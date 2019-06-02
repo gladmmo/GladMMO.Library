@@ -42,6 +42,7 @@
     <ProjectReference Include="..\..\GladMMO.Client.Common\GladMMO.Client.Common.csproj" />
     <ProjectReference Include="..\..\GladMMO.Common\GladMMO.Common.csproj" />
     <ProjectReference Include="..\..\GladMMO.Models.Authentication\GladMMO.Models.Authentication.csproj" />
+    <ProjectReference Include="..\..\GladMMO.Models.GameServer\GladMMO.Models.GameServer.csproj" />
     <ProjectReference Include="..\..\GladMMO.Models.Social\GladMMO.Models.Social.csproj" />
     <ProjectReference Include="..\..\GladMMO.Social.Common\GladMMO.Social.Common.csproj" />
     <ProjectReference Include="..\..\GladMMO.Unity.Common\GladMMO.Unity.Common.csproj" />
