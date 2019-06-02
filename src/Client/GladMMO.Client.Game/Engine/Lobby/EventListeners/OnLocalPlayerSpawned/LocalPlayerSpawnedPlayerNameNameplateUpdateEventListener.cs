@@ -31,10 +31,11 @@ namespace GladMMO
 			//TODO: Find a better way to do async stuff on events.
 			UnityAsyncHelper.UnityMainThreadContext.PostAsync(async () =>
 			{
-				string nameQueryResponseValue = await NameQueryable.RetrieveAsync(args.EntityGuid)
-					.ConfigureAwait(true);
+				throw new NotImplementedException($"TODO: Reimplement");
+				//string nameQueryResponseValue = await NameQueryable.RetrieveAsync(args.EntityGuid)
+				//	.ConfigureAwait(true);
 
-				PlayerNameTextField.Text = nameQueryResponseValue;
+				//PlayerNameTextField.Text = nameQueryResponseValue;
 			});
 		}
 	}

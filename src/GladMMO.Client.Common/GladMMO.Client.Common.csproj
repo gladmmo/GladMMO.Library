@@ -7,7 +7,6 @@
   <ItemGroup>
     <PackageReference Include="Common.Logging" Version="3.4.1" />
     <PackageReference Include="FluentValidation" Version="7.6.103" />
-    <PackageReference Include="FreecraftCore.API.Common.Entity.Identity" Version="4.0.10" />
     <PackageReference Include="Refit" Version="4.6.58" />
     <PackageReference Include="SceneJect.Metadata" Version="3.0.31" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.5.0" />
@@ -21,6 +20,10 @@
 
   <ItemGroup>
     <Folder Include="Extensions\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\GladMMO.Common\GladMMO.Common.csproj" />
   </ItemGroup>
 
 </Project>

@@ -5,20 +5,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Common.Logging;
-using FreecraftCore;
 using Glader.Essentials;
 using GladNet;
+using UnityEngine;
 
 namespace GladMMO
 {
-	[AdditionalRegisterationAs(typeof(IPlayerGroupLeftEventSubscribable))]
+	/*[AdditionalRegisterationAs(typeof(IPlayerGroupLeftEventSubscribable))]
 	[AdditionalRegisterationAs(typeof(IPlayerGroupJoinedEventSubscribable))]
 	[SceneTypeCreateGladMMO(GameSceneType.DefaultLobby)]
 	public sealed class ServerGroupListEventPayloadHandler : BaseGameClientGameMessageHandler<ServerGroupListEvent>, IPlayerGroupJoinedEventSubscribable, IPlayerGroupLeftEventSubscribable
 	{
-		private HashSet<ObjectGuid> GroupedPlayerSet { get; }
+		private HashSet<NetworkEntityGuid> GroupedPlayerSet { get; }
 
-		private Dictionary<ObjectGuid, GroupListMemberData> GroupMemberDataDictionary { get; }
+		private Dictionary<NetworkEntityGuid, GroupListMemberData> GroupMemberDataDictionary { get; }
 
 		/// <inheritdoc />
 		public event EventHandler<PlayerJoinedGroupEventArgs> OnPlayerJoinedGroup;
@@ -30,8 +30,8 @@ namespace GladMMO
 		public ServerGroupListEventPayloadHandler(ILog logger)
 			: base(logger)
 		{
-			GroupedPlayerSet = new HashSet<ObjectGuid>(ObjectGuidEqualityComparer<ObjectGuid>.Instance);
-			GroupMemberDataDictionary = new Dictionary<ObjectGuid, GroupListMemberData>(ObjectGuidEqualityComparer<ObjectGuid>.Instance);
+			GroupedPlayerSet = new HashSet<NetworkEntityGuid>(NetworkGuidEqualityComparer<NetworkEntityGuid>.Instance);
+			GroupMemberDataDictionary = new Dictionary<NetworkEntityGuid, GroupListMemberData>(NetworkGuidEqualityComparer<NetworkEntityGuid>.Instance);
 		}
 
 		/// <inheritdoc />
@@ -49,20 +49,20 @@ namespace GladMMO
 			//set operations to find out the NEW players!
 			if(payload.isGroupHaveAnyMembers)
 			{
-				ImmutableHashSet<ObjectGuid> groupListEventHashSet = payload.GroupMemberDataList.Select(g => g.PlayerGuid).ToImmutableHashSet(ObjectGuidEqualityComparer<ObjectGuid>.Instance);
+				ImmutableHashSet<NetworkEntityGuid> groupListEventHashSet = payload.GroupMemberDataList.Select(g => g.PlayerGuid).ToImmutableHashSet(NetworkGuidEqualityComparer<NetworkEntityGuid>.Instance);
 
 				//WoW send an update on every change, which is dumb, but we shouldn't assume it works that way always.
 				//group data dictionary, we need this for information to broadcast the events
 				//AND we need to actually maintain this data
-				var groupDataDictionary = payload.GroupMemberDataList.ToDictionary(data => data.PlayerGuid, ObjectGuidEqualityComparer<ObjectGuid>.Instance);
+				var groupDataDictionary = payload.GroupMemberDataList.ToDictionary(data => data.PlayerGuid, NetworkGuidEqualityComparer<NetworkEntityGuid>.Instance);
 
-				foreach(ObjectGuid newPlayer in groupListEventHashSet.Except(GroupedPlayerSet))
+				foreach(NetworkEntityGuid newPlayer in groupListEventHashSet.Except(GroupedPlayerSet))
 				{
 					HandlePlayerJoined(newPlayer, groupDataDictionary);
 				}
 
 				//Now we need to know who left the group
-				foreach(ObjectGuid playerLeaving in GroupedPlayerSet.Except(groupListEventHashSet))
+				foreach(NetworkEntityGuid playerLeaving in GroupedPlayerSet.Except(groupListEventHashSet))
 					HandlePlayerRemoved(playerLeaving);
 			}
 			else if(GroupedPlayerSet.Any())
@@ -71,7 +71,7 @@ namespace GladMMO
 				//then that means we are no longer in a group at all somehow.
 
 				//So this case is the simple case, broadcast the removal of all players.
-				foreach(ObjectGuid playerLeaving in GroupedPlayerSet)
+				foreach(NetworkEntityGuid playerLeaving in GroupedPlayerSet)
 					HandlePlayerRemoved(playerLeaving, false);
 
 				GroupedPlayerSet.Clear();
@@ -85,7 +85,7 @@ namespace GladMMO
 			return Task.CompletedTask;
 		}
 
-		private void HandlePlayerJoined([NotNull] ObjectGuid newPlayer, [NotNull] Dictionary<ObjectGuid, GroupListMemberData> currentPlayerDataDictionary)
+		private void HandlePlayerJoined([NotNull] NetworkEntityGuid newPlayer, [NotNull] Dictionary<NetworkEntityGuid, GroupListMemberData> currentPlayerDataDictionary)
 		{
 			if(newPlayer == null) throw new ArgumentNullException(nameof(newPlayer));
 			if(currentPlayerDataDictionary == null) throw new ArgumentNullException(nameof(currentPlayerDataDictionary));
@@ -98,7 +98,7 @@ namespace GladMMO
 				Logger.Debug($"Player: {currentPlayerDataDictionary[newPlayer].PlayerName} joined the group.");
 		}
 
-		private void HandlePlayerRemoved([NotNull] ObjectGuid playerLeaving, bool handleRemovingFromGroupSet = true)
+		private void HandlePlayerRemoved([NotNull] NetworkEntityGuid playerLeaving, bool handleRemovingFromGroupSet = true)
 		{
 			if(playerLeaving == null) throw new ArgumentNullException(nameof(playerLeaving));
 
@@ -112,5 +112,5 @@ namespace GladMMO
 			if(handleRemovingFromGroupSet)
 				GroupedPlayerSet.Remove(playerLeaving);
 		}
-	}
+	}*/
 }

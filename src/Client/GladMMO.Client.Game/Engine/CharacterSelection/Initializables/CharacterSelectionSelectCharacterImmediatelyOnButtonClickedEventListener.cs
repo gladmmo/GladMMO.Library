@@ -4,7 +4,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Autofac.Features.AttributeFilters;
 using Common.Logging;
-using FreecraftCore;
 using Glader.Essentials;
 using GladNet;
 using Nito.AsyncEx;
@@ -22,29 +21,29 @@ namespace GladMMO
 
 		private ILog Logger { get; }
 
-		private IPeerPayloadSendService<GamePacketPayload> SendService { get; }
-
 		private IUIButton EnterWorldButton { get; }
 
 		/// <inheritdoc />
 		public event EventHandler<ServerRequestedSceneChangeEventArgs> OnServerRequestedSceneChange;
 
-		private ObjectGuid SelectedCharacterGuid { get; set; }
+		private NetworkEntityGuid SelectedCharacterGuid { get; set; }
+
+		private ICharacterService CharacterServiceQueryable { get; }
 
 		/// <inheritdoc />
 		public CharacterSelectionSelectCharacterImmediatelyOnButtonClickedEventListener(
 			[NotNull] ICharacterSelectionButtonClickedEventSubscribable subscriptionService, 
 			[NotNull] ICharacterDataRepository characterData, 
 			[NotNull] ILog logger,
-			[NotNull] IPeerPayloadSendService<GamePacketPayload> sendService,
-			[KeyFilter(UnityUIRegisterationKey.EnterWorld)] [NotNull] IUIButton enterWorldButton)
+			[KeyFilter(UnityUIRegisterationKey.EnterWorld)] [NotNull] IUIButton enterWorldButton,
+			[NotNull] ICharacterService characterServiceQueryable)
 			: base(subscriptionService)
 		{
 			//CharacterService = characterService ?? throw new ArgumentNullException(nameof(characterService));
 			CharacterData = characterData ?? throw new ArgumentNullException(nameof(characterData));
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
-			SendService = sendService ?? throw new ArgumentNullException(nameof(sendService));
 			EnterWorldButton = enterWorldButton ?? throw new ArgumentNullException(nameof(enterWorldButton));
+			CharacterServiceQueryable = characterServiceQueryable ?? throw new ArgumentNullException(nameof(characterServiceQueryable));
 		}
 
 		/// <inheritdoc />
@@ -68,22 +67,27 @@ namespace GladMMO
 		private async Task OnEnterWorldButtonClicked()
 		{
 			if(SelectedCharacterGuid == null)
+			{
 				Logger.Error($"Tried to enter the world without any selected character guid.");
+				return;
+			}
 
 			//We do this before sending the player login BECAUSE of a race condition that can be caused
 			//since I actually KNOW this event should disable networking. We should not handle messages in this scene after this point basically.
 			//TODO: Don't hardcode this scene.
 			OnServerRequestedSceneChange?.Invoke(this, new ServerRequestedSceneChangeEventArgs((PlayableGameScene)2));
 
-			//So, this just tells TrinityCore that we want to login into THIS character.
-			//So, it'll attempt to do so.
-			//There isn't really a response to this, TrinityCore will just send back: SMSG_LOGIN_VERIFY_WORLD
-			//when it's successful and then the player will begin actually creating itself in the world and recieving
-			//some data about the world state.
-			await SendService.SendMessage(new CharacterLoginRequest(SelectedCharacterGuid));
+			CharacterSessionEnterResponse enterResponse = await CharacterServiceQueryable.TryEnterSession(SelectedCharacterGuid.EntityId);
+
+			if(Logger.IsDebugEnabled)
+				Logger.Debug($"Character Session Entry Response: {enterResponse.ResultCode}.");
+
+			if(!enterResponse.isSuccessful)
+				if(Logger.IsErrorEnabled)
+					Logger.Error($"Failed to enter CharacterSession for Entity: {SelectedCharacterGuid} Reason: {enterResponse.ResultCode}");
 
 			//TODO: handle character session failure
-			CharacterData.UpdateCharacterId(SelectedCharacterGuid.CurrentObjectGuid);
+			CharacterData.UpdateCharacterId(SelectedCharacterGuid.EntityId);
 
 			//TODO: Use the scene manager service.
 			//TODO: Don't hardcode scene ids. Don't load scenes directly.

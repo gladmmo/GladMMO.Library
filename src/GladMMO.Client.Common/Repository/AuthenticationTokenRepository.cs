@@ -50,7 +50,13 @@ namespace GladMMO
 		public string RetrieveWithType()
 		{
 			//TODO: Make this more efficient
-			return $"Bearer {AuthToken}";
+			return $"{RetrieveType()} {AuthToken}";
+		}
+
+		/// <inheritdoc />
+		public string RetrieveType()
+		{
+			return "Bearer";
 		}
 
 		/// <inheritdoc />

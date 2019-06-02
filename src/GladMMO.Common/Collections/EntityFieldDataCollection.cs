@@ -3,7 +3,6 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Text;
-using FreecraftCore;
 using Generic.Math;
 using Reinterpret.Net;
 

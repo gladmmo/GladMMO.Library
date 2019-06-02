@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Common.Logging;
-using FreecraftCore;
 
 namespace GladMMO
 {
-	public sealed class DefaultObjectUpdateBlockDispatcher : IObjectUpdateBlockDispatcher
+	/*public sealed class DefaultObjectUpdateBlockDispatcher : IObjectUpdateBlockDispatcher
 	{
 		private IObjectUpdateBlockHandler[] Handlers { get; }
 
@@ -40,5 +39,5 @@ namespace GladMMO
 			else
 				Handlers[(int)updateBlock.UpdateType].HandleUpdateBlock(updateBlock);
 		}
-	}
+	}*/
 }

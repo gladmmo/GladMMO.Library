@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 
 namespace GladMMO
 {
-	[SceneTypeCreateGladMMO(GameSceneType.PreZoneBurstingScreen)]
+	//[SceneTypeCreateGladMMO(GameSceneType.PreZoneBurstingScreen)]
 	public class PreBurstSceneChangeChangerEventListener : ThreadUnSafeBaseSingleEventListenerInitializable<IServerRequestedSceneChangeEventSubscribable, ServerRequestedSceneChangeEventArgs>
 	{
 		/// <inheritdoc />

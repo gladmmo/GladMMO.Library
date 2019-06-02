@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
-using FreecraftCore;
 using Glader.Essentials;
 
 namespace GladMMO
@@ -30,7 +29,7 @@ namespace GladMMO
 			PlayerUnitFrame = playerUnitFrame ?? throw new ArgumentNullException(nameof(playerUnitFrame));
 		}
 
-		protected void RegisterPlayerDataChangeCallback<TChangeType>(EUnitFields field, [NotNull] Action<ObjectGuid, EntityDataChangedArgs<TChangeType>> callback)
+		protected void RegisterPlayerDataChangeCallback<TChangeType>(EUnitFields field, [NotNull] Action<NetworkEntityGuid, EntityDataChangedArgs<TChangeType>> callback)
 			where TChangeType : struct
 		{
 			if(callback == null) throw new ArgumentNullException(nameof(callback));

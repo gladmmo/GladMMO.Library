@@ -23,12 +23,10 @@
 
   <ItemGroup>
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="4.2.2" />
-    <PackageReference Include="FreecraftCore.Packet.Game" Version="4.0.10" />
     <PackageReference Include="Glader.Essentials.Unity" Version="0.0.12" />
     <PackageReference Include="GladNet3.Client.API" Version="3.0.46" />
     <PackageReference Include="GladNet3.Client.DotNetTcpClient" Version="3.0.46" />
     <PackageReference Include="GladNet3.Handler.API" Version="3.0.46" />
-    <PackageReference Include="GladNet3.Serializer.FreecraftCore" Version="3.0.46" />
     <PackageReference Include="GladNet3.Serializer.ProtobufNet" Version="3.0.46" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.2.0" />
     <PackageReference Include="Nito.AsyncEx" Version="5.0.0-pre-05" />
@@ -48,6 +46,8 @@
     <ProjectReference Include="..\..\GladMMO.Social.Common\GladMMO.Social.Common.csproj" />
     <ProjectReference Include="..\..\GladMMO.Unity.Common\GladMMO.Unity.Common.csproj" />
     <ProjectReference Include="..\..\GladMMO.ZoneServer.Common\GladMMO.ZoneServer.Common.csproj" />
+    <ProjectReference Include="..\GladMMO.Client.CharacterService\GladMMO.Client.CharacterService.csproj" />
+    <ProjectReference Include="..\GladMMO.Client.NameQueryService\GladMMO.Client.NameQueryService.csproj" />
     <ProjectReference Include="..\GladMMO.Client.ServerSelection\GladMMO.Client.ServerSelection.csproj" />
     <ProjectReference Include="..\GladMMO.Client.ServiceDiscovery\GladMMO.Client.ServiceDiscovery.csproj" />
   </ItemGroup>

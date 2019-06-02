@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Text;
-using FreecraftCore;
 
 namespace GladMMO
 {
@@ -51,7 +50,7 @@ namespace GladMMO
 		/// </summary>
 		/// <param name="entityDataCollection"></param>
 		/// <param name="initialChangeTrackBitArray"></param>
-		public ChangeTrackingEntityFieldDataCollectionDecorator(IEntityDataFieldContainer entityDataCollection, [JetBrains.Annotations.NotNull] WireReadyBitArray initialChangeTrackBitArray)
+		public ChangeTrackingEntityFieldDataCollectionDecorator(IEntityDataFieldContainer entityDataCollection, [NotNull] WireReadyBitArray initialChangeTrackBitArray)
 		{
 			if(initialChangeTrackBitArray == null) throw new ArgumentNullException(nameof(initialChangeTrackBitArray));
 			if(initialChangeTrackBitArray.Length != entityDataCollection.DataSetIndicationArray.Length)

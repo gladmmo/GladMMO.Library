@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Common.Logging;
-using FreecraftCore;
 using GladNet;
 
 namespace GladMMO
 {
 	//This basically just logs unhandled opcodes or unimplemented opcodes.
-	public sealed class LoggableUnknownOpcodePayloadHandler : BaseGameClientGameMessageHandler<LoggableUnknownOpcodePayload>
+	/*public sealed class LoggableUnknownOpcodePayloadHandler : BaseGameClientGameMessageHandler<LoggableUnknownOpcodePayload>
 	{
 		/// <inheritdoc />
 		public LoggableUnknownOpcodePayloadHandler(ILog logger) 
@@ -26,5 +25,5 @@ namespace GladMMO
 
 			return Task.CompletedTask;
 		}
-	}
+	}*/
 }

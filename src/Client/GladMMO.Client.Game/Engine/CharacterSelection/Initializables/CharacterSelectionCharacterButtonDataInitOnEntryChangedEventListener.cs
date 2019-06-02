@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading;
 using Autofac.Features.AttributeFilters;
 using Common.Logging;
-using FreecraftCore;
 using Glader.Essentials;
 using Nito.AsyncEx;
 
@@ -20,7 +19,7 @@ namespace GladMMO
 
 		private IReadOnlyCollection<IUICharacterSlot> CharacterButtons { get; }
 
-		private INameQueryService NameQueryable { get; }
+		private IEntityNameQueryable NameQueryable { get; }
 
 		/// <inheritdoc />
 		public event EventHandler<CharacterButtonClickedEventArgs> OnCharacterButtonClicked;
@@ -29,7 +28,7 @@ namespace GladMMO
 		public CharacterSelectionCharacterButtonDataInitOnEntryChangedEventListener(ILog logger,
 			[NotNull] ICharacterSelectionEntryDataChangeEventSubscribable subscriptionService,
 			[KeyFilter(UnityUIRegisterationKey.CharacterSelection)] [NotNull] IReadOnlyCollection<IUICharacterSlot> characterButtons,
-			[NotNull] INameQueryService nameQueryable)
+			[NotNull] IEntityNameQueryable nameQueryable)
 			: base(subscriptionService, false, logger)
 		{
 			CharacterButtons = characterButtons ?? throw new ArgumentNullException(nameof(characterButtons));
@@ -66,7 +65,7 @@ namespace GladMMO
 			});
 		}
 
-		private void InitializeCharacterName([NotNull] ObjectGuid guid, [NotNull] IUICharacterSlot button)
+		private void InitializeCharacterName([NotNull] NetworkEntityGuid guid, [NotNull] IUICharacterSlot button)
 		{
 			if(guid == null) throw new ArgumentNullException(nameof(guid));
 			if(button == null) throw new ArgumentNullException(nameof(button));

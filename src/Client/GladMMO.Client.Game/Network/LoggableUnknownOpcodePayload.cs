@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
-using FreecraftCore;
 
 namespace GladMMO
 {
-	public sealed class LoggableUnknownOpcodePayload : GamePacketPayload
+	/*public sealed class LoggableUnknownOpcodePayload : GamePacketPayload
 	{
 		public int PacketLength { get; }
 
@@ -24,5 +23,5 @@ namespace GladMMO
 			OpCode = opCode;
 			BinaryData = binaryData ?? throw new ArgumentNullException(nameof(binaryData));
 		}
-	}
+	}*/
 }

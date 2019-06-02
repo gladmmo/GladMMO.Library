@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Refit" Version="4.6.58" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\GladMMO.Client.Common\GladMMO.Client.Common.csproj" />
+    <ProjectReference Include="..\..\GladMMO.Models.GameServer\GladMMO.Models.GameServer.csproj" />
+  </ItemGroup>
+
+</Project>

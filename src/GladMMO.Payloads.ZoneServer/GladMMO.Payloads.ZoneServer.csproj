@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="protobuf-net" Version="2.3.7" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\GladMMO.Models.Common\GladMMO.Models.Common.csproj" />
+    <ProjectReference Include="..\GladMMO.Network.Common\GladMMO.Network.Common.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="UnityEngine">
+      <HintPath>..\..\lib\Unity\UnityEngine.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

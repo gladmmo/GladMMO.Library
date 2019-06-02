@@ -11,12 +11,12 @@ namespace GladMMO
 	{
 		private IUIText SelectedCharacterText { get; }
 
-		private INameQueryService NameryQueryable { get; } 
+		private IEntityNameQueryable NameryQueryable { get; } 
 
 		/// <inheritdoc />
 		public CharacterSelectionUpdateCharacterSelectedNameOnCharacterSelectionEventListener(ICharacterSelectionButtonClickedEventSubscribable subscriptionService,
 			[KeyFilter(UnityUIRegisterationKey.CharacterSelection)] [NotNull] IUIText selectedCharacterText,
-			[NotNull] INameQueryService nameryQueryable) 
+			[NotNull] IEntityNameQueryable nameryQueryable)
 			: base(subscriptionService)
 		{
 			SelectedCharacterText = selectedCharacterText ?? throw new ArgumentNullException(nameof(selectedCharacterText));

@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
-using FreecraftCore;
 using Nito.AsyncEx;
 
 namespace GladMMO
 {
-	public sealed class GlobalEntityResourceLockingPolicy : IContextualResourceLockingPolicy<ObjectGuid>
+	public sealed class GlobalEntityResourceLockingPolicy : IContextualResourceLockingPolicy<NetworkEntityGuid>
 	{
 		static GlobalEntityResourceLockingPolicy()
 		{
@@ -24,27 +23,27 @@ namespace GladMMO
 		}
 
 		/// <inheritdoc />
-		public IDisposable ReaderLock(ObjectGuid context, CancellationToken cancellationToken)
+		public IDisposable ReaderLock(NetworkEntityGuid context, CancellationToken cancellationToken)
 		{
 			ThrowIfNoEntityInMap(context);
 
 			return EntityAsyncLockMap[context].ReaderLock(cancellationToken);
 		}
 
-		private void ThrowIfNoEntityInMap(ObjectGuid context)
+		private void ThrowIfNoEntityInMap(NetworkEntityGuid context)
 		{
 			//TODO: Race condition since we aren't locking the collection from modification.
 			if(!EntityAsyncLockMap.ContainsKey(context))
 				ThrowNoEntityInMap(context);
 		}
 
-		private static void ThrowNoEntityInMap(ObjectGuid context)
+		private static void ThrowNoEntityInMap(NetworkEntityGuid context)
 		{
 			throw new InvalidOperationException($"Cannot aquire lock on Entity: {context} as no lock data in the map.");
 		}
 
 		/// <inheritdoc />
-		public AwaitableDisposable<IDisposable> ReaderLockAsync(ObjectGuid context, CancellationToken cancellationToken)
+		public AwaitableDisposable<IDisposable> ReaderLockAsync(NetworkEntityGuid context, CancellationToken cancellationToken)
 		{
 			ThrowIfNoEntityInMap(context);
 
@@ -52,7 +51,7 @@ namespace GladMMO
 		}
 
 		/// <inheritdoc />
-		public IDisposable WriterLock(ObjectGuid context, CancellationToken cancellationToken)
+		public IDisposable WriterLock(NetworkEntityGuid context, CancellationToken cancellationToken)
 		{
 			ThrowIfNoEntityInMap(context);
 
@@ -60,7 +59,7 @@ namespace GladMMO
 		}
 
 		/// <inheritdoc />
-		public AwaitableDisposable<IDisposable> WriterLockAsync(ObjectGuid context, CancellationToken cancellationToken)
+		public AwaitableDisposable<IDisposable> WriterLockAsync(NetworkEntityGuid context, CancellationToken cancellationToken)
 		{
 			ThrowIfNoEntityInMap(context);
 

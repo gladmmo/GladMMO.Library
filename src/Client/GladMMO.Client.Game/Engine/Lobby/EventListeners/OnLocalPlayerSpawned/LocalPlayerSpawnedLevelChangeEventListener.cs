@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Text;
 using Autofac.Core;
 using Autofac.Features.AttributeFilters;
-using FreecraftCore;
 using Glader.Essentials;
 
 namespace GladMMO
@@ -26,7 +25,7 @@ namespace GladMMO
 			RegisterPlayerDataChangeCallback<int>(EUnitFields.UNIT_FIELD_LEVEL, OnLevelChanged);
 		}
 
-		private void OnLevelChanged(ObjectGuid entity, EntityDataChangedArgs<int> changeArgs)
+		private void OnLevelChanged(NetworkEntityGuid entity, EntityDataChangedArgs<int> changeArgs)
 		{
 			PlayerUnitFrame.UnitLevel.Text = changeArgs.NewValue.ToString();
 		}

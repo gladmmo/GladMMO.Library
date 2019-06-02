@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Common.Logging;
-using FreecraftCore;
 using GladNet;
 
 namespace GladMMO
 {
-	[SceneTypeCreateGladMMO(GameSceneType.DefaultLobby)]
+	/*[SceneTypeCreateGladMMO(GameSceneType.DefaultLobby)]
 	public sealed class ServerPartyCommandResultResponsePayloadHandler : BaseGameClientGameMessageHandler<ServerPartyCommandResultResponse>
 	{
 		/// <inheritdoc />
@@ -26,5 +25,5 @@ namespace GladMMO
 
 			return Task.CompletedTask;
 		}
-	}
+	}*/
 }

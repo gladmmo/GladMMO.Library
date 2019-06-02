@@ -1,0 +1,52 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <Configurations>Debug;Release;Database_Migration;Debug_Local</Configurations>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PublishWithAspNetCoreTargetManifest>false</PublishWithAspNetCoreTargetManifest>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.ResponseCaching" Version="2.0.3" />
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.1.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\GladMMO.Common\GladMMO.Common.csproj" />
+    <ProjectReference Include="..\..\GladMMO.Models.GameServer\GladMMO.Models.GameServer.csproj" />
+    <ProjectReference Include="..\..\GladMMO.Models.Server.ZoneServer\GladMMO.Models.Server.ZoneServer.csproj" />
+    <ProjectReference Include="..\..\GladMMO.Models.ServiceDiscovery\GladMMO.Models.ServiceDiscovery.csproj" />
+    <ProjectReference Include="..\GladMMO.Database.Common\GladMMO.Database.Common.csproj" />
+    <ProjectReference Include="..\GladMMO.Database.GameServer\GladMMO.Database.GameServer.csproj" />
+    <ProjectReference Include="..\GladMMO.Server.Common\GladMMO.Server.Common.csproj" />
+    <ProjectReference Include="..\GladMMO.Service.Common\GladMMO.Service.Common.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="UnityEngine">
+      <HintPath>..\..\..\lib\Unity\UnityEngine.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Certs\TestCert.pfx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Certs\TLSCert.pfx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

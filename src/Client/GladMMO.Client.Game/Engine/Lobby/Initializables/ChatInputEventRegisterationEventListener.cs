@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Autofac.Features.AttributeFilters;
 using Common.Logging;
-using FreecraftCore;
 using Glader.Essentials;
 using GladNet;
 using Nito.AsyncEx;
@@ -19,7 +18,7 @@ namespace GladMMO
 
 		private IUIText ChatEnterText { get; }
 
-		private IPeerPayloadSendService<GamePacketPayload> SendService { get; }
+		private IPeerPayloadSendService<GameClientPacketPayload> SendService { get; }
 		
 		private ILog Logger { get; }
 
@@ -27,7 +26,7 @@ namespace GladMMO
 		public ChatInputEventRegisterationEventListener(
 			[NotNull] [KeyFilter(UnityUIRegisterationKey.ChatInput)] IUIButton chatEnterButton,
 			[NotNull] [KeyFilter(UnityUIRegisterationKey.ChatInput)] IUIText chatEnterText,
-			[NotNull] IPeerPayloadSendService<GamePacketPayload> sendService,
+			[NotNull] IPeerPayloadSendService<GameClientPacketPayload> sendService,
 			[NotNull] ILog logger)
 		{
 			ChatEnterButton = chatEnterButton ?? throw new ArgumentNullException(nameof(chatEnterButton));
@@ -68,7 +67,8 @@ namespace GladMMO
 			{
 				try
 				{
-					if(ChatEnterText.Text.Contains("/invite"))
+					//TODO: Renable group invite testing command.
+					/*if(ChatEnterText.Text.Contains("/invite"))
 					{
 						string toInvite = ChatEnterText.Text.Split(' ').Last();
 						if(Logger.IsDebugEnabled)
@@ -78,7 +78,7 @@ namespace GladMMO
 					}
 					else
 						await SendService.SendMessage(new ChatMessageRequest(new SayPlayerChatMessage(ChatLanguage.LANG_ORCISH, ChatEnterText.Text)))
-							.ConfigureAwait(true);
+							.ConfigureAwait(true);*/
 
 					//We clear text here because we actually DON'T wanna clear the text if there was an error.
 					ChatEnterText.Text = "";

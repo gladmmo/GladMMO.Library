@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using FreecraftCore;
 
 namespace GladMMO
 {
@@ -16,7 +15,7 @@ namespace GladMMO
 		/// <param name="entity"></param>
 		/// <param name="dataField"></param>
 		/// <param name="callback"></param>
-		IEntityDataEventUnregisterable RegisterCallback<TCallbackValueCastType>(ObjectGuid entity, int dataField, Action<ObjectGuid, EntityDataChangedArgs<TCallbackValueCastType>> callback)
+		IEntityDataEventUnregisterable RegisterCallback<TCallbackValueCastType>(NetworkEntityGuid entity, int dataField, Action<NetworkEntityGuid, EntityDataChangedArgs<TCallbackValueCastType>> callback)
 			where TCallbackValueCastType : struct;
 
 		//TODO: Add unregisteration for callbacks

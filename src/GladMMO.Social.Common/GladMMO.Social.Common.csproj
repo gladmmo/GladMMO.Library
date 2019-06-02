@@ -8,4 +8,8 @@
     <Folder Include="NetworkInterfaces\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\GladMMO.Models.Social\GladMMO.Models.Social.csproj" />
+  </ItemGroup>
+
 </Project>

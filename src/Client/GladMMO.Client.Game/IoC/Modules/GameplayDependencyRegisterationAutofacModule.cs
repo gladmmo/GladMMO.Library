@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 using Autofac;
-using FreecraftCore;
 using UnityEngine;
 
 namespace GladMMO
@@ -49,7 +48,7 @@ namespace GladMMO
 
 			//Ok, now we actually register update block types manually
 			//because it's not worth it to do an assembly-wide search for them.
-			builder.RegisterType<DefaultObjectUpdateBlockDispatcher>()
+			/*builder.RegisterType<DefaultObjectUpdateBlockDispatcher>()
 				.AsSelf()
 				.AsImplementedInterfaces()
 				.SingleInstance();
@@ -66,10 +65,10 @@ namespace GladMMO
 			builder.RegisterType<DefaultThreadUnSafeKnownEntitySet>()
 				.AsSelf()
 				.AsImplementedInterfaces()
-				.SingleInstance();
+				.SingleInstance();*/
 		}
 
-		private static void RegisterUpdateBlockHandler<THandlerType>([NotNull] ContainerBuilder builder)
+		/*private static void RegisterUpdateBlockHandler<THandlerType>([NotNull] ContainerBuilder builder)
 			where THandlerType : IObjectUpdateBlockHandler
 		{
 			if(builder == null) throw new ArgumentNullException(nameof(builder));
@@ -77,6 +76,6 @@ namespace GladMMO
 			builder.RegisterType<THandlerType>()
 				.AsImplementedInterfaces()
 				.SingleInstance();
-		}
+		}*/
 	}
 }

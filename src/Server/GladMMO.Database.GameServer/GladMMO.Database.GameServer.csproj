@@ -1,0 +1,46 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netcoreapp2.1;netstandard2.0</TargetFrameworks>
+    <Configurations>Debug;Release;Database_Migration;Debug_Local</Configurations>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Migrations\20181130171540_TransitioningToProjectVindictiveWorldSystemCharacter.cs" />
+    <Compile Remove="Migrations\20190112224612_CharacterFriendRequestsTableMigration.cs" />
+    <Compile Remove="Migrations\20190112225507_CharacterFriendRequestsTableMigration.cs" />
+    <Compile Remove="Migrations\20190112230932_ChangingCharacterRequestTableColumnNamesMigration.cs" />
+    <Compile Remove="Migrations\20190112234340_CharacterRequestUniquePairMigration.cs" />
+    <Compile Remove="Migrations\20190112235605_CharacterFriendRequestsssMigration.cs" />
+    <Compile Remove="Migrations\20190113001047_FriendRequestsWithAlternateKeysMigration.cs" />
+    <Compile Remove="Migrations\20190113003102_AddUniqueDirectionalConstraintToFriendRequestsMigration.cs" />
+    <Compile Remove="Migrations\20190113003227_AddUniqueDirectionalConstraintToFriendRequestsMigration.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.2.1" />
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.1.2" />
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql.Design" Version="1.1.2" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\GladMMO.Models.GameServer\GladMMO.Models.GameServer.csproj" />
+    <ProjectReference Include="..\..\GladMMO.Models.Server.ZoneServer\GladMMO.Models.Server.ZoneServer.csproj" />
+    <ProjectReference Include="..\GladMMO.Database.Common\GladMMO.Database.Common.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Microsoft.EntityFrameworkCore.Abstractions">
+      <HintPath>..\..\..\..\..\..\.nuget\packages\microsoft.entityframeworkcore.abstractions\2.1.1\lib\netstandard2.0\Microsoft.EntityFrameworkCore.Abstractions.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

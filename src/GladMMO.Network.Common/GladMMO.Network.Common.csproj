@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -6,24 +6,17 @@
 
   <ItemGroup>
     <PackageReference Include="Glader.Essentials.Common" Version="0.0.12" />
+    <PackageReference Include="GladNet3.Client.API" Version="3.0.46" />
     <PackageReference Include="GladNet3.Common.API" Version="3.0.46" />
     <PackageReference Include="protobuf-net" Version="2.3.7" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Attributes\" />
     <Folder Include="Packet\" />
-    <Folder Include="Payload\" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\GladMMO.Common\GladMMO.Common.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="FreecraftCore.API.Common.Entity.Identity">
-      <HintPath>..\..\..\..\..\.nuget\packages\freecraftcore.api.common.entity.identity\4.0.0\lib\netstandard2.0\FreecraftCore.API.Common.Entity.Identity.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
 </Project>

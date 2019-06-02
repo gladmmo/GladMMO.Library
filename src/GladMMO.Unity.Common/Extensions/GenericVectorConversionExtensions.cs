@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using FreecraftCore;
 using UnityEngine;
 
 namespace GladMMO
 {
-	public static class GenericVectorConversionExtensions
+	/*public static class GenericVectorConversionExtensions
 	{
 		public static Vector3 ToUnityVector(this Vector3<float> freecraftVector)
 		{
@@ -19,5 +18,5 @@ namespace GladMMO
 		{
 			return new Vector3<float>(unityVector.z, unityVector.x, unityVector.y);
 		}
-	}
+	}*/
 }

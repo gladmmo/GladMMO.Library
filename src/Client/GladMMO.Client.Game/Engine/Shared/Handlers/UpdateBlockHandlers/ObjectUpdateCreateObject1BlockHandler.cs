@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 using Common.Logging;
-using FreecraftCore;
 using Glader.Essentials;
 
 namespace GladMMO
 {
-	[AdditionalRegisterationAs(typeof(INetworkEntityVisibleEventSubscribable))]
+	/*[AdditionalRegisterationAs(typeof(INetworkEntityVisibleEventSubscribable))]
 	public sealed class ObjectUpdateCreateObject1BlockHandler : BaseObjectUpdateBlockHandler<ObjectUpdateCreateObject1Block>, INetworkEntityVisibleEventSubscribable
 	{
 		/// <inheritdoc />
@@ -72,5 +71,5 @@ namespace GladMMO
 					throw new ArgumentOutOfRangeException($"Unable to handle the creation of ObjectType: {updateBlock.UpdateType}");
 			}
 		}
-	}
+	}*/
 }

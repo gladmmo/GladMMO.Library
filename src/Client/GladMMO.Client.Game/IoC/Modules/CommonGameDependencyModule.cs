@@ -4,7 +4,6 @@ using System.ComponentModel;
 using System.Text;
 using Autofac;
 using Common.Logging;
-using FreecraftCore;
 using Glader.Essentials;
 using Refit;
 
@@ -29,7 +28,7 @@ namespace GladMMO.Client
 
 		//TODO: Shoudl we expose the ServiceDiscovery URL to the editor? Is there value in that?
 		/// <inheritdoc />
-		public CommonGameDependencyModule(GameSceneType scene, [NotNull] string serviceDiscoveryUrl = "http://192.168.0.3:5000")
+		public CommonGameDependencyModule(GameSceneType scene, [NotNull] string serviceDiscoveryUrl = "http://127.0.0.1:5000")
 		{
 			if(!Enum.IsDefined(typeof(GameSceneType), scene)) throw new InvalidEnumArgumentException(nameof(scene), (int)scene, typeof(GameSceneType));
 
@@ -74,17 +73,24 @@ namespace GladMMO.Client
 			builder.RegisterModule(new EngineInterfaceRegisterationModule((int)Scene, GetType().Assembly));
 			builder.RegisterModule(new UIDependencyRegisterationModule<UnityUIRegisterationKey>());
 
-			//builder.RegisterModule<EntityMappableRegisterationModule<ObjectGuid>>();
+			//builder.RegisterModule<EntityMappableRegisterationModule<NetworkEntityGuid>>();
 			RegisterEntityContainers(builder);
 
 			builder.Register<IServiceDiscoveryService>(context => RestService.For<IServiceDiscoveryService>(ServiceDiscoveryUrl))
 				.As<IServiceDiscoveryService>()
 				.SingleInstance();
 
-			//TODO: This is just for testing.
-			builder.RegisterType<LocalTestNameQueryService>()
-				.As<INameQueryService>()
-				.As<INameQueryStorageable>()
+
+			builder.Register<INameQueryService>(context =>
+			{
+				IServiceDiscoveryService serviceDiscovery = context.Resolve<IServiceDiscoveryService>();
+
+				//TODO: Eventually gameserver won't be endpoint for namequeries.
+				return new AsyncEndpointNameQueryService(QueryForRemoteServiceEndpoint(serviceDiscovery, "GameServer"), new RefitSettings() { HttpMessageHandlerFactory = () => new FiddlerEnabledWebProxyHandler() });
+			});
+
+			builder.RegisterType<CacheableEntityNameQueryable>()
+				.As<IEntityNameQueryable>()
 				.SingleInstance();
 		}
 
@@ -93,7 +99,7 @@ namespace GladMMO.Client
 			//HelloKitty: We actually have to do this manually, and not use GladerEssentials because we use simplified interfaces.
 			//The below is kinda a hack to register the non-generic types in the
 			//removabale collection
-			List<IEntityCollectionRemovable<ObjectGuid>> removableComponentsList = new List<IEntityCollectionRemovable<ObjectGuid>>(10);
+			List<IEntityCollectionRemovable<NetworkEntityGuid>> removableComponentsList = new List<IEntityCollectionRemovable<NetworkEntityGuid>>(10);
 
 			builder.RegisterGeneric(typeof(EntityGuidDictionary<>))
 				.AsSelf()
@@ -101,14 +107,14 @@ namespace GladMMO.Client
 				.As(typeof(IEntityGuidMappable<>))
 				.OnActivated(args =>
 				{
-					if(args.Instance is IEntityCollectionRemovable<ObjectGuid> removable)
+					if(args.Instance is IEntityCollectionRemovable<NetworkEntityGuid> removable)
 						removableComponentsList.Add(removable);
 				})
 				.SingleInstance();
 
 			//This will allow everyone to register the removable collection collection.
 			builder.RegisterInstance(removableComponentsList)
-				.As<IReadOnlyCollection<IEntityCollectionRemovable<ObjectGuid>>>()
+				.As<IReadOnlyCollection<IEntityCollectionRemovable<NetworkEntityGuid>>>()
 				.AsSelf()
 				.SingleInstance();
 		}

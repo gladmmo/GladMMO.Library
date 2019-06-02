@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using FreecraftCore;
 
 namespace GladMMO
 {
@@ -16,10 +15,10 @@ namespace GladMMO
 		/// <summary>
 		/// The entity guid.
 		/// </summary>
-		public ObjectGuid EntityGuid { get; }
+		public NetworkEntityGuid EntityGuid { get; }
 
 		/// <inheritdoc />
-		public NetworkEntityNowVisibleEventArgs([NotNull] ObjectGuid entityGuid)
+		public NetworkEntityNowVisibleEventArgs([NotNull] NetworkEntityGuid entityGuid)
 		{
 			EntityGuid = entityGuid ?? throw new ArgumentNullException(nameof(entityGuid));
 		}

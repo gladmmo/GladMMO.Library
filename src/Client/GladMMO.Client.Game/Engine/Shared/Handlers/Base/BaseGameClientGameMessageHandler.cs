@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Common.Logging;
-using FreecraftCore;
 using GladNet;
 
 namespace GladMMO
@@ -12,8 +11,8 @@ namespace GladMMO
 	/// Base handler for all game handlers.
 	/// </summary>
 	/// <typeparam name="TSpecificPayloadType"></typeparam>
-	public abstract class BaseGameClientGameMessageHandler<TSpecificPayloadType> : IPeerMessageHandler<GamePacketPayload, GamePacketPayload>
-		where TSpecificPayloadType : GamePacketPayload
+	public abstract class BaseGameClientGameMessageHandler<TSpecificPayloadType> : IPeerMessageHandler<GameServerPacketPayload, GameClientPacketPayload>
+		where TSpecificPayloadType : GameServerPacketPayload
 	{
 		protected ILog Logger { get; }
 
@@ -24,19 +23,16 @@ namespace GladMMO
 		}
 
 		//TODO: Add exception logging support
-		/// <inheritdoc />
-		public abstract Task HandleMessage(IPeerMessageContext<GamePacketPayload> context, TSpecificPayloadType payload);
+		public abstract Task HandleMessage(IPeerMessageContext<GameClientPacketPayload> context, TSpecificPayloadType payload);
 
-		/// <inheritdoc />
-		public bool CanHandle(NetworkIncomingMessage<GamePacketPayload> message)
+		public bool CanHandle(NetworkIncomingMessage<GameServerPacketPayload> message)
 		{
 			return message.Payload is TSpecificPayloadType;
 		}
 
-		/// <inheritdoc />
-		public async Task<bool> TryHandleMessage(IPeerMessageContext<GamePacketPayload> context, NetworkIncomingMessage<GamePacketPayload> message)
+		public async Task<bool> TryHandleMessage(IPeerMessageContext<GameClientPacketPayload> context, NetworkIncomingMessage<GameServerPacketPayload> message)
 		{
-			if(!CanHandle(message))
+			if (!CanHandle(message))
 				return false;
 
 			await HandleMessage(context, (TSpecificPayloadType)message.Payload)

@@ -14,7 +14,7 @@ namespace GladMMO
 		/// <summary>
 		/// Represents the type of the entity.
 		/// </summary>
-		FreecraftCore.EntityGuidMask EntityTypeMask { get; }
+		EntityType EntityType { get; }
 
 		/// <summary>
 		/// Represents the unique entity integer indentifier.

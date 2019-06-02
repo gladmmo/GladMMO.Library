@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Common.Logging;
-using FreecraftCore;
 using Glader.Essentials;
 using GladNet;
 
 namespace GladMMO
 {
-	[AdditionalRegisterationAs(typeof(IServerRequestedSceneChangeEventSubscribable))]
+	/*[AdditionalRegisterationAs(typeof(IServerRequestedSceneChangeEventSubscribable))]
 	[SceneTypeCreateGladMMO(GameSceneType.PreZoneBurstingScreen)]
 	public sealed class LoginVerifyWorldPayloadHandler : BaseGameClientGameMessageHandler<SMSG_LOGIN_VERIFY_WORLD_PAYLOAD>, IServerRequestedSceneChangeEventSubscribable
 	{
@@ -38,5 +37,5 @@ namespace GladMMO
 
 			return Task.CompletedTask;
 		}
-	}
+	}*/
 }

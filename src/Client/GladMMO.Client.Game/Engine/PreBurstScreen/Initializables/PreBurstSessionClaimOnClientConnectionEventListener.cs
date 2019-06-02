@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using FreecraftCore;
 using Glader.Essentials;
 using GladNet;
 
@@ -10,14 +9,14 @@ namespace GladMMO
 	[SceneTypeCreateGladMMO(GameSceneType.PreZoneBurstingScreen)]
 	public sealed class PreBurstSessionClaimOnClientConnectionEventListener : BaseSingleEventListenerInitializable<INetworkConnectionEstablishedEventSubscribable>
 	{
-		private IPeerPayloadSendService<GamePacketPayload> SendService { get; }
+		private IPeerPayloadSendService<GameClientPacketPayload> SendService { get; }
 
 		private IReadonlyAuthTokenRepository AuthTokenRepository { get; }
 
 		private ICharacterDataRepository CharacterDataRepository { get; }
 
 		/// <inheritdoc />
-		public PreBurstSessionClaimOnClientConnectionEventListener(INetworkConnectionEstablishedEventSubscribable subscriptionService, [NotNull] IPeerPayloadSendService<GamePacketPayload> sendService, [NotNull] IReadonlyAuthTokenRepository authTokenRepository, [NotNull] ICharacterDataRepository characterDataRepository) 
+		public PreBurstSessionClaimOnClientConnectionEventListener(INetworkConnectionEstablishedEventSubscribable subscriptionService, [NotNull] IPeerPayloadSendService<GameClientPacketPayload> sendService, [NotNull] IReadonlyAuthTokenRepository authTokenRepository, [NotNull] ICharacterDataRepository characterDataRepository) 
 			: base(subscriptionService)
 		{
 			SendService = sendService ?? throw new ArgumentNullException(nameof(sendService));

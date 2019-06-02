@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
 using Common.Logging;
-using FreecraftCore;
 
 namespace GladMMO
 {
-	public abstract class BaseObjectUpdateBlockHandler<TSpecificUpdateBlockType> : IObjectUpdateBlockHandler<TSpecificUpdateBlockType> 
+	/*public abstract class BaseObjectUpdateBlockHandler<TSpecificUpdateBlockType> : IObjectUpdateBlockHandler<TSpecificUpdateBlockType> 
 		where TSpecificUpdateBlockType : ObjectUpdateBlock
 	{
 		/// <inheritdoc />
@@ -36,5 +35,5 @@ namespace GladMMO
 			else
 				throw new InvalidOperationException($"Failed to handle UpdateBlock: {updateBlock.GetType().Name} in {GetType().Name} because does not match Type: {typeof(TSpecificUpdateBlockType).Name}.");
 		}
-	}
+	}*/
 }

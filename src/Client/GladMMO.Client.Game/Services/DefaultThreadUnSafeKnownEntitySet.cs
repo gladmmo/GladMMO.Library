@@ -3,22 +3,21 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Text;
-using FreecraftCore;
 
 namespace GladMMO
 {
 	public sealed class DefaultThreadUnSafeKnownEntitySet : IKnownEntitySet, IReadonlyKnownEntitySet
 	{
-		private HashSet<ObjectGuid> InternalKnownSet { get; }
+		private HashSet<NetworkEntityGuid> InternalKnownSet { get; }
 
 		/// <inheritdoc />
 		public DefaultThreadUnSafeKnownEntitySet()
 		{
-			InternalKnownSet = new HashSet<ObjectGuid>(ObjectGuidEqualityComparer<ObjectGuid>.Instance);
+			InternalKnownSet = new HashSet<NetworkEntityGuid>(NetworkGuidEqualityComparer<NetworkEntityGuid>.Instance);
 		}
 
 		/// <inheritdoc />
-		public void RemoveEntity(ObjectGuid guid)
+		public void RemoveEntity(NetworkEntityGuid guid)
 		{
 			if(!isEntityKnown(guid))
 				throw new InvalidOperationException($"Cannot removed EntityGuid: {guid} because does not exists in Set: {nameof(DefaultThreadUnSafeKnownEntitySet)}.");
@@ -27,7 +26,7 @@ namespace GladMMO
 		}
 
 		/// <inheritdoc />
-		public void AddEntity(ObjectGuid guid)
+		public void AddEntity(NetworkEntityGuid guid)
 		{
 			if(isEntityKnown(guid))
 				throw new InvalidOperationException($"Cannot add EntityGuid: {guid} because it already exists in Set: {nameof(DefaultThreadUnSafeKnownEntitySet)}.");
@@ -37,13 +36,13 @@ namespace GladMMO
 
 		/// <inheritdoc />
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public bool isEntityKnown(ObjectGuid guid)
+		public bool isEntityKnown(NetworkEntityGuid guid)
 		{
 			return InternalKnownSet.Contains(guid);
 		}
 
 		/// <inheritdoc />
-		public IEnumerator<ObjectGuid> GetEnumerator()
+		public IEnumerator<NetworkEntityGuid> GetEnumerator()
 		{
 			return InternalKnownSet.GetEnumerator();
 		}

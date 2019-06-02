@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Text;
-using FreecraftCore;
 using JetBrains.Annotations;
 
 namespace GladMMO
@@ -10,15 +9,15 @@ namespace GladMMO
 	//TODO: We need some handling for callback cleanup, especially when an entity disappears.
 	public sealed class EntityDataChangeCallbackManager : IEntityDataChangeCallbackRegisterable, IEntityDataChangeCallbackService
 	{
-		private Dictionary<ObjectGuid, Dictionary<int, Action<int>>> CallbackMap { get; }
+		private Dictionary<NetworkEntityGuid, Dictionary<int, Action<int>>> CallbackMap { get; }
 
 		public EntityDataChangeCallbackManager()
 		{
-			CallbackMap = new Dictionary<ObjectGuid, Dictionary<int, Action<int>>>(ObjectGuidEqualityComparer<ObjectGuid>.Instance);
+			CallbackMap = new Dictionary<NetworkEntityGuid, Dictionary<int, Action<int>>>(NetworkGuidEqualityComparer<NetworkEntityGuid>.Instance);
 		}
 
 		/// <inheritdoc />
-		public IEntityDataEventUnregisterable RegisterCallback<TCallbackValueCastType>(ObjectGuid entity, int dataField, Action<ObjectGuid, EntityDataChangedArgs<TCallbackValueCastType>> callback) 
+		public IEntityDataEventUnregisterable RegisterCallback<TCallbackValueCastType>(NetworkEntityGuid entity, int dataField, Action<NetworkEntityGuid, EntityDataChangedArgs<TCallbackValueCastType>> callback) 
 			where TCallbackValueCastType : struct
 		{
 			//TODO: Anyway we can avoid this for registering callbacks, wasted cycles kinda
@@ -43,7 +42,7 @@ namespace GladMMO
 		}
 
 		/// <inheritdoc />
-		public void InvokeChangeEvents(ObjectGuid entity, int field, int newValueAsInt)
+		public void InvokeChangeEvents(NetworkEntityGuid entity, int field, int newValueAsInt)
 		{
 			//We aren't watching ANY data changes for this particular entity.
 			if(!CallbackMap.ContainsKey(entity))

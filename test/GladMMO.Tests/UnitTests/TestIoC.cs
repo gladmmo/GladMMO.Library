@@ -5,7 +5,6 @@ using System.Text;
 using Autofac;
 using Common.Logging;
 using Fasterflect;
-using FreecraftCore;
 using Glader.Essentials;
 using Moq;
 using GladMMO.Client;
@@ -98,7 +97,7 @@ namespace GladMMO
 				.As<ISceneManager>();
 
 			//Common thing used in temp registeration
-			builder.RegisterInstance(ObjectGuid.Empty)
+			builder.RegisterInstance(NetworkEntityGuid.Empty)
 				.AsSelf();
 
 			//We do this to override the UnityLogger which calls ECall Sec errors.

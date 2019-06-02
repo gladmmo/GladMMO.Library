@@ -17,5 +17,12 @@ namespace GladMMO
 		/// </summary>
 		/// <returns></returns>
 		string RetrieveWithType();
+
+		/// <summary>
+		/// Gets the scheme/type of authentication for the token
+		/// and only the scheme/type.
+		/// </summary>
+		/// <returns></returns>
+		string RetrieveType();
 	}
 }

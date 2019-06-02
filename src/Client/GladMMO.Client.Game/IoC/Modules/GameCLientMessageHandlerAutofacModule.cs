@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
 using Autofac;
-using FreecraftCore;
 using Glader.Essentials;
 using GladNet;
 
@@ -34,18 +33,18 @@ namespace GladMMO
 				.AsImplementedInterfaces()
 				.InstancePerLifetimeScope();
 
-			builder.RegisterType<LoggableUnknownOpcodePayloadHandler>()
+			/*builder.RegisterType<LoggableUnknownOpcodePayloadHandler>()
 				.AsImplementedInterfaces()
 				.AsSelf()
-				.SingleInstance();
+				.SingleInstance();*/
 
-			builder.RegisterType<MessageHandlerService<GamePacketPayload, GamePacketPayload>>()
-				.As<MessageHandlerService<GamePacketPayload, GamePacketPayload>>()
-				.UsingConstructor(typeof(IEnumerable<IPeerMessageHandler<GamePacketPayload, GamePacketPayload>>), typeof(IPeerPayloadSpecificMessageHandler<GamePacketPayload, GamePacketPayload>))
+			builder.RegisterType<MessageHandlerService<GameServerPacketPayload, GameClientPacketPayload>>()
+				.As<MessageHandlerService<GameServerPacketPayload, GameClientPacketPayload>>()
+				.UsingConstructor(typeof(IEnumerable<IPeerMessageHandler<GameServerPacketPayload, GameClientPacketPayload>>), typeof(IPeerPayloadSpecificMessageHandler<GameServerPacketPayload, GameClientPacketPayload>))
 				.InstancePerLifetimeScope();
 
 			//HelloKitty: We just pass 1 since we don't really use the concept of scenes, so it can kinda be ignored.
-			builder.RegisterModule(new BaseHandlerRegisterationModule<IPeerMessageHandler<GamePacketPayload, GamePacketPayload>>((int)SceneType, GetType().Assembly));
+			builder.RegisterModule(new BaseHandlerRegisterationModule<IPeerMessageHandler<GameServerPacketPayload, GameClientPacketPayload>>((int)SceneType, GetType().Assembly));
 		}
 	}
 }

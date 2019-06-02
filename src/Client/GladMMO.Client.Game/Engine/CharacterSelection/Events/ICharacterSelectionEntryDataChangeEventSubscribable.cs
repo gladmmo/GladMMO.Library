@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using FreecraftCore;
 
 namespace GladMMO
 {
@@ -12,10 +11,10 @@ namespace GladMMO
 
 	public sealed class CharacterSelectionEntryDataChangeEventArgs : EventArgs
 	{
-		public ObjectGuid CharacterEntityGuid { get; }
+		public NetworkEntityGuid CharacterEntityGuid { get; }
 
 		/// <inheritdoc />
-		public CharacterSelectionEntryDataChangeEventArgs([NotNull] ObjectGuid characterEntityGuid)
+		public CharacterSelectionEntryDataChangeEventArgs([NotNull] NetworkEntityGuid characterEntityGuid)
 		{
 			CharacterEntityGuid = characterEntityGuid ?? throw new ArgumentNullException(nameof(characterEntityGuid));
 		}

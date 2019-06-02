@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
-using FreecraftCore;
 using Moq;
 using NUnit.Framework;
 
@@ -26,7 +25,7 @@ namespace GladMMO
 			//arrange
 			EntityDataChangeCallbackManager callbackManager = new EntityDataChangeCallbackManager();
 
-			Assert.DoesNotThrow(() => callbackManager.RegisterCallback<float>(new ObjectGuid((ulong)guid), fieldType, (eg, args) => { }));
+			Assert.DoesNotThrow(() => callbackManager.RegisterCallback<float>(new NetworkEntityGuid((ulong)guid), fieldType, (eg, args) => { }));
 		}
 
 		[Test]
@@ -38,8 +37,8 @@ namespace GladMMO
 			//arrange
 			EntityDataChangeCallbackManager callbackManager = new EntityDataChangeCallbackManager();
 
-			Assert.DoesNotThrow(() => callbackManager.RegisterCallback<float>(new ObjectGuid((ulong)guid), fieldType, (eg, args) => { }));
-			Assert.DoesNotThrow(() => callbackManager.RegisterCallback<float>(new ObjectGuid((ulong)guid), fieldType, (eg, args) => { }));
+			Assert.DoesNotThrow(() => callbackManager.RegisterCallback<float>(new NetworkEntityGuid((ulong)guid), fieldType, (eg, args) => { }));
+			Assert.DoesNotThrow(() => callbackManager.RegisterCallback<float>(new NetworkEntityGuid((ulong)guid), fieldType, (eg, args) => { }));
 		}
 
 		[Test]
@@ -49,7 +48,7 @@ namespace GladMMO
 			EntityDataChangeCallbackManager callbackManager = new EntityDataChangeCallbackManager();
 
 			//assert
-			Assert.DoesNotThrow(() => callbackManager.InvokeChangeEvents(ObjectGuid.Empty, 3, 5));
+			Assert.DoesNotThrow(() => callbackManager.InvokeChangeEvents(NetworkEntityGuid.Empty, 3, 5));
 		}
 
 		[Test]
@@ -63,13 +62,13 @@ namespace GladMMO
 			EntityDataChangeCallbackManager callbackManager = new EntityDataChangeCallbackManager();
 
 			//act
-			callbackManager.RegisterCallback<float>(new ObjectGuid((ulong)guid), fieldType, (eg, args) =>
+			callbackManager.RegisterCallback<float>(new NetworkEntityGuid((ulong)guid), fieldType, (eg, args) =>
 			{
 				//Call so we can check for test purposes
 				testCallback.Object.GetEnumerator();
 			});
 
-			callbackManager.InvokeChangeEvents(new ObjectGuid((ulong)guid), fieldType, 5);
+			callbackManager.InvokeChangeEvents(new NetworkEntityGuid((ulong)guid), fieldType, 5);
 
 			//assert
 			testCallback.Verify(enumerable => enumerable.GetEnumerator(), Times.Once);
@@ -87,15 +86,15 @@ namespace GladMMO
 			EntityDataChangeCallbackManager callbackManager = new EntityDataChangeCallbackManager();
 
 			//act
-			callbackManager.RegisterCallback<float>(new ObjectGuid((ulong)guid), fieldType, (eg, args) =>
+			callbackManager.RegisterCallback<float>(new NetworkEntityGuid((ulong)guid), fieldType, (eg, args) =>
 			{
 				//Call so we can check for test purposes
 				testCallback.Object.GetEnumerator();
 			});
 
 			//Call twice
-			callbackManager.InvokeChangeEvents(new ObjectGuid((ulong)guid), fieldType, 5);
-			callbackManager.InvokeChangeEvents(new ObjectGuid((ulong)guid), fieldType, 5);
+			callbackManager.InvokeChangeEvents(new NetworkEntityGuid((ulong)guid), fieldType, 5);
+			callbackManager.InvokeChangeEvents(new NetworkEntityGuid((ulong)guid), fieldType, 5);
 
 			//assert
 			testCallback.Verify(enumerable => enumerable.GetEnumerator(), Times.Exactly(2));
@@ -113,16 +112,16 @@ namespace GladMMO
 			EntityDataChangeCallbackManager callbackManager = new EntityDataChangeCallbackManager();
 
 			//act
-			IEntityDataEventUnregisterable unregisterable = callbackManager.RegisterCallback<float>(new ObjectGuid((ulong)guid), fieldType, (eg, args) =>
+			IEntityDataEventUnregisterable unregisterable = callbackManager.RegisterCallback<float>(new NetworkEntityGuid((ulong)guid), fieldType, (eg, args) =>
 			{
 				//Call so we can check for test purposes
 				testCallback.Object.GetEnumerator();
 			});
 
 			//Call twice but unregister after the first call.
-			callbackManager.InvokeChangeEvents(new ObjectGuid((ulong)guid), fieldType, 5);
+			callbackManager.InvokeChangeEvents(new NetworkEntityGuid((ulong)guid), fieldType, 5);
 			unregisterable.Unregister();
-			callbackManager.InvokeChangeEvents(new ObjectGuid((ulong)guid), fieldType, 5);
+			callbackManager.InvokeChangeEvents(new NetworkEntityGuid((ulong)guid), fieldType, 5);
 
 			//assert
 			testCallback.Verify(enumerable => enumerable.GetEnumerator(), Times.Once);
@@ -141,22 +140,22 @@ namespace GladMMO
 			EntityDataChangeCallbackManager callbackManager = new EntityDataChangeCallbackManager();
 
 			//act
-			callbackManager.RegisterCallback<float>(new ObjectGuid((ulong)guid), fieldType, (eg, args) =>
+			callbackManager.RegisterCallback<float>(new NetworkEntityGuid((ulong)guid), fieldType, (eg, args) =>
 			{
 				//Call so we can check for test purposes
 				testCallback.Object.GetEnumerator();
 			});
 
 			//Of the same type
-			callbackManager.RegisterCallback<float>(new ObjectGuid((ulong)guid), fieldType, (eg, args) =>
+			callbackManager.RegisterCallback<float>(new NetworkEntityGuid((ulong)guid), fieldType, (eg, args) =>
 			{
 				//Call so we can check for test purposes
 				testCallback2.Object.GetEnumerator();
 			});
 
 			//Call twice
-			callbackManager.InvokeChangeEvents(new ObjectGuid((ulong)guid), fieldType, 5);
-			callbackManager.InvokeChangeEvents(new ObjectGuid((ulong)guid), fieldType, 5);
+			callbackManager.InvokeChangeEvents(new NetworkEntityGuid((ulong)guid), fieldType, 5);
+			callbackManager.InvokeChangeEvents(new NetworkEntityGuid((ulong)guid), fieldType, 5);
 
 			//assert
 			testCallback.Verify(enumerable => enumerable.GetEnumerator(), Times.Exactly(2));
@@ -172,22 +171,22 @@ namespace GladMMO
 			EntityDataChangeCallbackManager callbackManager = new EntityDataChangeCallbackManager();
 
 			//act
-			callbackManager.RegisterCallback<float>(new ObjectGuid((ulong)5), 2, (eg, args) =>
+			callbackManager.RegisterCallback<float>(new NetworkEntityGuid((ulong)5), 2, (eg, args) =>
 			{
 				//Call so we can check for test purposes
 				testCallback.Object.GetEnumerator();
 			});
 
 			//Of the same type
-			callbackManager.RegisterCallback<float>(new ObjectGuid((ulong)6), 2, (eg, args) =>
+			callbackManager.RegisterCallback<float>(new NetworkEntityGuid((ulong)6), 2, (eg, args) =>
 			{
 				//Call so we can check for test purposes
 				testCallback2.Object.GetEnumerator();
 			});
 
 			//Call twice
-			callbackManager.InvokeChangeEvents(new ObjectGuid((ulong)5), 2, 5);
-			callbackManager.InvokeChangeEvents(new ObjectGuid((ulong)6), 2, 5);
+			callbackManager.InvokeChangeEvents(new NetworkEntityGuid((ulong)5), 2, 5);
+			callbackManager.InvokeChangeEvents(new NetworkEntityGuid((ulong)6), 2, 5);
 
 			//assert
 			testCallback.Verify(enumerable => enumerable.GetEnumerator(), Times.Exactly(1));

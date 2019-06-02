@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
-using FreecraftCore;
 
 namespace GladMMO
 {
-	public sealed class StubbedObjectUpdateBlockHandler : IObjectUpdateBlockHandler
+	/*public sealed class StubbedObjectUpdateBlockHandler : IObjectUpdateBlockHandler
 	{
 		/// <inheritdoc />
 		public ObjectUpdateType UpdateType { get; }
@@ -23,5 +22,5 @@ namespace GladMMO
 		{
 
 		}
-	}
+	}*/
 }

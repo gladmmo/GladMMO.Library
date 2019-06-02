@@ -1,0 +1,55 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <LangVersion>7.3</LangVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <LangVersion>7.3</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Autofac" Version="4.8.1" />
+    <PackageReference Include="Glader.Essentials.Unity" Version="0.0.13" />
+    <PackageReference Include="GladNet3.Client.DotNetTcpClient" Version="3.0.46" />
+    <PackageReference Include="GladNet3.Handler.API" Version="3.0.46" />
+    <PackageReference Include="GladNet3.Serializer.ProtobufNet" Version="3.0.46" />
+    <PackageReference Include="GladNet3.Server.DotNetTcpServer" Version="3.0.47" />
+    <PackageReference Include="Nito.AsyncEx" Version="5.0.0-pre-05" />
+    <PackageReference Include="PostSharp.Patterns.Caching" Version="5.0.52" />
+    <PackageReference Include="Refit" Version="4.6.58" />
+    <PackageReference Include="SceneJect.Common" Version="3.0.31" />
+    <PackageReference Include="SceneJect.Editor" Version="3.0.31" />
+    <PackageReference Include="SceneJect.Metadata" Version="3.0.31" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Client\GladMMO.Client.ServiceDiscovery\GladMMO.Client.ServiceDiscovery.csproj" />
+    <ProjectReference Include="..\..\GladMMO.Client.Common\GladMMO.Client.Common.csproj" />
+    <ProjectReference Include="..\..\GladMMO.Common\GladMMO.Common.csproj" />
+    <ProjectReference Include="..\..\GladMMO.Models.Server.ZoneServer\GladMMO.Models.Server.ZoneServer.csproj" />
+    <ProjectReference Include="..\..\GladMMO.Models.ServiceDiscovery\GladMMO.Models.ServiceDiscovery.csproj" />
+    <ProjectReference Include="..\..\GladMMO.Network.Common\GladMMO.Network.Common.csproj" />
+    <ProjectReference Include="..\..\GladMMO.Payloads.ZoneServer\GladMMO.Payloads.ZoneServer.csproj" />
+    <ProjectReference Include="..\..\GladMMO.Unity.Common\GladMMO.Unity.Common.csproj" />
+    <ProjectReference Include="..\..\GladMMO.ZoneServer.Common\GladMMO.ZoneServer.Common.csproj" />
+    <ProjectReference Include="..\GladMMO.Server.Common\GladMMO.Server.Common.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="UnityEngine">
+      <HintPath>..\..\..\lib\Unity\UnityEngine.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Debug\" />
+    <Folder Include="Engine\Tickable\Base\" />
+    <Folder Include="Handlers\Subhandlers\" />
+  </ItemGroup>
+
+</Project>

@@ -10,12 +10,12 @@ cd servsel
 start "servsel" cmd /c dotnet GladMMO.Service.ServerSelection.dll --url=http://0.0.0.0:5002
 cd ..
 
-cd gameservdisc
-start "gameservdisc" cmd /c dotnet GladMMO.Service.ServiceDiscovery.dll --url=http://0.0.0.0:5003
-cd ..
-
 cd gameserv
 start "gameserv" cmd /c dotnet GladMMO.Service.GameServer.dll --url=http://0.0.0.0:5004
+cd ..
+
+cd gameservdisc
+start "gameservdisc" cmd /c dotnet GladMMO.Service.ServiceDiscovery.dll --url=http://0.0.0.0:5003
 cd ..
 
 cd contentserv

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using FreecraftCore;
 
 namespace GladMMO
 {
@@ -15,10 +14,10 @@ namespace GladMMO
 		/// <summary>
 		/// Entity guid of the entity that visibility was lost for.
 		/// </summary>
-		public ObjectGuid EntityGuid { get; }
+		public NetworkEntityGuid EntityGuid { get; }
 
 		/// <inheritdoc />
-		public NetworkEntityVisibilityLostEventArgs([NotNull] ObjectGuid entityGuid)
+		public NetworkEntityVisibilityLostEventArgs([NotNull] NetworkEntityGuid entityGuid)
 		{
 			EntityGuid = entityGuid ?? throw new ArgumentNullException(nameof(entityGuid));
 		}

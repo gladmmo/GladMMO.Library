@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using FreecraftCore;
 
 namespace GladMMO
 {
-	public interface IObjectUpdateBlockHandler
+	/*public interface IObjectUpdateBlockHandler
 	{
 		ObjectUpdateType UpdateType { get; }
 
@@ -16,5 +15,5 @@ namespace GladMMO
 		where TSpecificUpdateBlockType : ObjectUpdateBlock
 	{
 		void HandleUpdateBlock(TSpecificUpdateBlockType updateBlock);
-	}
+	}*/
 }

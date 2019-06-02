@@ -2,23 +2,23 @@
   "Region": "US",
   "ServiceEndpoints": {
     "Authentication": {
-      "endpointAddress": "http://192.168.0.3",
+      "endpointAddress": "http://192.168.0.12",
       "endpointPort": 5001
     },
     "ServerSelection": {
-      "endpointAddress": "http://192.168.0.3",
+      "endpointAddress": "http://192.168.0.12",
       "endpointPort": 5002
     },
     "GameServer": {
-      "endpointAddress": "http://192.168.0.3",
+      "endpointAddress": "http://192.168.0.12",
       "endpointPort": 5004
     },
     "ContentServer": {
-      "endpointAddress": "http://192.168.0.3",
+      "endpointAddress": "http://192.168.0.12",
       "endpointPort": 5005
     },
     "SocialService": {
-      "endpointAddress": "http://192.168.0.3",
+      "endpointAddress": "http://192.168.0.12",
       "endpointPort": 5008
     }
   }

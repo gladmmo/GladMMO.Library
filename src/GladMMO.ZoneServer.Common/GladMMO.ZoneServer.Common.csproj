@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\GladMMO.Network.Common\GladMMO.Network.Common.csproj" />
+    <ProjectReference Include="..\GladMMO.Payloads.ZoneServer\GladMMO.Payloads.ZoneServer.csproj" />
   </ItemGroup>
 
   <ItemGroup>

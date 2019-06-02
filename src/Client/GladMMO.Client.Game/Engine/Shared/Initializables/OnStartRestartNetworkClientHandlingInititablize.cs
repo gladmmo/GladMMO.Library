@@ -4,7 +4,6 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Common.Logging;
-using FreecraftCore;
 using Glader.Essentials;
 using GladNet;
 
@@ -20,7 +19,7 @@ namespace GladMMO
 		/// <summary>
 		/// The managed network client that the Unity3D client is implemented on-top of.
 		/// </summary>
-		private IManagedNetworkClient<GamePacketPayload, GamePacketPayload> Client { get; }
+		private IManagedNetworkClient<GameClientPacketPayload, GameServerPacketPayload> Client { get; }
 
 		private INetworkClientManager ClientManager { get; }
 
@@ -31,7 +30,7 @@ namespace GladMMO
 
 		/// <inheritdoc />
 		public OnStartRestartNetworkClientHandlingInititablize(
-			[NotNull] IManagedNetworkClient<GamePacketPayload, GamePacketPayload> client, 
+			[NotNull] IManagedNetworkClient<GameClientPacketPayload, GameServerPacketPayload> client, 
 			[NotNull] INetworkClientManager clientManager,
 			[NotNull] ILog logger)
 		{
