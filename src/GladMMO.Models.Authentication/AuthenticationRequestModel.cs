@@ -38,6 +38,14 @@ namespace GladMMO
 		public string GrantType { get; private set; } = "password"; //setter required by refit
 
 		/// <summary>
+		/// Unique value used to prevent replay attacks.
+		/// </summary>
+		[NotNull]
+		[AliasAs("nonce")]
+		[JsonProperty(PropertyName = "nonce", Required = Required.Default)]
+		public string Nonce { get; private set; } = Guid.NewGuid().ToString(); //This isn't technically cryptographically secure, but it's enough.
+
+		/// <summary>
 		/// Creates a new Authentication Request Model.
 		/// </summary>
 		/// <param name="userName">The non-null username.</param>
@@ -63,7 +71,7 @@ namespace GladMMO
 		public override string ToString()
 		{
 			//Just return the body that will likely be used for the auth
-			return $"grant_type=password&username={UserName}&password={Password}";
+			return $"grant_type=password&username={UserName}&password={Password}&nonce={Nonce}";
 		}
 	}
 }
