@@ -12,7 +12,7 @@ namespace GladMMO
 	/// JWT Token model.
 	/// </summary>
 	[JsonObject]
-	public sealed class JWTModel
+	public class JWTModel
 	{
 		/// <summary>
 		/// JWT access token if authentication was successful.
@@ -35,6 +35,10 @@ namespace GladMMO
 		[JsonProperty(PropertyName = "error_description", Required = Required.Default)] //optional because could be a valid token
 		public string ErrorDescription { get; private set; } //WARNING: Don't make these readonly. It breakes for some reason.
 
+		[CanBeNull]
+		[JsonProperty(PropertyName = "playfab_token", Required = Required.Default)] //optional because could be a valid token
+		public string PlayfabAuthenticationToken { get; internal set; }
+
 		[JsonIgnore]
 		private Lazy<bool> _isTokenValid { get; }
 
@@ -51,7 +55,7 @@ namespace GladMMO
 		public JWTModel([NotNull] string accessToken)
 			: this()
 		{
-			if(string.IsNullOrWhiteSpace(accessToken)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(accessToken));
+			if (string.IsNullOrWhiteSpace(accessToken)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(accessToken));
 
 			AccessToken = accessToken;
 		}
@@ -74,7 +78,8 @@ namespace GladMMO
 		/// <summary>
 		/// Serializer ctor
 		/// </summary>
-		private JWTModel()
+		[JsonConstructor]
+		protected JWTModel()
 		{
 			_isTokenValid = new Lazy<bool>(CheckIfTokenIsValid, true);
 		}
