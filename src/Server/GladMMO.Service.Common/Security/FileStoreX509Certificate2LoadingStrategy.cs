@@ -20,12 +20,26 @@ namespace GladMMO
 #else
 			if (File.Exists(name))
 			{
-				//The below will not work for local. Though behind IIS in AWS we must do the below
+				try
+				{
+					//The below will not work for local. Though behind IIS in AWS we must do the below
 #if !DEBUG_LOCAL && !RELEASE_LOCAL
-				cert = new X509Certificate2(name, "", X509KeyStorageFlags.EphemeralKeySet | X509KeyStorageFlags.MachineKeySet);
+					cert = new X509Certificate2(name, "", X509KeyStorageFlags.EphemeralKeySet | X509KeyStorageFlags.MachineKeySet);
 #else
-				cert = new X509Certificate2(name);
+					cert = new X509Certificate2(name);
 #endif
+				}
+				catch (Exception e)
+				{
+					//Maybe it has a password
+					//The below will not work for local. Though behind IIS in AWS we must do the below
+#if !DEBUG_LOCAL && !RELEASE_LOCAL
+					cert = new X509Certificate2(name, "Test", X509KeyStorageFlags.EphemeralKeySet | X509KeyStorageFlags.MachineKeySet);
+#else
+					cert = new X509Certificate2(name, "Test");
+#endif
+				}
+
 				return true;
 			}
 
