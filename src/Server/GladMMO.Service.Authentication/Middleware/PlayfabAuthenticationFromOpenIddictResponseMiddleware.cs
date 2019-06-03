@@ -100,10 +100,6 @@ namespace GladMMO
 				if (result == null)
 					throw new InvalidOperationException($"Refit returned invalid {nameof(LoginResult)} model. Was null.");
 
-				//We have an error
-				if(!String.IsNullOrWhiteSpace(result.ErrorMessage))
-					throw new InvalidOperationException($"Encountered PlayFab Error: {result.ErrorMessage}");
-
 				//TODO: Don't assume it's successful.
 				return result.Data.SessionTicket;
 			}
