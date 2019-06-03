@@ -1,27 +1,23 @@
 cd build\auth
-start "auth" cmd /c dotnet GladMMO.Service.Authentication.dll --url=http://192.168.0.3:5001
+start "auth" dotnet GladMMO.Service.Authentication.dll --usehttps Certs/vrguardians_cert.pfx
 cd ..
 
 cd servdisc
-start "servdisc" cmd /c dotnet GladMMO.Service.ServiceDiscovery.dll --url=http://192.168.0.3:5000
+start "servdisc" dotnet GladMMO.Service.ServiceDiscovery.dll --url=http://192.168.0.12:5000
 cd ..
 
 cd servsel
-start "servsel" cmd /c dotnet GladMMO.Service.ServerSelection.dll --url=http://192.168.0.3:5002
-cd ..
-
-cd gameservdisc
-start "gameservdisc" cmd /c dotnet GladMMO.Service.ServiceDiscovery.dll --url=http://192.168.0.3:5003
+start "servsel" dotnet GladMMO.Service.ServerSelection.dll --url=http://192.168.0.12:5002
 cd ..
 
 cd gameserv
-start "gameserv" cmd /c dotnet GladMMO.Service.GameServer.dll --url=http://192.168.0.3:5004
+start "gameserv" dotnet GladMMO.Service.GameServer.dll --url=http://192.168.0.12:5004
+cd ..
+
+cd gameservdisc
+start "gameservdisc" dotnet GladMMO.Service.ServiceDiscovery.dll --url=http://192.168.0.12:5003
 cd ..
 
 cd contentserv
-start "contentserv" cmd /c dotnet GladMMO.Service.ContentServer.dll --url=http://192.168.0.3:5005
-cd ..
-
-cd social
-start "social" cmd /c dotnet GladMMO.Service.Social.dll --url=http://192.168.0.3:5008
+start "contentserv" dotnet GladMMO.Service.ContentServer.dll --url=http://192.168.0.12:5005
 cd ..
