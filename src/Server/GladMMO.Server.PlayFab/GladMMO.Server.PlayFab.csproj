@@ -2,15 +2,11 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Configurations>Debug;Release;</Configurations>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="PlayFabAllSDK" Version="1.51.190520" />
     <PackageReference Include="Refit" Version="4.6.107" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\GladMMO.Models.ServerSelection\GladMMO.Models.ServerSelection.csproj" />
   </ItemGroup>
 
 </Project>
