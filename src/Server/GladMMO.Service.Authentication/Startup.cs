@@ -19,7 +19,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Protocols;
 using Microsoft.IdentityModel.Tokens;
+using OpenIddict.Core;
+using Refit;
 
 namespace GladMMO
 {
@@ -40,8 +43,13 @@ namespace GladMMO
 		{
 			services.Configure<IISOptions>(options =>
 			{
-				options.ForwardClientCertificate = false;
 				options.AutomaticAuthentication = false;
+			});
+
+			services.AddHttpsRedirection(options =>
+			{
+				options.RedirectStatusCode = StatusCodes.Status308PermanentRedirect;
+				options.HttpsPort = 443;
 			});
 
 			// Add framework services.
@@ -92,10 +100,6 @@ namespace GladMMO
 				// Register the Entity Framework stores.
 				options.AddEntityFrameworkCoreStores<GuardiansAuthenticationDbContext>();
 
-				//This will disable the https requirement if we're debugging or not in production/debug mode.
-#if DEBUG || DEBUGBUILD
-				options.DisableHttpsRequirement();
-#endif
 				// Register the ASP.NET Core MVC binder used by OpenIddict.
 				// Note: if you don't call this method, you won't be able to
 				// bind OpenIdConnectRequest or OpenIdConnectResponse parameters.
@@ -109,7 +113,6 @@ namespace GladMMO
 
 #warning Don't deploy this into production; we should use HTTPS. Even if it is behind IIS or HAProxy etc.
 				options.DisableHttpsRequirement();
-
 				try
 				{
 					//Loads the cert from the specified path
@@ -119,6 +122,9 @@ namespace GladMMO
 				{
 					throw new InvalidOperationException($"Failed to load cert at Path: {authOptions.Value.JwtSigningX509Certificate2Path} with Root: {Directory.GetCurrentDirectory()}. Error: {e.Message} \n\n Stack: {e.StackTrace}", e);
 				}
+
+				options.SetIssuer(new Uri(@"https://auth.vrguardians.net"));
+				options.RequireClientIdentification();
 			});
 
 #warning This is just for the test build, we don't actually want to do this
@@ -130,6 +136,12 @@ namespace GladMMO
 				options.Password.RequireLowercase = false;
 				options.Password.RequireNonAlphanumeric = false;
 			});
+
+			services.AddSingleton<IPlayfabAuthenticationClient>(provider =>
+				{
+					//TODO: make Playfab endpoint configurable.
+					return RestService.For<IPlayfabAuthenticationClient>($@"https://{63815}.playfabapi.com");
+				});
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -137,53 +149,13 @@ namespace GladMMO
 		{
 #warning Do not deploy exceptions page into production
 			app.UseDeveloperExceptionPage();
+			app.UseHsts();
+			//app.UseHttpsRedirection(); //Fucking PlayFab queries this server like a mongoloid and doesn't respect HTTPS redirects
 			app.UseAuthentication();
 			loggerFactory.RegisterGuardiansLogging(GeneralConfiguration);
 			loggerFactory.AddDebug();
+			app.UseMiddleware<PlayfabAuthenticationFromOpenIddictResponseMiddleware>();
 			app.UseMvcWithDefaultRoute();
-
-			//TODO: Refactor into common service library so boilerplate registeration doesn't need to be repeated
-			//TODO: Load Consul agent URI from file
-			//TODO: Handle region tag loading from config
-			//After the pipeline is configured we should then register this service with Consul.
-			/*IConsulClient<IConsulAgentServiceHttpApiService> agentService = 
-				new ConsulDotNetHttpClient<IConsulAgentServiceHttpApiService>(@"http://localhost:8500");
-
-			//TODO: Handle logging better. We don't want to close just because of Consul
-			//We will be orphaned though.
-			try
-			{
-				Task.Factory.StartNew(async () =>
-				{
-					await Task.Delay(2000)
-						.ConfigureAwait(false);
-
-					//TODO: Validate this
-					//The builder context actually has the listener URL that we need.
-					var serverAddressesFeature = app.ServerFeatures.Get<IServerAddressesFeature>();
-					string address = serverAddressesFeature.Addresses.First();
-
-					Uri hostUri = new Uri(address);
-
-					await agentService.Service.RegisterService(new AgentServiceRegisterationRequest()
-						{
-							//See: https://github.com/aspnet/Hosting/blob/a63932a492513cdeb4935661145084cad2ae5521/src/Microsoft.AspNetCore.Hosting.Abstractions/HostingAbstractionsWebHostBuilderExtensions.cs#L147
-							//TODO: How should we decide public address?
-							Address = $"{hostUri.Scheme}://{hostUri.Host}",
-							Port = hostUri.Port,
-							Id = Guid.NewGuid().ToString(),
-							Name = "Authentication",
-
-							//TODO: Handle locale from config; prod vs dev too
-							Tags = new[] {"US", "Dev"}
-						})
-						.ConfigureAwait(false);
-				});
-			}
-			catch(Exception e)
-			{
-				Console.WriteLine(e);
-			}*/
 		}
 	}
 }
