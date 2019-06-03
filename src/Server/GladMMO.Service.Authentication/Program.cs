@@ -19,7 +19,13 @@ namespace GladMMO
 
 		public static IWebHost BuildWebHost(string[] args) =>
 			WebHost.CreateDefaultBuilder(args)
-				.UseKestrelGuardiansConfig(args)
+				//HelloKitty: This is actually a very special case, the authentication server has 3rd party dependencies now from PlayFab. It will attempt to connect in a very specific way.
+				.UseSetting("https_port", "443")
+				.UseSetting("http_endpoint", "0.0.0.0")
+				.UseSetting("http_port", "80")
+				.UseSetting("https_endpoint", @"0.0.0.0")
+				.UseUrls(@"http://0.0.0.0:80", @"https://0.0.0.0:443")
+				.UseKestrelGuardiansConfig(args, false)
 				.UseIISIntegration()
 				.UseStartup<Startup>()
 				.ConfigureAppConfiguration((context, builder) =>
