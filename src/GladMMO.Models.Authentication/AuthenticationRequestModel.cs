@@ -45,6 +45,15 @@ namespace GladMMO
 		[JsonProperty(PropertyName = "nonce", Required = Required.Default)]
 		public string Nonce { get; private set; } = Guid.NewGuid().ToString(); //This isn't technically cryptographically secure, but it's enough.
 
+		//TODO: Make this configurable, expose it for creation.
+		/// <summary>
+		/// The identifier for the application.
+		/// </summary>
+		[NotNull]
+		[AliasAs("client_id")]
+		[JsonProperty(PropertyName = "client_id", Required = Required.Default)]
+		public string ClientId { get; private set; } = "VRGuardiansAuthentication";
+
 		/// <summary>
 		/// Creates a new Authentication Request Model.
 		/// </summary>
