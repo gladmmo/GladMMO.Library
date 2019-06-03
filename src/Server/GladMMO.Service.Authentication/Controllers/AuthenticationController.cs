@@ -21,9 +21,11 @@ namespace GladMMO
 
 	//From an old OpenIddict OAuth sample and a slightly modified version that I personally use
 	//in https://github.com/GladLive/GladLive.Authentication/blob/master/src/GladLive.Authentication.OAuth/Controllers/AuthorizationController.cs
-	[Route("api/auth")]
+	[Route(AUTHENTICATION_ROUTE_VALUE)]
 	public class AuthenticationController : Controller
 	{
+		internal const string AUTHENTICATION_ROUTE_VALUE = "api/auth";
+
 		private IOptions<IdentityOptions> IdentityOptions { get; }
 
 		private SignInManager<GuardiansApplicationUser> SignInManager { get; }
@@ -148,14 +150,13 @@ namespace GladMMO
 				OpenIdConnectConstants.Scopes.OpenId,
 				OpenIdConnectConstants.Scopes.Profile,
 				OpenIddictConstants.Scopes.Roles
-			}.Intersect(request.GetScopes()));
+			}.Intersect(request.GetScopes().Concat(new string[1] { OpenIdConnectConstants.Scopes.OpenId }))); //HelloKitty: Always include the OpenId, it's required for the Playfab authentication
 
 			ticket.SetResources("auth-server");
 
 			// Note: by default, claims are NOT automatically included in the access and identity tokens.
 			// To allow OpenIddict to serialize them, you must attach them a destination, that specifies
 			// whether they should be included in access tokens, in identity tokens or in both.
-
 			foreach (var claim in ticket.Principal.Claims)
 			{
 				// Never include the security stamp in the access and identity tokens, as it's a secret value.
@@ -171,8 +172,9 @@ namespace GladMMO
 
 				// Only add the iterated claim to the id_token if the corresponding scope was granted to the client application.
 				// The other claims will only be added to the access_token, which is encrypted when using the default format.
-				// We should also add the "sub" claim too for identity sake
-				if ((claim.Type == OpenIdConnectConstants.Claims.Name || claim.Type == OpenIdConnectConstants.Claims.Subject) && ticket.HasScope(OpenIdConnectConstants.Scopes.Profile))
+				if ((claim.Type == OpenIdConnectConstants.Claims.Name && ticket.HasScope(OpenIdConnectConstants.Scopes.Profile)) ||
+					(claim.Type == OpenIdConnectConstants.Claims.Email && ticket.HasScope(OpenIdConnectConstants.Scopes.Email)) ||
+					(claim.Type == OpenIdConnectConstants.Claims.Role && ticket.HasScope(OpenIddictConstants.Claims.Roles)))
 				{
 					destinations.Add(OpenIdConnectConstants.Destinations.IdentityToken);
 				}
