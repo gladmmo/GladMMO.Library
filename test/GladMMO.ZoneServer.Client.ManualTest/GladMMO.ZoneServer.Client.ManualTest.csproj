@@ -1,0 +1,34 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <LangVersion>7.3</LangVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <LangVersion>7.3</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="GladNet3.Client.DotNetTcpClient" Version="3.0.46" />
+    <PackageReference Include="GladNet3.Serializer.ProtobufNet" Version="3.0.46" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\GladMMO.Common\GladMMO.Common.csproj" />
+    <ProjectReference Include="..\..\src\GladMMO.Network.Common\GladMMO.Network.Common.csproj" />
+    <ProjectReference Include="..\..\src\GladMMO.Payloads.ZoneServer\GladMMO.Payloads.ZoneServer.csproj" />
+    <ProjectReference Include="..\..\src\GladMMO.Unity.Common\GladMMO.Unity.Common.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="UnityEngine">
+      <HintPath>..\..\lib\Unity\UnityEngine.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

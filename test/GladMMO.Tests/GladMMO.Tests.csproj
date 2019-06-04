@@ -5,12 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Castle.Core" Version="4.3.1" />
+    <PackageReference Include="Castle.Core" Version="4.1.0" />
     <PackageReference Include="Generic.Math" Version="1.0.2" />
     <PackageReference Include="JetBrains.Annotations" Version="2018.2.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.8.0" />
-    <PackageReference Include="Moq" Version="4.10.1" />
+    <PackageReference Include="Moq" Version="4.7.63" />
     <PackageReference Include="NUnit" Version="3.10.1" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.10.0" />
     <PackageReference Include="OpenIddict" Version="2.0.0-rtm-1060" />
@@ -21,20 +21,29 @@
     <ProjectReference Include="..\..\src\Client\GladMMO.Client.Game\GladMMO.Client.Game.csproj" />
     <ProjectReference Include="..\..\src\GladMMO.Models.Authentication\GladMMO.Models.Authentication.csproj" />
     <ProjectReference Include="..\..\src\GladMMO.Models.ServerSelection\GladMMO.Models.ServerSelection.csproj" />
+    <ProjectReference Include="..\..\src\GladMMO.Models.Social\GladMMO.Models.Social.csproj" />
     <ProjectReference Include="..\..\src\GladMMO.Network.Common\GladMMO.Network.Common.csproj" />
+    <ProjectReference Include="..\..\src\GladMMO.Payloads.ZoneServer\GladMMO.Payloads.ZoneServer.csproj" />
     <ProjectReference Include="..\..\src\Server\GladMMO.Database.Common\GladMMO.Database.Common.csproj" />
+    <ProjectReference Include="..\..\src\Server\GladMMO.Database.GameServer\GladMMO.Database.GameServer.csproj" />
+    <ProjectReference Include="..\..\src\Server\GladMMO.Server.ZoneServer\GladMMO.Server.ZoneServer.csproj" />
+    <ProjectReference Include="..\..\src\Server\GladMMO.Service.GameServer\GladMMO.Service.GameServer.csproj" />
     <ProjectReference Include="..\..\src\Server\GladMMO.Service.ServiceDiscovery\GladMMO.Service.ServiceDiscovery.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="Sirenix.OdinInspector.Attributes">
+      <HintPath>..\..\lib\Nido\Sirenix.OdinInspector.Attributes.dll</HintPath>
+    </Reference>
+    <Reference Include="Sirenix.Serialization">
+      <HintPath>..\..\lib\Nido\Sirenix.Serialization.dll</HintPath>
+    </Reference>
+    <Reference Include="Sirenix.Serialization.Config">
+      <HintPath>..\..\lib\Nido\Sirenix.Serialization.Config.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine">
       <HintPath>..\..\lib\Unity\UnityEngine.dll</HintPath>
     </Reference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="UnitTests\ZoneServer\Factories\" />
-    <Folder Include="UnitTests\ZoneServer\IoC\" />
   </ItemGroup>
 
 </Project>

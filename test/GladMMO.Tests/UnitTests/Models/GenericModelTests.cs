@@ -19,16 +19,24 @@ namespace GladMMO
 		where TContractType : Attribute
 	{
 		public static IEnumerable<Type> ModelTypes { get; } = AuthenticationModelsMetadataMarker.ModelTypes
+			.Concat(GameServerModelsMetadataMarker.ModelTypes)
 			.Concat(ServerSelectionModelsMetadataMarker.ModelTypes)
+			.Concat(ZoneServerModelsMetadataMarker.ModelTypes)
 			.Concat(ServiceDiscoveryModelsMetadataMarker.ModelTypes)
+			.Concat(ZoneServerMetadataMarker.AllProtobufModels)
+			.Concat(SocialModelsMetadataMarker.ModelTypes)
 			.Where(t => t.GetCustomAttribute<TContractType>(true) != null)
 			.Distinct()
 			.ToArray();
 
 		public static IEnumerable<Type> AllTypes { get; } =
 			AuthenticationModelsMetadataMarker.AllTypes
+				.Concat(GameServerModelsMetadataMarker.AllTypes)
 				.Concat(ServerSelectionModelsMetadataMarker.AllTypes)
+				.Concat(ZoneServerModelsMetadataMarker.ModelTypes)
 				.Concat(ServiceDiscoveryModelsMetadataMarker.ModelTypes)
+				.Concat(ZoneServerMetadataMarker.AllProtobufModels)
+				.Concat(SocialModelsMetadataMarker.AllTypes)
 				.Where(t => t.GetCustomAttribute<TContractType>(true) != null)
 				.Distinct()
 				.ToArray();
