@@ -12,6 +12,8 @@
 		Success = 1,
 
 		//TODO: Add more fine grained information about failure.
-		NameUnavailableError = 2
+		NameUnavailableError = 2,
+
+		GeneralServerError = 3
 	}
 }

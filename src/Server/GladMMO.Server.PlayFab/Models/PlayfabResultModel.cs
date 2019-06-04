@@ -18,6 +18,10 @@ namespace GladMMO
 		[JsonProperty(PropertyName = "data")]
 		public TResponseObjectType Data { get; private set; }
 
+		public PlayFabResultModel(TResponseObjectType data)
+		{
+			Data = data;
+		}
 
 		/// <summary>
 		/// Serializer ctor.

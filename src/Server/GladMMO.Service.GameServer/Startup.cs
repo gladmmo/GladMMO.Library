@@ -13,6 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Refit;
 using UnityEngine;
 
 namespace GladMMO
@@ -62,6 +63,8 @@ namespace GladMMO
 				//TODO: This is for testing purposes, we want and have the request to boot up at map 1 as an instance.
 				return new LocalInMemoryZoneInstanceWorkQueue(new ZoneInstanceWorkEntry(1), new ZoneInstanceWorkEntry(1));
 			});
+
+			RegisterRefitInterfaces(services);
 		}
 
 		private static void RegisterDatabaseServices(IServiceCollection services)
@@ -124,6 +127,17 @@ namespace GladMMO
 			loggerFactory.AddDebug();
 
 			app.UseMvcWithDefaultRoute();
+		}
+
+		private void RegisterRefitInterfaces([NotNull] IServiceCollection services)
+		{
+			if (services == null) throw new ArgumentNullException(nameof(services));
+
+			services.AddSingleton<IPlayfabCharacterClient>(provider =>
+			{
+				//TODO: Let's not hardcode the title id.
+				return RestService.For<IPlayfabCharacterClient>($@"https://{63815}.playfabapi.com");
+			});
 		}
 	}
 }

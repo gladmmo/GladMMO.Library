@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authorization;
@@ -54,8 +55,9 @@ namespace GladMMO
 		[AuthorizeJwt] //is it IMPORTANT that this method authorize the user. Don't know the accountid otherwise even, would be impossible.
 		[HttpPost("create/{name}")]
 		[NoResponseCache]
-		public async Task<IActionResult> CreateCharacter([FromRoute] string name)
+		public async Task<IActionResult> CreateCharacter([FromRoute] string name, [FromServices] [NotNull] IPlayfabCharacterClient playfabCharacterClient)
 		{
+			if (playfabCharacterClient == null) throw new ArgumentNullException(nameof(playfabCharacterClient));
 			if(string.IsNullOrWhiteSpace(name)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(name));
 
 			int accountId = ClaimsReader.GetUserIdInt(User);
@@ -64,6 +66,21 @@ namespace GladMMO
 
 			if(!nameIsAvailable)
 				return BadRequest(new CharacterCreationResponse(CharacterCreationResponseCode.NameUnavailableError));
+
+			string playfabId = ClaimsReader.GetPlayfabId(User);
+
+			//Now, we actually need to create the character on PlayFab first. It's better to have an orphaned character on PlayFab
+			//than to have a character without a PlayFab equivalent.
+			PlayFabResultModel<GladMMOPlayFabGrantCharacterToUserResult> playFabResultModel = await playfabCharacterClient.GrantCharacterToUser(new GladMMOPlayFabGrantCharacterToUserRequest(name, "test", playfabId));
+
+			//TODO: Better error handling
+			if (playFabResultModel.ResultCode != HttpStatusCode.OK)
+			{
+				if(Logger.IsEnabled(LogLevel.Error))
+					Logger.LogError($"PlayFab CharacterCreation Erorr: {playFabResultModel.ResultCode}:{playFabResultModel.ResultStatus}");
+
+				return BadRequest(new CharacterCreationResponse(CharacterCreationResponseCode.GeneralServerError));
+			}
 
 			//TODO: Don't expose the database table model
 			//Otherwise we should try to create. There is a race condition here that can cause it to still fail
