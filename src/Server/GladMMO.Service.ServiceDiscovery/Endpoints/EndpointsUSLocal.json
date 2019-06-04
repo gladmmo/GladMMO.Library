@@ -2,8 +2,8 @@
   "Region": "US",
   "ServiceEndpoints": {
     "Authentication": {
-      "endpointAddress": "http://192.168.0.12",
-      "endpointPort": 5001
+      "endpointAddress": "https://192.168.0.12",
+      "endpointPort": 443
     },
     "ServerSelection": {
       "endpointAddress": "http://192.168.0.12",
