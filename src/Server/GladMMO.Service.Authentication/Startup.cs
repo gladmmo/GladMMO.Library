@@ -66,6 +66,16 @@ namespace GladMMO
 
 			services.AddAuthentication();
 
+			services.AddSingleton<IAuthenticationService>(provider =>
+			{
+				//We need to find the listening address.
+				IServerAddressesFeature serverAddresses = provider.GetService<IServerAddressesFeature>();
+				string potentialHttpsAddress = serverAddresses.Addresses.FirstOrDefault(a => a.Contains("https"));
+				potentialHttpsAddress = potentialHttpsAddress ?? serverAddresses.Addresses.First();
+
+				return Refit.RestService.For<IAuthenticationService>(potentialHttpsAddress);
+			});
+
 			services.AddDbContext<GuardiansAuthenticationDbContext>(options =>
 			{
 				//TODO: Setup db options
