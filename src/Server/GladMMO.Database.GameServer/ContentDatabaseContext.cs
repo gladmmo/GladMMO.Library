@@ -30,7 +30,7 @@ namespace GladMMO
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
 			//TODO: Should I have local or also AWS setup here?
-			optionsBuilder.UseMySql("Server=localhost;Database=guardians.gameserver;Uid=root;Pwd=test;");
+			optionsBuilder.UseMySql("Server=192.168.0.3;Database=guardians.gameserver;Uid=root;Pwd=test;");
 
 			base.OnConfiguring(optionsBuilder);
 		}

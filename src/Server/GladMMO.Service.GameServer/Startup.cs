@@ -71,13 +71,7 @@ namespace GladMMO
 		{
 			services.AddDbContext<CharacterDatabaseContext>(o =>
 			{
-				//On local builds we don't want to use config. We want to default to local
-#if !DEBUG_LOCAL && !RELEASE_LOCAL
-				throw new NotSupportedException("AWS/Remote database not supported yet.");
-				//o.UseMySql(authOptions.Value.AuthenticationDatabaseString);
-#else
-				o.UseMySql("Server=72.190.177.214;Database=guardians.gameserver;Uid=root;Pwd=test;");
-#endif
+				o.UseMySql("Server=192.168.0.3;Database=guardians.gameserver;Uid=root;Pwd=test;");
 			});
 
 			services.AddTransient<ICharacterRepository, DatabaseBackedCharacterRepository>();
