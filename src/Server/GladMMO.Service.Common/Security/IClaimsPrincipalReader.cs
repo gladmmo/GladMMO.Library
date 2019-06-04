@@ -30,6 +30,14 @@ namespace GladMMO
 		string GetUserName(ClaimsPrincipal principal);
 
 		/// <summary>
+		/// Returns the pfid claim if present otherwise null.
+		/// (non-standard claim)
+		/// </summary>
+		/// <param name="principal">The <see cref="ClaimsPrincipal"/> instance.</param>
+		/// <returns>The pfid (PlayFab Id) claim or null if the claim is not present.</returns>
+		string GetPlayfabId(ClaimsPrincipal principal);
+
+		/// <summary>
 		/// Indicates if the claim has the specified <see cref="role"/>.
 		/// </summary>
 		/// <param name="principal">The principal value.</param>

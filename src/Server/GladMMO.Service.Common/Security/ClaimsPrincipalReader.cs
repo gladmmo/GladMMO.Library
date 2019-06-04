@@ -44,6 +44,11 @@ namespace GladMMO
 			return principal.FindFirstValue(Options.ClaimsIdentity.UserNameClaimType);
 		}
 
+		public string GetPlayfabId(ClaimsPrincipal principal)
+		{
+			return principal.FindFirstValue(GladMMOPlayfabConstants.PLAYFAB_JWT_CLAIM_TYPE);
+		}
+
 		/// <inheritdoc />
 		public bool HasGuardiansRole(ClaimsPrincipal principal, GuardianApplicationRole role)
 		{

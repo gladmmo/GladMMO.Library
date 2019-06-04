@@ -13,6 +13,10 @@
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\GladMMO.Server.PlayFab\GladMMO.Server.PlayFab.csproj" />
+  </ItemGroup>
+
   <PropertyGroup>
     <RuntimeIdentifiers>win</RuntimeIdentifiers>
   </PropertyGroup>
