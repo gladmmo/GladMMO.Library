@@ -32,6 +32,15 @@ namespace GladMMO
 		public string CharacterName { get; private set; }
 
 		/// <summary>
+		/// The PlayFabId associated with the character.
+		/// </summary>
+		[Required]
+		public string PlayFabId { get; private set; }
+
+		[Required]
+		public string PlayFabCharacterId { get; private set; }
+
+		/// <summary>
 		/// 
 		/// </summary>
 		[Required]
@@ -40,14 +49,21 @@ namespace GladMMO
 		public DateTime CreationDate { get; private set; }
 
 		/// <inheritdoc />
-		public CharacterEntryModel(int accountId, string characterName)
+		public CharacterEntryModel(int accountId,
+			[NotNull] string characterName, 
+			[NotNull] string playFabId = "UNKNOWN",
+			[NotNull] string playFabCharacterId = "UNKNOWN")
 		{
 			//Character name validation is handled externally
 			if(accountId < 0) throw new ArgumentOutOfRangeException(nameof(accountId));
 			if(string.IsNullOrWhiteSpace(characterName)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(characterName));
+			if (string.IsNullOrWhiteSpace(playFabId)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(playFabId));
+			if (string.IsNullOrWhiteSpace(playFabCharacterId)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(playFabCharacterId));
 
 			AccountId = accountId;
 			CharacterName = characterName;
+			PlayFabCharacterId = playFabCharacterId;
+			PlayFabId = playFabId;
 		}
 
 		//Serializer ctor
