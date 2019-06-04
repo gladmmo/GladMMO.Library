@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -15,14 +16,17 @@ namespace GladMMO
 
 		private ILogger<RegisterationController> Logger { get; }
 
-		/// <inheritdoc />
-		public RegisterationController(UserManager<GuardiansApplicationUser> userManager, ILogger<RegisterationController> logger)
-		{
-			if(userManager == null) throw new ArgumentNullException(nameof(userManager));
-			if(logger == null) throw new ArgumentNullException(nameof(logger));
+		//I know, this is ridiculous but it's the only way to get Playfab integration functional.
+		private IAuthenticationService AuthenticationServiceClient { get; }
 
-			UserManager = userManager;
-			Logger = logger;
+		/// <inheritdoc />
+		public RegisterationController([NotNull] UserManager<GuardiansApplicationUser> userManager,
+			[NotNull] ILogger<RegisterationController> logger,
+			[NotNull] IAuthenticationService authenticationServiceClient)
+		{
+			UserManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
+			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
+			AuthenticationServiceClient = authenticationServiceClient ?? throw new ArgumentNullException(nameof(authenticationServiceClient));
 		}
 
 #warning Dont ever deploy this for real
@@ -39,14 +43,22 @@ namespace GladMMO
 			if(Logger.IsEnabled(LogLevel.Information))
 				Logger.LogInformation($"Register Request: {username} {HttpContext.Connection.RemoteIpAddress}:{HttpContext.Connection.RemotePort}");
 
-			IdentityResult identityResult = await UserManager.CreateAsync(new GuardiansApplicationUser()
+			GuardiansApplicationUser user = new GuardiansApplicationUser()
 			{
 				UserName = username,
 				Email = "dev@dev.com"
-			}, password);
+			};
 
-			if(identityResult.Succeeded)
+			IdentityResult identityResult = await UserManager.CreateAsync(user, password);
+
+			if (identityResult.Succeeded)
+			{
+				JWTModel jwtModel = await AuthenticationServiceClient.TryAuthenticate(new AuthenticationRequestModel(username, password));
+				await UserManager.AddClaimAsync(user, new Claim(GladMMOPlayfabConstants.PLAYFAB_JWT_CLAIM_TYPE, jwtModel.PlayfabId));
+
+				//At this point, the account has the PlayFab id claim so it's ready for use.
 				return Ok();
+			}
 			else
 				return BadRequest(identityResult.Errors.Aggregate("", (s, error) => $"{s} {error.Code}:{error.Description}"));
 		}
