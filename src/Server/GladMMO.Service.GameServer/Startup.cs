@@ -133,10 +133,15 @@ namespace GladMMO
 		{
 			if (services == null) throw new ArgumentNullException(nameof(services));
 
+			//PlayFabId is null for servers.
+			services.AddSingleton(new GladMMOPlayFabClientConfiguration(Environment.GetEnvironmentVariable(GladMMOPlayfabConstants.PLAYFAB_SECRET_ENVIROMENT_PATH), null));
+
 			services.AddSingleton<IPlayfabCharacterClient>(provider =>
 			{
+				GladMMOPlayFabHttpHandler handler = provider.GetService<GladMMOPlayFabHttpHandler>();
+
 				//TODO: Let's not hardcode the title id.
-				return RestService.For<IPlayfabCharacterClient>($@"https://{63815}.playfabapi.com");
+				return RestService.For<IPlayfabCharacterClient>($@"https://{63815}.playfabapi.com", new RefitSettings(){ HttpMessageHandlerFactory = () => handler });
 			});
 		}
 	}

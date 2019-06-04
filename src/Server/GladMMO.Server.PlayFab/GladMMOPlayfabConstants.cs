@@ -9,5 +9,7 @@ namespace GladMMO
 		public const string PLAYFAB_JWT_CLAIM_TYPE = "pfid";
 
 		public const string PLAYFAB_SECRET_KEY_HEADER = "X-SecretKey";
+
+		public const string PLAYFAB_SECRET_ENVIROMENT_PATH = "PLAYFAB_KEY";
 	}
 }
