@@ -135,6 +135,7 @@ namespace GladMMO
 
 			//PlayFabId is null for servers.
 			services.AddSingleton(new GladMMOPlayFabClientConfiguration(Environment.GetEnvironmentVariable(GladMMOPlayfabConstants.PLAYFAB_SECRET_ENVIROMENT_PATH), null));
+			services.AddSingleton<GladMMOPlayFabHttpHandler>();
 
 			services.AddSingleton<IPlayfabCharacterClient>(provider =>
 			{
