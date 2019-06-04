@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Newtonsoft.Json;
@@ -24,7 +25,8 @@ namespace GladMMO
 		private IPlayfabAuthenticationClient AuthenticationClient { get; }
 
 		public PlayfabAuthenticationFromOpenIddictResponseMiddleware(RequestDelegate next,
-			[JetBrains.Annotations.NotNull] IPlayfabAuthenticationClient authenticationClient)
+			[NotNull] IPlayfabAuthenticationClient authenticationClient,
+			[NotNull] UserManager<GuardiansApplicationUser> userManager)
 		{
 			Next = next ?? throw new ArgumentNullException(nameof(next));
 			AuthenticationClient =
@@ -55,13 +57,14 @@ namespace GladMMO
 						newBodyStream.Seek(0, SeekOrigin.Begin);
 
 						//At this point, we need to actually query PlayFab and authenticate the user.
-						string playAuthToken = await AuthenticateWithPlayfab(jwtModel.OpenId);
+						GladMMOPlayFabLoginResult playAuthToken = await AuthenticateWithPlayfab(jwtModel.OpenId);
 
-						if(String.IsNullOrWhiteSpace(playAuthToken))
+						if(String.IsNullOrWhiteSpace(playAuthToken.SessionTicket))
 							throw new InvalidOperationException($"Encountered Null PlayFab Authentication Token.");
 
 						JWTModel jwtResponseModel = new JWTModel(jwtModel.AccessToken);
-						jwtResponseModel.PlayfabAuthenticationToken = playAuthToken;
+						jwtResponseModel.PlayfabAuthenticationToken = playAuthToken.SessionTicket;
+						jwtResponseModel.PlayfabId = playAuthToken.PlayFabId;
 
 						//Now we actually have to write the new JWT model to the response stream
 						byte[] bytes = JsonConvert.SerializeObject(jwtResponseModel).Reinterpret(Encoding.ASCII);
@@ -81,7 +84,7 @@ namespace GladMMO
 				await Next(context);
 		}
 
-		private async Task<string> AuthenticateWithPlayfab([JetBrains.Annotations.NotNull] string id_token)
+		private async Task<GladMMOPlayFabLoginResult> AuthenticateWithPlayfab([JetBrains.Annotations.NotNull] string id_token)
 		{
 			if (string.IsNullOrWhiteSpace(id_token))
 				throw new ArgumentException("Value cannot be null or whitespace.", nameof(id_token));
@@ -101,7 +104,7 @@ namespace GladMMO
 					throw new InvalidOperationException($"Refit returned invalid {nameof(LoginResult)} model. Was null.");
 
 				//TODO: Don't assume it's successful.
-				return result.Data.SessionTicket;
+				return result.Data;
 			}
 			catch (ApiException e)
 			{
