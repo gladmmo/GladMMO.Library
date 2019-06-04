@@ -16,6 +16,18 @@ namespace GladMMO
 		[JsonProperty]
 		public string SessionTicket { get; private set; }
 
+		/// <summary>
+		/// Player's unique PlayFabId.
+		/// </summary>
+		[JsonProperty]
+		public string PlayFabId { get; private set; }
+
+		/// <summary>
+		/// True if the account was newly created on this login.
+		/// </summary>
+		[JsonProperty]
+		public bool NewlyCreated { get; private set; }
+
 		public GladMMOPlayFabLoginResult(string sessionTicket)
 		{
 			if (string.IsNullOrWhiteSpace(sessionTicket))
