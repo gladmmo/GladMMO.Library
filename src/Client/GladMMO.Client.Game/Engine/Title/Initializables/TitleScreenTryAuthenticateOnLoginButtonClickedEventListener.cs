@@ -74,12 +74,17 @@ namespace GladMMO
 					jwtModel = await AuthService.TryAuthenticate(BuildAuthRequestModel())
 						.ConfigureAwait(false);
 				}
-				catch(ApiException e)
+				catch (ApiException e)
 				{
 					jwtModel = e.GetContentAs<JWTModel>();
 
-					if(Logger.IsErrorEnabled)
+					if (Logger.IsErrorEnabled)
 						Logger.Error($"Encountered Auth Error: {e.Message}");
+				}
+				catch (Exception e)
+				{
+					if (Logger.IsErrorEnabled)
+						Logger.Error($"Encountered Auth Error: {e.Message}\n\nStack: {e.StackTrace}");
 				}
 				finally
 				{
