@@ -69,11 +69,8 @@ namespace GladMMO
 			services.AddSingleton<IAuthenticationService>(provider =>
 			{
 				//We need to find the listening address.
-				IServerAddressesFeature serverAddresses = provider.GetService<IServerAddressesFeature>();
-				string potentialHttpsAddress = serverAddresses.Addresses.FirstOrDefault(a => a.Contains("https"));
-				potentialHttpsAddress = potentialHttpsAddress ?? serverAddresses.Addresses.First();
-
-				return Refit.RestService.For<IAuthenticationService>(potentialHttpsAddress);
+				PreferredEndpoint address = provider.GetService<PreferredEndpoint>();
+				return RestService.For<IAuthenticationService>($"{address.Endpoint}:{address.Port}");
 			});
 
 			services.AddDbContext<GuardiansAuthenticationDbContext>(options =>

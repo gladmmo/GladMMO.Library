@@ -7,6 +7,7 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace GladMMO
 {
@@ -27,6 +28,12 @@ namespace GladMMO
 				.UseUrls(@"http://0.0.0.0:80", @"https://0.0.0.0:443")
 				.UseKestrelGuardiansConfig(args, false)
 				.UseIISIntegration()
+				//Only way: https://stackoverflow.com/a/51450471
+				.ConfigureServices(collection =>
+					{
+						//Added for things can address the current endpoint.
+						collection.AddSingleton(new PreferredEndpoint("https://127.0.0.1", 443));
+					})
 				.UseStartup<Startup>()
 				.ConfigureAppConfiguration((context, builder) =>
 				{
