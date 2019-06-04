@@ -107,22 +107,8 @@ namespace GladMMO
 			//characters with this account id
 			int[] characterIds = await CharacterRepository.CharacterIdsForAccountId(accountId);
 
-#warning This is just for the test build, we need to change this
-			ProjectVersionStage.AssertInternalTesting();
 			if(characterIds.Length == 0)
-			{
-				//We just create a new one for testing.
-				bool result = await CharacterRepository.TryCreateAsync(new CharacterEntryModel(accountId, ClaimsReader.GetUserName(User)))
-					.ConfigureAwait(false);
-
-				if(result)
-					//Just return the get, a character should now exist.
-					return await GetCharacters();
-				else
-					return new CharacterListResponse(CharacterListResponseCode.NoCharactersFoundError);
-			}
-			/*if(characterIds.Length == 0)
-				return new CharacterListResponse(CharacterListResponseCode.NoCharactersFoundError);*/
+				return new CharacterListResponse(CharacterListResponseCode.NoCharactersFoundError);
 			
 			//The reason we only provide the IDs is all other character data can be looked up
 			//by the client when it needs it. Like name query, visible/character details/look stuff.
