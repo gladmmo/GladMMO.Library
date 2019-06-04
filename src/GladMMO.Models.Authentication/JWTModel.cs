@@ -39,6 +39,10 @@ namespace GladMMO
 		[JsonProperty(PropertyName = "playfab_token", Required = Required.Default)] //optional because could be a valid token
 		public string PlayfabAuthenticationToken { get; internal set; }
 
+		[CanBeNull]
+		[JsonProperty(PropertyName = "playfab_id", Required = Required.Default)] //optional because could be a valid token
+		public string PlayfabId { get; internal set; }
+
 		[JsonIgnore]
 		private Lazy<bool> _isTokenValid { get; }
 
