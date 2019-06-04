@@ -204,14 +204,27 @@ namespace GladMMO
 		{
 			//arrange
 			IServiceProvider serviceProvider = BuildServiceProvider<CharacterController>("Test", 1);
+			Mock<IPlayfabCharacterClient> playfabCharacterClientMock = CreatePlayFabCharacterClientMock();
 			CharacterController controller = serviceProvider.GetService<CharacterController>();
 
 			//act
-			CharacterCreationResponse result = ControllerTestsHelpers.GetActionResultObject<CharacterCreationResponse>(await controller.CreateCharacter(name));
+			CharacterCreationResponse result = ControllerTestsHelpers.GetActionResultObject<CharacterCreationResponse>(await controller.CreateCharacter(name, playfabCharacterClientMock.Object));
 
 			//assert
 			Assert.True(result.isSuccessful);
 			Assert.True(result.ResultCode == CharacterCreationResponseCode.Success);
+		}
+
+		private static Mock<IPlayfabCharacterClient> CreatePlayFabCharacterClientMock()
+		{
+			Mock<IPlayfabCharacterClient> playfabCharacterClientMock = new Mock<IPlayfabCharacterClient>();
+			playfabCharacterClientMock
+				.Setup(p => p.GrantCharacterToUser(It.IsAny<GladMMOPlayFabGrantCharacterToUserRequest>()))
+				.Returns(() =>
+					Task.FromResult(
+						new PlayFabResultModel<GladMMOPlayFabGrantCharacterToUserResult>(
+							new GladMMOPlayFabGrantCharacterToUserResult("1234567"))));
+			return playfabCharacterClientMock;
 		}
 
 		[Test]
@@ -224,10 +237,11 @@ namespace GladMMO
 			//arrange
 			IServiceProvider serviceProvider = BuildServiceProvider<CharacterController>("Test", 1);
 			CharacterController controller = serviceProvider.GetService<CharacterController>();
+			Mock<IPlayfabCharacterClient> playfabCharacterClientMock = CreatePlayFabCharacterClientMock();
 
 			//act
-			await controller.CreateCharacter(name);
-			CharacterCreationResponse result = ControllerTestsHelpers.GetActionResultObject<CharacterCreationResponse>(await controller.CreateCharacter(name));
+			await controller.CreateCharacter(name, playfabCharacterClientMock.Object);
+			CharacterCreationResponse result = ControllerTestsHelpers.GetActionResultObject<CharacterCreationResponse>(await controller.CreateCharacter(name, playfabCharacterClientMock.Object));
 
 			//assert
 			Assert.False(result.isSuccessful);
