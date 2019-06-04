@@ -75,6 +75,12 @@ namespace GladMMO
 				.HasIndex(c => c.AccountId)
 				.IsUnique(false);
 
+			characterEntity
+				.HasAlternateKey(c => new { c.PlayFabId, c.PlayFabCharacterId });
+
+			characterEntity
+				.HasIndex(c => c.PlayFabId);
+
 			//Sessions should enforce uniqueness on both character id and account id.
 			EntityTypeBuilder<CharacterSessionModel> sessionEntity = modelBuilder.Entity<CharacterSessionModel>();
 
