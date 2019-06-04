@@ -28,7 +28,7 @@ namespace GladMMO.Client
 
 		//TODO: Shoudl we expose the ServiceDiscovery URL to the editor? Is there value in that?
 		/// <inheritdoc />
-		public CommonGameDependencyModule(GameSceneType scene, [NotNull] string serviceDiscoveryUrl = "http://127.0.0.1:5000")
+		public CommonGameDependencyModule(GameSceneType scene, [NotNull] string serviceDiscoveryUrl = "http://192.168.0.12:5000")
 		{
 			if(!Enum.IsDefined(typeof(GameSceneType), scene)) throw new InvalidEnumArgumentException(nameof(scene), (int)scene, typeof(GameSceneType));
 
