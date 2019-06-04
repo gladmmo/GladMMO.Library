@@ -88,8 +88,8 @@ namespace GladMMO
 		public async Task Test_Can_Get_Name_From_Character_Id([Range(1, 20)] int count)
 		{
 			//arrange
-			IServiceProvider serviceProvider = BuildServiceProvider<CharacterController>("Test", 1);
-			CharacterController controller = serviceProvider.GetService<CharacterController>();
+			IServiceProvider serviceProvider = BuildServiceProvider<NameQueryController>("Test", 1);
+			NameQueryController controller = serviceProvider.GetService<NameQueryController>();
 
 			List<string> names = await AddTestValuesToRepository(count, serviceProvider, 2);
 
@@ -98,7 +98,12 @@ namespace GladMMO
 			//assert
 			for(int i = 1; i < count + 1; i++)
 			{
-				NameQueryResponse nameQueryResponse = ControllerTestsHelpers.GetActionResultObject<NameQueryResponse>(await controller.NameQuery(i));
+				NetworkEntityGuid guid = new NetworkEntityGuidBuilder()
+					.WithId(i)
+					.WithType(EntityType.Player)
+					.Build();
+
+				NameQueryResponse nameQueryResponse = ControllerTestsHelpers.GetActionResultObject<NameQueryResponse>(await controller.NameQuery(guid.RawGuidValue));
 				Assert.True(nameQueryResponse.isSuccessful);
 				Assert.NotNull(nameQueryResponse.EntityName);
 				resultQueryNames.Add(nameQueryResponse.EntityName);
@@ -114,11 +119,11 @@ namespace GladMMO
 		[TestCase(-1)]
 		[TestCase(int.MaxValue)]
 		[TestCase(int.MaxValue - 1)]
-		public async Task Test_Can_Not_NameQuery_Unknown_Ids(int keyToCheck)
+		public async Task Test_Can_Not_NameQuery_Unknown_Ids(ulong keyToCheck)
 		{
 			//arrange
-			IServiceProvider serviceProvider = BuildServiceProvider<CharacterController>("Test", 1);
-			CharacterController controller = serviceProvider.GetService<CharacterController>();
+			IServiceProvider serviceProvider = BuildServiceProvider<NameQueryController>("Test", 1);
+			NameQueryController controller = serviceProvider.GetService<NameQueryController>();
 			List<string> names = await AddTestValuesToRepository(20, serviceProvider, 2);
 
 			//act
