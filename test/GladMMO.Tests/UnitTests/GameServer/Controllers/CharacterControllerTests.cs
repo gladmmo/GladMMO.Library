@@ -119,8 +119,9 @@ namespace GladMMO
 		[TestCase(-1)]
 		[TestCase(int.MaxValue)]
 		[TestCase(int.MaxValue - 1)]
-		public async Task Test_Can_Not_NameQuery_Unknown_Ids(ulong keyToCheck)
+		public async Task Test_Can_Not_NameQuery_Unknown_Ids(int value)
 		{
+			ulong keyToCheck = (ulong)value;
 			//arrange
 			IServiceProvider serviceProvider = BuildServiceProvider<NameQueryController>("Test", 1);
 			NameQueryController controller = serviceProvider.GetService<NameQueryController>();
