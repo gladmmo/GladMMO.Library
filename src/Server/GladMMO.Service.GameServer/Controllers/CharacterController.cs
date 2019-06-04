@@ -74,28 +74,6 @@ namespace GladMMO
 			return Created("TODO", new CharacterCreationResponse(CharacterCreationResponseCode.Success));
 		}
 
-		//TODO: Conslidate/centralize name query stuff via entity GUID.
-		[AllowAnonymous]
-		[ProducesJson]
-		[ResponseCache(Duration = 360)] //We want to cache this for a long time. But it's possible with name changes that we want to not cache forever
-		[HttpGet("name/{id}")]
-		public async Task<IActionResult> NameQuery([FromRoute(Name = "id")] int characterId)
-		{
-			if(characterId < 0)
-				return BuildNotFoundUnknownIdResponse();
-
-			bool knownId = await CharacterRepository.ContainsAsync(characterId);
-
-			//TODO: JSON Response
-			if(!knownId)
-				return BuildNotFoundUnknownIdResponse();
-
-			//Else if it is a known id we should grab the name of the character
-			string name = await CharacterRepository.RetrieveNameAsync(characterId);
-
-			return Ok(new NameQueryResponse(name));
-		}
-
 		[HttpGet]
 		[AuthorizeJwt]
 		[ProducesJson]
