@@ -32,10 +32,13 @@ namespace GladMMO
 		{
 			ResolveServiceEndpointResponse endpointResponse = await serviceDiscovery.DiscoverService(new ResolveServiceEndpointRequest(ClientRegionLocale.US, serviceType));
 
-			if(!endpointResponse.isSuccessful)
+			if (!endpointResponse.isSuccessful)
+			{
+				Debug.LogError($"Failed to query for Endpoint: {serviceType}");
 				throw new InvalidOperationException($"Failed to query for Service: {serviceType} Result: {endpointResponse.ResultCode}");
+			}
 
-			//Debug.Log($"Recieved service discovery response: {endpointResponse.Endpoint.EndpointAddress}:{endpointResponse.Endpoint.EndpointPort} for Type: {serviceType}");
+			Debug.Log($"Recieved service discovery response: {endpointResponse.Endpoint.EndpointAddress}:{endpointResponse.Endpoint.EndpointPort} for Type: {serviceType}");
 
 			//TODO: Do we need extra slash?
 			return $"{endpointResponse.Endpoint.EndpointAddress}:{endpointResponse.Endpoint.EndpointPort}/";
