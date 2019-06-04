@@ -46,6 +46,86 @@ namespace GladMMO
 			Logger = logger;
 		}
 
+		internal async Task<IActionResult> Authenticate([JetBrains.Annotations.NotNull] string username,
+			[JetBrains.Annotations.NotNull] string password,
+			[JetBrains.Annotations.NotNull] IEnumerable<string> scopes)
+		{
+			if (scopes == null) throw new ArgumentNullException(nameof(scopes));
+			if (string.IsNullOrEmpty(username))
+				throw new ArgumentException("Value cannot be null or empty.", nameof(username));
+			if (string.IsNullOrEmpty(password))
+				throw new ArgumentException("Value cannot be null or empty.", nameof(password));
+
+			//We want to log this out for information purposes whenever an auth request begins
+			if(Logger.IsEnabled(LogLevel.Information))
+				Logger.LogInformation($"Auth Request: {username} {HttpContext.Connection.RemoteIpAddress}:{HttpContext.Connection.RemotePort}");
+
+			var user = await UserManager.FindByNameAsync(username);
+			if(user == null)
+			{
+				return BadRequest(new OpenIdConnectResponse
+				{
+					Error = OpenIdConnectConstants.Errors.InvalidGrant,
+					ErrorDescription = "The username/password couple is invalid."
+				});
+			}
+
+			// Ensure the user is allowed to sign in.
+			if(!await SignInManager.CanSignInAsync(user))
+			{
+				return BadRequest(new OpenIdConnectResponse
+				{
+					Error = OpenIdConnectConstants.Errors.InvalidGrant,
+					ErrorDescription = "The specified user is not allowed to sign in."
+				});
+			}
+
+			// Reject the token request if two-factor authentication has been enabled by the user.
+			if(UserManager.SupportsUserTwoFactor && await UserManager.GetTwoFactorEnabledAsync(user))
+			{
+				return BadRequest(new OpenIdConnectResponse
+				{
+					Error = OpenIdConnectConstants.Errors.InvalidGrant,
+					ErrorDescription = "The specified user is not allowed to sign in."
+				});
+			}
+
+			// Ensure the user is not already locked out.
+			if(UserManager.SupportsUserLockout && await UserManager.IsLockedOutAsync(user))
+			{
+				return BadRequest(new OpenIdConnectResponse
+				{
+					Error = OpenIdConnectConstants.Errors.InvalidGrant,
+					ErrorDescription = "The username/password couple is invalid."
+				});
+			}
+
+			// Ensure the password is valid.
+			if(!await UserManager.CheckPasswordAsync(user, password))
+			{
+				if(UserManager.SupportsUserLockout)
+				{
+					await UserManager.AccessFailedAsync(user);
+				}
+
+				return BadRequest(new OpenIdConnectResponse
+				{
+					Error = OpenIdConnectConstants.Errors.InvalidGrant,
+					ErrorDescription = "The username/password couple is invalid."
+				});
+			}
+
+			if(UserManager.SupportsUserLockout)
+			{
+				await UserManager.ResetAccessFailedCountAsync(user);
+			}
+
+			// Create a new authentication ticket.
+			var ticket = await CreateTicketAsync(scopes, user);
+
+			return SignIn(ticket.Principal, ticket.Properties, ticket.AuthenticationScheme);
+		}
+
 		[HttpPost]
 		[Produces("application/json")]
 		public async Task<IActionResult> Exchange(OpenIdConnectRequest request)
@@ -56,74 +136,7 @@ namespace GladMMO
 
 			if (request.IsPasswordGrantType())
 			{
-				//We want to log this out for information purposes whenever an auth request begins
-				if(Logger.IsEnabled(LogLevel.Information))
-					Logger.LogInformation($"Auth Request: {request.Username} {HttpContext.Connection.RemoteIpAddress}:{HttpContext.Connection.RemotePort}");
-
-				var user = await UserManager.FindByNameAsync(request.Username);
-				if (user == null)
-				{
-					return BadRequest(new OpenIdConnectResponse
-					{
-						Error = OpenIdConnectConstants.Errors.InvalidGrant,
-						ErrorDescription = "The username/password couple is invalid."
-					});
-				}
-
-				// Ensure the user is allowed to sign in.
-				if (!await SignInManager.CanSignInAsync(user))
-				{
-					return BadRequest(new OpenIdConnectResponse
-					{
-						Error = OpenIdConnectConstants.Errors.InvalidGrant,
-						ErrorDescription = "The specified user is not allowed to sign in."
-					});
-				}
-
-				// Reject the token request if two-factor authentication has been enabled by the user.
-				if (UserManager.SupportsUserTwoFactor && await UserManager.GetTwoFactorEnabledAsync(user))
-				{
-					return BadRequest(new OpenIdConnectResponse
-					{
-						Error = OpenIdConnectConstants.Errors.InvalidGrant,
-						ErrorDescription = "The specified user is not allowed to sign in."
-					});
-				}
-
-				// Ensure the user is not already locked out.
-				if (UserManager.SupportsUserLockout && await UserManager.IsLockedOutAsync(user))
-				{
-					return BadRequest(new OpenIdConnectResponse
-					{
-						Error = OpenIdConnectConstants.Errors.InvalidGrant,
-						ErrorDescription = "The username/password couple is invalid."
-					});
-				}
-
-				// Ensure the password is valid.
-				if (!await UserManager.CheckPasswordAsync(user, request.Password))
-				{
-					if (UserManager.SupportsUserLockout)
-					{
-						await UserManager.AccessFailedAsync(user);
-					}
-
-					return BadRequest(new OpenIdConnectResponse
-					{
-						Error = OpenIdConnectConstants.Errors.InvalidGrant,
-						ErrorDescription = "The username/password couple is invalid."
-					});
-				}
-
-				if (UserManager.SupportsUserLockout)
-				{
-					await UserManager.ResetAccessFailedCountAsync(user);
-				}
-
-				// Create a new authentication ticket.
-				var ticket = await CreateTicketAsync(request, user);
-
-				return SignIn(ticket.Principal, ticket.Properties, ticket.AuthenticationScheme);
+				return await Authenticate(request.Username, request.Password, request.GetScopes());
 			}
 
 			return BadRequest(new OpenIdConnectResponse
@@ -133,7 +146,7 @@ namespace GladMMO
 			});
 		}
 		
-		private async Task<AuthenticationTicket> CreateTicketAsync(OpenIdConnectRequest request, GuardiansApplicationUser user)
+		private async Task<AuthenticationTicket> CreateTicketAsync(IEnumerable<string> scopes, GuardiansApplicationUser user)
 		{
 			// Create a new ClaimsPrincipal containing the claims that
 			// will be used to create an id_token, a token or a code.
@@ -150,7 +163,7 @@ namespace GladMMO
 				OpenIdConnectConstants.Scopes.OpenId,
 				OpenIdConnectConstants.Scopes.Profile,
 				OpenIddictConstants.Scopes.Roles
-			}.Intersect(request.GetScopes().Concat(new string[1] { OpenIdConnectConstants.Scopes.OpenId }))); //HelloKitty: Always include the OpenId, it's required for the Playfab authentication
+			}.Intersect(scopes.Concat(new string[1] { OpenIdConnectConstants.Scopes.OpenId }))); //HelloKitty: Always include the OpenId, it's required for the Playfab authentication
 
 			ticket.SetResources("auth-server");
 
