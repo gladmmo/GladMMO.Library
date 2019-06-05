@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using MySql.Data.MySqlClient;
 
 namespace GladMMO
@@ -17,10 +18,14 @@ namespace GladMMO
 		//TODO: Move over to generic crud for crud methods. only delete is using it atm
 		private IGenericRepositoryCrudable<int, CharacterSessionModel> GenericCrudService { get; }
 
+		private ILogger<DatabaseBackedCharacterSessionRepository> Logger { get; }
+
 		/// <inheritdoc />
-		public DatabaseBackedCharacterSessionRepository(CharacterDatabaseContext context)
+		public DatabaseBackedCharacterSessionRepository(CharacterDatabaseContext context,
+			[NotNull] ILogger<DatabaseBackedCharacterSessionRepository> logger)
 		{
 			Context = context ?? throw new ArgumentNullException(nameof(context));
+			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
 			GenericCrudService = new GeneralGenericCrudRepositoryProvider<int, CharacterSessionModel>(context.CharacterSessions, context);
 		}
 
@@ -108,8 +113,11 @@ namespace GladMMO
 
 				return true;
 			}
-			catch(Exception)
+			catch(Exception e)
 			{
+				if(Logger.IsEnabled(LogLevel.Error))
+					Logger.LogError($"Failed to claim session for AccountId:CharacterId {accountId}:{characterId} Reason: {e.Message}");
+
 				//TODO: Log
 				return false;
 			}
