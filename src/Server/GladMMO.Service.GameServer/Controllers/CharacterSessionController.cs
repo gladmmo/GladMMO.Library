@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using CSharpx;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -31,6 +32,7 @@ namespace GladMMO
 		/// </summary>
 		/// <returns></returns>
 		//[AuthorizeJwt(GuardianApplicationRole.ZoneServer)]
+		[AllowAnonymous]
 		[HttpPost("claim")]
 		public async Task<IActionResult> TryClaimSession([FromBody] ZoneServerTryClaimSessionRequest request)
 		{
