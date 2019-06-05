@@ -8,12 +8,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using ProtoBuf;
 
 namespace GladMMO
 {
 	// A vector of bits.  Use this to store bits efficiently, without having to do bit 
 	// shifting yourself.
 	[Serializable]
+	[ProtoContract]
 	public sealed class WireReadyBitArray
 	{
 		// XPerY=n means that n Xs can be stored in 1 Y.
@@ -25,7 +27,8 @@ namespace GladMMO
 		public int Length => InternalArray.Length * BitsPerByte; //32 bits in an int
 
 		//WoW sends a byte-prefixed int array representing the bitarray.
-		internal byte[] InternalArray { get; }
+		[ProtoMember(1, IsRequired = true)]
+		internal byte[] InternalArray { get; private set; }
 
 		/// <summary>
 		/// The internal integer array representing the bitmask.
