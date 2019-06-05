@@ -20,10 +20,6 @@ namespace GladMMO
 
 		public void Register()
 		{
-			//HelloKitty: So, we've already run the registeration of this. So we should not continue.
-			if (RuntimeTypeModel.Default.IsDefined(typeof(GameServerPacketPayload)))
-				return;
-
 			RuntimeTypeModel.Default.AutoCompile = false;
 
 			RuntimeTypeModel.Default.Add(typeof(GameClientPacketPayload), true);
