@@ -18,8 +18,6 @@ namespace GladMMO
 	{
 		private IFactoryCreatable<GameObject, PlayerEntityCreationContext> PlayerFactory { get; }
 
-		private INetworkMessageSender<GenericSingleTargetMessageContext<PlayerSelfSpawnEventPayload>> SpawnPayloadSender { get; }
-
 		/// <inheritdoc />
 		public event EventHandler<PlayerWorldSessionCreationEventArgs> OnPlayerWorldSessionCreated;
 
@@ -33,13 +31,11 @@ namespace GladMMO
 			IPlayerSessionClaimedEventSubscribable subscriptionService,
 			ISessionDisconnectionEventSubscribable disconnectionSubscriptionService,
 			IFactoryCreatable<GameObject, PlayerEntityCreationContext> playerFactory, 
-			INetworkMessageSender<GenericSingleTargetMessageContext<PlayerSelfSpawnEventPayload>> spawnPayloadSender, 
 			ILog logger,
 			GlobalEntityCollectionsLockingPolicy lockingPolicy) 
 			: base(subscriptionService, false, logger)
 		{
 			PlayerFactory = playerFactory;
-			SpawnPayloadSender = spawnPayloadSender;
 			LockingPolicy = lockingPolicy;
 
 			disconnectionSubscriptionService.OnSessionDisconnection += OnSessionDisconnection;
@@ -58,13 +54,6 @@ namespace GladMMO
 		{
 			if(Logger.IsDebugEnabled)
 				Logger.Debug($"Dequeueing entity creation request for: {args.EntityGuid.EntityType}:{args.EntityGuid.EntityId}");
-
-			//TODO: This is test data
-			EntityFieldDataCollection<EUnitFields> testData = new EntityFieldDataCollection<EUnitFields>(1328);
-
-			//TODO: Test values set
-			testData.SetFieldValue(EUnitFields.UNIT_FIELD_HEALTH, 100);
-			testData.SetFieldValue(EUnitFields.UNIT_FIELD_MAXHEALTH, 120);
 
 			using(LockingPolicy.WriterLock(null, CancellationToken.None))
 			{
