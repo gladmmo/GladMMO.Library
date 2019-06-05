@@ -16,6 +16,8 @@ namespace GladMMO
 
 		private IGameObjectToEntityMappable GameObjectToEntityMap { get; }
 
+		private IEntityGuidMappable<IMovementData> MovementDataMappable { get; }
+
 		private IFactoryCreatable<GameObject, EntityPrefab> PrefabFactory { get; }
 
 		/// <inheritdoc />
@@ -23,12 +25,14 @@ namespace GladMMO
 			ILog logger,
 			IEntityGuidMappable<GameObject> guidToGameObjectMappable,
 			IGameObjectToEntityMappable gameObjectToEntityMap,
-			IFactoryCreatable<GameObject, EntityPrefab> prefabFactory)
+			IFactoryCreatable<GameObject, EntityPrefab> prefabFactory,
+			[NotNull] IEntityGuidMappable<IMovementData> movementDataMappable)
 		{
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
 			GuidToGameObjectMappable = guidToGameObjectMappable ?? throw new ArgumentNullException(nameof(guidToGameObjectMappable));
 			GameObjectToEntityMap = gameObjectToEntityMap ?? throw new ArgumentNullException(nameof(gameObjectToEntityMap));
 			PrefabFactory = prefabFactory ?? throw new ArgumentNullException(nameof(prefabFactory));
+			MovementDataMappable = movementDataMappable ?? throw new ArgumentNullException(nameof(movementDataMappable));
 		}
 
 		/// <inheritdoc />
@@ -41,6 +45,7 @@ namespace GladMMO
 			GameObject prefab = PrefabFactory.Create(context.PrefabType);
 
 			GameObject entityGameObject = GameObject.Instantiate(prefab, context.InitialPosition, Quaternion.Euler(0, 0, 0));
+			MovementDataMappable[context.EntityGuid] = new PositionChangeMovementData(0, context.InitialPosition, Vector2.zero);
 
 			GameObjectToEntityMap.ObjectToEntityMap.Add(entityGameObject, context.EntityGuid);
 
