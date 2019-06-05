@@ -37,6 +37,13 @@ namespace GladMMO
 			DataSetIndicationArray = new WireReadyBitArray(ComputeBitLength());
 		}
 
+		public EntityFieldDataCollection(int fieldCount)
+		{
+			//TODO: Make this allocation more efficient. Maybe even use pooling.
+			InternalDataFields = new byte[fieldCount * sizeof(int)];
+			DataSetIndicationArray = new WireReadyBitArray(ComputeBitLength());
+		}
+
 		/// <summary>
 		/// Overload that supports initializing custom (by the exactly sized)
 		/// <see cref="initialDataSetIndicationArray"/> and entity data <see cref="entityData"/>.
@@ -66,7 +73,7 @@ namespace GladMMO
 
 		private static int ComputeDataFieldCollectionLength()
 		{
-			return ComputeBitLength() * 4;
+			return ComputeBitLength() * sizeof(int);
 		}
 
 		/// <inheritdoc />
