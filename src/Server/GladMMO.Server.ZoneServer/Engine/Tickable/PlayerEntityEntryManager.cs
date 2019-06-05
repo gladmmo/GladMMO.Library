@@ -60,7 +60,7 @@ namespace GladMMO
 				Logger.Debug($"Dequeueing entity creation request for: {args.EntityGuid.EntityType}:{args.EntityGuid.EntityId}");
 
 			//TODO: This is test data
-			EntityFieldDataCollection<EUnitFields> testData = new EntityFieldDataCollection<EUnitFields>((int)EUnitFields.PLAYER_END);
+			EntityFieldDataCollection<EUnitFields> testData = new EntityFieldDataCollection<EUnitFields>(1328);
 
 			//TODO: Test values set
 			testData.SetFieldValue(EUnitFields.UNIT_FIELD_HEALTH, 100);
