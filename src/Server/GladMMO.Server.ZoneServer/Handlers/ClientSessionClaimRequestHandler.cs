@@ -47,6 +47,9 @@ namespace GladMMO
 
 			if(!zoneServerTryClaimSessionResponse.isSuccessful)
 			{
+				if(Logger.IsWarnEnabled)
+					Logger.Warn($"Client attempted to claim session for Character: {payload.CharacterId} but was denied.");
+
 				//TODO: Better error code
 				await context.PayloadSendService.SendMessage(new ClientSessionClaimResponsePayload(ClientSessionClaimResponseCode.SessionUnavailable))
 					.ConfigureAwait(false);
