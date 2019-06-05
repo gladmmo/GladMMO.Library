@@ -41,7 +41,7 @@ namespace GladMMO
 		{
 			//TODO: Make this allocation more efficient. Maybe even use pooling.
 			InternalDataFields = new byte[fieldCount * sizeof(int)];
-			DataSetIndicationArray = new WireReadyBitArray(ComputeBitLength());
+			DataSetIndicationArray = new WireReadyBitArray(fieldCount);
 		}
 
 		/// <summary>
