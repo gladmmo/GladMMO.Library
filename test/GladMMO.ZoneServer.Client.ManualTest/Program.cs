@@ -14,7 +14,7 @@ namespace GladMMO
 	{
 		static async Task Main(string[] args)
 		{
-			ProtobufNetGladNetSerializerAdapter serializer = new ProtobufNetGladNetSerializerAdapter(PrefixStyle.Fixed32);
+			ProtobufNetGladNetSerializerAdapter serializer = new ProtobufNetGladNetSerializerAdapter();
 
 			Unity3DProtobufPayloadRegister payloadRegister = new Unity3DProtobufPayloadRegister();
 			payloadRegister.RegisterDefaults();
