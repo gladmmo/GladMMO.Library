@@ -20,13 +20,11 @@ namespace GladMMO
 			payloadRegister.RegisterDefaults();
 			payloadRegister.Register();
 
-			var client = new DotNetTcpClientNetworkClient()
-				.AddHeaderlessNetworkMessageReading(serializer)
-				.For<GameServerPacketPayload, GameClientPacketPayload, IGamePacketPayload>()
-				.Build()
-				.AsManaged(new ConsoleLogger(LogLevel.All));
+			var client = new GladMMOUnmanagedNetworkClient<DotNetTcpClientNetworkClient, GameServerPacketPayload,
+					GameClientPacketPayload, IGamePacketPayload>(new DotNetTcpClientNetworkClient(), serializer)
+				.AsManaged();
 
-			await client.ConnectAsync(IPAddress.Parse("127.0.0.1"), 5006);
+			await client.ConnectAsync(IPAddress.Parse("192.168.0.12"), 5006);
 			Thread.Sleep(3000);
 
 			Console.WriteLine("Enter Character ID for test:");

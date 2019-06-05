@@ -57,7 +57,7 @@ namespace GladMMO
 				.As<ISessionCollection>()
 				.SingleInstance();
 
-			builder.RegisterInstance(new NetworkAddressInfo(IPAddress.Parse("192.168.0.3"), 5006))
+			builder.RegisterInstance(new NetworkAddressInfo(IPAddress.Parse("192.168.0.12"), 5006))
 				.As<NetworkAddressInfo>()
 				.SingleInstance()
 				.ExternallyOwned();
