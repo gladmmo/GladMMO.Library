@@ -19,6 +19,8 @@ namespace GladMMO
 		private IEntityGuidMappable<IMovementData> MovementDataMappable { get; }
 
 		private IEntityGuidMappable<IEntityDataFieldContainer> EntityFieldDataContainerMappable { get; }
+		
+		private IEntityGuidMappable<IChangeTrackableEntityDataCollection> EntityFieldDataChangeTrackableMappable { get; }
 
 		private IFactoryCreatable<GameObject, EntityPrefab> PrefabFactory { get; }
 
@@ -29,7 +31,8 @@ namespace GladMMO
 			IGameObjectToEntityMappable gameObjectToEntityMap,
 			IFactoryCreatable<GameObject, EntityPrefab> prefabFactory,
 			[NotNull] IEntityGuidMappable<IMovementData> movementDataMappable,
-			[NotNull] IEntityGuidMappable<IEntityDataFieldContainer> entityFieldDataContainerMappable)
+			[NotNull] IEntityGuidMappable<IEntityDataFieldContainer> entityFieldDataContainerMappable,
+			[NotNull] IEntityGuidMappable<IChangeTrackableEntityDataCollection> entityFieldDataChangeTrackableMappable)
 		{
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
 			GuidToGameObjectMappable = guidToGameObjectMappable ?? throw new ArgumentNullException(nameof(guidToGameObjectMappable));
@@ -37,6 +40,7 @@ namespace GladMMO
 			PrefabFactory = prefabFactory ?? throw new ArgumentNullException(nameof(prefabFactory));
 			MovementDataMappable = movementDataMappable ?? throw new ArgumentNullException(nameof(movementDataMappable));
 			EntityFieldDataContainerMappable = entityFieldDataContainerMappable ?? throw new ArgumentNullException(nameof(entityFieldDataContainerMappable));
+			EntityFieldDataChangeTrackableMappable = entityFieldDataChangeTrackableMappable ?? throw new ArgumentNullException(nameof(entityFieldDataChangeTrackableMappable));
 		}
 
 		/// <inheritdoc />
@@ -51,7 +55,7 @@ namespace GladMMO
 			GameObject entityGameObject = GameObject.Instantiate(prefab, context.InitialPosition, Quaternion.Euler(0, 0, 0));
 			MovementDataMappable[context.EntityGuid] = new PositionChangeMovementData(0, context.InitialPosition, Vector2.zero);
 			EntityFieldDataContainerMappable[context.EntityGuid] = new ChangeTrackingEntityFieldDataCollectionDecorator(new EntityFieldDataCollection<EUnitFields>(1328));
-
+			EntityFieldDataChangeTrackableMappable[context.EntityGuid] = (IChangeTrackableEntityDataCollection)EntityFieldDataContainerMappable[context.EntityGuid];
 			GameObjectToEntityMap.ObjectToEntityMap.Add(entityGameObject, context.EntityGuid);
 
 			GuidToGameObjectMappable.Add(context.EntityGuid, entityGameObject);
