@@ -55,7 +55,7 @@ namespace GladMMO
 
 			MovementDataMappable.AddObject(context.EntityGuid, new PositionChangeMovementData(0, context.InitialPosition, Vector2.zero));
 			EntityFieldDataContainerMappable.AddObject(context.EntityGuid, new ChangeTrackingEntityFieldDataCollectionDecorator(new EntityFieldDataCollection<EUnitFields>(1328)));
-			EntityFieldDataChangeTrackableMappable.AddObject(context.EntityGuid, (IChangeTrackableEntityDataCollection)EntityFieldDataContainerMappable[context.EntityGuid]);
+			EntityFieldDataChangeTrackableMappable.AddObject(context.EntityGuid, (IChangeTrackableEntityDataCollection)EntityFieldDataContainerMappable.RetrieveEntity(context.EntityGuid));
 			GuidToGameObjectMappable.AddObject(context.EntityGuid, entityGameObject);
 
 			//TODO: Rewrite the GameObject to EntityMap

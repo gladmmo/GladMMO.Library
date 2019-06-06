@@ -83,6 +83,33 @@ namespace GladMMO
 		/// <exception cref="InvalidOperationException">Throws if the entity does not have data mapped to it.</exception>
 		/// <returns></returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static TReturnType RetrieveEntity<TReturnType>([NotNull] this IDictionary<NetworkEntityGuid, TReturnType> collection, [NotNull] NetworkEntityGuid guid)
+		{
+			//No null checking because we hope to inline this
+			try
+			{
+				return collection[guid];
+			}
+			catch(Exception e)
+			{
+				CreateEntityCollectionException<TReturnType>(guid, e);
+			}
+
+			Debug.Assert(false, "Should never reach this point in RetrieveEntity.");
+			//Should never be reached.
+			return default(TReturnType);
+		}
+
+		/// <summary>
+		/// Retrieve the object of type <typeparamref name="TReturnType"/>
+		/// from the entity mapped collection.
+		/// </summary>
+		/// <typeparam name="TReturnType">The entity mapped object.</typeparam>
+		/// <param name="collection">The entity collection.</param>
+		/// <param name="guid">The entity guid.</param>
+		/// <exception cref="InvalidOperationException">Throws if the entity does not have data mapped to it.</exception>
+		/// <returns></returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static TReturnType RetrieveEntity<TReturnType>([NotNull] this IReadOnlyDictionary<NetworkEntityGuid, TReturnType> collection, [NotNull] NetworkEntityGuid guid)
 		{
 			//No null checking because we hope to inline this
