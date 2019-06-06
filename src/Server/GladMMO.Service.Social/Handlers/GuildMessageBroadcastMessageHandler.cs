@@ -30,16 +30,13 @@ namespace GladMMO
 		/// <inheritdoc />
 		protected override IRemoteSocialTextChatHubClient GetBroadcastGroup(IHubConnectionMessageContext<IRemoteSocialTextChatHubClient> context)
 		{
-			if(!GuildStatusMappable.ContainsKey(context.CallerGuid))
-				throw new InvalidOperationException($"Tried to send Guild Message for Entity: {context.CallerGuid} but no guild data was available.");
-
 			//TODO: We should have guild status model, including pending invites and such.
-			if(!GuildStatusMappable[context.CallerGuid].isSuccessful)
+			if(!GuildStatusMappable.RetrieveEntity(context.CallerGuid).isSuccessful)
 			{
 				//TODO: Log
 			}
 			
-			return context.Clients.Group($"guild:{GuildStatusMappable[context.CallerGuid].GuildId}");
+			return context.Clients.Group($"guild:{GuildStatusMappable.RetrieveEntity(context.CallerGuid).GuildId}");
 		}
 	}
 }

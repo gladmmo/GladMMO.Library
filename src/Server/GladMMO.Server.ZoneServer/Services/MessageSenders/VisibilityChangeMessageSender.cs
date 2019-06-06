@@ -59,11 +59,7 @@ namespace GladMMO
 		{
 			if(guid == null) throw new ArgumentNullException(nameof(guid));
 
-			//TODO: This will happen under disconnection circumstances. We need better disconnection handling.
-			if(!SessionMappable.ContainsKey(guid))
-				throw new InvalidOperationException($"Session that owns: {guid} no longer exists.");
-
-			return SessionMappable[guid];
+			return SessionMappable.RetrieveEntity(guid);
 		}
 
 		private NetworkObjectVisibilityChangeEventPayload BuildPayload([NotNull] IReadonlyInterestCollection interestCollection)

@@ -47,7 +47,7 @@ namespace GladMMO
 		{
 			ThrowIfNoEntityInMap(context);
 
-			return EntityAsyncLockMap[context].ReaderLockAsync(cancellationToken);
+			return EntityAsyncLockMap.RetrieveEntity(context).ReaderLockAsync(cancellationToken);
 		}
 
 		/// <inheritdoc />
@@ -55,7 +55,7 @@ namespace GladMMO
 		{
 			ThrowIfNoEntityInMap(context);
 
-			return EntityAsyncLockMap[context].WriterLock(cancellationToken);
+			return EntityAsyncLockMap.RetrieveEntity(context).WriterLock(cancellationToken);
 		}
 
 		/// <inheritdoc />
@@ -63,7 +63,7 @@ namespace GladMMO
 		{
 			ThrowIfNoEntityInMap(context);
 
-			return EntityAsyncLockMap[context].WriterLockAsync(cancellationToken);
+			return EntityAsyncLockMap.RetrieveEntity(context).WriterLockAsync(cancellationToken);
 		}
 	}
 }

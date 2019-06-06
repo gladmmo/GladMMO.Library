@@ -53,7 +53,7 @@ namespace GladMMO
 				//For every player we need to do some processing so that we can entity data update values
 				foreach(var guid in PlayerGuids)
 				{
-					InterestCollection interest = GetEntityInterestCollection(guid);
+					InterestCollection interest = GuidToInterestCollectionMappable.RetrieveEntity(guid);
 
 					//Even if we only know ourselves we should do this anyway
 					//so that the client can receieve entity data changes about itself
@@ -70,7 +70,7 @@ namespace GladMMO
 						//TODO: We should cache this update value so we don't need to recompute it for ALL players who are interested
 						//This is the update collection for the particular Entity with guid interestingEntityGuid
 						//We want to use the CHANGE TRACKING bitarray for updates. If this was initial discovery we'd use the SIT bitarray to send all set values.
-						FieldValueUpdate update = UpdateFactory.Create(new EntityFieldUpdateCreationContext(ChangeTrackingCollections[interestingEntityGuid], ChangeTrackingCollections[interestingEntityGuid].ChangeTrackingArray));
+						FieldValueUpdate update = UpdateFactory.Create(new EntityFieldUpdateCreationContext(ChangeTrackingCollections.RetrieveEntity(interestingEntityGuid), ChangeTrackingCollections.RetrieveEntity(interestingEntityGuid).ChangeTrackingArray));
 
 						updates.Add(new EntityAssociatedData<FieldValueUpdate>(interestingEntityGuid, update));
 					}
@@ -89,7 +89,7 @@ namespace GladMMO
 		{
 			try
 			{
-				SessionMappable[guid].SendMessageImmediately(new FieldValueUpdateEvent(updates.ToArray()));
+				SessionMappable.RetrieveEntity(guid).SendMessageImmediately(new FieldValueUpdateEvent(updates.ToArray()));
 			}
 			catch(Exception e)
 			{
@@ -101,23 +101,11 @@ namespace GladMMO
 		{
 			try
 			{
-				return ChangeTrackingCollections[interestingEntityGuid].HasPendingChanges;
+				return ChangeTrackingCollections.RetrieveEntity(interestingEntityGuid).HasPendingChanges;
 			}
 			catch(Exception e)
 			{
 				throw new InvalidOperationException($"Attempted to load Entity: {interestingEntityGuid}'s interst collection From: {ChangeTrackingCollections.GetType().Name} but failed. No entry matched the key. Exception: {e.Message}", e);
-			}
-		}
-
-		private InterestCollection GetEntityInterestCollection(NetworkEntityGuid guid)
-		{
-			try
-			{
-				return GuidToInterestCollectionMappable[guid];
-			}
-			catch(Exception e)
-			{
-				throw new InvalidOperationException($"Attempted to load Entity: {guid}'s interst collection From: {GuidToInterestCollectionMappable.GetType().Name} but failed. No interest collection matched the key. Exception: {e.Message}", e);
 			}
 		}
 	}

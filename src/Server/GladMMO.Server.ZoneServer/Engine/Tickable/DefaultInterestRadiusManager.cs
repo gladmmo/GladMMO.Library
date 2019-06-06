@@ -59,8 +59,8 @@ namespace GladMMO
 				{
 					case EntityInterestChangeEventArgs.ChangeType.Enter:
 						//If the entity already knows the entity then we should not register it.
-						if(!ManagedInterestCollections[args.EnterableEntity].Contains(args.EnteringEntity))
-							ManagedInterestCollections[args.EnterableEntity].Register(args.EnteringEntity, args.EnteringEntity);
+						if(!ManagedInterestCollections.RetrieveEntity(args.EnterableEntity).Contains(args.EnteringEntity))
+							ManagedInterestCollections.RetrieveEntity(args.EnterableEntity).Register(args.EnteringEntity, args.EnteringEntity);
 						break;
 					case EntityInterestChangeEventArgs.ChangeType.Exit:
 						//It's possible we'll want to be having an entity EXIT without being known.
@@ -68,7 +68,7 @@ namespace GladMMO
 						//the time before this interest system services interest it's possible
 						//that they also LEFT it. Therefore there could be an ENTER + EXIT in one go.
 						//Registering exits always will address this cleanup.
-						ManagedInterestCollections[args.EnterableEntity].Unregister(args.EnteringEntity);
+						ManagedInterestCollections.RetrieveEntity(args.EnterableEntity).Unregister(args.EnteringEntity);
 						break;
 				}
 			}

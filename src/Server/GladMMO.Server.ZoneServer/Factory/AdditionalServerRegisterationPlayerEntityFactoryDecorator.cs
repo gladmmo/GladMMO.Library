@@ -39,7 +39,7 @@ namespace GladMMO
 		{
 			GameObject gameObject = DecoratedFactory.Create(context);
 
-			GuidToSessionMappable.Add(context.EntityGuid, context.SessionContext.ZoneSession);
+			GuidToSessionMappable.AddObject(context.EntityGuid, context.SessionContext.ZoneSession);
 			ConnectionIdToControllingEntityMap.Add(context.SessionContext.ConnectionId, context.EntityGuid);
 
 			InterestCollection playerInterestCollection = new InterestCollection();
@@ -48,7 +48,7 @@ namespace GladMMO
 			playerInterestCollection.Add(context.EntityGuid);
 
 			//We just create our own manaul interest collection here.
-			GuidToInterestCollectionMappable.Add(context.EntityGuid, playerInterestCollection);
+			GuidToInterestCollectionMappable.AddObject(context.EntityGuid, playerInterestCollection);
 
 			//We don't need to touch the gameobject, we can just return it.
 			return gameObject;

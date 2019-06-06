@@ -31,7 +31,7 @@ namespace GladMMO
 		{
 			foreach(var entry in MovementGenerators)
 			{
-				entry.Value.Update(WorldObjectMap[entry.Key], TimeService.CurrentRemoteTime);
+				entry.Value.Update(WorldObjectMap.RetrieveEntity(entry.Key), TimeService.CurrentRemoteTime);
 			}
 		}
 	}

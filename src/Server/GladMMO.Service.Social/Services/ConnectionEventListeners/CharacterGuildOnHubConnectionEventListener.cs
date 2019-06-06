@@ -99,7 +99,7 @@ namespace GladMMO
 			if(GuildStatusMappable[guid].isSuccessful)
 			{
 				//TODO: don't hardcode
-				await groupManager.AddToGroupAsync(connectionId, $"guild:{GuildStatusMappable[guid].GuildId}")
+				await groupManager.AddToGroupAsync(connectionId, $"guild:{GuildStatusMappable.RetrieveEntity(guid).GuildId}")
 					.ConfigureAwait(false);
 			}
 		}

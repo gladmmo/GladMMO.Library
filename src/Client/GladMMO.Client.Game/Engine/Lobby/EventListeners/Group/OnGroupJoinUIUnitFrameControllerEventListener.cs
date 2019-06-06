@@ -51,8 +51,8 @@ namespace GladMMO
 			{
 				//Very possible we don't know them
 				//But if we do we should calculate their initial unitframe resources
-				RecalulateHealthUI(args.PlayerGuid, EntityDataMappable[args.PlayerGuid].GetFieldValue<int>((int)EUnitFields.UNIT_FIELD_HEALTH));
-				RecaculateLevelUI(args.PlayerGuid, EntityDataMappable[args.PlayerGuid].GetFieldValue<int>((int)EUnitFields.UNIT_FIELD_LEVEL));
+				RecalulateHealthUI(args.PlayerGuid, EntityDataMappable.RetrieveEntity(args.PlayerGuid).GetFieldValue<int>((int)EUnitFields.UNIT_FIELD_HEALTH));
+				RecaculateLevelUI(args.PlayerGuid, EntityDataMappable.RetrieveEntity(args.PlayerGuid).GetFieldValue<int>((int)EUnitFields.UNIT_FIELD_LEVEL));
 				GroupUnitframeManager[args.PlayerGuid].SetElementActive(true);
 			}
 		}
@@ -74,7 +74,7 @@ namespace GladMMO
 			GroupUnitframeManager[player].HealthBar.BarFillable.FillAmount = healthPercentage;
 
 			//Also we want to see the percentage text
-			GroupUnitframeManager[player].HealthBar.BarText.Text = $"{currentHealth} / {EntityDataMappable[player].GetFieldValue<int>((int)EUnitFields.UNIT_FIELD_MAXHEALTH)}";
+			GroupUnitframeManager[player].HealthBar.BarText.Text = $"{currentHealth} / {EntityDataMappable.RetrieveEntity(player).GetFieldValue<int>((int)EUnitFields.UNIT_FIELD_MAXHEALTH)}";
 		}
 
 		private void OnCurrentHealthChangedValue(NetworkEntityGuid source, EntityDataChangedArgs<int> changeArgs)

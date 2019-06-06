@@ -37,7 +37,7 @@ namespace GladMMO
 			//but they aren't ready.
 			foreach(NetworkEntityGuid entity in KnownEntites)
 			{
-				var changeTrackable = ChangeTrackableMap[entity];
+				var changeTrackable = ChangeTrackableMap.RetrieveEntity(entity);
 
 				//TODO: We can make this faster if we skip entities that have no registered callbacks.
 				//The idea is here that we check the changed values, while on the MAIN THREAD

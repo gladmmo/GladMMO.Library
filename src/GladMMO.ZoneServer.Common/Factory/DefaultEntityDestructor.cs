@@ -29,7 +29,7 @@ namespace GladMMO
 		public bool Destroy(NetworkEntityGuid obj)
 		{
 			//This removes the world entity from it's special collection AND removes it from the relevant map
-			GameObject rootEntityGameObject = GuidToGameObjectMappable[obj];
+			GameObject rootEntityGameObject = GuidToGameObjectMappable.RetrieveEntity(obj);
 			GameObjectToEntityMap.ObjectToEntityMap.Remove(rootEntityGameObject);
 			GameObject.Destroy(rootEntityGameObject);
 

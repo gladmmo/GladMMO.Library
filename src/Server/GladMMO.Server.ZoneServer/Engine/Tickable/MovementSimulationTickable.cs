@@ -32,7 +32,7 @@ namespace GladMMO
 			long currentTime = DateTime.UtcNow.Ticks;
 			foreach(var entry in MovementGenerators)
 			{
-				entry.Value.Update(WorldObjectMap[entry.Key], currentTime);
+				entry.Value.Update(WorldObjectMap.RetrieveEntity(entry.Key), currentTime);
 			}
 		}
 	}
