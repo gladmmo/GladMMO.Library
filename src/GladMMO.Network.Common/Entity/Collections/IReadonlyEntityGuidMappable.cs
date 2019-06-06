@@ -4,7 +4,7 @@ using System.Text;
 
 namespace GladMMO
 {
-	public interface IReadonlyEntityGuidMappable<TValue> : IReadOnlyDictionary<NetworkEntityGuid, TValue>
+	public interface IReadonlyEntityGuidMappable<TValue> : IReadOnlyDictionary<NetworkEntityGuid, TValue>, IEntityCollectionRemovable
 	{
 		
 	}
