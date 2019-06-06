@@ -13,7 +13,6 @@ namespace GladMMO
 	//AND also broadcast the connection established event.
 	[AdditionalRegisterationAs(typeof(INetworkConnectionEstablishedEventSubscribable))]
 	[SceneTypeCreateGladMMO(GameSceneType.DefaultLobby)]
-	[SceneTypeCreateGladMMO(GameSceneType.PreZoneBurstingScreen)]
 	public sealed class OnStartRestartNetworkClientHandlingInititablize : IGameInitializable, INetworkConnectionEstablishedEventSubscribable
 	{
 		/// <summary>
