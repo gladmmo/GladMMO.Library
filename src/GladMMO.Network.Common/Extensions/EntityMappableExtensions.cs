@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Text;
 
@@ -26,11 +27,11 @@ namespace GladMMO
 				if(collection.ContainsKey(guid))
 					collection[guid] = obj; //Replaces the existing object.
 				else
-					throw CreateEntityDoesNotExistException<TReturnType>(guid);
+					CreateEntityDoesNotExistException<TReturnType>(guid);
 			}
 			catch(Exception e)
 			{
-				throw CreateEntityCollectionException<TReturnType>(guid, e);
+				CreateEntityCollectionException<TReturnType>(guid, e);
 			}
 		}
 
@@ -53,23 +54,23 @@ namespace GladMMO
 			}
 			catch(Exception e)
 			{
-				throw CreateEntityCollectionException<TReturnType>(guid, e);
+				CreateEntityCollectionException<TReturnType>(guid, e);
 			}
 		}
 
-		private static Exception CreateEntityDoesNotExistException<TReturnType>(NetworkEntityGuid guid)
+		private static void CreateEntityDoesNotExistException<TReturnType>(NetworkEntityGuid guid)
 		{
 			if(guid == null) throw new ArgumentNullException(nameof(guid), $"Found that provided entity guid in {nameof(CreateEntityCollectionException)} was null.");
 
-			return new InvalidOperationException($"Entity does not exist in Collection {typeof(TReturnType).Name} from Entity: {guid}.");
+			throw new InvalidOperationException($"Entity does not exist in Collection {typeof(TReturnType).Name} from Entity: {guid}.");
 		}
 
-		private static Exception CreateEntityCollectionException<TReturnType>(NetworkEntityGuid guid, Exception e)
+		private static void CreateEntityCollectionException<TReturnType>(NetworkEntityGuid guid, Exception e)
 		{
 			if (guid == null) throw new ArgumentNullException(nameof(guid), $"Found that provided entity guid in {nameof(CreateEntityCollectionException)} was null.");
 			if (e == null) throw new ArgumentNullException(nameof(e), $"Found that provided inner exception in {nameof(CreateEntityCollectionException)} was null.");
 
-			return new InvalidOperationException($"Failed to access {typeof(TReturnType).Name} from Entity: {guid}. Error: {e.Message}", e);
+			throw new InvalidOperationException($"Failed to access {typeof(TReturnType).Name} from Entity: {guid}. Error: {e.Message}");
 		}
 
 		/// <summary>
@@ -91,8 +92,12 @@ namespace GladMMO
 			}
 			catch(Exception e)
 			{
-				throw CreateEntityCollectionException<TReturnType>(guid, e);
+				CreateEntityCollectionException<TReturnType>(guid, e);
 			}
+
+			Debug.Assert(false, "Should never reach this point in RetrieveEntity.");
+			//Should never be reached.
+			return default(TReturnType);
 		}
 	}
 }
