@@ -39,29 +39,14 @@ namespace GladMMO
 		/// <inheritdoc />
 		protected override void OnEventFired(object source, PlayerWorldSessionCreationEventArgs args)
 		{
-			IMovementData movementData = RetrieveEntity(MovementDataMappable, args.EntityGuid);
-			IEntityDataFieldContainer dataFieldContainer = RetrieveEntity(EntityDataMappable, args.EntityGuid);
+			IMovementData movementData = MovementDataMappable.RetrieveEntity(args.EntityGuid);
+			IEntityDataFieldContainer dataFieldContainer = EntityDataMappable.RetrieveEntity(args.EntityGuid);
 
 			EntityCreationData data = new EntityCreationData(args.EntityGuid, movementData, EntityDataUpdateFactory.Create(new EntityFieldUpdateCreationContext(dataFieldContainer, dataFieldContainer.DataSetIndicationArray)));
 
 			var senderContext = new GenericSingleTargetMessageContext<PlayerSelfSpawnEventPayload>(args.EntityGuid, new PlayerSelfSpawnEventPayload(data));
 
 			Sender.Send(senderContext);
-		}
-
-		public TReturnType RetrieveEntity<TReturnType>([NotNull] IReadonlyEntityGuidMappable<TReturnType> collection, [NotNull] NetworkEntityGuid guid)
-		{
-			if (collection == null) throw new ArgumentNullException(nameof(collection));
-			if (guid == null) throw new ArgumentNullException(nameof(guid));
-
-			try
-			{
-				return collection[guid];
-			}
-			catch(Exception e)
-			{
-				throw new InvalidOperationException($"Failed to access {typeof(TReturnType).Name} from Entity: {guid}. Error: {e.Message}");
-			}
 		}
 	}
 }
