@@ -51,14 +51,22 @@ namespace GladMMO
 
 			//load the entity's prefab from the factory
 			GameObject prefab = PrefabFactory.Create(context.PrefabType);
-
 			GameObject entityGameObject = GameObject.Instantiate(prefab, context.InitialPosition, Quaternion.Euler(0, 0, 0));
-			MovementDataMappable[context.EntityGuid] = new PositionChangeMovementData(0, context.InitialPosition, Vector2.zero);
-			EntityFieldDataContainerMappable[context.EntityGuid] = new ChangeTrackingEntityFieldDataCollectionDecorator(new EntityFieldDataCollection<EUnitFields>(1328));
-			EntityFieldDataChangeTrackableMappable[context.EntityGuid] = (IChangeTrackableEntityDataCollection)EntityFieldDataContainerMappable[context.EntityGuid];
-			GameObjectToEntityMap.ObjectToEntityMap.Add(entityGameObject, context.EntityGuid);
 
-			GuidToGameObjectMappable.Add(context.EntityGuid, entityGameObject);
+			MovementDataMappable.AddObject(context.EntityGuid, new PositionChangeMovementData(0, context.InitialPosition, Vector2.zero));
+			EntityFieldDataContainerMappable.AddObject(context.EntityGuid, new ChangeTrackingEntityFieldDataCollectionDecorator(new EntityFieldDataCollection<EUnitFields>(1328)));
+			EntityFieldDataChangeTrackableMappable.AddObject(context.EntityGuid, (IChangeTrackableEntityDataCollection)EntityFieldDataContainerMappable[context.EntityGuid]);
+			GuidToGameObjectMappable.AddObject(context.EntityGuid, entityGameObject);
+
+			//TODO: Rewrite the GameObject to EntityMap
+			try
+			{
+				GameObjectToEntityMap.ObjectToEntityMap.Add(entityGameObject, context.EntityGuid);
+			}
+			catch (Exception e)
+			{
+				throw new InvalidOperationException($"GameObject already exists in {nameof(GameObjectToEntityMap)}.", e);
+			}
 
 			return entityGameObject;
 		}
