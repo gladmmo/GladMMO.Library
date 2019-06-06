@@ -61,7 +61,7 @@ namespace GladMMO
 		{
 			if(guid == null) throw new ArgumentNullException(nameof(guid), $"Found that provided entity guid in {nameof(CreateEntityCollectionException)} was null.");
 
-			throw new InvalidOperationException($"Entity does not exist in Collection {typeof(TReturnType).Name} from Entity: {guid}.");
+			return new InvalidOperationException($"Entity does not exist in Collection {typeof(TReturnType).Name} from Entity: {guid}.");
 		}
 
 		private static Exception CreateEntityCollectionException<TReturnType>(NetworkEntityGuid guid, Exception e)
@@ -69,7 +69,7 @@ namespace GladMMO
 			if (guid == null) throw new ArgumentNullException(nameof(guid), $"Found that provided entity guid in {nameof(CreateEntityCollectionException)} was null.");
 			if (e == null) throw new ArgumentNullException(nameof(e), $"Found that provided inner exception in {nameof(CreateEntityCollectionException)} was null.");
 
-			throw new InvalidOperationException($"Failed to access {typeof(TReturnType).Name} from Entity: {guid}. Error: {e.Message}", e);
+			return new InvalidOperationException($"Failed to access {typeof(TReturnType).Name} from Entity: {guid}. Error: {e.Message}", e);
 		}
 
 		/// <summary>
