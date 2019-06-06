@@ -8,13 +8,40 @@ namespace GladMMO
 	public static class EntityMappableExtensions
 	{
 		/// <summary>
-		/// Adds the entity object with the provided key <see cref="guid"/>
+		/// Replaces an existing Entity with key <see cref="guid"/> with the value <see cref="obj"/>
+		/// if it already exists. Throws if the data does not exist.
 		/// </summary>
-		/// <typeparam name="TReturnType"></typeparam>
-		/// <param name="collection"></param>
-		/// <param name="guid"></param>
-		/// <param name="obj"></param>
-		/// <returns></returns>
+		/// <typeparam name="TReturnType">The type of object to add.</typeparam>
+		/// <param name="collection">The entity collection.</param>
+		/// <param name="guid">The entity guid.</param>
+		/// <param name="obj">The object to add.</param>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static void ReplaceObject<TReturnType>([NotNull] this IDictionary<NetworkEntityGuid, TReturnType> collection, [NotNull] NetworkEntityGuid guid, TReturnType obj)
+			where TReturnType : class
+		{
+			//No null checking because we hope to inline this.
+			try
+			{
+				//We strictly enforce that the entity be known/existing in this component collection.
+				if(collection.ContainsKey(guid))
+					collection[guid] = obj; //Replaces the existing object.
+				else
+					throw CreateEntityDoesNotExistException<TReturnType>(guid);
+			}
+			catch(Exception e)
+			{
+				throw CreateEntityCollectionException<TReturnType>(guid, e);
+			}
+		}
+
+		/// <summary>
+		/// Adds the entity object with the provided key <see cref="guid"/> if it doesn't exists.
+		/// If the key already exists it will throw.
+		/// </summary>
+		/// <typeparam name="TReturnType">The type of object to add.</typeparam>
+		/// <param name="collection">The entity collection.</param>
+		/// <param name="guid">The entity guid.</param>
+		/// <param name="obj">The object to add.</param>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static void AddObject<TReturnType>([NotNull] this IDictionary<NetworkEntityGuid, TReturnType> collection, [NotNull] NetworkEntityGuid guid, TReturnType obj)
 			where TReturnType : class
@@ -22,18 +49,25 @@ namespace GladMMO
 			//No null checking because we hope to inline this.
 			try
 			{
-				collection[guid] = obj; //replaces existing value if there is any.
+				collection.Add(guid, obj); //Does NOT replace the entity if there is one.
 			}
 			catch(Exception e)
 			{
-				CreateEntityNotFoundException<TReturnType>(guid, e);
+				throw CreateEntityCollectionException<TReturnType>(guid, e);
 			}
 		}
 
-		private static Exception CreateEntityNotFoundException<TReturnType>(NetworkEntityGuid guid, Exception e)
+		private static Exception CreateEntityDoesNotExistException<TReturnType>(NetworkEntityGuid guid)
 		{
-			if (guid == null) throw new ArgumentNullException(nameof(guid), $"Found that provided entity guid in {nameof(CreateEntityNotFoundException)} was null.");
-			if (e == null) throw new ArgumentNullException(nameof(e), $"Found that provided inner exception in {nameof(CreateEntityNotFoundException)} was null.");
+			if(guid == null) throw new ArgumentNullException(nameof(guid), $"Found that provided entity guid in {nameof(CreateEntityCollectionException)} was null.");
+
+			throw new InvalidOperationException($"Entity does not exist in Collection {typeof(TReturnType).Name} from Entity: {guid}.");
+		}
+
+		private static Exception CreateEntityCollectionException<TReturnType>(NetworkEntityGuid guid, Exception e)
+		{
+			if (guid == null) throw new ArgumentNullException(nameof(guid), $"Found that provided entity guid in {nameof(CreateEntityCollectionException)} was null.");
+			if (e == null) throw new ArgumentNullException(nameof(e), $"Found that provided inner exception in {nameof(CreateEntityCollectionException)} was null.");
 
 			throw new InvalidOperationException($"Failed to access {typeof(TReturnType).Name} from Entity: {guid}. Error: {e.Message}", e);
 		}
@@ -57,7 +91,7 @@ namespace GladMMO
 			}
 			catch(Exception e)
 			{
-				throw CreateEntityNotFoundException<TReturnType>(guid, e);
+				throw CreateEntityCollectionException<TReturnType>(guid, e);
 			}
 		}
 	}
