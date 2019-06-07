@@ -35,15 +35,15 @@ namespace GladMMO
 		}
 
 		/// <inheritdoc />
-		public async Task<ContentDownloadURLResponse> RequestWorldDownloadUrl(long worldId, string authToken)
+		public async Task<ContentDownloadURLResponse> RequestWorldDownloadUrl(long worldId)
 		{
-			return await (await GetService().ConfigureAwait(false)).RequestWorldDownloadUrl(worldId, authToken).ConfigureAwait(false);
+			return await (await GetService().ConfigureAwait(false)).RequestWorldDownloadUrl(worldId).ConfigureAwait(false);
 		}
 
 		/// <inheritdoc />
-		public async Task<ContentDownloadURLResponse> RequestAvatarDownloadUrl(long avatarId, string authToken)
+		public async Task<ContentDownloadURLResponse> RequestAvatarDownloadUrl(long avatarId)
 		{
-			return await (await GetService().ConfigureAwait(false)).RequestAvatarDownloadUrl(avatarId, authToken).ConfigureAwait(false);
+			return await (await GetService().ConfigureAwait(false)).RequestAvatarDownloadUrl(avatarId).ConfigureAwait(false);
 		}
 	}
 }
