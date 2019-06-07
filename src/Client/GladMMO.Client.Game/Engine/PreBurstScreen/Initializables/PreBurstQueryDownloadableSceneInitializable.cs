@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Common.Logging;
 using Glader.Essentials;
 using Nito.AsyncEx;
+using UnityEngine;
+using UnityEngine.Networking;
+using UnityEngine.SceneManagement;
 
 namespace GladMMO
 {
@@ -56,6 +60,36 @@ namespace GladMMO
 
 					if(Logger.IsInfoEnabled)
 						Logger.Info($"World Download Url: {urlDownloadResponse.DownloadURL}");
+
+					//Can't do web request not on the main thread, sadly.
+					await new UnityYieldAwaitable();
+
+					//TODO: Do we need to be on the main unity3d thread
+					UnityWebRequestAsyncOperation asyncOperation = UnityWebRequestAssetBundle.GetAssetBundle(urlDownloadResponse.DownloadURL, 0).SendWebRequest();
+
+					//TODO: We should render these operations to the loading screen UI.
+					asyncOperation.completed += operation =>
+					{
+						AssetBundle bundle = DownloadHandlerAssetBundle.GetContent(asyncOperation.webRequest);
+
+						string[] paths = bundle.GetAllScenePaths();
+
+						foreach(string p in paths)
+							Debug.Log($"Found Scene in Bundle: {p}");
+
+						AsyncOperation sceneAsync = SceneManager.LoadSceneAsync(System.IO.Path.GetFileNameWithoutExtension(paths.First()));
+
+						sceneAsync.completed += operation1 =>
+						{
+							//When the scene is finished loading we should cleanup the asset bundle
+							//Don't clean up the WHOLE BUNDLE, just the compressed downloaded data
+							bundle.Unload(false);
+
+							//TODO: We need a way/system to reference the bundle later so it can be cleaned up inbetween scene loads.
+						};
+
+						sceneAsync.allowSceneActivation = true;
+					};
 				}
 				catch (Exception e)
 				{
