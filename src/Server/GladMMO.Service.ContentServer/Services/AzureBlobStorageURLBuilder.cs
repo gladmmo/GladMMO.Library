@@ -32,7 +32,7 @@ namespace GladMMO
 		public async Task<string> BuildRetrivalUrl(UserContentType contentType, Guid key)
 		{
 			//Container name format is {contentType}s.
-			CloudBlobContainer container = BlobClient.GetContainerReference($"{contentType.ToString()}s");
+			CloudBlobContainer container = BlobClient.GetContainerReference($"{contentType.ToString().ToLower()}s");
 
 			SharedAccessBlobPolicy sasConstraints = new SharedAccessBlobPolicy();
 			sasConstraints.SharedAccessExpiryTime = DateTime.UtcNow.AddMinutes(30);
