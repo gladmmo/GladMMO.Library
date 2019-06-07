@@ -23,10 +23,14 @@ namespace GladMMO
 		private ILog Logger { get; }
 
 		public PreBurstQueryDownloadableSceneInitializable(ICharacterSessionDataChangedEventSubscribable subscriptionService,
-			[NotNull] ILog logger) 
+			[NotNull] ILog logger,
+			[NotNull] IContentServerServiceClient contentService,
+			[NotNull] IZoneServerService zoneDataService) 
 			: base(subscriptionService)
 		{
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
+			ContentService = contentService ?? throw new ArgumentNullException(nameof(contentService));
+			ZoneDataService = zoneDataService ?? throw new ArgumentNullException(nameof(zoneDataService));
 		}
 
 		protected override void OnThreadUnSafeEventFired(object source, CharacterSessionDataChangedEventArgs args)
@@ -56,7 +60,7 @@ namespace GladMMO
 				catch (Exception e)
 				{
 					if(Logger.IsErrorEnabled)
-						Logger.Error($"Failed to query for Download URL for ZoneId: {args.ZoneIdentifier} WorldId: {worldId} (0 if never succeeded request).");
+						Logger.Error($"Failed to query for Download URL for ZoneId: {args.ZoneIdentifier} WorldId: {worldId} (0 if never succeeded request). Error: {e.Message}");
 
 					Console.WriteLine(e);
 					throw;
