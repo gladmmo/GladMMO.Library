@@ -18,13 +18,13 @@ namespace GladMMO
 		public async Task<string> BuildUploadUrl(UserContentType contentType, Guid key)
 		{
 			//Container name format is {contentType}s.
-			CloudBlobContainer container = BlobClient.GetContainerReference($"{contentType.ToString()}s");
+			CloudBlobContainer container = BlobClient.GetContainerReference($"{contentType.ToString().ToLower()}s");
 
 			SharedAccessBlobPolicy sasConstraints = new SharedAccessBlobPolicy();
 			sasConstraints.SharedAccessExpiryTime = DateTime.UtcNow.AddMinutes(30);
 			sasConstraints.Permissions = SharedAccessBlobPermissions.Write | SharedAccessBlobPermissions.Create;
 
-			ICloudBlob blob = await container.GetBlobReferenceFromServerAsync($"{key.ToString()}.bin");
+			ICloudBlob blob = container.GetBlockBlobReference($"{key.ToString()}");
 
 			return new Uri(blob.Uri, blob.GetSharedAccessSignature(sasConstraints)).ToString();
 		}
