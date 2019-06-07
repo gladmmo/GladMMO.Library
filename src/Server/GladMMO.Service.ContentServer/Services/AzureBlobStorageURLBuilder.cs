@@ -24,7 +24,7 @@ namespace GladMMO
 			sasConstraints.SharedAccessExpiryTime = DateTime.UtcNow.AddMinutes(30);
 			sasConstraints.Permissions = SharedAccessBlobPermissions.Write | SharedAccessBlobPermissions.Create;
 
-			ICloudBlob blob = container.GetBlockBlobReference($"{key.ToString()}");
+			ICloudBlob blob = container.GetBlockBlobReference($"{key.ToString()}.bin");
 
 			return new Uri(blob.Uri, blob.GetSharedAccessSignature(sasConstraints)).ToString();
 		}
