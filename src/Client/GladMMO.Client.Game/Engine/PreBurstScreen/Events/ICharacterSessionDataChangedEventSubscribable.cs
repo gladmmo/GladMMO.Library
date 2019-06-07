@@ -6,7 +6,7 @@ namespace GladMMO
 {
 	public interface ICharacterSessionDataChangedEventSubscribable
 	{
-		event EventHandler<ServerRequestedSceneChangeEventArgs> OnCharacterSessionDataChanged;
+		event EventHandler<CharacterSessionDataChangedEventArgs> OnCharacterSessionDataChanged;
 	}
 
 	public sealed class CharacterSessionDataChangedEventArgs : EventArgs
