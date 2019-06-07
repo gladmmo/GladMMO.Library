@@ -13,6 +13,7 @@ namespace GladMMO
 	/// has changed and then download the upcoming scene. Maybe it's a Lobby, maybe it's a Forest.
 	/// Either way, we want to download it.
 	/// </summary>
+	[SceneTypeCreateGladMMO(GameSceneType.PreZoneBurstingScreen)]
 	public sealed class PreBurstQueryDownloadableSceneInitializable : ThreadUnSafeBaseSingleEventListenerInitializable<ICharacterSessionDataChangedEventSubscribable, CharacterSessionDataChangedEventArgs>
 	{
 		private IZoneServerService ZoneDataService { get; }
@@ -30,6 +31,9 @@ namespace GladMMO
 
 		protected override void OnThreadUnSafeEventFired(object source, CharacterSessionDataChangedEventArgs args)
 		{
+			if(Logger.IsInfoEnabled)
+				Logger.Info($"Starting process to download world.");
+
 			UnityAsyncHelper.UnityMainThreadContext.PostAsync(async () =>
 			{
 				long worldId = 0;
