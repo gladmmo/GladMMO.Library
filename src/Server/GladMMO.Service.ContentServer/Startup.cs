@@ -13,6 +13,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Blob;
 
 namespace GladMMO
 {
@@ -57,10 +59,17 @@ namespace GladMMO
 			services.AddJwtAuthorization(cert);
 
 			//Adds and registers S3 service for URLBuilding and communication/credentials and etc
-			services.AddS3Service(Configuration);
+			//services.AddS3Service(Configuration);
 			services.AddTransient<IWorldEntryRepository, DatabaseBackedWorldEntryRepository>();
 			services.AddTransient<IAvatarEntryRepository, DatabaseBackedAvatarEntryRepository>();
 			services.AddTransient<IContentDownloadAuthroizationValidator, UnimplementedContentDownloadAuthorizationValidator>();
+
+			//AZURE_STORAGE_CONNECTIONSTRING
+			string ConnectionString = Environment.GetEnvironmentVariable("AZURE_STORAGE_CONNECTIONSTRING");
+			CloudStorageAccount storageAccount = CloudStorageAccount.Parse(ConnectionString);
+
+			services.AddScoped(p => storageAccount.CreateCloudBlobClient());
+			services.AddTransient<IStorageUrlBuilder, AzureBlobStorageURLBuilder>();
 		}
 
 		private static void RegisterDatabaseServices(IServiceCollection services)
