@@ -48,6 +48,9 @@ namespace GladMMO
 				return;
 			}
 
+			if(Logger.IsInfoEnabled)
+				Logger.Info($"About to broadcasting {nameof(OnCharacterSessionDataChanged)} with Zone: {characterSessionData.ZoneId}");
+
 			OnCharacterSessionDataChanged?.Invoke(this, new CharacterSessionDataChangedEventArgs(characterSessionData.ZoneId));
 		}
 	}
