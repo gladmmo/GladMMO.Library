@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Common.Logging;
+using Glader;
 using Glader.Essentials;
 
 namespace GladMMO
@@ -12,7 +13,7 @@ namespace GladMMO
 	/// </summary>
 	[AdditionalRegisterationAs(typeof(ICharacterSessionDataChangedEventSubscribable))]
 	[SceneTypeCreateGladMMO(GameSceneType.PreZoneBurstingScreen)]
-	public sealed class PreBurstOnStartCharacterSessionQueryInitializable : IGameInitializable, ICharacterSessionDataChangedEventSubscribable
+	public sealed class PreBurstOnStartCharacterSessionQueryStartable : IGameStartable, ICharacterSessionDataChangedEventSubscribable
 	{
 		//TODO: Refactor this behind its own object to provide download URL for character.
 		private ICharacterService CharacterService { get; }
@@ -23,7 +24,7 @@ namespace GladMMO
 
 		public event EventHandler<CharacterSessionDataChangedEventArgs> OnCharacterSessionDataChanged;
 
-		public PreBurstOnStartCharacterSessionQueryInitializable(
+		public PreBurstOnStartCharacterSessionQueryStartable(
 			[NotNull] ICharacterService characterService,
 			[NotNull] ICharacterDataRepository localCharacterData,
 			[NotNull] ILog logger)
@@ -33,7 +34,7 @@ namespace GladMMO
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
-		public async Task OnGameInitialized()
+		public async Task Start()
 		{
 			//When we start the loading screen for the game
 			//To know what world we should load we should
