@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -48,9 +48,11 @@
     <ProjectReference Include="..\..\GladMMO.Unity.Common\GladMMO.Unity.Common.csproj" />
     <ProjectReference Include="..\..\GladMMO.ZoneServer.Common\GladMMO.ZoneServer.Common.csproj" />
     <ProjectReference Include="..\GladMMO.Client.CharacterService\GladMMO.Client.CharacterService.csproj" />
+    <ProjectReference Include="..\GladMMO.Client.ContentServer\GladMMO.Client.ContentServer.csproj" />
     <ProjectReference Include="..\GladMMO.Client.NameQueryService\GladMMO.Client.NameQueryService.csproj" />
     <ProjectReference Include="..\GladMMO.Client.ServerSelection\GladMMO.Client.ServerSelection.csproj" />
     <ProjectReference Include="..\GladMMO.Client.ServiceDiscovery\GladMMO.Client.ServiceDiscovery.csproj" />
+    <ProjectReference Include="..\GladMMO.Client.ZoneService\GladMMO.Client.ZoneService.csproj" />
   </ItemGroup>
 
   <ItemGroup>
