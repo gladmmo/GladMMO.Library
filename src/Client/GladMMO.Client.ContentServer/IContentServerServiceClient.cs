@@ -34,10 +34,12 @@ namespace GladMMO
 		Task<RequestedUrlResponseModel> GetNewAvatarUploadUrl([AuthenticationToken] string authToken);
 
 		//TODO: Doc
+		[RequiresAuthentication]
 		[Post("/api/World/{id}/downloadurl")]
 		Task<ContentDownloadURLResponse> RequestWorldDownloadUrl([AliasAs("id")] long worldId);
 
 		//TODO: Doc
+		[RequiresAuthentication]
 		[Post("/api/avatar/{id}/downloadurl")]
 		Task<ContentDownloadURLResponse> RequestAvatarDownloadUrl([AliasAs("id")] long avatarId);
 	}
