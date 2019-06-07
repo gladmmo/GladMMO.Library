@@ -14,10 +14,10 @@ cd gameserv
 start "gameserv" dotnet GladMMO.Service.GameServer.dll --url=http://192.168.0.12:5004
 cd ..
 
-cd gameservdisc
-start "gameservdisc" dotnet GladMMO.Service.ServiceDiscovery.dll --url=http://192.168.0.12:5003
-cd ..
-
 cd contentserv
 start "contentserv" dotnet GladMMO.Service.ContentServer.dll --url=http://192.168.0.12:5005
+cd ..
+
+cd gameservdisc
+start "gameservdisc" dotnet GladMMO.Service.ServiceDiscovery.dll --url=http://192.168.0.12:5003
 cd ..
