@@ -11,13 +11,7 @@ namespace GladMMO
 		/// <inheritdoc />
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.Register<ICharacterService>(context =>
-			{
-				IServiceDiscoveryService serviceDiscovery = context.Resolve<IServiceDiscoveryService>();
-				IReadonlyAuthTokenRepository tokenRepository = context.Resolve<IReadonlyAuthTokenRepository>();
-
-				return new AsyncEndpointCharacterService(QueryForRemoteServiceEndpoint(serviceDiscovery, "GameServer"), new RefitSettings() { HttpMessageHandlerFactory = () => new AuthenticatedHttpClientHandler(tokenRepository) });
-			});
+			builder.RegisterModule<CharacterServiceDependencyAutofacModule>();
 		}
 	}
 }
