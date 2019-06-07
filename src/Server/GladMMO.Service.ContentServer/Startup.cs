@@ -66,6 +66,9 @@ namespace GladMMO
 
 			//AZURE_STORAGE_CONNECTIONSTRING
 			string ConnectionString = Environment.GetEnvironmentVariable("AZURE_STORAGE_CONNECTIONSTRING");
+			if(String.IsNullOrWhiteSpace(ConnectionString))
+				throw new InvalidOperationException($"Failed to load AZURE_STORAGE_CONNECTIONSTRING.");
+
 			CloudStorageAccount storageAccount = CloudStorageAccount.Parse(ConnectionString);
 
 			services.AddScoped(p => storageAccount.CreateCloudBlobClient());
