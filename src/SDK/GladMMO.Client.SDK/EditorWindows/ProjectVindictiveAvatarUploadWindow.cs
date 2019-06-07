@@ -83,7 +83,7 @@ namespace GladMMO.SDK
 				{
 					try
 					{
-						string uploadUrl = (await ucmService.GetNewWorldUploadUrl(AuthToken)).UploadUrl;
+						string uploadUrl = (await ucmService.GetNewAvatarUploadUrl(AuthToken)).UploadUrl;
 						Debug.Log($"Uploading to: {uploadUrl}.");
 						var cloudBlockBlob = new CloudBlockBlob(new Uri(uploadUrl));
 						await cloudBlockBlob.UploadFromFileAsync(Path.Combine(projectPath, "AssetBundles", "temp", AssetBundlePath));
