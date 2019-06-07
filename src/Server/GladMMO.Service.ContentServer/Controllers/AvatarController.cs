@@ -81,7 +81,9 @@ namespace GladMMO
 
 		[HttpPost("{id}/uploaded")]
 		[AuthorizeJwt]
-		public async Task<IActionResult> SetAvatarAsUploaded([FromRoute(Name = "id")] long worldId, [FromServices] IAvatarEntryRepository avatarEntryRepository, [FromServices] IAmazonS3 storageClient)
+		public async Task<IActionResult> SetAvatarAsUploaded([FromRoute(Name = "id")] long worldId, 
+			[FromServices] IAvatarEntryRepository avatarEntryRepository, 
+			[FromServices] IContentResourceExistenceVerifier contentExistenceVerifier)
 		{
 			//At this point, the user is telling us they finished uploading the world.
 			//They could be lying so we should check that the resource exists AND
@@ -104,7 +106,7 @@ namespace GladMMO
 			//Now that we know the world is in the database and the account making this authorized requests owns it
 			//we can now actually check that the resource exists on the storeage system
 			//TODO: This relies on some outdated API/deprecated stuff.
-			bool resourceExists = await S3ResourceExists(storageClient, "projectvindictiveworlds-dev", model.StorageGuid)
+			bool resourceExists = await contentExistenceVerifier.VerifyResourceExists(UserContentType.Avatar, model.StorageGuid)
 				.ConfigureAwait(false); //TODO: Don't hardcore bucket name
 
 			//TODO: Be more descriptive
@@ -124,43 +126,6 @@ namespace GladMMO
 				.ConfigureAwait(false);
 
 			return Ok();
-		}
-
-		private async Task<bool> S3ResourceExists(IAmazonS3 client, string bucket, Guid worldGuidKey)
-		{
-			//This is actually how the old AWS client worked: https://github.com/aws/aws-sdk-net/blob/master/sdk/src/Services/S3/Custom/_bcl/IO/S3FileInfo.cs
-			//Kinda bad design tbh Amazon lol
-			try
-			{
-				var request = new GetObjectMetadataRequest
-				{
-					BucketName = bucket,
-					Key = worldGuidKey.ToString().Replace('\\', '/') //S3helper.EncodeKey: https://github.com/aws/aws-sdk-net/blob/b691e46e57a3e24477e6a5fa2e849da44db7002f/sdk/src/Services/S3/Custom/_bcl/IO/S3Helper.cs
-				};
-				((Amazon.Runtime.Internal.IAmazonWebServiceRequest)request).AddBeforeRequestHandler(FileIORequestEventHandler);
-
-				// If the object doesn't exist then a "NotFound" will be thrown
-				await client.GetObjectMetadataAsync(request)
-					.ConfigureAwait(false);
-
-				return true;
-			}
-			catch(AmazonS3Exception e)
-			{
-				Logger.LogError($"Encountered AWS Error: {e.Message}");
-				return false;
-			}
-		}
-
-		//From: https://github.com/aws/aws-sdk-net/blob/b691e46e57a3e24477e6a5fa2e849da44db7002f/sdk/src/Services/S3/Custom/_bcl/IO/S3Helper.cs
-		internal static void FileIORequestEventHandler(object sender, RequestEventArgs args)
-		{
-			WebServiceRequestEventArgs wsArgs = args as WebServiceRequestEventArgs;
-			if(wsArgs != null)
-			{
-				string currentUserAgent = wsArgs.Headers[AWSSDKUtils.UserAgentHeader];
-				wsArgs.Headers[AWSSDKUtils.UserAgentHeader] = currentUserAgent + " FileIO";
-			}
 		}
 
 		/// <summary>
