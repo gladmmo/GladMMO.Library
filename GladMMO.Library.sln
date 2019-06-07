@@ -99,9 +99,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladMMO.Social.ManualTest",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GladMMO.ZoneServer.Client.ManualTest", "test\GladMMO.ZoneServer.Client.ManualTest\GladMMO.ZoneServer.Client.ManualTest.csproj", "{044080E8-44D0-45A3-ADA6-BBBF1BC6CEA3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladMMO.Client.ZoneService", "src\Client\GladMMO.Client.ZoneService\GladMMO.Client.ZoneService.csproj", "{11D64C1C-9ED7-4247-B1F8-351637E89A44}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GladMMO.Client.ZoneService", "src\Client\GladMMO.Client.ZoneService\GladMMO.Client.ZoneService.csproj", "{11D64C1C-9ED7-4247-B1F8-351637E89A44}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GladMMO.Models.ContentServer", "src\GladMMO.Models.ContentServer\GladMMO.Models.ContentServer.csproj", "{6D277804-735E-4DDE-89A9-75E36D62F2E3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GladMMO.Client.ContentServer", "src\Client\GladMMO.Client.ContentServer\GladMMO.Client.ContentServer.csproj", "{A96A7B1F-6226-44B6-9C5F-C46457381A0F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -492,6 +494,16 @@ Global
 		{6D277804-735E-4DDE-89A9-75E36D62F2E3}.Debug-Local|Any CPU.Build.0 = Debug|Any CPU
 		{6D277804-735E-4DDE-89A9-75E36D62F2E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6D277804-735E-4DDE-89A9-75E36D62F2E3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A96A7B1F-6226-44B6-9C5F-C46457381A0F}.Database_Migration|Any CPU.ActiveCfg = Debug|Any CPU
+		{A96A7B1F-6226-44B6-9C5F-C46457381A0F}.Database_Migration|Any CPU.Build.0 = Debug|Any CPU
+		{A96A7B1F-6226-44B6-9C5F-C46457381A0F}.DEBUG_LOCAL|Any CPU.ActiveCfg = Debug|Any CPU
+		{A96A7B1F-6226-44B6-9C5F-C46457381A0F}.DEBUG_LOCAL|Any CPU.Build.0 = Debug|Any CPU
+		{A96A7B1F-6226-44B6-9C5F-C46457381A0F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A96A7B1F-6226-44B6-9C5F-C46457381A0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A96A7B1F-6226-44B6-9C5F-C46457381A0F}.Debug-Local|Any CPU.ActiveCfg = Debug|Any CPU
+		{A96A7B1F-6226-44B6-9C5F-C46457381A0F}.Debug-Local|Any CPU.Build.0 = Debug|Any CPU
+		{A96A7B1F-6226-44B6-9C5F-C46457381A0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A96A7B1F-6226-44B6-9C5F-C46457381A0F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -545,6 +557,7 @@ Global
 		{044080E8-44D0-45A3-ADA6-BBBF1BC6CEA3} = {FCFAE99C-C28A-44B7-A7BE-F9D5481C35B9}
 		{11D64C1C-9ED7-4247-B1F8-351637E89A44} = {8C598CE2-9578-41F6-A195-24678617AE6F}
 		{6D277804-735E-4DDE-89A9-75E36D62F2E3} = {572E4B21-970E-4889-9B0D-357816B1307C}
+		{A96A7B1F-6226-44B6-9C5F-C46457381A0F} = {8C598CE2-9578-41F6-A195-24678617AE6F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {886DD3D7-35E3-42F0-8CE9-74FB5AD7BBD0}
