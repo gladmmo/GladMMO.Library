@@ -7,7 +7,7 @@ using Glader.Essentials;
 
 namespace GladMMO
 {
-	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
+	//[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
 	public sealed class LocalPlayerSpawnedLevelChangeEventListener : HubChangedLocalPlayerSpawnedEventListener
 	{
 		/// <inheritdoc />
