@@ -16,7 +16,6 @@ namespace GladMMO
 		/// <inheritdoc />
 		protected override void Load(ContainerBuilder builder)
 		{
-
 			//Register the serialization models.
 			Unity3DProtobufPayloadRegister unityProtobufRegisteration = new Unity3DProtobufPayloadRegister();
 			unityProtobufRegisteration.RegisterDefaults();
