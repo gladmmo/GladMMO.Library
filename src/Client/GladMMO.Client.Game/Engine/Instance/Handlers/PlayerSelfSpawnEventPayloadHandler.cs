@@ -8,27 +8,27 @@ using GladNet;
 
 namespace GladMMO
 {
-	[AdditionalRegisterationAs(typeof(INetworkEntityVisibleEventSubscribable))]
 	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
-	public sealed class PlayerSelfSpawnEventPayloadHandler : BaseGameClientGameMessageHandler<PlayerSelfSpawnEventPayload>, INetworkEntityVisibleEventSubscribable
+	public sealed class PlayerSelfSpawnEventPayloadHandler : BaseGameClientGameMessageHandler<PlayerSelfSpawnEventPayload>
 	{
-		/// <inheritdoc />
-		public event EventHandler<NetworkEntityNowVisibleEventArgs> OnNetworkEntityNowVisible;
+		private INetworkEntityVisibilityEventPublisher VisibilityEventPublisher { get; }
 
 		private IFactoryCreatable<NetworkEntityNowVisibleEventArgs, EntityCreationData> VisibileEventFactory { get; }
 
-		public PlayerSelfSpawnEventPayloadHandler(ILog logger, [NotNull] IFactoryCreatable<NetworkEntityNowVisibleEventArgs, EntityCreationData> visibileEventFactory) 
+		public PlayerSelfSpawnEventPayloadHandler(ILog logger, 
+			[NotNull] IFactoryCreatable<NetworkEntityNowVisibleEventArgs, EntityCreationData> visibileEventFactory
+			, [NotNull] INetworkEntityVisibilityEventPublisher visibilityEventPublisher) 
 			: base(logger)
 		{
 			VisibileEventFactory = visibileEventFactory ?? throw new ArgumentNullException(nameof(visibileEventFactory));
+			VisibilityEventPublisher = visibilityEventPublisher ?? throw new ArgumentNullException(nameof(visibilityEventPublisher));
 		}
 
 		public override Task HandleMessage(IPeerMessageContext<GameClientPacketPayload> context, PlayerSelfSpawnEventPayload payload)
 		{
 			NetworkEntityNowVisibleEventArgs visibilityEvent = VisibileEventFactory.Create(payload.CreationData);
 
-			//Now we broadcast that an entity is now visible.
-			OnNetworkEntityNowVisible?.Invoke(this, visibilityEvent);
+			VisibilityEventPublisher.Publish(visibilityEvent);
 			return Task.CompletedTask;
 		}
 	}

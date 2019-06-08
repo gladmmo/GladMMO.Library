@@ -57,6 +57,12 @@ namespace GladMMO
 				.As<IFactoryCreatable<NetworkEntityNowVisibleEventArgs, EntityCreationData>>()
 				.SingleInstance();
 
+			//DefaultEntityVisibilityEventPublisher : INetworkEntityVisibilityEventPublisher, INetworkEntityVisibleEventSubscribable
+			builder.RegisterType<DefaultEntityVisibilityEventPublisher>()
+				.AsSelf()
+				.AsImplementedInterfaces()
+				.SingleInstance();
+
 			//Ok, now we actually register update block types manually
 			//because it's not worth it to do an assembly-wide search for them.
 			/*builder.RegisterType<DefaultObjectUpdateBlockDispatcher>()
