@@ -53,7 +53,7 @@ namespace GladMMO
 			}
 		}
 
-		[SceneTypeCreateGladMMO(GameSceneType.ZoneGameScene)]
+		[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
 		public class TestGameSceneInit : IGameInitializable
 		{
 			/// <inheritdoc />
@@ -73,7 +73,7 @@ namespace GladMMO
 			}
 		}
 
-		[SceneTypeCreateGladMMO(GameSceneType.ZoneGameScene)]
+		[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
 		[SceneTypeCreateGladMMO(GameSceneType.TitleScreen)]
 		public class TestBothSceneInit : IGameInitializable
 		{

@@ -12,7 +12,7 @@ namespace GladMMO
 	//Basically, this component can be used to restart the network client
 	//AND also broadcast the connection established event.
 	[AdditionalRegisterationAs(typeof(INetworkConnectionEstablishedEventSubscribable))]
-	[SceneTypeCreateGladMMO(GameSceneType.DefaultLobby)]
+	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
 	public sealed class OnStartRestartNetworkClientHandlingInititablize : IGameInitializable, INetworkConnectionEstablishedEventSubscribable
 	{
 		/// <summary>

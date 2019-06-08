@@ -9,7 +9,7 @@ using Glader.Essentials;
 
 namespace GladMMO
 {
-	[SceneTypeCreateGladMMO(GameSceneType.DefaultLobby)]
+	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
 	public sealed class OnGroupJoinUIUnitFrameControllerEventListener : EventQueueBasedTickable<IPlayerGroupJoinedEventSubscribable, PlayerJoinedGroupEventArgs>
 	{
 		private IReadonlyEntityGuidMappable<IEntityDataFieldContainer> EntityDataMappable { get; }

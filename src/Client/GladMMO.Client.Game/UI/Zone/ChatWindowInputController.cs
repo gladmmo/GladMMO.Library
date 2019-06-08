@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace GladMMO
 {
-	[SceneTypeCreateGladMMO(GameSceneType.ZoneGameScene)]
+	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
 	public sealed class ChatWindowInputController : IGameInitializable
 	{
 		private IUIButton ChatInputButton { get; }
