@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="protobuf-net" Version="2.4.0" />
     <PackageReference Include="SceneJect.Editor" Version="3.0.31" />
   </ItemGroup>
 

@@ -8,7 +8,7 @@
     <PackageReference Include="Glader.Essentials.Common" Version="0.0.15" />
     <PackageReference Include="GladNet3.Client.API" Version="3.0.46" />
     <PackageReference Include="GladNet3.Common.API" Version="3.0.46" />
-    <PackageReference Include="protobuf-net" Version="2.3.7" />
+    <PackageReference Include="protobuf-net" Version="2.4.0" />
   </ItemGroup>
 
   <ItemGroup>
