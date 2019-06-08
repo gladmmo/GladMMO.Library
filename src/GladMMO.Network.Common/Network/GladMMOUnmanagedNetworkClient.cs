@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Common.Logging;
+using Common.Logging.Simple;
 using GladNet;
 using Nito.AsyncEx;
 using Reinterpret.Net;
@@ -50,7 +52,9 @@ namespace GladMMO
 		/// </summary>
 		protected readonly AsyncLock writeSynObj = new AsyncLock();
 
-		public GladMMOUnmanagedNetworkClient(TClientType decoratedClient, INetworkSerializationService serializer, int payloadBufferSize = 30000)
+		private ILog Logger { get; }
+
+		public GladMMOUnmanagedNetworkClient(TClientType decoratedClient, INetworkSerializationService serializer, ILog logger, int payloadBufferSize = 30000)
 		{
 			if(decoratedClient == null) throw new ArgumentNullException(nameof(decoratedClient));
 			if(serializer == null) throw new ArgumentNullException(nameof(serializer));
@@ -58,6 +62,7 @@ namespace GladMMO
 
 			DecoratedClient = decoratedClient;
 			Serializer = serializer;
+			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
 			//One of the lobby packets is 14,000 bytes. We may even need bigger.
 			PacketPayloadReadBuffer = new byte[payloadBufferSize]; //TODO: Do we need a larger buffer for any packets?
@@ -107,7 +112,11 @@ namespace GladMMO
 			}
 			catch(Exception e)
 			{
-				throw new InvalidOperationException($"Encountered Exception in serializing outgoing packet Type: {payload.GetType().Name}. Exception: {e.Message}", e);
+				string exceptionMessage = $"Encountered Exception in serializing outgoing packet Type: {payload.GetType().Name}. Exception: {e.Message}";
+				if(Logger.IsErrorEnabled)
+					Logger.Error(exceptionMessage);
+
+				throw new InvalidOperationException(exceptionMessage, e);
 			}
 		}
 

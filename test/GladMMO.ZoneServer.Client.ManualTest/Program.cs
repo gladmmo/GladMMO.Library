@@ -21,7 +21,7 @@ namespace GladMMO
 			payloadRegister.Register();
 
 			var client = new GladMMOUnmanagedNetworkClient<DotNetTcpClientNetworkClient, GameServerPacketPayload,
-					GameClientPacketPayload, IGamePacketPayload>(new DotNetTcpClientNetworkClient(), serializer)
+					GameClientPacketPayload, IGamePacketPayload>(new DotNetTcpClientNetworkClient(), serializer, new ConsoleLogger(LogLevel.All))
 				.AsManaged();
 
 			await client.ConnectAsync(IPAddress.Parse("192.168.0.12"), 5006);
