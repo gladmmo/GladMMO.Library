@@ -15,7 +15,7 @@ namespace GladMMO
 	[AdditionalRegisterationAs(typeof(IGroupUnitFrameManager))]
 	[AdditionalRegisterationAs(typeof(IGroupUnitFrameIssuable))]
 	[AdditionalRegisterationAs(typeof(IGroupUnitframeManagedCollection))]
-	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
+	//[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
 	public sealed class GroupUnitFrameUIControllerInitializable : IGameInitializable, IGroupUnitFrameManager
 	{
 		public ILog Logger { get; }

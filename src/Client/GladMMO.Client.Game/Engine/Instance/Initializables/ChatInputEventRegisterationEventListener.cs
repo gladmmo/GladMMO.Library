@@ -11,7 +11,7 @@ using Nito.AsyncEx;
 
 namespace GladMMO
 {
-	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
+	//[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
 	public sealed class ChatInputEventRegisterationEventListener : IGameInitializable
 	{
 		private IUIButton ChatEnterButton { get; }
