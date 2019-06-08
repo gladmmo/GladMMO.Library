@@ -52,5 +52,13 @@ namespace GladMMO
 		{
 
 		}
+
+		public override string ToString()
+		{
+			if (isSuccessful)
+				return $"Result: {ResultCode} Endpoint: {Endpoint}";
+			else
+				return $"Result: {ResultCode}";
+		}
 	}
 }

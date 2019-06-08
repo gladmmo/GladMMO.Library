@@ -31,5 +31,10 @@ namespace GladMMO
 		{
 
 		}
+
+		public override string ToString()
+		{
+			return $"Address: {EndpointAddress} Port: {EndpointPort}";
+		}
 	}
 }
