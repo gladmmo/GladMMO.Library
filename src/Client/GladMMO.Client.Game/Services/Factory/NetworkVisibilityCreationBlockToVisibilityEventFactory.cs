@@ -7,9 +7,8 @@ using Glader.Essentials;
 
 namespace GladMMO
 {
-	[AdditionalRegisterationAs(typeof(IFactoryCreatable<NetworkEntityNowVisibleEventArgs, EntityCreationData>))]
 	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
-	public sealed class NetworkVisibilityCreationBlockToVisibilityEventFactory : IGameInitializable, IFactoryCreatable<NetworkEntityNowVisibleEventArgs, EntityCreationData>
+	public sealed class NetworkVisibilityCreationBlockToVisibilityEventFactory : IFactoryCreatable<NetworkEntityNowVisibleEventArgs, EntityCreationData>
 	{
 		private IEntityGuidMappable<IChangeTrackableEntityDataCollection> ChangeTrackableCollection { get; }
 
@@ -63,12 +62,6 @@ namespace GladMMO
 			}
 
 			return t;
-		}
-
-		/// <inheritdoc />
-		public Task OnGameInitialized()
-		{
-			return Task.CompletedTask;
 		}
 	}
 }
