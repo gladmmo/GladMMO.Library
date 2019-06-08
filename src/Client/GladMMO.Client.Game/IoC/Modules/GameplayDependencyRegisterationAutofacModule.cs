@@ -16,6 +16,8 @@ namespace GladMMO
 		/// <inheritdoc />
 		protected override void Load(ContainerBuilder builder)
 		{
+			builder.RegisterModule<ZoneServerServiceDependencyAutofacModule>();
+
 			builder.RegisterType<EntityPrefabFactory>()
 				.As<IFactoryCreatable<GameObject, EntityPrefab>>()
 				.AsSelf()
@@ -46,6 +48,11 @@ namespace GladMMO
 				.AsSelf()
 				.SingleInstance();
 
+			builder.RegisterType<DefaultThreadUnSafeKnownEntitySet>()
+				.AsSelf()
+				.AsImplementedInterfaces()
+				.SingleInstance();
+
 			//Ok, now we actually register update block types manually
 			//because it's not worth it to do an assembly-wide search for them.
 			/*builder.RegisterType<DefaultObjectUpdateBlockDispatcher>()
@@ -60,12 +67,7 @@ namespace GladMMO
 			builder.RegisterInstance(new StubbedObjectUpdateBlockHandler(ObjectUpdateType.UPDATETYPE_CREATE_OBJECT2)).As<IObjectUpdateBlockHandler>();
 			builder.RegisterInstance(new StubbedObjectUpdateBlockHandler(ObjectUpdateType.UPDATETYPE_MOVEMENT)).As<IObjectUpdateBlockHandler>();
 			builder.RegisterInstance(new StubbedObjectUpdateBlockHandler(ObjectUpdateType.UPDATETYPE_NEAR_OBJECTS)).As<IObjectUpdateBlockHandler>();
-			builder.RegisterInstance(new StubbedObjectUpdateBlockHandler(ObjectUpdateType.UPDATETYPE_OUT_OF_RANGE_OBJECTS)).As<IObjectUpdateBlockHandler>();
-
-			builder.RegisterType<DefaultThreadUnSafeKnownEntitySet>()
-				.AsSelf()
-				.AsImplementedInterfaces()
-				.SingleInstance();*/
+			builder.RegisterInstance(new StubbedObjectUpdateBlockHandler(ObjectUpdateType.UPDATETYPE_OUT_OF_RANGE_OBJECTS)).As<IObjectUpdateBlockHandler>();*/
 		}
 
 		/*private static void RegisterUpdateBlockHandler<THandlerType>([NotNull] ContainerBuilder builder)
