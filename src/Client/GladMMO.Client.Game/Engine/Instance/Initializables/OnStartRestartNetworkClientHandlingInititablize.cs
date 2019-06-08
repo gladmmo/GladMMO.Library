@@ -4,6 +4,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Common.Logging;
+using Glader;
 using Glader.Essentials;
 using GladNet;
 
@@ -13,7 +14,7 @@ namespace GladMMO
 	//AND also broadcast the connection established event.
 	[AdditionalRegisterationAs(typeof(INetworkConnectionEstablishedEventSubscribable))]
 	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
-	public sealed class OnStartRestartNetworkClientHandlingInititablize : IGameInitializable, INetworkConnectionEstablishedEventSubscribable
+	public sealed class OnStartRestartNetworkClientHandlingInititablize : IGameStartable, INetworkConnectionEstablishedEventSubscribable
 	{
 		/// <summary>
 		/// The managed network client that the Unity3D client is implemented on-top of.
@@ -38,8 +39,7 @@ namespace GladMMO
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
-		/// <inheritdoc />
-		public async Task OnGameInitialized()
+		public async Task Start()
 		{
 			if(!Client.isConnected)
 			{
