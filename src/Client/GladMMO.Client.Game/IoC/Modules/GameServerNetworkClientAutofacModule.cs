@@ -38,7 +38,7 @@ namespace GladMMO
 				.As<IPeerPayloadSendService<GameClientPacketPayload>>()
 				.As<IPayloadInterceptable>()
 				.As<IConnectionService>()
-				.InstancePerLifetimeScope();
+				.SingleInstance();
 
 			builder.RegisterType<DefaultMessageContextFactory>()
 				.As<IPeerMessageContextFactory>()
@@ -53,7 +53,6 @@ namespace GladMMO
 				.AsImplementedInterfaces()
 				.SingleInstance();
 
-			//WOO, the magical WoW serializer!
 			builder.RegisterModule<GladMMONetworkSerializerAutofacModule>();
 		}
 	}
