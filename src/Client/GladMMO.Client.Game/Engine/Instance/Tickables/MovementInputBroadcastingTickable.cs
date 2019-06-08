@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Common.Logging;
 using Glader.Essentials;
 using UnityEngine;
 
 namespace GladMMO
 {
 	[AdditionalRegisterationAs(typeof(IMovementInputChangedEventSubscribable))]
-	//[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
+	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
 	public sealed class MovementInputBroadcastingTickable : OnLocalPlayerSpawnedEventListener, IGameTickable, IMovementInputChangedEventSubscribable
 	{
 		/// <inheritdoc />
@@ -21,11 +22,14 @@ namespace GladMMO
 
 		private bool isLocalPlayerSpawned { get; set; } = false;
 
+		private ILog Logger { get; }
+
 		/// <inheritdoc />
-		public MovementInputBroadcastingTickable(ILocalPlayerSpawnedEventSubscribable subscriptionService)
+		public MovementInputBroadcastingTickable(ILocalPlayerSpawnedEventSubscribable subscriptionService,
+			[NotNull] ILog logger)
 			: base(subscriptionService)
 		{
-
+			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
 		/// <inheritdoc />
@@ -60,6 +64,9 @@ namespace GladMMO
 		/// <inheritdoc />
 		protected override void OnLocalPlayerSpawned(LocalPlayerSpawnedEventArgs args)
 		{
+			if(Logger.IsInfoEnabled)
+				Logger.Info($"Movement input enabled.");
+
 			//Local player is spawned, we should actually handle input now.
 			isLocalPlayerSpawned = true;
 		}
