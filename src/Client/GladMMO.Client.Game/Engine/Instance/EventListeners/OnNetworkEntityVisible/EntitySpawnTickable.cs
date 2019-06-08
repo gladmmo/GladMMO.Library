@@ -38,12 +38,6 @@ namespace GladMMO
 		{
 			try
 			{
-				//TODO: We need to do abit MORE about this, to know the entity.
-				KnownEntites.AddEntity(args.EntityGuid);
-
-				if(Logger.IsDebugEnabled)
-					Logger.Debug($"Entity: {args.EntityGuid.EntityType}:{args.EntityGuid.EntityId} is now known.");
-
 				//It should be assumed none of the event listeners will be async
 				OnEntityCreationStarting?.Invoke(this, new EntityCreationEventArgs(args.EntityGuid));
 
@@ -59,6 +53,12 @@ namespace GladMMO
 					if(Logger.IsInfoEnabled)
 						Logger.Info($"Spawning remote player.");
 				}
+
+				//TODO: We need to do abit MORE about this, to know the entity.
+				KnownEntites.AddEntity(args.EntityGuid);
+
+				if(Logger.IsDebugEnabled)
+					Logger.Debug($"Entity: {args.EntityGuid.EntityType}:{args.EntityGuid.EntityId} is now known.");
 
 				//TODO: Handle remote players and non-players.
 			}
