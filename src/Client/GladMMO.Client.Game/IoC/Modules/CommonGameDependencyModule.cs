@@ -56,6 +56,11 @@ namespace GladMMO.Client
 				.As<ICharacterDataRepository>()
 				.SingleInstance();
 
+			builder.RegisterType<LocalZoneDataRepository>()
+				.As<IZoneDataRepository>()
+				.As<IReadonlyZoneDataRepository>()
+				.SingleInstance();
+
 			builder.RegisterType<AuthenticationTokenRepository>()
 				.As<IAuthTokenRepository>()
 				.As<IReadonlyAuthTokenRepository>()
