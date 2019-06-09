@@ -35,6 +35,8 @@ namespace GladMMO
 		/// Opcode used for telling the client
 		/// to load a new scene.
 		/// </summary>
-		LoadNewScene = 7
+		LoadNewScene = 7,
+
+		PlayerRotationUpdate = 8,
 	}
 }
