@@ -95,7 +95,7 @@ namespace GladMMO
 			float mouseY = Input.GetAxis("Mouse Y");
 
 			//We can skip this if the inputs are 0.
-			if (mouseY == mouseY && mouseY == 0.0f)
+			if (mouseY == mouseX && mouseY == 0.0f)
 				return;
 
 			CameraInputData _cameraInputData = Data.Value;
