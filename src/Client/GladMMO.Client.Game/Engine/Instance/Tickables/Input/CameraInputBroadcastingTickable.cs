@@ -7,6 +7,8 @@ using UnityEngine;
 
 namespace GladMMO
 {
+#warning This needs some MAJOR cleanup, this entire file
+
 	//TODO: extract
 	[AdditionalRegisterationAs(typeof(IFactoryCreatable<CameraInputData, EmptyFactoryContext>))]
 	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
@@ -51,14 +53,17 @@ namespace GladMMO
 		public Vector3 CurrentRotation;
 	}
 
+	[AdditionalRegisterationAs(typeof(ICameraInputChangedEventSubscribable))]
 	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
-	public sealed class CameraInputBroadcastingTickable : OnLocalPlayerSpawnedEventListener, IGameTickable
+	public sealed class CameraInputBroadcastingTickable : OnLocalPlayerSpawnedEventListener, IGameTickable, ICameraInputChangedEventSubscribable
 	{
 		private ILog Logger { get; }
 
 		private bool isLocalPlayerSpawned { get; set; } = false;
 
 		private Lazy<CameraInputData> Data { get; }
+
+		public event EventHandler<CameraInputChangedEventArgs> OnCameraInputChange;
 
 		public CameraInputBroadcastingTickable(ILocalPlayerSpawnedEventSubscribable subscriptionService, 
 			[NotNull] ILog logger,
@@ -86,15 +91,24 @@ namespace GladMMO
 			if (!isLocalPlayerSpawned)
 				return;
 
+			float mouseX = Input.GetAxis("Mouse X");
+			float mouseY = Input.GetAxis("Mouse Y");
+
+			//We can skip this if the inputs are 0.
+			if (mouseY == mouseY && mouseY == 0.0f)
+				return;
+
 			CameraInputData _cameraInputData = Data.Value;
 
-			float rotationalMovement = Input.GetAxis("Mouse X") * _cameraInputData.LookSpeed;
+			float rotationalMovement = mouseX * _cameraInputData.LookSpeed;
 
 			//TODO: Kinda slow
-			_cameraInputData.CurrentRotation = new Vector3(Mathf.Clamp(-Input.GetAxis("Mouse Y") * _cameraInputData.LookSpeed + _cameraInputData.CurrentRotation.x, -_cameraInputData.MaxLookAngle.x, _cameraInputData.MaxLookAngle.x), 0, 0);
+			_cameraInputData.CurrentRotation = new Vector3(Mathf.Clamp(-mouseY * _cameraInputData.LookSpeed + _cameraInputData.CurrentRotation.x, -_cameraInputData.MaxLookAngle.x, _cameraInputData.MaxLookAngle.x), 0, 0);
 
 			_cameraInputData.CameraGameObject.transform.localEulerAngles = _cameraInputData.CurrentRotation;
 			_cameraInputData.RootRotationalObject.transform.Rotate(Vector3.up, rotationalMovement);
+
+			OnCameraInputChange?.Invoke(this, new CameraInputChangedEventArgs(rotationalMovement));
 		}
 	}
 }
