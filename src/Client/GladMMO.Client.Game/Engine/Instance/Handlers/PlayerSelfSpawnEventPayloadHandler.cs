@@ -24,12 +24,15 @@ namespace GladMMO
 			VisibilityEventPublisher = visibilityEventPublisher ?? throw new ArgumentNullException(nameof(visibilityEventPublisher));
 		}
 
-		public override Task HandleMessage(IPeerMessageContext<GameClientPacketPayload> context, PlayerSelfSpawnEventPayload payload)
+		public override async Task HandleMessage(IPeerMessageContext<GameClientPacketPayload> context, PlayerSelfSpawnEventPayload payload)
 		{
 			NetworkEntityNowVisibleEventArgs visibilityEvent = VisibileEventFactory.Create(payload.CreationData);
 
 			VisibilityEventPublisher.Publish(visibilityEvent);
-			return Task.CompletedTask;
+
+			//TODO: We need to make this the first packet, or couple of packets. We don't want to do this inbetween potentially slow operatons.
+			await context.PayloadSendService.SendMessageImmediately(new ServerTimeSyncronizationRequestPayload(DateTime.UtcNow.Ticks))
+				.ConfigureAwait(false);
 		}
 	}
 }
