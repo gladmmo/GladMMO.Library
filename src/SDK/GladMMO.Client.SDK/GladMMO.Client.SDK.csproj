@@ -13,6 +13,7 @@
     <ProjectReference Include="..\..\Client\GladMMO.Client.ContentServer\GladMMO.Client.ContentServer.csproj" />
     <ProjectReference Include="..\..\Client\GladMMO.Client.ServiceDiscovery\GladMMO.Client.ServiceDiscovery.csproj" />
     <ProjectReference Include="..\..\GladMMO.Client.Authentication\GladMMO.Client.Authentication.csproj" />
+    <ProjectReference Include="..\GladMMO.Common.SDK\GladMMO.Common.SDK.csproj" />
   </ItemGroup>
 
   <ItemGroup>
