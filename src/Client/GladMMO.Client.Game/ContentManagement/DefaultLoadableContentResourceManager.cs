@@ -128,7 +128,7 @@ namespace GladMMO
 				var handle = ResourceHandleCache[avatarId];
 				handle.ClaimReference();
 
-				return handle;
+				return new SingleReleaseablePrefabContentResourceHandleDecorator(handle);
 			}
 		}
 
