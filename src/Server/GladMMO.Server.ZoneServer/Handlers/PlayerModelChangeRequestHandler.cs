@@ -8,6 +8,7 @@ using GladNet;
 namespace GladMMO
 {
 	//PlayerModelChangeRequestPayload
+	[ServerSceneTypeCreate(ServerSceneType.Default)]
 	public sealed class PlayerModelChangeRequestHandler : ControlledEntityRequestHandler<PlayerModelChangeRequestPayload>
 	{
 		private IReadonlyEntityGuidMappable<IEntityDataFieldContainer> EntityFieldMap { get; }
