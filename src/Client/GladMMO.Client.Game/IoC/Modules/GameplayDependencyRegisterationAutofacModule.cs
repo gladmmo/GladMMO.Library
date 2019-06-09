@@ -63,6 +63,11 @@ namespace GladMMO
 				.AsImplementedInterfaces()
 				.SingleInstance();
 
+			//DefaultMovementGeneratorFactory : IFactoryCreatable<IMovementGenerator<GameObject>, EntityAssociatedData<IMovementData>>
+			builder.RegisterType<DefaultMovementGeneratorFactory>()
+				.As<IFactoryCreatable<IMovementGenerator<GameObject>, EntityAssociatedData<IMovementData>>>()
+				.SingleInstance();
+
 			//Ok, now we actually register update block types manually
 			//because it's not worth it to do an assembly-wide search for them.
 			/*builder.RegisterType<DefaultObjectUpdateBlockDispatcher>()
