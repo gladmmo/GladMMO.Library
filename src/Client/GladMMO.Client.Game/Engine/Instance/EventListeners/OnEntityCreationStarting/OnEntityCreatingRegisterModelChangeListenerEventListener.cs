@@ -58,6 +58,8 @@ namespace GladMMO
 			}
 			else
 				AvatarLoaderMappable.AddObject(entityGuid, cancelable);
+
+			cancelable.StartLoading();
 		}
 	}
 }
