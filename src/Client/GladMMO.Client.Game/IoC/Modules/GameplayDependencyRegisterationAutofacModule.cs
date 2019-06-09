@@ -17,6 +17,7 @@ namespace GladMMO
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterModule<ZoneServerServiceDependencyAutofacModule>();
+			builder.RegisterModule<ContentServerDependencyAutofacModule>();
 
 			builder.RegisterType<EntityPrefabFactory>()
 				.As<IFactoryCreatable<GameObject, EntityPrefab>>()
@@ -70,6 +71,16 @@ namespace GladMMO
 
 			builder.RegisterType<DefaultEntityDestructor>()
 				.As<IObjectDestructorable<NetworkEntityGuid>>()
+				.SingleInstance();
+
+			//CustomAvatarLoaderCancelableFactory : IFactoryCreatable<CustomAvatarLoaderCancelable, CustomAvatarLoaderCreationContext>, IAvatarPrefabCompletedDownloadEventSubscribable
+			builder.RegisterType<CustomAvatarLoaderCancelableFactory>()
+				.AsImplementedInterfaces()
+				.SingleInstance();
+
+			//DefaultLoadableContentResourceManager : ILoadableContentResourceManager, IDisposable
+			builder.RegisterType<DefaultLoadableContentResourceManager>()
+				.AsImplementedInterfaces()
 				.SingleInstance();
 
 			//Ok, now we actually register update block types manually
