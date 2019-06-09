@@ -21,9 +21,10 @@ namespace GladMMO
 		/// </summary>
 		/// <param name="entity"></param>
 		/// <param name="currentTime"></param>
-		protected override void Start(GameObject entity, long currentTime)
+		protected override Vector3 Start(GameObject entity, long currentTime)
 		{
 			MovementData = InitializeMovementData(entity, currentTime);
+			return entity.transform.position;
 		}
 
 		protected abstract TDataInputType InitializeMovementData(GameObject entity, long currentTime);
@@ -31,20 +32,22 @@ namespace GladMMO
 
 	public abstract class MoveGenerator : IMovementGenerator<GameObject>
 	{
-		protected bool hasStartFired { get; private set; } = false;
+		public Vector3 CurrentPosition { get; private set; }
 
-		protected abstract void Start(GameObject entity, long currentTime);
+		public bool isRunning { get; private set; } = false;
+
+		protected abstract Vector3 Start(GameObject entity, long currentTime);
 
 		/// <inheritdoc />
 		public void Update(GameObject entity, long currentTime)
 		{
-			if (!hasStartFired)
+			if (!isRunning)
 			{
-				Start(entity, currentTime);
-				hasStartFired = true;
+				CurrentPosition = Start(entity, currentTime);
+				isRunning = true;
 			}
 			else
-				InternalUpdate(entity, currentTime); //don't update if we called Start
+				CurrentPosition = InternalUpdate(entity, currentTime); //don't update if we called Start
 		}
 
 		/// <summary>
@@ -52,7 +55,7 @@ namespace GladMMO
 		/// </summary>
 		/// <param name="entity"></param>
 		/// <param name="currentTime"></param>
-		protected abstract void InternalUpdate(GameObject entity, long currentTime);
+		protected abstract Vector3 InternalUpdate(GameObject entity, long currentTime);
 	}
 
 	/// <summary>

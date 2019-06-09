@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using UnityEngine;
 
 namespace GladMMO
 {
@@ -13,5 +14,16 @@ namespace GladMMO
 		/// <param name="entity"></param>
 		/// <param name="currentTime"></param>
 		void Update(TEntityType entity, long currentTime);
+
+		/// <summary>
+		/// Indicates the current position of the Entity.
+		/// </summary>
+		Vector3 CurrentPosition { get; }
+
+		//TODO: Expose a state instead.
+		/// <summary>
+		/// Indicates if the movement generator is running.
+		/// </summary>
+		bool isRunning { get; }
 	}
 }
