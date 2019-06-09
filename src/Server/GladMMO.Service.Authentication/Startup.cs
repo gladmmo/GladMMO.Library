@@ -147,7 +147,7 @@ namespace GladMMO
 			services.AddSingleton<IPlayfabAuthenticationClient>(provider =>
 				{
 					//TODO: make Playfab endpoint configurable.
-					return RestService.For<IPlayfabAuthenticationClient>($@"https://{63815}.playfabapi.com");
+					return RestService.For<IPlayfabAuthenticationClient>($@"https://{63815}.playfabapi.com:443");
 				});
 		}
 
