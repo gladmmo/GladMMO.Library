@@ -41,7 +41,7 @@ namespace GladMMO
 			if(!GuidToInterestCollectionMappable.ContainsKey(context.EntityGuid))
 				return;
 
-			AssociatedMovementData[] movementBlocks = BuildMovementBlocks(context.EntityGuid);
+			EntityAssociatedData<IMovementData>[] movementBlocks = BuildMovementBlocks(context.EntityGuid);
 
 			//it is possible that no movement data needs to be sent, because none is ddirty so we need to check
 			if(movementBlocks.Length == 0)
@@ -53,14 +53,14 @@ namespace GladMMO
 		}
 
 		//TODO: We need to filter in ONLY dirty movement data. Right now it resends movement data every packet but we only want to update if the data has changed.
-		private AssociatedMovementData[] BuildMovementBlocks(NetworkEntityGuid guid)
+		private EntityAssociatedData<IMovementData>[] BuildMovementBlocks(NetworkEntityGuid guid)
 		{
 			return GuidToInterestCollectionMappable[guid]
 				.ContainedEntities
 				//TODO: Temporarily we are not sending movement data about ourselves.
 				//We also only send information about movement that is dirty from the last update we sent out.
 				.Where(e => MovementDataMap.isEntryDirty(e)) 
-				.Select(e => new AssociatedMovementData(e, MovementDataMap[e]))
+				.Select(e => new EntityAssociatedData<IMovementData>(e, MovementDataMap[e]))
 				.ToArray();
 		}
 

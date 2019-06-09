@@ -21,9 +21,9 @@ namespace GladMMO
 			GladNet.ProtobufNetGladNetSerializerAdapter gladnetProtobuf = new ProtobufNetGladNetSerializerAdapter(PrefixStyle.Fixed32);
 
 			//act
-			MovementDataUpdateEventPayload payload = new MovementDataUpdateEventPayload(new AssociatedMovementData[]
+			MovementDataUpdateEventPayload payload = new MovementDataUpdateEventPayload(new EntityAssociatedData<IMovementData>[]
 			{
-				new AssociatedMovementData(new NetworkEntityGuid(55), new PathBasedMovementData(new Vector3[]
+				new EntityAssociatedData<IMovementData>(new NetworkEntityGuid(55), new PathBasedMovementData(new Vector3[]
 				{
 					new Vector3(1,2,3),
 					new Vector3(2,3,4) 

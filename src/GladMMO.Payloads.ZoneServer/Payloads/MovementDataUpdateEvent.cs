@@ -18,13 +18,13 @@ namespace GladMMO
 		/// The internally serialized movement data blocks.
 		/// </summary>
 		[ProtoMember(1)]
-		private AssociatedMovementData[] _MovementDatas { get; }
+		private EntityAssociatedData<IMovementData>[] _MovementDatas { get; }
 
 		/// <summary>
 		/// The movement data sent in the update.
 		/// </summary>
 		[ProtoIgnore]
-		public IReadOnlyCollection<AssociatedMovementData> MovementDatas => _MovementDatas;
+		public IReadOnlyCollection<EntityAssociatedData<IMovementData>> MovementDatas => _MovementDatas;
 
 		/// <summary>
 		/// Should always be true. Events should not be sent with no data.
@@ -33,7 +33,7 @@ namespace GladMMO
 		public bool HasMovementData => _MovementDatas != null && _MovementDatas.Length != 0;
 
 		/// <inheritdoc />
-		public MovementDataUpdateEventPayload([NotNull] AssociatedMovementData[] movementDatas)
+		public MovementDataUpdateEventPayload([NotNull] EntityAssociatedData<IMovementData>[] movementDatas)
 		{
 			_MovementDatas = movementDatas ?? throw new ArgumentNullException(nameof(movementDatas));
 		}
