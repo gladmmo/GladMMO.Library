@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Threading;
 using UnityEngine;
 
 namespace GladMMO
@@ -16,12 +17,11 @@ namespace GladMMO
 
 		private long LastMovementUpdateTime { get; set; }
 
-		private CharacterController Controller { get; }
+		private Lazy<CharacterController> Controller { get; }
 
-		public ClientSideInputMovementGenerator(PositionChangeMovementData movementData, [NotNull] CharacterController controller) 
+		public ClientSideInputMovementGenerator(PositionChangeMovementData movementData, [NotNull] Lazy<CharacterController> controller) 
 			: base(movementData)
 		{
-			//Don't null check, could be on the wrong thread.
 			Controller = controller ?? throw new ArgumentNullException(nameof(controller));
 		}
 
@@ -30,8 +30,11 @@ namespace GladMMO
 			if (entity == null) throw new ArgumentNullException(nameof(entity));
 			if (Controller == null) throw new ArgumentNullException(nameof(Controller));
 
+			//Reason: See https://forum.unity.com/threads/does-transform-position-work-on-a-charactercontroller.36149/
+			Controller.Value.enabled = false;
 			//Sets the new authoratively specified movement position.
 			entity.transform.position = MovementData.InitialPosition;
+			Controller.Value.enabled = true;
 
 			//Now, we should also create the movement direction
 			CachedMovementDirection = new Vector3(MovementData.Direction.x, 0.0f, MovementData.Direction.y).normalized;
@@ -47,7 +50,7 @@ namespace GladMMO
 			//gravity
 			//Don't need to subtract the cached direction Y because it should be 0, or treated as 0.
 			CachedMovementDirection.y = (-9.8f * diff);
-			Controller.Move(CachedMovementDirection * diff);
+			Controller.Value.Move(CachedMovementDirection * diff);
 
 			//Our new last movement time is now the current time.
 			LastMovementUpdateTime = currentTime;
