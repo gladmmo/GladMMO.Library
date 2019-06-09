@@ -26,5 +26,11 @@ namespace GladMMO
 		/// </summary>
 		[ProtoIgnore]
 		Vector3 InitialPosition { get; }
+
+		/// <summary>
+		/// Rotation around the Y-Axis.
+		/// </summary>
+		[ProtoIgnore]
+		float Rotation { get; }
 	}
 }

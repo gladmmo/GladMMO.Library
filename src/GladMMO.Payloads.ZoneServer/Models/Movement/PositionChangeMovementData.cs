@@ -26,12 +26,16 @@ namespace GladMMO
 		[ProtoMember(3)]
 		public Vector2 Direction { get; }
 
+		[ProtoMember(4)]
+		public float Rotation { get; }
+
 		/// <inheritdoc />
-		public PositionChangeMovementData(long timeStamp, Vector3 initialPosition, Vector2 direction)
+		public PositionChangeMovementData(long timeStamp, Vector3 initialPosition, Vector2 direction, float rotation)
 		{
 			TimeStamp = timeStamp;
 			InitialPosition = initialPosition;
 			Direction = direction;
+			Rotation = rotation;
 		}
 
 		protected PositionChangeMovementData()

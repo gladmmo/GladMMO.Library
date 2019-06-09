@@ -53,7 +53,7 @@ namespace GladMMO
 			GameObject prefab = PrefabFactory.Create(context.PrefabType);
 			GameObject entityGameObject = GameObject.Instantiate(prefab, context.InitialPosition, Quaternion.Euler(0, 0, 0));
 
-			MovementDataMappable.AddObject(context.EntityGuid, new PositionChangeMovementData(0, context.InitialPosition, Vector2.zero));
+			MovementDataMappable.AddObject(context.EntityGuid, new PositionChangeMovementData(0, context.InitialPosition, Vector2.zero, 0));
 			EntityFieldDataContainerMappable.AddObject(context.EntityGuid, new ChangeTrackingEntityFieldDataCollectionDecorator(new EntityFieldDataCollection<EUnitFields>(1328)));
 			EntityFieldDataChangeTrackableMappable.AddObject(context.EntityGuid, (IChangeTrackableEntityDataCollection)EntityFieldDataContainerMappable.RetrieveEntity(context.EntityGuid));
 			GuidToGameObjectMappable.AddObject(context.EntityGuid, entityGameObject);
