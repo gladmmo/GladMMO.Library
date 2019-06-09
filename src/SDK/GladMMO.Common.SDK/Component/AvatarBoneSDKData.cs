@@ -1,4 +1,4 @@
-﻿/*using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using Guardians.FinalIK;
@@ -37,4 +37,4 @@ namespace GladMMO.SDK
 		/// <inheritdoc />
 		public CustomVRIKReferences references => _references;
 	}
-}*/
+}

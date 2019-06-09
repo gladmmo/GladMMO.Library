@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\FinalIK.Models\FinalIK.Models.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="UnityEngine">
       <HintPath>..\..\..\lib\Unity\UnityEngine.dll</HintPath>
     </Reference>
