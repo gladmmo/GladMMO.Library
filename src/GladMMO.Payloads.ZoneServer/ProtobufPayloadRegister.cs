@@ -16,6 +16,7 @@ namespace GladMMO
 
 		public ProtobufPayloadRegister()
 		{
+			ProtoBuf.Meta.RuntimeTypeModel.Default.AutoCompile = false;
 		}
 
 		public virtual void RegisterDefaults()
