@@ -10,10 +10,13 @@ namespace GladMMO
 	
 	public sealed class ClientCharacterControllerInputMovementGenerator : CharacterControllerInputMovementGenerator
 	{
-		public ClientCharacterControllerInputMovementGenerator(PositionChangeMovementData movementData, Lazy<CharacterController> controller) 
+		//This property mostly exists to allow for callers who may know rotation shouldn't be set can deny it.
+		private bool ShouldSetRotation { get; }
+
+		public ClientCharacterControllerInputMovementGenerator(PositionChangeMovementData movementData, Lazy<CharacterController> controller, bool shouldSetRotation = true) 
 			: base(movementData, controller)
 		{
-
+			ShouldSetRotation = shouldSetRotation;
 		}
 
 		protected override Vector3 Start(GameObject entity, long currentTime)
@@ -24,6 +27,8 @@ namespace GladMMO
 			Controller.Value.enabled = false;
 			//Sets the new authoratively specified movement position.
 			entity.transform.position = MovementData.InitialPosition;
+			if(ShouldSetRotation)
+				entity.transform.Rotate(Vector3.up, MovementData.Rotation);
 			Controller.Value.enabled = true;
 
 			//We use the server set position here.

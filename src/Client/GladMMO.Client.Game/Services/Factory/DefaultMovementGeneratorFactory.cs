@@ -10,9 +10,12 @@ namespace GladMMO
 	{
 		private IReadonlyEntityGuidMappable<CharacterController> ControllerMappable { get; }
 
-		public DefaultMovementGeneratorFactory([NotNull] IReadonlyEntityGuidMappable<CharacterController> controllerMappable)
+		private ILocalPlayerDetails LocalPlayerDetails { get; }
+
+		public DefaultMovementGeneratorFactory([NotNull] IReadonlyEntityGuidMappable<CharacterController> controllerMappable, [NotNull] ILocalPlayerDetails localPlayerDetails)
 		{
 			ControllerMappable = controllerMappable ?? throw new ArgumentNullException(nameof(controllerMappable));
+			LocalPlayerDetails = localPlayerDetails ?? throw new ArgumentNullException(nameof(localPlayerDetails));
 		}
 
 		public IMovementGenerator<GameObject> Create(EntityAssociatedData<IMovementData> context)
@@ -21,7 +24,7 @@ namespace GladMMO
 			if (context.Data is PositionChangeMovementData pcmd)
 			{
 				//The reason we use a lazy here is because we can't promise that the character controller exists AT ALL at this point sadly.
-				return new ClientCharacterControllerInputMovementGenerator(pcmd, new Lazy<CharacterController>(() => ControllerMappable.RetrieveEntity(context.EntityGuid)));
+				return new ClientCharacterControllerInputMovementGenerator(pcmd, new Lazy<CharacterController>(() => ControllerMappable.RetrieveEntity(context.EntityGuid)), LocalPlayerDetails.LocalPlayerGuid != context.EntityGuid);
 			}
 
 			throw new NotSupportedException($"TODO: Encountered unsupported movement data: {context.Data.GetType().Name}");

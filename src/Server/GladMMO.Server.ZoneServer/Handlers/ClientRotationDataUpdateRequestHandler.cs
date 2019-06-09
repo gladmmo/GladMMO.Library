@@ -3,15 +3,19 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Common.Logging;
+using Glader.Essentials;
 using GladNet;
 using JetBrains.Annotations;
 using UnityEngine;
 
 namespace GladMMO
 {
+	[AdditionalRegisterationAs(typeof(IPlayerRotationChangeEventSubscribable))]
 	[ServerSceneTypeCreate(ServerSceneType.Default)]
-	public sealed class ClientRotationDataUpdateRequestHandler : ControlledEntityRequestHandler<ClientRotationDataUpdateRequest>
+	public sealed class ClientRotationDataUpdateRequestHandler : ControlledEntityRequestHandler<ClientRotationDataUpdateRequest>, IPlayerRotationChangeEventSubscribable
 	{
+		public event EventHandler<PlayerRotiationChangeEventArgs> OnPlayerRotationChanged;
+
 		private IEntityGuidMappable<IMovementData> MovementDataMap { get; }
 
 		private IEntityGuidMappable<IMovementGenerator<GameObject>> MovementGenerator { get; }
@@ -46,6 +50,8 @@ namespace GladMMO
 				Vector2 direction = movementData is PositionChangeMovementData d ? d.Direction : Vector2.zero;
 
 				MovementDataMap.ReplaceObject(guid, new PositionChangeMovementData(TimeService.CurrentLocalTime, initialPosition, direction, payload.Rotation));
+
+				OnPlayerRotationChanged?.Invoke(this, new PlayerRotiationChangeEventArgs(guid, payload.Rotation));
 			}
 			catch(Exception e)
 			{

@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace GladMMO
 {
+	[GameInitializableOrdering(2)]
 	[ServerSceneTypeCreate(ServerSceneType.Default)]
 	public sealed class MovementSimulationTickable : IGameTickable
 	{
