@@ -21,7 +21,7 @@ namespace GladMMO
 			if (context.Data is PositionChangeMovementData pcmd)
 			{
 				//The reason we use a lazy here is because we can't promise that the character controller exists AT ALL at this point sadly.
-				return new ClientSideInputMovementGenerator(pcmd, new Lazy<CharacterController>(() => ControllerMappable.RetrieveEntity(context.EntityGuid)));
+				return new ClientCharacterControllerInputMovementGenerator(pcmd, new Lazy<CharacterController>(() => ControllerMappable.RetrieveEntity(context.EntityGuid)));
 			}
 
 			throw new NotSupportedException($"TODO: Encountered unsupported movement data: {context.Data.GetType().Name}");

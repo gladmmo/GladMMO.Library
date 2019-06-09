@@ -18,6 +18,8 @@ namespace GladMMO
 
 		private IEntityGuidMappable<IMovementGenerator<GameObject>> MovementGenerator { get; }
 
+		private IReadonlyNetworkTimeService TimeService { get; }
+
 		/// <inheritdoc />
 		public ClientMovementDataUpdateRequestHandler(
 			[NotNull] ILog logger, 
@@ -25,12 +27,14 @@ namespace GladMMO
 			[NotNull] IEntityGuidMappable<IMovementData> movementDataMap,
 			IContextualResourceLockingPolicy<NetworkEntityGuid> lockingPolicy,
 			[NotNull] IEntityGuidMappable<IMovementGenerator<GameObject>> movementGenerator,
-			[NotNull] IReadonlyEntityGuidMappable<CharacterController> characterControllerMappable) 
+			[NotNull] IReadonlyEntityGuidMappable<CharacterController> characterControllerMappable,
+			[NotNull] IReadonlyNetworkTimeService timeService) 
 			: base(logger, connectionIdToEntityMap, lockingPolicy)
 		{
 			MovementDataMap = movementDataMap ?? throw new ArgumentNullException(nameof(movementDataMap));
 			MovementGenerator = movementGenerator ?? throw new ArgumentNullException(nameof(movementGenerator));
 			CharacterControllerMappable = characterControllerMappable ?? throw new ArgumentNullException(nameof(characterControllerMappable));
+			TimeService = timeService ?? throw new ArgumentNullException(nameof(timeService));
 		}
 
 		/// <inheritdoc />
@@ -38,7 +42,13 @@ namespace GladMMO
 		{
 			try
 			{
-				MovementGenerator.ReplaceObject(guid, new PlayerInputChangeMovementGenerator(payload.MovementInput, data => MovementDataMap.ReplaceObject(guid, data), CharacterControllerMappable.RetrieveEntity(guid)));
+				IMovementGenerator<GameObject> generator = MovementGenerator.RetrieveEntity(guid);
+				IMovementData movementData = MovementDataMap.RetrieveEntity(guid);
+				PositionChangeMovementData changeMovementData = BuildPositionChangeMovementData(payload, generator, movementData);
+				MovementDataMap.ReplaceObject(guid, changeMovementData);
+
+				//If the generator is running, we should use its initial position instead of the last movement data's position.
+				MovementGenerator.ReplaceObject(guid, BuildCharacterControllerMovementGenerator(guid, changeMovementData, generator, movementData));
 			}
 			catch(Exception e)
 			{
@@ -49,6 +59,16 @@ namespace GladMMO
 			}
 
 			return Task.CompletedTask;
+		}
+
+		private CharacterControllerInputMovementGenerator BuildCharacterControllerMovementGenerator(NetworkEntityGuid guid, PositionChangeMovementData data, IMovementGenerator<GameObject> generator, IMovementData movementData)
+		{
+			return new CharacterControllerInputMovementGenerator(data, new Lazy<CharacterController>(() => this.CharacterControllerMappable.RetrieveEntity(guid)));
+		}
+
+		private PositionChangeMovementData BuildPositionChangeMovementData(ClientMovementDataUpdateRequest payload, IMovementGenerator<GameObject> generator, IMovementData originalMovementData)
+		{
+			return new PositionChangeMovementData(TimeService.CurrentLocalTime, generator.isRunning ? generator.CurrentPosition : originalMovementData.InitialPosition, payload.MovementInput, originalMovementData.Rotation);
 		}
 	}
 }
