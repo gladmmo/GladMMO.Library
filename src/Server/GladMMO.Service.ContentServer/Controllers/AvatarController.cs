@@ -150,21 +150,21 @@ namespace GladMMO
 			//TODO: We should send this if we can't get a user id
 			//return new JsonResult(RequestedUrlResponseModel.CreateFailure("Failed to authorize action.", RequestedUrlResponseCode.AuthorizationFailed));
 			//TODO: Abstract this behind an issuer
-			Guid worldGuid = Guid.NewGuid();
+			Guid avatarGuid = Guid.NewGuid();
 
 			//TODO: Check if the result is valid? We should maybe return bool from this API (we do return bool from this API now)
 			//The idea is to create an entry which will contain a GUID. From that GUID we can then generate the upload URL
-			AvatarEntryModel world = new AvatarEntryModel(userId, this.HttpContext.Connection.RemoteIpAddress.ToString(), worldGuid);
+			AvatarEntryModel world = new AvatarEntryModel(userId, this.HttpContext.Connection.RemoteIpAddress.ToString(), avatarGuid);
 			bool result = await avatarEntryRepository.TryCreateAsync(world); //TODO: Ok to just provide a guid right?
 
 			//TODO: Check world's worldid has been set
 
-			string uploadUrl = await urlBuilder.BuildUploadUrl(UserContentType.World, worldGuid);
+			string uploadUrl = await urlBuilder.BuildUploadUrl(UserContentType.Avatar, avatarGuid);
 
 			if(String.IsNullOrEmpty(uploadUrl))
 			{
 				if(Logger.IsEnabled(LogLevel.Error))
-					Logger.LogError($"Failed to create world upload URL for {ClaimsReader.GetUserName(User)}:{ClaimsReader.GetUserId(User)} with GUID: {worldGuid}.");
+					Logger.LogError($"Failed to create world upload URL for {ClaimsReader.GetUserName(User)}:{ClaimsReader.GetUserId(User)} with GUID: {avatarGuid}.");
 
 				return new JsonResult(RequestedUrlResponseModel.CreateFailure("Upload service unavailable.", RequestedUrlResponseCode.ServiceUnavailable));
 			}
