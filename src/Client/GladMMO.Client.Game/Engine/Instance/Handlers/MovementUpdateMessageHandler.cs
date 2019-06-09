@@ -18,17 +18,21 @@ namespace GladMMO
 
 		private IEntityGuidMappable<IMovementData> MovementDataMappable { get; }
 
+		private IReadonlyKnownEntitySet KnownEntities { get; }
+
 		/// <inheritdoc />
 		public MovementUpdateMessageHandler(
 			ILog logger,
 			[NotNull] IFactoryCreatable<IMovementGenerator<GameObject>, EntityAssociatedData<IMovementData>> movementGeneratorFactory,
 			[NotNull] IEntityGuidMappable<IMovementGenerator<GameObject>> movementGeneratorMappable,
-			[NotNull] IEntityGuidMappable<IMovementData> movementDataMappable)
+			[NotNull] IEntityGuidMappable<IMovementData> movementDataMappable,
+			[NotNull] IKnownEntitySet knownEntities)
 			: base(logger)
 		{
 			MovementGeneratorFactory = movementGeneratorFactory ?? throw new ArgumentNullException(nameof(movementGeneratorFactory));
 			MovementGeneratorMappable = movementGeneratorMappable ?? throw new ArgumentNullException(nameof(movementGeneratorMappable));
 			MovementDataMappable = movementDataMappable ?? throw new ArgumentNullException(nameof(movementDataMappable));
+			KnownEntities = knownEntities ?? throw new ArgumentNullException(nameof(knownEntities));
 		}
 
 		/// <inheritdoc />
@@ -44,6 +48,14 @@ namespace GladMMO
 
 			foreach(var movementUpdate in payload.MovementDatas)
 			{
+				if (!KnownEntities.isEntityKnown(movementUpdate.EntityGuid))
+				{
+					if(Logger.IsInfoEnabled)
+						Logger.Info($"TODO: Received movement update too soon. Must enable deferred movement update queueing for entities that are about to spawn.");
+
+					continue;
+				}
+
 				try
 				{
 					IMovementGenerator<GameObject> generator = MovementGeneratorFactory.Create(movementUpdate);
@@ -56,7 +68,7 @@ namespace GladMMO
 				}
 				catch (Exception e)
 				{
-					string error = $"Failed to handle Movement Data for Entity: {movementUpdate.EntityGuid} Type: {movementUpdate.Data.GetType().Name}";
+					string error = $"Failed to handle Movement Data for Entity: {movementUpdate.EntityGuid} Type: {movementUpdate.Data.GetType().Name} Error: {e.Message}";
 
 					if(Logger.IsErrorEnabled)
 						Logger.Error(error);
