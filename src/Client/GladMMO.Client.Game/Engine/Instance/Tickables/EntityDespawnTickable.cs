@@ -12,12 +12,12 @@ namespace GladMMO
 	{
 		private IObjectDestructorable<NetworkEntityGuid> EntityDestructor { get; }
 
-		private IReadonlyKnownEntitySet KnownEntites { get; }
+		private IKnownEntitySet KnownEntites { get; }
 
 		/// <inheritdoc />
 		public EntityDespawnTickable(INetworkEntityVisibilityLostEventSubscribable subscriptionService, ILog logger,
 			[NotNull] IObjectDestructorable<NetworkEntityGuid> entityDestructor,
-			[NotNull] IReadonlyKnownEntitySet knownEntites) 
+			[NotNull] IKnownEntitySet knownEntites) 
 			: base(subscriptionService, true, logger)
 		{
 			EntityDestructor = entityDestructor ?? throw new ArgumentNullException(nameof(entityDestructor));
@@ -41,6 +41,9 @@ namespace GladMMO
 			else
 				if(Logger.IsInfoEnabled)
 					Logger.Info($"About to cleanup Entity: {args.EntityGuid.EntityType}:{args.EntityGuid.EntityId}");
+
+			//They are no longer known, even before cleanup.
+			KnownEntites.RemoveEntity(args.EntityGuid);
 
 			//TODO: This is a semi-slow process, can any of this be offloaded to the other thread?
 			EntityDestructor.Destroy(args.EntityGuid);
