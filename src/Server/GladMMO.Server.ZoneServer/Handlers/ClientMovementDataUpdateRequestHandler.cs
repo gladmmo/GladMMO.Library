@@ -38,7 +38,7 @@ namespace GladMMO
 		{
 			try
 			{
-				MovementGenerator.ReplaceObject(guid, new ServerPlayerInputChangeMovementGenerator(payload.MovementInput, data => MovementDataMap.ReplaceObject(guid, data), CharacterControllerMappable.RetrieveEntity(guid)));
+				MovementGenerator.ReplaceObject(guid, new PlayerInputChangeMovementGenerator(payload.MovementInput, data => MovementDataMap.ReplaceObject(guid, data), CharacterControllerMappable.RetrieveEntity(guid)));
 			}
 			catch(Exception e)
 			{

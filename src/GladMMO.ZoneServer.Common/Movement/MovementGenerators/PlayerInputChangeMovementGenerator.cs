@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace GladMMO
 {
-	public sealed class ServerPlayerInputChangeMovementGenerator : LateInitializationBaseMovementGenerator<PositionChangeMovementData>
+	public sealed class PlayerInputChangeMovementGenerator : LateInitializationBaseMovementGenerator<PositionChangeMovementData>
 	{
 		private Vector2 Input { get; }
 
@@ -23,7 +23,7 @@ namespace GladMMO
 		private long LastMovementUpdateTime;
 
 		/// <inheritdoc />
-		public ServerPlayerInputChangeMovementGenerator(Vector2 input, Action<PositionChangeMovementData> onCreatedCallback, [NotNull] CharacterController controller)
+		public PlayerInputChangeMovementGenerator(Vector2 input, Action<PositionChangeMovementData> onCreatedCallback, [NotNull] CharacterController controller)
 		{
 			Input = input.normalized;
 			OnCreatedCallback = onCreatedCallback;
