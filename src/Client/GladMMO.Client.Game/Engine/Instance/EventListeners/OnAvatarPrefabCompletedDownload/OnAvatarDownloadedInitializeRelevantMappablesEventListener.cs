@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Common.Logging;
 using Glader.Essentials;
+using UnityEngine;
 
 namespace GladMMO
 {
@@ -18,7 +19,7 @@ namespace GladMMO
 		public OnAvatarDownloadedInitializeRelevantMappablesEventListener(IAvatarPrefabCompletedDownloadEventSubscribable subscriptionService, 
 			[NotNull] IEntityGuidMappable<IPrefabContentResourceHandle> prefabHandleMappable,
 			[NotNull] IReadonlyKnownEntitySet knownEntities,
-			[NotNull] ILog logger) 
+			[NotNull] ILog logger)
 			: base(subscriptionService)
 		{
 			PrefabHandleMappable = prefabHandleMappable ?? throw new ArgumentNullException(nameof(prefabHandleMappable));
@@ -45,11 +46,6 @@ namespace GladMMO
 			}
 
 			PrefabHandleMappable.AddObject(args.EntityGuid, args.PrefabHandle);
-
-			if(Logger.IsInfoEnabled)
-				Logger.Info($"Instantiating new Avatar for Entity: {args.EntityGuid}");
-
-			//Now we've assigned the handle, we need to actually handle the spawning/loading of the avatar.
 		}
 	}
 }
