@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace GladMMO
 {
-	//[SceneTypeCreateGladMMO(GameSceneType.DefaultLobby)]
+	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
 	public sealed class EntityDespawnTickable : EventQueueBasedTickable<INetworkEntityVisibilityLostEventSubscribable, NetworkEntityVisibilityLostEventArgs>
 	{
 		private IObjectDestructorable<NetworkEntityGuid> EntityDestructor { get; }
