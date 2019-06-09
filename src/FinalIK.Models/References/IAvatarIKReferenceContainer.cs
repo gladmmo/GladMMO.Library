@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace FinalIK
+namespace GladMMO.FinalIK
 {
 	public interface IAvatarIKReferenceContainer<out TReferenceType>
 		where TReferenceType : IInverseKinematicReferenceable

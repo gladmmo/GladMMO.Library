@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using Guardians.FinalIK;
-using FinalIK;
+using GladMMO.FinalIK;
 
 namespace GladMMO.SDK
 {

@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using FinalIK;
 using JetBrains.Annotations;
 using UnityEngine;
 
-namespace Guardians.FinalIK
+namespace GladMMO.FinalIK
 {
 	/// <summary>
 	/// VRIK-specific definition of a humanoid biped.
