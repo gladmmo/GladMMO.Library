@@ -108,7 +108,7 @@ namespace GladMMO
 			_cameraInputData.CameraGameObject.transform.localEulerAngles = _cameraInputData.CurrentRotation;
 			_cameraInputData.RootRotationalObject.transform.Rotate(Vector3.up, rotationalMovement);
 
-			OnCameraInputChange?.Invoke(this, new CameraInputChangedEventArgs(rotationalMovement));
+			OnCameraInputChange?.Invoke(this, new CameraInputChangedEventArgs(_cameraInputData.RootRotationalObject.transform.eulerAngles.y));
 		}
 	}
 }

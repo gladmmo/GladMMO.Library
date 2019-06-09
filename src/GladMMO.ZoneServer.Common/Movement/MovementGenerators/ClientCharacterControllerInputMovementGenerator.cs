@@ -27,8 +27,8 @@ namespace GladMMO
 			Controller.Value.enabled = false;
 			//Sets the new authoratively specified movement position.
 			entity.transform.position = MovementData.InitialPosition;
-			if(ShouldSetRotation)
-				entity.transform.Rotate(Vector3.up, MovementData.Rotation);
+			if (ShouldSetRotation)
+				entity.transform.eulerAngles = new Vector3(entity.transform.eulerAngles.x, MovementData.Rotation, entity.transform.eulerAngles.z);
 			Controller.Value.enabled = true;
 
 			//We use the server set position here.

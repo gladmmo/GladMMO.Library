@@ -17,7 +17,8 @@ namespace GladMMO
 
 		protected override void HandleEvent(PlayerRotiationChangeEventArgs args)
 		{
-			GameObjectMappable.RetrieveEntity(args.EntityGuid).transform.Rotate(Vector3.up, args.Rotation);
+			GameObject gameObject = GameObjectMappable.RetrieveEntity(args.EntityGuid);
+			gameObject.transform.eulerAngles = new Vector3(gameObject.transform.eulerAngles.x, args.Rotation, gameObject.transform.eulerAngles.z);
 		}
 
 		public PlayerEntityRotationUpdateTickable(IPlayerRotationChangeEventSubscribable subscriptionService, 
