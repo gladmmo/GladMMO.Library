@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace GladMMO
 {
-	//[SceneTypeCreateGladMMO(GameSceneType.DefaultLobby)]
+	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
 	public sealed class MovementSimulationTickable : IGameTickable
 	{
 		private IReadonlyEntityGuidMappable<IMovementGenerator<GameObject>> MovementGenerators { get; }
@@ -15,15 +15,19 @@ namespace GladMMO
 
 		private IReadonlyNetworkTimeService TimeService { get; }
 
+		private IReadonlyKnownEntitySet KnonwnEntities { get; }
+
 		/// <inheritdoc />
 		public MovementSimulationTickable(
 			IReadonlyEntityGuidMappable<IMovementGenerator<GameObject>> movementGenerators,
 			IReadonlyEntityGuidMappable<GameObject> worldObjectMap,
-			INetworkTimeService timeService)
+			INetworkTimeService timeService,
+			[NotNull] IReadonlyKnownEntitySet knonwnEntities)
 		{
 			MovementGenerators = movementGenerators ?? throw new ArgumentNullException(nameof(movementGenerators));
 			WorldObjectMap = worldObjectMap ?? throw new ArgumentNullException(nameof(worldObjectMap));
 			TimeService = timeService ?? throw new ArgumentNullException(nameof(timeService));
+			KnonwnEntities = knonwnEntities ?? throw new ArgumentNullException(nameof(knonwnEntities));
 		}
 
 		/// <inheritdoc />
@@ -31,6 +35,10 @@ namespace GladMMO
 		{
 			foreach(var entry in MovementGenerators)
 			{
+				//Entity may be in the cleanup process, or something. Shouldn't happen on client though.
+				if (!KnonwnEntities.isEntityKnown(entry.Key))
+					continue;
+
 				entry.Value.Update(WorldObjectMap.RetrieveEntity(entry.Key), TimeService.CurrentRemoteTime);
 			}
 		}
