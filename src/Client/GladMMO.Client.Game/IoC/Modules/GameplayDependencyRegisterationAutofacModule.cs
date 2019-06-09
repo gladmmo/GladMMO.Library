@@ -68,6 +68,10 @@ namespace GladMMO
 				.As<IFactoryCreatable<IMovementGenerator<GameObject>, EntityAssociatedData<IMovementData>>>()
 				.SingleInstance();
 
+			builder.RegisterType<DefaultEntityDestructor>()
+				.As<IObjectDestructorable<NetworkEntityGuid>>()
+				.SingleInstance();
+
 			//Ok, now we actually register update block types manually
 			//because it's not worth it to do an assembly-wide search for them.
 			/*builder.RegisterType<DefaultObjectUpdateBlockDispatcher>()
