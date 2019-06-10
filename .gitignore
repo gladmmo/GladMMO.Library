@@ -23,6 +23,9 @@ bld/
 [Oo]bj/
 [Ll]ib/Dependency Builds/
 
+# We can't distribute licensed software sadly
+[Ss]rc/FinalIK/
+
 # Visual Studo 2015 cache/options directory
 .vs/
 
