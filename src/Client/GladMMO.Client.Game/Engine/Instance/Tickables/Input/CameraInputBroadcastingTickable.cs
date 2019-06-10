@@ -16,24 +16,23 @@ namespace GladMMO
 	{
 		private ILocalPlayerDetails Details { get; }
 
-		private IReadonlyEntityGuidMappable<GameObject> GameobjectMappable { get; }
+		private IReadonlyEntityGuidMappable<EntityGameObjectDirectory> CameraObjectMappable { get; }
 
-		private IReadonlyEntityGuidMappable<Camera> CameraObjectMappable { get; }
-
-		public TestCameraDataFactory([NotNull] ILocalPlayerDetails details, [NotNull] IReadonlyEntityGuidMappable<GameObject> gameobjectMappable, [NotNull] IReadonlyEntityGuidMappable<Camera> cameraObjectMappable)
+		public TestCameraDataFactory([NotNull] ILocalPlayerDetails details, [NotNull] IReadonlyEntityGuidMappable<EntityGameObjectDirectory> cameraObjectMappable)
 		{
 			Details = details ?? throw new ArgumentNullException(nameof(details));
-			GameobjectMappable = gameobjectMappable ?? throw new ArgumentNullException(nameof(gameobjectMappable));
 			CameraObjectMappable = cameraObjectMappable ?? throw new ArgumentNullException(nameof(cameraObjectMappable));
 		}
 
 		public CameraInputData Create(EmptyFactoryContext context)
 		{
+			EntityGameObjectDirectory directory = CameraObjectMappable.RetrieveEntity(Details.LocalPlayerGuid);
+
 			return new CameraInputData()
 			{
-				RootRotationalObject = GameobjectMappable.RetrieveEntity(Details.LocalPlayerGuid),
-				CameraGameObject = CameraObjectMappable.RetrieveEntity(Details.LocalPlayerGuid).gameObject,
-				CurrentRotation = CameraObjectMappable.RetrieveEntity(Details.LocalPlayerGuid).transform.eulerAngles
+				RootRotationalObject = directory.GetGameObject(EntityGameObjectDirectory.Type.Root),
+				CameraGameObject = directory.GetGameObject(EntityGameObjectDirectory.Type.CameraRoot),
+				CurrentRotation = directory.GetGameObject(EntityGameObjectDirectory.Type.Root).transform.eulerAngles
 			};
 		}
 

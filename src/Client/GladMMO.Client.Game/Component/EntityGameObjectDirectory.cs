@@ -18,10 +18,14 @@ namespace GladMMO
 		[SerializeField]
 		private GameObject IKRoot;
 
+		[SerializeField]
+		private GameObject CameraRoot;
+
 		public enum Type
 		{
 			Root = 0,
 			IKRoot = 1,
+			CameraRoot = 2,
 		}
 
 		public GameObject GetGameObject(EntityGameObjectDirectory.Type gameObjectType)
@@ -34,6 +38,8 @@ namespace GladMMO
 					return RootGameObject;
 				case Type.IKRoot:
 					return IKRoot;
+				case Type.CameraRoot:
+					return CameraRoot;
 				default:
 					throw new ArgumentOutOfRangeException(nameof(gameObjectType), gameObjectType, null);
 			}
