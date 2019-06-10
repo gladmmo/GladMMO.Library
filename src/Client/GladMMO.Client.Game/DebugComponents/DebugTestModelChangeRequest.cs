@@ -1,0 +1,27 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Threading.Tasks;
+using Glader.Essentials;
+using GladNet;
+using UnityEngine;
+
+namespace GladMMO
+{
+	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
+	public sealed class DebugTestModelChangeRequest : IGameTickable
+	{
+		private IPeerPayloadSendService<GameClientPacketPayload> SendService { get; }
+
+		public DebugTestModelChangeRequest([NotNull] IPeerPayloadSendService<GameClientPacketPayload> sendService)
+		{
+			SendService = sendService ?? throw new ArgumentNullException(nameof(sendService));
+		}
+
+		public void Tick()
+		{
+			if (Input.GetKeyDown(KeyCode.H))
+				SendService.SendMessage(new PlayerModelChangeRequestPayload(6));
+		}
+	}
+}
