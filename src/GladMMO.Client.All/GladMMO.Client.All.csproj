@@ -14,6 +14,7 @@
     <ProjectReference Include="..\Client\GladMMO.Client.ServiceDiscovery\GladMMO.Client.ServiceDiscovery.csproj" />
     <ProjectReference Include="..\FinalIK.Models\FinalIK.Models.csproj" />
     <ProjectReference Include="..\FinalIK\FinalIK.Core\FinalIK.Core.csproj" />
+    <ProjectReference Include="..\FinalIK\FinalIK.Custom\FinalIK.Custom.csproj" />
     <ProjectReference Include="..\FinalIK\FinalIK.Editor\FinalIK.Editor.csproj" />
     <ProjectReference Include="..\GladMMO.Client.Editor\GladMMO.Client.Editor.csproj" />
   </ItemGroup>
