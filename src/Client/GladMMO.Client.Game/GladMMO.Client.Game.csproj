@@ -64,6 +64,9 @@
     <Reference Include="UnityEngine.UI">
       <HintPath>..\..\..\lib\Unity\UnityEngine.UI.dll</HintPath>
     </Reference>
+    <Reference Include="VivoxUnity">
+      <HintPath>..\..\..\lib\Vivox\VivoxUnity.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
   <ItemGroup>
