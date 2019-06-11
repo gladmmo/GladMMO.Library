@@ -5,12 +5,12 @@ using VivoxUnity;
 
 namespace GladMMO
 {
-	public interface IReadonlyPositionalVoiceChannels : IEnumerable<IChannelSession>
+	public interface IReadonlyPositionalVoiceChannelCollection : IEnumerable<IChannelSession>
 	{
 
 	}
 
-	public interface IPositionalVoiceChannels : IReadonlyPositionalVoiceChannels, ICollection<IChannelSession>
+	public interface IPositionalVoiceChannelCollection : IReadonlyPositionalVoiceChannelCollection, ICollection<IChannelSession>
 	{
 
 	}

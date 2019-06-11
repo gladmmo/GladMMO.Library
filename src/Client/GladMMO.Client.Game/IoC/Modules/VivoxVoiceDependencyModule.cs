@@ -12,6 +12,9 @@ namespace GladMMO
 			builder.RegisterType<VivoxUnity.Client>()
 				.AsSelf()
 				.SingleInstance();
+
+			builder.RegisterType<PositionalVoiceEntityTickable>()
+				.AsSelf();
 		}
 	}
 }

@@ -13,11 +13,15 @@ namespace GladMMO
 	{
 		private ILog Logger { get; }
 
+		private IPositionalVoiceChannelCollection PositionalVoiceChannels { get; }
+
 		public JoinWorldVoiceChannelEventListener(IVoiceSessionAuthenticatedEventSubscribable subscriptionService,
-			[NotNull] ILog logger) 
+			[NotNull] ILog logger,
+			[NotNull] IPositionalVoiceChannelCollection positionalVoiceChannels) 
 			: base(subscriptionService)
 		{
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
+			PositionalVoiceChannels = positionalVoiceChannels ?? throw new ArgumentNullException(nameof(positionalVoiceChannels));
 		}
 
 		protected override void OnEventFired(object source, VoiceSessionAuthenticatedEventArgs args)
@@ -29,7 +33,7 @@ namespace GladMMO
 				{
 					//TODO: Make 3D positional audio.
 					//TODO: We should use channel based on zoneId.
-					IChannelSession testChannel = args.Session.GetChannelSession(new ChannelId("vrguardian-vrg-dev", "lobby", "vdx5.vivox.com", ChannelType.Echo));
+					IChannelSession testChannel = args.Session.GetChannelSession(new ChannelId("vrguardian-vrg-dev", "lobby", "vdx5.vivox.com", ChannelType.Positional));
 
 					await testChannel.ConnectionAsync(true, false, TransmitPolicy.Yes, testChannel.GetConnectToken(VivoxDemoAPIKey.AccessKey, TimeSpan.FromSeconds(90)))
 						.ConfigureAwait(true);
@@ -37,6 +41,8 @@ namespace GladMMO
 					//Documentation says that it doesn't mean the channel has connected yet.
 					if(Logger.IsInfoEnabled)
 						Logger.Info($"Vivox ChannelState: {testChannel.AudioState}");
+
+					PositionalVoiceChannels.Add(testChannel);
 				}
 				catch(Exception e)
 				{
