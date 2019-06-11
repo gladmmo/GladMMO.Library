@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Glader.Essentials;
 using UnityEngine;
+using VivoxUnity;
 
 namespace GladMMO
 {
@@ -88,7 +89,8 @@ namespace GladMMO
 			foreach(var channel in PositionalChannels)
 			{
 				//TODO: We should handle mouth and ears seperately.
-				channel.Set3DPosition(TrackerObject.position, TrackerObject.position, TrackerObject.forward, TrackerObject.up);
+				if(channel.AudioState == ConnectionState.Connected)
+					channel.Set3DPosition(TrackerObject.position, TrackerObject.position, TrackerObject.forward, TrackerObject.up);
 			}
 		}
 	}
