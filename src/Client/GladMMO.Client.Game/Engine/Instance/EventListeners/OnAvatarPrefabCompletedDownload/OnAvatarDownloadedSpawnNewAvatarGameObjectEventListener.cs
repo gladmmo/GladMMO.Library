@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Common.Logging;
 using Glader.Essentials;
+using GladMMO.FinalIK;
 using UnityEngine;
 
 namespace GladMMO
@@ -36,6 +37,9 @@ namespace GladMMO
 				GameObject newlySpawnedAvatar = InstantiateNewFromPrefab(args.DownloadedPrefabObject, currentAvatarRootGameObject);
 
 				GameObject.DestroyImmediate(currentAvatarRootGameObject, false);
+
+				//This will actually re-initialize the IK for the new avatar, since the old one is now gone.
+				ikRootGameObject.GetComponent<IIKReinitializable>().ReInitialize();
 			}
 			catch (Exception e)
 			{
