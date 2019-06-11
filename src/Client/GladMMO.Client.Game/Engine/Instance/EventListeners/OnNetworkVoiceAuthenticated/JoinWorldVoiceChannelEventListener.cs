@@ -1,0 +1,49 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using Common.Logging;
+using Glader.Essentials;
+using Nito.AsyncEx;
+using VivoxUnity;
+
+namespace GladMMO
+{
+	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
+	public sealed class JoinWorldVoiceChannelEventListener : BaseSingleEventListenerInitializable<IVoiceSessionAuthenticatedEventSubscribable, VoiceSessionAuthenticatedEventArgs>
+	{
+		private ILog Logger { get; }
+
+		public JoinWorldVoiceChannelEventListener(IVoiceSessionAuthenticatedEventSubscribable subscriptionService,
+			[NotNull] ILog logger) 
+			: base(subscriptionService)
+		{
+			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
+		}
+
+		protected override void OnEventFired(object source, VoiceSessionAuthenticatedEventArgs args)
+		{
+			//Join the world channel with the session in the args.
+			UnityAsyncHelper.UnityMainThreadContext.PostAsync(async () =>
+			{
+				try
+				{
+					//TODO: Make 3D positional audio.
+					//TODO: We should use channel based on zoneId.
+					IChannelSession testChannel = args.Session.GetChannelSession(new ChannelId("vrguardian-vrg-dev", "lobby", "vdx5.vivox.com", ChannelType.Echo));
+
+					await testChannel.ConnectionAsync(true, false, TransmitPolicy.Yes, testChannel.GetConnectToken(VivoxDemoAPIKey.AccessKey, TimeSpan.FromSeconds(90)))
+						.ConfigureAwait(true);
+
+					//Documentation says that it doesn't mean the channel has connected yet.
+					if(Logger.IsInfoEnabled)
+						Logger.Info($"Vivox ChannelState: {testChannel.AudioState}");
+				}
+				catch(Exception e)
+				{
+					Logger.Error($"Failed to Initialize Vivox Voice. Reason: {e.Message}\n\nStack: {e.StackTrace}");
+					throw;
+				}
+			});
+		}
+	}
+}
