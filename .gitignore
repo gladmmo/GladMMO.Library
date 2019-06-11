@@ -25,6 +25,7 @@ bld/
 
 # We can't distribute licensed software sadly
 [Ss]rc/FinalIK/
+[Ll]ib/Vivox/
 
 # Visual Studo 2015 cache/options directory
 .vs/
