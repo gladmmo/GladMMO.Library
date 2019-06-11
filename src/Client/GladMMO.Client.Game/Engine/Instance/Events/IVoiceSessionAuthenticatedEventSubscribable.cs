@@ -6,7 +6,7 @@ namespace GladMMO
 {
 	public interface IVoiceSessionAuthenticatedEventSubscribable
 	{
-		event EventHandler OnVoiceSessionAuthenticated;
+		event EventHandler<VoiceSessionAuthenticatedEventArgs> OnVoiceSessionAuthenticated;
 	}
 
 	public sealed class VoiceSessionAuthenticatedEventArgs : EventArgs
