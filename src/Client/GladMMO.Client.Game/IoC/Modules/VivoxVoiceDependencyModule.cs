@@ -15,6 +15,11 @@ namespace GladMMO
 
 			builder.RegisterType<PositionalVoiceEntityTickable>()
 				.AsSelf();
+
+			builder.RegisterInstance(new DefaultPositionVoiceChannelsCollection())
+				.AsImplementedInterfaces()
+				.AsSelf()
+				.SingleInstance();
 		}
 	}
 }
