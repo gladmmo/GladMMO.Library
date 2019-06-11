@@ -8,6 +8,7 @@ using VivoxUnity;
 
 namespace GladMMO
 {
+	[AdditionalRegisterationAs(typeof(IVoiceSessionAuthenticatedEventSubscribable))]
 	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
 	public sealed class AuthenticateVoiceSessionEventListener : BaseSingleEventListenerInitializable<IVoiceNetworkInitializedEventSubscribable>, IVoiceSessionAuthenticatedEventSubscribable
 	{

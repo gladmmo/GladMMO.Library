@@ -25,6 +25,7 @@ namespace GladMMO
 			isInitialized = true;
 		}
 
+		//It's important that this runs, because it's the message pump that services things I guess.
 		public void Tick()
 		{
 			try

@@ -45,5 +45,12 @@ namespace GladMMO
 				}
 			});
 		}
+
+		//Notes on positional audio
+		/*foreach (var channel in _voiceServer.PositionalChannels)
+		{
+			var positionalChannelSession = _client.GetUser(_username).GetChannelSession(channel);
+			positionalChannelSession.Set3DPosition(speaker.position, listener.position, listener.forward, listener.up);
+		}*/
 	}
 }
