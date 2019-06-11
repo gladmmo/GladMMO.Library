@@ -43,6 +43,9 @@ namespace GladMMO
 			//TODO: We should have real handling at some point.
 			float diff = DiffFromStartTime(currentTime);
 
+			if(diff < 0.0f)
+				throw new InvalidOperationException($"Movement diff time is less than 0.");
+
 			//gravity
 			//Don't need to subtract the cached direction Y because it should be 0, or treated as 0.
 			CachedMovementDirection.y = (-9.8f * diff);
