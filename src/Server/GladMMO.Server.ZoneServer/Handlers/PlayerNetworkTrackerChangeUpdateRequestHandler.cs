@@ -25,6 +25,7 @@ namespace GladMMO
 
 		protected override Task HandleMessage(IPeerSessionMessageContext<GameServerPacketPayload> context, PlayerNetworkTrackerChangeUpdateRequest payload, NetworkEntityGuid guid)
 		{
+			//TODO: Do some validation here. Players could be sending empty ones, or invalid ones.
 			InterestCollection interestCollection = InterestCollections.RetrieveEntity(guid);
 			PlayerNetworkTrackerChangeUpdateEvent changeUpdateEvent = new PlayerNetworkTrackerChangeUpdateEvent(new EntityAssociatedData<PlayerNetworkTrackerChangeUpdateRequest>(guid, payload));
 
