@@ -154,6 +154,10 @@ namespace GladMMO
 			builder.RegisterInstance(GlobalPhysicsEventSystem.Instance)
 				.AsImplementedInterfaces()
 				.SingleInstance();
+
+			//DefaultEntitySessionMessageSender : IEntitySessionMessageSender
+			builder.RegisterType<DefaultEntitySessionMessageSender>()
+				.As<IEntitySessionMessageSender>();
 		}
 
 		private static void RegisterEntityMappableCollections(ContainerBuilder builder)
