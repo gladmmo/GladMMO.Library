@@ -51,6 +51,9 @@ namespace GladMMO
 			if (!isLocalPlayerSpawned)
 				return;
 
+			if (Input.GetKeyDown(KeyCode.K))
+				ChangedTrackers |= (NetworkMovementTrackerTypeFlags.LeftHand | NetworkMovementTrackerTypeFlags.RightHand);
+
 			if (ChangedTrackers == NetworkMovementTrackerTypeFlags.None)
 				return;
 

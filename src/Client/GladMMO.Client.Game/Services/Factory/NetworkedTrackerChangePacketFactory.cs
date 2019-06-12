@@ -66,10 +66,7 @@ namespace GladMMO
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		private static Quaternion ComputeRelativeRotation(EntityGameObjectDirectory directory, EntityGameObjectDirectory.Type gameObjectType)
 		{
-			//TODO: Optimize this.
-			//Relative rotation from root gameobject rotation to camera rotation.
-			//it's B - A where A is the root quaternion
-			return Quaternion.Inverse(directory.GetGameObject(EntityGameObjectDirectory.Type.Root).transform.rotation) * directory.GetGameObject(gameObjectType).transform.rotation;
+			return directory.GetGameObject(gameObjectType).transform.localRotation;
 		}
 
 		private void InitializePositions(NetworkMovementTrackerTypeFlags context, Vector3[] positions)
@@ -85,12 +82,13 @@ namespace GladMMO
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		private static Vector3 ComputeRelativePosition(EntityGameObjectDirectory directory, EntityGameObjectDirectory.Type gameObjectType)
 		{
-			return directory.GetGameObject(gameObjectType).transform.position - directory.GetGameObject(EntityGameObjectDirectory.Type.Root).transform.position;
+			return directory.GetGameObject(gameObjectType).transform.localPosition;
 		}
 
-		internal static UInt32 CountChangedTrackerFlags(NetworkMovementTrackerTypeFlags skills)
+		//Fun fun fun, this is: https://en.wikipedia.org/wiki/Hamming_weight
+		internal static UInt32 CountChangedTrackerFlags(NetworkMovementTrackerTypeFlags flags)
 		{
-			UInt32 v = (UInt32)skills;
+			UInt32 v = (UInt32)flags;
 			v = v - ((v >> 1) & 0x55555555); // reuse input as temporary
 			v = (v & 0x33333333) + ((v >> 2) & 0x33333333); // temp
 			UInt32 c = ((v + (v >> 4) & 0xF0F0F0F) * 0x1010101) >> 24; // count
