@@ -64,7 +64,7 @@ namespace GladMMO
 		{
 			//cameraTransform.position = (rootTransform.position + args.ChangeInformation.Data.TrackerPositionUpdates[0]);
 			if((context & flagToCheck) != 0)
-				directory.GetGameObject(gameObjectType).transform.localPosition = positions[index];
+				directory.GetGameObject(gameObjectType).transform.localPosition = positions[index++];
 
 			return index;
 		}
