@@ -33,6 +33,11 @@ namespace GladMMO
 			if (!RuntimeTypeModel.Default.IsDefined(typeof(Vector2)))
 				RuntimeTypeModel.Default.Add(typeof(Vector2), false)
 					.Add(nameof(Vector2.x), nameof(Vector2.y));
+
+			//Register Quaternion
+			if(!RuntimeTypeModel.Default.IsDefined(typeof(Quaternion)))
+				RuntimeTypeModel.Default.Add(typeof(Quaternion), false)
+					.Add(nameof(Quaternion.x), nameof(Quaternion.y), nameof(Quaternion.z), nameof(Quaternion.w));
 		}
 	}
 }
