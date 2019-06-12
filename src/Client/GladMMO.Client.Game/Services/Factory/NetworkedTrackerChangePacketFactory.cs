@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Text;
 using UnityEngine;
 
@@ -37,27 +38,54 @@ namespace GladMMO
 		{
 			EntityGameObjectDirectory directory = GameObjectDirectoryMappable.RetrieveEntity(LocalPlayerDetails.LocalPlayerGuid);
 
+			int index = 0;
 			//TODO: Right now we're only doing heads, so this works but will break later.
-			if ((context & NetworkMovementTrackerTypeFlags.Head) != 0)
-			{
-				//TODO: Optimize this.
-				//Relative rotation from root gameobject rotation to camera rotation.
-				//it's B - A where A is the root quaternion
-				Quaternion relative = Quaternion.Inverse(directory.GetGameObject(EntityGameObjectDirectory.Type.Root).transform.rotation) * directory.GetGameObject(EntityGameObjectDirectory.Type.CameraRoot).transform.rotation;
-				rotations[0] = relative;
-			}
+			index = InitializeRotationIndex(context, NetworkMovementTrackerTypeFlags.Head, EntityGameObjectDirectory.Type.CameraRoot, rotations, index, directory);
+			index = InitializeRotationIndex(context, NetworkMovementTrackerTypeFlags.RightHand, EntityGameObjectDirectory.Type.RightHand, rotations, index, directory);
+			index = InitializeRotationIndex(context, NetworkMovementTrackerTypeFlags.LeftHand, EntityGameObjectDirectory.Type.LeftHand, rotations, index, directory);
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		private static int InitializeRotationIndex(NetworkMovementTrackerTypeFlags context, NetworkMovementTrackerTypeFlags flagToCheck, EntityGameObjectDirectory.Type gameObjectType, Quaternion[] rotations, int index, EntityGameObjectDirectory directory)
+		{
+			if ((context & flagToCheck) != 0)
+				rotations[index++] = ComputeRelativeRotation(directory, gameObjectType);
+
+			return index;
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		private static int InitializePositionIndex(NetworkMovementTrackerTypeFlags context, NetworkMovementTrackerTypeFlags flagToCheck, EntityGameObjectDirectory.Type gameObjectType, Vector3[] positions, int index, EntityGameObjectDirectory directory)
+		{
+			if((context & flagToCheck) != 0)
+				positions[index++] = ComputeRelativePosition(directory, gameObjectType);
+
+			return index;
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		private static Quaternion ComputeRelativeRotation(EntityGameObjectDirectory directory, EntityGameObjectDirectory.Type gameObjectType)
+		{
+			//TODO: Optimize this.
+			//Relative rotation from root gameobject rotation to camera rotation.
+			//it's B - A where A is the root quaternion
+			return Quaternion.Inverse(directory.GetGameObject(EntityGameObjectDirectory.Type.Root).transform.rotation) * directory.GetGameObject(gameObjectType).transform.rotation;
 		}
 
 		private void InitializePositions(NetworkMovementTrackerTypeFlags context, Vector3[] positions)
 		{
 			EntityGameObjectDirectory directory = GameObjectDirectoryMappable.RetrieveEntity(LocalPlayerDetails.LocalPlayerGuid);
 
-			//TODO: Right now we're only doing heads, so this works but will break later.
-			if ((context & NetworkMovementTrackerTypeFlags.Head) != 0)
-			{
-				Vector3 relative = directory.GetGameObject(EntityGameObjectDirectory.Type.CameraRoot).transform.position - directory.GetGameObject(EntityGameObjectDirectory.Type.Root).transform.position;
-				positions[0] = relative;
-			}
+			int index = 0;
+			index = InitializePositionIndex(context, NetworkMovementTrackerTypeFlags.Head, EntityGameObjectDirectory.Type.CameraRoot, positions, index, directory);
+			index = InitializePositionIndex(context, NetworkMovementTrackerTypeFlags.RightHand, EntityGameObjectDirectory.Type.RightHand, positions, index, directory);
+			index = InitializePositionIndex(context, NetworkMovementTrackerTypeFlags.LeftHand, EntityGameObjectDirectory.Type.LeftHand, positions, index, directory);
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		private static Vector3 ComputeRelativePosition(EntityGameObjectDirectory directory, EntityGameObjectDirectory.Type gameObjectType)
+		{
+			return directory.GetGameObject(gameObjectType).transform.position - directory.GetGameObject(EntityGameObjectDirectory.Type.Root).transform.position;
 		}
 
 		internal static UInt32 CountChangedTrackerFlags(NetworkMovementTrackerTypeFlags skills)
