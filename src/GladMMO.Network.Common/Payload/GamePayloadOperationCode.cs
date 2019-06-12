@@ -24,13 +24,6 @@ namespace GladMMO
 
 		FieldValueUpdate = 6,
 
-		//Voice payloads
-		VoiceInitialization = 7,
-
-		VoiceData = 8,
-
-		ModelChangeRequest = 9,
-
 		/// <summary>
 		/// Opcode used for telling the client
 		/// to load a new scene.
@@ -38,5 +31,9 @@ namespace GladMMO
 		LoadNewScene = 7,
 
 		PlayerRotationUpdate = 8,
+
+		ModelChangeRequest = 9,
+
+		PlayerTrackerDataChange = 10
 	}
 }
