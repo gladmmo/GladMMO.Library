@@ -9,6 +9,8 @@ namespace GladMMO
 	{
 		private Vector3 lastPosition;
 
+		private Quaternion lastRotation;
+
 		[SerializeField]
 		private Transform TransformToFollow;
 
@@ -19,12 +21,13 @@ namespace GladMMO
 		void Start()
 		{
 			lastPosition = transform.position;
+			lastRotation = transform.rotation;
 		}
 
 		void LateUpdate()
 		{
-			transform.position = Vector3.Lerp(lastPosition, TransformToFollow.position, LerpPower);
-			lastPosition = transform.position;
+			lastPosition = transform.position = Vector3.Lerp(lastPosition, TransformToFollow.position, LerpPower);
+			lastRotation = transform.rotation = Quaternion.Slerp(lastRotation, TransformToFollow.rotation, LerpPower);
 		}
 	}
 }
