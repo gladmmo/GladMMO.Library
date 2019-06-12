@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Common.Logging;
+using Glader.Essentials;
 using GladNet;
 
 namespace GladMMO
 {
+	[AdditionalRegisterationAs(typeof(IPlayerTrackerTransformChangedEventSubscribable))]
 	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
 	public sealed class PlayerNetworkTrackerChangeUpdateEventHandler : BaseGameClientGameMessageHandler<PlayerNetworkTrackerChangeUpdateEvent>, IPlayerTrackerTransformChangedEventSubscribable
 	{
