@@ -26,17 +26,21 @@ namespace GladMMO
 		/// </summary>
 		private GlobalEntityCollectionsLockingPolicy LockingPolicy { get; }
 
+		private IEventPublisher<IEntityCreationStartingEventSubscribable, EntityCreationStartingEventArgs> EntityCreatingEventPublisher { get; }
+
 		/// <inheritdoc />
 		public PlayerEntityEntryManager(
 			IPlayerSessionClaimedEventSubscribable subscriptionService,
 			ISessionDisconnectionEventSubscribable disconnectionSubscriptionService,
 			IFactoryCreatable<GameObject, PlayerEntityCreationContext> playerFactory, 
 			ILog logger,
-			GlobalEntityCollectionsLockingPolicy lockingPolicy) 
+			GlobalEntityCollectionsLockingPolicy lockingPolicy,
+			[NotNull] IEventPublisher<IEntityCreationStartingEventSubscribable, EntityCreationStartingEventArgs> entityCreatingEventPublisher) 
 			: base(subscriptionService, false, logger)
 		{
 			PlayerFactory = playerFactory;
 			LockingPolicy = lockingPolicy;
+			EntityCreatingEventPublisher = entityCreatingEventPublisher ?? throw new ArgumentNullException(nameof(entityCreatingEventPublisher));
 
 			disconnectionSubscriptionService.OnSessionDisconnection += OnSessionDisconnection;
 		}
@@ -62,6 +66,9 @@ namespace GladMMO
 				//We don't need to do anything with the returned object.
 				GameObject playerGameObject = PlayerFactory.Create(new PlayerEntityCreationContext(args.EntityGuid, args.SessionContext, EntityPrefab.RemotePlayer, args.SpawnPosition, 0));
 			}
+
+			//TODO: We eventually want event stages for this. CreationStarting and then Created. Removing the need for the above factory hopefully.
+			EntityCreatingEventPublisher.PublishEvent(this, new EntityCreationStartingEventArgs(args.EntityGuid));
 
 			if(Logger.IsDebugEnabled)
 				Logger.Debug($"Sending player spawn payload Id: {args.EntityGuid.EntityId}");
