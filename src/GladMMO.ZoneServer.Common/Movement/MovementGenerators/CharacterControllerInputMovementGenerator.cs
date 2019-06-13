@@ -13,7 +13,7 @@ namespace GladMMO
 		private Vector3 CachedMovementDirection;
 
 		//TODO: We shouldn't do this here
-		private float DefaultPlayerSpeed = 3.0f;
+		private float DefaultPlayerSpeed = 5.0f;
 
 		private long LastMovementUpdateTime { get; set; }
 
