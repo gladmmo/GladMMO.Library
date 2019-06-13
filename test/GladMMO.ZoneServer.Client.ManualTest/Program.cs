@@ -24,7 +24,7 @@ namespace GladMMO
 					GameClientPacketPayload, IGamePacketPayload>(new DotNetTcpClientNetworkClient(), serializer, new ConsoleLogger(LogLevel.All))
 				.AsManaged();
 
-			await client.ConnectAsync(IPAddress.Parse("192.168.0.12"), 5006);
+			await client.ConnectAsync(IPAddress.Parse("72.190.177.214"), 5006);
 			Thread.Sleep(3000);
 
 			Console.WriteLine("Enter Character ID for test:");

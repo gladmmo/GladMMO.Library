@@ -42,6 +42,10 @@ namespace GladMMO
 			//To know where we must connect, we must query for the zone-endpoint that we should be connecting to.
 			ResolveServiceEndpointResponse endpointResponse = await ZoneServiceClient.GetServerEndpoint(ZoneDataRepository.ZoneId);
 
+			if(endpointResponse.isSuccessful)
+				if(Logger.IsInfoEnabled)
+					Logger.Info($"");
+
 			if(Logger.IsInfoEnabled)
 				Logger.Info($"Recieved ZoneEndpoint: {endpointResponse.ToString()}");
 			

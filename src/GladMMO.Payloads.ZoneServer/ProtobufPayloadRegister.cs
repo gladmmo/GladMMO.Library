@@ -52,8 +52,6 @@ namespace GladMMO
 
 			foreach (var entry in payloadTypes)
 			{
-				UnityEngine.Debug.Log($"Registering: {entry.Value.Name} with Key: {entry.Key}");
-
 				//TODO: Will this ever prevent a subtype registeration?
 				RuntimeTypeModel.Default.Add(entry.Value, true);
 
