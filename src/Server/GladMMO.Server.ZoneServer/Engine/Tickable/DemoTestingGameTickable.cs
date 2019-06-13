@@ -8,7 +8,7 @@ namespace GladMMO
 {
 	//To put some demo/testing code into
 	[GameInitializableOrdering(1)]
-	[ServerSceneTypeCreate(ServerSceneType.Default)]
+	//[ServerSceneTypeCreate(ServerSceneType.Default)]
 	public sealed class DemoTestingGameTickable : IGameTickable
 	{
 		private IReadonlyEntityGuidMappable<IEntityDataFieldContainer> EntityDataContainer { get; }
