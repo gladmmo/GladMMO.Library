@@ -26,7 +26,6 @@ namespace GladMMO
 
 			builder.Register<IManagedNetworkClient<GameClientPacketPayload, GameServerPacketPayload>>(context =>
 				{
-#warning TODO We need this reimplemented
 					//The idea here is if the global network client it's null we should use it as the instance.
 					if(GloballyManagedClient == null || !GloballyManagedClient.isConnected)
 						return GloballyManagedClient = new GladMMOUnmanagedNetworkClient<DotNetTcpClientNetworkClient, GameServerPacketPayload, GameClientPacketPayload, IGamePacketPayload>(new DotNetTcpClientNetworkClient(), context.Resolve<INetworkSerializationService>(), context.Resolve<ILog>())
