@@ -158,6 +158,12 @@ namespace GladMMO
 			//DefaultEntitySessionMessageSender : IEntitySessionMessageSender
 			builder.RegisterType<DefaultEntitySessionMessageSender>()
 				.As<IEntitySessionMessageSender>();
+
+			//EntityCreatingEventPublisher : IEventPublisher<IEntityCreatingEventSubscribable, EntityCreatingEventArgs>, IEntityCreatingEventSubscribable
+			builder.RegisterType<EntityCreatingEventPublisher>()
+				.As<IEventPublisher<IEntityCreatingEventSubscribable, EntityCreatingEventArgs>>()
+				.As<IEntityCreatingEventSubscribable>()
+				.SingleInstance();
 		}
 
 		private static void RegisterEntityMappableCollections(ContainerBuilder builder)
