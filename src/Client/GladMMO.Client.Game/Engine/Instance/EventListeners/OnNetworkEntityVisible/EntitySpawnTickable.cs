@@ -18,7 +18,7 @@ namespace GladMMO
 		/// <inheritdoc />
 		public event EventHandler<LocalPlayerSpawnedEventArgs> OnLocalPlayerSpawned;
 
-		public event EventHandler<EntityCreationEventArgs> OnEntityCreationStarting;
+		public event EventHandler<EntityCreationStartingEventArgs> OnEntityCreationStarting;
 
 		private ICharacterDataRepository CharacterDateRepository { get; }
 
@@ -39,7 +39,7 @@ namespace GladMMO
 			try
 			{
 				//It should be assumed none of the event listeners will be async
-				OnEntityCreationStarting?.Invoke(this, new EntityCreationEventArgs(args.EntityGuid));
+				OnEntityCreationStarting?.Invoke(this, new EntityCreationStartingEventArgs(args.EntityGuid));
 
 				if(args.EntityGuid.EntityType == EntityType.Player && IsSpawningEntityLocalPlayer(args.EntityGuid))
 				{

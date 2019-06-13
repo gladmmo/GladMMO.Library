@@ -11,10 +11,10 @@ namespace GladMMO
 	/// </summary>
 	public interface IEntityCreationStartingEventSubscribable
 	{
-		event EventHandler<EntityCreationEventArgs> OnEntityCreationStarting;
+		event EventHandler<EntityCreationStartingEventArgs> OnEntityCreationStarting;
 	}
 
-	public sealed class EntityCreationEventArgs : EventArgs
+	public sealed class EntityCreationStartingEventArgs : EventArgs
 	{
 		/// <summary>
 		/// The entity guid of the creating entity.
@@ -22,7 +22,7 @@ namespace GladMMO
 		public NetworkEntityGuid EntityGuid { get; }
 
 		/// <inheritdoc />
-		public EntityCreationEventArgs([NotNull] NetworkEntityGuid entityGuid)
+		public EntityCreationStartingEventArgs([NotNull] NetworkEntityGuid entityGuid)
 		{
 			EntityGuid = entityGuid ?? throw new ArgumentNullException(nameof(entityGuid));
 		}

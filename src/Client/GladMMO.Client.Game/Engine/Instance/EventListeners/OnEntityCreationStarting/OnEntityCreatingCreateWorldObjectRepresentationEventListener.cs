@@ -10,7 +10,7 @@ namespace GladMMO
 	//Conceptually this is like a partial factory
 	[AdditionalRegisterationAs(typeof(IEntityWorldRepresentationCreatedEventSubscribable))]
 	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
-	public sealed class OnEntityCreatingCreateWorldObjectRepresentationEventListener : BaseSingleEventListenerInitializable<IEntityCreationStartingEventSubscribable, EntityCreationEventArgs>, IEntityWorldRepresentationCreatedEventSubscribable
+	public sealed class OnEntityCreatingCreateWorldObjectRepresentationEventListener : BaseSingleEventListenerInitializable<IEntityCreationStartingEventSubscribable, EntityCreationStartingEventArgs>, IEntityWorldRepresentationCreatedEventSubscribable
 	{
 		public event EventHandler<EntityWorldRepresentationCreatedEventArgs> OnEntityWorldRepresentationCreated;
 
@@ -31,7 +31,7 @@ namespace GladMMO
 			MovementDataMappable = movementDataMappable ?? throw new ArgumentNullException(nameof(movementDataMappable));
 		}
 
-		protected override void OnEventFired(object source, EntityCreationEventArgs args)
+		protected override void OnEventFired(object source, EntityCreationStartingEventArgs args)
 		{
 			EntityPrefab prefabType = ComputePrefabType(args.EntityGuid);
 			IMovementData movementData = MovementDataMappable.RetrieveEntity(args.EntityGuid);

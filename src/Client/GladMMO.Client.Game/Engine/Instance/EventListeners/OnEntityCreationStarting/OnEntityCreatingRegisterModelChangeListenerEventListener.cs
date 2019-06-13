@@ -11,7 +11,7 @@ using UnityEngine;
 namespace GladMMO
 {
 	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
-	public sealed class OnEntityCreatingRegisterModelChangeListenerEventListener : BaseSingleEventListenerInitializable<IEntityCreationStartingEventSubscribable, EntityCreationEventArgs>
+	public sealed class OnEntityCreatingRegisterModelChangeListenerEventListener : BaseSingleEventListenerInitializable<IEntityCreationStartingEventSubscribable, EntityCreationStartingEventArgs>
 	{
 		private IEntityDataChangeCallbackRegisterable EntityDataCallbackRegister { get; }
 
@@ -34,7 +34,7 @@ namespace GladMMO
 			AvatarLoaderMappable = avatarLoaderMappable ?? throw new ArgumentNullException(nameof(avatarLoaderMappable));
 		}
 
-		protected override void OnEventFired(object source, EntityCreationEventArgs args)
+		protected override void OnEventFired(object source, EntityCreationStartingEventArgs args)
 		{
 			//We only handle player downloading right now.
 			if (args.EntityGuid.EntityType != EntityType.Player)
