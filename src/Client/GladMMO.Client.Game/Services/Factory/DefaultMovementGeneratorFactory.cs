@@ -23,11 +23,24 @@ namespace GladMMO
 			//TODO: redo all this of this garbage
 			if (context.Data is PositionChangeMovementData pcmd)
 			{
-				//The reason we use a lazy here is because we can't promise that the character controller exists AT ALL at this point sadly.
-				return new ClientCharacterControllerInputMovementGenerator(pcmd, new Lazy<CharacterController>(() => ControllerMappable.RetrieveEntity(context.EntityGuid)), LocalPlayerDetails.LocalPlayerGuid != context.EntityGuid);
+				//Warning, this following code is ONLY for client. To smooth out serverside corrections
+				if (pcmd.Direction == Vector2.zero)
+				{
+					return new LocalClientInterpolatedCorrectionMovementGenerator(pcmd, BuildLazyControllerFactory(context));
+				}
+				else
+				{
+					//The reason we use a lazy here is because we can't promise that the character controller exists AT ALL at this point sadly.
+					return new ClientCharacterControllerInputMovementGenerator(pcmd, BuildLazyControllerFactory(context), LocalPlayerDetails.LocalPlayerGuid != context.EntityGuid);
+				}
 			}
 
 			throw new NotSupportedException($"TODO: Encountered unsupported movement data: {context.Data.GetType().Name}");
+		}
+
+		private Lazy<CharacterController> BuildLazyControllerFactory(EntityAssociatedData<IMovementData> context)
+		{
+			return new Lazy<CharacterController>(() => ControllerMappable.RetrieveEntity(context.EntityGuid));
 		}
 	}
 }
