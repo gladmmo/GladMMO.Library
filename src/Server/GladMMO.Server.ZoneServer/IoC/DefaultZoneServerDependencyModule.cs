@@ -159,10 +159,10 @@ namespace GladMMO
 			builder.RegisterType<DefaultEntitySessionMessageSender>()
 				.As<IEntitySessionMessageSender>();
 
-			//EntityCreatingEventPublisher : IEventPublisher<IEntityCreatingEventSubscribable, EntityCreatingEventArgs>, IEntityCreatingEventSubscribable
+			//EntityCreatingEventPublisher : IEventPublisher<IEntityCreationStartingEventSubscribable, EntityCreationStartingEventArgs>, IEntityCreationStartingEventSubscribable
 			builder.RegisterType<EntityCreatingEventPublisher>()
-				.As<IEventPublisher<IEntityCreatingEventSubscribable, EntityCreatingEventArgs>>()
-				.As<IEntityCreatingEventSubscribable>()
+				.As<IEventPublisher<IEntityCreationStartingEventSubscribable, EntityCreationStartingEventArgs>>()
+				.As<IEntityCreationStartingEventSubscribable>()
 				.SingleInstance();
 		}
 
