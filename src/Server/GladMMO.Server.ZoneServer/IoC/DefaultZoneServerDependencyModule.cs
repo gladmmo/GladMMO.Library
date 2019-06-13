@@ -164,6 +164,10 @@ namespace GladMMO
 				.As<IEventPublisher<IEntityCreationStartingEventSubscribable, EntityCreationStartingEventArgs>>()
 				.As<IEntityCreationStartingEventSubscribable>()
 				.SingleInstance();
+
+			//EntityBaseStatsDataFactory : IFactoryCreatable<EntityBaseStatsModel, EntityDataStatsDerivable>
+			builder.RegisterType<EntityBaseStatsDataFactory>()
+				.As<IFactoryCreatable<EntityBaseStatsModel, EntityDataStatsDerivable>>();
 		}
 
 		private static void RegisterEntityMappableCollections(ContainerBuilder builder)
