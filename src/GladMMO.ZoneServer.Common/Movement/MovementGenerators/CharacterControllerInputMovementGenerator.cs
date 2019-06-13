@@ -15,6 +15,8 @@ namespace GladMMO
 		//TODO: We shouldn't do this here
 		private float DefaultPlayerSpeed = 5.0f;
 
+		public const float CHARACTERCONTROLLER_GRAVITY_SPEED = -(9.8f * 9.8f);
+
 		private long LastMovementUpdateTime { get; set; }
 
 		protected Lazy<CharacterController> Controller { get; }
@@ -48,7 +50,7 @@ namespace GladMMO
 
 			//gravity
 			//Don't need to subtract the cached direction Y because it should be 0, or treated as 0.
-			CachedMovementDirection.y = (-9.8f * diff);
+			CachedMovementDirection.y = (CHARACTERCONTROLLER_GRAVITY_SPEED * diff);
 			Controller.Value.Move(entity.transform.worldToLocalMatrix.inverse * CachedMovementDirection * diff);
 
 			//Our new last movement time is now the current time.
