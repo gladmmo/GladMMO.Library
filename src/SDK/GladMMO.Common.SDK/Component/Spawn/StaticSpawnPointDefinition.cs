@@ -10,6 +10,16 @@ namespace Booma.Proxy
 {
 	public sealed class StaticSpawnPointDefinition : GladMMOSDKMonoBehaviour, ISpawnPointStrategy
 	{
+		private Vector3 CachedSpawnPosition;
+
+		private Quaternion CachedSpawnRotation;
+
+		void Awake()
+		{
+			CachedSpawnPosition = transform.position;
+			CachedSpawnRotation = transform.rotation;
+		}
+
 		//TODO: IFDEF this out for deployment builds
 		private void OnDrawGizmos()
 		{
@@ -38,7 +48,8 @@ namespace Booma.Proxy
 
 		public SpawnPointData GetSpawnPoint()
 		{
-			return new SpawnPointData(transform.position, transform.rotation);
+			//Cached references mostly for thread safety purposes
+			return new SpawnPointData(CachedSpawnPosition, CachedSpawnRotation);
 		}
 	}
 }
