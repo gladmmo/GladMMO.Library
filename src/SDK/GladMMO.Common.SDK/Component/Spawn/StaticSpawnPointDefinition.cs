@@ -22,5 +22,17 @@ namespace Booma.Proxy
 			//TODO: Add spawnpoint image icon
 			//Gizmos.DrawIcon(transform.position, "SpawnPoint.png", true);
 		}
+
+		[Button]
+		private void StickSpawnPointToCollider()
+		{
+			transform.rotation = Quaternion.identity;
+
+			RaycastHit hitInfo;
+			if(Physics.Raycast(transform.position, Vector3.down, out hitInfo, 10f)) //don't use a layer mask
+			{
+				transform.position = new Vector3(transform.position.x, hitInfo.point.y, transform.position.z);
+			}
+		}
 	}
 }
