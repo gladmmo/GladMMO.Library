@@ -15,24 +15,25 @@ namespace Booma.Proxy
 		{
 			Color originalColor = Gizmos.color;
 
-			Gizmos.color = Color.blue;
-			Gizmos.DrawSphere(transform.position, transform.localScale.magnitude);
+			Gizmos.color = Color.cyan;
+			Gizmos.DrawSphere(transform.position, 0.1f);
+			Gizmos.DrawLine(transform.position, transform.position + (transform.forward * 0.3f));
 			Gizmos.color = originalColor;
-
-			//TODO: Add spawnpoint image icon
-			//Gizmos.DrawIcon(transform.position, "SpawnPoint.png", true);
 		}
 
 		[Button]
 		private void StickSpawnPointToCollider()
 		{
-			transform.rotation = Quaternion.identity;
+			RaycastHit[] hitInfos = Physics.RaycastAll(transform.position, Vector3.down, 10f);
 
-			RaycastHit hitInfo;
-			if(Physics.Raycast(transform.position, Vector3.down, out hitInfo, 10f)) //don't use a layer mask
-			{
-				transform.position = new Vector3(transform.position.x, hitInfo.point.y, transform.position.z);
-			}
+			if(hitInfos == null || hitInfos.Length == 0)
+				return;
+
+			RaycastHit hitInfo = hitInfos
+				.OrderBy(h => h.distance)
+				.First();
+
+			transform.position = new Vector3(transform.position.x, hitInfo.point.y + 0.001f, transform.position.z);
 		}
 	}
 }
