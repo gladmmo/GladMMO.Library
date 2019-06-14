@@ -19,13 +19,17 @@ namespace GladMMO
 		/// <inheritdoc />
 		public event EventHandler<PlayerSessionClaimedEventArgs> OnSuccessfulSessionClaimed;
 
+		private ISpawnPointStrategy SpawnPointProvider { get; }
+
 		/// <inheritdoc />
 		public ClientSessionClaimRequestHandler(
 			[NotNull] IZoneServerToGameServerClient gameServerClient,
-			[NotNull] ILog logger)
+			[NotNull] ILog logger,
+			[NotNull] ISpawnPointStrategy spawnPointProvider)
 			: base(logger)
 		{
 			GameServerClient = gameServerClient ?? throw new ArgumentNullException(nameof(gameServerClient));
+			SpawnPointProvider = spawnPointProvider ?? throw new ArgumentNullException(nameof(spawnPointProvider));
 		}
 
 		/// <inheritdoc />
@@ -64,16 +68,19 @@ namespace GladMMO
 				.WithType(EntityType.Player);
 
 			//TODO: We assume they are authenticated, we don't check at the moment but we WILL and SHOULD. Just load their location.
-			ZoneServerCharacterLocationResponse locationResponse = await GameServerClient.GetCharacterLocation(payload.CharacterId)
+			/*ZoneServerCharacterLocationResponse locationResponse = await GameServerClient.GetCharacterLocation(payload.CharacterId)
 				.ConfigureAwait(false);
 
-			Vector3 position = locationResponse.isSuccessful ? locationResponse.Position : Vector3.zero;
+			Vector3 position = locationResponse.isSuccessful ? locationResponse.Position : Vector3.zero;*/
+
+			//TODO: We should not get spawn point data here. We need a more complicated way that involves querying for saved position.
+			SpawnPointData pointData = SpawnPointProvider.GetSpawnPoint();
 
 			if(Logger.IsDebugEnabled)
-				Logger.Debug($"Recieved player location: {position}");
+				Logger.Debug($"Recieved player location: {pointData.WorldPosition}");
 
 			//Just broadcast successful claim, let listeners figure out what to do with this information.
-			OnSuccessfulSessionClaimed?.Invoke(this, new PlayerSessionClaimedEventArgs(builder.Build(), position, new PlayerEntitySessionContext(context.PayloadSendService, context.Details.ConnectionId)));
+			OnSuccessfulSessionClaimed?.Invoke(this, new PlayerSessionClaimedEventArgs(builder.Build(), pointData.WorldPosition, new PlayerEntitySessionContext(context.PayloadSendService, context.Details.ConnectionId)));
 
 			await context.PayloadSendService.SendMessage(new ClientSessionClaimResponsePayload(ClientSessionClaimResponseCode.Success))
 				.ConfigureAwait(false);
