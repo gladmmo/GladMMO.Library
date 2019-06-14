@@ -168,6 +168,14 @@ namespace GladMMO
 			//EntityBaseStatsDataFactory : IFactoryCreatable<EntityBaseStatsModel, EntityDataStatsDerivable>
 			builder.RegisterType<EntityBaseStatsDataFactory>()
 				.As<IFactoryCreatable<EntityBaseStatsModel, EntityDataStatsDerivable>>();
+
+			//RoundRobinSpawnStrategy : ISpawnPointStrategy
+			builder.RegisterType<RoundRobinSpawnStrategy>()
+				.As<ISpawnPointStrategy>();
+
+			builder.RegisterType<PlayerSpawnStrategyQueue>()
+				.AsSelf()
+				.SingleInstance();
 		}
 
 		private static void RegisterEntityMappableCollections(ContainerBuilder builder)
