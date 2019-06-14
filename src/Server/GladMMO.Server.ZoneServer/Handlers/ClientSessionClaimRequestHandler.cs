@@ -84,10 +84,6 @@ namespace GladMMO
 
 			await context.PayloadSendService.SendMessage(new ClientSessionClaimResponsePayload(ClientSessionClaimResponseCode.Success))
 				.ConfigureAwait(false);
-
-			//TODO: We shouldn't hardcode this, we should send the correct scene specified by the gameserver this zone/instance connects to to service.
-			await context.PayloadSendService.SendMessage(new LoadNewSceneEventPayload(PlayableGameScene.LobbyType1))
-				.ConfigureAwait(false);
 		}
 	}
 }
