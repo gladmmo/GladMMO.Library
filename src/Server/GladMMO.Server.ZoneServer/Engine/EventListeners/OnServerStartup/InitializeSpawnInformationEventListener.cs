@@ -10,11 +10,11 @@ namespace GladMMO
 {
 	//TODO: Eventually we need to do this after we download the server map data.
 	[ServerSceneTypeCreate(ServerSceneType.Default)]
-	public sealed class InitializeSpawnInformationEventListener : BaseSingleEventListenerInitializable<IServerStartupEventSubscribable>
+	public sealed class InitializeSpawnInformationEventListener : BaseSingleEventListenerInitializable<IServerStartingEventSubscribable>
 	{
 		private PlayerSpawnStrategyQueue SpawnStrategyQueue { get; }
 
-		public InitializeSpawnInformationEventListener(IServerStartupEventSubscribable subscriptionService,
+		public InitializeSpawnInformationEventListener(IServerStartingEventSubscribable subscriptionService,
 			[NotNull] PlayerSpawnStrategyQueue spawnStrategyQueue) 
 			: base(subscriptionService)
 		{

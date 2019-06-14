@@ -4,8 +4,8 @@ using System.Text;
 
 namespace GladMMO
 {
-	public interface IServerStartupEventSubscribable
+	public interface IServerStartingEventSubscribable
 	{
-		event EventHandler OnServerStartup;
+		event EventHandler OnServerStarting;
 	}
 }
