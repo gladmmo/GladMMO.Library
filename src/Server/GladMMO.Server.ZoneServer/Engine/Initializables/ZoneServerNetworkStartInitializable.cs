@@ -8,10 +8,13 @@ using GladNet;
 namespace GladMMO
 {
 	//Initializable that just starts the zoneserver network listener.
+	[AdditionalRegisterationAs(typeof(IServerStartingEventSubscribable))]
 	[ServerSceneTypeCreate(ServerSceneType.Default)]
-	public sealed class ZoneServerNetworkStartInitializable : IGameInitializable
+	public sealed class ZoneServerNetworkStartInitializable : IGameInitializable, IServerStartingEventSubscribable
 	{
 		private ZoneServerApplicationBase ApplicationBase { get; }
+
+		public event EventHandler OnServerStarting;
 
 		/// <inheritdoc />
 		public ZoneServerNetworkStartInitializable([NotNull] ZoneServerApplicationBase applicationBase)
@@ -22,6 +25,8 @@ namespace GladMMO
 		/// <inheritdoc />
 		public Task OnGameInitialized()
 		{
+			OnServerStarting?.Invoke(this, EventArgs.Empty);
+
 			if(!ApplicationBase.StartServer())
 			{
 				string error = $"Failed to start server on Details: {ApplicationBase.ServerAddress}";

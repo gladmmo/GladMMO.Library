@@ -31,6 +31,10 @@ namespace GladMMO
 			{
 				SpawnStrategyQueue.Enqueue(spawn);
 			}
+
+			//It's possible the creator didn't specify a spawnpoint, so we just use a default
+			if (SpawnStrategyQueue.Count == 0)
+				SpawnStrategyQueue.Enqueue(new DefaultSpawnPointStrategy());
 		}
 	}
 }
