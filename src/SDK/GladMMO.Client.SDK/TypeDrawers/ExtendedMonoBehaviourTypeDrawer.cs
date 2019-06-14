@@ -9,7 +9,7 @@ using UnityEngine;
 namespace GladMMO
 {
 	[CustomEditor(typeof(GladMMOSDKMonoBehaviour), true)]
-	public sealed class ExtendedMonoBehaviourTypeDrawer : Editor
+	public class ExtendedMonoBehaviourTypeDrawer : Editor
 	{
 		public override void OnInspectorGUI()
 		{
