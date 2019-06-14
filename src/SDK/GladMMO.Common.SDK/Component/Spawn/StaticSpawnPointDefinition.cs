@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace Booma.Proxy
 {
-	public sealed class StaticSpawnPointDefinition : GladMMOSDKMonoBehaviour
+	public sealed class StaticSpawnPointDefinition : GladMMOSDKMonoBehaviour, ISpawnPointStrategy
 	{
 		//TODO: IFDEF this out for deployment builds
 		private void OnDrawGizmos()
@@ -34,6 +34,11 @@ namespace Booma.Proxy
 				.First();
 
 			transform.position = new Vector3(transform.position.x, hitInfo.point.y + 0.001f, transform.position.z);
+		}
+
+		public SpawnPointData GetSpawnPoint()
+		{
+			return new SpawnPointData(transform.position, transform.rotation);
 		}
 	}
 }
