@@ -26,8 +26,8 @@ namespace GladMMO
 			//This locates all spawnpoint strats in the scene
 			foreach (var spawn in Resources.FindObjectsOfTypeAll<MonoBehaviour>()
 				.Where(b => b?.gameObject?.scene != null && !String.IsNullOrEmpty(b?.gameObject?.scene.name))
-				.Select(b => b as ISpawnPointStrategy)
-				.Where(b => b != null))
+				.OfType<ISpawnPointStrategy>()
+				.Where(b => b.EntityType == EntitySpawnType.Player))
 			{
 				SpawnStrategyQueue.Enqueue(spawn);
 			}
