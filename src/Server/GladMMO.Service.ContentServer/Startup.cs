@@ -61,7 +61,11 @@ namespace GladMMO
 			//Adds and registers S3 service for URLBuilding and communication/credentials and etc
 			//services.AddS3Service(Configuration);
 			services.AddTransient<IWorldEntryRepository, DatabaseBackedWorldEntryRepository>();
+			services.AddTransient<ICustomContentRepository<WorldEntryModel>>(provider => provider.GetRequiredService<IWorldEntryRepository>());
+
 			services.AddTransient<IAvatarEntryRepository, DatabaseBackedAvatarEntryRepository>();
+			services.AddTransient<ICustomContentRepository<AvatarEntryModel>>(provider => provider.GetRequiredService<IAvatarEntryRepository>());
+
 			services.AddTransient<IContentDownloadAuthroizationValidator, UnimplementedContentDownloadAuthorizationValidator>();
 
 			//AZURE_STORAGE_CONNECTIONSTRING
