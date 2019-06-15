@@ -13,6 +13,8 @@ namespace GladMMO
 	[Table("world_entry")]
 	public class WorldEntryModel : IClientContentPersistable
 	{
+		public long ContentId => WorldId;
+
 		/// <summary>
 		/// The primary unique 64bit integer key used for the
 		/// world's unique ID.

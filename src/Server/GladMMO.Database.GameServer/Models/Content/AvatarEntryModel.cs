@@ -12,6 +12,8 @@ namespace GladMMO
 	[Table("avatar_entry")]
 	public class AvatarEntryModel : IClientContentPersistable
 	{
+		public long ContentId => AvatarId;
+
 		/// <summary>
 		/// The primary unique 64bit integer key used for the
 		/// world's unique ID.

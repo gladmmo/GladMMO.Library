@@ -9,6 +9,8 @@ namespace GladMMO
 	[Table("creature_model_entry")]
 	public class CreatureModelEntryModel : IClientContentPersistable
 	{
+		public long ContentId => CreatureId;
+
 		/// <summary>
 		/// The primary unique 64bit integer key used for the
 		/// creature's unique ID.
