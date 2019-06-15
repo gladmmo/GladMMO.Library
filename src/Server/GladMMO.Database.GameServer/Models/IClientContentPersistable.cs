@@ -8,6 +8,11 @@ namespace GladMMO
 {
 	public interface IClientContentPersistable
 	{
+		/// <summary>
+		/// The id of the content.
+		/// </summary>
+		long ContentId { get; }
+
 		//TODO: Should we like tables somehow with auth? Probably not?
 		/// <summary>
 		/// Key for the account associated with the creation/registeration of this world.
