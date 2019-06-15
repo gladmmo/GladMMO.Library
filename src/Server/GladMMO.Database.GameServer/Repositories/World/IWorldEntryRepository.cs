@@ -8,7 +8,7 @@ namespace GladMMO
 	/// <summary>
 	/// Contract for world entry repository types.
 	/// </summary>
-	public interface IWorldEntryRepository : IGenericRepositoryCrudable<long, WorldEntryModel>
+	public interface IWorldEntryRepository : ICustomContentRepository<WorldEntryModel>
 	{
 		Task SetWorldValidated(long worldId);
 	}
