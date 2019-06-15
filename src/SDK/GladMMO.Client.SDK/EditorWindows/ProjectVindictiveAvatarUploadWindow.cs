@@ -74,7 +74,7 @@ namespace GladMMO.SDK
 				ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 				ServicePointManager.CheckCertificateRevocationList = false;
 
-				IContentServerServiceClient ucmService = Refit.RestService.For<IContentServerServiceClient>("http://72.190.177.214:5005/");
+				IDownloadableContentServerServiceClient ucmService = Refit.RestService.For<IDownloadableContentServerServiceClient>("http://72.190.177.214:5005/");
 
 				//Done out here, must be called on the main thread
 				string projectPath = Application.dataPath.ToLower().TrimEnd(@"assets".ToCharArray());

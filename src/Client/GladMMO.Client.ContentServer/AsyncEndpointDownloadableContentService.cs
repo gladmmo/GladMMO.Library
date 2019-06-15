@@ -6,17 +6,17 @@ using Refit;
 
 namespace GladMMO
 {
-	public sealed class AsyncEndpointContentServerService : BaseAsyncEndpointService<IContentServerServiceClient>, IContentServerServiceClient
+	public sealed class AsyncEndpointDownloadableContentService : BaseAsyncEndpointService<IDownloadableContentServerServiceClient>, IDownloadableContentServerServiceClient
 	{
 		/// <inheritdoc />
-		public AsyncEndpointContentServerService(Task<string> futureEndpoint) 
+		public AsyncEndpointDownloadableContentService(Task<string> futureEndpoint) 
 			: base(futureEndpoint)
 		{
 
 		}
 
 		/// <inheritdoc />
-		public AsyncEndpointContentServerService(Task<string> futureEndpoint, RefitSettings settings) 
+		public AsyncEndpointDownloadableContentService(Task<string> futureEndpoint, RefitSettings settings) 
 			: base(futureEndpoint, settings)
 		{
 

@@ -11,7 +11,7 @@ namespace GladMMO
 	//From ProjectVindictive: https://github.com/HelloKitty/ProjectVindictive.Library/blob/master/src/ProjectVindictive.SDK.Editor.Build/Client/IUserContentManagementServiceClient.cs
 	//TODO: Automate user-agent SDK version headers
 	[Headers("User-Agent: SDK 0.0.1")]
-	public interface IContentServerServiceClient
+	public interface IDownloadableContentServerServiceClient
 	{
 		/// <summary>
 		/// Attempts to get a new URL that can be used to upload the world.

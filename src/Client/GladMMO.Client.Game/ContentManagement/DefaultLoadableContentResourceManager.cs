@@ -15,7 +15,7 @@ namespace GladMMO
 	//TODO: We should do some threading and safety stuff.
 	public sealed class DefaultLoadableContentResourceManager : ILoadableContentResourceManager, IDisposable
 	{
-		private IContentServerServiceClient ContentClient { get; }
+		private IDownloadableContentServerServiceClient ContentClient { get; }
 
 		private IReadonlyAuthTokenRepository AuthTokenRepo { get; }
 
@@ -33,7 +33,7 @@ namespace GladMMO
 
 		/// <inheritdoc />
 		public DefaultLoadableContentResourceManager(
-			[NotNull] IContentServerServiceClient contentClient,
+			[NotNull] IDownloadableContentServerServiceClient contentClient,
 			[NotNull] IReadonlyAuthTokenRepository authTokenRepo,
 			[NotNull] ILog logger)
 		{

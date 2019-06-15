@@ -23,13 +23,13 @@ namespace GladMMO
 	{
 		private IZoneServerService ZoneDataService { get; }
 
-		private IContentServerServiceClient ContentService { get; }
+		private IDownloadableContentServerServiceClient ContentService { get; }
 
 		private ILog Logger { get; }
 
 		public PreBurstQueryDownloadableSceneInitializable(ICharacterSessionDataChangedEventSubscribable subscriptionService,
 			[NotNull] ILog logger,
-			[NotNull] IContentServerServiceClient contentService,
+			[NotNull] IDownloadableContentServerServiceClient contentService,
 			[NotNull] IZoneServerService zoneDataService) 
 			: base(subscriptionService)
 		{
