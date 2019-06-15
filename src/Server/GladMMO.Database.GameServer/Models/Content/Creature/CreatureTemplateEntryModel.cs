@@ -30,7 +30,6 @@ namespace GladMMO
 		/// The primary unique 64bit integer key used for the
 		/// creature model's unique ID.
 		/// </summary>
-		[Key]
 		[ForeignKey(nameof(CreatureModelEntry))]
 		[Range(0, long.MaxValue)]
 		public long ModelId { get; private set; }
