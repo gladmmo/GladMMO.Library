@@ -34,6 +34,11 @@ namespace GladMMO
 			return await (await GetService().ConfigureAwait(false)).GetNewAvatarUploadUrl(authToken).ConfigureAwait(false);
 		}
 
+		public async Task<RequestedUrlResponseModel> GetNewCreatureModelUploadUrl(string authToken)
+		{
+			return await(await GetService().ConfigureAwait(false)).GetNewCreatureModelUploadUrl(authToken).ConfigureAwait(false);
+		}
+
 		/// <inheritdoc />
 		public async Task<ContentDownloadURLResponse> RequestWorldDownloadUrl(long worldId)
 		{
@@ -44,6 +49,11 @@ namespace GladMMO
 		public async Task<ContentDownloadURLResponse> RequestAvatarDownloadUrl(long avatarId)
 		{
 			return await (await GetService().ConfigureAwait(false)).RequestAvatarDownloadUrl(avatarId).ConfigureAwait(false);
+		}
+
+		public async Task<ContentDownloadURLResponse> RequestCreatureModelDownloadUrl(long creatureId)
+		{
+			return await(await GetService().ConfigureAwait(false)).RequestCreatureModelDownloadUrl(creatureId).ConfigureAwait(false);
 		}
 	}
 }
