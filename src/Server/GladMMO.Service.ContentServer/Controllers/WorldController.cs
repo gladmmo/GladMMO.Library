@@ -17,9 +17,8 @@ namespace GladMMO
 	public class WorldController : BaseCustomControllerController<WorldEntryModel>
 	{
 		public WorldController(IClaimsPrincipalReader claimsReader, 
-			ILogger<AuthorizationReadyController> logger, 
-			UserContentType contentType) 
-			: base(claimsReader, logger, contentType)
+			ILogger<AuthorizationReadyController> logger) 
+			: base(claimsReader, logger, UserContentType.World)
 		{
 		}
 

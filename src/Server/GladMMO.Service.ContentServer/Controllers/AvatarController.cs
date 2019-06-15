@@ -17,9 +17,8 @@ namespace GladMMO
 	public class AvatarController : BaseCustomControllerController<AvatarEntryModel>
 	{
 		public AvatarController(IClaimsPrincipalReader claimsReader, 
-			ILogger<AuthorizationReadyController> logger, 
-			UserContentType contentType)
-			: base(claimsReader, logger, contentType)
+			ILogger<AuthorizationReadyController> logger)
+			: base(claimsReader, logger, UserContentType.Avatar)
 		{
 		}
 
