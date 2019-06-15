@@ -8,7 +8,7 @@ namespace GladMMO
 	/// <summary>
 	/// Contract for avatar entry repository types.
 	/// </summary>
-	public interface IAvatarEntryRepository : IGenericRepositoryCrudable<long, AvatarEntryModel>
+	public interface IAvatarEntryRepository : ICustomContentRepository<AvatarEntryModel>
 	{
 		Task SetWorldValidated(long worldId);
 	}
