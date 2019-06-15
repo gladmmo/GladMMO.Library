@@ -6,13 +6,15 @@ using System.Threading.Tasks;
 using GladMMO;
 using UnityEngine;
 
-namespace Booma.Proxy
+namespace GladMMO
 {
-	public sealed class StaticSpawnPointDefinition : GladMMOSDKMonoBehaviour, ISpawnPointStrategy
+	public abstract class StaticSpawnPointDefinition : GladMMOSDKMonoBehaviour, ISpawnPointStrategy
 	{
 		private Vector3 CachedSpawnPosition;
 
 		private Quaternion CachedSpawnRotation;
+
+		public abstract EntitySpawnType EntityType { get; }
 
 		void Awake()
 		{

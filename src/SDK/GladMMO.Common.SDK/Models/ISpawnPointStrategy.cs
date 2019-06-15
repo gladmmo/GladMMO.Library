@@ -10,6 +10,12 @@ namespace GladMMO
 	public interface ISpawnPointStrategy
 	{
 		/// <summary>
+		/// The spawn type of the strategy.
+		/// Could be player or creature.
+		/// </summary>
+		EntitySpawnType EntityType { get; }
+
+		/// <summary>
 		/// Generates a spawnpoint.
 		/// </summary>
 		/// <returns>A non-null Transform.</returns>
