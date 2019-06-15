@@ -12,6 +12,8 @@ namespace GladMMO
 	{
 		World,
 
-		Avatar
+		Avatar,
+
+		Creature
 	}
 }
