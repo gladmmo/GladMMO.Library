@@ -24,7 +24,7 @@ namespace GladMMO
 		//[AuthorizeJwt]
 		[ProducesJson]
 		[HttpPost("instance")]
-		public async Task<IActionResult> CreateCreatureInstance([FromQuery(Name = "worldId")] long worldId,
+		public async Task<IActionResult> CreateCreatureInstance([FromQuery(Name = "world")] long worldId,
 			[FromServices] ICreatureEntryRepository creatureEntryRepository)
 		{
 			CreatureEntryModel creatureEntryModel = new CreatureEntryModel(1, new Vector3<float>(0, 0, 0), 0, worldId);
