@@ -91,9 +91,6 @@ namespace GladMMO
 #endif
 			});
 
-			services.AddTransient<INpcTemplateRepository, DatabaseBackedNpcTemplateRepository>();
-			services.AddTransient<INpcEntryRepository, DatabaseBackedNpcEntryRepository>();
-
 			services.AddDbContext<CommonGameDatabaseContext>(o =>
 			{
 				//On local builds we don't want to use config. We want to default to local

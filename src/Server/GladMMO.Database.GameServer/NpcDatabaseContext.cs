@@ -8,9 +8,6 @@ namespace GladMMO
 	//TODO: Non-server specific data should go in a seperate database. Not the world/gameserver database.
 	public sealed class NpcDatabaseContext : DbContext
 	{
-		public DbSet<NPCEntryModel> Entries { get; set; }
-
-		public DbSet<NPCTemplateModel> Templates { get; set; }
 
 		public NpcDatabaseContext(DbContextOptions<NpcDatabaseContext> options)
 			: base(options)
