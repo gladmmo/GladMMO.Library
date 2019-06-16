@@ -6,7 +6,7 @@ using System.Text;
 
 namespace GladMMO
 {
-	[Table("creature_model_entry")]
+	[Table("creature_model")]
 	public class CreatureModelEntryModel : IClientContentPersistable
 	{
 		public long ContentId => CreatureId;
