@@ -68,6 +68,9 @@ namespace GladMMO
 
 			services.AddTransient<IContentDownloadAuthroizationValidator, UnimplementedContentDownloadAuthorizationValidator>();
 
+			//DatabaseBackedCreatureTemplateEntryRepository : ICreatureTemplateRepository
+			services.AddTransient<ICreatureTemplateRepository, DatabaseBackedCreatureTemplateEntryRepository>();
+
 			//AZURE_STORAGE_CONNECTIONSTRING
 			string ConnectionString = Environment.GetEnvironmentVariable("AZURE_STORAGE_CONNECTIONSTRING");
 			if(String.IsNullOrWhiteSpace(ConnectionString))
