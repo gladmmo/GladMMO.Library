@@ -41,9 +41,18 @@ namespace GladMMO
 
 		public NetworkEntityGuidBuilder WithType(EntityType type)
 		{
-			RawGuid = 0xFF00FFFFFFFFFFFF & RawGuid; //remove current entity type.
+			RawGuid = 0x00FFFFFFFFFFFFFF & RawGuid; //remove current entity type.
 
-			RawGuid |= (((ulong)(byte)type) << 48);
+			RawGuid |= (((ulong)(byte)type) << 56);
+
+			return this;
+		}
+
+		public NetworkEntityGuidBuilder WithTemplate(int templateId)
+		{
+			RawGuid = 0xFF000000FFFFFFFF & RawGuid;
+
+			RawGuid |= (((ulong)(int)templateId) << 32);
 
 			return this;
 		}

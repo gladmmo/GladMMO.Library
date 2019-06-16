@@ -43,7 +43,7 @@ namespace GladMMO
 		/// </summary>
 		[JsonIgnore]
 		[ProtoIgnore]
-		public EntityType EntityType => (EntityType)(byte)((RawGuidValue & 0x00FF000000000000) >> 48); //mask out to the EE (entity Type) and then shift it down to a byte
+		public EntityType EntityType => (EntityType)(byte)((RawGuidValue & 0xFF00000000000000) >> 56); //mask out to the EE (entity Type) and then shift it down to a byte
 
 		/// <summary>
 		/// Indiciates if the GUID is an empty or unitialized GUID.
@@ -59,6 +59,15 @@ namespace GladMMO
 		[JsonIgnore]
 		[ProtoIgnore]
 		public int EntityId => (int)(RawGuidValue & 0x00000000FFFFFFFF); //FFFF FFFF masks out everything but an unsigned integer. Casts to int. We waste bits this way but we gain considerable perf.
+
+		//TODO: We need to eventually support the last 1 byte of space for template ids when they get high enough.
+		/// <summary>
+		/// Optional template id for the entity.
+		/// This may be 0 if it's a player.
+		/// </summary>
+		[JsonIgnore]
+		[ProtoIgnore]
+		public int TemplateId => (int)((RawGuidValue & 0x00FFFFFF00000000) >> 32);
 
 		public NetworkEntityGuid(ulong guidValue)
 		{
