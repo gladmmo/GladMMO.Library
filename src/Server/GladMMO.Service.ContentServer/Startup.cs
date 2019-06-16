@@ -77,6 +77,10 @@ namespace GladMMO
 
 			services.AddScoped(p => storageAccount.CreateCloudBlobClient());
 			services.AddTransient<IStorageUrlBuilder, AzureBlobStorageURLBuilder>();
+
+			//TODO: Add auto-registeration for type converters
+			//CreatureTemplateTableToNetworkTypeConverter : ITypeConverterProvider<CreatureTemplateEntryModel, CreatureTemplateModel>
+			services.AddSingleton<ITypeConverterProvider<CreatureTemplateEntryModel, CreatureTemplateModel>, CreatureTemplateTableToNetworkTypeConverter>();
 		}
 
 		private static void RegisterDatabaseServices(IServiceCollection services)
