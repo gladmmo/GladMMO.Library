@@ -7,7 +7,7 @@ using GladMMO;
 using UnityEditor;
 using UnityEngine;
 
-namespace Booma.Proxy
+namespace GladMMO
 {
 	//based on: https://unity3d.college/2016/09/12/unity-oninspectorgui/
 	[CustomEditor(typeof(StaticSpawnPointDefinition))]
