@@ -15,7 +15,7 @@ namespace GladMMO
 		[JsonIgnore]
 		public bool isSuccessful => ResultCode == CreatureEntryCollectionResponseCode.Success;
 
-		public CreatureTemplateModel CreatureTemplate { get; }
+		public CreatureTemplateModel CreatureTemplate { get; private set; }
 
 		public CreatureTemplateQueryResponseModel(CreatureEntryCollectionResponseCode resultCode)
 		{
@@ -26,6 +26,7 @@ namespace GladMMO
 
 		public CreatureTemplateQueryResponseModel([NotNull] CreatureTemplateModel creatureTemplate)
 		{
+			ResultCode = CreatureEntryCollectionResponseCode.Success;
 			CreatureTemplate = creatureTemplate ?? throw new ArgumentNullException(nameof(creatureTemplate));
 		}
 
