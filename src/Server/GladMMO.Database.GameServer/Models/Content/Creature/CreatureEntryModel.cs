@@ -72,5 +72,13 @@ namespace GladMMO
 			MapId = mapId;
 			InitialOrientation = initialOrientation;
 		}
+
+		/// <summary>
+		/// EF constructor.
+		/// </summary>
+		private CreatureEntryModel()
+		{
+			
+		}
 	}
 }
