@@ -23,7 +23,7 @@ namespace GladMMO
 		//TODO: Eventually we need to require authorization, because they need to own the world.
 		//[AuthorizeJwt]
 		[ProducesJson]
-		[HttpPost("instance?world={worldId}")]
+		[HttpPost("instance")]
 		public async Task<IActionResult> CreateCreatureInstance([FromQuery(Name = "worldId")] long worldId,
 			[FromServices] ICreatureEntryRepository creatureEntryRepository)
 		{
