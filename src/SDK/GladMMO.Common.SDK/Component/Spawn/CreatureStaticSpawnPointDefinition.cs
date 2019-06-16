@@ -13,9 +13,18 @@ namespace GladMMO
 		[SerializeField]
 		private int _CreatureTemplateId = -1; //default to -1 so it's not known.
 
+		//We don't show this in the inspector because the user should not be changing this.
+		[HideInInspector]
+		private int _CreatureInstanceId = -1; //default to -1 so it's not known.
+
 		/// <summary>
 		/// The ID of the creature template to use for spawning.
 		/// </summary>
 		public int CreatureTemplateId => _CreatureTemplateId;
+
+		/// <summary>
+		/// The ID of the creature instance. Basically the global instance id of a creature.
+		/// </summary>
+		public int CreatureInstanceId => _CreatureInstanceId;
 	}
 }
