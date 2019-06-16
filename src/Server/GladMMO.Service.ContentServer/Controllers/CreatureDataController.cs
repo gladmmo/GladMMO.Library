@@ -20,6 +20,23 @@ namespace GladMMO
 		}
 
 		[ProducesJson]
+		[HttpGet("instance/{id}")]
+		public async Task<IActionResult> GetCreatureInstance([FromRoute(Name = "id")] int creatureId,
+			[FromServices] ICreatureEntryRepository creatureEntryRepository,
+			[FromServices] ITypeConverterProvider<CreatureEntryModel, CreatureInstanceModel> tableToNetworkModelConverter)
+		{
+			//If unknown templateId, then just indicate such.
+			if(!await creatureEntryRepository.ContainsAsync(creatureId))
+				return BuildFailedResponseModel(CreatureTemplateQueryResponseCode.NoneFound);
+
+			//Load the model, convert and send back.
+			CreatureEntryModel entryModel = await creatureEntryRepository.RetrieveAsync(creatureId);
+			CreatureInstanceModel instanceModel = tableToNetworkModelConverter.Convert(entryModel);
+
+			return BuildSuccessfulResponseModel(instanceModel);
+		}
+
+		[ProducesJson]
 		[HttpGet("template/{id}")]
 		public async Task<IActionResult> GetCreatureTemplate([FromRoute(Name = "id")] int creatureTemplateId, 
 			[FromServices] ICreatureTemplateRepository creatureTemplateRepository,
