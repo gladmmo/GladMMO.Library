@@ -9,7 +9,8 @@ namespace GladMMO
 	{
 		public override EntitySpawnType EntityType => EntitySpawnType.Creature;
 
-		[Tooltip("This should be the ID of the creature template that holds information about what creature is suppose to spawn.")]
+		[HideInInspector]
+		//[Tooltip("This should be the ID of the creature template that holds information about what creature is suppose to spawn.")]
 		[SerializeField]
 		private int _CreatureTemplateId = -1; //default to -1 so it's not known.
 
@@ -20,7 +21,11 @@ namespace GladMMO
 		/// <summary>
 		/// The ID of the creature template to use for spawning.
 		/// </summary>
-		public int CreatureTemplateId => _CreatureTemplateId;
+		public int CreatureTemplateId
+		{
+			get => _CreatureTemplateId;
+			set => _CreatureTemplateId = value; //TODO: Make internal
+		}
 
 		/// <summary>
 		/// The ID of the creature instance. Basically the global instance id of a creature.
