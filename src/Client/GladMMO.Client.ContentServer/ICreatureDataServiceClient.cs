@@ -12,6 +12,6 @@ namespace GladMMO
 	public interface ICreatureDataServiceClient
 	{
 		[Get("/api/CreatureData/template/{id}")]
-		Task<CreatureTemplateQueryResponseModel> GetCreatureTemplate([AliasAs("id")] int creatureId);
+		Task<ResponseModel<CreatureTemplateModel, CreatureTemplateQueryResponseCode>> GetCreatureTemplate([AliasAs("id")] int creatureId);
 	}
 }
