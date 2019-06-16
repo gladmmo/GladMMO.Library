@@ -16,5 +16,8 @@ namespace GladMMO
 
 		[Get("/api/CreatureData/instance/{id}")]
 		Task<ResponseModel<CreatureInstanceModel, SceneContentQueryResponseCode>> GetCreatureInstance([AliasAs("id")] int creatureId);
+
+		[Post("/api/CreatureData/instance?world={worldId}")]
+		Task<ResponseModel<CreatureInstanceModel, SceneContentQueryResponseCode>> CreateCreatureInstance(long worldId);
 	}
 }

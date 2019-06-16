@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GladMMO.Database;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -17,6 +18,24 @@ namespace GladMMO
 			: base(claimsReader, logger)
 		{
 
+		}
+
+		//TODO: Eventually we need to require authorization, because they need to own the world.
+		//[AuthorizeJwt]
+		[ProducesJson]
+		[HttpPost("instance?world={worldId}")]
+		public async Task<IActionResult> CreateCreatureInstance([FromQuery(Name = "worldId")] long worldId,
+			[FromServices] ICreatureEntryRepository creatureEntryRepository)
+		{
+			CreatureEntryModel creatureEntryModel = new CreatureEntryModel(1, new Vector3<float>(0, 0, 0), 0, worldId);
+			bool result = await creatureEntryRepository.TryCreateAsync(creatureEntryModel);
+
+			//No known reason that this should fail.
+			if (!result)
+				return BuildFailedResponseModel(SceneContentQueryResponseCode.GeneralServerError);
+
+			//Otherwise, it has been created so let's get it
+			return await GetCreatureInstance(creatureEntryModel.CreatureEntryId, creatureEntryRepository, new CreatureInstanceTableToNetworkTypeConverter());
 		}
 
 		[ProducesJson]
@@ -55,7 +74,7 @@ namespace GladMMO
 
 		//TODO: We should make it so it requires ZoneServer authorization to query this
 		//[AuthorizeJwt(GuardianApplicationRole.ZoneServer)]
-		[ProducesJson]
+		/*[ProducesJson]
 		[ResponseCache(Duration = int.MaxValue)]
 		[HttpGet("Map/{id}")]
 		public async Task<IActionResult> GetNpcsOnMap([FromRoute(Name = "id")] int mapId, [FromServices] ICreatureEntryRepository entryRepository)
@@ -70,19 +89,6 @@ namespace GladMMO
 				return Ok(new CreatureEntryCollectionResponse(CreatureEntryCollectionResponseCode.NoneFound));
 
 			return base.Ok(new CreatureEntryCollectionResponse(entryModels.Select(npc => BuildDatabaseNPCEntryToTransportNPC(npc)).ToArray()));
-		}
-
-		//TODO: Create a converter type
-		private static CreatureInstanceModel BuildDatabaseNPCEntryToTransportNPC(CreatureEntryModel creature)
-		{
-			NetworkEntityGuidBuilder guidBuilder = new NetworkEntityGuidBuilder();
-
-			NetworkEntityGuid guid = guidBuilder.WithId(creature.CreatureEntryId)
-				.WithType(EntityType.Npc)
-				.Build();
-
-			//TODO: Create a Vector3 converter
-			return new CreatureInstanceModel(guid, creature.CreatureTemplateId, new Vector3(creature.SpawnPosition.X, creature.SpawnPosition.Y, creature.SpawnPosition.Z));
-		}
+		}*/
 	}
 }
