@@ -5,10 +5,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GladMMO
 {
-	//TODO: Non-server specific data should go in a seperate database. Not the world/gameserver database.
+	//This is from way way back, but because migrations reference it we can never ever remove it.
+	[Obsolete("This is here only for legacy reasons. Never add anything to it.")]
 	public sealed class NpcDatabaseContext : DbContext
 	{
-
 		public NpcDatabaseContext(DbContextOptions<NpcDatabaseContext> options)
 			: base(options)
 		{
