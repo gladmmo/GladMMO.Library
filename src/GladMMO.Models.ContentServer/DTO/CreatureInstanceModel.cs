@@ -33,14 +33,22 @@ namespace GladMMO
 		[JsonConverter(typeof(Vector3Converter))] //TODO: Make custom attribute
 		public Vector3 InitialPosition { get; private set; }
 
+		/// <summary>
+		/// Creature's initial rotation around the Y-Axis.
+		/// </summary>
+		[JsonRequired]
+		[JsonProperty]
+		public float YAxisRotation { get; private set; }
+
 		/// <inheritdoc />
-		public CreatureInstanceModel([NotNull] NetworkEntityGuid guid, int templateId, Vector3 initialPosition)
+		public CreatureInstanceModel([NotNull] NetworkEntityGuid guid, int templateId, Vector3 initialPosition, float yRotation)
 		{
 			if(templateId <= 0) throw new ArgumentOutOfRangeException(nameof(templateId));
 
 			Guid = guid ?? throw new ArgumentNullException(nameof(guid));
 			TemplateId = templateId;
 			InitialPosition = initialPosition;
+			YAxisRotation = yRotation;
 		}
 
 		/// <summary>
