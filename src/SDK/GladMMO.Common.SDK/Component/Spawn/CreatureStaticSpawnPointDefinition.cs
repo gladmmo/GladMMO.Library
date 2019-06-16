@@ -25,6 +25,10 @@ namespace GladMMO
 		/// <summary>
 		/// The ID of the creature instance. Basically the global instance id of a creature.
 		/// </summary>
-		public int CreatureInstanceId => _CreatureInstanceId;
+		public int CreatureInstanceId
+		{
+			get => _CreatureInstanceId;
+			set => _CreatureInstanceId = value; //TODO: Make internal
+		}
 	}
 }
