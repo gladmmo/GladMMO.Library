@@ -9,11 +9,11 @@ using UnityEngine;
 
 namespace GladMMO
 {
-	[Route("api/npcdata")]
-	public class NpcDataController : AuthorizationReadyController
+	[Route("api/[controller]")]
+	public class CreatureDataController : AuthorizationReadyController
 	{
 		/// <inheritdoc />
-		public NpcDataController(IClaimsPrincipalReader claimsReader, ILogger<AuthorizationReadyController> logger) 
+		public CreatureDataController(IClaimsPrincipalReader claimsReader, ILogger<AuthorizationReadyController> logger) 
 			: base(claimsReader, logger)
 		{
 
@@ -24,11 +24,11 @@ namespace GladMMO
 		[ProducesJson]
 		[ResponseCache(Duration = int.MaxValue)]
 		[HttpGet("Map/{id}")]
-		public async Task<IActionResult> GetNpcsOnMap([FromRoute(Name = "id")] int mapId, [FromServices] INpcEntryRepository entryRepository)
+		public async Task<IActionResult> GetNpcsOnMap([FromRoute(Name = "id")] int mapId, [FromServices] ICreatureEntryRepository entryRepository)
 		{
 			if(entryRepository == null) throw new ArgumentNullException(nameof(entryRepository));
 
-			IReadOnlyCollection<NPCEntryModel> entryModels = await entryRepository.RetrieveAllWithMapIdAsync(mapId)
+			IReadOnlyCollection<CreatureEntryModel> entryModels = await entryRepository.RetrieveAllWithMapIdAsync(mapId)
 				.ConfigureAwait(false);
 
 			//TODO: Should this be an OK?
@@ -39,16 +39,17 @@ namespace GladMMO
 		}
 
 		//TODO: Create a converter type
-		private static ZoneServerNpcEntryModel BuildDatabaseNPCEntryToTransportNPC(NPCEntryModel npc)
+		private static ZoneServerNpcEntryModel BuildDatabaseNPCEntryToTransportNPC(CreatureEntryModel npc)
 		{
-			NetworkEntityGuidBuilder guidBuilder = new NetworkEntityGuidBuilder();
+			throw new NotImplementedException("TODO: Rewrite NPC crap.");
+			/*NetworkEntityGuidBuilder guidBuilder = new NetworkEntityGuidBuilder();
 
 			NetworkEntityGuid guid = guidBuilder.WithId(npc.EntryId)
 				.WithType(EntityType.Npc)
 				.Build();
 
 			//TODO: Create a Vector3 converter
-			return new ZoneServerNpcEntryModel(guid, npc.NpcTemplateId, new Vector3(npc.SpawnPosition.X, npc.SpawnPosition.Y, npc.SpawnPosition.Z), npc.MovementType, npc.MovementData);
+			return new ZoneServerNpcEntryModel(guid, npc.NpcTemplateId, new Vector3(npc.SpawnPosition.X, npc.SpawnPosition.Y, npc.SpawnPosition.Z), npc.MovementType, npc.MovementData);*/
 		}
 
 		//TODO: Conslidate/centralize name query stuff via entity GUID.
@@ -56,7 +57,7 @@ namespace GladMMO
 		[ProducesJson]
 		[ResponseCache(Duration = int.MaxValue)] //NPC names can be cached forever.
 		[HttpGet("name/{id}")]
-		public async Task<IActionResult> NameQuery([FromRoute(Name = "id")] int npcId, [FromServices] INpcTemplateRepository templateRepository)
+		public async Task<IActionResult> NameQuery([FromRoute(Name = "id")] int npcId, [FromServices] ICreatureTemplateRepository templateRepository)
 		{
 			if(templateRepository == null) throw new ArgumentNullException(nameof(templateRepository));
 

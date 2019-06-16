@@ -7,9 +7,9 @@ namespace GladMMO
 {
 	/// <summary>
 	/// Contract for types that implement data access as a repository to
-	/// <see cref="NPCTemplateModel"/> data.
+	/// <see cref="CreatureTemplateEntryModel"/> data.
 	/// </summary>
-	public interface INpcTemplateRepository : IGenericRepositoryCrudable<int, NPCTemplateModel>, INameQueryableRepository<int>
+	public interface ICreatureTemplateRepository : IGenericRepositoryCrudable<int, CreatureTemplateEntryModel>, INameQueryableRepository<int>
 	{
 
 	}
