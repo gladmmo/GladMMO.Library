@@ -71,7 +71,7 @@ namespace GladMMO
 			//DatabaseBackedCreatureTemplateEntryRepository : ICreatureTemplateRepository
 			services.AddTransient<ICreatureTemplateRepository, DatabaseBackedCreatureTemplateEntryRepository>();
 			//DatabaseBackedCreatureEntryRepository : ICreatureEntryRepository
-			services.AddTransient<ICreatureEntryRepository, DatabaseBackedCreatureEntryRepository>()
+			services.AddTransient<ICreatureEntryRepository, DatabaseBackedCreatureEntryRepository>();
 
 			//AZURE_STORAGE_CONNECTIONSTRING
 			string ConnectionString = Environment.GetEnvironmentVariable("AZURE_STORAGE_CONNECTIONSTRING");
