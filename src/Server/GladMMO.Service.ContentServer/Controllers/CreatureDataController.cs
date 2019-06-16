@@ -27,7 +27,7 @@ namespace GladMMO
 		{
 			//If unknown templateId, then just indicate such.
 			if(!await creatureEntryRepository.ContainsAsync(creatureId))
-				return BuildFailedResponseModel(CreatureTemplateQueryResponseCode.NoneFound);
+				return BuildFailedResponseModel(SceneContentQueryResponseCode.TemplateUnknown);
 
 			//Load the model, convert and send back.
 			CreatureEntryModel entryModel = await creatureEntryRepository.RetrieveAsync(creatureId);
@@ -44,7 +44,7 @@ namespace GladMMO
 		{
 			//If unknown templateId, then just indicate such.
 			if (!await creatureTemplateRepository.ContainsAsync(creatureTemplateId))
-				return BuildFailedResponseModel(CreatureTemplateQueryResponseCode.NoneFound);
+				return BuildFailedResponseModel(SceneContentQueryResponseCode.TemplateUnknown);
 
 			//Load the model, convert and send back.
 			CreatureTemplateEntryModel entryModel = await creatureTemplateRepository.RetrieveAsync(creatureTemplateId);
