@@ -13,5 +13,8 @@ namespace GladMMO
 	{
 		[Get("/api/CreatureData/template/{id}")]
 		Task<ResponseModel<CreatureTemplateModel, SceneContentQueryResponseCode>> GetCreatureTemplate([AliasAs("id")] int creatureTemplateId);
+
+		[Get("/api/CreatureData/instance/{id}")]
+		Task<ResponseModel<CreatureInstanceModel, SceneContentQueryResponseCode>> GetCreatureInstance([AliasAs("id")] int creatureId);
 	}
 }
