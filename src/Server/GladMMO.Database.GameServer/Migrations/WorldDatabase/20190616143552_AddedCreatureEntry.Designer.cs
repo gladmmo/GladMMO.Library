@@ -3,14 +3,16 @@ using System;
 using GladMMO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GladMMO.Database.GameServer.Migrations.WorldDatabase
 {
     [DbContext(typeof(ContentDatabaseContext))]
-    partial class WorldDatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20190616143552_AddedCreatureEntry")]
+    partial class AddedCreatureEntry
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -49,13 +51,11 @@ namespace GladMMO.Database.GameServer.Migrations.WorldDatabase
 
                     b.Property<float>("InitialOrientation");
 
-                    b.Property<long>("WorldId");
+                    b.Property<int>("MapId");
 
                     b.HasKey("CreatureEntryId");
 
                     b.HasIndex("CreatureTemplateId");
-
-                    b.HasIndex("WorldId");
 
                     b.ToTable("creature");
                 });
@@ -127,11 +127,6 @@ namespace GladMMO.Database.GameServer.Migrations.WorldDatabase
                     b.HasOne("GladMMO.CreatureTemplateEntryModel", "CreatureTemplate")
                         .WithMany()
                         .HasForeignKey("CreatureTemplateId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("GladMMO.WorldEntryModel", "WorldEntry")
-                        .WithMany()
-                        .HasForeignKey("WorldId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.OwnsOne("GladMMO.Database.Vector3<float>", "SpawnPosition", b1 =>

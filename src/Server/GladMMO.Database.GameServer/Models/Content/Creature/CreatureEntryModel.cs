@@ -59,17 +59,24 @@ namespace GladMMO
 		/// </summary>
 		[Column(Order = 5)]
 		[Required]
-		public int MapId { get; private set; }
+		[ForeignKey(nameof(WorldEntry))]
+		public long WorldId { get; private set; }
+
+		//Navigation property
+		/// <summary>
+		/// The NPC template.
+		/// </summary>
+		public virtual WorldEntryModel WorldEntry { get; private set; }
 
 		/// <inheritdoc />
-		public CreatureEntryModel(int npcTemplateId, Vector3<float> spawnPosition, float initialOrientation, int mapId)
+		public CreatureEntryModel(int npcTemplateId, Vector3<float> spawnPosition, float initialOrientation, long worldId)
 		{
-			if(mapId <= 0) throw new ArgumentOutOfRangeException(nameof(mapId));
+			if(worldId <= 0) throw new ArgumentOutOfRangeException(nameof(worldId));
 			if(npcTemplateId <= 0) throw new ArgumentOutOfRangeException(nameof(npcTemplateId));
 
 			CreatureTemplateId = npcTemplateId;
 			SpawnPosition = spawnPosition ?? throw new ArgumentNullException(nameof(spawnPosition));
-			MapId = mapId;
+			WorldId = worldId;
 			InitialOrientation = initialOrientation;
 		}
 
