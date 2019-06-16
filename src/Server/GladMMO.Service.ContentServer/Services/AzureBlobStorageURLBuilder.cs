@@ -10,7 +10,7 @@ namespace GladMMO
 	{
 		private CloudBlobClient BlobClient { get; }
 
-		public AzureBlobStorageURLBuilder([JetBrains.Annotations.NotNull] CloudBlobClient blobClient)
+		public AzureBlobStorageURLBuilder([NotNull] CloudBlobClient blobClient)
 		{
 			BlobClient = blobClient ?? throw new ArgumentNullException(nameof(blobClient));
 		}

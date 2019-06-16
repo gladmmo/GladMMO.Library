@@ -3,7 +3,7 @@
 	/// <summary>
 	/// Enumeration of all response codes associated with <see cref="ZoneServerNPCEntryCollectionResponse"/>.
 	/// </summary>
-	public enum NpcEntryCollectionResponseCode
+	public enum CreatureEntryCollectionResponseCode
 	{
 		Success = 1,
 

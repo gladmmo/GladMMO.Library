@@ -12,4 +12,10 @@
     <ProjectReference Include="..\GladMMO.Models.Common\GladMMO.Models.Common.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="UnityEngine">
+      <HintPath>..\..\lib\Unity\UnityEngine.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

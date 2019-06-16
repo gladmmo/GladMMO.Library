@@ -16,8 +16,8 @@ namespace GladMMO
 
 		private ILogger<AmazonS3ResourceExistenceVerifier> Logger { get; }
 
-		public AmazonS3ResourceExistenceVerifier([JetBrains.Annotations.NotNull] IAmazonS3 cloudClient,
-			[JetBrains.Annotations.NotNull] ILogger<AmazonS3ResourceExistenceVerifier> logger)
+		public AmazonS3ResourceExistenceVerifier([NotNull] IAmazonS3 cloudClient,
+			[NotNull] ILogger<AmazonS3ResourceExistenceVerifier> logger)
 		{
 			CloudClient = cloudClient ?? throw new ArgumentNullException(nameof(cloudClient));
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));

@@ -22,12 +22,6 @@ namespace GladMMO
 		}
 
 		/// <inheritdoc />
-		public async Task<ZoneServerNPCEntryCollectionResponse> GetNPCEntriesByMapId(int mapId)
-		{
-			return await (await GetService().ConfigureAwait(false)).GetNPCEntriesByMapId(mapId).ConfigureAwait(false);
-		}
-
-		/// <inheritdoc />
 		public async Task<ZoneServerCharacterLocationResponse> GetCharacterLocation(int characterId)
 		{
 			return await (await GetService().ConfigureAwait(false)).GetCharacterLocation(characterId).ConfigureAwait(false);

@@ -33,23 +33,22 @@ namespace GladMMO
 
 			//TODO: Should this be an OK?
 			if(entryModels.Count == 0)
-				return Ok(new ZoneServerNPCEntryCollectionResponse(NpcEntryCollectionResponseCode.NoneFound));
+				return Ok(new CreatureEntryCollectionResponse(CreatureEntryCollectionResponseCode.NoneFound));
 
-			return base.Ok(new ZoneServerNPCEntryCollectionResponse(entryModels.Select(npc => BuildDatabaseNPCEntryToTransportNPC(npc)).ToArray()));
+			return base.Ok(new CreatureEntryCollectionResponse(entryModels.Select(npc => BuildDatabaseNPCEntryToTransportNPC(npc)).ToArray()));
 		}
 
 		//TODO: Create a converter type
-		private static ZoneServerNpcEntryModel BuildDatabaseNPCEntryToTransportNPC(CreatureEntryModel npc)
+		private static CreatureInstanceModel BuildDatabaseNPCEntryToTransportNPC(CreatureEntryModel creature)
 		{
-			throw new NotImplementedException("TODO: Rewrite NPC crap.");
-			/*NetworkEntityGuidBuilder guidBuilder = new NetworkEntityGuidBuilder();
+			NetworkEntityGuidBuilder guidBuilder = new NetworkEntityGuidBuilder();
 
-			NetworkEntityGuid guid = guidBuilder.WithId(npc.EntryId)
+			NetworkEntityGuid guid = guidBuilder.WithId(creature.CreatureEntryId)
 				.WithType(EntityType.Npc)
 				.Build();
 
 			//TODO: Create a Vector3 converter
-			return new ZoneServerNpcEntryModel(guid, npc.NpcTemplateId, new Vector3(npc.SpawnPosition.X, npc.SpawnPosition.Y, npc.SpawnPosition.Z), npc.MovementType, npc.MovementData);*/
+			return new CreatureInstanceModel(guid, creature.CreatureTemplateId, new Vector3(creature.SpawnPosition.X, creature.SpawnPosition.Y, creature.SpawnPosition.Z));
 		}
 
 		//TODO: Conslidate/centralize name query stuff via entity GUID.
