@@ -16,6 +16,8 @@ namespace GladMMO
 			SpawnStrategies = spawnStrategies ?? throw new ArgumentNullException(nameof(spawnStrategies));
 		}
 
+		public EntitySpawnType EntityType => EntitySpawnType.Player;
+
 		public SpawnPointData GetSpawnPoint()
 		{
 			//Even though the above is a concurrent queue we need to lock
