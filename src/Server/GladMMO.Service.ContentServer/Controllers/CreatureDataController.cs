@@ -19,6 +19,23 @@ namespace GladMMO
 
 		}
 
+		[ProducesJson]
+		[HttpGet("template/{id}")]
+		public async Task<IActionResult> GetCreatureTemplate([FromRoute(Name = "id")] int creatureTemplateId, 
+			[FromServices] ICreatureTemplateRepository creatureTemplateRepository,
+			[FromServices] ITypeConverterProvider<CreatureTemplateEntryModel, CreatureTemplateModel> tableToNetworkModelConverter)
+		{
+			//If unknown templateId, then just indicate such.
+			if (!await creatureTemplateRepository.ContainsAsync(creatureTemplateId))
+				return Json(new CreatureTemplateQueryResponseModel(CreatureEntryCollectionResponseCode.NoneFound));
+
+			//Load the model, convert and send back.
+			CreatureTemplateEntryModel entryModel = await creatureTemplateRepository.RetrieveAsync(creatureTemplateId);
+			CreatureTemplateModel templateModel = tableToNetworkModelConverter.Convert(entryModel);
+
+			return Json(new CreatureTemplateQueryResponseModel(templateModel));
+		}
+
 		//TODO: We should make it so it requires ZoneServer authorization to query this
 		//[AuthorizeJwt(GuardianApplicationRole.ZoneServer)]
 		[ProducesJson]
