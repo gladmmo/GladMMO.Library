@@ -35,6 +35,8 @@ namespace GladMMO
 					//This prevents ASP Core from trying to validate Vector3's children, which contain Vector3 (because Unity3D thanks)
 					//so it will cause stack overflows. This will avoid it.
 					options.ModelMetadataDetailsProviders.Add(new SuppressChildValidationMetadataProvider(typeof(Vector3)));
+					options.ModelMetadataDetailsProviders.Add(new SuppressChildValidationMetadataProvider(typeof(NetworkEntityGuid)));
+					options.ModelMetadataDetailsProviders.Add(new SuppressChildValidationMetadataProvider(typeof(CreatureInstanceModel)));
 				})
 				.RegisterHealthCheckController();
 
