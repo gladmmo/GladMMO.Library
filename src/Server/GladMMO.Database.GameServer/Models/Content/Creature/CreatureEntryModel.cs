@@ -30,7 +30,7 @@ namespace GladMMO
 		[Column(Order = 2)]
 		[Required]
 		[ForeignKey(nameof(CreatureTemplate))]
-		public int CreatureTemplateId { get; private set; }
+		public int CreatureTemplateId { get; set; }
 
 		//Navigation property
 		/// <summary>
@@ -43,7 +43,7 @@ namespace GladMMO
 		/// </summary>
 		[Column(Order = 3)]
 		[Required]
-		public Vector3<float> SpawnPosition { get; private set; }
+		public Vector3<float> SpawnPosition { get; set; }
 
 		/// <summary>
 		/// The initial Y-axis orientation/rotation of the Creature when spawned.
@@ -51,7 +51,7 @@ namespace GladMMO
 		/// </summary>
 		[Column(Order = 4)]
 		[Required]
-		public float InitialOrientation { get; private set; }
+		public float InitialOrientation { get; set; }
 
 		/// <summary>
 		/// The map/zone that this creature exists in.
