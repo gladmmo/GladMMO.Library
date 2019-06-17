@@ -20,6 +20,26 @@ namespace GladMMO
 
 		}
 
+		//TODO: We need to do authorization so players can't just change anyone's map.
+		[HttpPut("instance/{id}")]
+		public async Task<IActionResult> UpdateCreatureInstance(
+			[FromBody] CreatureInstanceModel model,
+			[FromRoute(Name = "id")] int creatureId,
+			[FromServices] ICreatureEntryRepository creatureEntryRepository)
+		{
+			if (model.Guid.EntityId != creatureId)
+				return BadRequest();
+
+			CreatureEntryModel entryModel = await creatureEntryRepository.RetrieveAsync(creatureId);
+			entryModel.CreatureTemplateId = model.TemplateId;
+			entryModel.InitialOrientation = model.YAxisRotation;
+			entryModel.SpawnPosition = new Vector3<float>(model.InitialPosition.x, model.InitialPosition.y, model.InitialPosition.z);
+
+			await creatureEntryRepository.UpdateAsync(creatureId, entryModel);
+
+			return Ok();
+		}
+
 		//TODO: Eventually we need to require authorization, because they need to own the world.
 		//[AuthorizeJwt]
 		[ProducesJson]
