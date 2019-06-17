@@ -85,7 +85,9 @@ namespace GladMMO
 
 			//TODO: Add auto-registeration for type converters
 			//CreatureTemplateTableToNetworkTypeConverter : ITypeConverterProvider<CreatureTemplateEntryModel, CreatureTemplateModel>
+			//CreatureInstanceTableToNetworkTypeConverter : ITypeConverterProvider<CreatureEntryModel, CreatureInstanceModel>
 			services.AddSingleton<ITypeConverterProvider<CreatureTemplateEntryModel, CreatureTemplateModel>, CreatureTemplateTableToNetworkTypeConverter>();
+			services.AddSingleton<ITypeConverterProvider<CreatureEntryModel, CreatureInstanceModel>, CreatureInstanceTableToNetworkTypeConverter>();
 		}
 
 		private static void RegisterDatabaseServices(IServiceCollection services)
