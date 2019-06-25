@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Text;
+using Nito.AsyncEx;
 
 namespace GladMMO
 {
@@ -10,10 +11,13 @@ namespace GladMMO
 	{
 		private HashSet<NetworkEntityGuid> InternalKnownSet { get; }
 
+		public AsyncReaderWriterLock LockObject { get; }
+
 		/// <inheritdoc />
 		public DefaultThreadUnSafeKnownEntitySet()
 		{
 			InternalKnownSet = new HashSet<NetworkEntityGuid>(NetworkGuidEqualityComparer<NetworkEntityGuid>.Instance);
+			LockObject = new AsyncReaderWriterLock();
 		}
 
 		/// <inheritdoc />

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Nito.AsyncEx;
 
 namespace GladMMO
 {
@@ -12,6 +13,11 @@ namespace GladMMO
 		/// <param name="guid">The guid to check</param>
 		/// <returns>True if known.</returns>
 		bool isEntityKnown(NetworkEntityGuid guid);
+
+		/// <summary>
+		/// The synchronization object for the known entity set.
+		/// </summary>
+		AsyncReaderWriterLock LockObject { get; }
 	}
 
 	public interface IKnownEntitySet : IReadonlyKnownEntitySet
