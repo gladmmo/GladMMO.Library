@@ -9,17 +9,24 @@ namespace GladMMO
 	{
 		protected Lazy<CharacterController> Controller { get; }
 
+		public bool ShouldSetRotation { get; }
+
 		//See: AvatarLerper for an example of this.
 		private float LerpPower { get; } = 0.4f;
 
-		public LocalClientInterpolatedCorrectionMovementGenerator(PositionChangeMovementData movementData, [NotNull] Lazy<CharacterController> controller) 
+		public LocalClientInterpolatedCorrectionMovementGenerator(PositionChangeMovementData movementData, [NotNull] Lazy<CharacterController> controller, bool shouldSetRotation = true) 
 			: base(movementData)
 		{
 			Controller = controller ?? throw new ArgumentNullException(nameof(controller));
+			ShouldSetRotation = shouldSetRotation;
 		}
 
 		protected override Vector3 Start(GameObject entity, long currentTime)
 		{
+			if (ShouldSetRotation)
+				//We must still set rotation here
+				entity.transform.eulerAngles = new Vector3(entity.transform.eulerAngles.x, MovementData.Rotation, entity.transform.eulerAngles.z);
+
 			//Normally, we should set at least the rotation here but this is ONLY
 			//for use with the local player, so we basically should do nothing.
 			return entity.transform.position;

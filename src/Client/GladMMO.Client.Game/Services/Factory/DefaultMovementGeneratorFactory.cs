@@ -26,7 +26,7 @@ namespace GladMMO
 				//Warning, this following code is ONLY for client. To smooth out serverside corrections
 				if (pcmd.Direction == Vector2.zero)
 				{
-					return new LocalClientInterpolatedCorrectionMovementGenerator(pcmd, BuildLazyControllerFactory(context));
+					return new LocalClientInterpolatedCorrectionMovementGenerator(pcmd, BuildLazyControllerFactory(context), LocalPlayerDetails.LocalPlayerGuid != context.EntityGuid);
 				}
 				else
 				{
