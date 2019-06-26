@@ -13,6 +13,7 @@ namespace GladMMO
 	/// <typeparam name="TEventInterfaceType">The event interface this tickable should listen for.</typeparam>
 	/// <typeparam name="TEventArgs">The entity container event args.</typeparam>
 	[AdditionalRegisterationAs(typeof(IEntityCreationStartingEventSubscribable))]
+	[AdditionalRegisterationAs(typeof(IEntityCreationFinishedEventSubscribable))]
 	public abstract class SharedEntitySpawnTickable<TEventInterfaceType, TEventArgs> : EventQueueBasedTickable<TEventInterfaceType, TEventArgs>, IEntityCreationStartingEventSubscribable, IEntityCreationFinishedEventSubscribable
 		where TEventInterfaceType : class 
 		where TEventArgs : EventArgs, IEntityGuidContainer
