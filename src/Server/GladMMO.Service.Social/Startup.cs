@@ -138,7 +138,7 @@ namespace GladMMO
 
 			//This will allow everyone to register the removable collection collection.
 			builder.RegisterInstance(removableComponentsList)
-				.AsImplementedInterfaces()
+				.As<IReadOnlyCollection<IEntityCollectionRemovable>>()
 				.AsSelf()
 				.SingleInstance();
 		}
