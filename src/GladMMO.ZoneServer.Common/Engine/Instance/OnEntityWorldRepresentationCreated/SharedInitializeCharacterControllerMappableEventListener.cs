@@ -6,7 +6,6 @@ using UnityEngine;
 
 namespace GladMMO
 {
-	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
 	public class SharedInitializeCharacterControllerMappableEventListener : BaseSingleEventListenerInitializable<IEntityWorldRepresentationCreatedEventSubscribable, EntityWorldRepresentationCreatedEventArgs>
 	{
 		private IEntityGuidMappable<CharacterController> CharacterControllerMappable { get; }
