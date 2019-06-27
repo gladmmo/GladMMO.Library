@@ -61,7 +61,7 @@ namespace GladMMO
 				.SingleInstance();
 
 			//DefaultMovementGeneratorFactory : IFactoryCreatable<IMovementGenerator<GameObject>, EntityAssociatedData<IMovementData>>
-			builder.RegisterType<DefaultMovementGeneratorFactory>()
+			builder.RegisterType<ClientMovementGeneratorFactory>()
 				.As<IFactoryCreatable<IMovementGenerator<GameObject>, EntityAssociatedData<IMovementData>>>()
 				.SingleInstance();
 

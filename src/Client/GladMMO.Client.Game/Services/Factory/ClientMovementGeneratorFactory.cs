@@ -6,13 +6,13 @@ using UnityEngine;
 namespace GladMMO
 {
 	//TODO: This is a WIP. It does not support movement generator creation will. It does not really support anything but players.
-	public sealed class DefaultMovementGeneratorFactory : IFactoryCreatable<IMovementGenerator<GameObject>, EntityAssociatedData<IMovementData>>
+	public sealed class ClientMovementGeneratorFactory : IFactoryCreatable<IMovementGenerator<GameObject>, EntityAssociatedData<IMovementData>>
 	{
 		private IReadonlyEntityGuidMappable<CharacterController> ControllerMappable { get; }
 
 		private ILocalPlayerDetails LocalPlayerDetails { get; }
 
-		public DefaultMovementGeneratorFactory([NotNull] IReadonlyEntityGuidMappable<CharacterController> controllerMappable, [NotNull] ILocalPlayerDetails localPlayerDetails)
+		public ClientMovementGeneratorFactory([NotNull] IReadonlyEntityGuidMappable<CharacterController> controllerMappable, [NotNull] ILocalPlayerDetails localPlayerDetails)
 		{
 			ControllerMappable = controllerMappable ?? throw new ArgumentNullException(nameof(controllerMappable));
 			LocalPlayerDetails = localPlayerDetails ?? throw new ArgumentNullException(nameof(localPlayerDetails));
