@@ -52,7 +52,6 @@
     <Folder Include="Debug\" />
     <Folder Include="Engine\Tickable\Base\" />
     <Folder Include="Handlers\Subhandlers\" />
-    <Folder Include="Services\EventPublishers\" />
   </ItemGroup>
 
 </Project>
