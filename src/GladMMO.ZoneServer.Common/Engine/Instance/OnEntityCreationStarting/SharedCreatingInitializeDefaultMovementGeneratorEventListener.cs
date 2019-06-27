@@ -6,8 +6,11 @@ using UnityEngine;
 
 namespace GladMMO
 {
-	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
-	public sealed class OnEntityCreatingInitializeDefaultMovementGeneratorEventListener : BaseSingleEventListenerInitializable<IEntityCreationStartingEventSubscribable, EntityCreationStartingEventArgs>
+	/// <summary>
+	/// Base event listener that handles movement generator initialization
+	/// for creating entities.
+	/// </summary>
+	public class SharedCreatingInitializeDefaultMovementGeneratorEventListener : BaseSingleEventListenerInitializable<IEntityCreationStartingEventSubscribable, EntityCreationStartingEventArgs>
 	{
 		private IFactoryCreatable<IMovementGenerator<GameObject>, EntityAssociatedData<IMovementData>> MovementGeneratorFactory { get; }
 
@@ -15,7 +18,7 @@ namespace GladMMO
 
 		private IReadonlyEntityGuidMappable<IMovementData> MovementDataMappable { get; }
 
-		public OnEntityCreatingInitializeDefaultMovementGeneratorEventListener(IEntityCreationStartingEventSubscribable subscriptionService,
+		public SharedCreatingInitializeDefaultMovementGeneratorEventListener(IEntityCreationStartingEventSubscribable subscriptionService,
 			[NotNull] IEntityGuidMappable<IMovementGenerator<GameObject>> movementGeneratorMappable,
 			[NotNull] IFactoryCreatable<IMovementGenerator<GameObject>, EntityAssociatedData<IMovementData>> movementGeneratorFactory,
 			[NotNull] IReadonlyEntityGuidMappable<IMovementData> movementDataMappable) 
