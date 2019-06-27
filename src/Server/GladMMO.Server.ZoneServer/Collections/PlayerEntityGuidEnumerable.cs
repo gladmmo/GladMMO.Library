@@ -13,29 +13,24 @@ namespace GladMMO
 
 	public sealed class PlayerEntityGuidEnumerable : IPlayerEntityGuidEnumerable
 	{
-		private ISessionCollection ConnectedSessions { get; }
+		private IReadonlyKnownEntitySet EntitySet { get; }
 
-		private IReadonlyConnectionEntityCollection ConnectionEntities { get; }
-
-		/// <inheritdoc />
-		public PlayerEntityGuidEnumerable([NotNull] ISessionCollection connectedSessions, [NotNull] IReadonlyConnectionEntityCollection connectionEntities)
+		public PlayerEntityGuidEnumerable([NotNull] IReadonlyKnownEntitySet entitySet)
 		{
-			ConnectedSessions = connectedSessions ?? throw new ArgumentNullException(nameof(connectedSessions));
-			ConnectionEntities = connectionEntities ?? throw new ArgumentNullException(nameof(connectionEntities));
+			EntitySet = entitySet ?? throw new ArgumentNullException(nameof(entitySet));
 		}
 
 		/// <inheritdoc />
 		public IEnumerator<NetworkEntityGuid> GetEnumerator()
 		{
-			//Provides an enumerator that will produce all NetworkEntityGuids associated with players.
-			foreach(var session in ConnectedSessions)
+			foreach(var entity in EntitySet)
 			{
 				//If the session with the ID does not have an entity associated with it then a player
 				//for the session is not in the world
-				if(!ConnectionEntities.ContainsKey(session.Details.ConnectionId))
+				if (entity.EntityType != EntityType.Player)
 					continue;
 
-				yield return ConnectionEntities[session.Details.ConnectionId];
+				yield return entity;
 			}
 		}
 
