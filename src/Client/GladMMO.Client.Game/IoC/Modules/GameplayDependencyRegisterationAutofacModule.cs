@@ -45,11 +45,6 @@ namespace GladMMO
 				.As<IGameObjectToEntityMappable>()
 				.SingleInstance();
 
-			builder.RegisterType<DefaultEntityFactory<DefaultEntityCreationContext>>()
-				.As<IFactoryCreatable<GameObject, DefaultEntityCreationContext>>()
-				.AsSelf()
-				.SingleInstance();
-
 			builder.RegisterType<DefaultThreadUnSafeKnownEntitySet>()
 				.AsSelf()
 				.AsImplementedInterfaces()
