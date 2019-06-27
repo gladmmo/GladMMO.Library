@@ -11,6 +11,7 @@ namespace GladMMO
 	{
 		private HashSet<NetworkEntityGuid> InternalKnownSet { get; }
 
+		/// <inheritdoc />
 		public AsyncReaderWriterLock LockObject { get; }
 
 		/// <inheritdoc />
