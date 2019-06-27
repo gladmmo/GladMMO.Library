@@ -10,14 +10,13 @@ namespace GladMMO
 	/// Event subscriber that links the <see cref="GameObject"/> and <see cref="NetworkEntityGuid"/> of an Entity
 	/// together in a two-way relationship.
 	/// </summary>
-	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
-	public sealed class OnEntityWorldRepresentationCreatedInitializeEntityWorldMappablesEventListener : BaseSingleEventListenerInitializable<IEntityWorldRepresentationCreatedEventSubscribable, EntityWorldRepresentationCreatedEventArgs>
+	public class SharedInitializeEntityWorldMappablesEventListener : BaseSingleEventListenerInitializable<IEntityWorldRepresentationCreatedEventSubscribable, EntityWorldRepresentationCreatedEventArgs>
 	{
 		private IEntityGuidMappable<GameObject> GuidToGameObjectMappable { get; }
 
 		private IGameObjectToEntityMappable GameObjectToEntityMap { get; }
 
-		public OnEntityWorldRepresentationCreatedInitializeEntityWorldMappablesEventListener(IEntityWorldRepresentationCreatedEventSubscribable subscriptionService,
+		public SharedInitializeEntityWorldMappablesEventListener(IEntityWorldRepresentationCreatedEventSubscribable subscriptionService,
 			[NotNull] IEntityGuidMappable<GameObject> guidToGameObjectMappable,
 			[NotNull] IGameObjectToEntityMappable gameObjectToEntityMap) 
 			: base(subscriptionService)
