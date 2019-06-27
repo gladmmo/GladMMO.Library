@@ -11,7 +11,7 @@ namespace GladMMO
 	//it just sends a player creation event to the actual player
 	//so that the player will actually spawn itself, and know how to correctly.
 	[ServerSceneTypeCreate(ServerSceneType.Default)]
-	public sealed class PlayerCreatedSendPlayerCreationPayloadToPlayerEventListener : BaseSingleEventListenerInitializable<IPlayerWorldSessionCreatedEventSubscribable, PlayerWorldSessionCreationEventArgs>
+	public sealed class PlayerCreatedSendPlayerCreationPayloadToPlayerEventListener : BaseSingleEventListenerInitializable<IEntityCreationFinishedEventSubscribable, EntityCreationFinishedEventArgs>
 	{
 		private INetworkMessageSender<GenericSingleTargetMessageContext<PlayerSelfSpawnEventPayload>> Sender { get; }
 
@@ -21,24 +21,26 @@ namespace GladMMO
 
 		private IReadonlyEntityGuidMappable<IEntityDataFieldContainer> EntityDataMappable { get; }
 
-		/// <inheritdoc />
-		public PlayerCreatedSendPlayerCreationPayloadToPlayerEventListener(
-			IPlayerWorldSessionCreatedEventSubscribable subscriptionService, 
-			[NotNull] INetworkMessageSender<GenericSingleTargetMessageContext<PlayerSelfSpawnEventPayload>> sender, 
-			[NotNull] IReadonlyEntityGuidMappable<IMovementData> movementDataMappable,
-			[NotNull] IFactoryCreatable<FieldValueUpdate, EntityFieldUpdateCreationContext> entityDataUpdateFactory,
-			[NotNull] IReadonlyEntityGuidMappable<IEntityDataFieldContainer> entityDataMappable) 
+		public PlayerCreatedSendPlayerCreationPayloadToPlayerEventListener(IEntityCreationFinishedEventSubscribable subscriptionService, 
+			INetworkMessageSender<GenericSingleTargetMessageContext<PlayerSelfSpawnEventPayload>> sender, 
+			IReadonlyEntityGuidMappable<IMovementData> movementDataMappable, 
+			IFactoryCreatable<FieldValueUpdate, EntityFieldUpdateCreationContext> entityDataUpdateFactory, 
+			IReadonlyEntityGuidMappable<IEntityDataFieldContainer> entityDataMappable) 
 			: base(subscriptionService)
 		{
-			Sender = sender ?? throw new ArgumentNullException(nameof(sender));
-			MovementDataMappable = movementDataMappable ?? throw new ArgumentNullException(nameof(movementDataMappable));
-			EntityDataUpdateFactory = entityDataUpdateFactory ?? throw new ArgumentNullException(nameof(entityDataUpdateFactory));
-			EntityDataMappable = entityDataMappable ?? throw new ArgumentNullException(nameof(entityDataMappable));
+			Sender = sender;
+			MovementDataMappable = movementDataMappable;
+			EntityDataUpdateFactory = entityDataUpdateFactory;
+			EntityDataMappable = entityDataMappable;
 		}
 
 		/// <inheritdoc />
-		protected override void OnEventFired(object source, PlayerWorldSessionCreationEventArgs args)
+		protected override void OnEventFired(object source, EntityCreationFinishedEventArgs args)
 		{
+			//TODO: Hide this in base class.
+			if (args.EntityGuid.EntityType != EntityType.Player)
+				return;
+
 			IMovementData movementData = MovementDataMappable.RetrieveEntity(args.EntityGuid);
 			IEntityDataFieldContainer dataFieldContainer = EntityDataMappable.RetrieveEntity(args.EntityGuid);
 
