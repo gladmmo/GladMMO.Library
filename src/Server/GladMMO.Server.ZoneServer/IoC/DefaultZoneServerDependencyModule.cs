@@ -165,6 +165,11 @@ namespace GladMMO
 			builder.RegisterType<PlayerSpawnStrategyQueue>()
 				.AsSelf()
 				.SingleInstance();
+
+			builder.RegisterType<DefaultThreadUnSafeKnownEntitySet>()
+				.AsSelf()
+				.AsImplementedInterfaces()
+				.SingleInstance();
 		}
 
 		private static void RegisterEntityMappableCollections(ContainerBuilder builder)
