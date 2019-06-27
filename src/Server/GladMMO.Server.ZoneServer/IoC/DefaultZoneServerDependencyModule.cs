@@ -81,11 +81,6 @@ namespace GladMMO
 
 			RegisterPlayerFactoryServices(builder);
 
-			builder.RegisterType<DefaultEntityFactory<DefaultEntityCreationContext>>()
-				.AsImplementedInterfaces()
-				.AsSelf()
-				.SingleInstance();
-
 			builder.RegisterType<GenericMessageSender<PlayerSelfSpawnEventPayload>>()
 				.AsSelf()
 				.AsImplementedInterfaces();
@@ -237,24 +232,6 @@ namespace GladMMO
 
 		private static void RegisterPlayerFactoryServices(ContainerBuilder builder)
 		{
-			builder.RegisterType<DefaultEntityFactory<PlayerEntityCreationContext>>()
-				.AsSelf()
-				.SingleInstance();
-
-			builder.Register(context =>
-			{
-				using(var scope = context.Resolve<ILifetimeScope>().BeginLifetimeScope(subBuilder =>
-				{
-					subBuilder.RegisterType<AdditionalServerRegisterationPlayerEntityFactoryDecorator>()
-						.WithParameter(new TypedParameter(typeof(IFactoryCreatable<GameObject, PlayerEntityCreationContext>), context.Resolve<DefaultEntityFactory<PlayerEntityCreationContext>>()));
-				}))
-				{
-					return scope.Resolve<AdditionalServerRegisterationPlayerEntityFactoryDecorator>();
-				}
-			})
-				.As<IFactoryCreatable<GameObject, PlayerEntityCreationContext>>()
-				.SingleInstance();
-
 			builder.RegisterType<EntityPrefabFactory>()
 				.As<IFactoryCreatable<GameObject, EntityPrefab>>()
 				.SingleInstance();
