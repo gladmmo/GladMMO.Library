@@ -14,7 +14,7 @@
 
   <ItemGroup>
     <PackageReference Include="Autofac" Version="4.8.1" />
-    <PackageReference Include="Glader.Essentials.Unity" Version="0.0.17" />
+    <PackageReference Include="Glader.Essentials.Unity" Version="0.0.18" />
     <PackageReference Include="GladNet3.Client.DotNetTcpClient" Version="3.0.46" />
     <PackageReference Include="GladNet3.Handler.API" Version="3.0.46" />
     <PackageReference Include="GladNet3.Serializer.ProtobufNet" Version="3.0.46" />
@@ -52,6 +52,7 @@
     <Folder Include="Debug\" />
     <Folder Include="Engine\Tickable\Base\" />
     <Folder Include="Handlers\Subhandlers\" />
+    <Folder Include="Services\EventPublishers\" />
   </ItemGroup>
 
 </Project>
