@@ -7,11 +7,11 @@ using UnityEngine;
 namespace GladMMO
 {
 	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
-	public sealed class OnEntityWorldRepresentationCreatedInitializeCharacterControllerMappableEventListener : BaseSingleEventListenerInitializable<IEntityWorldRepresentationCreatedEventSubscribable, EntityWorldRepresentationCreatedEventArgs>
+	public class SharedInitializeCharacterControllerMappableEventListener : BaseSingleEventListenerInitializable<IEntityWorldRepresentationCreatedEventSubscribable, EntityWorldRepresentationCreatedEventArgs>
 	{
 		private IEntityGuidMappable<CharacterController> CharacterControllerMappable { get; }
 
-		public OnEntityWorldRepresentationCreatedInitializeCharacterControllerMappableEventListener(IEntityWorldRepresentationCreatedEventSubscribable subscriptionService,
+		public SharedInitializeCharacterControllerMappableEventListener(IEntityWorldRepresentationCreatedEventSubscribable subscriptionService,
 			[NotNull] IEntityGuidMappable<CharacterController> characterControllerMappable) 
 			: base(subscriptionService)
 		{
