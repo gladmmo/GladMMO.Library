@@ -170,6 +170,11 @@ namespace GladMMO
 				.AsSelf()
 				.AsImplementedInterfaces()
 				.SingleInstance();
+
+			//ServerMovementGeneratorFactory : IFactoryCreatable<IMovementGenerator<GameObject>, EntityAssociatedData<IMovementData>>
+			builder.RegisterType<ServerMovementGeneratorFactory>()
+				.As<IFactoryCreatable<IMovementGenerator<GameObject>, EntityAssociatedData<IMovementData>>>()
+				.AsSelf();
 		}
 
 		private static void RegisterEntityMappableCollections(ContainerBuilder builder)
