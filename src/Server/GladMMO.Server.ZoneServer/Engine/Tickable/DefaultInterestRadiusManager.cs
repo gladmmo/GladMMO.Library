@@ -21,23 +21,20 @@ namespace GladMMO
 
 		private INetworkMessageSender<EntityVisibilityChangeContext> VisibilityMessageSender { get; }
 
-		/// <summary>
-		/// The collections locking policy.
-		/// </summary>
-		private GlobalEntityCollectionsLockingPolicy LockingPolicy { get; }
+		private IReadonlyKnownEntitySet KnownEntities { get; }
 
 		/// <inheritdoc />
 		public DefaultInterestRadiusManager(
-			[PostSharp.Patterns.Contracts.NotNull] IEntityInterestChangeEventSubscribable subscriptionService,
-			[PostSharp.Patterns.Contracts.NotNull] ILog logger,
-			[PostSharp.Patterns.Contracts.NotNull] IReadonlyEntityGuidMappable<InterestCollection> managedInterestCollections,
-			[PostSharp.Patterns.Contracts.NotNull] INetworkMessageSender<EntityVisibilityChangeContext> visibilityMessageSender,
-			[PostSharp.Patterns.Contracts.NotNull] GlobalEntityCollectionsLockingPolicy lockingPolicy) 
+			[NotNull] IEntityInterestChangeEventSubscribable subscriptionService,
+			[NotNull] ILog logger,
+			[NotNull] IReadonlyEntityGuidMappable<InterestCollection> managedInterestCollections,
+			[NotNull] INetworkMessageSender<EntityVisibilityChangeContext> visibilityMessageSender,
+			[NotNull] IReadonlyKnownEntitySet knownEntities)
 			: base(subscriptionService, true, logger)
 		{
 			ManagedInterestCollections = managedInterestCollections ?? throw new ArgumentNullException(nameof(managedInterestCollections));
 			VisibilityMessageSender = visibilityMessageSender ?? throw new ArgumentNullException(nameof(visibilityMessageSender));
-			LockingPolicy = lockingPolicy ?? throw new ArgumentNullException(nameof(lockingPolicy));
+			KnownEntities = knownEntities ?? throw new ArgumentNullException(nameof(knownEntities));
 		}
 
 		private void ThrowIfNoEntityInterestManaged(NetworkEntityGuid entryContext, NetworkEntityGuid entityGuid)
@@ -49,7 +46,8 @@ namespace GladMMO
 		/// <inheritdoc />
 		protected override void HandleEvent(EntityInterestChangeEventArgs args)
 		{
-			using(LockingPolicy.ReaderLock(null, CancellationToken.None))
+			//TODO: Check if entity is still known
+			using (KnownEntities.LockObject.ReaderLock())
 			{
 				ThrowIfNoEntityInterestManaged(args.EnterableEntity, args.EnteringEntity);
 
@@ -80,49 +78,34 @@ namespace GladMMO
 			//After ALL the queued interest changes have been serviced
 			//we can actually handle the changes and send them and such
 
-			//We need to iterate the entire interest dictionary
-			//That means we need to check the new incoming and outgoing entities
-			//We do this because we need to build update packets for the players
-			//so that they can become aware of them AND we can start pushing
-			//events to them
-			foreach(var kvp in ManagedInterestCollections)
+			using (KnownEntities.LockObject.ReaderLock())
 			{
-				//We want to skip any collection that doesn't have any pending changes.
-				//No reason to send a message about it nor dequeue anything
-				if(!kvp.Value.HasPendingChanges())
-					continue;
-
-				//Even though this modifies the collections
-				//the write lock of this type is reserved only
-				//for adding or removing new entities. Not for
-				//actually changing the data itself.
-				using(LockingPolicy.ReaderLock(null, CancellationToken.None))
+				//We need to iterate the entire interest dictionary
+				//That means we need to check the new incoming and outgoing entities
+				//We do this because we need to build update packets for the players
+				//so that they can become aware of them AND we can start pushing
+				//events to them
+				foreach(var entity in KnownEntities)
 				{
+					InterestCollection interestCollection = ManagedInterestCollections.RetrieveEntity(entity);
+
+					//We want to skip any collection that doesn't have any pending changes.
+					//No reason to send a message about it nor dequeue anything
+					if(!interestCollection.HasPendingChanges())
+						continue;
+
 					//We should only build packets for players.
-					if(kvp.Key.EntityType == EntityType.Player)
-					{
-						VisibilityMessageSender.Send(new EntityVisibilityChangeContext(kvp.Key, kvp.Value));
-					}
+					if(entity.EntityType == EntityType.Player)
+						VisibilityMessageSender.Send(new EntityVisibilityChangeContext(entity, interestCollection));
 
 					//No matter player or NPC we should dequeue the joining/leaving
 					//entites so that the state of the known entites reflects the diff packets sent
-					InterestDequeueSetCommand dequeueCommand = new InterestDequeueSetCommand(kvp.Value, kvp.Value);
+					InterestDequeueSetCommand dequeueCommand = new InterestDequeueSetCommand(interestCollection, interestCollection);
 
 					//TODO: Should we execute right away? Or after all packets are sent?
 					dequeueCommand.Execute();
 				}
 			}
-
-#if DEBUG || DEBUG_BUILD
-			foreach(var kvp in ManagedInterestCollections)
-			{
-				if(!kvp.Value.EnteringDequeueable.isEmpty)
-					throw new InvalidOperationException($"Failed to fully queue: {nameof(kvp.Value.EnteringDequeueable)}");
-
-				if(!kvp.Value.LeavingDequeueable.isEmpty)
-					throw new InvalidOperationException($"Failed to fully queue: {nameof(kvp.Value.LeavingDequeueable)}");
-			}
-#endif
 		}
 	}
 }
