@@ -15,7 +15,7 @@ namespace GladMMO
 	//Don't do a Skippable here, because we actually don't have a good design. It's possible without work there is still something to do.
 	[GameInitializableOrdering(0)] //this should run first
 	[ServerSceneTypeCreate(ServerSceneType.Default)]
-	public sealed class DefaultInterestRadiusManager : EventQueueBasedTickable<IEntityInterestChangeEventSubscribable, EntityInterestChangeEventArgs>
+	public sealed class InterestChangeEventHandlerTickable : EventQueueBasedTickable<IEntityInterestChangeEventSubscribable, EntityInterestChangeEventArgs>
 	{
 		private IReadonlyEntityGuidMappable<InterestCollection> ManagedInterestCollections { get; }
 
@@ -24,7 +24,7 @@ namespace GladMMO
 		private IReadonlyKnownEntitySet KnownEntities { get; }
 
 		/// <inheritdoc />
-		public DefaultInterestRadiusManager(
+		public InterestChangeEventHandlerTickable(
 			[NotNull] IEntityInterestChangeEventSubscribable subscriptionService,
 			[NotNull] ILog logger,
 			[NotNull] IReadonlyEntityGuidMappable<InterestCollection> managedInterestCollections,
