@@ -11,7 +11,7 @@ namespace GladMMO
 	/// </summary>
 	public interface IEntityWorldRepresentationDeconstructionFinishedEventSubscribable
 	{
-		event EventHandler<EntityWorldRepresentationDeconstructionStartingEventArgs> OnEntityWorldRepresentationDeconstructionFinished;
+		event EventHandler<EntityWorldRepresentationDeconstructionFinishedEventArgs> OnEntityWorldRepresentationDeconstructionFinished;
 	}
 
 	public sealed class EntityWorldRepresentationDeconstructionFinishedEventArgs : EventArgs, IEntityGuidContainer
