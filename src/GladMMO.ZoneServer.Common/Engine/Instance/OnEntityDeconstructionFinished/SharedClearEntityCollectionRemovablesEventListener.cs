@@ -8,7 +8,7 @@ namespace GladMMO
 	/// <summary>
 	/// Base type for entity collection removable cleanup listener.
 	/// </summary>
-	public sealed class SharedClearEntityCollectionRemovablesEventListener : BaseSingleEventListenerInitializable<IEntityWorldRepresentationDeconstructionFinishedEventSubscribable, EntityWorldRepresentationDeconstructionFinishedEventArgs>
+	public abstract class SharedClearEntityCollectionRemovablesEventListener : BaseSingleEventListenerInitializable<IEntityWorldRepresentationDeconstructionFinishedEventSubscribable, EntityWorldRepresentationDeconstructionFinishedEventArgs>
 	{
 		private IReadOnlyCollection<IEntityCollectionRemovable> RemovableCollections { get; }
 
