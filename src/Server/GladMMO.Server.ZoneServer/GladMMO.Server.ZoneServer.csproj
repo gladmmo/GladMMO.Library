@@ -51,6 +51,7 @@
   <ItemGroup>
     <Folder Include="Debug\" />
     <Folder Include="Engine\Tickable\Base\" />
+    <Folder Include="Factory\Destructors\" />
     <Folder Include="Handlers\Subhandlers\" />
   </ItemGroup>
 
