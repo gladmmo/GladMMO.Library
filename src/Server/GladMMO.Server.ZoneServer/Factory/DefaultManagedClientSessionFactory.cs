@@ -19,20 +19,16 @@ namespace GladMMO
 
 		private MessageHandlerService<GameClientPacketPayload, GameServerPacketPayload, IPeerSessionMessageContext<GameServerPacketPayload>> HandlerService { get; }
 
-		private IRegisterable<int, ZoneClientSession> SessionRegisterable { get; }
-
 		/// <inheritdoc />
 		public event EventHandler<SessionStatusChangeEventArgs> OnSessionDisconnection;
 
 		/// <inheritdoc />
 		public DefaultManagedClientSessionFactory(
 			[NotNull] ILog logger,
-			[NotNull] MessageHandlerService<GameClientPacketPayload, GameServerPacketPayload, IPeerSessionMessageContext<GameServerPacketPayload>> handlerService,
-			[NotNull] IRegisterable<int, ZoneClientSession> sessionRegisterable)
+			[NotNull] MessageHandlerService<GameClientPacketPayload, GameServerPacketPayload, IPeerSessionMessageContext<GameServerPacketPayload>> handlerService)
 		{
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
 			HandlerService = handlerService ?? throw new ArgumentNullException(nameof(handlerService));
-			SessionRegisterable = sessionRegisterable ?? throw new ArgumentNullException(nameof(sessionRegisterable));
 		}
 
 		/// <inheritdoc />
@@ -48,8 +44,6 @@ namespace GladMMO
 
 				ZoneClientSession clientSession = new ZoneClientSession(context.Client, context.Details, HandlerService, Logger);
 
-				//We should add this to the session collection, and also make sure it is unregistered on disconnection
-				SessionRegisterable.Register(context.Details.ConnectionId, clientSession);
 				clientSession.OnSessionDisconnection += (source, args) =>
 				{
 					OnSessionDisconnection?.Invoke(source, args);
