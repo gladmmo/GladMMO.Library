@@ -52,11 +52,6 @@ namespace GladMMO
 				.As<MessageHandlerService<GameClientPacketPayload, GameServerPacketPayload, IPeerSessionMessageContext<GameServerPacketPayload>>>()
 				.SingleInstance();
 
-			builder.RegisterInstance(new DefaultSessionCollection())
-				.As<IRegisterable<int, ZoneClientSession>>()
-				.As<ISessionCollection>()
-				.SingleInstance();
-
 			//TODO: Make this configurable
 			builder.RegisterInstance(new NetworkAddressInfo(IPAddress.Parse("192.168.0.12"), 5006))
 				.As<NetworkAddressInfo>()
