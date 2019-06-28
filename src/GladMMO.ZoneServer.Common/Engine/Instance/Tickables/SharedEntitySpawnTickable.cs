@@ -45,7 +45,7 @@ namespace GladMMO
 				OnEntityCreationStarting?.Invoke(this, new EntityCreationStartingEventArgs(args.EntityGuid));
 
 				//For multithread syncronization we should lock the known entities list, since it is now known and will change the known entity collection.
-				using(KnownEntities.LockObject.ReaderLock())
+				using(KnownEntities.LockObject.WriterLock())
 					KnownEntities.AddEntity(args.EntityGuid);
 
 				if(Logger.IsDebugEnabled)
