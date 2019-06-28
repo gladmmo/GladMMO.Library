@@ -11,7 +11,7 @@ namespace GladMMO
 	/// </summary>
 	public interface IEntityDeconstructionStartingEventSubscribable
 	{
-		event EventHandler<EntityCreationStartingEventArgs> OnEntityDeconstructionStarting;
+		event EventHandler<EntityDeconstructionStartingEventArgs> OnEntityDeconstructionStarting;
 	}
 
 	public sealed class EntityDeconstructionStartingEventArgs : EventArgs, IEntityGuidContainer

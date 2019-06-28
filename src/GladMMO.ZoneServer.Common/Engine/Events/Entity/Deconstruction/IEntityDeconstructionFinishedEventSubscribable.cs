@@ -6,7 +6,7 @@ namespace GladMMO
 {
 	public interface IEntityDeconstructionFinishedEventSubscribable
 	{
-		event EventHandler<EntityCreationFinishedEventArgs> OnEntityDeconstructionFinished;
+		event EventHandler<EntityDeconstructionFinishedEventArgs> OnEntityDeconstructionFinished;
 	}
 
 	public sealed class EntityDeconstructionFinishedEventArgs : EventArgs, IEntityGuidContainer
