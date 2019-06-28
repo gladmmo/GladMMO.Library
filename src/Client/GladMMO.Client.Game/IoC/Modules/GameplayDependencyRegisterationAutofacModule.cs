@@ -65,10 +65,6 @@ namespace GladMMO
 				.As<IFactoryCreatable<IMovementGenerator<GameObject>, EntityAssociatedData<IMovementData>>>()
 				.SingleInstance();
 
-			builder.RegisterType<DefaultEntityDestructor>()
-				.As<IObjectDestructorable<NetworkEntityGuid>>()
-				.SingleInstance();
-
 			//CustomAvatarLoaderCancelableFactory : IFactoryCreatable<CustomAvatarLoaderCancelable, CustomAvatarLoaderCreationContext>, IAvatarPrefabCompletedDownloadEventSubscribable
 			builder.RegisterType<CustomAvatarLoaderCancelableFactory>()
 				.AsImplementedInterfaces()

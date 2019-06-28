@@ -227,15 +227,6 @@ namespace GladMMO
 
 		private static void RegisterEntityDestructionServices(ContainerBuilder builder)
 		{
-			builder.RegisterType<PlayerSessionDestructor>()
-				.As<IObjectDestructorable<PlayerSessionDeconstructionContext>>();
-
-			builder.RegisterType<ServerPlayerEntityDestructor>()
-				.As<IObjectDestructorable<PlayerEntityDestructionContext>>();
-
-			builder.RegisterType<DefaultEntityDestructor>()
-				.As<IObjectDestructorable<NetworkEntityGuid>>();
-
 			builder.RegisterType<NetworkedEntityDataSaveable>()
 				.As<IEntityDataSaveable>();
 		}
