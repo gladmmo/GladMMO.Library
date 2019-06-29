@@ -7,7 +7,7 @@ using UnityEngine;
 namespace GladMMO
 {
 	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
-	public sealed class OnEntityWorldRepresentationCreatedInitializeGameObjectDirectoryEventListener : BaseSingleEventListenerInitializable<IEntityWorldRepresentationCreatedEventSubscribable, EntityWorldRepresentationCreatedEventArgs>
+	public sealed class OnEntityWorldRepresentationCreatedInitializeGameObjectDirectoryEventListener : PlayerWorldRepresentationCreatedEventListener
 	{
 		private IEntityGuidMappable<EntityGameObjectDirectory> GameObjectDirectoryMappable { get; }
 
@@ -18,7 +18,7 @@ namespace GladMMO
 			GameObjectDirectoryMappable = gameObjectDirectoryMappable ?? throw new ArgumentNullException(nameof(gameObjectDirectoryMappable));
 		}
 
-		protected override void OnEventFired(object source, EntityWorldRepresentationCreatedEventArgs args)
+		protected override void OnPlayerWorldRepresentationCreated(EntityWorldRepresentationCreatedEventArgs args)
 		{
 			EntityGameObjectDirectory characterController = args.EntityWorldRepresentation.GetComponent<EntityGameObjectDirectory>();
 
