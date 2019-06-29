@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace GladMMO
 {
-	public class SharedInitializeCharacterControllerMappableEventListener : BaseSingleEventListenerInitializable<IEntityWorldRepresentationCreatedEventSubscribable, EntityWorldRepresentationCreatedEventArgs>
+	public class SharedInitializeCharacterControllerMappableEventListener : PlayerWorldRepresentationCreatedEventListener
 	{
 		private IEntityGuidMappable<CharacterController> CharacterControllerMappable { get; }
 
@@ -17,7 +17,7 @@ namespace GladMMO
 			CharacterControllerMappable = characterControllerMappable ?? throw new ArgumentNullException(nameof(characterControllerMappable));
 		}
 
-		protected override void OnEventFired(object source, EntityWorldRepresentationCreatedEventArgs args)
+		protected override void OnPlayerWorldRepresentationCreated(EntityWorldRepresentationCreatedEventArgs args)
 		{
 			CharacterController characterController = args.EntityWorldRepresentation.GetComponent<CharacterController>();
 
