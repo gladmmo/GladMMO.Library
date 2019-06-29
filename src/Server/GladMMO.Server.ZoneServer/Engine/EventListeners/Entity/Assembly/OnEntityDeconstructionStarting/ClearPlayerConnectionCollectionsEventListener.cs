@@ -6,6 +6,7 @@ using Glader.Essentials;
 
 namespace GladMMO
 {
+	//TODO: Make player only.
 	[ServerSceneTypeCreate(ServerSceneType.Default)]
 	public sealed class ClearPlayerConnectionCollectionsEventListener : BaseSingleEventListenerInitializable<IEntityDeconstructionStartingEventSubscribable, EntityDeconstructionStartingEventArgs>
 	{
