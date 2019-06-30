@@ -19,7 +19,7 @@ namespace GladMMO
 		/// <summary>
 		/// Creatures a Successful <see cref="CreatureTemplateCollectionModel"/>
 		/// </summary>
-		/// <param name="entries">The entries to send.</param>
+		/// <param name="templates">The entries to send.</param>
 		public CreatureTemplateCollectionModel([NotNull] CreatureTemplateModel[] templates)
 		{
 			if(templates == null) throw new ArgumentNullException(nameof(templates));
