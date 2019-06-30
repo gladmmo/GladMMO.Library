@@ -70,6 +70,16 @@ namespace GladMMO
 		[ProtoIgnore]
 		public int EntryId => (int)((RawGuidValue & 0x00FFFFFF00000000) >> 32);
 
+		/// <summary>
+		/// Indicates if the <see cref="NetworkEntityGuid"/> is a template
+		/// for the creation of instance guids.
+		/// For example, creature template guids will have no EntityId which is assumed
+		/// to be created and increment on spawn.
+		/// </summary>
+		[JsonIgnore]
+		[ProtoIgnore]
+		public bool isTemplateGuid => EntityId == 0;
+
 		public NetworkEntityGuid(ulong guidValue)
 		{
 			RawGuidValue = guidValue;
