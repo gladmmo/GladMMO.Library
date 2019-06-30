@@ -27,7 +27,7 @@ namespace GladMMO
 					return EntityPrefab.RemotePlayer;
 				case EntityType.GameObject:
 					break;
-				case EntityType.Npc:
+				case EntityType.Creature:
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();

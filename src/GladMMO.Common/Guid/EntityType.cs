@@ -26,6 +26,6 @@ namespace GladMMO
 		/// </summary>
 		GameObject = 2,
 
-		Npc = 3,
+		Creature = 3,
 	}
 }
