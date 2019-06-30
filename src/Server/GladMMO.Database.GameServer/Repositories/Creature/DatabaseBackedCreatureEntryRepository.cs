@@ -1,17 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace GladMMO
 {
 	public sealed class DatabaseBackedCreatureEntryRepository : ICreatureEntryRepository
 	{
+		private ContentDatabaseContext Context { get; }
+
 		private IGenericRepositoryCrudable<int, CreatureEntryModel> GenericRepository { get; }
 
 		public DatabaseBackedCreatureEntryRepository([JetBrains.Annotations.NotNull] ContentDatabaseContext context)
 		{
 			if(context == null) throw new ArgumentNullException(nameof(context));
+			Context = context;
 
 			GenericRepository = new GeneralGenericCrudRepositoryProvider<int, CreatureEntryModel>(context.Creatures, context);
 		}
@@ -41,9 +46,13 @@ namespace GladMMO
 			return GenericRepository.UpdateAsync(key, model);
 		}
 
-		public Task<IReadOnlyCollection<CreatureEntryModel>> RetrieveAllWithMapIdAsync(int mapId)
+		public async Task<IReadOnlyCollection<CreatureEntryModel>> RetrieveAllWorldIdAsync(int worldId)
 		{
-			throw new NotImplementedException($"TODO: Reimplement map querying.");
+			if (worldId <= 0) throw new ArgumentOutOfRangeException(nameof(worldId));
+
+			return await Context.Creatures
+				.Where(c => c.WorldId == worldId)
+				.ToArrayAsync();
 		}
 	}
 }
