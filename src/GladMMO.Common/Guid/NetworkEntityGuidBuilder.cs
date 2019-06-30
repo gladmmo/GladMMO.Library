@@ -48,11 +48,11 @@ namespace GladMMO
 			return this;
 		}
 
-		public NetworkEntityGuidBuilder WithTemplate(int templateId)
+		public NetworkEntityGuidBuilder WithEntryId(int entryId)
 		{
 			RawGuid = 0xFF000000FFFFFFFF & RawGuid;
 
-			RawGuid |= (((ulong)(int)templateId) << 32);
+			RawGuid |= (((ulong)(int)entryId) << 32);
 
 			return this;
 		}

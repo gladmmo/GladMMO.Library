@@ -13,9 +13,9 @@ namespace GladMMO
 			if (fromObject == null) throw new ArgumentNullException(nameof(fromObject));
 
 			NetworkEntityGuid guid = new NetworkEntityGuidBuilder()
-				.WithId(fromObject.CreatureEntryId)
+				.WithId(0) //0 means that it's not an instance.
 				.WithType(EntityType.Npc)
-				.WithTemplate(fromObject.CreatureTemplateId)
+				.WithEntryId(fromObject.CreatureEntryId)
 				.Build();
 
 			//TODO: better handle position crap

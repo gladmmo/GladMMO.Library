@@ -62,12 +62,13 @@ namespace GladMMO
 
 		//TODO: We need to eventually support the last 1 byte of space for template ids when they get high enough.
 		/// <summary>
-		/// Optional template id for the entity.
+		/// Optional entry id for the entity.
 		/// This may be 0 if it's a player.
+		/// For creatures, this is the unique entry (not the template).
 		/// </summary>
 		[JsonIgnore]
 		[ProtoIgnore]
-		public int TemplateId => (int)((RawGuidValue & 0x00FFFFFF00000000) >> 32);
+		public int EntryId => (int)((RawGuidValue & 0x00FFFFFF00000000) >> 32);
 
 		public NetworkEntityGuid(ulong guidValue)
 		{

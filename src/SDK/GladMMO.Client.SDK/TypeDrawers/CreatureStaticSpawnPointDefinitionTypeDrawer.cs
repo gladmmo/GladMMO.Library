@@ -31,7 +31,7 @@ namespace GladMMO
 
 					if (result.isSuccessful)
 					{
-						GetTarget().CreatureInstanceId = result.Result.Guid.EntityId;
+						GetTarget().CreatureInstanceId = result.Result.Guid.EntryId;
 						EditorUtility.SetDirty(GetTarget());
 					}
 				}
@@ -94,9 +94,9 @@ namespace GladMMO
 		private NetworkEntityGuid BuildNetworkEntityGuid()
 		{
 			return new NetworkEntityGuidBuilder()
-				.WithId(GetTarget().CreatureInstanceId)
+				.WithId(0) //0 means it's not an instance.
 				.WithType(EntityType.Npc)
-				.WithTemplate(GetTarget().CreatureTemplateId)
+				.WithEntryId(GetTarget().CreatureInstanceId)
 				.Build();
 		}
 
