@@ -49,7 +49,7 @@ namespace GladMMO
 			IReadOnlyCollection<CreatureEntryModel> models = await creatureEntryRepository.RetrieveAllWorldIdAsync((int)worldId);
 
 			if (models.Count == 0)
-				return BuildFailedResponseModel(CreatureEntryCollectionResponseCode.NoneFound);
+				return BuildFailedResponseModel(CreatureCollectionResponseCode.NoneFound);
 
 			CreatureInstanceModel[] instanceModels = models
 				.Select(tableToNetworkModelConverter.Convert)

@@ -1,9 +1,10 @@
 ﻿namespace GladMMO
 {
 	/// <summary>
-	/// Enumeration of all response codes associated with <see cref="ZoneServerNPCEntryCollectionResponse"/>.
+	/// Enumeration of all response codes associated with looking up creature data
+	/// in collection form.
 	/// </summary>
-	public enum CreatureEntryCollectionResponseCode
+	public enum CreatureCollectionResponseCode
 	{
 		Success = 1,
 
