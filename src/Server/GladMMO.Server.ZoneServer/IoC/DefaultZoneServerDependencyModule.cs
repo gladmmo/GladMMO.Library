@@ -25,6 +25,8 @@ namespace GladMMO
 			ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 			ServicePointManager.CheckCertificateRevocationList = false;
 
+			builder.RegisterModule<ContentServerDependencyAutofacModule>();
+
 			//TODO: Extract to seperate module like the client.
 			//Register the serialization models.
 			Unity3DProtobufPayloadRegister unityProtobufRegisteration = new Unity3DProtobufPayloadRegister();
