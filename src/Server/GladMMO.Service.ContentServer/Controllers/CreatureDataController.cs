@@ -40,6 +40,24 @@ namespace GladMMO
 			return Ok();
 		}
 
+		[ProducesJson]
+		[HttpGet("{world}/instance")]
+		public async Task<IActionResult> GetCreatureEntries([FromRoute(Name = "world")] long worldId,
+			[FromServices] ICreatureEntryRepository creatureEntryRepository,
+			[FromServices] ITypeConverterProvider<CreatureEntryModel, CreatureInstanceModel> tableToNetworkModelConverter)
+		{
+			IReadOnlyCollection<CreatureEntryModel> models = await creatureEntryRepository.RetrieveAllWorldIdAsync((int)worldId);
+
+			if (models.Count == 0)
+				return BuildFailedResponseModel(CreatureEntryCollectionResponseCode.NoneFound);
+
+			CreatureInstanceModel[] instanceModels = models
+				.Select(tableToNetworkModelConverter.Convert)
+				.ToArray();
+
+			return BuildSuccessfulResponseModel(new CreatureEntryCollectionModel(instanceModels));
+		}
+
 		//TODO: Eventually we need to require authorization, because they need to own the world.
 		//[AuthorizeJwt]
 		[ProducesJson]
