@@ -12,7 +12,7 @@ namespace GladMMO
 	/// that are implemented within <see cref="Autofac.Module"/>'s.
 	/// </summary>
 	/// <typeparam name="TModuleType">The module to register.</typeparam>
-	public abstract class AutofacBasedDependencyRegister<TModuleType> : NonBehaviourDependency 
+	public abstract class AutofacBasedDependencyRegister<TModuleType> : NonBehaviourDependency
 		where TModuleType : IModule, new()
 	{
 		protected AutofacBasedDependencyRegister()

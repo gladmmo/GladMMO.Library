@@ -15,10 +15,12 @@
   <ItemGroup>
     <PackageReference Include="Autofac" Version="4.8.1" />
     <PackageReference Include="Common.Logging" Version="3.4.1" />
+    <PackageReference Include="SceneJect.Common" Version="3.0.31" />
     <PackageReference Include="SceneJect.Metadata" Version="3.0.31" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Client\GladMMO.Client.ServiceDiscovery\GladMMO.Client.ServiceDiscovery.csproj" />
     <ProjectReference Include="..\GladMMO.Network.Common\GladMMO.Network.Common.csproj" />
   </ItemGroup>
 
@@ -32,7 +34,6 @@
     <Folder Include="Async\" />
     <Folder Include="Components\" />
     <Folder Include="Factory\" />
-    <Folder Include="IoC\" />
     <Folder Include="Services\" />
   </ItemGroup>
 
