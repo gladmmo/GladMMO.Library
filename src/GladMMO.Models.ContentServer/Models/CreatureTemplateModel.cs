@@ -9,6 +9,12 @@ namespace GladMMO
 	public sealed class CreatureTemplateModel
 	{
 		/// <summary>
+		/// The creature's template id.
+		/// </summary>
+		[JsonProperty]
+		public int CreatureTemplateId { get; private set; }
+
+		/// <summary>
 		/// The ID of the creature's model.
 		/// </summary>
 		[JsonProperty]
@@ -33,13 +39,15 @@ namespace GladMMO
 		[JsonProperty]
 		public int MaximumLevel { get; private set; }
 
-		public CreatureTemplateModel(long modelId, [NotNull] string creatureName, int minimumLevel, int maximumLevel)
+		public CreatureTemplateModel(int creatureTemplateId, long modelId, [NotNull] string creatureName, int minimumLevel, int maximumLevel)
 		{
 			if (modelId <= 0) throw new ArgumentOutOfRangeException(nameof(modelId));
 			if (string.IsNullOrWhiteSpace(creatureName)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(creatureName));
 			if (minimumLevel <= 0) throw new ArgumentOutOfRangeException(nameof(minimumLevel));
 			if (maximumLevel <= 0) throw new ArgumentOutOfRangeException(nameof(maximumLevel));
+			if (creatureTemplateId <= 0) throw new ArgumentOutOfRangeException(nameof(creatureTemplateId));
 
+			CreatureTemplateId = creatureTemplateId;
 			ModelId = modelId;
 			CreatureName = creatureName;
 			MinimumLevel = minimumLevel;

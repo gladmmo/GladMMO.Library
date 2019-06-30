@@ -9,7 +9,7 @@ namespace GladMMO
 	{
 		public CreatureTemplateModel Convert(CreatureTemplateEntryModel fromObject)
 		{
-			return new CreatureTemplateModel(fromObject.ModelId, fromObject.CreatureName, fromObject.MinimumLevel, fromObject.MaximumLevel);
+			return new CreatureTemplateModel(fromObject.CreatureTemplateId, fromObject.ModelId, fromObject.CreatureName, fromObject.MinimumLevel, fromObject.MaximumLevel);
 		}
 	}
 }
