@@ -22,5 +22,13 @@ namespace GladMMO
 
 		[Put("/api/CreatureData/instance/{id}")]
 		Task UpdateCreatureInstance([AliasAs("id")] int creatureId, [JsonBody] CreatureInstanceModel model);
+
+		/// <summary>
+		/// REST endpoint that yields the entire collection of creature entries for a provided/specified <see cref="worldId"/>.
+		/// </summary>
+		/// <param name="worldId">The id of the world.</param>
+		/// <returns>A non-null response model indicating the success or result.</returns>
+		[Get("/api/CreatureData/instance?world={worldId}")]
+		Task<ResponseModel<CreatureEntryCollectionModel, CreatureEntryCollectionResponseCode>> GetCreatureEntries(long worldId);
 	}
 }
