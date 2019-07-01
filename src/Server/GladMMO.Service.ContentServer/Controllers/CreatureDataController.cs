@@ -122,12 +122,13 @@ namespace GladMMO
 			if(models.Count == 0)
 				return BuildFailedResponseModel(CreatureCollectionResponseCode.NoneFound);
 
-			CreatureTemplateModel[] instanceModels = models
+			CreatureTemplateModel[] templateModels = models
 				.Select(m => m.CreatureTemplate)
+				.Distinct(DatabaseModelKeyableEquailityComparer< CreatureTemplateEntryModel>.Instance)
 				.Select(tableToNetworkModelConverter.Convert)
 				.ToArray();
 
-			return BuildSuccessfulResponseModel(new CreatureTemplateCollectionModel(instanceModels));
+			return BuildSuccessfulResponseModel(new CreatureTemplateCollectionModel(templateModels));
 		}
 
 		//TODO: We should make it so it requires ZoneServer authorization to query this
