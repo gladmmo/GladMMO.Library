@@ -8,8 +8,11 @@ namespace GladMMO
 {
 	//Conceptually based on TrinityCore's (WoW's): https://trinitycore.atlassian.net/wiki/spaces/tc/pages/2130008/creature+template
 	[Table("creature_template")]
-	public class CreatureTemplateEntryModel
+	public class CreatureTemplateEntryModel : IDatabaseModelKeyable
 	{
+		[NotMapped]
+		public int EntryKey => CreatureTemplateId;
+
 		/// <summary>
 		/// The id of the creature template.
 		/// </summary>
