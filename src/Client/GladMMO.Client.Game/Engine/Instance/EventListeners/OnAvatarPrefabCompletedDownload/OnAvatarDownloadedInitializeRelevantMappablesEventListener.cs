@@ -42,7 +42,7 @@ namespace GladMMO
 			{
 				IPrefabContentResourceHandle handle = PrefabHandleMappable.RetrieveEntity(args.EntityGuid);
 				handle.Release();
-				PrefabHandleMappable.Remove(args.EntityGuid);
+				PrefabHandleMappable.RemoveEntityEntry(args.EntityGuid);
 			}
 
 			PrefabHandleMappable.AddObject(args.EntityGuid, args.PrefabHandle);

@@ -15,10 +15,14 @@ namespace GladMMO
 
 		private float TimePassed = 0.0f;
 
+		private IReadonlyKnownEntitySet KnownEntities { get; }
+
 		/// <inheritdoc />
-		public DemoTestingGameTickable([NotNull] IReadonlyEntityGuidMappable<IEntityDataFieldContainer> entityDataContainer)
+		public DemoTestingGameTickable([NotNull] IReadonlyEntityGuidMappable<IEntityDataFieldContainer> entityDataContainer,
+			[NotNull] IReadonlyKnownEntitySet knownEntities)
 		{
 			EntityDataContainer = entityDataContainer ?? throw new ArgumentNullException(nameof(entityDataContainer));
+			KnownEntities = knownEntities ?? throw new ArgumentNullException(nameof(knownEntities));
 		}
 
 		/// <inheritdoc />
@@ -35,9 +39,9 @@ namespace GladMMO
 				return;
 
 			//We should just decrement every player's health by 10 every second.
-			foreach(IEntityDataFieldContainer container in EntityDataContainer.Values)
+			foreach(var component in EntityDataContainer.Enumerate(KnownEntities))
 			{
-				container.SetFieldValue((int)EUnitFields.UNIT_FIELD_HEALTH, Math.Max(0, container.GetFieldValue<int>((int)EUnitFields.UNIT_FIELD_HEALTH) - 10));
+				component.SetFieldValue((int)EUnitFields.UNIT_FIELD_HEALTH, Math.Max(0, component.GetFieldValue<int>((int)EUnitFields.UNIT_FIELD_HEALTH) - 10));
 			}
 		}
 	}

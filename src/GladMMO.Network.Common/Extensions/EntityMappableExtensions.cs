@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Text;
+using Glader.Essentials;
 
 namespace GladMMO
 {
@@ -17,7 +18,7 @@ namespace GladMMO
 		/// <param name="guid">The entity guid.</param>
 		/// <param name="obj">The object to add.</param>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static void ReplaceObject<TReturnType>([NotNull] this IDictionary<NetworkEntityGuid, TReturnType> collection, [NotNull] NetworkEntityGuid guid, TReturnType obj)
+		public static void ReplaceObject<TReturnType>([NotNull] this IEntityGuidMappable<NetworkEntityGuid, TReturnType> collection, [NotNull] NetworkEntityGuid guid, TReturnType obj)
 			where TReturnType : class
 		{
 			//No null checking because we hope to inline this.
@@ -44,7 +45,7 @@ namespace GladMMO
 		/// <param name="guid">The entity guid.</param>
 		/// <param name="obj">The object to add.</param>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static void AddObject<TReturnType>([NotNull] this IDictionary<NetworkEntityGuid, TReturnType> collection, [NotNull] NetworkEntityGuid guid, TReturnType obj)
+		public static void AddObject<TReturnType>([NotNull] this IEntityGuidMappable<NetworkEntityGuid, TReturnType> collection, [NotNull] NetworkEntityGuid guid, TReturnType obj)
 			where TReturnType : class
 		{
 			//No null checking because we hope to inline this.
@@ -83,7 +84,7 @@ namespace GladMMO
 		/// <exception cref="InvalidOperationException">Throws if the entity does not have data mapped to it.</exception>
 		/// <returns></returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static TReturnType RetrieveEntity<TReturnType>([NotNull] this IDictionary<NetworkEntityGuid, TReturnType> collection, [NotNull] NetworkEntityGuid guid)
+		public static TReturnType RetrieveEntity<TReturnType>([NotNull] this IReadonlyEntityGuidMappable<NetworkEntityGuid, TReturnType> collection, [NotNull] NetworkEntityGuid guid)
 		{
 			//No null checking because we hope to inline this
 			try
@@ -100,31 +101,31 @@ namespace GladMMO
 			return default(TReturnType);
 		}
 
-		/// <summary>
-		/// Retrieve the object of type <typeparamref name="TReturnType"/>
-		/// from the entity mapped collection.
-		/// </summary>
-		/// <typeparam name="TReturnType">The entity mapped object.</typeparam>
-		/// <param name="collection">The entity collection.</param>
-		/// <param name="guid">The entity guid.</param>
-		/// <exception cref="InvalidOperationException">Throws if the entity does not have data mapped to it.</exception>
-		/// <returns></returns>
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static TReturnType RetrieveEntity<TReturnType>([NotNull] this IReadOnlyDictionary<NetworkEntityGuid, TReturnType> collection, [NotNull] NetworkEntityGuid guid)
+		public static IEnumerable<TReturnType> Enumerate<TReturnType>(this IReadonlyEntityGuidMappable<NetworkEntityGuid, TReturnType> collection, IReadonlyKnownEntitySet entitySet)
 		{
-			//No null checking because we hope to inline this
-			try
-			{
-				return collection[guid];
-			}
-			catch(Exception e)
-			{
-				CreateEntityCollectionException<TReturnType>(guid, e);
-			}
+			if (collection == null) throw new ArgumentNullException(nameof(collection));
+			if (entitySet == null) throw new ArgumentNullException(nameof(entitySet));
 
-			Debug.Assert(false, "Should never reach this point in RetrieveEntity.");
-			//Should never be reached.
-			return default(TReturnType);
+			using(entitySet.LockObject.ReaderLock())
+				foreach(var element in entitySet)
+				{
+					if (collection.ContainsKey(element))
+						yield return collection.RetrieveEntity(element);
+				}
+		}
+
+		//Never used this before, new C# feature. Named tuples. They seem like a bad idea, but I figured I should write one in my life.
+		public static IEnumerable<(NetworkEntityGuid EntityGuid, TReturnType ComponentValue)> EnumerateWithGuid<TReturnType>(this IReadonlyEntityGuidMappable<NetworkEntityGuid, TReturnType> collection, IReadonlyKnownEntitySet entitySet)
+		{
+			if(collection == null) throw new ArgumentNullException(nameof(collection));
+			if(entitySet == null) throw new ArgumentNullException(nameof(entitySet));
+
+			using(entitySet.LockObject.ReaderLock())
+				foreach(var element in entitySet)
+				{
+					if(collection.ContainsKey(element))
+						yield return (element, collection.RetrieveEntity(element));
+				}
 		}
 	}
 }

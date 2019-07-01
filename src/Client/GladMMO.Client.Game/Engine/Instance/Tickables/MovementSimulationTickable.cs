@@ -33,14 +33,8 @@ namespace GladMMO
 		/// <inheritdoc />
 		public void Tick()
 		{
-			foreach(var entry in MovementGenerators)
-			{
-				//Entity may be in the cleanup process, or something. Shouldn't happen on client though.
-				if (!KnonwnEntities.isEntityKnown(entry.Key))
-					continue;
-
-				entry.Value.Update(WorldObjectMap.RetrieveEntity(entry.Key), TimeService.CurrentRemoteTime);
-			}
+			foreach(var entry in MovementGenerators.EnumerateWithGuid(KnonwnEntities))
+				entry.ComponentValue.Update(WorldObjectMap.RetrieveEntity(entry.EntityGuid), TimeService.CurrentRemoteTime);
 		}
 	}
 }

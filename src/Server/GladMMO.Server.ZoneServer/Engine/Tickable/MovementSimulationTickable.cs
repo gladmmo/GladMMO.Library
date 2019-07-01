@@ -16,25 +16,28 @@ namespace GladMMO
 
 		private IReadonlyNetworkTimeService TimeService { get; }
 
+		private IReadonlyKnownEntitySet KnownEntities { get; }
+
 		/// <inheritdoc />
 		public MovementSimulationTickable(
 			IReadonlyEntityGuidMappable<IMovementGenerator<GameObject>> movementGenerators,
 			IReadonlyEntityGuidMappable<GameObject> worldObjectMap,
-			INetworkTimeService timeService)
+			INetworkTimeService timeService,
+			[NotNull] IReadonlyKnownEntitySet knownEntities)
 		{
 			MovementGenerators = movementGenerators ?? throw new ArgumentNullException(nameof(movementGenerators));
 			WorldObjectMap = worldObjectMap ?? throw new ArgumentNullException(nameof(worldObjectMap));
 			TimeService = timeService ?? throw new ArgumentNullException(nameof(timeService));
+			KnownEntities = knownEntities ?? throw new ArgumentNullException(nameof(knownEntities));
 		}
 
 		/// <inheritdoc />
 		public void Tick()
 		{
 			long currentTime = DateTime.UtcNow.Ticks;
-			foreach(var entry in MovementGenerators)
-			{
-				entry.Value.Update(WorldObjectMap.RetrieveEntity(entry.Key), currentTime);
-			}
+
+			foreach(var entry in MovementGenerators.EnumerateWithGuid(KnownEntities))
+				entry.ComponentValue.Update(WorldObjectMap.RetrieveEntity(entry.EntityGuid), currentTime);
 		}
 	}
 }
