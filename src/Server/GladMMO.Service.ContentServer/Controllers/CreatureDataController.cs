@@ -113,18 +113,17 @@ namespace GladMMO
 		[ProducesJson]
 		[HttpGet("{world}/template")]
 		public async Task<IActionResult> GetCreatureTemplates([FromRoute(Name = "world")] int worldId,
-			ICreatureEntryRepository creatureEntryRepository,
+			[FromServices] ICreatureEntryRepository creatureEntryRepository,
 			[FromServices] ITypeConverterProvider<CreatureTemplateEntryModel, CreatureTemplateModel> tableToNetworkModelConverter)
 		{
 			//We can actually get all the templates FROM the creature instances.
-			IReadOnlyCollection<CreatureEntryModel> models = await creatureEntryRepository.RetrieveAllWorldIdAsync((int)worldId);
+			IReadOnlyCollection<CreatureTemplateEntryModel> models = await creatureEntryRepository.RetrieveTemplatesByWorldIdAsync((int)worldId);
 
 			if(models.Count == 0)
 				return BuildFailedResponseModel(CreatureCollectionResponseCode.NoneFound);
 
 			CreatureTemplateModel[] templateModels = models
-				.Select(m => m.CreatureTemplate)
-				.Distinct(DatabaseModelKeyableEquailityComparer< CreatureTemplateEntryModel>.Instance)
+				.Distinct(DatabaseModelKeyableEquailityComparer<CreatureTemplateEntryModel>.Instance)
 				.Select(tableToNetworkModelConverter.Convert)
 				.ToArray();
 

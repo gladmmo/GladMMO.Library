@@ -54,5 +54,16 @@ namespace GladMMO
 				.Where(c => c.WorldId == worldId)
 				.ToArrayAsync();
 		}
+
+		public async Task<IReadOnlyCollection<CreatureTemplateEntryModel>> RetrieveTemplatesByWorldIdAsync(int worldId)
+		{
+			if(worldId <= 0) throw new ArgumentOutOfRangeException(nameof(worldId));
+
+			return await Context.Creatures
+				.Where(c => c.WorldId == worldId)
+				.Include(c => c.CreatureTemplate)
+				.Select(c => c.CreatureTemplate)
+				.ToArrayAsync();
+		}
 	}
 }

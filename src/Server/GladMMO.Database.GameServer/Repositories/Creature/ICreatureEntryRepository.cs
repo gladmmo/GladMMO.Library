@@ -16,5 +16,8 @@ namespace GladMMO
 		/// <param name="worldId">The id of the map to load the Creature instance data for.</param>
 		/// <returns>A collection of all Creature entries with the specified <see cref="worldId"/>.</returns>
 		Task<IReadOnlyCollection<CreatureEntryModel>> RetrieveAllWorldIdAsync(int worldId);
+
+		//TODO: Doc
+		Task<IReadOnlyCollection<CreatureTemplateEntryModel>> RetrieveTemplatesByWorldIdAsync(int worldId);
 	}
 }
