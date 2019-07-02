@@ -31,9 +31,6 @@ namespace GladMMO
 		{
 			NetworkEntityGuid guid = args.EntityGuid;
 
-			if(guid.EntityType != EntityType.Player)
-				throw new NotImplementedException($"TODO: Implement handling for non-players.");
-
 			//TODO: handle non-players
 			//TODO: Fix the issue with having to hardcore the field count.
 			//Build the update values stuff and initialize the initial movement data.
