@@ -28,7 +28,7 @@ namespace GladMMO
 				case EntityType.GameObject:
 					break;
 				case EntityType.Creature:
-					break;
+					return EntityPrefab.NetworkNpc;
 				default:
 					throw new ArgumentOutOfRangeException();
 			}
