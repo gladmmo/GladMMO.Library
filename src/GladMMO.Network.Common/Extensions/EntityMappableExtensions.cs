@@ -115,7 +115,7 @@ namespace GladMMO
 		}
 
 		//Never used this before, new C# feature. Named tuples. They seem like a bad idea, but I figured I should write one in my life.
-		public static IEnumerable<(NetworkEntityGuid EntityGuid, TReturnType ComponentValue)> EnumerateWithGuid<TReturnType>(this IReadonlyEntityGuidMappable<NetworkEntityGuid, TReturnType> collection, IReadonlyKnownEntitySet entitySet)
+		public static IEnumerable<(NetworkEntityGuid EntityGuid, TReturnType ComponentValue)> EnumerateWithGuid<TReturnType>(this IReadonlyEntityGuidMappable<NetworkEntityGuid, TReturnType> collection, IReadonlyKnownEntitySet entitySet, EntityType exclusiveEntityType = EntityType.None)
 		{
 			if(collection == null) throw new ArgumentNullException(nameof(collection));
 			if(entitySet == null) throw new ArgumentNullException(nameof(entitySet));
@@ -123,6 +123,10 @@ namespace GladMMO
 			using(entitySet.LockObject.ReaderLock())
 				foreach(var element in entitySet)
 				{
+					if (exclusiveEntityType != EntityType.None)
+						if (element.EntityType != exclusiveEntityType)
+							continue;
+
 					if(collection.ContainsKey(element))
 						yield return (element, collection.RetrieveEntity(element));
 				}
