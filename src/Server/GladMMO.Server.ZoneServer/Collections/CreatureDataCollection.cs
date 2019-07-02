@@ -83,14 +83,20 @@ namespace GladMMO
 			return CreatureInstanceDictionary[key.EntryId];
 		}
 
-		public void Add(NetworkEntityGuid key, CreatureTemplateModel value)
+		public void Add([NotNull] NetworkEntityGuid key, [NotNull] CreatureTemplateModel value)
 		{
-			throw new NotImplementedException();
+			if (key == null) throw new ArgumentNullException(nameof(key));
+			if (value == null) throw new ArgumentNullException(nameof(value));
+
+			CreatureTemplateDictionary.Add(value.CreatureTemplateId, value);
 		}
 
-		public void Add(NetworkEntityGuid key, CreatureInstanceModel value)
+		public void Add([NotNull] NetworkEntityGuid key, [NotNull] CreatureInstanceModel value)
 		{
-			throw new NotImplementedException();
+			if (key == null) throw new ArgumentNullException(nameof(key));
+			if (value == null) throw new ArgumentNullException(nameof(value));
+
+			CreatureInstanceDictionary.Add(key.EntryId, value);
 		}
 
 		public bool RemoveEntityEntry(NetworkEntityGuid entityGuid)
