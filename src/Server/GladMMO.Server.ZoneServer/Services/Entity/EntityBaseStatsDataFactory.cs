@@ -9,8 +9,8 @@ namespace GladMMO
 	{
 		public EntityBaseStatsModel Create(EntityDataStatsDerivable context)
 		{
-			if(context.EntityType != EntityType.Player)
-				throw new NotImplementedException($"TODO: Implement base stats for creatures.");
+			if(context.EntityType == EntityType.GameObject)
+				throw new NotImplementedException($"TODO: Implement base stats for GameObjects.");
 
 			//TODO: Add base mana calculation
 			return new EntityBaseStatsModel(CaclulateBaseHealthFromLevel(context.Level), 0);
