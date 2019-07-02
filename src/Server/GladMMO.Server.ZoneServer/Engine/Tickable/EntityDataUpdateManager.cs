@@ -41,7 +41,7 @@ namespace GladMMO
 		/// <inheritdoc />
 		public void Tick()
 		{
-			foreach (var entry in GuidToInterestCollectionMappable.EnumerateWithGuid(KnownEntities))
+			foreach (var entry in GuidToInterestCollectionMappable.EnumerateWithGuid(KnownEntities, EntityType.Player))
 			{
 				InterestCollection interest = entry.ComponentValue;
 
