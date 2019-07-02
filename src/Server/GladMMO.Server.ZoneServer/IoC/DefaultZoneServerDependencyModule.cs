@@ -212,6 +212,14 @@ namespace GladMMO
 			builder.RegisterType<IncrementingCreatureGuidFactory>()
 				.AsImplementedInterfaces()
 				.SingleInstance(); //important, otherwise colliding guids will be produced.
+
+			//CreatureDataCollection : IEntityGuidMappable<CreatureTemplateModel>, IEntityGuidMappable<CreatureInstanceModel>
+			builder.RegisterType<CreatureDataCollection>()
+				.As<IEntityGuidMappable<CreatureTemplateModel>>()
+				.As<IReadonlyEntityGuidMappable<CreatureTemplateModel>>()
+				.As<IEntityGuidMappable<CreatureInstanceModel>>()
+				.As<IReadonlyEntityGuidMappable<CreatureInstanceModel>>()
+				.SingleInstance();
 		}
 
 		private static void RegisterLockingPolicies(ContainerBuilder builder)
