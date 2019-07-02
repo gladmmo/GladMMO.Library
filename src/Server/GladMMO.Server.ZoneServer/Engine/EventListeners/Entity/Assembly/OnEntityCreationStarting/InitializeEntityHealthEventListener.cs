@@ -45,7 +45,7 @@ namespace GladMMO
 				return EntityBaseStatsMappable.RetrieveEntity(entityGuid);
 
 			//TODO: We should get actual level somewhere else. During creation time (before CreationStarted since it's a persisted data.
-			EntityBaseStatsModel baseStats = EntityBaseStatsFactory.Create(new EntityDataStatsDerivable(EntityType.Player, 1));
+			EntityBaseStatsModel baseStats = EntityBaseStatsFactory.Create(new EntityDataStatsDerivable(entityGuid.EntityType, 1));
 			EntityBaseStatsMappable.AddObject(entityGuid, baseStats);
 
 			return baseStats;
