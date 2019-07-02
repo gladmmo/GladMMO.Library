@@ -16,6 +16,10 @@ namespace GladMMO
 
 		public IMovementGenerator<GameObject> Create(EntityAssociatedData<IMovementData> context)
 		{
+			//TODO: Another temporary hack
+			if(context.EntityGuid.EntityType == EntityType.Creature)
+				return new IdleMovementGenerator(context.Data.InitialPosition);
+
 			//TODO: redo all this of this garbage
 			if (context.Data is PositionChangeMovementData pcmd)
 				return new ClientCharacterControllerInputMovementGenerator(pcmd, BuildLazyControllerFactory(context));
