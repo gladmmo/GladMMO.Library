@@ -10,7 +10,7 @@ namespace GladMMO
 	/// Base event listener that handles movement generator initialization
 	/// for creating entities.
 	/// </summary>
-	public class SharedCreatingInitializeDefaultMovementGeneratorEventListener : BaseSingleEventListenerInitializable<IEntityCreationStartingEventSubscribable, EntityCreationStartingEventArgs>
+	public class SharedCreatingInitializeDefaultMovementGeneratorEventListener : BaseSingleEventListenerInitializable<IEntityCreationFinishedEventSubscribable, EntityCreationFinishedEventArgs>
 	{
 		private IFactoryCreatable<IMovementGenerator<GameObject>, EntityAssociatedData<IMovementData>> MovementGeneratorFactory { get; }
 
@@ -18,7 +18,7 @@ namespace GladMMO
 
 		private IReadonlyEntityGuidMappable<IMovementData> MovementDataMappable { get; }
 
-		public SharedCreatingInitializeDefaultMovementGeneratorEventListener(IEntityCreationStartingEventSubscribable subscriptionService,
+		public SharedCreatingInitializeDefaultMovementGeneratorEventListener(IEntityCreationFinishedEventSubscribable subscriptionService,
 			[NotNull] IEntityGuidMappable<IMovementGenerator<GameObject>> movementGeneratorMappable,
 			[NotNull] IFactoryCreatable<IMovementGenerator<GameObject>, EntityAssociatedData<IMovementData>> movementGeneratorFactory,
 			[NotNull] IReadonlyEntityGuidMappable<IMovementData> movementDataMappable) 
@@ -29,7 +29,7 @@ namespace GladMMO
 			MovementDataMappable = movementDataMappable ?? throw new ArgumentNullException(nameof(movementDataMappable));
 		}
 
-		protected override void OnEventFired(object source, EntityCreationStartingEventArgs args)
+		protected override void OnEventFired(object source, EntityCreationFinishedEventArgs args)
 		{
 			IMovementData movementData = MovementDataMappable.RetrieveEntity(args.EntityGuid);
 
