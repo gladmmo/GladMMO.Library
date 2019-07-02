@@ -143,7 +143,7 @@ namespace GladMMO
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			return $"{EntityType}:{EntityId}";
+			return $"{EntityType}:{EntryId}:{EntityId}";
 		}
 	}
 }
