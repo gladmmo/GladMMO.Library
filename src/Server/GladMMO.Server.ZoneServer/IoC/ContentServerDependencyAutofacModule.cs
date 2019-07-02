@@ -19,6 +19,14 @@ namespace GladMMO
 
 				return new AsyncEndpointDownloadableContentService(QueryForRemoteServiceEndpoint(serviceDiscovery, "ContentServer"), new RefitSettings() { HttpMessageHandlerFactory = () => new AuthenticatedHttpClientHandler(tokenRepository) });
 			});
+
+			builder.Register<ICreatureDataServiceClient>(context =>
+			{
+				IServiceDiscoveryService serviceDiscovery = context.Resolve<IServiceDiscoveryService>();
+				IReadonlyAuthTokenRepository tokenRepository = context.Resolve<IReadonlyAuthTokenRepository>();
+
+				return new AsyncCreatureDataServiceClient(QueryForRemoteServiceEndpoint(serviceDiscovery, "ContentServer"), new RefitSettings() { HttpMessageHandlerFactory = () => new AuthenticatedHttpClientHandler(tokenRepository) });
+			});
 		}
 	}
 }
