@@ -25,8 +25,7 @@ namespace GladMMO
 				case EntityType.None:
 					break;
 				case EntityType.Player:
-					CreatePlayerMovementGenerator(context);
-					break;
+					return CreatePlayerMovementGenerator(context);
 				case EntityType.GameObject:
 					break;
 				case EntityType.Creature:
@@ -56,6 +55,8 @@ namespace GladMMO
 					return new ClientCharacterControllerInputMovementGenerator(pcmd, BuildLazyControllerFactory(context), LocalPlayerDetails.LocalPlayerGuid != context.EntityGuid);
 				}
 			}
+
+			throw new NotSupportedException($"TODO: Encountered unsupported movement data: {context.Data.GetType().Name}");
 		}
 
 		private Lazy<CharacterController> BuildLazyControllerFactory(EntityAssociatedData<IMovementData> context)
