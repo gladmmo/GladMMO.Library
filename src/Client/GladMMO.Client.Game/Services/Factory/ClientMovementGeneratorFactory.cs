@@ -20,6 +20,28 @@ namespace GladMMO
 
 		public IMovementGenerator<GameObject> Create(EntityAssociatedData<IMovementData> context)
 		{
+			switch (context.EntityGuid.EntityType)
+			{
+				case EntityType.None:
+					break;
+				case EntityType.Player:
+					CreatePlayerMovementGenerator(context);
+					break;
+				case EntityType.GameObject:
+					break;
+				case EntityType.Creature:
+					//TODO: Support non-static NPCs.
+					return new IdleMovementGenerator(context.Data.InitialPosition);
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
+			
+
+			throw new NotSupportedException($"TODO: Encountered unsupported movement data: {context.Data.GetType().Name}");
+		}
+
+		private IMovementGenerator<GameObject> CreatePlayerMovementGenerator(EntityAssociatedData<IMovementData> context)
+		{
 			//TODO: redo all this of this garbage
 			if (context.Data is PositionChangeMovementData pcmd)
 			{
@@ -34,8 +56,6 @@ namespace GladMMO
 					return new ClientCharacterControllerInputMovementGenerator(pcmd, BuildLazyControllerFactory(context), LocalPlayerDetails.LocalPlayerGuid != context.EntityGuid);
 				}
 			}
-
-			throw new NotSupportedException($"TODO: Encountered unsupported movement data: {context.Data.GetType().Name}");
 		}
 
 		private Lazy<CharacterController> BuildLazyControllerFactory(EntityAssociatedData<IMovementData> context)
