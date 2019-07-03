@@ -24,13 +24,17 @@ namespace GladMMO
 
 		protected override EntityPrefab ComputePrefabType(NetworkEntityGuid entityGuid)
 		{
-			if (entityGuid.EntityType == EntityType.Player)
+			switch(entityGuid.EntityType)
 			{
-				//It could be remote player or local player.
-				if (entityGuid.EntityId == CharacterDataRepository.CharacterId)
-					return EntityPrefab.LocalPlayer;
-				else
-					return EntityPrefab.RemotePlayer;
+				case EntityType.Player:
+					//It could be remote player or local player.
+					if(entityGuid.EntityId == CharacterDataRepository.CharacterId)
+						return EntityPrefab.LocalPlayer;
+					else
+						return EntityPrefab.RemotePlayer;
+
+				case EntityType.Creature:
+					return EntityPrefab.NetworkNpc;
 			}
 
 			//TODO: Handle other cases.
