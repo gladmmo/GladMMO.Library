@@ -32,14 +32,12 @@ namespace GladMMO
 		/// <inheritdoc />
 		public DefaultLoadableContentResourceManager(
 			[NotNull] IDownloadableContentServerServiceClient contentClient,
-			[NotNull] IReadonlyAuthTokenRepository authTokenRepo,
 			[NotNull] ILog logger)
 		{
 			//TODO: We haven't implemented the refcounted cleanup. We ref count, but don't yet dispose.
 			ProjectVersionStage.AssertAlpha();
 
 			ContentClient = contentClient ?? throw new ArgumentNullException(nameof(contentClient));
-			AuthTokenRepo = authTokenRepo ?? throw new ArgumentNullException(nameof(authTokenRepo));
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
 			ResourceHandleCache = new Dictionary<long, ReferenceCountedPrefabContentResourceHandle>();
