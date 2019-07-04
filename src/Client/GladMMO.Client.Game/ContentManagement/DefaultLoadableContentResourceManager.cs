@@ -17,8 +17,6 @@ namespace GladMMO
 	{
 		private IDownloadableContentServerServiceClient ContentClient { get; }
 
-		private IReadonlyAuthTokenRepository AuthTokenRepo { get; }
-
 		private ILog Logger { get; }
 
 		//We should only tocuh this on the main thread, including cleanup and updating it.
