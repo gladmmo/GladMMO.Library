@@ -18,11 +18,11 @@ Supporting:
 
 - [x] Unity3D SDK for UCC
 
-- [ ] Vivox Voice Chat
+- [x] Vivox Voice Chat
 
-- [ ] FinalIK Integration
+- [x] FinalIK Integration
 
-- [ ] VR Support
+- [x] VR Support
 
 ## Dependencies
 
