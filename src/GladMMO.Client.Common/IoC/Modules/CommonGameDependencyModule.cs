@@ -7,7 +7,7 @@ using Common.Logging;
 using Glader.Essentials;
 using Refit;
 
-namespace GladMMO.Client
+namespace GladMMO
 {
 	public sealed class CommonGameDependencyModule : NetworkServiceDiscoveryableAutofaceModule
 	{
