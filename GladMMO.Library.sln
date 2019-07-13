@@ -121,6 +121,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FinalIK.Editor", "src\Final
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FinalIK.Custom", "src\FinalIK\FinalIK.Custom\FinalIK.Custom.csproj", "{7F3966BB-C566-46EE-AC82-4DD0008F40D8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladMMO.Client.Game.NetCore", "src\Client\GladMMO.Client.Game.NetCore\GladMMO.Client.Game.NetCore.csproj", "{B2191DAE-0384-4A5B-9BE6-55419D5960F4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Database_Migration|Any CPU = Database_Migration|Any CPU
@@ -590,6 +592,16 @@ Global
 		{7F3966BB-C566-46EE-AC82-4DD0008F40D8}.Debug-Local|Any CPU.Build.0 = Debug|Any CPU
 		{7F3966BB-C566-46EE-AC82-4DD0008F40D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7F3966BB-C566-46EE-AC82-4DD0008F40D8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B2191DAE-0384-4A5B-9BE6-55419D5960F4}.Database_Migration|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2191DAE-0384-4A5B-9BE6-55419D5960F4}.Database_Migration|Any CPU.Build.0 = Debug|Any CPU
+		{B2191DAE-0384-4A5B-9BE6-55419D5960F4}.DEBUG_LOCAL|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2191DAE-0384-4A5B-9BE6-55419D5960F4}.DEBUG_LOCAL|Any CPU.Build.0 = Debug|Any CPU
+		{B2191DAE-0384-4A5B-9BE6-55419D5960F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2191DAE-0384-4A5B-9BE6-55419D5960F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B2191DAE-0384-4A5B-9BE6-55419D5960F4}.Debug-Local|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2191DAE-0384-4A5B-9BE6-55419D5960F4}.Debug-Local|Any CPU.Build.0 = Debug|Any CPU
+		{B2191DAE-0384-4A5B-9BE6-55419D5960F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B2191DAE-0384-4A5B-9BE6-55419D5960F4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -652,6 +664,7 @@ Global
 		{F5731FFE-35BF-438F-B6F9-5B75EACDEF0C} = {E4BE989E-6AA4-4CC9-9822-D84A6DEFCA1C}
 		{D631C20D-CCF5-4048-BB9C-C2DC27BB1D4C} = {E4BE989E-6AA4-4CC9-9822-D84A6DEFCA1C}
 		{7F3966BB-C566-46EE-AC82-4DD0008F40D8} = {E4BE989E-6AA4-4CC9-9822-D84A6DEFCA1C}
+		{B2191DAE-0384-4A5B-9BE6-55419D5960F4} = {8C598CE2-9578-41F6-A195-24678617AE6F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {886DD3D7-35E3-42F0-8CE9-74FB5AD7BBD0}
