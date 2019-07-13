@@ -8,7 +8,6 @@ using System.Xml;
 using Common.Logging;
 using GladNet;
 using SceneJect.Common;
-using UnityEngine;
 
 namespace GladMMO
 {
