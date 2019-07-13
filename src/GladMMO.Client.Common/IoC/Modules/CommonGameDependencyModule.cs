@@ -41,15 +41,8 @@ namespace GladMMO.Client
 		{
 			base.Load(builder);
 
-			//Set the sync context
-			UnityAsyncHelper.InitializeSyncContext();
-
 			builder.Register(context => LogLevel.All)
 				.As<LogLevel>()
-				.SingleInstance();
-
-			builder.RegisterType<UnityLogger>()
-				.As<ILog>()
 				.SingleInstance();
 
 			builder.RegisterType<LocalCharacterDataRepository>()
@@ -66,17 +59,11 @@ namespace GladMMO.Client
 				.As<IReadonlyAuthTokenRepository>()
 				.SingleInstance();
 
-			builder.RegisterType<GlobalEntityResourceLockingPolicy>()
-				.AsSelf()
-				.AsImplementedInterfaces()
-				.SingleInstance();
-			
 			//Handlers aren't needed for all scenes, but for most.
 			//TODO: We should expose SceneTypeCreatable or whatever on handlers
 			builder.RegisterModule(new GameClientMessageHandlerAutofacModule(Scene));
 
 			builder.RegisterModule(new EngineInterfaceRegisterationModule((int)Scene, GetType().Assembly));
-			builder.RegisterModule(new UIDependencyRegisterationModule<UnityUIRegisterationKey>());
 
 			//builder.RegisterModule<EntityMappableRegisterationModule<NetworkEntityGuid>>();
 			RegisterEntityContainers(builder);

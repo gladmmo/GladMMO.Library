@@ -70,7 +70,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Attributes\" />
     <Folder Include="Component\Base\" />
+    <Folder Include="Engine\Shared\Handlers\" />
     <Folder Include="Engine\Shared\Tickables\" />
     <Folder Include="Engine\Title\Tickables\" />
     <Folder Include="UI\CharacterSelection\" />

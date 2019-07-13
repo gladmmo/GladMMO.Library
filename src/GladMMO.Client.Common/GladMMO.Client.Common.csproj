@@ -1,12 +1,16 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Autofac" Version="4.8.1" />
     <PackageReference Include="Common.Logging" Version="3.4.1" />
     <PackageReference Include="FluentValidation" Version="7.6.103" />
+    <PackageReference Include="Glader.Essentials.Common" Version="1.0.18" />
+    <PackageReference Include="GladNet3.Client.DotNetTcpClient" Version="3.0.46" />
+    <PackageReference Include="GladNet3.Handler.API" Version="3.0.46" />
     <PackageReference Include="Refit" Version="4.6.107" />
     <PackageReference Include="SceneJect.Metadata" Version="3.0.31" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.5.0" />
@@ -18,7 +22,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Client\GladMMO.Client.CharacterService\GladMMO.Client.CharacterService.csproj" />
+    <ProjectReference Include="..\Client\GladMMO.Client.NameQueryService\GladMMO.Client.NameQueryService.csproj" />
+    <ProjectReference Include="..\Client\GladMMO.Client.ServiceDiscovery\GladMMO.Client.ServiceDiscovery.csproj" />
+    <ProjectReference Include="..\Client\GladMMO.Client.ZoneService\GladMMO.Client.ZoneService.csproj" />
+    <ProjectReference Include="..\GladMMO.Client.Authentication\GladMMO.Client.Authentication.csproj" />
     <ProjectReference Include="..\GladMMO.Common\GladMMO.Common.csproj" />
+    <ProjectReference Include="..\GladMMO.Network.Common\GladMMO.Network.Common.csproj" />
   </ItemGroup>
 
 </Project>

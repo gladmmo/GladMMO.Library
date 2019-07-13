@@ -17,6 +17,10 @@ namespace GladMMO
 	/// </summary>
 	public sealed class GameServerNetworkClientDependencyContainer : AutofacBasedDependencyRegister<GameServerNetworkClientAutofacModule>
 	{
-
+		public override void Register(ContainerBuilder register)
+		{
+			base.Register(register);
+			register.RegisterModule<GladMMONetworkSerializerAutofacModule>();
+		}
 	}
 }

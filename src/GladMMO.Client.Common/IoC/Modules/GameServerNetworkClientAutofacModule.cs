@@ -20,10 +20,6 @@ namespace GladMMO
 				.As<LogLevel>()
 				.SingleInstance();
 
-			builder.RegisterType<UnityLogger>()
-				.As<ILog>()
-				.SingleInstance();
-
 			builder.Register<IManagedNetworkClient<GameClientPacketPayload, GameServerPacketPayload>>(context =>
 				{
 					//The idea here is if the global network client it's null we should use it as the instance.
@@ -51,8 +47,6 @@ namespace GladMMO
 			builder.RegisterType<GameNetworkClient>()
 				.AsImplementedInterfaces()
 				.SingleInstance();
-
-			builder.RegisterModule<GladMMONetworkSerializerAutofacModule>();
 		}
 	}
 }

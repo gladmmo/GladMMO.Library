@@ -6,7 +6,6 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using Autofac;
-using UnityEngine;
 
 namespace GladMMO
 {
@@ -34,11 +33,11 @@ namespace GladMMO
 
 			if (!endpointResponse.isSuccessful)
 			{
-				Debug.LogError($"Failed to query for Endpoint: {serviceType}");
+				//Debug.LogError($"Failed to query for Endpoint: {serviceType}");
 				throw new InvalidOperationException($"Failed to query for Service: {serviceType} Result: {endpointResponse.ResultCode}");
 			}
 
-			Debug.Log($"Recieved service discovery response: {endpointResponse.Endpoint.EndpointAddress}:{endpointResponse.Endpoint.EndpointPort} for Type: {serviceType}");
+			//Debug.Log($"Recieved service discovery response: {endpointResponse.Endpoint.EndpointAddress}:{endpointResponse.Endpoint.EndpointPort} for Type: {serviceType}");
 
 			//TODO: Do we need extra slash?
 			return $"{endpointResponse.Endpoint.EndpointAddress}:{endpointResponse.Endpoint.EndpointPort}/";

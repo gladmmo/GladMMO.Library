@@ -9,7 +9,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\GladMMO.Client.Common\GladMMO.Client.Common.csproj" />
     <ProjectReference Include="..\..\GladMMO.Models.ServiceDiscovery\GladMMO.Models.ServiceDiscovery.csproj" />
   </ItemGroup>
 

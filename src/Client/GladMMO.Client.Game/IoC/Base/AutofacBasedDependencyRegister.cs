@@ -21,7 +21,7 @@ namespace GladMMO
 		}
 
 		/// <inheritdoc />
-		public sealed override void Register(ContainerBuilder register)
+		public override void Register(ContainerBuilder register)
 		{
 			//We just register the autofac module.
 			register.RegisterModule(CreateModule());

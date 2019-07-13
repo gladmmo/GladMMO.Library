@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Autofac;
 using GladNet;
 using Refit;
-using UnityEngine;
 
 namespace GladMMO
 {
