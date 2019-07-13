@@ -1,7 +1,8 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <ItemGroup>
@@ -18,7 +19,6 @@
 
   <ItemGroup>
     <Folder Include="Extensions\" />
-    <Folder Include="Services\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -29,6 +29,7 @@
     <ProjectReference Include="..\GladMMO.Client.Authentication\GladMMO.Client.Authentication.csproj" />
     <ProjectReference Include="..\GladMMO.Common\GladMMO.Common.csproj" />
     <ProjectReference Include="..\GladMMO.Network.Common\GladMMO.Network.Common.csproj" />
+    <ProjectReference Include="..\GladMMO.Payloads.ZoneServer\GladMMO.Payloads.ZoneServer.csproj" />
   </ItemGroup>
 
 </Project>
