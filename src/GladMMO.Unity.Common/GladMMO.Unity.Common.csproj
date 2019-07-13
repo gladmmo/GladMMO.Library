@@ -34,7 +34,6 @@
     <Folder Include="Async\" />
     <Folder Include="Components\" />
     <Folder Include="Factory\" />
-    <Folder Include="Services\" />
   </ItemGroup>
 
 </Project>
