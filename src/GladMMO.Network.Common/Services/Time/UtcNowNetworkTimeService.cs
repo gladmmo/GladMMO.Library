@@ -27,7 +27,6 @@ namespace GladMMO
 			{
 				//TODO: How to handle this check.
 				long value = CurrentLocalTime - CurrentTimeOffset;
-				Debug.Assert(value < 0);
 				return value;
 			}
 		}
