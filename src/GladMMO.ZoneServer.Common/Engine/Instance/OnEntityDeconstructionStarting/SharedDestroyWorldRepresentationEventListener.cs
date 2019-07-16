@@ -36,7 +36,7 @@ namespace GladMMO
 		protected override void OnEventFired(object source, EntityDeconstructionStartingEventArgs args)
 		{
 			//Before we even touch the GameObject, let's broadcast this.
-			OnEntityWorldRepresentationDeconstructionStarting?.Invoke(this, new EntityWorldRepresentationDeconstructionStartingEventArgs(args.EntityGuid, GuidToGameObjectMappable.RetrieveEntity(args.EntityGuid)));
+			OnEntityWorldRepresentationDeconstructionStarting?.Invoke(this, new EntityWorldRepresentationDeconstructionStartingEventArgs(args.EntityGuid));
 			CleanupGameObject(args);
 			OnEntityWorldRepresentationDeconstructionFinished?.Invoke(this, new EntityWorldRepresentationDeconstructionFinishedEventArgs(args.EntityGuid));
 

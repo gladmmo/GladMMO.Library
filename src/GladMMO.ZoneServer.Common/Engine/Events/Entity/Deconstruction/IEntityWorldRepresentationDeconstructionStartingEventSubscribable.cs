@@ -21,16 +21,10 @@ namespace GladMMO
 		/// </summary>
 		public NetworkEntityGuid EntityGuid { get; }
 
-		/// <summary>
-		/// The world representation of the Entity.
-		/// </summary>
-		public GameObject WorldRepresentation { get; }
-
 		/// <inheritdoc />
-		public EntityWorldRepresentationDeconstructionStartingEventArgs([NotNull] NetworkEntityGuid entityGuid, [NotNull] GameObject worldRepresentation)
+		public EntityWorldRepresentationDeconstructionStartingEventArgs([NotNull] NetworkEntityGuid entityGuid)
 		{
 			EntityGuid = entityGuid ?? throw new ArgumentNullException(nameof(entityGuid));
-			WorldRepresentation = worldRepresentation ?? throw new ArgumentNullException(nameof(worldRepresentation));
 		}
 	}
 }
