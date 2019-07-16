@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\GladMMO.Client.Common\GladMMO.Client.Common.csproj" />
+    <ProjectReference Include="..\..\GladMMO.ZoneServer.Common\GladMMO.ZoneServer.Common.csproj" />
   </ItemGroup>
 
 </Project>
