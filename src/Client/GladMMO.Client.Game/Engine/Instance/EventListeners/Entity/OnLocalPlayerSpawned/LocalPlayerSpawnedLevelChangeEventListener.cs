@@ -10,13 +10,17 @@ namespace GladMMO
 	//[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
 	public sealed class LocalPlayerSpawnedLevelChangeEventListener : HubChangedLocalPlayerSpawnedEventListener
 	{
+		protected IUIUnitFrame PlayerUnitFrame { get; }
+
 		/// <inheritdoc />
 		public LocalPlayerSpawnedLevelChangeEventListener(ILocalPlayerSpawnedEventSubscribable subscriptionService, 
 			IEntityDataChangeCallbackRegisterable entityDataCallbackRegister, 
 			IReadonlyLocalPlayerDetails playerDetails,
-			[KeyFilter(UnityUIRegisterationKey.PlayerUnitFrame)] IUIUnitFrame playerUnitFrame)
-			: base(subscriptionService, entityDataCallbackRegister, playerDetails, playerUnitFrame)
+			[KeyFilter(UnityUIRegisterationKey.PlayerUnitFrame)] [NotNull]
+			IUIUnitFrame playerUnitFrame)
+			: base(subscriptionService, entityDataCallbackRegister, playerDetails)
 		{
+			PlayerUnitFrame = playerUnitFrame ?? throw new ArgumentNullException(nameof(playerUnitFrame));
 		}
 
 		/// <inheritdoc />

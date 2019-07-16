@@ -15,18 +15,14 @@ namespace GladMMO
 		/// </summary>
 		protected IReadonlyLocalPlayerDetails PlayerDetails { get; }
 
-		protected IUIUnitFrame PlayerUnitFrame { get; }
-
 		/// <inheritdoc />
 		protected HubChangedLocalPlayerSpawnedEventListener(ILocalPlayerSpawnedEventSubscribable subscriptionService,
 			[NotNull] IEntityDataChangeCallbackRegisterable entityDataCallbackRegister,
-			[NotNull] IReadonlyLocalPlayerDetails playerDetails,
-			[NotNull] IUIUnitFrame playerUnitFrame) 
+			[NotNull] IReadonlyLocalPlayerDetails playerDetails)
 			: base(subscriptionService)
 		{
 			EntityDataCallbackRegister = entityDataCallbackRegister ?? throw new ArgumentNullException(nameof(entityDataCallbackRegister));
 			PlayerDetails = playerDetails ?? throw new ArgumentNullException(nameof(playerDetails));
-			PlayerUnitFrame = playerUnitFrame ?? throw new ArgumentNullException(nameof(playerUnitFrame));
 		}
 
 		protected void RegisterPlayerDataChangeCallback<TChangeType>(EUnitFields field, [NotNull] Action<NetworkEntityGuid, EntityDataChangedArgs<TChangeType>> callback)
