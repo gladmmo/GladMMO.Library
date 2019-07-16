@@ -7,7 +7,7 @@ using JetBrains.Annotations;
 namespace GladMMO
 {
 	//TODO: We need some handling for callback cleanup, especially when an entity disappears.
-	public sealed class EntityDataChangeCallbackManager : IEntityDataChangeCallbackRegisterable, IEntityDataChangeCallbackService
+	public sealed class EntityDataChangeCallbackManager : IEntityDataChangeCallbackRegisterable, IEntityDataChangeCallbackService, IEntityCollectionRemovable
 	{
 		private Dictionary<NetworkEntityGuid, Dictionary<int, Action<int>>> CallbackMap { get; }
 
@@ -51,6 +51,11 @@ namespace GladMMO
 			//If we have any registered callbacks for this entity's data change we should dispatch it (they will all be called)
 			if(CallbackMap[entity].ContainsKey(field))
 				CallbackMap[entity][field]?.Invoke(newValueAsInt);
+		}
+
+		public bool RemoveEntityEntry(NetworkEntityGuid entityGuid)
+		{
+			return CallbackMap.Remove(entityGuid);
 		}
 	}
 }
