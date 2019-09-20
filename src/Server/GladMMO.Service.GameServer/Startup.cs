@@ -71,7 +71,7 @@ namespace GladMMO
 		{
 			services.AddDbContext<CharacterDatabaseContext>(o =>
 			{
-				o.UseMySql("Server=192.168.0.3;Database=guardians.gameserver;Uid=root;Pwd=test;");
+				o.UseMySql("Server=127.0.0.1;Database=guardians.gameserver;Uid=root;Pwd=test;");
 			});
 
 			services.AddTransient<ICharacterRepository, DatabaseBackedCharacterRepository>();
