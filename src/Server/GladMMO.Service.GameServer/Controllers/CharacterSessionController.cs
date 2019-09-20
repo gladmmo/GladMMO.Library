@@ -258,12 +258,21 @@ namespace GladMMO
 				return new CharacterSessionEnterResponse(sessionModel.ZoneId);
 			}
 
-			//If we've made it this far we'll need to create a session (because one does not exist) for the character
-			//but we need player location data first (if they've never entered the world they won't have any
-			//TODO: Handle location loading
-			//TODO: Handle deafult
-			if(!await CharacterSessionRepository.TryCreateAsync(new CharacterSessionModel(characterId, 1)))
-				return new CharacterSessionEnterResponse(CharacterSessionEnterResponseCode.GeneralServerError);
+			try
+			{
+				//If we've made it this far we'll need to create a session (because one does not exist) for the character
+				//but we need player location data first (if they've never entered the world they won't have any
+				//TODO: Handle location loading
+				//TODO: Handle deafult
+				if(!await CharacterSessionRepository.TryCreateAsync(new CharacterSessionModel(characterId, 1)))
+					return new CharacterSessionEnterResponse(CharacterSessionEnterResponseCode.GeneralServerError);
+			}
+			catch (Exception e)
+			{
+				if(Logger.IsEnabled(LogLevel.Error))
+					Logger.LogError($"Character with ID: {characterId} failed to create session. Potentially no default world assigned or World with session was deleted and orphaned.");
+				throw;
+			}
 			
 			//TODO: Better zone handling
 			return new CharacterSessionEnterResponse(1);
