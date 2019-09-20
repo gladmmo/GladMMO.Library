@@ -4,6 +4,6 @@
 
     "JwtSigningX509Certificate2Path": "Certs/TestCert.pfx",
 
-    "AuthenticationDatabaseString": "Server=guardians-auth-db.c7tnrjczj0de.us-east-2.rds.amazonaws.com;Database=guardians-auth-db;Uid=root;Pwd=password;"
+    "AuthenticationDatabaseString": "Server=127.0.0.1;Database=guardians.auth;Uid=root;Pwd=test;"
   }
 }
