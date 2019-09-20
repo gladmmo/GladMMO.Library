@@ -34,6 +34,8 @@ namespace GladMMO
 
 		ModelChangeRequest = 9,
 
-		PlayerTrackerDataChange = 10
+		PlayerTrackerDataChange = 10,
+
+		ClickToMove = 11,
 	}
 }
