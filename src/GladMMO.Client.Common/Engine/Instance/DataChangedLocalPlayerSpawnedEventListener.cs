@@ -6,7 +6,7 @@ using Glader.Essentials;
 
 namespace GladMMO
 {
-	public abstract class HubChangedLocalPlayerSpawnedEventListener : OnLocalPlayerSpawnedEventListener
+	public abstract class DataChangedLocalPlayerSpawnedEventListener : OnLocalPlayerSpawnedEventListener
 	{
 		private IEntityDataChangeCallbackRegisterable EntityDataCallbackRegister { get; }
 
@@ -16,7 +16,7 @@ namespace GladMMO
 		protected IReadonlyLocalPlayerDetails PlayerDetails { get; }
 
 		/// <inheritdoc />
-		protected HubChangedLocalPlayerSpawnedEventListener(ILocalPlayerSpawnedEventSubscribable subscriptionService,
+		protected DataChangedLocalPlayerSpawnedEventListener(ILocalPlayerSpawnedEventSubscribable subscriptionService,
 			[NotNull] IEntityDataChangeCallbackRegisterable entityDataCallbackRegister,
 			[NotNull] IReadonlyLocalPlayerDetails playerDetails)
 			: base(subscriptionService)
