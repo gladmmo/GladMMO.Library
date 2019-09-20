@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Reflection;
 using System.Text;
 using Autofac;
 using Common.Logging;
@@ -19,6 +20,11 @@ namespace GladMMO
 		private string ServiceDiscoveryUrl { get; }
 
 		/// <summary>
+		/// The assembly being used to gather engine interface implementations from.
+		/// </summary>
+		public Assembly EngineInterfaceAssembly { get; }
+
+		/// <summary>
 		/// Default autofac ctor.
 		/// </summary>
 		public CommonGameDependencyModule()
@@ -28,12 +34,13 @@ namespace GladMMO
 
 		//TODO: Shoudl we expose the ServiceDiscovery URL to the editor? Is there value in that?
 		/// <inheritdoc />
-		public CommonGameDependencyModule(GameSceneType scene, [NotNull] string serviceDiscoveryUrl = "http://72.190.177.214:5000")
+		public CommonGameDependencyModule(GameSceneType scene, [NotNull] string serviceDiscoveryUrl, Assembly engineInterfaceAssembly)
 		{
 			if(!Enum.IsDefined(typeof(GameSceneType), scene)) throw new InvalidEnumArgumentException(nameof(scene), (int)scene, typeof(GameSceneType));
 
 			Scene = scene;
 			ServiceDiscoveryUrl = serviceDiscoveryUrl ?? throw new ArgumentNullException(nameof(serviceDiscoveryUrl));
+			EngineInterfaceAssembly = engineInterfaceAssembly;
 		}
 
 		/// <inheritdoc />
@@ -63,7 +70,7 @@ namespace GladMMO
 			//TODO: We should expose SceneTypeCreatable or whatever on handlers
 			builder.RegisterModule(new GameClientMessageHandlerAutofacModule(Scene));
 
-			builder.RegisterModule(new EngineInterfaceRegisterationModule((int)Scene, GetType().Assembly));
+			builder.RegisterModule(new EngineInterfaceRegisterationModule((int)Scene, EngineInterfaceAssembly));
 
 			//builder.RegisterModule<EntityMappableRegisterationModule<NetworkEntityGuid>>();
 			RegisterEntityContainers(builder);
