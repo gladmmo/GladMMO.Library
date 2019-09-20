@@ -68,13 +68,12 @@ namespace GladMMO
 				.WithType(EntityType.Player);
 
 			//TODO: We assume they are authenticated, we don't check at the moment but we WILL and SHOULD. Just load their location.
-			/*ZoneServerCharacterLocationResponse locationResponse = await GameServerClient.GetCharacterLocation(payload.CharacterId)
+			ZoneServerCharacterLocationResponse locationResponse = await GameServerClient.GetCharacterLocation(payload.CharacterId)
 				.ConfigureAwait(false);
 
-			Vector3 position = locationResponse.isSuccessful ? locationResponse.Position : Vector3.zero;*/
+			Vector3 position = locationResponse.isSuccessful ? locationResponse.Position : Vector3.zero;
 
-			//TODO: We should not get spawn point data here. We need a more complicated way that involves querying for saved position.
-			SpawnPointData pointData = SpawnPointProvider.GetSpawnPoint();
+			SpawnPointData pointData = new SpawnPointData(position, Quaternion.identity);
 
 			if(Logger.IsDebugEnabled)
 				Logger.Debug($"Recieved player location: {pointData.WorldPosition}");
