@@ -81,7 +81,7 @@ namespace GladMMO
 #if !DEBUG_LOCAL && !RELEASE_LOCAL
 				options.UseMySql(authOptions.Value.AuthenticationDatabaseString);
 #else
-				options.UseMySql("Server=72.190.177.214;Database=guardians.auth;Uid=root;Pwd=test;");
+				options.UseMySql("Server=127.0.0.1;Database=guardians.auth;Uid=root;Pwd=test;");
 #endif
 				options.UseOpenIddict<int>();
 			});
