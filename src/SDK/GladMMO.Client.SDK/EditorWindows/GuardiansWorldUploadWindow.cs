@@ -8,6 +8,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Glader.Essentials;
 using Microsoft.Azure.Storage.Blob;
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -59,15 +60,35 @@ namespace GladMMO.SDK
 				//Done out here, must be called on the main thread
 				string projectPath = Application.dataPath.ToLower().TrimEnd(@"assets".ToCharArray());
 
-				Thread uploadThread = new Thread(new ThreadStart(async () =>
-				{
-					string uploadUrl = (await ucmService.GetNewWorldUploadUrl(AuthenticationModelSingleton.Instance.AuthenticationToken)).UploadUrl;
-					Debug.Log($"Uploading to: {uploadUrl}.");
-					var cloudBlockBlob = new CloudBlockBlob(new Uri(uploadUrl));
-					await cloudBlockBlob.UploadFromFileAsync(Path.Combine(projectPath, "AssetBundles", "temp", AssetBundlePath));
-				}));
+				UnityAsyncHelper.InitializeSyncContext();
 
-				uploadThread.Start();
+				UnityAsyncHelper.UnityMainThreadContext.Post(async o =>
+				{
+					EditorUtility.DisplayProgressBar("Uploading Content", "Please wait until complete.", 0.5f);
+					try
+					{
+						RequestedUrlResponseModel newWorldUpload = await ucmService.GetNewWorldUploadUrl(AuthenticationModelSingleton.Instance.AuthenticationToken)
+							.ConfigureAwait(true);
+
+						string uploadUrl = newWorldUpload.UploadUrl;
+						Debug.Log($"Uploading to: {uploadUrl}.");
+
+						var cloudBlockBlob = new CloudBlockBlob(new Uri(uploadUrl));
+						await cloudBlockBlob.UploadFromFileAsync(Path.Combine(projectPath, "AssetBundles", "temp", AssetBundlePath))
+							.ConfigureAwait(true);
+					}
+					catch (Exception e)
+					{
+						Debug.LogError($"Failed to upload. Reason: {e.Message}");
+						throw;
+					}
+					finally
+					{
+						//Important to ALWAYS end the progress bar, even if failed.
+						EditorUtility.ClearProgressBar();
+					}
+
+				}, null);
 			}
 		}
 
