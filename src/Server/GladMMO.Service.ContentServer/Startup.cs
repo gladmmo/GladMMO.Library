@@ -101,7 +101,7 @@ namespace GladMMO
 				throw new NotSupportedException("AWS/Remote database not supported yet.");
 				//o.UseMySql(authOptions.Value.AuthenticationDatabaseString);
 #else
-				o.UseMySql("Server=72.190.177.214;Database=guardians.gameserver;Uid=root;Pwd=test;");
+				o.UseMySql("Server=127.0.0.1;Database=guardians.gameserver;Uid=root;Pwd=test;");
 #endif
 			});
 		}
