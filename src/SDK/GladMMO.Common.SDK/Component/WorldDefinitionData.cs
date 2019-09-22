@@ -41,6 +41,7 @@ namespace GladMMO
 		{
 			_WorldId = 0;
 			_WorldGuid = null;
+			GameObject.DestroyImmediate(this.gameObject);
 		}
 	}
 }
