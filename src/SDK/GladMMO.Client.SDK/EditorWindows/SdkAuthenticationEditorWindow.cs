@@ -75,7 +75,7 @@ namespace GladMMO.SDK
 			if (result.isTokenValid)
 			{
 				AuthenticationModelSingleton.Instance.SetAuthenticationState(true);
-				AuthenticationModelSingleton.Instance.SetAuthenticationToken("{result.AccessToken}");
+				AuthenticationModelSingleton.Instance.SetAuthenticationToken(result.AccessToken);
 			}
 
 			return result.isTokenValid;
