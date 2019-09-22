@@ -29,6 +29,12 @@ namespace GladMMO
 		}
 
 		/// <inheritdoc />
+		public async Task<ResponseModel<ContentUploadToken, ContentUploadResponseCode>> RequestUpdateExistingWorld(long worldId)
+		{
+			return await(await GetService().ConfigureAwait(false)).RequestUpdateExistingWorld(worldId).ConfigureAwait(false);
+		}
+
+		/// <inheritdoc />
 		public async Task<ResponseModel<ContentUploadToken, ContentUploadResponseCode>> GetNewAvatarUploadUrl()
 		{
 			return await (await GetService().ConfigureAwait(false)).GetNewAvatarUploadUrl().ConfigureAwait(false);

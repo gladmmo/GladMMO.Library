@@ -24,6 +24,16 @@ namespace GladMMO
 		Task<ResponseModel<ContentUploadToken, ContentUploadResponseCode>> GetNewWorldUploadUrl();
 
 		/// <summary>
+		/// Attempts to get a PATCH uploaded world's content.
+		/// If successful the Token contained in the response will contain a valid upload
+		/// URL which can be used to update the world content.
+		/// </summary>
+		/// <returns>A model representing the result of the world URL update request.</returns>
+		[RequiresAuthentication]
+		[Patch("/api/World/{id}")]
+		Task<ResponseModel<ContentUploadToken, ContentUploadResponseCode>> RequestUpdateExistingWorld([AliasAs("id")] long worldId);
+
+		/// <summary>
 		/// Attempts to get a new URL that can be used to upload the avatar.
 		/// If successful the URl contained in the response will contain a valid upload
 		/// URL which can be used to upload avatar content.

@@ -80,10 +80,37 @@ namespace GladMMO
 		}
 
 		/// <summary>
+		/// PATCH request that requests to update an already uploaded URL for a content.
+		/// The user must be authorized and MUST own the content.
+		/// </summary>
+		/// <returns>A <see cref="ContentUploadToken"/> that either contains error information or the upload URL if it was successful.</returns>
+		[HttpPatch("{id}")]
+		[AuthorizeJwt]
+		public async Task<IActionResult> UpdateUploadedContent(
+			[FromRoute(Name = "id")] long contentId,
+			[FromServices] ICustomContentRepository<TContentType> contentEntryRepository,
+			[FromServices] IStorageUrlBuilder urlBuilder)
+		{
+			//Content must exist.
+			if (!await contentEntryRepository.ContainsAsync(contentId))
+				return BuildFailedResponseModel(ContentUploadResponseCode.InvalidRequest);
+
+			//Unlike creation, we just load an existing one.
+			TContentType content = await contentEntryRepository.RetrieveAsync(contentId)
+				.ConfigureAwait(false);
+
+			//WE MUST MAKE SURE THE AUTHORIZED USER OWNS THE CONTENT!!
+			if(ClaimsReader.GetUserIdInt(User) != content.AccountId)
+				return BuildFailedResponseModel(ContentUploadResponseCode.AuthorizationFailed);
+
+			return await GenerateUploadTokenResponse(urlBuilder, content);
+		}
+
+		/// <summary>
 		/// POST request that requests an upload URL for a content.
 		/// The user must be authorized.
 		/// </summary>
-		/// <returns>A <see cref="RequestedUrlResponseModel"/> that either contains error information or the upload URL if it was successful.</returns>
+		/// <returns>A <see cref="ContentUploadToken"/> that either contains error information or the upload URL if it was successful.</returns>
 		[HttpPost("create")]
 		[AuthorizeJwt]
 		public async Task<IActionResult> RequestContentUploadUrl(
@@ -103,17 +130,22 @@ namespace GladMMO
 			TContentType content = GenerateNewModel();
 			bool result = await contentEntryRepository.TryCreateAsync(content);
 
+			return await GenerateUploadTokenResponse(urlBuilder, content);
+		}
+
+		private async Task<IActionResult> GenerateUploadTokenResponse(IStorageUrlBuilder urlBuilder, TContentType content)
+		{
 			string uploadUrl = await urlBuilder.BuildUploadUrl(ContentType, content.StorageGuid);
 
-			if(String.IsNullOrEmpty(uploadUrl))
+			if (String.IsNullOrEmpty(uploadUrl))
 			{
-				if(Logger.IsEnabled(LogLevel.Error))
+				if (Logger.IsEnabled(LogLevel.Error))
 					Logger.LogError($"Failed to create content upload URL for {ClaimsReader.GetUserName(User)}:{ClaimsReader.GetUserId(User)} with GUID: {content.StorageGuid}.");
 
 				return BuildFailedResponseModel(ContentUploadResponseCode.ServiceUnavailable);
 			}
 
-			if(Logger.IsEnabled(LogLevel.Information))
+			if (Logger.IsEnabled(LogLevel.Information))
 				Logger.LogInformation($"Success. Sending {ClaimsReader.GetUserName(User)} URL: {uploadUrl}");
 
 			return BuildSuccessfulResponseModel(new ContentUploadToken(uploadUrl, content.ContentId, content.StorageGuid));
