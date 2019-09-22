@@ -10,6 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Glader.Essentials;
 using Microsoft.Azure.Storage.Blob;
+using Refit;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -30,22 +31,40 @@ namespace GladMMO.SDK
 
 		protected override void AuthenticatedOnGUI()
 		{
+			SceneObject = AssetDatabase.LoadAssetAtPath<SceneAsset>(SceneManager.GetActiveScene().path);
+
 			//TODO: Validate scene file
-			SceneObject = EditorGUILayout.ObjectField("Scene", SceneObject, typeof(SceneAsset), false);
+			EditorGUILayout.ObjectField("Scene", SceneObject, typeof(SceneAsset), false);
 
-			if(GUILayout.Button("Upload World"))
+			//If there is a world definition in the scene we should utilize it.
+			//TODO: We should do more than just render it.
+			WorldDefinitionData definitionData = FindObjectOfType<WorldDefinitionData>();
+
+			if (definitionData != null)
 			{
-				string assetBundlePath = GenerateWorldBundle();
+				EditorGUILayout.LabelField($"World Id: {definitionData.WorldId}");
+				EditorGUILayout.LabelField($"World GUID: {definitionData.WorldGuid}");
+			}
+			else
+			{
+				//If there is no world data definition then we should allow users
+				//to upload a new world.
+				if(GUILayout.Button("Upload World"))
+				{
+					string assetBundlePath = GenerateWorldBundle();
 
-				UploadWorldAssetBundle(assetBundlePath);
+					UploadWorldAssetBundle(assetBundlePath);
 
-				return;
+					return;
+				}
 			}
 		}
 
 		private static void UploadWorldAssetBundle(string assetBundlePath)
 		{
-			IDownloadableContentServerServiceClient ucmService = Refit.RestService.For<IDownloadableContentServerServiceClient>("http://72.190.177.214:5005/");
+			IDownloadableContentServerServiceClient ucmService = 
+				new DownloadableContentServiceClientFactory()
+					.Create(EmptyFactoryContext.Instance);
 
 			//Done out here, must be called on the main thread
 			string projectPath = Application.dataPath.ToLower().TrimEnd(@"assets".ToCharArray());
@@ -57,7 +76,7 @@ namespace GladMMO.SDK
 				EditorUtility.DisplayProgressBar("Uploading Content", "Please wait until complete.", 0.5f);
 				try
 				{
-					ResponseModel<ContentUploadToken, ContentUploadResponseCode> contentUploadToken = await ucmService.GetNewWorldUploadUrl(AuthenticationModelSingleton.Instance.AuthenticationToken)
+					ResponseModel<ContentUploadToken, ContentUploadResponseCode> contentUploadToken = await ucmService.GetNewWorldUploadUrl()
 						.ConfigureAwait(true);
 
 					//TODO: Handle failure.
@@ -70,6 +89,13 @@ namespace GladMMO.SDK
 						.ConfigureAwait(true);
 
 					Debug.Log("Successfully uploaded.");
+
+					//If it's sucessfully uploaded we should create a world definition
+					//object in the scene.
+					WorldDefinitionData definitionData = new GameObject("World Definition").AddComponent<WorldDefinitionData>();
+
+					definitionData.WorldGuid = contentUploadToken.Result.ContentGuid.ToString();
+					definitionData.WorldId = contentUploadToken.Result.ContentId;
 				}
 				catch (Exception e)
 				{

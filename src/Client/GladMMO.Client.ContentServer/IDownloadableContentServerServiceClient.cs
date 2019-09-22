@@ -20,8 +20,9 @@ namespace GladMMO
 		/// </summary>
 		/// <param name="authToken">The user authentication token.</param>
 		/// <returns>A model representing the result of the world URL generation request.</returns>
+		[RequiresAuthentication]
 		[Post("/api/World/create")]
-		Task<ResponseModel<ContentUploadToken, ContentUploadResponseCode>> GetNewWorldUploadUrl([AuthenticationToken] string authToken);
+		Task<ResponseModel<ContentUploadToken, ContentUploadResponseCode>> GetNewWorldUploadUrl();
 
 		/// <summary>
 		/// Attempts to get a new URL that can be used to upload the avatar.
@@ -30,8 +31,9 @@ namespace GladMMO
 		/// </summary>
 		/// <param name="authToken">The user authentication token.</param>
 		/// <returns>A model representing the result of the avatar URL generation request.</returns>
+		[RequiresAuthentication]
 		[Post("/api/avatar/create")]
-		Task<ResponseModel<ContentUploadToken, ContentUploadResponseCode>> GetNewAvatarUploadUrl([AuthenticationToken] string authToken);
+		Task<ResponseModel<ContentUploadToken, ContentUploadResponseCode>> GetNewAvatarUploadUrl();
 
 		/// <summary>
 		/// Attempts to get a new URL that can be used to upload the creature.
@@ -40,8 +42,9 @@ namespace GladMMO
 		/// </summary>
 		/// <param name="authToken">The user authentication token.</param>
 		/// <returns>A model representing the result of the creature URL generation request.</returns>
+		[RequiresAuthentication]
 		[Post("/api/avatar/create")]
-		Task<ResponseModel<ContentUploadToken, ContentUploadResponseCode>> GetNewCreatureModelUploadUrl([AuthenticationToken] string authToken);
+		Task<ResponseModel<ContentUploadToken, ContentUploadResponseCode>> GetNewCreatureModelUploadUrl();
 
 		//TODO: Doc
 		[RequiresAuthentication]

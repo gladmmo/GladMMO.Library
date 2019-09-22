@@ -61,7 +61,9 @@ namespace GladMMO.SDK
 
 			if(GUILayout.Button("Upload Assetbundle"))
 			{
-				IDownloadableContentServerServiceClient ucmService = Refit.RestService.For<IDownloadableContentServerServiceClient>("http://72.190.177.214:5005/");
+				IDownloadableContentServerServiceClient ucmService =
+					new DownloadableContentServiceClientFactory()
+						.Create(EmptyFactoryContext.Instance);
 
 				//Done out here, must be called on the main thread
 				string projectPath = Application.dataPath.ToLower().TrimEnd(@"assets".ToCharArray());
@@ -70,7 +72,7 @@ namespace GladMMO.SDK
 				{
 					try
 					{
-						ResponseModel<ContentUploadToken, ContentUploadResponseCode> contentUploadToken = await ucmService.GetNewCreatureModelUploadUrl(AuthenticationModelSingleton.Instance.AuthenticationToken);
+						ResponseModel<ContentUploadToken, ContentUploadResponseCode> contentUploadToken = await ucmService.GetNewCreatureModelUploadUrl();
 
 						//TODO: Handle failure.
 
