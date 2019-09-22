@@ -23,20 +23,20 @@ namespace GladMMO
 		}
 
 		/// <inheritdoc />
-		public async Task<ResponseModel<ContentUploadToken, ContentUploadResponseCode>> GetNewWorldUploadUrl(string authToken)
+		public async Task<ResponseModel<ContentUploadToken, ContentUploadResponseCode>> GetNewWorldUploadUrl()
 		{
-			return await (await GetService().ConfigureAwait(false)).GetNewWorldUploadUrl(authToken).ConfigureAwait(false);
+			return await (await GetService().ConfigureAwait(false)).GetNewWorldUploadUrl().ConfigureAwait(false);
 		}
 
 		/// <inheritdoc />
-		public async Task<ResponseModel<ContentUploadToken, ContentUploadResponseCode>> GetNewAvatarUploadUrl(string authToken)
+		public async Task<ResponseModel<ContentUploadToken, ContentUploadResponseCode>> GetNewAvatarUploadUrl()
 		{
-			return await (await GetService().ConfigureAwait(false)).GetNewAvatarUploadUrl(authToken).ConfigureAwait(false);
+			return await (await GetService().ConfigureAwait(false)).GetNewAvatarUploadUrl().ConfigureAwait(false);
 		}
 
-		public async Task<ResponseModel<ContentUploadToken, ContentUploadResponseCode>> GetNewCreatureModelUploadUrl(string authToken)
+		public async Task<ResponseModel<ContentUploadToken, ContentUploadResponseCode>> GetNewCreatureModelUploadUrl()
 		{
-			return await (await GetService().ConfigureAwait(false)).GetNewCreatureModelUploadUrl(authToken).ConfigureAwait(false);
+			return await (await GetService().ConfigureAwait(false)).GetNewCreatureModelUploadUrl().ConfigureAwait(false);
 		}
 
 		/// <inheritdoc />
