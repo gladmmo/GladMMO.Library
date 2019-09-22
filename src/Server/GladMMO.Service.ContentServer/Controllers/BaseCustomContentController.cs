@@ -8,12 +8,12 @@ using Microsoft.Extensions.Logging;
 
 namespace GladMMO
 {
-	public abstract class BaseCustomControllerController<TContentType> : AuthorizationReadyController 
+	public abstract class BaseCustomContentController<TContentType> : AuthorizationReadyController 
 		where TContentType : IClientContentPersistable
 	{
 		protected UserContentType ContentType { get; }
 
-		protected BaseCustomControllerController(IClaimsPrincipalReader claimsReader, 
+		protected BaseCustomContentController(IClaimsPrincipalReader claimsReader, 
 			ILogger<AuthorizationReadyController> logger, 
 			UserContentType contentType) 
 			: base(claimsReader, logger)

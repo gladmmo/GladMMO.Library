@@ -14,7 +14,7 @@ namespace GladMMO
 {
 	//From ProjectVindictive: https://github.com/HelloKitty/ProjectVindictive.Library/blob/master/src/ProjectVindictive.Service.UserContentManagement/Controllers/WorldController.cs
 	[Route("api/[controller]")]
-	public class WorldController : BaseCustomControllerController<WorldEntryModel>
+	public class WorldController : BaseCustomContentController<WorldEntryModel>
 	{
 		public WorldController(IClaimsPrincipalReader claimsReader, 
 			ILogger<AuthorizationReadyController> logger) 

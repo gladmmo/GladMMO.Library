@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 namespace GladMMO
 {
 	[Route("api/[controller]")]
-	public sealed class CreatureController : BaseCustomControllerController<CreatureModelEntryModel>
+	public sealed class CreatureController : BaseCustomContentController<CreatureModelEntryModel>
 	{
 		public CreatureController(IClaimsPrincipalReader claimsReader, ILogger<AuthorizationReadyController> logger) 
 			: base(claimsReader, logger, UserContentType.Creature)

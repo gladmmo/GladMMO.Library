@@ -14,7 +14,7 @@ namespace GladMMO
 {
 	//TODO: This is mostly a copy-paste from Worlds, we need to significantly extend and refactor this for public avatars and private avatars support.
 	[Route("api/[controller]")]
-	public class AvatarController : BaseCustomControllerController<AvatarEntryModel>
+	public class AvatarController : BaseCustomContentController<AvatarEntryModel>
 	{
 		public AvatarController(IClaimsPrincipalReader claimsReader, 
 			ILogger<AuthorizationReadyController> logger)
