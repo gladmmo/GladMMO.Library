@@ -9,6 +9,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>GladMMO.Client.SDK</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="UnityEngine">
       <HintPath>..\..\..\lib\Unity\UnityEngine.dll</HintPath>
     </Reference>
