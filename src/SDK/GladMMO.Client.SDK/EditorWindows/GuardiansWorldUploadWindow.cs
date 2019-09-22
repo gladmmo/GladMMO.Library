@@ -44,28 +44,33 @@ namespace GladMMO.SDK
 			{
 				EditorGUILayout.LabelField($"World Id: {definitionData.WorldId}");
 				EditorGUILayout.LabelField($"World GUID: {definitionData.WorldGuid}");
+
+				//TODO: Conssolidate
+				if (GUILayout.Button("Update World"))
+				{
+					string assetBundlePath = GenerateWorldBundle();
+
+					var contentServerServiceClient = new DownloadableContentServiceClientFactory().Create(EmptyFactoryContext.Instance);
+					UploadWorldAssetBundle(assetBundlePath, true, new UpdatedContentUploadTokenFactory(contentServerServiceClient, definitionData));
+				}
 			}
 			else
 			{
+				//TODO: Consolidate
 				//If there is no world data definition then we should allow users
 				//to upload a new world.
 				if(GUILayout.Button("Upload World"))
 				{
 					string assetBundlePath = GenerateWorldBundle();
 
-					UploadWorldAssetBundle(assetBundlePath);
-
-					return;
+					var contentServerServiceClient = new DownloadableContentServiceClientFactory().Create(EmptyFactoryContext.Instance);
+					UploadWorldAssetBundle(assetBundlePath, true, new NewContentUploadTokenFactory(contentServerServiceClient));
 				}
 			}
 		}
 
-		private static void UploadWorldAssetBundle(string assetBundlePath)
+		private static void UploadWorldAssetBundle(string assetBundlePath, bool shouldCreateSceneWorldData, IContentUploadTokenFactory tokenFactory)
 		{
-			IDownloadableContentServerServiceClient ucmService = 
-				new DownloadableContentServiceClientFactory()
-					.Create(EmptyFactoryContext.Instance);
-
 			//Done out here, must be called on the main thread
 			string projectPath = Application.dataPath.ToLower().TrimEnd(@"assets".ToCharArray());
 
@@ -76,26 +81,14 @@ namespace GladMMO.SDK
 				EditorUtility.DisplayProgressBar("Uploading Content", "Please wait until complete.", 0.5f);
 				try
 				{
-					ResponseModel<ContentUploadToken, ContentUploadResponseCode> contentUploadToken = await ucmService.GetNewWorldUploadUrl()
+					ResponseModel<ContentUploadToken, ContentUploadResponseCode> contentUploadToken = await tokenFactory.Create(new ContentUploadTokenFactoryContext(UserContentType.World))
 						.ConfigureAwait(true);
 
 					//TODO: Handle failure.
+					await UploadWorldContent(assetBundlePath, contentUploadToken.Result.UploadUrl, projectPath);
 
-					string uploadUrl = contentUploadToken.Result.UploadUrl;
-					Debug.Log($"Uploading to: {uploadUrl}.");
-
-					var cloudBlockBlob = new CloudBlockBlob(new Uri(uploadUrl));
-					await cloudBlockBlob.UploadFromFileAsync(Path.Combine(projectPath, "AssetBundles", "temp", assetBundlePath))
-						.ConfigureAwait(true);
-
-					Debug.Log("Successfully uploaded.");
-
-					//If it's sucessfully uploaded we should create a world definition
-					//object in the scene.
-					WorldDefinitionData definitionData = new GameObject("World Definition").AddComponent<WorldDefinitionData>();
-
-					definitionData.WorldGuid = contentUploadToken.Result.ContentGuid.ToString();
-					definitionData.WorldId = contentUploadToken.Result.ContentId;
+					if(shouldCreateSceneWorldData)
+						CreateWorldDefinition(contentUploadToken);
 				}
 				catch (Exception e)
 				{
@@ -108,6 +101,27 @@ namespace GladMMO.SDK
 					EditorUtility.ClearProgressBar();
 				}
 			}, null);
+		}
+
+		private static void CreateWorldDefinition(ResponseModel<ContentUploadToken, ContentUploadResponseCode> contentUploadToken)
+		{
+			//If it's sucessfully uploaded we should create a world definition
+			//object in the scene.
+			WorldDefinitionData definitionData = new GameObject("World Definition").AddComponent<WorldDefinitionData>();
+
+			definitionData.WorldGuid = contentUploadToken.Result.ContentGuid.ToString();
+			definitionData.WorldId = contentUploadToken.Result.ContentId;
+		}
+
+		private static async Task UploadWorldContent(string assetBundlePath, string uploadUrl, string projectPath)
+		{
+			Debug.Log($"Uploading to: {uploadUrl}.");
+
+			var cloudBlockBlob = new CloudBlockBlob(new Uri(uploadUrl));
+			await cloudBlockBlob.UploadFromFileAsync(Path.Combine(projectPath, "AssetBundles", "temp", assetBundlePath))
+				.ConfigureAwait(true);
+
+			Debug.Log("Successfully uploaded.");
 		}
 
 		private string GenerateWorldBundle()
