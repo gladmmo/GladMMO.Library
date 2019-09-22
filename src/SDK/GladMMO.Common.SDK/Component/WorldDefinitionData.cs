@@ -24,7 +24,7 @@ namespace GladMMO
 		public string WorldGuid
 		{
 			get => _WorldGuid;
-			set => _WorldGuid = value;
+			internal set => _WorldGuid = value;
 		}
 
 		/// <summary>
@@ -33,7 +33,7 @@ namespace GladMMO
 		public long WorldId
 		{
 			get => _WorldId;
-			set => _WorldId = value;
+			internal set => _WorldId = value;
 		}
 
 		[Button]
