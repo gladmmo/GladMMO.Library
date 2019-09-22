@@ -20,9 +20,9 @@ namespace GladMMO
 		private string ServiceDiscoveryUrl { get; }
 
 		/// <summary>
-		/// The assembly being used to gather engine interface implementations from.
+		/// The assemblies being used to gather engine interface implementations from.
 		/// </summary>
-		public Assembly EngineInterfaceAssembly { get; }
+		public IEnumerable<Assembly> EngineInterfaceAssemblies { get; }
 
 		/// <summary>
 		/// Default autofac ctor.
@@ -34,13 +34,13 @@ namespace GladMMO
 
 		//TODO: Shoudl we expose the ServiceDiscovery URL to the editor? Is there value in that?
 		/// <inheritdoc />
-		public CommonGameDependencyModule(GameSceneType scene, [NotNull] string serviceDiscoveryUrl, Assembly engineInterfaceAssembly)
+		public CommonGameDependencyModule(GameSceneType scene, [NotNull] string serviceDiscoveryUrl, params Assembly[] engineInterfaceAssemblies)
 		{
 			if(!Enum.IsDefined(typeof(GameSceneType), scene)) throw new InvalidEnumArgumentException(nameof(scene), (int)scene, typeof(GameSceneType));
 
 			Scene = scene;
 			ServiceDiscoveryUrl = serviceDiscoveryUrl ?? throw new ArgumentNullException(nameof(serviceDiscoveryUrl));
-			EngineInterfaceAssembly = engineInterfaceAssembly;
+			EngineInterfaceAssemblies = engineInterfaceAssemblies;
 		}
 
 		/// <inheritdoc />
@@ -68,9 +68,11 @@ namespace GladMMO
 
 			//Handlers aren't needed for all scenes, but for most.
 			//TODO: We should expose SceneTypeCreatable or whatever on handlers
-			builder.RegisterModule(new GameClientMessageHandlerAutofacModule(Scene));
+			foreach(var assembly in EngineInterfaceAssemblies)
+				builder.RegisterModule(new GameClientMessageHandlerAutofacModule(Scene, assembly));
 
-			builder.RegisterModule(new EngineInterfaceRegisterationModule((int)Scene, EngineInterfaceAssembly));
+			foreach(var assembly in EngineInterfaceAssemblies)
+				builder.RegisterModule(new EngineInterfaceRegisterationModule((int)Scene, assembly));
 
 			//builder.RegisterModule<EntityMappableRegisterationModule<NetworkEntityGuid>>();
 			RegisterEntityContainers(builder);
