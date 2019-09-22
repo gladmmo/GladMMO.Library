@@ -25,16 +25,14 @@ namespace GladMMO.SDK
 		[SerializeField]
 		private string AssetBundlePath;
 
-		[MenuItem("VRGuardians/CreatureUpload")]
+		[MenuItem("VRGuardians/Content/CreatureUpload")]
 		public static void ShowWindow()
 		{
 			EditorWindow.GetWindow(typeof(GuardiansCreatureModelUploadWindow));
 		}
 
-		protected override void OnGUI()
+		protected override void AuthenticatedOnGUI()
 		{
-			base.OnGUI();
-
 			//TODO: Validate scene file
 			CreatureModelPrefab = EditorGUILayout.ObjectField("Creature Model Prefab", CreatureModelPrefab, typeof(GameObject), false) as GameObject;
 
@@ -47,12 +45,6 @@ namespace GladMMO.SDK
 
 			if(GUILayout.Button("Build Creature AssetBundle"))
 			{
-				if(!TryAuthenticate())
-				{
-					Debug.LogError($"Failed to authenticate User: {AccountName}");
-					return;
-				}
-
 				//Once authenticated we need to try to build the bundle.
 				ProjectVindictiveAssetbundleBuilder builder = new ProjectVindictiveAssetbundleBuilder(CreatureModelPrefab);
 
@@ -69,11 +61,6 @@ namespace GladMMO.SDK
 
 			if(GUILayout.Button("Upload Assetbundle"))
 			{
-				//https://stackoverflow.com/questions/4926676/mono-https-webrequest-fails-with-the-authentication-or-decryption-has-failed
-				ServicePointManager.ServerCertificateValidationCallback = MyRemoteCertificateValidationCallback;
-				ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-				ServicePointManager.CheckCertificateRevocationList = false;
-
 				IDownloadableContentServerServiceClient ucmService = Refit.RestService.For<IDownloadableContentServerServiceClient>("http://72.190.177.214:5005/");
 
 				//Done out here, must be called on the main thread
@@ -83,7 +70,7 @@ namespace GladMMO.SDK
 				{
 					try
 					{
-						string uploadUrl = (await ucmService.GetNewCreatureModelUploadUrl(AuthToken)).UploadUrl;
+						string uploadUrl = (await ucmService.GetNewCreatureModelUploadUrl(AuthenticationModelSingleton.Instance.AuthenticationToken)).UploadUrl;
 						Debug.Log($"Uploading to: {uploadUrl}.");
 						var cloudBlockBlob = new CloudBlockBlob(new Uri(uploadUrl));
 						await cloudBlockBlob.UploadFromFileAsync(Path.Combine(projectPath, "AssetBundles", "temp", AssetBundlePath));
@@ -97,6 +84,11 @@ namespace GladMMO.SDK
 
 				uploadThread.Start();
 			}
+		}
+
+		protected override void UnAuthenticatedOnGUI()
+		{
+			//TODO: Redirect to login.
 		}
 	}
 }
