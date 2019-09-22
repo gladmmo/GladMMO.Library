@@ -18,7 +18,7 @@ namespace GladMMO.Client
 		{
 			UnityAsyncHelper.UnityUIAsyncContinuationBehaviour = this.gameObject.AddComponent<UnityUIAsyncContinuationBehaviour>();
 
-			return new CommonGameDependencyModule(SceneType, "http://192.168.0.12:5000", this.GetType().Assembly, typeof(GladMMOClientCommonMetadataMarker).Assembly);
+			return new CommonGameDependencyModule(SceneType, "http://72.190.177.214:5000", this.GetType().Assembly, typeof(GladMMOClientCommonMetadataMarker).Assembly);
 		}
 
 		public override void Register(ContainerBuilder register)
