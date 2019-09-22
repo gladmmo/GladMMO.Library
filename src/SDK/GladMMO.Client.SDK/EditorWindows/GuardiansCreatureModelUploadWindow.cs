@@ -17,7 +17,7 @@ using UnityEngine.SceneManagement;
 namespace GladMMO.SDK
 {
 	//TODO: Refactor
-	public sealed class ProjectVindictiveCreatureModelUploadWindow : AuthenticatableEditorWindow
+	public sealed class GuardiansCreatureModelUploadWindow : AuthenticatableEditorWindow
 	{
 		[SerializeField]
 		private UnityEngine.GameObject CreatureModelPrefab;
@@ -25,10 +25,10 @@ namespace GladMMO.SDK
 		[SerializeField]
 		private string AssetBundlePath;
 
-		[MenuItem("ProjectVindictive/CreatureUpload")]
+		[MenuItem("VRGuardians/CreatureUpload")]
 		public static void ShowWindow()
 		{
-			EditorWindow.GetWindow(typeof(ProjectVindictiveCreatureModelUploadWindow));
+			EditorWindow.GetWindow(typeof(GuardiansCreatureModelUploadWindow));
 		}
 
 		protected override void OnGUI()

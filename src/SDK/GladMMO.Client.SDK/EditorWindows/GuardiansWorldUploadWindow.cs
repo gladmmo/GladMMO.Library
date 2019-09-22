@@ -16,19 +16,18 @@ using UnityEngine.SceneManagement;
 
 namespace GladMMO.SDK
 {
-	//TODO: Refactor
-	public sealed class ProjectVindictiveAvatarUploadWindow : AuthenticatableEditorWindow
+	public sealed class GuardiansWorldUploadWindow : AuthenticatableEditorWindow
 	{
 		[SerializeField]
-		private UnityEngine.GameObject AvatarPrefab;
+		private UnityEngine.Object SceneObject;
 
 		[SerializeField]
 		private string AssetBundlePath;
 
-		[MenuItem("ProjectVindictive/AvatarUpload")]
+		[MenuItem("VRGuardians/WorldUpload")]
 		public static void ShowWindow()
 		{
-			EditorWindow.GetWindow(typeof(ProjectVindictiveAvatarUploadWindow));
+			EditorWindow.GetWindow(typeof(GuardiansWorldUploadWindow));
 		}
 
 		protected override void OnGUI()
@@ -36,14 +35,7 @@ namespace GladMMO.SDK
 			base.OnGUI();
 
 			//TODO: Validate scene file
-			AvatarPrefab = EditorGUILayout.ObjectField("Avatar Prefab", AvatarPrefab, typeof(GameObject), false) as GameObject;
-
-			if(AvatarPrefab != null)
-				if(PrefabUtility.GetPrefabAssetType(AvatarPrefab) == PrefabAssetType.NotAPrefab)
-				{
-					AvatarPrefab = null;
-					Debug.LogError($"Provided avatar prefab MUST be a prefab.");
-				}
+			SceneObject = EditorGUILayout.ObjectField("Scene", SceneObject, typeof(SceneAsset), false);
 
 			if(GUILayout.Button("Build World AssetBundle"))
 			{
@@ -54,7 +46,7 @@ namespace GladMMO.SDK
 				}
 
 				//Once authenticated we need to try to build the bundle.
-				ProjectVindictiveAssetbundleBuilder builder = new ProjectVindictiveAssetbundleBuilder(AvatarPrefab);
+				ProjectVindictiveAssetbundleBuilder builder = new ProjectVindictiveAssetbundleBuilder(SceneObject);
 
 				//TODO: Handle uploading build
 				AssetBundleManifest manifest = builder.BuildBundle();
@@ -81,18 +73,10 @@ namespace GladMMO.SDK
 
 				Thread uploadThread = new Thread(new ThreadStart(async () =>
 				{
-					try
-					{
-						string uploadUrl = (await ucmService.GetNewAvatarUploadUrl(AuthToken)).UploadUrl;
-						Debug.Log($"Uploading to: {uploadUrl}.");
-						var cloudBlockBlob = new CloudBlockBlob(new Uri(uploadUrl));
-						await cloudBlockBlob.UploadFromFileAsync(Path.Combine(projectPath, "AssetBundles", "temp", AssetBundlePath));
-					}
-					catch (Exception e)
-					{
-						Debug.LogError($"Failed to upload Avatar. Error: {e.Message}\n\nStack: {e.StackTrace}");
-						throw;
-					}
+					string uploadUrl = (await ucmService.GetNewWorldUploadUrl(AuthToken)).UploadUrl;
+					Debug.Log($"Uploading to: {uploadUrl}.");
+					var cloudBlockBlob = new CloudBlockBlob(new Uri(uploadUrl));
+					await cloudBlockBlob.UploadFromFileAsync(Path.Combine(projectPath, "AssetBundles", "temp", AssetBundlePath));
 				}));
 
 				uploadThread.Start();
