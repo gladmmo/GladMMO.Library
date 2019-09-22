@@ -43,7 +43,7 @@ namespace GladMMO.SDK
 					Debug.LogError($"Provided avatar prefab MUST be a prefab.");
 				}
 
-			if(GUILayout.Button("Build World AssetBundle"))
+			if(GUILayout.Button("Build Avatar AssetBundle"))
 			{
 				//Once authenticated we need to try to build the bundle.
 				ProjectVindictiveAssetbundleBuilder builder = new ProjectVindictiveAssetbundleBuilder(AvatarPrefab);
