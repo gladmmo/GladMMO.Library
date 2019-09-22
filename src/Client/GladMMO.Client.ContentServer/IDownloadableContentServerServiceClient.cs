@@ -18,7 +18,6 @@ namespace GladMMO
 		/// If successful the URl contained in the response will contain a valid upload
 		/// URL which can be used to upload world content.
 		/// </summary>
-		/// <param name="authToken">The user authentication token.</param>
 		/// <returns>A model representing the result of the world URL generation request.</returns>
 		[RequiresAuthentication]
 		[Post("/api/World/create")]
@@ -29,7 +28,6 @@ namespace GladMMO
 		/// If successful the URl contained in the response will contain a valid upload
 		/// URL which can be used to upload avatar content.
 		/// </summary>
-		/// <param name="authToken">The user authentication token.</param>
 		/// <returns>A model representing the result of the avatar URL generation request.</returns>
 		[RequiresAuthentication]
 		[Post("/api/avatar/create")]
@@ -40,7 +38,6 @@ namespace GladMMO
 		/// If successful the URl contained in the response will contain a valid upload
 		/// URL which can be used to upload creature content.
 		/// </summary>
-		/// <param name="authToken">The user authentication token.</param>
 		/// <returns>A model representing the result of the creature URL generation request.</returns>
 		[RequiresAuthentication]
 		[Post("/api/avatar/create")]
