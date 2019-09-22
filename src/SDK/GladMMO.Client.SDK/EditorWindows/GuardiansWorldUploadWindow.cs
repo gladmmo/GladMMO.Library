@@ -51,7 +51,7 @@ namespace GladMMO.SDK
 					string assetBundlePath = GenerateWorldBundle();
 
 					var contentServerServiceClient = new DownloadableContentServiceClientFactory().Create(EmptyFactoryContext.Instance);
-					UploadWorldAssetBundle(assetBundlePath, true, new UpdatedContentUploadTokenFactory(contentServerServiceClient, definitionData));
+					UploadWorldAssetBundle(assetBundlePath, false, new UpdatedContentUploadTokenFactory(contentServerServiceClient, definitionData));
 				}
 			}
 			else
