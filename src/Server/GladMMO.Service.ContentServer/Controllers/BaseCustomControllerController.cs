@@ -110,13 +110,13 @@ namespace GladMMO
 				if(Logger.IsEnabled(LogLevel.Error))
 					Logger.LogError($"Failed to create content upload URL for {ClaimsReader.GetUserName(User)}:{ClaimsReader.GetUserId(User)} with GUID: {content.StorageGuid}.");
 
-				return new JsonResult(RequestedUrlResponseModel.CreateFailure("Upload service unavailable.", RequestedUrlResponseCode.ServiceUnavailable));
+				return BuildFailedResponseModel(ContentUploadResponseCode.ServiceUnavailable);
 			}
 
 			if(Logger.IsEnabled(LogLevel.Information))
 				Logger.LogInformation($"Success. Sending {ClaimsReader.GetUserName(User)} URL: {uploadUrl}");
 
-			return new JsonResult(RequestedUrlResponseModel.CreateSuccess(uploadUrl, content.ContentId));
+			return BuildSuccessfulResponseModel(new ContentUploadToken(uploadUrl, content.ContentId, content.StorageGuid));
 		}
 
 		protected abstract TContentType GenerateNewModel();

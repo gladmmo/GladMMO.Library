@@ -57,10 +57,12 @@ namespace GladMMO.SDK
 				EditorUtility.DisplayProgressBar("Uploading Content", "Please wait until complete.", 0.5f);
 				try
 				{
-					RequestedUrlResponseModel newWorldUpload = await ucmService.GetNewWorldUploadUrl(AuthenticationModelSingleton.Instance.AuthenticationToken)
+					ResponseModel<ContentUploadToken, ContentUploadResponseCode> contentUploadToken = await ucmService.GetNewWorldUploadUrl(AuthenticationModelSingleton.Instance.AuthenticationToken)
 						.ConfigureAwait(true);
 
-					string uploadUrl = newWorldUpload.UploadUrl;
+					//TODO: Handle failure.
+
+					string uploadUrl = contentUploadToken.Result.UploadUrl;
 					Debug.Log($"Uploading to: {uploadUrl}.");
 
 					var cloudBlockBlob = new CloudBlockBlob(new Uri(uploadUrl));

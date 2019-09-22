@@ -70,7 +70,11 @@ namespace GladMMO.SDK
 				{
 					try
 					{
-						string uploadUrl = (await ucmService.GetNewCreatureModelUploadUrl(AuthenticationModelSingleton.Instance.AuthenticationToken)).UploadUrl;
+						ResponseModel<ContentUploadToken, ContentUploadResponseCode> contentUploadToken = await ucmService.GetNewCreatureModelUploadUrl(AuthenticationModelSingleton.Instance.AuthenticationToken);
+
+						//TODO: Handle failure.
+
+						string uploadUrl = contentUploadToken.Result.UploadUrl;
 						Debug.Log($"Uploading to: {uploadUrl}.");
 						var cloudBlockBlob = new CloudBlockBlob(new Uri(uploadUrl));
 						await cloudBlockBlob.UploadFromFileAsync(Path.Combine(projectPath, "AssetBundles", "temp", AssetBundlePath));

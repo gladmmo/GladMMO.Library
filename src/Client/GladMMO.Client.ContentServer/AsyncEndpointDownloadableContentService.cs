@@ -23,18 +23,18 @@ namespace GladMMO
 		}
 
 		/// <inheritdoc />
-		public async Task<RequestedUrlResponseModel> GetNewWorldUploadUrl(string authToken)
+		public async Task<ResponseModel<ContentUploadToken, ContentUploadResponseCode>> GetNewWorldUploadUrl(string authToken)
 		{
 			return await (await GetService().ConfigureAwait(false)).GetNewWorldUploadUrl(authToken).ConfigureAwait(false);
 		}
 
 		/// <inheritdoc />
-		public async Task<RequestedUrlResponseModel> GetNewAvatarUploadUrl(string authToken)
+		public async Task<ResponseModel<ContentUploadToken, ContentUploadResponseCode>> GetNewAvatarUploadUrl(string authToken)
 		{
 			return await (await GetService().ConfigureAwait(false)).GetNewAvatarUploadUrl(authToken).ConfigureAwait(false);
 		}
 
-		public async Task<RequestedUrlResponseModel> GetNewCreatureModelUploadUrl(string authToken)
+		public async Task<ResponseModel<ContentUploadToken, ContentUploadResponseCode>> GetNewCreatureModelUploadUrl(string authToken)
 		{
 			return await (await GetService().ConfigureAwait(false)).GetNewCreatureModelUploadUrl(authToken).ConfigureAwait(false);
 		}

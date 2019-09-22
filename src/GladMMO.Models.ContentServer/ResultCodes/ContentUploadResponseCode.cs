@@ -1,9 +1,9 @@
 ﻿namespace GladMMO
 {
-	public enum RequestedUrlResponseCode
+	public enum ContentUploadResponseCode
 	{
 		/// <summary>
-		/// 
+		/// Success.
 		/// </summary>
 		Success = 1,
 
