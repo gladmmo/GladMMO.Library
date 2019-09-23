@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
@@ -9,6 +10,7 @@ using Autofac;
 using Common.Logging;
 using Glader.Essentials;
 using GladNet;
+using Newtonsoft.Json;
 using ProtoBuf;
 using Refit;
 using UnityEngine;
@@ -39,6 +41,8 @@ namespace GladMMO
 			//TODO: We need to not have such a high rate of Update and need to add prediction.
 			Application.targetFrameRate = 60;
 
+			HandleConfigurableDependencies(builder);
+
 			builder.RegisterType<ProtobufNetGladNetSerializerAdapter>()
 				.As<INetworkSerializationService>()
 				.SingleInstance();
@@ -53,12 +57,6 @@ namespace GladMMO
 			builder.RegisterType<MessageHandlerService<GameClientPacketPayload, GameServerPacketPayload, IPeerSessionMessageContext<GameServerPacketPayload>>>()
 				.As<MessageHandlerService<GameClientPacketPayload, GameServerPacketPayload, IPeerSessionMessageContext<GameServerPacketPayload>>>()
 				.SingleInstance();
-
-			//TODO: Make this configurable
-			builder.RegisterInstance(new NetworkAddressInfo(IPAddress.Parse("192.168.0.12"), 5006))
-				.As<NetworkAddressInfo>()
-				.SingleInstance()
-				.ExternallyOwned();
 
 			builder.RegisterType<ZoneServerApplicationBase>()
 				.SingleInstance()
@@ -172,6 +170,69 @@ namespace GladMMO
 			builder.RegisterType<ServerMovementGeneratorFactory>()
 				.As<IFactoryCreatable<IMovementGenerator<GameObject>, EntityAssociatedData<IMovementData>>>()
 				.AsSelf();
+		}
+
+		private void HandleConfigurableDependencies(ContainerBuilder builder)
+		{
+			ZoneServerRootConfiguration rootConfiguration = null;
+
+			if(Application.isEditor || !ConfigurationFileFound())
+				rootConfiguration = new ZoneServerRootConfiguration();
+			else
+				rootConfiguration = JsonConvert.DeserializeObject<ZoneServerRootConfiguration>(LoadServerConfigFileContents());
+
+			//Register each subconfiguration as a dependency.
+			if (rootConfiguration.NetworkConfig != null)
+			{
+				NetworkConfiguration netConfig = rootConfiguration.NetworkConfig;
+
+				InitializeNetworkConfigurationDependencies(builder, netConfig);
+			}
+			else
+			{
+				NetworkConfiguration netConfig = new DefaultNetworkConfiguration();
+
+				InitializeNetworkConfigurationDependencies(builder, netConfig);
+			}
+
+			if (rootConfiguration.WorldConfig != null)
+				builder.RegisterInstance(rootConfiguration.WorldConfig)
+					.AsSelf()
+					.SingleInstance()
+					.ExternallyOwned();
+			else
+				builder.RegisterType<DefaultWorldConfiguration>()
+					.As<WorldConfiguration>()
+					.SingleInstance();
+		}
+
+		private static void InitializeNetworkConfigurationDependencies([NotNull] ContainerBuilder builder, [NotNull] NetworkConfiguration netConfig)
+		{
+			if (builder == null) throw new ArgumentNullException(nameof(builder));
+			if (netConfig == null) throw new ArgumentNullException(nameof(netConfig));
+
+			builder.RegisterInstance(new NetworkAddressInfo(IPAddress.Parse(netConfig.ListenerAddress), netConfig.Port))
+				.As<NetworkAddressInfo>()
+				.SingleInstance()
+				.ExternallyOwned();
+		}
+
+		private static void RegisterDefaultConfiguration(ContainerBuilder builder)
+		{
+			builder.RegisterInstance(new NetworkAddressInfo(IPAddress.Parse("192.168.0.12"), 5006))
+				.As<NetworkAddressInfo>()
+				.SingleInstance()
+				.ExternallyOwned();
+		}
+
+		private bool ConfigurationFileFound()
+		{
+			return File.Exists(Path.Combine(Directory.GetParent(Application.dataPath).FullName, "ServerConfig.json"));
+		}
+
+		private string LoadServerConfigFileContents()
+		{
+			return File.ReadAllText(Path.Combine(Directory.GetParent(Application.dataPath).FullName, "ServerConfig.json"));
 		}
 
 		private static void RegisterEntityMappableCollections(ContainerBuilder builder)
