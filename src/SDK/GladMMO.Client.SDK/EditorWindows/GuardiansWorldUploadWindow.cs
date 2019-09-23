@@ -111,6 +111,9 @@ namespace GladMMO.SDK
 
 			definitionData.WorldGuid = contentUploadToken.Result.ContentGuid.ToString();
 			definitionData.WorldId = contentUploadToken.Result.ContentId;
+
+			EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
+			EditorUtility.SetDirty(definitionData);
 		}
 
 		private static async Task UploadWorldContent(string assetBundlePath, string uploadUrl, string projectPath)
