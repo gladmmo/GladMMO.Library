@@ -29,6 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Client\GladMMO.Client.ContentServer\GladMMO.Client.ContentServer.csproj" />
     <ProjectReference Include="..\..\Client\GladMMO.Client.ServiceDiscovery\GladMMO.Client.ServiceDiscovery.csproj" />
     <ProjectReference Include="..\..\GladMMO.Client.Common\GladMMO.Client.Common.csproj" />
     <ProjectReference Include="..\..\GladMMO.Common\GladMMO.Common.csproj" />
@@ -38,7 +39,6 @@
     <ProjectReference Include="..\..\GladMMO.Payloads.ZoneServer\GladMMO.Payloads.ZoneServer.csproj" />
     <ProjectReference Include="..\..\GladMMO.Unity.Common\GladMMO.Unity.Common.csproj" />
     <ProjectReference Include="..\..\GladMMO.ZoneServer.Common\GladMMO.ZoneServer.Common.csproj" />
-    <ProjectReference Include="..\..\SDK\GladMMO.Client.SDK\GladMMO.Client.SDK.csproj" />
     <ProjectReference Include="..\..\SDK\GladMMO.Common.SDK\GladMMO.Common.SDK.csproj" />
     <ProjectReference Include="..\GladMMO.Server.Common\GladMMO.Server.Common.csproj" />
   </ItemGroup>
