@@ -19,7 +19,7 @@ namespace GladMMO
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
-		public void DownloadAsync(string worldDownloadUrl)
+		public void DownloadAsync(string worldDownloadUrl, bool loadSceneAdditive = false)
 		{
 			long worldId = 0;
 			try
@@ -39,7 +39,7 @@ namespace GladMMO
 
 					string scenePath = paths.First();
 
-					LoadDownloadedScene(scenePath, bundle);
+					LoadDownloadedScene(scenePath, bundle, loadSceneAdditive);
 				};
 			}
 			catch(Exception e)
@@ -54,7 +54,7 @@ namespace GladMMO
 			}
 		}
 
-		private static AsyncOperation LoadDownloadedScene(string scenePath, AssetBundle bundle)
+		private static AsyncOperation LoadDownloadedScene(string scenePath, AssetBundle bundle, bool loadSceneAdditive)
 		{
 			//The idea here is that AFTER the scene has been loaded, we need to then load the ACTUAL
 			//networking-based gameplay scene. Containing sceneject and all that other stuff.
@@ -63,7 +63,7 @@ namespace GladMMO
 			SceneManager.sceneLoaded += OnDownloadedSceneFinishedLoading;
 
 			//After this upcoming scene is completed
-			AsyncOperation sceneAsync = SceneManager.LoadSceneAsync(System.IO.Path.GetFileNameWithoutExtension(scenePath));
+			AsyncOperation sceneAsync = SceneManager.LoadSceneAsync(System.IO.Path.GetFileNameWithoutExtension(scenePath), loadSceneAdditive ? LoadSceneMode.Additive : LoadSceneMode.Single);
 
 			sceneAsync.completed += operation1 =>
 			{
@@ -81,6 +81,7 @@ namespace GladMMO
 
 		private static void OnDownloadedSceneFinishedLoading(Scene sceneLoaded, LoadSceneMode mode)
 		{
+			//TODO: For zoneserver this is VERY likely to break at some point.
 			//Cheapest thing to check first
 			if(mode == LoadSceneMode.Single)
 			{
