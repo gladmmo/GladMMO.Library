@@ -71,7 +71,7 @@ namespace GladMMO
 			ZoneServerCharacterLocationResponse locationResponse = await GameServerClient.GetCharacterLocation(payload.CharacterId)
 				.ConfigureAwait(false);
 
-			Vector3 position = locationResponse.isSuccessful ? locationResponse.Position : Vector3.zero;
+			Vector3 position = locationResponse.isSuccessful ? locationResponse.Position : SpawnPointProvider.GetSpawnPoint().WorldPosition;
 
 			SpawnPointData pointData = new SpawnPointData(position, Quaternion.identity);
 
