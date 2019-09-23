@@ -10,7 +10,7 @@ namespace GladMMO
 	//Initializable that just starts the zoneserver network listener.
 	[AdditionalRegisterationAs(typeof(IServerStartingEventSubscribable))]
 	[ServerSceneTypeCreate(ServerSceneType.Default)]
-	public sealed class ZoneServerNetworkStartInitializable : IGameInitializable, IServerStartingEventSubscribable
+	public sealed class ZoneServerNetworkStartInitializable : IGameStartable, IServerStartingEventSubscribable
 	{
 		private ZoneServerApplicationBase ApplicationBase { get; }
 
@@ -23,7 +23,7 @@ namespace GladMMO
 		}
 
 		/// <inheritdoc />
-		public Task OnGameInitialized()
+		public Task Start()
 		{
 			OnServerStarting?.Invoke(this, EventArgs.Empty);
 
