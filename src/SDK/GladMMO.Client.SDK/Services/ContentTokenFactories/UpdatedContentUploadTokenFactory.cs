@@ -9,12 +9,12 @@ namespace GladMMO.SDK
 	{
 		private IDownloadableContentServerServiceClient ContentClient { get; }
 
-		private WorldDefinitionData WorldData { get; }
+		private IUploadedContentDataDefinition ContentDataDefinition { get; }
 
-		public UpdatedContentUploadTokenFactory([NotNull] IDownloadableContentServerServiceClient contentClient, [NotNull] WorldDefinitionData worldData)
+		public UpdatedContentUploadTokenFactory([NotNull] IDownloadableContentServerServiceClient contentClient, [NotNull] IUploadedContentDataDefinition contentDataDefinition)
 		{
 			ContentClient = contentClient ?? throw new ArgumentNullException(nameof(contentClient));
-			WorldData = worldData ?? throw new ArgumentNullException(nameof(worldData));
+			ContentDataDefinition = contentDataDefinition ?? throw new ArgumentNullException(nameof(contentDataDefinition));
 		}
 
 		public Task<ResponseModel<ContentUploadToken, ContentUploadResponseCode>> Create(ContentUploadTokenFactoryContext context)
@@ -22,7 +22,7 @@ namespace GladMMO.SDK
 			switch (context.ContentType)
 			{
 				case UserContentType.World:
-					return ContentClient.RequestUpdateExistingWorld(WorldData.ContentId);
+					return ContentClient.RequestUpdateExistingWorld(ContentDataDefinition.ContentId);
 				case UserContentType.Avatar:
 					throw new NotImplementedException($"TODO: Implement avatar updating.");
 				case UserContentType.Creature:
