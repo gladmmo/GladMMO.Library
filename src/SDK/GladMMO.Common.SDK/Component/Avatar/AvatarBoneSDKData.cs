@@ -9,6 +9,7 @@ namespace GladMMO.SDK
 	/// Component that is similar to VR-IK component
 	/// that contains references to bones that can be automatically initialized.
 	/// </summary>
+	[RequireComponent(typeof(AvatarDefinitionData))]
 	public sealed class AvatarBoneSDKData : MonoBehaviour, IAvatarIKReferenceContainer<CustomVRIKReferences>
 	{
 		/// <summary>
