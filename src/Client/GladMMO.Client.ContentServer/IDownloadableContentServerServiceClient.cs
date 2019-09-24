@@ -44,6 +44,16 @@ namespace GladMMO
 		Task<ResponseModel<ContentUploadToken, ContentUploadResponseCode>> GetNewAvatarUploadUrl();
 
 		/// <summary>
+		/// Attempts to get a PATCH uploaded avatar's content.
+		/// If successful the Token contained in the response will contain a valid upload
+		/// URL which can be used to update the avatar content.
+		/// </summary>
+		/// <returns>A model representing the result of the avatar URL update request.</returns>
+		[RequiresAuthentication]
+		[Patch("/api/avatar/{id}")]
+		Task<ResponseModel<ContentUploadToken, ContentUploadResponseCode>> RequestUpdateExistingAvatar([AliasAs("id")] long avatarId);
+
+		/// <summary>
 		/// Attempts to get a new URL that can be used to upload the creature.
 		/// If successful the URl contained in the response will contain a valid upload
 		/// URL which can be used to upload creature content.

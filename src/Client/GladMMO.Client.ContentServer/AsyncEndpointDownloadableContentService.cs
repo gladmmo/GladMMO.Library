@@ -40,6 +40,11 @@ namespace GladMMO
 			return await (await GetService().ConfigureAwait(false)).GetNewAvatarUploadUrl().ConfigureAwait(false);
 		}
 
+		public async Task<ResponseModel<ContentUploadToken, ContentUploadResponseCode>> RequestUpdateExistingAvatar(long avatarId)
+		{
+			return await(await GetService().ConfigureAwait(false)).RequestUpdateExistingAvatar(avatarId).ConfigureAwait(false);
+		}
+
 		public async Task<ResponseModel<ContentUploadToken, ContentUploadResponseCode>> GetNewCreatureModelUploadUrl()
 		{
 			return await (await GetService().ConfigureAwait(false)).GetNewCreatureModelUploadUrl().ConfigureAwait(false);
