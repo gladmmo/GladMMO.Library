@@ -42,8 +42,8 @@ namespace GladMMO.SDK
 
 			if (definitionData != null)
 			{
-				EditorGUILayout.LabelField($"World Id: {definitionData.WorldId}");
-				EditorGUILayout.LabelField($"World GUID: {definitionData.WorldGuid}");
+				EditorGUILayout.LabelField($"World Id: {definitionData.ContentId}");
+				EditorGUILayout.LabelField($"World GUID: {definitionData.ContentGuid.ToString()}");
 
 				//TODO: Conssolidate
 				if (GUILayout.Button("Update World"))
@@ -109,8 +109,8 @@ namespace GladMMO.SDK
 			//object in the scene.
 			WorldDefinitionData definitionData = new GameObject("World Definition").AddComponent<WorldDefinitionData>();
 
-			definitionData.WorldGuid = contentUploadToken.Result.ContentGuid.ToString();
-			definitionData.WorldId = contentUploadToken.Result.ContentId;
+			definitionData.ContentGuid = contentUploadToken.Result.ContentGuid;
+			definitionData.ContentId = contentUploadToken.Result.ContentId;
 
 			EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
 			EditorUtility.SetDirty(definitionData);

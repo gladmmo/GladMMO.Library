@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 
-namespace GladMMO
+namespace GladMMO.SDK
 {
 	/// <summary>
 	/// Data component for the World/Scene data link.
 	/// </summary>
-	public sealed class WorldDefinitionData : GladMMOSDKMonoBehaviour
+	public sealed class WorldDefinitionData : GladMMOSDKMonoBehaviour, IUploadedContentDataDefinition
 	{
 		[Tooltip("The unique world id.")]
 		[SerializeField]
@@ -21,16 +21,16 @@ namespace GladMMO
 		/// <summary>
 		/// The GUID for the world content.
 		/// </summary>
-		public string WorldGuid
+		public Guid ContentGuid
 		{
-			get => _WorldGuid;
-			internal set => _WorldGuid = value;
+			get => Guid.Parse(_WorldGuid);
+			internal set => _WorldGuid = value.ToString();
 		}
 
 		/// <summary>
 		/// The identifier for the world.
 		/// </summary>
-		public long WorldId
+		public long ContentId
 		{
 			get => _WorldId;
 			internal set => _WorldId = value;

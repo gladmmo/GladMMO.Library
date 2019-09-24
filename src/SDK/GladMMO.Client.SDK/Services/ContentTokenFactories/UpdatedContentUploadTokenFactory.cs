@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GladMMO
+namespace GladMMO.SDK
 {
 	public sealed class UpdatedContentUploadTokenFactory : IContentUploadTokenFactory
 	{
@@ -22,7 +22,7 @@ namespace GladMMO
 			switch (context.ContentType)
 			{
 				case UserContentType.World:
-					return ContentClient.RequestUpdateExistingWorld(WorldData.WorldId);
+					return ContentClient.RequestUpdateExistingWorld(WorldData.ContentId);
 				case UserContentType.Avatar:
 					throw new NotImplementedException($"TODO: Implement avatar updating.");
 				case UserContentType.Creature:
