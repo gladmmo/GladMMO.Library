@@ -9,6 +9,7 @@ using UnityEngine;
 
 namespace GladMMO
 {
+	[AdditionalRegisterationAs(typeof(MovementUpdateMessageHandler))]
 	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
 	public sealed class MovementUpdateMessageHandler : BaseGameClientGameMessageHandler<MovementDataUpdateEventPayload>
 	{
@@ -48,36 +49,40 @@ namespace GladMMO
 
 			foreach(var movementUpdate in payload.MovementDatas)
 			{
-				if (!KnownEntities.isEntityKnown(movementUpdate.EntityGuid))
-				{
-					if(Logger.IsInfoEnabled)
-						Logger.Info($"TODO: Received movement update too soon. Must enable deferred movement update queueing for entities that are about to spawn.");
-
-					continue;
-				}
-
-				try
-				{
-					IMovementGenerator<GameObject> generator = MovementGeneratorFactory.Create(movementUpdate);
-
-					//We just initialize this casually, the next update tick in Unity3D will start the movement generator, the old generator actually might be running right now
-					//at the time this is set.
-					MovementGeneratorMappable.ReplaceObject(movementUpdate.EntityGuid, generator);
-					MovementDataMappable.ReplaceObject(movementUpdate.EntityGuid, movementUpdate.Data);
-
-				}
-				catch (Exception e)
-				{
-					string error = $"Failed to handle Movement Data for Entity: {movementUpdate.EntityGuid} Type: {movementUpdate.Data.GetType().Name} Error: {e.Message}";
-
-					if(Logger.IsErrorEnabled)
-						Logger.Error(error);
-
-					throw new InvalidOperationException(error, e);
-				}
+				HandleMovementUpdate(movementUpdate);
 			}
 
 			return Task.CompletedTask;
+		}
+
+		public void HandleMovementUpdate(EntityAssociatedData<IMovementData> movementUpdate)
+		{
+			if (!KnownEntities.isEntityKnown(movementUpdate.EntityGuid))
+			{
+				if (Logger.IsInfoEnabled)
+					Logger.Info($"TODO: Received movement update too soon. Must enable deferred movement update queueing for entities that are about to spawn.");
+
+				return;
+			}
+
+			try
+			{
+				IMovementGenerator<GameObject> generator = MovementGeneratorFactory.Create(movementUpdate);
+
+				//We just initialize this casually, the next update tick in Unity3D will start the movement generator, the old generator actually might be running right now
+				//at the time this is set.
+				MovementGeneratorMappable.ReplaceObject(movementUpdate.EntityGuid, generator);
+				MovementDataMappable.ReplaceObject(movementUpdate.EntityGuid, movementUpdate.Data);
+			}
+			catch (Exception e)
+			{
+				string error = $"Failed to handle Movement Data for Entity: {movementUpdate.EntityGuid} Type: {movementUpdate.Data.GetType().Name} Error: {e.Message}";
+
+				if (Logger.IsErrorEnabled)
+					Logger.Error(error);
+
+				throw new InvalidOperationException(error, e);
+			}
 		}
 	}
 }
