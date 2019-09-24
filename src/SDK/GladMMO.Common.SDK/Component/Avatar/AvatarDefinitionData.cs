@@ -21,7 +21,13 @@ namespace GladMMO.SDK
 		/// </summary>
 		public Guid ContentGuid
 		{
-			get => Guid.Parse(_AvatarGuid);
+			get
+			{
+				if(Guid.TryParse(_AvatarGuid, out Guid guidResult))
+					return guidResult;
+				else
+					return Guid.Empty;
+			}
 			internal set => _AvatarGuid = value.ToString();
 		}
 

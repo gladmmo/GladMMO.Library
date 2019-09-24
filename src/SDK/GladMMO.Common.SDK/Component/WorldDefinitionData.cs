@@ -23,7 +23,13 @@ namespace GladMMO.SDK
 		/// </summary>
 		public Guid ContentGuid
 		{
-			get => Guid.Parse(_WorldGuid);
+			get
+			{
+				if (Guid.TryParse(_WorldGuid, out Guid guidResult))
+					return guidResult;
+				else
+					return Guid.Empty;
+			}
 			internal set => _WorldGuid = value.ToString();
 		}
 
