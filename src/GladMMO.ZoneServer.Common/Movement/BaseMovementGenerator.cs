@@ -46,8 +46,8 @@ namespace GladMMO
 				CurrentPosition = Start(entity, currentTime);
 				isRunning = true;
 			}
-			else
-				CurrentPosition = InternalUpdate(entity, currentTime); //don't update if we called Start
+
+			CurrentPosition = InternalUpdate(entity, currentTime); //don't update if we called Start
 		}
 
 		/// <summary>
