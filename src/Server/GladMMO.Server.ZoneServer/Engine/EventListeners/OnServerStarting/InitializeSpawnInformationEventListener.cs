@@ -29,7 +29,7 @@ namespace GladMMO
 		protected override void OnEventFired(object source, EventArgs args)
 		{
 			//This locates all spawnpoint strats in the scene
-			foreach (var spawn in Resources.FindObjectsOfTypeAll<MonoBehaviour>()
+			foreach (var spawn in GameObject.FindObjectsOfType<MonoBehaviour>()
 				.Where(b => b?.gameObject?.scene != null && !String.IsNullOrEmpty(b?.gameObject?.scene.name))
 				.OfType<ISpawnPointStrategy>()
 				.Where(b => b.EntityType == EntitySpawnType.Player))
