@@ -57,7 +57,12 @@ namespace GladMMO.SDK
 		protected void OnRenderUploadGUI([NotNull] IUploadedContentDataDefinition uploadDefinition, [NotNull] UnityEngine.Object contentObject, Action<ContentUploadToken> onContentTokenCallback = null)
 		{
 			if (uploadDefinition == null) throw new ArgumentNullException(nameof(uploadDefinition));
-			if(contentObject == null) throw new ArgumentNullException(nameof(contentObject));
+
+			//If the content is null, we should render DISABLED buttons here
+			if (contentObject == null)
+			{
+				EditorGUI.BeginDisabledGroup(true);
+			}
 
 			if(uploadDefinition.ContentId > 0)
 			{
@@ -85,6 +90,12 @@ namespace GladMMO.SDK
 					var contentServerServiceClient = new DownloadableContentServiceClientFactory().Create(EmptyFactoryContext.Instance);
 					UploadContentAssetBundle(assetBundlePath, new NewContentUploadTokenFactory(contentServerServiceClient), onContentTokenCallback);
 				}
+			}
+
+			//If the content is null, we should render DISABLED buttons here
+			if(contentObject == null)
+			{
+				EditorGUI.EndDisabledGroup();
 			}
 		}
 
