@@ -52,8 +52,15 @@ namespace GladMMO.SDK
 
 			base.OnRenderUploadGUI(definitionData, SceneObject, token =>
 			{
+				//DO NOT REFERNECE THE ABOVE DEFINITION. IT NO LONGER EXISTS
+				//THIS IS DUE TO SCENE RELOAD
+				definitionData = FindObjectOfType<WorldDefinitionData>();
+
 				definitionData.ContentGuid = token.ContentGuid;
 				definitionData.ContentId = token.ContentId;
+
+				EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
+				EditorUtility.SetDirty(definitionData);
 			});
 		}
 
