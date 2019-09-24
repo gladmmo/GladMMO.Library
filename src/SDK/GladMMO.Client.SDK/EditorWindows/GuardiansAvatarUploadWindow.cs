@@ -39,22 +39,23 @@ namespace GladMMO.SDK
 		{
 			AvatarPrefab = EditorGUILayout.ObjectField("Avatar Prefab", AvatarPrefab, typeof(GameObject), false) as GameObject;
 
-			if(AvatarPrefab != null)
+			if (AvatarPrefab != null)
+			{
 				if(PrefabUtility.GetPrefabAssetType(AvatarPrefab) == PrefabAssetType.NotAPrefab)
 				{
 					AvatarPrefab = null;
 					Debug.LogError($"Provided avatar prefab MUST be a prefab.");
+					return;
 				}
+			}
+			else
+				return; //TODO: Try to discover the avatar's prefab in the scene.
 
 			//We need the avatar data definition now.
 			AvatarDefinitionData definitionData = AvatarPrefab.GetComponent<AvatarDefinitionData>();
 
 			if (definitionData == null)
-			{
-				AvatarPrefab = null;
 				Debug.LogError($"Provided avatar must contain Component: {nameof(AvatarDefinitionData)} on root {nameof(GameObject)}");
-				return;
-			}
 
 			base.OnRenderUploadGUI(definitionData, AvatarPrefab, token =>
 			{
