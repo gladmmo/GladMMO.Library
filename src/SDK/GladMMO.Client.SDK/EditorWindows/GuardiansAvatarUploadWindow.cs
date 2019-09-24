@@ -8,6 +8,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Glader.Essentials;
 using Microsoft.Azure.Storage.Blob;
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -17,13 +18,16 @@ using UnityEngine.SceneManagement;
 namespace GladMMO.SDK
 {
 	//TODO: Refactor
-	public sealed class GuardiansAvatarUploadWindow : AuthenticatableEditorWindow
+	public sealed class GuardiansAvatarUploadWindow : BaseCustomContentUploadEditorWindow
 	{
 		[SerializeField]
 		private UnityEngine.GameObject AvatarPrefab;
 
-		[SerializeField]
-		private string AssetBundlePath;
+		public GuardiansAvatarUploadWindow()
+			: base(UserContentType.Avatar)
+		{
+
+		}
 
 		[MenuItem("VRGuardians/Content/AvatarUpload")]
 		public static void ShowWindow()
@@ -33,7 +37,6 @@ namespace GladMMO.SDK
 
 		protected override void AuthenticatedOnGUI()
 		{
-			//TODO: Validate scene file
 			AvatarPrefab = EditorGUILayout.ObjectField("Avatar Prefab", AvatarPrefab, typeof(GameObject), false) as GameObject;
 
 			if(AvatarPrefab != null)
@@ -43,55 +46,21 @@ namespace GladMMO.SDK
 					Debug.LogError($"Provided avatar prefab MUST be a prefab.");
 				}
 
-			if(GUILayout.Button("Build Avatar AssetBundle"))
+			//We need the avatar data definition now.
+			AvatarDefinitionData definitionData = AvatarPrefab.GetComponent<AvatarDefinitionData>();
+
+			if (definitionData == null)
 			{
-				//Once authenticated we need to try to build the bundle.
-				ProjectVindictiveAssetbundleBuilder builder = new ProjectVindictiveAssetbundleBuilder(AvatarPrefab);
-
-				//TODO: Handle uploading build
-				AssetBundleManifest manifest = builder.BuildBundle();
-
-				//TODO: Refactor all this crap
-				AssetBundlePath = manifest.GetAllAssetBundles().First();
-
-				Debug.Log($"Generated AssetBundle with Path: {AssetBundlePath}");
-
+				AvatarPrefab = null;
+				Debug.LogError($"Provided avatar must contain Component: {nameof(AvatarDefinitionData)} on root {nameof(GameObject)}");
 				return;
 			}
 
-			if(GUILayout.Button("Upload Assetbundle"))
+			base.OnRenderUploadGUI(definitionData, AvatarPrefab, token =>
 			{
-				IDownloadableContentServerServiceClient ucmService =
-					new DownloadableContentServiceClientFactory()
-						.Create(EmptyFactoryContext.Instance);
-
-				//Done out here, must be called on the main thread
-				string projectPath = Application.dataPath.ToLower().TrimEnd(@"assets".ToCharArray());
-
-				Thread uploadThread = new Thread(new ThreadStart(async () =>
-				{
-					try
-					{
-						ResponseModel<ContentUploadToken, ContentUploadResponseCode> avatarUploadToken = await ucmService.GetNewAvatarUploadUrl();
-
-						//TODO: Better handling.
-						if(!avatarUploadToken.isSuccessful)
-							throw new Exception($"AVATAR FAILED.");
-
-						string uploadUrl = avatarUploadToken.Result.UploadUrl;
-						Debug.Log($"Uploading to: {uploadUrl}.");
-						var cloudBlockBlob = new CloudBlockBlob(new Uri(uploadUrl));
-						await cloudBlockBlob.UploadFromFileAsync(Path.Combine(projectPath, "AssetBundles", "temp", AssetBundlePath));
-					}
-					catch (Exception e)
-					{
-						Debug.LogError($"Failed to upload Avatar. Error: {e.Message}\n\nStack: {e.StackTrace}");
-						throw;
-					}
-				}));
-
-				uploadThread.Start();
-			}
+				definitionData.ContentGuid = token.ContentGuid;
+				definitionData.ContentId = token.ContentId;
+			});
 		}
 
 		protected override void UnAuthenticatedOnGUI()
