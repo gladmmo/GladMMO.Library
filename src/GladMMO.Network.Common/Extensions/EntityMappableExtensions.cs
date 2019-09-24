@@ -19,7 +19,6 @@ namespace GladMMO
 		/// <param name="obj">The object to add.</param>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static void ReplaceObject<TReturnType>([NotNull] this IEntityGuidMappable<NetworkEntityGuid, TReturnType> collection, [NotNull] NetworkEntityGuid guid, TReturnType obj)
-			where TReturnType : class
 		{
 			//No null checking because we hope to inline this.
 			try
@@ -46,7 +45,6 @@ namespace GladMMO
 		/// <param name="obj">The object to add.</param>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static void AddObject<TReturnType>([NotNull] this IEntityGuidMappable<NetworkEntityGuid, TReturnType> collection, [NotNull] NetworkEntityGuid guid, TReturnType obj)
-			where TReturnType : class
 		{
 			//No null checking because we hope to inline this.
 			try
