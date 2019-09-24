@@ -58,6 +58,10 @@ namespace GladMMO.SDK
 
 			base.OnRenderUploadGUI(definitionData, AvatarPrefab, token =>
 			{
+				//DO NOT REFERNECE THE ABOVE DEFINITION. IT NO LONGER EXISTS
+				//THIS IS DUE TO SCENE RELOAD
+				definitionData = AvatarPrefab.GetComponent<AvatarDefinitionData>();
+
 				definitionData.ContentGuid = token.ContentGuid;
 				definitionData.ContentId = token.ContentId;
 			});
