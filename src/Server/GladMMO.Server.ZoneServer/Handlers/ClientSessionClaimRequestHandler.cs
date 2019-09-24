@@ -76,7 +76,7 @@ namespace GladMMO
 			SpawnPointData pointData = new SpawnPointData(position, Quaternion.identity);
 
 			if(Logger.IsDebugEnabled)
-				Logger.Debug($"Recieved player location: {pointData.WorldPosition}");
+				Logger.Debug($"Recieved player location: {pointData.WorldPosition} from {(locationResponse.isSuccessful ? "Database" : "Spawnpoint")}");
 
 			//Just broadcast successful claim, let listeners figure out what to do with this information.
 			OnSuccessfulSessionClaimed?.Invoke(this, new PlayerSessionClaimedEventArgs(builder.Build(), pointData.WorldPosition, new PlayerEntitySessionContext(context.PayloadSendService, context.Details.ConnectionId)));
