@@ -19,8 +19,10 @@ namespace GladMMO
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
-		public void DownloadAsync(string worldDownloadUrl, bool loadSceneAdditive = false)
+		public async Task<bool> DownloadAsync(string worldDownloadUrl, bool loadSceneAdditive = false)
 		{
+			TaskCompletionSource<bool> resultSource = new TaskCompletionSource<bool>();
+
 			long worldId = 0;
 			try
 			{
@@ -28,7 +30,7 @@ namespace GladMMO
 				UnityWebRequestAsyncOperation asyncOperation = UnityWebRequestAssetBundle.GetAssetBundle(worldDownloadUrl, 0).SendWebRequest();
 
 				//TODO: We should render these operations to the loading screen UI.
-				asyncOperation.completed += operation =>
+				asyncOperation.completed += async operation =>
 				{
 					AssetBundle bundle = DownloadHandlerAssetBundle.GetContent(asyncOperation.webRequest);
 
@@ -39,7 +41,8 @@ namespace GladMMO
 
 					string scenePath = paths.First();
 
-					LoadDownloadedScene(scenePath, bundle, loadSceneAdditive);
+					await LoadDownloadedScene(scenePath, bundle, loadSceneAdditive);
+					resultSource.SetResult(true);
 				};
 			}
 			catch(Exception e)
@@ -52,10 +55,14 @@ namespace GladMMO
 
 				throw;
 			}
+
+			return await resultSource.Task;
 		}
 
-		private static AsyncOperation LoadDownloadedScene(string scenePath, AssetBundle bundle, bool loadSceneAdditive)
+		private static Task<bool> LoadDownloadedScene(string scenePath, AssetBundle bundle, bool loadSceneAdditive)
 		{
+			TaskCompletionSource<bool> resultSource = new TaskCompletionSource<bool>();
+
 			//The idea here is that AFTER the scene has been loaded, we need to then load the ACTUAL
 			//networking-based gameplay scene. Containing sceneject and all that other stuff.
 			//It's basically a layered scene-based approach. Layer 1 is the downloaded scene, layer 2 is the actual nuts and bolts
@@ -72,11 +79,12 @@ namespace GladMMO
 				bundle.Unload(false);
 
 				//TODO: We need a way/system to reference the bundle later so it can be cleaned up inbetween scene loads.
+				resultSource.SetResult(true);
 			};
 
 			sceneAsync.allowSceneActivation = true;
 
-			return sceneAsync;
+			return resultSource.Task;
 		}
 
 		private static void OnDownloadedSceneFinishedLoading(Scene sceneLoaded, LoadSceneMode mode)
