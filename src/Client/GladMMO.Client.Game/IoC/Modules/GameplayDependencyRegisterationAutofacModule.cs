@@ -71,7 +71,11 @@ namespace GladMMO
 				.SingleInstance();
 
 			//DefaultLoadableContentResourceManager : ILoadableContentResourceManager, IDisposable
-			builder.RegisterType<DefaultLoadableContentResourceManager>()
+			builder.RegisterType<NetworkAvatarContentResourceManager>()
+				.AsImplementedInterfaces()
+				.SingleInstance();
+
+			builder.RegisterType<NetworkCreatureContentResourceManager>()
 				.AsImplementedInterfaces()
 				.SingleInstance();
 
