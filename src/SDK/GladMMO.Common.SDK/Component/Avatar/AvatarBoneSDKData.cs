@@ -22,8 +22,8 @@ namespace GladMMO.SDK
 		/// <summary>
 		/// Auto-detects bone references for this Avatar. Works with a Humanoid Animator on the gameobject only.
 		/// </summary>
-		[ContextMenu("Auto-detect References")]
-		public void AutoDetectReferences()
+		[ContextMenu("Auto-detect Bones")]
+		public void AutoDetectBones()
 		{
 			CustomVRIKReferences.AutoDetectReferences(transform, out _references);
 
