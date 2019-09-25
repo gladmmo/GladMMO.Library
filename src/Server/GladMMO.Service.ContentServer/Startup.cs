@@ -60,6 +60,7 @@ namespace GladMMO
 			//This provides JwtBearer support for Authorize attribute/header
 			services.AddJwtAuthorization(cert);
 
+			//TODO: Simplify avatar/world content repos with base repo.
 			//Adds and registers S3 service for URLBuilding and communication/credentials and etc
 			//services.AddS3Service(Configuration);
 			services.AddTransient<IWorldEntryRepository, DatabaseBackedWorldEntryRepository>();
@@ -67,6 +68,8 @@ namespace GladMMO
 
 			services.AddTransient<IAvatarEntryRepository, DatabaseBackedAvatarEntryRepository>();
 			services.AddTransient<ICustomContentRepository<AvatarEntryModel>>(provider => provider.GetRequiredService<IAvatarEntryRepository>());
+
+			services.AddTransient<ICustomContentRepository<CreatureModelEntryModel>, DatabaseBackedCreatureModelEntryRepository>();
 
 			services.AddTransient<IContentDownloadAuthroizationValidator, UnimplementedContentDownloadAuthorizationValidator>();
 
