@@ -27,7 +27,7 @@ namespace GladMMO
 			[FromRoute(Name = "id")] int creatureId,
 			[FromServices] ICreatureEntryRepository creatureEntryRepository)
 		{
-			if (model.Guid.EntityId != creatureId)
+			if (model.Guid.EntryId != creatureId)
 				return BadRequest();
 
 			CreatureEntryModel entryModel = await creatureEntryRepository.RetrieveAsync(creatureId);
