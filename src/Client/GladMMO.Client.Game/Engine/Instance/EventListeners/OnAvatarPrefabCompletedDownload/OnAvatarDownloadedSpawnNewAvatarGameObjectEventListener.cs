@@ -26,6 +26,10 @@ namespace GladMMO
 
 		protected override void OnEventFired(object source, ContentPrefabCompletedDownloadEventArgs args)
 		{
+			//Only interested in players.
+			if (args.EntityGuid.EntityType != EntityType.Player)
+				return;
+
 			if(Logger.IsInfoEnabled)
 				Logger.Info($"About to create new Avatar for Entity: {args.EntityGuid}");
 
