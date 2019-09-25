@@ -66,7 +66,7 @@ namespace GladMMO
 				.SingleInstance();
 
 			//CustomAvatarLoaderCancelableFactory : IFactoryCreatable<CustomAvatarLoaderCancelable, CustomAvatarLoaderCreationContext>, IAvatarPrefabCompletedDownloadEventSubscribable
-			builder.RegisterType<CustomAvatarLoaderCancelableFactory>()
+			builder.RegisterType<CustomModelLoaderCancelableFactory>()
 				.AsImplementedInterfaces()
 				.SingleInstance();
 
