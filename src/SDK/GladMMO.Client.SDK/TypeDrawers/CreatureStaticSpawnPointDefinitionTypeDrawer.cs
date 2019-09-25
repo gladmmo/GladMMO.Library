@@ -2,93 +2,203 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using Glader.Essentials;
 using Refit;
 using UnityEditor;
 using UnityEngine;
 
-namespace GladMMO
+namespace GladMMO.SDK
 {
 	[CustomEditor(typeof(CreatureStaticSpawnPointDefinition))]
 	public sealed class CreatureStaticSpawnPointDefinitionTypeDrawer : StaticSpawnPointDefinitionEditor
 	{
+		private string CachedCreatureInfoText = null;
+
+		private string CachedCreatureTemplateInfoText = null;
+
 		public override void OnInspectorGUI()
 		{
 			base.OnInspectorGUI();
 
-			bool isSaveable = true;
+			//Depending on authentication state
+			//we dispatch the rendering for GUI controls
+			if(AuthenticationModelSingleton.Instance.isAuthenticated)
+				AuthenticatedOnGUI();
+			else
+				UnAuthenticatedOnGUI();
+		}
 
-			//If the instance id is -1 then this creature instance is NOT networked, the information will not exists in the database at all.
+		private void UnAuthenticatedOnGUI()
+		{
+			EditorGUILayout.LabelField($"You need to be authenticated.");
+		}
+
+		private void AuthenticatedOnGUI()
+		{
+			UnityAsyncHelper.InitializeSyncContext();
+
+			//There is no creature instance associated with this yet.
 			if (GetTarget().CreatureInstanceId == -1)
 			{
-				//So, we should a button asking the user if they want to create a creature instance.
 				if (GUILayout.Button($"Create Creature Instance"))
 				{
-					//TODO: This is just for testing, we should properly handle this
-					ICreatureDataServiceClient client = RestService.For<ICreatureDataServiceClient>("http://192.168.0.12:5005");
+					ICreatureDataServiceClient client = new CreatureContentServiceClientFactory().Create(EmptyFactoryContext.Instance);
 
-					//If they press this, we need to actually create a creature instance for this world id.
-					var result = client.CreateCreatureInstance(30).ConfigureAwait(false).GetAwaiter().GetResult(); //TODO: This is just for testing. We should get the world id from the scene somehow.
+					WorldDefinitionData worldData = FindObjectOfType<WorldDefinitionData>();
 
-					if (result.isSuccessful)
+					if (worldData == null)
 					{
-						GetTarget().CreatureInstanceId = result.Result.Guid.EntryId;
-						EditorUtility.SetDirty(GetTarget());
+						Debug.LogError($"Cannot create creature instance until the world is uploaded and the {nameof(WorldDefinitionData)} exists within the scene.");
+						return;
 					}
+
+					CreateCreatureInstance(client, worldData);
 				}
 
-				//No matter what, do not continue with editing. Since the creature DOES NOT EXIST on the backend.
 				return;
 			}
 			else
 			{
-				//TODO: This is just for testing, we should properly handle this
-				ICreatureDataServiceClient client = RestService.For<ICreatureDataServiceClient>("http://192.168.0.12:5005");
+				EditorGUILayout.LabelField($"Instance Id: {GetTarget().CreatureInstanceId}");
 
-				var task = client.GetCreatureInstance(GetTarget().CreatureInstanceId);
-				var queryResponseModel = task.ConfigureAwait(false).GetAwaiter().GetResult();
+				GUILayout.Label(CachedCreatureInfoText, GUI.skin.textArea);
 
-				//TODO: No idea what should be done here.
-				if (!queryResponseModel.isSuccessful)
-					return;
+				//The reason we do this manually is so that it can be hidden before there is an instance id.
+				GetTarget().CreatureTemplateId = EditorGUILayout.IntField($"Template Id", GetTarget().CreatureTemplateId);
 
-				//Just show the instance id
-				GUILayout.Label($"Creature Instance: {GetTarget().CreatureInstanceId}\nGuid: {queryResponseModel.Result.Guid}\nSpawnPosition: {queryResponseModel.Result.InitialPosition}\nYRotation: {queryResponseModel.Result.YAxisRotation}", GUI.skin.textArea);
-			}
-
-			//The reason we do this manually is so that it can be hidden before there is an instance id.
-			GetTarget().CreatureTemplateId = EditorGUILayout.IntField($"Template Id", GetTarget().CreatureTemplateId);
-
-			//Now, if the creature template id is not -1 we should try to load the template
-			if (GetTarget().CreatureTemplateId != -1)
-			{
-				//TODO: This is just for testing, we should properly handle this
-				ICreatureDataServiceClient client = RestService.For<ICreatureDataServiceClient>("http://192.168.0.12:5005");
-				var task = client.GetCreatureTemplate(GetTarget().CreatureTemplateId);
-				var queryResponseModel = task.ConfigureAwait(false).GetAwaiter().GetResult();
-
-				if (!queryResponseModel.isSuccessful)
+				//Now, if the creature template id is not -1 we should try to load the template
+				if (GetTarget().CreatureTemplateId > 0)
 				{
-					isSaveable = false;
-					GUILayout.Label($"Unknown Creature Template: {GetTarget().CreatureTemplateId}", GUI.skin.textArea);
+					GUILayout.Label(CachedCreatureTemplateInfoText, GUI.skin.textArea);
 				}
 				else
-				{
-					var result = queryResponseModel.Result;
-					GUILayout.Label($"Creature Template: {GetTarget().CreatureTemplateId}\nName: {result.CreatureName}\nModel Id: {result.ModelId}\nLevel Range: {result.MinimumLevel}-{result.MaximumLevel}", GUI.skin.textArea);
-				}
+					GUILayout.Label($"Unknown Creature Template: {GetTarget().CreatureTemplateId}", GUI.skin.textArea);
+
 			}
 
-			if (isSaveable)
+			if (GUILayout.Button($"Refresh Creature Data"))
 			{
-				if (GUILayout.Button("Save Updates"))
+				ICreatureDataServiceClient client = new CreatureContentServiceClientFactory().Create(EmptyFactoryContext.Instance);
+
+				RefreshCreatureData(client);
+			}
+
+			if(GUILayout.Button("Save Updates"))
+			{
+				UpdateCreatureData();
+			}
+		}
+
+		private void UpdateCreatureData()
+		{
+			EditorUtility.DisplayProgressBar("Updating Creature", "Uploading Data (1/1)", 0.25f);
+
+			UnityAsyncHelper.UnityMainThreadContext.Post(async o =>
+			{
+				try
 				{
-					ICreatureDataServiceClient client = RestService.For<ICreatureDataServiceClient>("http://192.168.0.12:5005");
+					ICreatureDataServiceClient client = new CreatureContentServiceClientFactory().Create(EmptyFactoryContext.Instance);
 
 					//Just sent the updated model.
-					client.UpdateCreatureInstance(GetTarget().CreatureInstanceId, new CreatureInstanceModel(BuildNetworkEntityGuid(), GetTarget().CreatureTemplateId, GetTarget().transform.position, GetTarget().transform.eulerAngles.y))
-						.ConfigureAwait(false).GetAwaiter().GetResult();
+					await client.UpdateCreatureInstance(GetTarget().CreatureInstanceId, new CreatureInstanceModel(BuildNetworkEntityGuid(), GetTarget().CreatureTemplateId, GetTarget().transform.position, GetTarget().transform.eulerAngles.y));
+				}
+				catch (Exception e)
+				{
+					Debug.LogError($"Failed to update creature. Reason: {e.Message}");
+					throw;
+				}
+				finally
+				{
+					EditorUtility.ClearProgressBar();
+				}
+			}, null);
+		}
+
+		private void CreateCreatureInstance(ICreatureDataServiceClient client, WorldDefinitionData worldData)
+		{
+			EditorUtility.DisplayProgressBar("Creating Creature", "Requesting instance (1/2)", 0.0f);
+
+			UnityAsyncHelper.UnityMainThreadContext.Post(async o =>
+			{
+				try
+				{
+					//If they press this, we need to actually create a creature instance for this world id.
+					var result = await client.CreateCreatureInstance(worldData.ContentId);
+
+					if (result.isSuccessful)
+					{
+						EditorUtility.DisplayProgressBar("Creating Creature", "Saving Instance (2/2)", 0.5f);
+
+						GetTarget().CreatureInstanceId = result.Result.Guid.EntryId;
+						EditorUtility.SetDirty(GetTarget());
+						await RefreshCreatureData(client);
+					}
+					else
+						Debug.LogError($"Failed to create Creature Instance. Reason: {result.ResultCode}");
+				}
+				catch (Exception e)
+				{
+					Debug.LogError($"Failed to create Creature Instance. Reason: {e.Message}");
+					throw;
+				}
+				finally
+				{
+					EditorUtility.ClearProgressBar();
+				}
+			}, null);
+		}
+
+		private async Task RefreshCreatureData([NotNull] ICreatureDataServiceClient client)
+		{
+			if(client == null) throw new ArgumentNullException(nameof(client));
+
+			try
+			{
+				EditorUtility.DisplayProgressBar("Refreshing Creature", "Creature Instance (1/2).", 0.0f);
+
+				CreatureInstanceModel instanceData = await RefreshCreatureInstanceData(client);
+
+				//If the creature instance exists and we have a valid template assigned.
+				if (instanceData != null && instanceData.TemplateId > 0)
+				{
+					EditorUtility.DisplayProgressBar("Refreshing Creature", "Creature Template (2/2).", 0.0f);
+					await RefreshCreatureTemplateData(client);
 				}
 			}
+			catch (Exception e)
+			{
+				Debug.LogError($"Failed to refresh Creature. Reason: {e.Message}");
+				throw;
+			}
+			finally
+			{
+				EditorUtility.ClearProgressBar();
+			}
+		}
+
+		private async Task RefreshCreatureTemplateData(ICreatureDataServiceClient client)
+		{
+			//TODO: This is just for testing, we should properly handle this
+			ResponseModel<CreatureTemplateModel, SceneContentQueryResponseCode> templateModelResponse = await client.GetCreatureTemplate(GetTarget().CreatureTemplateId);
+			var result = templateModelResponse.Result;
+
+			CachedCreatureTemplateInfoText = $"Creature Template: {GetTarget().CreatureTemplateId}\nName: {result.CreatureName}\nModel Id: {result.ModelId}\nLevel Range: {result.MinimumLevel}-{result.MaximumLevel}";
+		}
+
+		private async Task<CreatureInstanceModel> RefreshCreatureInstanceData([NotNull] ICreatureDataServiceClient client)
+		{
+			if (client == null) throw new ArgumentNullException(nameof(client));
+
+			ResponseModel<CreatureInstanceModel, SceneContentQueryResponseCode> queryResponseModel = await client.GetCreatureInstance(GetTarget().CreatureInstanceId);
+
+			//TODO: No idea what should be done here.
+			if (!queryResponseModel.isSuccessful)
+				return null;
+
+			CachedCreatureInfoText = $"Creature Instance: {GetTarget().CreatureInstanceId}\nGuid: {queryResponseModel.Result.Guid}\nSpawnPosition: {queryResponseModel.Result.InitialPosition}\nYRotation: {queryResponseModel.Result.YAxisRotation}";
+			GetTarget().CreatureTemplateId = queryResponseModel.Result.TemplateId;
+
+			return queryResponseModel.Result;
 		}
 
 		private NetworkEntityGuid BuildNetworkEntityGuid()
