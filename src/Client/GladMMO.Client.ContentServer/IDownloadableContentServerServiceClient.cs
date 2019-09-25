@@ -60,7 +60,7 @@ namespace GladMMO
 		/// </summary>
 		/// <returns>A model representing the result of the creature URL generation request.</returns>
 		[RequiresAuthentication]
-		[Post("/api/avatar/create")]
+		[Post("/api/Creature/create")]
 		Task<ResponseModel<ContentUploadToken, ContentUploadResponseCode>> GetNewCreatureModelUploadUrl();
 
 		//TODO: Doc
