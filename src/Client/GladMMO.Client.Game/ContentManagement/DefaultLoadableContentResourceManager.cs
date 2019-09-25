@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -13,11 +14,11 @@ using UnityEngine.Networking;
 namespace GladMMO
 {
 	//TODO: We should do some threading and safety stuff.
-	public sealed class DefaultLoadableContentResourceManager : ILoadableContentResourceManager, IDisposable
+	public abstract class DefaultLoadableContentResourceManager : ILoadableContentResourceManager, IDisposable
 	{
-		private IDownloadableContentServerServiceClient ContentClient { get; }
-
 		private ILog Logger { get; }
+
+		public UserContentType ContentType { get; }
 
 		//We should only tocuh this on the main thread, including cleanup and updating it.
 		private Dictionary<long, ReferenceCountedPrefabContentResourceHandle> ResourceHandleCache { get; }
@@ -31,14 +32,16 @@ namespace GladMMO
 
 		/// <inheritdoc />
 		public DefaultLoadableContentResourceManager(
-			[NotNull] IDownloadableContentServerServiceClient contentClient,
-			[NotNull] ILog logger)
+			[NotNull] ILog logger,
+			UserContentType contentType)
 		{
+			if(!Enum.IsDefined(typeof(UserContentType), contentType)) throw new InvalidEnumArgumentException(nameof(contentType), (int)contentType, typeof(UserContentType));
+
 			//TODO: We haven't implemented the refcounted cleanup. We ref count, but don't yet dispose.
 			ProjectVersionStage.AssertAlpha();
 
-			ContentClient = contentClient ?? throw new ArgumentNullException(nameof(contentClient));
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
+			ContentType = contentType;
 
 			ResourceHandleCache = new Dictionary<long, ReferenceCountedPrefabContentResourceHandle>();
 
@@ -46,23 +49,22 @@ namespace GladMMO
 		}
 
 		/// <inheritdoc />
-		public bool IsContentResourceAvailable(long avatarId)
+		public bool IsContentResourceAvailable(long contentId)
 		{
-			if(avatarId < 0) throw new ArgumentOutOfRangeException(nameof(avatarId));
+			if(contentId < 0) throw new ArgumentOutOfRangeException(nameof(contentId));
 
 			lock(SyncObj)
-				return ResourceHandleCache.ContainsKey(avatarId);
+				return ResourceHandleCache.ContainsKey(contentId);
 		}
 
 		/// <inheritdoc />
-		public async Task<IPrefabContentResourceHandle> LoadContentPrefabAsync(long avatarId)
+		public async Task<IPrefabContentResourceHandle> LoadContentPrefabAsync(long contentId)
 		{
 			//If it's already available, we can just return immediately
-			if(IsContentResourceAvailable(avatarId))
-				return TryLoadContentPrefab(avatarId);
+			if(IsContentResourceAvailable(contentId))
+				return TryLoadContentPrefab(contentId);
 
-			ContentDownloadURLResponse downloadUrlResponse = await ContentClient.RequestAvatarDownloadUrl(avatarId)
-				.ConfigureAwait(false);
+			ContentDownloadURLResponse downloadUrlResponse = await RequestDownloadURL(contentId);
 
 			//TODO: Handle failure
 			TaskCompletionSource<IPrefabContentResourceHandle> completionSource = new TaskCompletionSource<IPrefabContentResourceHandle>();
@@ -96,15 +98,15 @@ namespace GladMMO
 				{
 					//We're on the main thread again. So, we should check if another
 					//request already got the bundle
-					if(IsContentResourceAvailable(avatarId))
+					if(IsContentResourceAvailable(contentId))
 					{
-						completionSource.SetResult(TryLoadContentPrefab(avatarId));
+						completionSource.SetResult(TryLoadContentPrefab(contentId));
 						return;
 					}
 
 					//otherwise, we still don't have it so we should initialize it.
-					this.ResourceHandleCache[avatarId] = new ReferenceCountedPrefabContentResourceHandle(DownloadHandlerAssetBundle.GetContent(asyncOperation.webRequest));
-					completionSource.SetResult(TryLoadContentPrefab(avatarId)); //we assume this will work now.
+					this.ResourceHandleCache[contentId] = new ReferenceCountedPrefabContentResourceHandle(DownloadHandlerAssetBundle.GetContent(asyncOperation.webRequest));
+					completionSource.SetResult(TryLoadContentPrefab(contentId)); //we assume this will work now.
 				}
 			};
 
@@ -112,16 +114,18 @@ namespace GladMMO
 				.ConfigureAwait(false);
 		}
 
+		protected abstract Task<ContentDownloadURLResponse> RequestDownloadURL(long contentId);
+
 		/// <inheritdoc />
-		public IPrefabContentResourceHandle TryLoadContentPrefab(long avatarId)
+		public IPrefabContentResourceHandle TryLoadContentPrefab(long contentId)
 		{
 			lock(SyncObj)
 			{
-				if(!IsContentResourceAvailable(avatarId))
-					throw new InvalidOperationException($"Cannot load AvatarId: {avatarId} from memory. Call {nameof(LoadContentPrefabAsync)} if not already in memory.");
+				if(!IsContentResourceAvailable(contentId))
+					throw new InvalidOperationException($"Cannot load contentId: {contentId} from memory. Call {nameof(LoadContentPrefabAsync)} if not already in memory.");
 
 				//Important to claim reference, since this is ref counted.
-				var handle = ResourceHandleCache[avatarId];
+				var handle = ResourceHandleCache[contentId];
 				handle.ClaimReference();
 
 				return new SingleReleaseablePrefabContentResourceHandleDecorator(handle);

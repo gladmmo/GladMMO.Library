@@ -7,6 +7,8 @@ namespace GladMMO
 {
 	public interface ILoadableContentResourceManager
 	{
+		UserContentType ContentType { get; }
+
 		/// <summary>
 		/// Indicates if the avatar resource with key <see cref="contentId"/>
 		/// is available and doesn't need to be downloaded.
