@@ -8,6 +8,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Glader.Essentials;
 using Microsoft.Azure.Storage.Blob;
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -17,15 +18,18 @@ using UnityEngine.SceneManagement;
 namespace GladMMO.SDK
 {
 	//TODO: Refactor
-	public sealed class GuardiansCreatureModelUploadWindow : AuthenticatableEditorWindow
+	public sealed class GuardiansCreatureModelUploadWindow : BaseCustomContentUploadEditorWindow
 	{
 		[SerializeField]
-		private UnityEngine.GameObject CreatureModelPrefab;
+		private UnityEngine.GameObject CreaturePrefab;
 
-		[SerializeField]
-		private string AssetBundlePath;
+		public GuardiansCreatureModelUploadWindow()
+			: base(UserContentType.Creature)
+		{
 
-		[MenuItem("VRGuardians/Content/CreatureUpload")]
+		}
+
+		[MenuItem("VRGuardians/Content/CreatureModelUpload")]
 		public static void ShowWindow()
 		{
 			EditorWindow.GetWindow(typeof(GuardiansCreatureModelUploadWindow));
@@ -33,63 +37,35 @@ namespace GladMMO.SDK
 
 		protected override void AuthenticatedOnGUI()
 		{
-			//TODO: Validate scene file
-			CreatureModelPrefab = EditorGUILayout.ObjectField("Creature Model Prefab", CreatureModelPrefab, typeof(GameObject), false) as GameObject;
+			CreaturePrefab = EditorGUILayout.ObjectField("Creature Prefab", CreaturePrefab, typeof(GameObject), false) as GameObject;
 
-			if(CreatureModelPrefab != null)
-				if(PrefabUtility.GetPrefabAssetType(CreatureModelPrefab) == PrefabAssetType.NotAPrefab)
+			if(CreaturePrefab != null)
+			{
+				if(PrefabUtility.GetPrefabAssetType(CreaturePrefab) == PrefabAssetType.NotAPrefab)
 				{
-					CreatureModelPrefab = null;
+					CreaturePrefab = null;
 					Debug.LogError($"Provided creature prefab MUST be a prefab.");
+					return;
 				}
-
-			if(GUILayout.Button("Build Creature AssetBundle"))
-			{
-				//Once authenticated we need to try to build the bundle.
-				ProjectVindictiveAssetbundleBuilder builder = new ProjectVindictiveAssetbundleBuilder(CreatureModelPrefab);
-
-				//TODO: Handle uploading build
-				AssetBundleManifest manifest = builder.BuildBundle();
-
-				//TODO: Refactor all this crap
-				AssetBundlePath = manifest.GetAllAssetBundles().First();
-
-				Debug.Log($"Generated AssetBundle with Path: {AssetBundlePath}");
-
-				return;
 			}
+			else
+				return; //TODO: Try to discover the avatar's prefab in the scene.
 
-			if(GUILayout.Button("Upload Assetbundle"))
+			//We need the avatar data definition now.
+			CreatureDefinitionData definitionData = CreaturePrefab.GetComponent<CreatureDefinitionData>();
+
+			if(definitionData == null)
+				Debug.LogError($"Provided creature must contain Component: {nameof(CreatureDefinitionData)} on root {nameof(GameObject)}");
+
+			base.OnRenderUploadGUI(definitionData, CreaturePrefab, token =>
 			{
-				IDownloadableContentServerServiceClient ucmService =
-					new DownloadableContentServiceClientFactory()
-						.Create(EmptyFactoryContext.Instance);
+				//DO NOT REFERNECE THE ABOVE DEFINITION. IT NO LONGER EXISTS
+				//THIS IS DUE TO SCENE RELOAD
+				definitionData = CreaturePrefab.GetComponent<CreatureDefinitionData>();
 
-				//Done out here, must be called on the main thread
-				string projectPath = Application.dataPath.ToLower().TrimEnd(@"assets".ToCharArray());
-
-				Thread uploadThread = new Thread(new ThreadStart(async () =>
-				{
-					try
-					{
-						ResponseModel<ContentUploadToken, ContentUploadResponseCode> contentUploadToken = await ucmService.GetNewCreatureModelUploadUrl();
-
-						//TODO: Handle failure.
-
-						string uploadUrl = contentUploadToken.Result.UploadUrl;
-						Debug.Log($"Uploading to: {uploadUrl}.");
-						var cloudBlockBlob = new CloudBlockBlob(new Uri(uploadUrl));
-						await cloudBlockBlob.UploadFromFileAsync(Path.Combine(projectPath, "AssetBundles", "temp", AssetBundlePath));
-					}
-					catch (Exception e)
-					{
-						Debug.LogError($"Failed to upload Avatar. Error: {e.Message}\n\nStack: {e.StackTrace}");
-						throw;
-					}
-				}));
-
-				uploadThread.Start();
-			}
+				definitionData.ContentGuid = token.ContentGuid;
+				definitionData.ContentId = token.ContentId;
+			});
 		}
 
 		protected override void UnAuthenticatedOnGUI()
