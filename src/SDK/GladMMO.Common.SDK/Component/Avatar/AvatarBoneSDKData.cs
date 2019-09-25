@@ -9,8 +9,7 @@ namespace GladMMO.SDK
 	/// Component that is similar to VR-IK component
 	/// that contains references to bones that can be automatically initialized.
 	/// </summary>
-	[RequireComponent(typeof(AvatarDefinitionData))]
-	public sealed class AvatarBoneSDKData : MonoBehaviour, IAvatarIKReferenceContainer<CustomVRIKReferences>
+	public sealed class AvatarBoneSDKData : GladMMOSDKMonoBehaviour, IAvatarIKReferenceContainer<CustomVRIKReferences>
 	{
 		/// <summary>
 		/// Bone mapping. Right-click on the component header and select 'Auto-detect References' of fill in manually if not a Humanoid character. Chest, neck, shoulder and toe bones are optional. VRIK also supports legless characters. If you do not wish to use legs, leave all leg references empty.
