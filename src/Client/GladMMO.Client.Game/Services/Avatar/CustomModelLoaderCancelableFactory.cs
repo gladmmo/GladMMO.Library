@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace GladMMO
 {
-	public sealed class CustomModelLoaderCancelableFactory : IFactoryCreatable<CustomAvatarLoaderCancelable, CustomModelLoaderCreationContext>, IAvatarPrefabCompletedDownloadEventSubscribable
+	public sealed class CustomModelLoaderCancelableFactory : IFactoryCreatable<CustomModelLoaderCancelable, CustomModelLoaderCreationContext>, IAvatarPrefabCompletedDownloadEventSubscribable
 	{
 		private ILoadableContentResourceManager ContentResourceManager { get; }
 
@@ -21,11 +21,11 @@ namespace GladMMO
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
-		public CustomAvatarLoaderCancelable Create(CustomModelLoaderCreationContext context)
+		public CustomModelLoaderCancelable Create(CustomModelLoaderCreationContext context)
 		{
 			Task<IPrefabContentResourceHandle> avatarPrefabAsync = ContentResourceManager.LoadAvatarPrefabAsync(context.ContentId);
 
-			return new CustomAvatarLoaderCancelable(avatarPrefabAsync, Logger, prefab =>
+			return new CustomModelLoaderCancelable(avatarPrefabAsync, Logger, prefab =>
 			{
 				//Callback should only occur is avatarPrefabAsync has completed
 				IPrefabContentResourceHandle handle = avatarPrefabAsync.Result;

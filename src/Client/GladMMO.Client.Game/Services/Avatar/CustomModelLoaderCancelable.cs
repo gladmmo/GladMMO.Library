@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace GladMMO
 {
-	public sealed class CustomAvatarLoaderCancelable : IDisposable
+	public sealed class CustomModelLoaderCancelable : IDisposable
 	{
 		private Task<IPrefabContentResourceHandle> PrefabHandleFuture { get; }
 
@@ -23,7 +23,7 @@ namespace GladMMO
 		/// </summary>
 		private CancellationTokenSource CurrentCancellationSource { get; set; }
 
-		public CustomAvatarLoaderCancelable([NotNull] Task<IPrefabContentResourceHandle> prefabHandleFuture, [NotNull] ILog logger, [NotNull] Action<GameObject> avatarPrefabReadyCallback)
+		public CustomModelLoaderCancelable([NotNull] Task<IPrefabContentResourceHandle> prefabHandleFuture, [NotNull] ILog logger, [NotNull] Action<GameObject> avatarPrefabReadyCallback)
 		{
 			PrefabHandleFuture = prefabHandleFuture ?? throw new ArgumentNullException(nameof(prefabHandleFuture));
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));

@@ -16,15 +16,15 @@ namespace GladMMO
 
 		private ILog Logger { get; }
 
-		private IFactoryCreatable<CustomAvatarLoaderCancelable, CustomModelLoaderCreationContext> AvatarLoaderFactory { get; }
+		private IFactoryCreatable<CustomModelLoaderCancelable, CustomModelLoaderCreationContext> AvatarLoaderFactory { get; }
 
-		private IEntityGuidMappable<CustomAvatarLoaderCancelable> AvatarLoaderMappable { get; }
+		private IEntityGuidMappable<CustomModelLoaderCancelable> AvatarLoaderMappable { get; }
 
 		public OnEntityCreatingRegisterModelChangeListenerEventListener(IEntityCreationStartingEventSubscribable subscriptionService,
 			[NotNull] IEntityDataChangeCallbackRegisterable entityDataCallbackRegister,
 			[NotNull] ILog logger,
-			[NotNull] IFactoryCreatable<CustomAvatarLoaderCancelable, CustomModelLoaderCreationContext> avatarLoaderFactory,
-			[NotNull] IEntityGuidMappable<CustomAvatarLoaderCancelable> avatarLoaderMappable) 
+			[NotNull] IFactoryCreatable<CustomModelLoaderCancelable, CustomModelLoaderCreationContext> avatarLoaderFactory,
+			[NotNull] IEntityGuidMappable<CustomModelLoaderCancelable> avatarLoaderMappable) 
 			: base(subscriptionService)
 		{
 			EntityDataCallbackRegister = entityDataCallbackRegister ?? throw new ArgumentNullException(nameof(entityDataCallbackRegister));
@@ -48,7 +48,7 @@ namespace GladMMO
 			if (entityGuid == null) throw new ArgumentNullException(nameof(entityGuid));
 
 			//The new id of the model is now known.
-			CustomAvatarLoaderCancelable cancelable = AvatarLoaderFactory.Create(new CustomModelLoaderCreationContext(changedModelId.NewValue, entityGuid));
+			CustomModelLoaderCancelable cancelable = AvatarLoaderFactory.Create(new CustomModelLoaderCreationContext(changedModelId.NewValue, entityGuid));
 
 			if (AvatarLoaderMappable.ContainsKey(entityGuid))
 			{
