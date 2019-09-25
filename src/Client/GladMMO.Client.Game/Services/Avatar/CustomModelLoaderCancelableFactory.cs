@@ -23,7 +23,7 @@ namespace GladMMO
 
 		public CustomModelLoaderCancelable Create(CustomModelLoaderCreationContext context)
 		{
-			Task<IPrefabContentResourceHandle> avatarPrefabAsync = ContentResourceManager.LoadAvatarPrefabAsync(context.ContentId);
+			Task<IPrefabContentResourceHandle> avatarPrefabAsync = ContentResourceManager.LoadContentPrefabAsync(context.ContentId);
 
 			return new CustomModelLoaderCancelable(avatarPrefabAsync, Logger, prefab =>
 			{

@@ -46,7 +46,7 @@ namespace GladMMO
 		}
 
 		/// <inheritdoc />
-		public bool IsAvatarResourceAvailable(long avatarId)
+		public bool IsContentResourceAvailable(long avatarId)
 		{
 			if(avatarId < 0) throw new ArgumentOutOfRangeException(nameof(avatarId));
 
@@ -55,11 +55,11 @@ namespace GladMMO
 		}
 
 		/// <inheritdoc />
-		public async Task<IPrefabContentResourceHandle> LoadAvatarPrefabAsync(long avatarId)
+		public async Task<IPrefabContentResourceHandle> LoadContentPrefabAsync(long avatarId)
 		{
 			//If it's already available, we can just return immediately
-			if(IsAvatarResourceAvailable(avatarId))
-				return TryLoadAvatarPrefab(avatarId);
+			if(IsContentResourceAvailable(avatarId))
+				return TryLoadContentPrefab(avatarId);
 
 			ContentDownloadURLResponse downloadUrlResponse = await ContentClient.RequestAvatarDownloadUrl(avatarId)
 				.ConfigureAwait(false);
@@ -96,15 +96,15 @@ namespace GladMMO
 				{
 					//We're on the main thread again. So, we should check if another
 					//request already got the bundle
-					if(IsAvatarResourceAvailable(avatarId))
+					if(IsContentResourceAvailable(avatarId))
 					{
-						completionSource.SetResult(TryLoadAvatarPrefab(avatarId));
+						completionSource.SetResult(TryLoadContentPrefab(avatarId));
 						return;
 					}
 
 					//otherwise, we still don't have it so we should initialize it.
 					this.ResourceHandleCache[avatarId] = new ReferenceCountedPrefabContentResourceHandle(DownloadHandlerAssetBundle.GetContent(asyncOperation.webRequest));
-					completionSource.SetResult(TryLoadAvatarPrefab(avatarId)); //we assume this will work now.
+					completionSource.SetResult(TryLoadContentPrefab(avatarId)); //we assume this will work now.
 				}
 			};
 
@@ -113,12 +113,12 @@ namespace GladMMO
 		}
 
 		/// <inheritdoc />
-		public IPrefabContentResourceHandle TryLoadAvatarPrefab(long avatarId)
+		public IPrefabContentResourceHandle TryLoadContentPrefab(long avatarId)
 		{
 			lock(SyncObj)
 			{
-				if(!IsAvatarResourceAvailable(avatarId))
-					throw new InvalidOperationException($"Cannot load AvatarId: {avatarId} from memory. Call {nameof(LoadAvatarPrefabAsync)} if not already in memory.");
+				if(!IsContentResourceAvailable(avatarId))
+					throw new InvalidOperationException($"Cannot load AvatarId: {avatarId} from memory. Call {nameof(LoadContentPrefabAsync)} if not already in memory.");
 
 				//Important to claim reference, since this is ref counted.
 				var handle = ResourceHandleCache[avatarId];
