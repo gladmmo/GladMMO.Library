@@ -9,21 +9,40 @@ namespace GladMMO
 {
 	public sealed class CustomModelLoaderCancelableFactory : IFactoryCreatable<CustomModelLoaderCancelable, CustomModelLoaderCreationContext>, IAvatarPrefabCompletedDownloadEventSubscribable
 	{
-		private ILoadableContentResourceManager ContentResourceManager { get; }
+		private Dictionary<UserContentType, ILoadableContentResourceManager> ContentResourceManagers { get; }
 
 		private ILog Logger { get; }
 
 		public event EventHandler<AvatarPrefabCompletedDownloadEventArgs> OnAvatarPrefabCompletedDownloading;
 
-		public CustomModelLoaderCancelableFactory([NotNull] ILoadableContentResourceManager contentResourceManager, [NotNull] ILog logger)
+		public CustomModelLoaderCancelableFactory(
+			[NotNull] IEnumerable<ILoadableContentResourceManager> contentResourceManagers, 
+			[NotNull] ILog logger)
 		{
-			ContentResourceManager = contentResourceManager ?? throw new ArgumentNullException(nameof(contentResourceManager));
+			ContentResourceManagers = new Dictionary<UserContentType, ILoadableContentResourceManager>();
+
+			//Create the resource manager map
+			foreach (var resourceManager in contentResourceManagers)
+				ContentResourceManagers.Add(resourceManager.ContentType, resourceManager);
+
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
 		public CustomModelLoaderCancelable Create(CustomModelLoaderCreationContext context)
 		{
-			Task<IPrefabContentResourceHandle> avatarPrefabAsync = ContentResourceManager.LoadContentPrefabAsync(context.ContentId);
+			if (!ContentResourceManagers.ContainsKey(ConvertEntityTypeToUserContentType(context)))
+			{
+				throw new InvalidOperationException($"Cannot load content for EntityType: {context.EntityGuid.EntityType}");
+			}
+
+			ILoadableContentResourceManager contentResourceManager = ContentResourceManagers[ConvertEntityTypeToUserContentType(context)];
+
+			return CreateFromResourceManager(context, contentResourceManager);
+		}
+
+		private CustomModelLoaderCancelable CreateFromResourceManager(CustomModelLoaderCreationContext context, ILoadableContentResourceManager contentResourceManager)
+		{
+			Task<IPrefabContentResourceHandle> avatarPrefabAsync = contentResourceManager.LoadContentPrefabAsync(context.ContentId);
 
 			return new CustomModelLoaderCancelable(avatarPrefabAsync, Logger, prefab =>
 			{
@@ -32,6 +51,23 @@ namespace GladMMO
 
 				OnAvatarPrefabCompletedDownloading?.Invoke(this, new AvatarPrefabCompletedDownloadEventArgs(handle, prefab, context.EntityGuid));
 			});
+		}
+
+		private static UserContentType ConvertEntityTypeToUserContentType(CustomModelLoaderCreationContext context)
+		{
+			switch (context.EntityGuid.EntityType)
+			{
+				case EntityType.None:
+					throw new NotImplementedException();
+				case EntityType.Player:
+					return UserContentType.Avatar;
+				case EntityType.GameObject:
+					throw new NotImplementedException();
+				case EntityType.Creature:
+					return UserContentType.Creature;
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
 		}
 	}
 }
