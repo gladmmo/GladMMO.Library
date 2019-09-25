@@ -7,13 +7,13 @@ using UnityEngine;
 
 namespace GladMMO
 {
-	public sealed class CustomModelLoaderCancelableFactory : IFactoryCreatable<CustomModelLoaderCancelable, CustomModelLoaderCreationContext>, IAvatarPrefabCompletedDownloadEventSubscribable
+	public sealed class CustomModelLoaderCancelableFactory : IFactoryCreatable<CustomModelLoaderCancelable, CustomModelLoaderCreationContext>, IContentPrefabCompletedDownloadEventSubscribable
 	{
 		private Dictionary<UserContentType, ILoadableContentResourceManager> ContentResourceManagers { get; }
 
 		private ILog Logger { get; }
 
-		public event EventHandler<AvatarPrefabCompletedDownloadEventArgs> OnAvatarPrefabCompletedDownloading;
+		public event EventHandler<ContentPrefabCompletedDownloadEventArgs> OnContentPrefabCompletedDownloading;
 
 		public CustomModelLoaderCancelableFactory(
 			[NotNull] IEnumerable<ILoadableContentResourceManager> contentResourceManagers, 
@@ -49,7 +49,7 @@ namespace GladMMO
 				//Callback should only occur is avatarPrefabAsync has completed
 				IPrefabContentResourceHandle handle = avatarPrefabAsync.Result;
 
-				OnAvatarPrefabCompletedDownloading?.Invoke(this, new AvatarPrefabCompletedDownloadEventArgs(handle, prefab, context.EntityGuid));
+				OnContentPrefabCompletedDownloading?.Invoke(this, new ContentPrefabCompletedDownloadEventArgs(handle, prefab, context.EntityGuid));
 			});
 		}
 

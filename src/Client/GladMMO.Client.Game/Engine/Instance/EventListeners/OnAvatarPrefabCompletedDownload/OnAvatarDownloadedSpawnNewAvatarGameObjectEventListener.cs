@@ -9,13 +9,13 @@ using UnityEngine;
 namespace GladMMO
 {
 	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
-	public sealed class OnAvatarDownloadedSpawnNewAvatarGameObjectEventListener : BaseSingleEventListenerInitializable<IAvatarPrefabCompletedDownloadEventSubscribable, AvatarPrefabCompletedDownloadEventArgs>
+	public sealed class OnAvatarDownloadedSpawnNewAvatarGameObjectEventListener : BaseSingleEventListenerInitializable<IContentPrefabCompletedDownloadEventSubscribable, ContentPrefabCompletedDownloadEventArgs>
 	{
 		private IReadonlyEntityGuidMappable<EntityGameObjectDirectory> GameObjectDirectoryMappable { get; }
 
 		private ILog Logger { get; }
 
-		public OnAvatarDownloadedSpawnNewAvatarGameObjectEventListener(IAvatarPrefabCompletedDownloadEventSubscribable subscriptionService,
+		public OnAvatarDownloadedSpawnNewAvatarGameObjectEventListener(IContentPrefabCompletedDownloadEventSubscribable subscriptionService,
 			[NotNull] ILog logger,
 			[NotNull] IReadonlyEntityGuidMappable<EntityGameObjectDirectory> gameObjectDirectoryMappable) 
 			: base(subscriptionService)
@@ -24,7 +24,7 @@ namespace GladMMO
 			GameObjectDirectoryMappable = gameObjectDirectoryMappable ?? throw new ArgumentNullException(nameof(gameObjectDirectoryMappable));
 		}
 
-		protected override void OnEventFired(object source, AvatarPrefabCompletedDownloadEventArgs args)
+		protected override void OnEventFired(object source, ContentPrefabCompletedDownloadEventArgs args)
 		{
 			if(Logger.IsInfoEnabled)
 				Logger.Info($"About to create new Avatar for Entity: {args.EntityGuid}");

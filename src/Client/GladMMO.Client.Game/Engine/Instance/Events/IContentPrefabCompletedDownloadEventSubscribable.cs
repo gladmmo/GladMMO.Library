@@ -5,12 +5,12 @@ using UnityEngine;
 
 namespace GladMMO
 {
-	public interface IAvatarPrefabCompletedDownloadEventSubscribable
+	public interface IContentPrefabCompletedDownloadEventSubscribable
 	{
-		event EventHandler<AvatarPrefabCompletedDownloadEventArgs> OnAvatarPrefabCompletedDownloading;
+		event EventHandler<ContentPrefabCompletedDownloadEventArgs> OnContentPrefabCompletedDownloading;
 	}
 
-	public sealed class AvatarPrefabCompletedDownloadEventArgs : EventArgs
+	public sealed class ContentPrefabCompletedDownloadEventArgs : EventArgs
 	{
 		public IPrefabContentResourceHandle PrefabHandle { get; }
 
@@ -18,7 +18,7 @@ namespace GladMMO
 
 		public NetworkEntityGuid EntityGuid { get; }
 
-		public AvatarPrefabCompletedDownloadEventArgs([NotNull] IPrefabContentResourceHandle prefabHandle, [NotNull] GameObject downloadedPrefabObject, [NotNull] NetworkEntityGuid entityGuid)
+		public ContentPrefabCompletedDownloadEventArgs([NotNull] IPrefabContentResourceHandle prefabHandle, [NotNull] GameObject downloadedPrefabObject, [NotNull] NetworkEntityGuid entityGuid)
 		{
 			PrefabHandle = prefabHandle ?? throw new ArgumentNullException(nameof(prefabHandle));
 			DownloadedPrefabObject = downloadedPrefabObject ?? throw new ArgumentNullException(nameof(downloadedPrefabObject));
