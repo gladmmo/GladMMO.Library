@@ -39,8 +39,12 @@ namespace GladMMO
 			{
 				using(KnownEntities.LockObject.ReaderLock())
 					if (!KnownEntities.isEntityKnown(args.EntityGuid))
-						if (Logger.IsErrorEnabled)
-							Logger.Error($"Tried to cleanup unknown Entity: {args.EntityGuid}");
+						if (Logger.IsWarnEnabled)
+						{
+							Logger.Warn($"Tried to cleanup unknown Entity: {args.EntityGuid}");
+							return;
+						}
+							
 
 				if(Logger.IsInfoEnabled)
 					Logger.Info($"Despawning Entity: {args.EntityGuid}.");
