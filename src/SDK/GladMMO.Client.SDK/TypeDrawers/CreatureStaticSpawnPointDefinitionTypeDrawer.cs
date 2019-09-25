@@ -101,6 +101,9 @@ namespace GladMMO.SDK
 
 					//Just sent the updated model.
 					await client.UpdateCreatureInstance(GetTarget().CreatureInstanceId, new CreatureInstanceModel(BuildNetworkEntityGuid(), GetTarget().CreatureTemplateId, GetTarget().transform.position, GetTarget().transform.eulerAngles.y));
+
+					//Since the data about the creature displayed is probably now stale, we should update it after saving.
+					await RefreshCreatureData(client);
 				}
 				catch (Exception e)
 				{
