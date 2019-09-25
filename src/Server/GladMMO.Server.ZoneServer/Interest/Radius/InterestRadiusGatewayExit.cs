@@ -20,7 +20,7 @@ namespace GladMMO
 		/// <inheritdoc />
 		public override void OnTriggerExit(Collider other)
 		{
-			GlobalPhysicsEventSystem.Instance.DispatchTriggerEnter(PhysicsTriggerEventType.Interest, gameObject, other);
+			GlobalPhysicsEventSystem.Instance.DispatchTriggerExit(PhysicsTriggerEventType.Interest, gameObject, other);
 		}
 	}
 }
