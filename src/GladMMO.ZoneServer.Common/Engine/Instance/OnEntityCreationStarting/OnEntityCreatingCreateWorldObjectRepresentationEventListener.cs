@@ -33,7 +33,7 @@ namespace GladMMO
 
 			//load the entity's prefab from the factory
 			GameObject prefab = PrefabFactory.Create(prefabType);
-			GameObject entityGameObject = GameObject.Instantiate(prefab, movementData.InitialPosition, Quaternion.Euler(0, 0, 0));
+			GameObject entityGameObject = GameObject.Instantiate(prefab, movementData.InitialPosition, Quaternion.Euler(0, movementData.Rotation, 0));
 
 			OnEntityWorldRepresentationCreated?.Invoke(this, new EntityWorldRepresentationCreatedEventArgs(args.EntityGuid, entityGameObject));
 		}
