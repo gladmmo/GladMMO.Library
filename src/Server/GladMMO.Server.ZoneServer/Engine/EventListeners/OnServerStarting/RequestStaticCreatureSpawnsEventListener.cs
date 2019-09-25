@@ -23,12 +23,14 @@ namespace GladMMO
 
 		private IEntityGuidMappable<CreatureInstanceModel> CreatureInstanceMappable { get; }
 
+		private WorldConfiguration WorldConfiguration { get; }
+
 		public RequestStaticCreatureSpawnsEventListener(IServerStartingEventSubscribable subscriptionService,
 			[NotNull] ICreatureDataServiceClient creatureContentDataClient,
 			[NotNull] IEventPublisher<IEntityCreationRequestedEventSubscribable, EntityCreationRequestedEventArgs> entityCreationRequester,
 			[NotNull] IFactoryCreatable<NetworkEntityGuid, CreatureInstanceModel> creatureGuidFactory,
 			[NotNull] ILog logger, [NotNull] IEntityGuidMappable<CreatureTemplateModel> creatureTemplateMappable,
-			[NotNull] IEntityGuidMappable<CreatureInstanceModel> creatureInstanceMappable)
+			[NotNull] IEntityGuidMappable<CreatureInstanceModel> creatureInstanceMappable, WorldConfiguration worldConfiguration)
 			: base(subscriptionService)
 		{
 			CreatureContentDataClient = creatureContentDataClient ?? throw new ArgumentNullException(nameof(creatureContentDataClient));
@@ -37,6 +39,7 @@ namespace GladMMO
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
 			CreatureTemplateMappable = creatureTemplateMappable ?? throw new ArgumentNullException(nameof(creatureTemplateMappable));
 			CreatureInstanceMappable = creatureInstanceMappable ?? throw new ArgumentNullException(nameof(creatureInstanceMappable));
+			WorldConfiguration = worldConfiguration;
 		}
 
 		protected override void OnEventFired(object source, EventArgs args)
@@ -45,8 +48,8 @@ namespace GladMMO
 			//TODO: Don't hardcode the test world id.
 			UnityAsyncHelper.UnityMainThreadContext.PostAsync(async () =>
 			{
-				ResponseModel<CreatureEntryCollectionModel, CreatureCollectionResponseCode> entriesByWorld = await CreatureContentDataClient.GetCreatureEntriesByWorld(30);
-				ResponseModel<CreatureTemplateCollectionModel, CreatureCollectionResponseCode> templatesByWorld = await CreatureContentDataClient.GetCreatureTemplatesByWorld(30);
+				ResponseModel<CreatureEntryCollectionModel, CreatureCollectionResponseCode> entriesByWorld = await CreatureContentDataClient.GetCreatureEntriesByWorld(WorldConfiguration.WorldId);
+				ResponseModel<CreatureTemplateCollectionModel, CreatureCollectionResponseCode> templatesByWorld = await CreatureContentDataClient.GetCreatureTemplatesByWorld(WorldConfiguration.WorldId);
 
 				if (entriesByWorld.isSuccessful && templatesByWorld.isSuccessful)
 				{
