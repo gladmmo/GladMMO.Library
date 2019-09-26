@@ -18,7 +18,7 @@ using UnityEngine.SceneManagement;
 namespace GladMMO.SDK
 {
 	//TODO: Refactor
-	public sealed class GuardiansCreatureModelUploadWindow : BasePrefabedCustomContentUploadEditorWindow
+	public sealed class GuardiansCreatureModelUploadWindow : BasePrefabedCustomContentUploadEditorWindow<CreatureDefinitionData>
 	{
 		public GuardiansCreatureModelUploadWindow()
 			: base(UserContentType.Creature)
