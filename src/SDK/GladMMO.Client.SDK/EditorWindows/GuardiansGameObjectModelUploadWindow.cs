@@ -17,18 +17,18 @@ using UnityEngine.SceneManagement;
 
 namespace GladMMO.SDK
 {
-	public sealed class GuardiansCreatureModelUploadWindow : BasePrefabedCustomContentUploadEditorWindow<CreatureDefinitionData>
+	public sealed class GuardiansGameObjectModelUploadWindow : BasePrefabedCustomContentUploadEditorWindow<GameObjectDefinitionData>
 	{
-		public GuardiansCreatureModelUploadWindow()
-			: base(UserContentType.Creature)
+		public GuardiansGameObjectModelUploadWindow()
+			: base(UserContentType.GameObject)
 		{
 
 		}
 
-		[MenuItem("VRGuardians/Content/CreatureModelUpload")]
+		[MenuItem("VRGuardians/Content/GameObjectModelUpload")]
 		public static void ShowWindow()
 		{
-			EditorWindow.GetWindow(typeof(GuardiansCreatureModelUploadWindow));
+			EditorWindow.GetWindow(typeof(GuardiansGameObjectModelUploadWindow));
 		}
 	}
 }
