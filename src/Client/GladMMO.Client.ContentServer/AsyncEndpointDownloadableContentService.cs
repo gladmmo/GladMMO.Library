@@ -50,6 +50,11 @@ namespace GladMMO
 			return await (await GetService().ConfigureAwait(false)).GetNewCreatureModelUploadUrl().ConfigureAwait(false);
 		}
 
+		public async Task<ResponseModel<ContentUploadToken, ContentUploadResponseCode>> RequestUpdateExistingCreature(long creatureModelId)
+		{
+			return await(await GetService().ConfigureAwait(false)).RequestUpdateExistingCreature(creatureModelId).ConfigureAwait(false);
+		}
+
 		/// <inheritdoc />
 		public async Task<ContentDownloadURLResponse> RequestWorldDownloadUrl(long worldId)
 		{

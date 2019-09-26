@@ -63,6 +63,16 @@ namespace GladMMO
 		[Post("/api/Creature/create")]
 		Task<ResponseModel<ContentUploadToken, ContentUploadResponseCode>> GetNewCreatureModelUploadUrl();
 
+		/// <summary>
+		/// Attempts to get a PATCH uploaded creature model's content.
+		/// If successful the Token contained in the response will contain a valid upload
+		/// URL which can be used to update the creature model content.
+		/// </summary>
+		/// <returns>A model representing the result of the creature model URL update request.</returns>
+		[RequiresAuthentication]
+		[Patch("/api/creature/{id}")]
+		Task<ResponseModel<ContentUploadToken, ContentUploadResponseCode>> RequestUpdateExistingCreature([AliasAs("id")] long creatureModelId);
+
 		//TODO: Doc
 		[RequiresAuthentication]
 		[Post("/api/World/{id}/downloadurl")]

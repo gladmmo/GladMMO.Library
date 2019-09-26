@@ -26,7 +26,7 @@ namespace GladMMO.SDK
 				case UserContentType.Avatar:
 					return ContentClient.RequestUpdateExistingAvatar(ContentDataDefinition.ContentId);
 				case UserContentType.Creature:
-					throw new NotImplementedException($"TODO: Implement avatar updating.");
+					return ContentClient.RequestUpdateExistingCreature(ContentDataDefinition.ContentId);
 				default:
 					throw new ArgumentOutOfRangeException();
 			}
