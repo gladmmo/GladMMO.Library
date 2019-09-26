@@ -4,10 +4,19 @@ using System.Text;
 
 namespace GladMMO.SDK
 {
+	/// <summary>
+	/// Contract for types that represent data for an uploadable content.
+	/// </summary>
 	public interface IUploadedContentDataDefinition
 	{
-		long ContentId { get; }
+		/// <summary>
+		/// The unique 64bit identifier for the content.
+		/// </summary>
+		long ContentId { get; set; } //These have to be mutable now... OH well.
 
-		Guid ContentGuid { get; }
+		/// <summary>
+		/// The unique 64bit content name identifier for the stored content.
+		/// </summary>
+		Guid ContentGuid { get; set; } //These have to be mutable now... OH well.
 	}
 }
