@@ -18,11 +18,8 @@ using UnityEngine.SceneManagement;
 namespace GladMMO.SDK
 {
 	//TODO: Refactor
-	public sealed class GuardiansAvatarUploadWindow : BaseCustomContentUploadEditorWindow
+	public sealed class GuardiansAvatarUploadWindow : BasePrefabedCustomContentUploadEditorWindow<AvatarDefinitionData>
 	{
-		[SerializeField]
-		private UnityEngine.GameObject AvatarPrefab;
-
 		public GuardiansAvatarUploadWindow()
 			: base(UserContentType.Avatar)
 		{
@@ -33,46 +30,6 @@ namespace GladMMO.SDK
 		public static void ShowWindow()
 		{
 			EditorWindow.GetWindow(typeof(GuardiansAvatarUploadWindow));
-		}
-
-		protected override void AuthenticatedOnGUI()
-		{
-			AvatarPrefab = EditorGUILayout.ObjectField("Avatar Prefab", AvatarPrefab, typeof(GameObject), false) as GameObject;
-
-			if (AvatarPrefab != null)
-			{
-				if(PrefabUtility.GetPrefabAssetType(AvatarPrefab) == PrefabAssetType.NotAPrefab)
-				{
-					AvatarPrefab = null;
-					Debug.LogError($"Provided avatar prefab MUST be a prefab.");
-					return;
-				}
-			}
-			else
-				return; //TODO: Try to discover the avatar's prefab in the scene.
-
-			//We need the avatar data definition now.
-			AvatarDefinitionData definitionData = AvatarPrefab.GetComponent<AvatarDefinitionData>();
-
-			if (definitionData == null)
-				Debug.LogError($"Provided avatar must contain Component: {nameof(AvatarDefinitionData)} on root {nameof(GameObject)}");
-
-			base.OnRenderUploadGUI(definitionData, AvatarPrefab, token =>
-			{
-				//DO NOT REFERNECE THE ABOVE DEFINITION. IT NO LONGER EXISTS
-				//THIS IS DUE TO SCENE RELOAD
-				definitionData = AvatarPrefab.GetComponent<AvatarDefinitionData>();
-
-				definitionData.ContentGuid = token.ContentGuid;
-				definitionData.ContentId = token.ContentId;
-
-				PrefabUtility.SavePrefabAsset(AvatarPrefab);
-			});
-		}
-
-		protected override void UnAuthenticatedOnGUI()
-		{
-			//TODO: Redirect to login.
 		}
 	}
 }
