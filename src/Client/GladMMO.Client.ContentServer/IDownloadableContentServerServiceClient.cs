@@ -73,6 +73,26 @@ namespace GladMMO
 		[Patch("/api/creature/{id}")]
 		Task<ResponseModel<ContentUploadToken, ContentUploadResponseCode>> RequestUpdateExistingCreature([AliasAs("id")] long creatureModelId);
 
+		/// <summary>
+		/// Attempts to get a new URL that can be used to upload the creature.
+		/// If successful the URl contained in the response will contain a valid upload
+		/// URL which can be used to upload creature content.
+		/// </summary>
+		/// <returns>A model representing the result of the creature URL generation request.</returns>
+		[RequiresAuthentication]
+		[Post("/api/GameObjectModel/create")]
+		Task<ResponseModel<ContentUploadToken, ContentUploadResponseCode>> GetNewGameObjectModelUploadUrl();
+
+		/// <summary>
+		/// Attempts to get a PATCH uploaded gameobject model's content.
+		/// If successful the Token contained in the response will contain a valid upload
+		/// URL which can be used to update the gameobject model content.
+		/// </summary>
+		/// <returns>A model representing the result of the gameobject model URL update request.</returns>
+		[RequiresAuthentication]
+		[Patch("/api/GameObjectModel/{id}")]
+		Task<ResponseModel<ContentUploadToken, ContentUploadResponseCode>> RequestUpdateExistingGameObjectModel([AliasAs("id")] long gameObjectModelId);
+
 		//TODO: Doc
 		[RequiresAuthentication]
 		[Post("/api/World/{id}/downloadurl")]
@@ -87,5 +107,9 @@ namespace GladMMO
 		[RequiresAuthentication]
 		[Post("/api/Creature/{id}/downloadurl")]
 		Task<ContentDownloadURLResponse> RequestCreatureModelDownloadUrl([AliasAs("id")] long creatureId);
+
+		[RequiresAuthentication]
+		[Post("/api/GameObjectModel/{id}/downloadurl")]
+		Task<ContentDownloadURLResponse> RequestGameObjectModelDownloadUrl([AliasAs("id")] long gameObjectModelId);
 	}
 }

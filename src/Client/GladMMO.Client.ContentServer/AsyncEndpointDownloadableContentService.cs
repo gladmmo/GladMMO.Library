@@ -71,5 +71,20 @@ namespace GladMMO
 		{
 			return await (await GetService().ConfigureAwait(false)).RequestCreatureModelDownloadUrl(creatureId).ConfigureAwait(false);
 		}
+
+		public async Task<ContentDownloadURLResponse> RequestGameObjectModelDownloadUrl(long gameObjectModelId)
+		{
+			return await (await GetService().ConfigureAwait(false)).RequestGameObjectModelDownloadUrl(gameObjectModelId).ConfigureAwait(false);
+		}
+
+		public async Task<ResponseModel<ContentUploadToken, ContentUploadResponseCode>> GetNewGameObjectModelUploadUrl()
+		{
+			return await(await GetService().ConfigureAwait(false)).GetNewGameObjectModelUploadUrl().ConfigureAwait(false);
+		}
+
+		public async Task<ResponseModel<ContentUploadToken, ContentUploadResponseCode>> RequestUpdateExistingGameObjectModel(long gameObjectModelId)
+		{
+			return await (await GetService().ConfigureAwait(false)).RequestUpdateExistingGameObjectModel(gameObjectModelId).ConfigureAwait(false);
+		}
 	}
 }
