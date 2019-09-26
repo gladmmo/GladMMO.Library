@@ -19,6 +19,8 @@ namespace GladMMO
 
 		public DbSet<CreatureEntryModel> Creatures { get; set; }
 
+		public DbSet<GameObjectModelEntryModel> GameObjectModels { get; set; }
+
 		public ContentDatabaseContext(DbContextOptions<ContentDatabaseContext> options) 
 			: base(options)
 		{
