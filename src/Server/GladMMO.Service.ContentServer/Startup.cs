@@ -70,6 +70,9 @@ namespace GladMMO
 			services.AddTransient<ICustomContentRepository<AvatarEntryModel>>(provider => provider.GetRequiredService<IAvatarEntryRepository>());
 
 			services.AddTransient<ICustomContentRepository<CreatureModelEntryModel>, DatabaseBackedCreatureModelEntryRepository>();
+			services.AddTransient<ICustomContentRepository<GameObjectModelEntryModel>, DatabaseBackedGameObjectModelEntryRepository>();
+
+			//GameObjectModelEntryModel
 
 			services.AddTransient<IContentDownloadAuthroizationValidator, UnimplementedContentDownloadAuthorizationValidator>();
 
