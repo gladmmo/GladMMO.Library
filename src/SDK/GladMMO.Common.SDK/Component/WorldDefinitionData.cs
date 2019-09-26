@@ -30,7 +30,7 @@ namespace GladMMO.SDK
 				else
 					return Guid.Empty;
 			}
-			internal set => _WorldGuid = value.ToString();
+			set => _WorldGuid = value.ToString();
 		}
 
 		/// <summary>
@@ -39,7 +39,7 @@ namespace GladMMO.SDK
 		public long ContentId
 		{
 			get => _WorldId;
-			internal set => _WorldId = value;
+			set => _WorldId = value;
 		}
 
 		[Button]

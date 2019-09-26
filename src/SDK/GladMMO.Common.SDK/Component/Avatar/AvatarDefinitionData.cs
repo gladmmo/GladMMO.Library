@@ -28,7 +28,7 @@ namespace GladMMO.SDK
 				else
 					return Guid.Empty;
 			}
-			internal set => _AvatarGuid = value.ToString();
+			set => _AvatarGuid = value.ToString();
 		}
 
 		/// <summary>
@@ -37,7 +37,7 @@ namespace GladMMO.SDK
 		public long ContentId
 		{
 			get => _AvatarId;
-			internal set => _AvatarId = value;
+			set => _AvatarId = value;
 		}
 	}
 }
