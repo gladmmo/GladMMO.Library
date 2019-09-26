@@ -11,7 +11,7 @@ namespace GladMMO
 	public sealed class GameObjectModelController : BaseCustomContentController<GameObjectModelEntryModel>
 	{
 		public GameObjectModelController(IClaimsPrincipalReader claimsReader, ILogger<AuthorizationReadyController> logger) 
-			: base(claimsReader, logger, UserContentType.Creature)
+			: base(claimsReader, logger, UserContentType.GameObject)
 		{
 
 		}

@@ -14,6 +14,8 @@ namespace GladMMO
 
 		Avatar,
 
-		Creature
+		Creature,
+
+		GameObject
 	}
 }
