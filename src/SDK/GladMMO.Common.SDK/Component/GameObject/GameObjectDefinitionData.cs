@@ -27,7 +27,7 @@ namespace GladMMO.SDK
 				else
 					return Guid.Empty;
 			}
-			internal set => _CreatureGuid = value.ToString();
+			internal set => _GameObjectModelGuid = value.ToString();
 		}
 
 		/// <summary>
