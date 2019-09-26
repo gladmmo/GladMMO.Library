@@ -65,6 +65,8 @@ namespace GladMMO.SDK
 
 				definitionData.ContentGuid = token.ContentGuid;
 				definitionData.ContentId = token.ContentId;
+
+				PrefabUtility.SavePrefabAsset(AvatarPrefab);
 			});
 		}
 

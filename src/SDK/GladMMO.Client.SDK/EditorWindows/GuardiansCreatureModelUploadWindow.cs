@@ -66,8 +66,7 @@ namespace GladMMO.SDK
 				definitionData.ContentGuid = token.ContentGuid;
 				definitionData.ContentId = token.ContentId;
 
-				EditorUtility.SetDirty(definitionData);
-				EditorUtility.SetDirty(CreaturePrefab);
+				PrefabUtility.SavePrefabAsset(CreaturePrefab);
 			});
 		}
 
