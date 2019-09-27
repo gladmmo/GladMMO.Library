@@ -12,8 +12,10 @@ namespace GladMMO
 	/// Represents an actual Creature entry that exists in the world.
 	/// </summary>
 	[Table("creature")]
-	public class CreatureEntryModel
+	public class CreatureEntryModel : IInstanceableWorldObjectModel
 	{
+		public int ObjectInstanceId => CreatureEntryId;
+
 		/// <summary>
 		/// Primary key for the Creature entry.
 		/// Must be unique.
