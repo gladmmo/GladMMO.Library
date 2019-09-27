@@ -27,6 +27,8 @@ namespace GladMMO.SDK
 					return ContentClient.RequestUpdateExistingAvatar(ContentDataDefinition.ContentId);
 				case UserContentType.Creature:
 					return ContentClient.RequestUpdateExistingCreature(ContentDataDefinition.ContentId);
+				case UserContentType.GameObject:
+					return ContentClient.RequestUpdateExistingGameObjectModel(ContentDataDefinition.ContentId);
 				default:
 					throw new ArgumentOutOfRangeException();
 			}

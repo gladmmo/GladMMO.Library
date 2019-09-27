@@ -24,6 +24,8 @@ namespace GladMMO
 					return ContentClient.GetNewAvatarUploadUrl();
 				case UserContentType.Creature:
 					return ContentClient.GetNewCreatureModelUploadUrl();
+				case UserContentType.GameObject:
+					return ContentClient.GetNewGameObjectModelUploadUrl();
 				default:
 					throw new ArgumentOutOfRangeException();
 			}
