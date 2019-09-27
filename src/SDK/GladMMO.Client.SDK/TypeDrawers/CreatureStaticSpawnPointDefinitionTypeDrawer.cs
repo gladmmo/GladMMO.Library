@@ -17,16 +17,23 @@ namespace GladMMO.SDK
 
 		private string CachedCreatureTemplateInfoText = null;
 
+		//This needs to be static, otherwise progress bars could be running while you switch TO another window, and then back
+		//and then you could press the buttons again. This must be prevented.
+		private static bool isProgressBarActive = false;
+
 		public override void OnInspectorGUI()
 		{
 			base.OnInspectorGUI();
 
-			//Depending on authentication state
-			//we dispatch the rendering for GUI controls
-			if(AuthenticationModelSingleton.Instance.isAuthenticated)
-				AuthenticatedOnGUI();
-			else
-				UnAuthenticatedOnGUI();
+			using (new EditorGUI.DisabledGroupScope(isProgressBarActive))
+			{
+				//Depending on authentication state
+				//we dispatch the rendering for GUI controls
+				if(AuthenticationModelSingleton.Instance.isAuthenticated)
+					AuthenticatedOnGUI();
+				else
+					UnAuthenticatedOnGUI();
+			}
 		}
 
 		private void UnAuthenticatedOnGUI()
@@ -90,9 +97,21 @@ namespace GladMMO.SDK
 			}
 		}
 
+		private void DisplayProgressBar(string title, string info, float progress)
+		{
+			isProgressBarActive = true;
+			EditorUtility.DisplayProgressBar(title, info, progress);
+		}
+
+		private void ClearProgressBar()
+		{
+			isProgressBarActive = false;
+			EditorUtility.ClearProgressBar();
+		}
+
 		private void UpdateCreatureData()
 		{
-			EditorUtility.DisplayProgressBar("Updating Creature", "Uploading Data (1/1)", 0.25f);
+			DisplayProgressBar("Updating Creature", "Uploading Data (1/1)", 0.25f);
 
 			UnityAsyncHelper.UnityMainThreadContext.Post(async o =>
 			{
@@ -113,14 +132,14 @@ namespace GladMMO.SDK
 				}
 				finally
 				{
-					EditorUtility.ClearProgressBar();
+					ClearProgressBar();
 				}
 			}, null);
 		}
 
 		private void CreateCreatureInstance(ICreatureDataServiceClient client, WorldDefinitionData worldData)
 		{
-			EditorUtility.DisplayProgressBar("Creating Creature", "Requesting instance (1/2)", 0.0f);
+			DisplayProgressBar("Creating Creature", "Requesting instance (1/2)", 0.0f);
 
 			UnityAsyncHelper.UnityMainThreadContext.Post(async o =>
 			{
@@ -131,7 +150,7 @@ namespace GladMMO.SDK
 
 					if (result.isSuccessful)
 					{
-						EditorUtility.DisplayProgressBar("Creating Creature", "Saving Instance (2/2)", 0.5f);
+						DisplayProgressBar("Creating Creature", "Saving Instance (2/2)", 0.5f);
 
 						GetTarget().CreatureInstanceId = result.Result.Guid.EntryId;
 						EditorUtility.SetDirty(GetTarget());
@@ -149,7 +168,7 @@ namespace GladMMO.SDK
 				}
 				finally
 				{
-					EditorUtility.ClearProgressBar();
+					ClearProgressBar();
 				}
 			}, null);
 		}
@@ -160,14 +179,14 @@ namespace GladMMO.SDK
 
 			try
 			{
-				EditorUtility.DisplayProgressBar("Refreshing Creature", "Creature Instance (1/2).", 0.0f);
+				DisplayProgressBar("Refreshing Creature", "Creature Instance (1/2).", 0.0f);
 
 				CreatureInstanceModel instanceData = await RefreshCreatureInstanceData(client);
 
 				//If the creature instance exists and we have a valid template assigned.
 				if (instanceData != null && instanceData.TemplateId > 0)
 				{
-					EditorUtility.DisplayProgressBar("Refreshing Creature", "Creature Template (2/2).", 0.0f);
+					DisplayProgressBar("Refreshing Creature", "Creature Template (2/2).", 0.0f);
 					await RefreshCreatureTemplateData(client);
 				}
 			}
@@ -178,7 +197,7 @@ namespace GladMMO.SDK
 			}
 			finally
 			{
-				EditorUtility.ClearProgressBar();
+				ClearProgressBar();
 			}
 		}
 
