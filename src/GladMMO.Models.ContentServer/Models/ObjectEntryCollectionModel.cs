@@ -7,9 +7,8 @@ using Newtonsoft.Json;
 
 namespace GladMMO
 {
-	//TODO: Rename/refactor
 	[JsonObject]
-	public sealed class InstanceObjectEntryCollectionModel<TModelType>
+	public sealed class ObjectEntryCollectionModel<TModelType>
 	{
 		[JsonProperty(PropertyName = "Entries")]
 		private TModelType[] _Entries { get; set; }
@@ -18,10 +17,10 @@ namespace GladMMO
 		public IReadOnlyCollection<TModelType> Entries => _Entries;
 
 		/// <summary>
-		/// Creatures a Successful <see cref="InstanceObjectEntryCollectionModel{TModelType}"/>
+		/// Creatures a Successful <see cref="ObjectEntryCollectionModel{TModelType}"/>
 		/// </summary>
 		/// <param name="entries">The entries to send.</param>
-		public InstanceObjectEntryCollectionModel([NotNull] TModelType[] entries)
+		public ObjectEntryCollectionModel([NotNull] TModelType[] entries)
 		{
 			if(entries == null) throw new ArgumentNullException(nameof(entries));
 			if(entries.Length == 0) throw new ArgumentException("Value cannot be an empty collection.", nameof(entries));
@@ -32,7 +31,7 @@ namespace GladMMO
 		/// <summary>
 		/// Serializer ctor.
 		/// </summary>
-		protected InstanceObjectEntryCollectionModel()
+		protected ObjectEntryCollectionModel()
 		{
 			
 		}

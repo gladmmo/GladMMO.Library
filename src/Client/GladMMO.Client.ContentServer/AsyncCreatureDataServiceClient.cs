@@ -43,12 +43,12 @@ namespace GladMMO
 			await(await GetService().ConfigureAwait(false)).UpdateCreatureInstance(creatureId, model).ConfigureAwait(false);
 		}
 
-		public async Task<ResponseModel<InstanceObjectEntryCollectionModel<CreatureInstanceModel>, CreatureCollectionResponseCode>> GetCreatureEntriesByWorld(long worldId)
+		public async Task<ResponseModel<ObjectEntryCollectionModel<CreatureInstanceModel>, CreatureCollectionResponseCode>> GetCreatureEntriesByWorld(long worldId)
 		{
 			return await(await GetService().ConfigureAwait(false)).GetCreatureEntriesByWorld(worldId).ConfigureAwait(false);
 		}
 
-		public async Task<ResponseModel<InstanceObjectEntryCollectionModel<CreatureTemplateModel>, CreatureCollectionResponseCode>> GetCreatureTemplatesByWorld(long worldId)
+		public async Task<ResponseModel<ObjectEntryCollectionModel<CreatureTemplateModel>, CreatureCollectionResponseCode>> GetCreatureTemplatesByWorld(long worldId)
 		{
 			return await(await GetService().ConfigureAwait(false)).GetCreatureTemplatesByWorld(worldId).ConfigureAwait(false);
 		}

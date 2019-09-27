@@ -55,7 +55,7 @@ namespace GladMMO
 				.Select(tableToNetworkModelConverter.Convert)
 				.ToArray();
 
-			return BuildSuccessfulResponseModel(new InstanceObjectEntryCollectionModel<TTemplateTransferType>(templateModels));
+			return BuildSuccessfulResponseModel(new ObjectEntryCollectionModel<TTemplateTransferType>(templateModels));
 		}
 	}
 }
