@@ -48,7 +48,7 @@ namespace GladMMO
 			//TODO: Don't hardcode the test world id.
 			UnityAsyncHelper.UnityMainThreadContext.PostAsync(async () =>
 			{
-				ResponseModel<CreatureEntryCollectionModel, CreatureCollectionResponseCode> entriesByWorld = await CreatureContentDataClient.GetCreatureEntriesByWorld(WorldConfiguration.WorldId);
+				ResponseModel<InstanceObjectEntryCollectionModel<CreatureInstanceModel>, CreatureCollectionResponseCode > entriesByWorld = await CreatureContentDataClient.GetCreatureEntriesByWorld(WorldConfiguration.WorldId);
 				ResponseModel<CreatureTemplateCollectionModel, CreatureCollectionResponseCode> templatesByWorld = await CreatureContentDataClient.GetCreatureTemplatesByWorld(WorldConfiguration.WorldId);
 
 				if (entriesByWorld.isSuccessful && templatesByWorld.isSuccessful)

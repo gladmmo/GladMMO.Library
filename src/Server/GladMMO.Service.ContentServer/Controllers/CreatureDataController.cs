@@ -55,7 +55,7 @@ namespace GladMMO
 				.Select(tableToNetworkModelConverter.Convert)
 				.ToArray();
 
-			return BuildSuccessfulResponseModel(new CreatureEntryCollectionModel(instanceModels));
+			return BuildSuccessfulResponseModel(new InstanceObjectEntryCollectionModel<CreatureInstanceModel>(instanceModels));
 		}
 
 		//TODO: Eventually we need to require authorization, because they need to own the world.
