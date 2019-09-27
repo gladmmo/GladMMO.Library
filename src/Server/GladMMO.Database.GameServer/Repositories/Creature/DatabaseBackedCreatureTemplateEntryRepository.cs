@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
@@ -51,6 +52,17 @@ namespace GladMMO
 				.FindAsync(key);
 
 			return findAsync.CreatureName;
+		}
+
+		public async Task<IReadOnlyCollection<CreatureTemplateEntryModel>> RetrieveTemplatesByWorldIdAsync(int worldId)
+		{
+			if(worldId <= 0) throw new ArgumentOutOfRangeException(nameof(worldId));
+
+			return await Context.Creatures
+				.Where(c => c.WorldId == worldId)
+				.Include(c => c.CreatureTemplate)
+				.Select(c => c.CreatureTemplate)
+				.ToArrayAsync();
 		}
 	}
 }

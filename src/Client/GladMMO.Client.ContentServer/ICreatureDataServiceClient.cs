@@ -37,6 +37,6 @@ namespace GladMMO
 		/// <param name="worldId">The id of the world.</param>
 		/// <returns>A non-null response model indicating the success or result.</returns>
 		[Get("/api/CreatureTemplateData/{worldId}/template")]
-		Task<ResponseModel<CreatureTemplateCollectionModel, CreatureCollectionResponseCode>> GetCreatureTemplatesByWorld(long worldId);
+		Task<ResponseModel<InstanceObjectEntryCollectionModel<CreatureTemplateModel>, CreatureCollectionResponseCode>> GetCreatureTemplatesByWorld(long worldId);
 	}
 }

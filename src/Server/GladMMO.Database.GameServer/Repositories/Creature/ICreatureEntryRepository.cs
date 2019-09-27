@@ -7,7 +7,6 @@ namespace GladMMO
 {
 	public interface ICreatureEntryRepository : IGenericRepositoryCrudable<int, CreatureEntryModel>, IInstanceableWorldObjectRepository<CreatureEntryModel>
 	{
-		//TODO: Doc
-		Task<IReadOnlyCollection<CreatureTemplateEntryModel>> RetrieveTemplatesByWorldIdAsync(int worldId);
+
 	}
 }

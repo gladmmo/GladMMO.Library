@@ -40,7 +40,7 @@ namespace GladMMO
 		[ProducesJson]
 		[HttpGet("{world}/template")]
 		public async Task<IActionResult> GetCreatureTemplates([FromRoute(Name = "world")] int worldId,
-			[FromServices] ICreatureEntryRepository creatureEntryRepository,
+			[FromServices] ICreatureTemplateRepository creatureEntryRepository,
 			[FromServices] ITypeConverterProvider<CreatureTemplateEntryModel, CreatureTemplateModel> tableToNetworkModelConverter)
 		{
 			//We can actually get all the templates FROM the creature instances.
@@ -54,7 +54,7 @@ namespace GladMMO
 				.Select(tableToNetworkModelConverter.Convert)
 				.ToArray();
 
-			return BuildSuccessfulResponseModel(new CreatureTemplateCollectionModel(templateModels));
+			return BuildSuccessfulResponseModel(new InstanceObjectEntryCollectionModel<CreatureTemplateModel>(templateModels));
 		}
 	}
 }

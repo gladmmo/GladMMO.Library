@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 
 namespace GladMMO
 {
+	//TODO: Rename/refactor
 	[JsonObject]
 	public sealed class InstanceObjectEntryCollectionModel<TModelType>
 	{
