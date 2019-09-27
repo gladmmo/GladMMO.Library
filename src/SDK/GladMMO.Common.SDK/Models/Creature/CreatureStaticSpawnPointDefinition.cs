@@ -16,6 +16,7 @@ namespace GladMMO
 
 		//We don't show this in the inspector because the user should not be changing this.
 		[HideInInspector]
+		[SerializeField]
 		private int _CreatureInstanceId = -1; //default to -1 so it's not known.
 
 		/// <summary>

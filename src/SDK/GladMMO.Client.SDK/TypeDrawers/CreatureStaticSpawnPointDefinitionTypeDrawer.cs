@@ -135,8 +135,8 @@ namespace GladMMO.SDK
 
 						GetTarget().CreatureInstanceId = result.Result.Guid.EntryId;
 						EditorUtility.SetDirty(GetTarget());
+						EditorSceneManager.MarkSceneDirty(GetTarget().gameObject.scene);
 
-						EditorSceneManager.MarkAllScenesDirty(); //TODO: This is kinda  hack, but SetDirty wasn't making scene dirty causing data loss.
 						await RefreshCreatureData(client);
 					}
 					else
