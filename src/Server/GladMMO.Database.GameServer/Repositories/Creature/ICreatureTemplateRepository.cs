@@ -9,7 +9,7 @@ namespace GladMMO
 	/// Contract for types that implement data access as a repository to
 	/// <see cref="CreatureTemplateEntryModel"/> data.
 	/// </summary>
-	public interface ICreatureTemplateRepository : IGenericRepositoryCrudable<int, CreatureTemplateEntryModel>, INameQueryableRepository<int>
+	public interface ICreatureTemplateRepository : IGenericRepositoryCrudable<int, CreatureTemplateEntryModel>, INameQueryableRepository<int>, ITemplateableWorldObjectRepository<TTemplateModelType>
 	{
 
 	}
