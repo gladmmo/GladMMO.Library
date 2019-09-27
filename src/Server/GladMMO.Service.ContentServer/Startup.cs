@@ -63,23 +63,25 @@ namespace GladMMO
 			//TODO: Simplify avatar/world content repos with base repo.
 			//Adds and registers S3 service for URLBuilding and communication/credentials and etc
 			//services.AddS3Service(Configuration);
+			
+			//World
 			services.AddTransient<IWorldEntryRepository, DatabaseBackedWorldEntryRepository>();
 			services.AddTransient<ICustomContentRepository<WorldEntryModel>>(provider => provider.GetRequiredService<IWorldEntryRepository>());
 
+			//Avatar
 			services.AddTransient<IAvatarEntryRepository, DatabaseBackedAvatarEntryRepository>();
 			services.AddTransient<ICustomContentRepository<AvatarEntryModel>>(provider => provider.GetRequiredService<IAvatarEntryRepository>());
 
+			//Creature
 			services.AddTransient<ICustomContentRepository<CreatureModelEntryModel>, DatabaseBackedCreatureModelEntryRepository>();
-			services.AddTransient<ICustomContentRepository<GameObjectModelEntryModel>, DatabaseBackedGameObjectModelEntryRepository>();
+			services.AddTransient<ICreatureTemplateRepository, DatabaseBackedCreatureTemplateEntryRepository>();
+			services.AddTransient<ICreatureEntryRepository, DatabaseBackedCreatureEntryRepository>();
 
-			//GameObjectModelEntryModel
+			//GameObjects
+			services.AddTransient<ICustomContentRepository<GameObjectModelEntryModel>, DatabaseBackedGameObjectModelEntryRepository>();
+			services.AddTransient<IGameObjectTemplateRepository, DatabaseBackedGameObjectTemplateEntryRepository>();
 
 			services.AddTransient<IContentDownloadAuthroizationValidator, UnimplementedContentDownloadAuthorizationValidator>();
-
-			//DatabaseBackedCreatureTemplateEntryRepository : ICreatureTemplateRepository
-			services.AddTransient<ICreatureTemplateRepository, DatabaseBackedCreatureTemplateEntryRepository>();
-			//DatabaseBackedCreatureEntryRepository : ICreatureEntryRepository
-			services.AddTransient<ICreatureEntryRepository, DatabaseBackedCreatureEntryRepository>();
 
 			//AZURE_STORAGE_CONNECTIONSTRING
 			string ConnectionString = Environment.GetEnvironmentVariable("AZURE_STORAGE_CONNECTIONSTRING");
