@@ -11,16 +11,16 @@ namespace GladMMO
 	[Headers("User-Agent: SDK 0.0.1")]
 	public interface ICreatureDataServiceClient
 	{
-		[Get("/api/CreatureData/template/{id}")]
+		[Get("/api/CreatureTemplateData/template/{id}")]
 		Task<ResponseModel<CreatureTemplateModel, SceneContentQueryResponseCode>> GetCreatureTemplate([AliasAs("id")] int creatureTemplateId);
 
-		[Get("/api/CreatureData/instance/{id}")]
+		[Get("/api/CreatureInstanceData/instance/{id}")]
 		Task<ResponseModel<CreatureInstanceModel, SceneContentQueryResponseCode>> GetCreatureInstance([AliasAs("id")] int creatureId);
 
-		[Post("/api/CreatureData/{worldId}/instance")]
+		[Post("/api/CreatureInstanceData/{worldId}/instance")]
 		Task<ResponseModel<CreatureInstanceModel, SceneContentQueryResponseCode>> CreateCreatureInstance(long worldId);
 
-		[Put("/api/CreatureData/instance/{id}")]
+		[Put("/api/CreatureInstanceData/instance/{id}")]
 		Task UpdateCreatureInstance([AliasAs("id")] int creatureId, [JsonBody] CreatureInstanceModel model);
 
 		/// <summary>
@@ -28,7 +28,7 @@ namespace GladMMO
 		/// </summary>
 		/// <param name="worldId">The id of the world.</param>
 		/// <returns>A non-null response model indicating the success or result.</returns>
-		[Get("/api/CreatureData/{worldId}/instance")]
+		[Get("/api/CreatureInstanceData/{worldId}/instance")]
 		Task<ResponseModel<InstanceObjectEntryCollectionModel<CreatureInstanceModel>, CreatureCollectionResponseCode>> GetCreatureEntriesByWorld(long worldId);
 
 		/// <summary>
@@ -36,7 +36,7 @@ namespace GladMMO
 		/// </summary>
 		/// <param name="worldId">The id of the world.</param>
 		/// <returns>A non-null response model indicating the success or result.</returns>
-		[Get("/api/CreatureData/{worldId}/template")]
+		[Get("/api/CreatureTemplateData/{worldId}/template")]
 		Task<ResponseModel<CreatureTemplateCollectionModel, CreatureCollectionResponseCode>> GetCreatureTemplatesByWorld(long worldId);
 	}
 }

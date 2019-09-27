@@ -11,10 +11,10 @@ using UnityEngine;
 namespace GladMMO
 {
 	[Route("api/[controller]")]
-	public class CreatureDataController : InstanceObjectDataController<CreatureEntryModel, CreatureInstanceModel, ICreatureEntryRepository>
+	public class CreatureInstanceDataController : InstanceObjectDataController<CreatureEntryModel, CreatureInstanceModel, ICreatureEntryRepository>
 	{
 		/// <inheritdoc />
-		public CreatureDataController(IClaimsPrincipalReader claimsReader, ILogger<AuthorizationReadyController> logger) 
+		public CreatureInstanceDataController(IClaimsPrincipalReader claimsReader, ILogger<AuthorizationReadyController> logger) 
 			: base(claimsReader, logger)
 		{
 
