@@ -98,6 +98,8 @@ namespace GladMMO
 			//CreatureInstanceTableToNetworkTypeConverter : ITypeConverterProvider<CreatureEntryModel, CreatureInstanceModel>
 			services.AddSingleton<ITypeConverterProvider<CreatureTemplateEntryModel, CreatureTemplateModel>, CreatureTemplateTableToNetworkTypeConverter>();
 			services.AddSingleton<ITypeConverterProvider<CreatureEntryModel, CreatureInstanceModel>, CreatureInstanceTableToNetworkTypeConverter>();
+			//GameObjectTemplateTableToNetworkTypeConverter : ITypeConverterProvider<GameObjectTemplateEntryModel, GameObjectTemplateModel>
+			services.AddSingleton<ITypeConverterProvider<GameObjectTemplateEntryModel, GameObjectTemplateModel>, GameObjectTemplateTableToNetworkTypeConverter>();
 
 			//TODO: This doesn't fully convert it
 			services.AddSingleton<ITypeConverterProvider<CreatureInstanceModel, CreatureEntryModel>, CreatureInstanceNetworkToTableTypeConverter>();
