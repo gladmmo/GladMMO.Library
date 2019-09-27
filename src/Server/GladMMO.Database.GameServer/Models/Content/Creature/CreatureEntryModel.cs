@@ -12,7 +12,7 @@ namespace GladMMO
 	/// Represents an actual Creature entry that exists in the world.
 	/// </summary>
 	[Table("creature")]
-	public class CreatureEntryModel : IInstanceableWorldObjectModel
+	public class CreatureEntryModel : IInstanceableWorldObjectModel, IModelEntryUpdateable<CreatureEntryModel>
 	{
 		public int ObjectInstanceId => CreatureEntryId;
 
@@ -88,6 +88,13 @@ namespace GladMMO
 		private CreatureEntryModel()
 		{
 			
+		}
+
+		public void Update(CreatureEntryModel model)
+		{
+			CreatureTemplateId = model.CreatureTemplateId;
+			InitialOrientation = model.InitialOrientation;
+			SpawnPosition = model.SpawnPosition;
 		}
 	}
 }
