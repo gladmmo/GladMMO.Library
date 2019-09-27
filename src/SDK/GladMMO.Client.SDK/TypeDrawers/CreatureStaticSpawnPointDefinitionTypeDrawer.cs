@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Glader.Essentials;
 using Refit;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 
 namespace GladMMO.SDK
@@ -134,6 +135,8 @@ namespace GladMMO.SDK
 
 						GetTarget().CreatureInstanceId = result.Result.Guid.EntryId;
 						EditorUtility.SetDirty(GetTarget());
+
+						EditorSceneManager.MarkAllScenesDirty(); //TODO: This is kinda  hack, but SetDirty wasn't making scene dirty causing data loss.
 						await RefreshCreatureData(client);
 					}
 					else
