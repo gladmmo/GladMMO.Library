@@ -14,6 +14,8 @@ namespace GladMMO.SDK
 	[CustomEditor(typeof(PlayerStaticSpawnPointDefinition))]
 	public sealed class PlayerStaticSpawnPointDefinitionTypeDrawer : StaticSpawnPointDefinitionEditor
 	{
+		private string CachedInfoText = null;
+
 		public override void OnInspectorGUI()
 		{
 			base.OnInspectorGUI();
@@ -60,7 +62,7 @@ namespace GladMMO.SDK
 			}
 			else
 			{
-				EditorGUILayout.LabelField($"Instance Id: {GetTarget().PlayerSpawnPointId}");
+				GUILayout.Label(CachedInfoText, GUI.skin.textArea);
 
 				//The reason we do this manually is so that it can be hidden before there is an instance id.
 				GetTarget().isInstanceReserved = EditorGUILayout.Toggle($"IsReserved", GetTarget().isInstanceReserved);
@@ -154,6 +156,8 @@ namespace GladMMO.SDK
 				PlayerSpawnPointInstanceModel instanceData = await RefreshInstanceData(client);
 				GetTarget().PlayerSpawnPointId = instanceData.SpawnPointId;
 				GetTarget().isInstanceReserved = instanceData.isReserved;
+
+				CachedInfoText = $"Creature Instance: {GetTarget().PlayerSpawnPointId}\nSpawnPosition: {instanceData.InitialPosition}\nYRotation: {instanceData.YAxisRotation}\nIsReserved: {instanceData.isReserved}";
 			}
 			catch (Exception e)
 			{
