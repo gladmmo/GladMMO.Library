@@ -87,7 +87,7 @@ namespace GladMMO
 			foreach (var template in resultTemplates)
 			{
 				if(Logger.IsInfoEnabled)
-					Logger.Info($"Processing GameObject Template: {template.GameObjectTemplateId} Name: {template.GameObjectName}");
+					Logger.Info($"Processing GameObject Template: {template.TemplateId} Name: {template.GameObjectName}");
 
 				GameObjectTemplateMappable.Add(NetworkEntityGuid.Empty, template);
 			}

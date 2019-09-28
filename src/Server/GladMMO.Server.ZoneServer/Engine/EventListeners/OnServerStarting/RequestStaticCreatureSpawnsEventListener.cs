@@ -87,7 +87,7 @@ namespace GladMMO
 			foreach (var template in resultTemplates)
 			{
 				if(Logger.IsInfoEnabled)
-					Logger.Info($"Processing Creature Template: {template.CreatureTemplateId} Name: {template.CreatureName}");
+					Logger.Info($"Processing Creature Template: {template.TemplateId} Name: {template.CreatureName}");
 
 				CreatureTemplateMappable.Add(NetworkEntityGuid.Empty, template);
 			}
