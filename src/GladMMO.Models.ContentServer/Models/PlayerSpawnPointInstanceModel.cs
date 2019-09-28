@@ -30,14 +30,19 @@ namespace GladMMO
 		[JsonProperty]
 		public float YAxisRotation { get; private set; }
 
+		[JsonProperty]
+		[JsonRequired]
+		public bool isReserved { get; private set; }
+
 		/// <inheritdoc />
-		public PlayerSpawnPointInstanceModel(int spawnPointId, Vector3 initialPosition, float yRotation)
+		public PlayerSpawnPointInstanceModel(int spawnPointId, Vector3 initialPosition, float yRotation, bool isReserved)
 		{
 			if (spawnPointId <= 0) throw new ArgumentOutOfRangeException(nameof(spawnPointId));
 
 			SpawnPointId = spawnPointId;
 			InitialPosition = initialPosition;
 			YAxisRotation = yRotation;
+			this.isReserved = isReserved;
 		}
 
 		/// <summary>
