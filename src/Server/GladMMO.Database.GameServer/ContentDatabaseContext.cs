@@ -25,6 +25,8 @@ namespace GladMMO
 
 		public DbSet<GameObjectEntryModel> GameObjects { get; set; }
 
+		public DbSet<PlayerSpawnPointEntryModel> PlayerSpawnPoints { get; set; }
+
 		public ContentDatabaseContext(DbContextOptions<ContentDatabaseContext> options) 
 			: base(options)
 		{
