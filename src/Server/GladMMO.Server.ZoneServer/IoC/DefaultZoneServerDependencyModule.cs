@@ -280,6 +280,10 @@ namespace GladMMO
 				.AsImplementedInterfaces()
 				.SingleInstance(); //important, otherwise colliding guids will be produced.
 
+			builder.RegisterType<IncrementingGameObjectGuidFactory>()
+				.AsImplementedInterfaces()
+				.SingleInstance(); //important, otherwise colliding guids will be produced.
+
 			//CreatureDataCollection : IEntityGuidMappable<CreatureTemplateModel>, IEntityGuidMappable<CreatureInstanceModel>
 			builder.RegisterType<CreatureDataCollection>()
 				.As<IEntityGuidMappable<CreatureTemplateModel>>()
