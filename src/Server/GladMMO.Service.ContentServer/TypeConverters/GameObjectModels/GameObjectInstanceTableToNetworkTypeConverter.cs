@@ -14,7 +14,7 @@ namespace GladMMO
 
 			NetworkEntityGuid guid = new NetworkEntityGuidBuilder()
 				.WithId(0) //0 means that it's not an instance.
-				.WithType(EntityType.Creature)
+				.WithType(EntityType.GameObject)
 				.WithEntryId(fromObject.GameObjectEntryId)
 				.Build();
 
