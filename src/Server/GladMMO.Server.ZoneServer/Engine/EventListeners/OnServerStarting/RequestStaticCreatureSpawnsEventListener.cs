@@ -8,6 +8,7 @@ using Unitysync.Async;
 
 namespace GladMMO
 {
+	//TODO: Refactor and combine with GameObjects. They share a lot of code.
 	[ServerSceneTypeCreate(ServerSceneType.Default)]
 	public sealed class RequestStaticCreatureSpawnsEventListener : BaseSingleEventListenerInitializable<IServerStartingEventSubscribable>
 	{
