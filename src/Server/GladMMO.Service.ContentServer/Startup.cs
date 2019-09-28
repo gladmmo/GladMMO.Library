@@ -83,6 +83,10 @@ namespace GladMMO
 			services.AddTransient<IGameObjectTemplateRepository, DatabaseBackedGameObjectTemplateEntryRepository>();
 			services.AddTransient<IGameObjectEntryRepository, DatabaseBackedGameObjectEntryRepository>();
 
+			//Player
+			//DatabaseBackedPlayerSpawnPointEntryRepository : IPlayerSpawnPointEntryRepository
+			services.AddTransient<IPlayerSpawnPointEntryRepository, DatabaseBackedPlayerSpawnPointEntryRepository>();
+
 			services.AddTransient<IContentDownloadAuthroizationValidator, UnimplementedContentDownloadAuthorizationValidator>();
 
 			//AZURE_STORAGE_CONNECTIONSTRING
