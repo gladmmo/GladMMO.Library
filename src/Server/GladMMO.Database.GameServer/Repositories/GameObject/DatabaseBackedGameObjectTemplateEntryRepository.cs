@@ -58,13 +58,11 @@ namespace GladMMO
 		{
 			if(worldId <= 0) throw new ArgumentOutOfRangeException(nameof(worldId));
 
-			throw new NotImplementedException($"TODO: Implement this when GameObject instances exist.");
-
-			/*return await Context.Creatures
+			return await Context.GameObjects
 				.Where(c => c.WorldId == worldId)
-				.Include(c => c.CreatureTemplate)
-				.Select(c => c.CreatureTemplate)
-				.ToArrayAsync();*/
+				.Include(c => c.GameObjectTemplate)
+				.Select(c => c.GameObjectTemplate)
+				.ToArrayAsync();
 		}
 	}
 }
