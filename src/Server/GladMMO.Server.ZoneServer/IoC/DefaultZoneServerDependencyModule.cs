@@ -285,7 +285,7 @@ namespace GladMMO
 				.SingleInstance(); //important, otherwise colliding guids will be produced.
 
 			//CreatureDataCollection : IEntityGuidMappable<CreatureTemplateModel>, IEntityGuidMappable<CreatureInstanceModel>
-			builder.RegisterType<CreatureDataCollection>()
+			builder.RegisterType<InstanceTemplateableDataCollection<CreatureInstanceModel, CreatureTemplateModel>>()
 				.As<IEntityGuidMappable<CreatureTemplateModel>>()
 				.As<IReadonlyEntityGuidMappable<CreatureTemplateModel>>()
 				.As<IEntityGuidMappable<CreatureInstanceModel>>()
