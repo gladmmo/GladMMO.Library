@@ -50,13 +50,21 @@ namespace GladMMO
 		/// </summary>
 		public virtual WorldEntryModel WorldEntry { get; private set; }
 
-		public PlayerSpawnPointModel(Vector3<float> spawnPosition, float initialOrientation, long worldId)
+		/// <summary>
+		/// Indicates if the spawn point is reserved for special actions.
+		/// </summary>
+		[Column(Order = 5)]
+		[Required]
+		public bool isReserved { get; private set; }
+
+		public PlayerSpawnPointModel(Vector3<float> spawnPosition, float initialOrientation, long worldId, bool isReserved)
 		{
 			if (worldId <= 0) throw new ArgumentOutOfRangeException(nameof(worldId));
 
 			SpawnPosition = spawnPosition;
 			InitialOrientation = initialOrientation;
 			WorldId = worldId;
+			this.isReserved = isReserved;
 		}
 
 		/// <summary>
@@ -74,6 +82,7 @@ namespace GladMMO
 			//Don't let world id be updateable
 			SpawnPosition = model.SpawnPosition;
 			InitialOrientation = model.InitialOrientation;
+			isReserved = model.isReserved;
 		}
 	}
 }
