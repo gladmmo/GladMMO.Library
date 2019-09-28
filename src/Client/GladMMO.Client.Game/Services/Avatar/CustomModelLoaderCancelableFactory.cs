@@ -62,7 +62,7 @@ namespace GladMMO
 				case EntityType.Player:
 					return UserContentType.Avatar;
 				case EntityType.GameObject:
-					throw new NotImplementedException();
+					return UserContentType.GameObject;
 				case EntityType.Creature:
 					return UserContentType.Creature;
 				default:
