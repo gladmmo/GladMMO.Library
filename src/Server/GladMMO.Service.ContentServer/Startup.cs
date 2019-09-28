@@ -38,6 +38,7 @@ namespace GladMMO
 					options.ModelMetadataDetailsProviders.Add(new SuppressChildValidationMetadataProvider(typeof(NetworkEntityGuid)));
 					options.ModelMetadataDetailsProviders.Add(new SuppressChildValidationMetadataProvider(typeof(CreatureInstanceModel)));
 					options.ModelMetadataDetailsProviders.Add(new SuppressChildValidationMetadataProvider(typeof(GameObjectInstanceModel)));
+					options.ModelMetadataDetailsProviders.Add(new SuppressChildValidationMetadataProvider(typeof(PlayerSpawnPointInstanceModel)));
 				})
 				.RegisterHealthCheckController();
 
