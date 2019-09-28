@@ -10,6 +10,7 @@ using UnityEngine;
 
 namespace GladMMO.SDK
 {
+	//TODO: Refactor to combine Creature and GameObject instance spawning.
 	[CustomEditor(typeof(CreatureStaticSpawnPointDefinition))]
 	public sealed class CreatureStaticSpawnPointDefinitionTypeDrawer : StaticSpawnPointDefinitionEditor
 	{
