@@ -38,7 +38,7 @@ namespace GladMMO
 		/// <summary>
 		/// The GameObject template.
 		/// </summary>
-		public virtual CreatureTemplateEntryModel GameObjectTemplate { get; private set; }
+		public virtual GameObjectTemplateEntryModel GameObjectTemplate { get; private set; }
 
 		/// <summary>
 		/// The spawn position of the GameObject.
