@@ -23,6 +23,8 @@ namespace GladMMO
 
 		public DbSet<GameObjectTemplateEntryModel> GameObjectTemplates { get; set; }
 
+		public DbSet<GameObjectEntryModel> GameObjects { get; set; }
+
 		public ContentDatabaseContext(DbContextOptions<ContentDatabaseContext> options) 
 			: base(options)
 		{
