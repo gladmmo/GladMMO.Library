@@ -17,10 +17,6 @@ namespace GladMMO.SDK
 
 		private string CachedCreatureTemplateInfoText = null;
 
-		//This needs to be static, otherwise progress bars could be running while you switch TO another window, and then back
-		//and then you could press the buttons again. This must be prevented.
-		private static bool isProgressBarActive = false;
-
 		public override void OnInspectorGUI()
 		{
 			base.OnInspectorGUI();
@@ -95,18 +91,6 @@ namespace GladMMO.SDK
 			{
 				UpdateCreatureData();
 			}
-		}
-
-		private void DisplayProgressBar(string title, string info, float progress)
-		{
-			isProgressBarActive = true;
-			EditorUtility.DisplayProgressBar(title, info, progress);
-		}
-
-		private void ClearProgressBar()
-		{
-			isProgressBarActive = false;
-			EditorUtility.ClearProgressBar();
 		}
 
 		private void UpdateCreatureData()
