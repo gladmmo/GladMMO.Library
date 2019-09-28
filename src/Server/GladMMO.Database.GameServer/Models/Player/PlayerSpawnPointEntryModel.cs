@@ -8,7 +8,7 @@ using GladMMO.Database;
 namespace GladMMO
 {
 	[Table("player_spawnpoint")]
-	public class PlayerSpawnPointModel : IInstanceableWorldObjectModel, IModelEntryUpdateable<PlayerSpawnPointModel>
+	public class PlayerSpawnPointEntryModel : IInstanceableWorldObjectModel, IModelEntryUpdateable<PlayerSpawnPointEntryModel>
 	{
 		public int ObjectInstanceId => PlayerSpawnId;
 
@@ -57,7 +57,7 @@ namespace GladMMO
 		[Required]
 		public bool isReserved { get; private set; }
 
-		public PlayerSpawnPointModel(Vector3<float> spawnPosition, float initialOrientation, long worldId, bool isReserved)
+		public PlayerSpawnPointEntryModel(Vector3<float> spawnPosition, float initialOrientation, long worldId, bool isReserved)
 		{
 			if (worldId <= 0) throw new ArgumentOutOfRangeException(nameof(worldId));
 
@@ -70,12 +70,12 @@ namespace GladMMO
 		/// <summary>
 		/// EF constructor.
 		/// </summary>
-		private PlayerSpawnPointModel()
+		private PlayerSpawnPointEntryModel()
 		{
 
 		}
 
-		public void Update([JetBrains.Annotations.NotNull] PlayerSpawnPointModel model)
+		public void Update([JetBrains.Annotations.NotNull] PlayerSpawnPointEntryModel model)
 		{
 			if (model == null) throw new ArgumentNullException(nameof(model));
 
