@@ -14,6 +14,8 @@ namespace GladMMO
 		LocalPlayer = 1,
 		RemotePlayer = 2,
 
-		NetworkNpc = 3
+		NetworkNpc = 3,
+
+		NetworkGameObject = 4,
 	}
 }

@@ -26,6 +26,7 @@ namespace GladMMO
 				case EntityType.Player:
 					return EntityPrefab.RemotePlayer;
 				case EntityType.GameObject:
+					return EntityPrefab.NetworkGameObject;
 					break;
 				case EntityType.Creature:
 					return EntityPrefab.NetworkNpc;

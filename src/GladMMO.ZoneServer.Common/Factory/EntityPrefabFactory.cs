@@ -33,6 +33,8 @@ namespace GladMMO
 					return Resources.Load<GameObject>("Prefabs/RemotePlayer");
 				case EntityPrefab.NetworkNpc:
 					return Resources.Load<GameObject>("Prefabs/NetworkNpc");
+				case EntityPrefab.NetworkGameObject:
+					return Resources.Load<GameObject>("Prefabs/NetworkGameObject");
 			}
 
 			throw new NotImplementedException($"Failed to load prefab for {nameof(EntityPrefab)}: {context}");

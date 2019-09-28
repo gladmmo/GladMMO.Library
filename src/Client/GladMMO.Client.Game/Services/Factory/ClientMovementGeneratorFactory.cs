@@ -27,7 +27,8 @@ namespace GladMMO
 				case EntityType.Player:
 					return CreatePlayerMovementGenerator(context);
 				case EntityType.GameObject:
-					break;
+					//TODO: Support non-static GameObjects.
+					return new IdleMovementGenerator(context.Data.InitialPosition);
 				case EntityType.Creature:
 					//TODO: Support non-static NPCs.
 					return new IdleMovementGenerator(context.Data.InitialPosition);

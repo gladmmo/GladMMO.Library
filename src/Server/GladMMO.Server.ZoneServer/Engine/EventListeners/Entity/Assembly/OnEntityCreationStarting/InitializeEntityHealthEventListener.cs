@@ -27,9 +27,6 @@ namespace GladMMO
 
 		protected override void OnEventFired(object source, EntityCreationStartingEventArgs args)
 		{
-			if(args.EntityGuid.EntityType == EntityType.GameObject)
-				throw new NotImplementedException($"TODO: Fix this when GameObjects are finally introduced.");
-
 			IEntityDataFieldContainer dataContainer = EntityDataMappable.RetrieveEntity(args.EntityGuid);
 			EntityBaseStatsModel baseStats = GenerateEntityBaseStats(args.EntityGuid);
 
