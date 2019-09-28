@@ -157,7 +157,7 @@ namespace GladMMO.SDK
 				GetTarget().PlayerSpawnPointId = instanceData.SpawnPointId;
 				GetTarget().isInstanceReserved = instanceData.isReserved;
 
-				CachedInfoText = $"Creature Instance: {GetTarget().PlayerSpawnPointId}\nSpawnPosition: {instanceData.InitialPosition}\nYRotation: {instanceData.YAxisRotation}\nIsReserved: {instanceData.isReserved}";
+				CachedInfoText = $"PlayerSpawn Instance: {GetTarget().PlayerSpawnPointId}\nSpawnPosition: {instanceData.InitialPosition}\nYRotation: {instanceData.YAxisRotation}\nIsReserved: {instanceData.isReserved}";
 			}
 			catch (Exception e)
 			{
