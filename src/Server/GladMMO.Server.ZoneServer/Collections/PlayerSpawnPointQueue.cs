@@ -5,7 +5,7 @@ using System.Text;
 
 namespace GladMMO
 {
-	public class PlayerSpawnStrategyQueue : ConcurrentQueue<ISpawnPointStrategy>
+	public class PlayerSpawnPointQueue : ConcurrentQueue<PlayerSpawnPointInstanceModel>
 	{
 
 	}

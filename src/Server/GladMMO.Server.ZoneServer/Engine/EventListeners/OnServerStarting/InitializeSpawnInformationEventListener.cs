@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Common.Logging;
 using Glader.Essentials;
+using Nito.AsyncEx;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -13,41 +14,53 @@ namespace GladMMO
 	[ServerSceneTypeCreate(ServerSceneType.Default)]
 	public sealed class InitializeSpawnInformationEventListener : BaseSingleEventListenerInitializable<IServerStartingEventSubscribable>
 	{
-		private PlayerSpawnStrategyQueue SpawnStrategyQueue { get; }
+		private PlayerSpawnPointQueue SpawnStrategyQueue { get; }
 
 		private ILog Logger { get; }
 
+		private IPlayerSpawnPointDataServiceClient PlayerSpawnContentDataClient { get; }
+
+		private WorldConfiguration WorldConfiguration { get; }
+
 		public InitializeSpawnInformationEventListener(IServerStartingEventSubscribable subscriptionService,
-			[NotNull] PlayerSpawnStrategyQueue spawnStrategyQueue,
-			[NotNull] ILog logger) 
+			[NotNull] PlayerSpawnPointQueue spawnStrategyQueue,
+			[NotNull] ILog logger,
+			[NotNull] IPlayerSpawnPointDataServiceClient playerSpawnContentDataClient,
+			[NotNull] WorldConfiguration worldConfiguration) 
 			: base(subscriptionService)
 		{
 			SpawnStrategyQueue = spawnStrategyQueue ?? throw new ArgumentNullException(nameof(spawnStrategyQueue));
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
+			PlayerSpawnContentDataClient = playerSpawnContentDataClient ?? throw new ArgumentNullException(nameof(playerSpawnContentDataClient));
+			WorldConfiguration = worldConfiguration ?? throw new ArgumentNullException(nameof(worldConfiguration));
 		}
 
 		protected override void OnEventFired(object source, EventArgs args)
 		{
-			//This locates all spawnpoint strats in the scene
-			foreach (var spawn in GameObject.FindObjectsOfType<MonoBehaviour>()
-				.Where(b => b?.gameObject?.scene != null && !String.IsNullOrEmpty(b?.gameObject?.scene.name))
-				.OfType<ISpawnPointStrategy>()
-				.Where(b => b.EntitySpawnType == EntityType.Player))
+			UnityAsyncHelper.UnityMainThreadContext.PostAsync(async () =>
 			{
-				SpawnStrategyQueue.Enqueue(spawn);
+				ResponseModel<ObjectEntryCollectionModel<PlayerSpawnPointInstanceModel>, ContentEntryCollectionResponseCode> responseModel = await PlayerSpawnContentDataClient.GetSpawnPointEntriesByWorld(WorldConfiguration.WorldId);
 
-				if(Logger.IsDebugEnabled)
-					Logger.Debug($"SpawnPoint found.");
-			}
+				//TODO: Handle failure.
+				foreach (var spawnPoint in responseModel.Result.Entries)
+					if (!spawnPoint.isReserved)
+					{
+						if(Logger.IsInfoEnabled)
+							Logger.Info($"Found Player Spawn: {spawnPoint.SpawnPointId}");
 
-			//It's possible the creator didn't specify a spawnpoint, so we just use a default
-			if (SpawnStrategyQueue.Count == 0)
-			{
-				if(Logger.IsWarnEnabled)
-					Logger.Debug($"No spawnPoints found.");
+						SpawnStrategyQueue.Enqueue(spawnPoint);
+					}
+						
 
-				SpawnStrategyQueue.Enqueue(new DefaultSpawnPointStrategy());
-			}
+				//It's possible the creator didn't specify a spawnpoint, so we just use a default
+				if (SpawnStrategyQueue.Count == 0)
+				{
+					if (Logger.IsWarnEnabled)
+						Logger.Debug($"No spawnPoints found.");
+
+					SpawnStrategyQueue.Enqueue(new PlayerSpawnPointInstanceModel(1, Vector3.zero, 0, false));
+				}
+			});
 		}
 	}
 }

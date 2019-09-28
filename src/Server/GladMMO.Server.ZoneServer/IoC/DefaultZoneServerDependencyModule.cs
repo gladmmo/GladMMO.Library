@@ -160,10 +160,10 @@ namespace GladMMO
 				.As<IFactoryCreatable<EntityBaseStatsModel, EntityDataStatsDerivable>>();
 
 			//RoundRobinSpawnStrategy : ISpawnPointStrategy
-			builder.RegisterType<RoundRobinSpawnStrategy>()
+			builder.RegisterType<PlayerRoundRobinSpawnStrategy>()
 				.As<ISpawnPointStrategy>();
 
-			builder.RegisterType<PlayerSpawnStrategyQueue>()
+			builder.RegisterType<PlayerSpawnPointQueue>()
 				.AsSelf()
 				.SingleInstance();
 
