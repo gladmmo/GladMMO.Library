@@ -31,7 +31,8 @@ namespace GladMMO
 		/// <summary>
 		/// Serializer ctor.
 		/// </summary>
-		protected ObjectEntryCollectionModel()
+		[JsonConstructor]
+		private ObjectEntryCollectionModel()
 		{
 			
 		}

@@ -57,6 +57,7 @@ namespace GladMMO
 		/// <summary>
 		/// Serializer ctor.
 		/// </summary>
+		[JsonConstructor]
 		private CreatureTemplateModel()
 		{
 			

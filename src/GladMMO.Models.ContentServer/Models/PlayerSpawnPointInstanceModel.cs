@@ -48,7 +48,8 @@ namespace GladMMO
 		/// <summary>
 		/// Serializer ctor.
 		/// </summary>
-		protected PlayerSpawnPointInstanceModel()
+		[JsonConstructor]
+		private PlayerSpawnPointInstanceModel()
 		{
 			
 		}
