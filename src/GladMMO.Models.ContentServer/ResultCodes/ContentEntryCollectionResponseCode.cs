@@ -1,10 +1,10 @@
 ﻿namespace GladMMO
 {
 	/// <summary>
-	/// Enumeration of all response codes associated with looking up creature data
+	/// Enumeration of all response codes associated with looking up GameObject data
 	/// in collection form.
 	/// </summary>
-	public enum CreatureCollectionResponseCode
+	public enum ContentEntryCollectionResponseCode
 	{
 		Success = 1,
 

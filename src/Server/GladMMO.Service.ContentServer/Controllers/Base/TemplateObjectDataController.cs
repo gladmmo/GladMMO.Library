@@ -48,7 +48,7 @@ namespace GladMMO
 			IReadOnlyCollection<TTemplateEntryType> models = await objectTemplateRepository.RetrieveTemplatesByWorldIdAsync((int)worldId);
 
 			if(models.Count == 0)
-				return BuildFailedResponseModel(CreatureCollectionResponseCode.NoneFound);
+				return BuildFailedResponseModel(ContentEntryCollectionResponseCode.NoneFound);
 
 			TTemplateTransferType[] templateModels = models
 				.Distinct(DatabaseModelKeyableEquailityComparer<TTemplateEntryType>.Instance)
