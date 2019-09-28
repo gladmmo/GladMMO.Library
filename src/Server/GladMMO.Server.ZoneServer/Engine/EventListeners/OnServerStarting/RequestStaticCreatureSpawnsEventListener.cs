@@ -49,20 +49,30 @@ namespace GladMMO
 			//TODO: Don't hardcode the test world id.
 			UnityAsyncHelper.UnityMainThreadContext.PostAsync(async () =>
 			{
-				ResponseModel<ObjectEntryCollectionModel<CreatureInstanceModel>, ContentEntryCollectionResponseCode > entriesByWorld = await CreatureContentDataClient.GetCreatureEntriesByWorld(WorldConfiguration.WorldId);
-				ResponseModel<ObjectEntryCollectionModel<CreatureTemplateModel>, ContentEntryCollectionResponseCode> templatesByWorld = await CreatureContentDataClient.GetCreatureTemplatesByWorld(WorldConfiguration.WorldId);
-
-				if (entriesByWorld.isSuccessful && templatesByWorld.isSuccessful)
+				try
 				{
-					AddCreatureTemplates(templatesByWorld.Result.Entries);
-					AddCreatureInstances(entriesByWorld.Result.Entries);
+					ResponseModel<ObjectEntryCollectionModel<CreatureInstanceModel>, ContentEntryCollectionResponseCode> entriesByWorld = await CreatureContentDataClient.GetCreatureEntriesByWorld(WorldConfiguration.WorldId);
+					ResponseModel<ObjectEntryCollectionModel<CreatureTemplateModel>, ContentEntryCollectionResponseCode> templatesByWorld = await CreatureContentDataClient.GetCreatureTemplatesByWorld(WorldConfiguration.WorldId);
 
-					ProcessCreatureEntries(entriesByWorld.Result.Entries);
+					if(entriesByWorld.isSuccessful && templatesByWorld.isSuccessful)
+					{
+						AddCreatureTemplates(templatesByWorld.Result.Entries);
+						AddCreatureInstances(entriesByWorld.Result.Entries);
+
+						ProcessCreatureEntries(entriesByWorld.Result.Entries);
+					}
+					else
+					{
+						if(Logger.IsWarnEnabled)
+							Logger.Warn($"Didn't properly query Creature Data. This may not actually be an error. Instance Reason: {entriesByWorld.ResultCode} Template Reason: {templatesByWorld.ResultCode}");
+					}
 				}
-				else
+				catch (Exception e)
 				{
-					if(Logger.IsWarnEnabled)
-						Logger.Warn($"Didn't properly query Creature Data. This may not actually be an error. Instance Reason: {entriesByWorld.ResultCode} Template Reason: {templatesByWorld.ResultCode}");
+					if(Logger.IsErrorEnabled)
+						Logger.Error($"Failed to finish creature instance query. Reason: {e.Message}\nStack: {e.StackTrace}");
+
+					throw;
 				}
 			});
 		}
