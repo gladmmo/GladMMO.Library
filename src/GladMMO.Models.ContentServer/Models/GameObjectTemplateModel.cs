@@ -6,13 +6,13 @@ using Newtonsoft.Json;
 namespace GladMMO
 {
 	[JsonObject]
-	public sealed class GameObjectTemplateModel
+	public sealed class GameObjectTemplateModel : IObjectTemplateModel
 	{
 		/// <summary>
 		/// The GameObject's template id.
 		/// </summary>
 		[JsonProperty]
-		public int GameObjectTemplateId { get; private set; }
+		public int TemplateId { get; private set; }
 
 		/// <summary>
 		/// The ID of the GameObject's model.
@@ -32,7 +32,7 @@ namespace GladMMO
 			if (string.IsNullOrWhiteSpace(gameObjectName)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(gameObjectName));
 			if (gameObjectTemplateId <= 0) throw new ArgumentOutOfRangeException(nameof(gameObjectTemplateId));
 
-			GameObjectTemplateId = gameObjectTemplateId;
+			TemplateId = gameObjectTemplateId;
 			ModelId = modelId;
 			GameObjectName = gameObjectName;
 		}

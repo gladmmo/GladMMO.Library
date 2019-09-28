@@ -9,7 +9,7 @@ using UnityEngine;
 namespace GladMMO
 {
 	[JsonObject]
-	public sealed class CreatureInstanceModel
+	public sealed class CreatureInstanceModel : IInstanceObjectModel
 	{
 		/// <summary>
 		/// The network GUID associated with the entry.

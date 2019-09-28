@@ -6,13 +6,13 @@ using Newtonsoft.Json;
 namespace GladMMO
 {
 	[JsonObject]
-	public sealed class CreatureTemplateModel
+	public sealed class CreatureTemplateModel : IObjectTemplateModel
 	{
 		/// <summary>
 		/// The creature's template id.
 		/// </summary>
 		[JsonProperty]
-		public int CreatureTemplateId { get; private set; }
+		public int TemplateId { get; private set; }
 
 		/// <summary>
 		/// The ID of the creature's model.
@@ -47,7 +47,7 @@ namespace GladMMO
 			if (maximumLevel <= 0) throw new ArgumentOutOfRangeException(nameof(maximumLevel));
 			if (creatureTemplateId <= 0) throw new ArgumentOutOfRangeException(nameof(creatureTemplateId));
 
-			CreatureTemplateId = creatureTemplateId;
+			TemplateId = creatureTemplateId;
 			ModelId = modelId;
 			CreatureName = creatureName;
 			MinimumLevel = minimumLevel;
