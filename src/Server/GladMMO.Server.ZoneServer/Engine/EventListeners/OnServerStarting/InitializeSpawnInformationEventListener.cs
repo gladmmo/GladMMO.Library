@@ -39,26 +39,34 @@ namespace GladMMO
 		{
 			UnityAsyncHelper.UnityMainThreadContext.PostAsync(async () =>
 			{
-				ResponseModel<ObjectEntryCollectionModel<PlayerSpawnPointInstanceModel>, ContentEntryCollectionResponseCode> responseModel = await PlayerSpawnContentDataClient.GetSpawnPointEntriesByWorld(WorldConfiguration.WorldId);
-
-				//TODO: Handle failure.
-				foreach (var spawnPoint in responseModel.Result.Entries)
-					if (!spawnPoint.isReserved)
-					{
-						if(Logger.IsInfoEnabled)
-							Logger.Info($"Found Player Spawn: {spawnPoint.SpawnPointId}");
-
-						SpawnStrategyQueue.Enqueue(spawnPoint);
-					}
-						
-
-				//It's possible the creator didn't specify a spawnpoint, so we just use a default
-				if (SpawnStrategyQueue.Count == 0)
+				try
 				{
-					if (Logger.IsWarnEnabled)
-						Logger.Debug($"No spawnPoints found.");
+					ResponseModel<ObjectEntryCollectionModel<PlayerSpawnPointInstanceModel>, ContentEntryCollectionResponseCode> responseModel = await PlayerSpawnContentDataClient.GetSpawnPointEntriesByWorld(WorldConfiguration.WorldId);
 
-					SpawnStrategyQueue.Enqueue(new PlayerSpawnPointInstanceModel(1, Vector3.zero, 0, false));
+					//TODO: Handle failure.
+					foreach(var spawnPoint in responseModel.Result.Entries)
+						if(!spawnPoint.isReserved)
+						{
+							if(Logger.IsInfoEnabled)
+								Logger.Info($"Found Player Spawn: {spawnPoint.SpawnPointId}");
+
+							SpawnStrategyQueue.Enqueue(spawnPoint);
+						}
+
+
+					//It's possible the creator didn't specify a spawnpoint, so we just use a default
+					if(SpawnStrategyQueue.Count == 0)
+					{
+						if(Logger.IsWarnEnabled)
+							Logger.Debug($"No spawnPoints found.");
+
+						SpawnStrategyQueue.Enqueue(new PlayerSpawnPointInstanceModel(1, Vector3.zero, 0, false));
+					}
+				}
+				catch (Exception e)
+				{
+					if(Logger.IsErrorEnabled)
+						Logger.Error($"Failed to fully finish query for PlayerSpawnPoint data. Reason: {e.Message}\nStack: {e.StackTrace}");
 				}
 			});
 		}
