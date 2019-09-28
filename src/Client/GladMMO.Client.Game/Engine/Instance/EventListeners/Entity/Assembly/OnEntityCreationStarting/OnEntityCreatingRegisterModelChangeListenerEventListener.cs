@@ -35,10 +35,6 @@ namespace GladMMO
 
 		protected override void OnEventFired(object source, EntityCreationStartingEventArgs args)
 		{
-			//We only handle player downloading right now.
-			if (args.EntityGuid.EntityType != EntityType.Player && args.EntityGuid.EntityType != EntityType.Creature)
-				return;
-
 			//We're just using the WoW EUnitFields for now, and using display id for the avatar.
 			EntityDataCallbackRegister.RegisterCallback<int>(args.EntityGuid, (int)EUnitFields.UNIT_FIELD_DISPLAYID, HandleModelChange);
 		}
