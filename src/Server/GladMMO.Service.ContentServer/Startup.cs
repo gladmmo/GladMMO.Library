@@ -80,6 +80,7 @@ namespace GladMMO
 			//GameObjects
 			services.AddTransient<ICustomContentRepository<GameObjectModelEntryModel>, DatabaseBackedGameObjectModelEntryRepository>();
 			services.AddTransient<IGameObjectTemplateRepository, DatabaseBackedGameObjectTemplateEntryRepository>();
+			services.AddTransient<IGameObjectEntryRepository, DatabaseBackedGameObjectEntryRepository>();
 
 			services.AddTransient<IContentDownloadAuthroizationValidator, UnimplementedContentDownloadAuthorizationValidator>();
 
@@ -100,12 +101,16 @@ namespace GladMMO
 			services.AddSingleton<ITypeConverterProvider<CreatureEntryModel, CreatureInstanceModel>, CreatureInstanceTableToNetworkTypeConverter>();
 			//GameObjectTemplateTableToNetworkTypeConverter : ITypeConverterProvider<GameObjectTemplateEntryModel, GameObjectTemplateModel>
 			services.AddSingleton<ITypeConverterProvider<GameObjectTemplateEntryModel, GameObjectTemplateModel>, GameObjectTemplateTableToNetworkTypeConverter>();
+			services.AddSingleton<ITypeConverterProvider<GameObjectEntryModel, GameObjectInstanceModel>, GameObjectInstanceTableToNetworkTypeConverter>();
 
 			//TODO: This doesn't fully convert it
 			services.AddSingleton<ITypeConverterProvider<CreatureInstanceModel, CreatureEntryModel>, CreatureInstanceNetworkToTableTypeConverter>();
+			services.AddSingleton<ITypeConverterProvider<GameObjectInstanceModel, GameObjectEntryModel>, GameObjectInstanceNetworkToTableTypeConverter>();
 
 			//DefaultCreatureEntryModelFactory : IFactoryCreatable<CreatureEntryModel, WorldInstanceableEntryModelCreationContext>
 			services.AddTransient<IFactoryCreatable<CreatureEntryModel, WorldInstanceableEntryModelCreationContext>, DefaultCreatureEntryModelFactory>();
+			//DefaultGameObjectEntryModelFactory : IFactoryCreatable<GameObjectEntryModel, WorldInstanceableEntryModelCreationContext>
+			services.AddTransient<IFactoryCreatable<GameObjectEntryModel, WorldInstanceableEntryModelCreationContext>, DefaultGameObjectEntryModelFactory>();
 		}
 
 		private static void RegisterDatabaseServices(IServiceCollection services)
