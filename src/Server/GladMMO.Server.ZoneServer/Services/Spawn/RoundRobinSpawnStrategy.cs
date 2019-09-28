@@ -16,7 +16,7 @@ namespace GladMMO
 			SpawnStrategies = spawnStrategies ?? throw new ArgumentNullException(nameof(spawnStrategies));
 		}
 
-		public EntitySpawnType EntityType => EntitySpawnType.Player;
+		public EntityType EntitySpawnType => EntityType.Player;
 
 		public SpawnPointData GetSpawnPoint()
 		{

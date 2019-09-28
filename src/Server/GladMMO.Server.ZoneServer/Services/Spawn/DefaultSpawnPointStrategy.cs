@@ -10,7 +10,7 @@ namespace GladMMO
 	/// </summary>
 	public sealed class DefaultSpawnPointStrategy : ISpawnPointStrategy
 	{
-		public EntitySpawnType EntityType => EntitySpawnType.Player;
+		public EntityType EntitySpawnType => EntityType.Player;
 
 		public SpawnPointData GetSpawnPoint()
 		{

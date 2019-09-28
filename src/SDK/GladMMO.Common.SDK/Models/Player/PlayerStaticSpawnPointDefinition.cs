@@ -6,6 +6,6 @@ namespace GladMMO
 {
 	public sealed class PlayerStaticSpawnPointDefinition : StaticSpawnPointDefinition
 	{
-		public override EntitySpawnType EntityType => EntitySpawnType.Player;
+		public override EntityType EntitySpawnType => EntityType.Player;
 	}
 }

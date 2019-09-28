@@ -7,7 +7,7 @@ namespace GladMMO
 {
 	public sealed class CreatureStaticSpawnPointDefinition : StaticSpawnPointDefinition
 	{
-		public override EntitySpawnType EntityType => EntitySpawnType.Creature;
+		public override EntityType EntitySpawnType => EntityType.Creature;
 
 		[HideInInspector]
 		//[Tooltip("This should be the ID of the creature template that holds information about what creature is suppose to spawn.")]

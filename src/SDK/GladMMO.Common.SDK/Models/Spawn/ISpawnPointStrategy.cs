@@ -13,7 +13,7 @@ namespace GladMMO
 		/// The spawn type of the strategy.
 		/// Could be player or creature.
 		/// </summary>
-		EntitySpawnType EntityType { get; }
+		EntityType EntitySpawnType { get; }
 
 		/// <summary>
 		/// Generates a spawnpoint.

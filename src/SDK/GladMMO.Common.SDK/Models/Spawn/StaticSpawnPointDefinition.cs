@@ -14,7 +14,7 @@ namespace GladMMO
 
 		private Quaternion CachedSpawnRotation;
 
-		public abstract EntitySpawnType EntityType { get; }
+		public abstract EntityType EntitySpawnType { get; }
 
 		void Awake()
 		{

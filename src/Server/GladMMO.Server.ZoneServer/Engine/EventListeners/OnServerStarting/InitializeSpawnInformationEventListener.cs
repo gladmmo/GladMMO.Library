@@ -32,7 +32,7 @@ namespace GladMMO
 			foreach (var spawn in GameObject.FindObjectsOfType<MonoBehaviour>()
 				.Where(b => b?.gameObject?.scene != null && !String.IsNullOrEmpty(b?.gameObject?.scene.name))
 				.OfType<ISpawnPointStrategy>()
-				.Where(b => b.EntityType == EntitySpawnType.Player))
+				.Where(b => b.EntitySpawnType == EntityType.Player))
 			{
 				SpawnStrategyQueue.Enqueue(spawn);
 
