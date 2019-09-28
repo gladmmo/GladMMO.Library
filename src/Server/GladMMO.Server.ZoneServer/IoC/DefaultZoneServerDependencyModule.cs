@@ -291,6 +291,13 @@ namespace GladMMO
 				.As<IEntityGuidMappable<CreatureInstanceModel>>()
 				.As<IReadonlyEntityGuidMappable<CreatureInstanceModel>>()
 				.SingleInstance();
+
+			builder.RegisterType<InstanceTemplateableDataCollection<GameObjectInstanceModel, GameObjectTemplateModel>>()
+				.As<IEntityGuidMappable<GameObjectTemplateModel>>()
+				.As<IReadonlyEntityGuidMappable<GameObjectTemplateModel>>()
+				.As<IEntityGuidMappable<GameObjectInstanceModel>>()
+				.As<IReadonlyEntityGuidMappable<GameObjectInstanceModel>>()
+				.SingleInstance();
 		}
 
 		private static void RegisterLockingPolicies(ContainerBuilder builder)
