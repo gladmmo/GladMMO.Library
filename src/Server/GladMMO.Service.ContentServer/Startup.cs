@@ -107,10 +107,12 @@ namespace GladMMO
 			//GameObjectTemplateTableToNetworkTypeConverter : ITypeConverterProvider<GameObjectTemplateEntryModel, GameObjectTemplateModel>
 			services.AddSingleton<ITypeConverterProvider<GameObjectTemplateEntryModel, GameObjectTemplateModel>, GameObjectTemplateTableToNetworkTypeConverter>();
 			services.AddSingleton<ITypeConverterProvider<GameObjectEntryModel, GameObjectInstanceModel>, GameObjectInstanceTableToNetworkTypeConverter>();
+			services.AddSingleton<ITypeConverterProvider<PlayerSpawnPointEntryModel, PlayerSpawnPointInstanceModel>, PlayerSpawnPointInstanceTableToNetworkTypeConverter>();
 
 			//TODO: This doesn't fully convert it
 			services.AddSingleton<ITypeConverterProvider<CreatureInstanceModel, CreatureEntryModel>, CreatureInstanceNetworkToTableTypeConverter>();
 			services.AddSingleton<ITypeConverterProvider<GameObjectInstanceModel, GameObjectEntryModel>, GameObjectInstanceNetworkToTableTypeConverter>();
+			services.AddSingleton<ITypeConverterProvider<PlayerSpawnPointInstanceModel, PlayerSpawnPointEntryModel>, PlayerSpawnPointInstanceNetworkToTableTypeConverter>();
 
 			//DefaultCreatureEntryModelFactory : IFactoryCreatable<CreatureEntryModel, WorldInstanceableEntryModelCreationContext>
 			services.AddTransient<IFactoryCreatable<CreatureEntryModel, WorldInstanceableEntryModelCreationContext>, DefaultCreatureEntryModelFactory>();
