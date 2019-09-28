@@ -118,6 +118,8 @@ namespace GladMMO
 			services.AddTransient<IFactoryCreatable<CreatureEntryModel, WorldInstanceableEntryModelCreationContext>, DefaultCreatureEntryModelFactory>();
 			//DefaultGameObjectEntryModelFactory : IFactoryCreatable<GameObjectEntryModel, WorldInstanceableEntryModelCreationContext>
 			services.AddTransient<IFactoryCreatable<GameObjectEntryModel, WorldInstanceableEntryModelCreationContext>, DefaultGameObjectEntryModelFactory>();
+			//DefaultPlayerSpawnPointEntryModelFactory : IFactoryCreatable<PlayerSpawnPointEntryModel, WorldInstanceableEntryModelCreationContext>
+			services.AddTransient<IFactoryCreatable<PlayerSpawnPointEntryModel, WorldInstanceableEntryModelCreationContext>, DefaultPlayerSpawnPointEntryModelFactory>();
 		}
 
 		private static void RegisterDatabaseServices(IServiceCollection services)
