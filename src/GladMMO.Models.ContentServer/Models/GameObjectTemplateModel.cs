@@ -26,13 +26,13 @@ namespace GladMMO
 		[JsonProperty]
 		public string GameObjectName { get; private set; }
 
-		public GameObjectTemplateModel(int creatureTemplateId, long modelId, [NotNull] string gameObjectName)
+		public GameObjectTemplateModel(int gameObjectTemplateId, long modelId, [NotNull] string gameObjectName)
 		{
 			if (modelId <= 0) throw new ArgumentOutOfRangeException(nameof(modelId));
 			if (string.IsNullOrWhiteSpace(gameObjectName)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(gameObjectName));
-			if (creatureTemplateId <= 0) throw new ArgumentOutOfRangeException(nameof(creatureTemplateId));
+			if (gameObjectTemplateId <= 0) throw new ArgumentOutOfRangeException(nameof(gameObjectTemplateId));
 
-			GameObjectTemplateId = creatureTemplateId;
+			GameObjectTemplateId = gameObjectTemplateId;
 			ModelId = modelId;
 			GameObjectName = gameObjectName;
 		}
