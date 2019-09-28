@@ -79,6 +79,10 @@ namespace GladMMO
 				.AsImplementedInterfaces()
 				.SingleInstance();
 
+			builder.RegisterType<NetworkGameObjectContentResourceManager>()
+				.AsImplementedInterfaces()
+				.SingleInstance();
+
 			//NetworkedTrackerChangePacketFactory : IFactoryCreatable<PlayerNetworkTrackerChangeUpdateRequest, NetworkMovementTrackerTypeFlags>
 			builder.RegisterType<NetworkedTrackerChangePacketFactory>()
 				.As<IFactoryCreatable<PlayerNetworkTrackerChangeUpdateRequest, NetworkMovementTrackerTypeFlags>>()
