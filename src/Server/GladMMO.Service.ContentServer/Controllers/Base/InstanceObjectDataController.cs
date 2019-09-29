@@ -42,7 +42,7 @@ namespace GladMMO
 		//[AuthorizeJwt]
 		[ProducesJson]
 		[HttpPost("{world}/instance")]
-		public async Task<IActionResult> CreateObjectInstance([FromRoute(Name = "world")] long worldId,
+		public virtual async Task<IActionResult> CreateObjectInstance([FromRoute(Name = "world")] long worldId,
 			[FromServices] [NotNull] TInstanceRepositoryType instanceObjectRepository,
 			[FromServices] [NotNull] IFactoryCreatable<TInstanceEntryModelType, WorldInstanceableEntryModelCreationContext> defaultInstanceEntryModelFactory,
 			[FromServices] [NotNull] ITypeConverterProvider<TInstanceEntryModelType, TInstanceTransportModelType> tableToNetworkModelConverter)
@@ -89,7 +89,7 @@ namespace GladMMO
 		{
 			if (model == null) throw new ArgumentNullException(nameof(model));
 			if (instanceObjectRepository == null) throw new ArgumentNullException(nameof(instanceObjectRepository));
-			if(networkToTableConverter == null) throw new ArgumentNullException(nameof(networkToTableConverter));
+			if (networkToTableConverter == null) throw new ArgumentNullException(nameof(networkToTableConverter));
 
 			//It's TRUE that they should be sending a valid GUID.
 			//But it doesn't matter, it's not this action's responsibility to deal with it.
