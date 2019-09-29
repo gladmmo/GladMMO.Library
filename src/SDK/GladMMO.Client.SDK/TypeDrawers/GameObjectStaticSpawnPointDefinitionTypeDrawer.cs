@@ -18,6 +18,8 @@ namespace GladMMO.SDK
 
 		private string CachedGameObjectTemplateInfoText = null;
 
+		private GameObjectType CachedGameObjectType = GameObjectType.Visual;
+
 		public override void OnInspectorGUI()
 		{
 			base.OnInspectorGUI();
@@ -75,6 +77,24 @@ namespace GladMMO.SDK
 				if (GetTarget().GameObjectTemplateId > 0)
 				{
 					GUILayout.Label(CachedGameObjectTemplateInfoText, GUI.skin.textArea);
+
+					//TODO: Better handle GameObjectTypes supplmenetal components.
+					//If we have a template we should try to let them change the type if it's visual.
+					if (CachedGameObjectType != GameObjectType.Visual)
+					{
+						INetworkGameObjectBehaviour behaviour = GetTarget().gameObject.GetComponent<INetworkGameObjectBehaviour>();
+						if (behaviour == null)
+						{
+							//TODO: Better handling for created component.
+							GetTarget().gameObject.AddComponent<WorldTeleporterDefinitionData>();
+						}
+						else
+						{
+							//Warn non-matching behavior.
+							if(behaviour.BehaviorType != CachedGameObjectType)
+								Debug.LogError($"GameObject Id: {GetTarget().GameObjectInstanceId} has Type: {CachedGameObjectType} but does not match Component: {behaviour.GetType().Name}", GetTarget().gameObject);
+						}
+					}
 				}
 				else
 					GUILayout.Label($"Unknown GameObject Template: {GetTarget().GameObjectTemplateId}", GUI.skin.textArea);
@@ -192,7 +212,8 @@ namespace GladMMO.SDK
 			ResponseModel<GameObjectTemplateModel, SceneContentQueryResponseCode> templateModelResponse = await client.GetGameObjectTemplate(GetTarget().GameObjectTemplateId);
 			var result = templateModelResponse.Result;
 
-			CachedGameObjectTemplateInfoText = $"GameObject Template: {GetTarget().GameObjectTemplateId}\nName: {result.GameObjectName}\nModel Id: {result.ModelId}\n Type: {result.ObjectType.ToString()}";
+			CachedGameObjectType = templateModelResponse.Result.ObjectType;
+			CachedGameObjectTemplateInfoText = $"GameObject Template: {GetTarget().GameObjectTemplateId}\nName: {result.GameObjectName}\nModel Id: {result.ModelId}\nType: {result.ObjectType.ToString()}";
 		}
 
 		private async Task<GameObjectInstanceModel> RefreshGameObjectInstanceData([NotNull] IGameObjectDataServiceClient client)
