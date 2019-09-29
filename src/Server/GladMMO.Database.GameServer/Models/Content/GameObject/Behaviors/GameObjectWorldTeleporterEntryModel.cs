@@ -3,12 +3,20 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
+using GladMMO.Database;
 
 namespace GladMMO
 {
 	[Table("gameobject_worldteleporter")]
-	public class GameObjectWorldTeleporterEntryModel
+	public class GameObjectWorldTeleporterEntryModel : IInstanceableWorldObjectModel, IModelEntryUpdateable<GameObjectWorldTeleporterEntryModel>
 	{
+		public int ObjectInstanceId => TargetGameObjectId;
+
+		//TODO: This are UNSAFE!
+		public Vector3<float> SpawnPosition => TargetGameObject.SpawnPosition;
+
+		public float InitialOrientation => TargetGameObject.InitialOrientation;
+
 		/// <summary>
 		/// Defines the <see cref="GameObjectEntryModel"/> instance that
 		/// this behavior is attached to. It is the primary
@@ -76,6 +84,14 @@ namespace GladMMO
 		protected GameObjectWorldTeleporterEntryModel()
 		{
 			
+		}
+
+		public void Update([JetBrains.Annotations.NotNull] GameObjectWorldTeleporterEntryModel model)
+		{
+			if (model == null) throw new ArgumentNullException(nameof(model));
+
+			LocalSpawnPointId = model.LocalSpawnPointId;
+			RemoteSpawnPointId = model.RemoteSpawnPointId;
 		}
 	}
 }
