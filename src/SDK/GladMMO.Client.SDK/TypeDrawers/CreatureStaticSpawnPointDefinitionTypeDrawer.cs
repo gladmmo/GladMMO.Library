@@ -12,7 +12,7 @@ namespace GladMMO.SDK
 {
 	//TODO: Refactor to combine Creature and GameObject instance spawning.
 	[CustomEditor(typeof(CreatureStaticSpawnPointDefinition))]
-	public sealed class CreatureStaticSpawnPointDefinitionTypeDrawer : StaticSpawnPointDefinitionEditor
+	public sealed class CreatureStaticSpawnPointDefinitionTypeDrawer : NetworkedDefinitionEditor
 	{
 		private string CachedCreatureInfoText = null;
 
