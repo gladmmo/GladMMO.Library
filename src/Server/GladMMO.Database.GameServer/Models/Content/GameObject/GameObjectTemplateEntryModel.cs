@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
@@ -50,15 +51,24 @@ namespace GladMMO
 		[Required]
 		public string GameObjectName { get; private set; }
 
-		public GameObjectTemplateEntryModel(int accountId, long modelId, [NotNull] string gameObjectName)
+		/// <summary>
+		/// Indicates the type of the game object.
+		/// </summary>
+		[Column(Order = 5)]
+		[Required]
+		public GameObjectType Type { get; private set; }
+
+		public GameObjectTemplateEntryModel(int accountId, long modelId, [NotNull] string gameObjectName, GameObjectType type)
 		{
 			if (accountId <= 0) throw new ArgumentOutOfRangeException(nameof(accountId));
 			if (modelId <= 0) throw new ArgumentOutOfRangeException(nameof(modelId));
 			if (string.IsNullOrWhiteSpace(gameObjectName)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(gameObjectName));
+			if (!Enum.IsDefined(typeof(GameObjectType), type)) throw new InvalidEnumArgumentException(nameof(type), (int) type, typeof(GameObjectType));
 
 			AccountId = accountId;
 			ModelId = modelId;
 			GameObjectName = gameObjectName;
+			Type = type;
 		}
 
 		protected GameObjectTemplateEntryModel()
