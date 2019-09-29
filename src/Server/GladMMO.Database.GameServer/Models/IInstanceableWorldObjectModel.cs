@@ -17,12 +17,12 @@ namespace GladMMO
 		/// <summary>
 		/// The spawn position of the GameObject.
 		/// </summary>
-		Vector3<float> SpawnPosition { get; set; }
+		Vector3<float> SpawnPosition { get; }
 
 		/// <summary>
 		/// The initial Y-axis orientation/rotation of the GameObject when spawned.
 		/// Especially important for stationary GameObjects.
 		/// </summary>
-		float InitialOrientation { get; set; }
+		float InitialOrientation { get; }
 	}
 }
