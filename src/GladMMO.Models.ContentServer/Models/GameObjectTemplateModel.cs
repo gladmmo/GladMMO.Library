@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text;
 using Newtonsoft.Json;
 
@@ -26,15 +27,20 @@ namespace GladMMO
 		[JsonProperty]
 		public string GameObjectName { get; private set; }
 
-		public GameObjectTemplateModel(int gameObjectTemplateId, long modelId, [NotNull] string gameObjectName)
+		[JsonProperty]
+		public GameObjectType ObjectType { get; private set; }
+
+		public GameObjectTemplateModel(int gameObjectTemplateId, long modelId, [NotNull] string gameObjectName, GameObjectType objectType)
 		{
 			if (modelId <= 0) throw new ArgumentOutOfRangeException(nameof(modelId));
 			if (string.IsNullOrWhiteSpace(gameObjectName)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(gameObjectName));
 			if (gameObjectTemplateId <= 0) throw new ArgumentOutOfRangeException(nameof(gameObjectTemplateId));
+			if (!Enum.IsDefined(typeof(GameObjectType), objectType)) throw new InvalidEnumArgumentException(nameof(objectType), (int) objectType, typeof(GameObjectType));
 
 			TemplateId = gameObjectTemplateId;
 			ModelId = modelId;
 			GameObjectName = gameObjectName;
+			ObjectType = objectType;
 		}
 
 		/// <summary>

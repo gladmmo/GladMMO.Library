@@ -11,7 +11,7 @@ namespace GladMMO
 		{
 			if (fromObject == null) throw new ArgumentNullException(nameof(fromObject));
 
-			return new GameObjectTemplateModel(fromObject.GameObjectTemplateId, fromObject.ModelId, fromObject.GameObjectName);
+			return new GameObjectTemplateModel(fromObject.GameObjectTemplateId, fromObject.ModelId, fromObject.GameObjectName, fromObject.Type);
 		}
 	}
 }
