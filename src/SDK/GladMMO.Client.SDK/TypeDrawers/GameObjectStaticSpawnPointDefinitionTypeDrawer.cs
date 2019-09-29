@@ -192,7 +192,7 @@ namespace GladMMO.SDK
 			ResponseModel<GameObjectTemplateModel, SceneContentQueryResponseCode> templateModelResponse = await client.GetGameObjectTemplate(GetTarget().GameObjectTemplateId);
 			var result = templateModelResponse.Result;
 
-			CachedGameObjectTemplateInfoText = $"GameObject Template: {GetTarget().GameObjectTemplateId}\nName: {result.GameObjectName}\nModel Id: {result.ModelId}";
+			CachedGameObjectTemplateInfoText = $"GameObject Template: {GetTarget().GameObjectTemplateId}\nName: {result.GameObjectName}\nModel Id: {result.ModelId}\n Type: {result.ObjectType.ToString()}";
 		}
 
 		private async Task<GameObjectInstanceModel> RefreshGameObjectInstanceData([NotNull] IGameObjectDataServiceClient client)
