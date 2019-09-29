@@ -4,7 +4,7 @@ using System.Text;
 
 namespace GladMMO
 {
-	public interface IWorldTeleporterGameObjectEntryRepository : IGenericRepositoryCrudable<int, GameObjectWorldTeleporterEntryModel>
+	public interface IWorldTeleporterGameObjectEntryRepository : IGenericRepositoryCrudable<int, GameObjectWorldTeleporterEntryModel>, IInstanceableWorldObjectRepository<GameObjectWorldTeleporterEntryModel>
 	{
 
 	}
