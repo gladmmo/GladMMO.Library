@@ -8,9 +8,9 @@ using Microsoft.Extensions.Logging;
 namespace GladMMO
 {
 	[Route("api/[controller]")]
-	public sealed class WorldTeleporterController : InstanceObjectDataController<GameObjectWorldTeleporterEntryModel, WorldTeleporterInstanceModel, IWorldTeleporterGameObjectEntryRepository>
+	public sealed class WorldTeleporterDataController : InstanceObjectDataController<GameObjectWorldTeleporterEntryModel, WorldTeleporterInstanceModel, IWorldTeleporterGameObjectEntryRepository>
 	{
-		public WorldTeleporterController(IClaimsPrincipalReader claimsReader, ILogger<AuthorizationReadyController> logger) 
+		public WorldTeleporterDataController(IClaimsPrincipalReader claimsReader, ILogger<AuthorizationReadyController> logger) 
 			: base(claimsReader, logger)
 		{
 
