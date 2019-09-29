@@ -119,15 +119,11 @@ namespace GladMMO
 		public static IEnumerable<Type> GetAllTypesImplementingOpenGenericType(Type openGenericType, Assembly assembly)
 		{
 			return assembly.GetTypes()
-				.SelectMany(t => t.GetInterfaces())
 				.Where(t =>
 				{
-					var y = t.BaseType;
-
-					return (y != null && y.IsGenericType &&
-					        openGenericType.IsAssignableFrom(y.GetGenericTypeDefinition())) ||
-					       (t.IsGenericType &&
-					        openGenericType.IsAssignableFrom(t.GetGenericTypeDefinition()));
+					return t.GetInterfaces()
+						.Where(i => i.IsConstructedGenericType)
+						.Any(i => i.GetGenericTypeDefinition() == openGenericType);
 				});
 		}
 
