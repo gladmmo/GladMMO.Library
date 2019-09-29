@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
@@ -100,20 +101,10 @@ namespace GladMMO
 			services.AddScoped(p => storageAccount.CreateCloudBlobClient());
 			services.AddTransient<IStorageUrlBuilder, AzureBlobStorageURLBuilder>();
 
-			//TODO: Add auto-registeration for type converters
-			//CreatureTemplateTableToNetworkTypeConverter : ITypeConverterProvider<CreatureTemplateEntryModel, CreatureTemplateModel>
-			//CreatureInstanceTableToNetworkTypeConverter : ITypeConverterProvider<CreatureEntryModel, CreatureInstanceModel>
-			services.AddSingleton<ITypeConverterProvider<CreatureTemplateEntryModel, CreatureTemplateModel>, CreatureTemplateTableToNetworkTypeConverter>();
-			services.AddSingleton<ITypeConverterProvider<CreatureEntryModel, CreatureInstanceModel>, CreatureInstanceTableToNetworkTypeConverter>();
-			//GameObjectTemplateTableToNetworkTypeConverter : ITypeConverterProvider<GameObjectTemplateEntryModel, GameObjectTemplateModel>
-			services.AddSingleton<ITypeConverterProvider<GameObjectTemplateEntryModel, GameObjectTemplateModel>, GameObjectTemplateTableToNetworkTypeConverter>();
-			services.AddSingleton<ITypeConverterProvider<GameObjectEntryModel, GameObjectInstanceModel>, GameObjectInstanceTableToNetworkTypeConverter>();
-			services.AddSingleton<ITypeConverterProvider<PlayerSpawnPointEntryModel, PlayerSpawnPointInstanceModel>, PlayerSpawnPointInstanceTableToNetworkTypeConverter>();
-
-			//TODO: This doesn't fully convert it
-			services.AddSingleton<ITypeConverterProvider<CreatureInstanceModel, CreatureEntryModel>, CreatureInstanceNetworkToTableTypeConverter>();
-			services.AddSingleton<ITypeConverterProvider<GameObjectInstanceModel, GameObjectEntryModel>, GameObjectInstanceNetworkToTableTypeConverter>();
-			services.AddSingleton<ITypeConverterProvider<PlayerSpawnPointInstanceModel, PlayerSpawnPointEntryModel>, PlayerSpawnPointInstanceNetworkToTableTypeConverter>();
+			//Register all the type converters in the assembly
+			foreach(Type t in GetAllTypesImplementingOpenGenericType(typeof(ITypeConverterProvider<,>), this.GetType().Assembly))
+				foreach (var tInterface in t.GetInterfaces())
+					services.AddSingleton(tInterface, t);
 
 			//DefaultCreatureEntryModelFactory : IFactoryCreatable<CreatureEntryModel, WorldInstanceableEntryModelCreationContext>
 			services.AddTransient<IFactoryCreatable<CreatureEntryModel, WorldInstanceableEntryModelCreationContext>, DefaultCreatureEntryModelFactory>();
@@ -121,6 +112,22 @@ namespace GladMMO
 			services.AddTransient<IFactoryCreatable<GameObjectEntryModel, WorldInstanceableEntryModelCreationContext>, DefaultGameObjectEntryModelFactory>();
 			//DefaultPlayerSpawnPointEntryModelFactory : IFactoryCreatable<PlayerSpawnPointEntryModel, WorldInstanceableEntryModelCreationContext>
 			services.AddTransient<IFactoryCreatable<PlayerSpawnPointEntryModel, WorldInstanceableEntryModelCreationContext>, DefaultPlayerSpawnPointEntryModelFactory>();
+		}
+
+		//For type converter discovery
+		public static IEnumerable<Type> GetAllTypesImplementingOpenGenericType(Type openGenericType, Assembly assembly)
+		{
+			return assembly.GetTypes()
+				.SelectMany(t => t.GetInterfaces())
+				.Where(t =>
+				{
+					var y = t.BaseType;
+
+					return (y != null && y.IsGenericType &&
+					        openGenericType.IsAssignableFrom(y.GetGenericTypeDefinition())) ||
+					       (t.IsGenericType &&
+					        openGenericType.IsAssignableFrom(t.GetGenericTypeDefinition()));
+				});
 		}
 
 		private static void RegisterDatabaseServices(IServiceCollection services)
