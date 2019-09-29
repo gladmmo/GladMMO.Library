@@ -10,7 +10,6 @@ using UnityEngine;
 namespace GladMMO
 {
 	//based on: https://unity3d.college/2016/09/12/unity-oninspectorgui/
-	[CustomEditor(typeof(StaticSpawnPointDefinition))]
 	public class NetworkedDefinitionEditor : ExtendedMonoBehaviourTypeDrawer
 	{
 		//This needs to be static, otherwise progress bars could be running while you switch TO another window, and then back
