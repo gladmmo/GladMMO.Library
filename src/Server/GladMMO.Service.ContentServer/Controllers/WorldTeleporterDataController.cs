@@ -16,12 +16,16 @@ namespace GladMMO
 
 		}
 
+		//TODO: Fix parameters annotations
 		public override Task<IActionResult> CreateObjectInstance(long worldId, IWorldTeleporterGameObjectEntryRepository instanceObjectRepository, IFactoryCreatable<GameObjectWorldTeleporterEntryModel, WorldInstanceableEntryModelCreationContext> defaultInstanceEntryModelFactory, ITypeConverterProvider<GameObjectWorldTeleporterEntryModel, WorldTeleporterInstanceModel> tableToNetworkModelConverter)
 		{
 			return Task.FromResult((IActionResult)BadRequest("This request is not valid for World Teleporters."));
 		}
 
-		public override async Task<IActionResult> UpdateObjectInstance(WorldTeleporterInstanceModel model, int objectId, IWorldTeleporterGameObjectEntryRepository instanceObjectRepository, ITypeConverterProvider<WorldTeleporterInstanceModel, GameObjectWorldTeleporterEntryModel> networkToTableConverter)
+		public override async Task<IActionResult> UpdateObjectInstance([FromBody] [NotNull] WorldTeleporterInstanceModel model,
+			[FromRoute(Name = "id")] int objectId,
+			[FromServices] [NotNull] IWorldTeleporterGameObjectEntryRepository instanceObjectRepository,
+			[FromServices] [NotNull] ITypeConverterProvider<WorldTeleporterInstanceModel, GameObjectWorldTeleporterEntryModel> networkToTableConverter)
 		{
 			//So, this one is abit different since there is no created instance.
 			//The client needs to create it, we don't assign a default behavior.
