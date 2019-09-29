@@ -3,14 +3,16 @@ using System;
 using GladMMO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GladMMO.Database.GameServer.Migrations.WorldDatabase
 {
     [DbContext(typeof(ContentDatabaseContext))]
-    partial class WorldDatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20190929005532_AddedGameObjectTypeToGameObjectTemplate")]
+    partial class AddedGameObjectTypeToGameObjectTemplate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
