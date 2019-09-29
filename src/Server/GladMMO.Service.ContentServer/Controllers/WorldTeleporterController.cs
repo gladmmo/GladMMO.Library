@@ -15,5 +15,10 @@ namespace GladMMO
 		{
 
 		}
+
+		public override Task<IActionResult> CreateObjectInstance(long worldId, IWorldTeleporterGameObjectEntryRepository instanceObjectRepository, IFactoryCreatable<GameObjectWorldTeleporterEntryModel, WorldInstanceableEntryModelCreationContext> defaultInstanceEntryModelFactory, ITypeConverterProvider<GameObjectWorldTeleporterEntryModel, object> tableToNetworkModelConverter)
+		{
+			return Task.FromResult((IActionResult)BadRequest("This request is not valid for World Teleporters."));
+		}
 	}
 }
