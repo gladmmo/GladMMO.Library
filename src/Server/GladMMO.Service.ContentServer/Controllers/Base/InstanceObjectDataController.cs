@@ -81,7 +81,7 @@ namespace GladMMO
 		}
 
 		[HttpPut("instance/{id}")]
-		public async Task<IActionResult> UpdateObjectInstance(
+		public virtual async Task<IActionResult> UpdateObjectInstance(
 			[FromBody] [NotNull] TInstanceTransportModelType model,
 			[FromRoute(Name = "id")] int objectId,
 			[FromServices] [NotNull] TInstanceRepositoryType instanceObjectRepository,
