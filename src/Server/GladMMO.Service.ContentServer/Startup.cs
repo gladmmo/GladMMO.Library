@@ -84,6 +84,7 @@ namespace GladMMO
 			services.AddTransient<ICustomContentRepository<GameObjectModelEntryModel>, DatabaseBackedGameObjectModelEntryRepository>();
 			services.AddTransient<IGameObjectTemplateRepository, DatabaseBackedGameObjectTemplateEntryRepository>();
 			services.AddTransient<IGameObjectEntryRepository, DatabaseBackedGameObjectEntryRepository>();
+			services.AddTransient<IWorldTeleporterGameObjectEntryRepository, DatabaseBackedWorldTeleporterEntryRepository>();
 
 			//Player
 			//DatabaseBackedPlayerSpawnPointEntryRepository : IPlayerSpawnPointEntryRepository
