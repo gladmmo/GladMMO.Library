@@ -18,5 +18,10 @@ namespace GladMMO
 		{
 
 		}
+
+		public new IEnumerator<TValue> GetEnumerator()
+		{
+			return base.Values.GetEnumerator();
+		}
 	}
 }

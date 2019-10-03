@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
@@ -38,6 +39,16 @@ namespace GladMMO
 		public bool RemoveEntityEntry(NetworkEntityGuid entityGuid)
 		{
 			return InstanceLinkedDataMap.Remove(entityGuid.EntryId);
+		}
+
+		public IEnumerator<TInstanceLinkedDataType> GetEnumerator()
+		{
+			return InstanceLinkedDataMap.Values.GetEnumerator();
+		}
+
+		IEnumerator IEnumerable.GetEnumerator()
+		{
+			return GetEnumerator();
 		}
 	}
 }
