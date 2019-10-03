@@ -180,6 +180,12 @@ namespace GladMMO
 			builder.RegisterType<RemoteGameObjectDataService>()
 				.As<IGameObjectDataService>()
 				.SingleInstance();
+
+			//ReflectionBasedGameObjectEntityBehaviourFactory : IGameObjectEntityBehaviourFactory
+			builder.RegisterType<ReflectionBasedGameObjectEntityBehaviourFactory>()
+				.As<IGameObjectEntityBehaviourFactory>()
+				.SingleInstance();
+
 		}
 
 		private void HandleConfigurableDependencies(ContainerBuilder builder)
