@@ -36,6 +36,12 @@ namespace GladMMO
 
 				cb.RegisterInstance(GameObjectDataContainer.WorldTeleporterInstanceMappable.RetrieveEntity(context))
 					.AsSelf();
+
+				cb.RegisterInstance(context)
+					.AsSelf();
+
+				//TODO: support ANY component type.
+				cb.RegisterType<DefaultWorldTeleporterInteractableGameObjectBehaviourComponent>();
 			}))
 			{
 				return (DefaultWorldTeleporterInteractableGameObjectBehaviourComponent)scope.Resolve(typeof(DefaultWorldTeleporterInteractableGameObjectBehaviourComponent));
