@@ -21,7 +21,7 @@ namespace GladMMO
 			if (args.EntityGuid.EntityType != EntityType.GameObject)
 				return;
 
-			OnEtityCreationFinished(args);
+			OnEntityCreationFinished(args);
 		}
 	}
 }
