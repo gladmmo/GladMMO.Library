@@ -185,7 +185,6 @@ namespace GladMMO
 			builder.RegisterType<ReflectionBasedGameObjectEntityBehaviourFactory>()
 				.As<IGameObjectEntityBehaviourFactory>()
 				.SingleInstance();
-
 		}
 
 		private void HandleConfigurableDependencies(ContainerBuilder builder)
@@ -312,6 +311,16 @@ namespace GladMMO
 			builder.RegisterType<InstanceStaticEntityDataCollection<WorldTeleporterInstanceModel>>()
 				.As<IEntityGuidMappable<WorldTeleporterInstanceModel>>()
 				.As<IReadonlyEntityGuidMappable<WorldTeleporterInstanceModel>>()
+				.SingleInstance();
+
+			//GameObjectEntityBehaviourComponentCollection : IEntityGuidMappable<BaseGameObjectEntityBehaviourComponent>, IReadonlyEntityGuidMappable<IWorldInteractable>
+			builder.RegisterType<GameObjectEntityBehaviourComponentCollection>()
+				.As<IEntityGuidMappable<BaseGameObjectEntityBehaviourComponent>>()
+				.As<IReadonlyEntityGuidMappable<IWorldInteractable>>()
+				.OnActivated(args =>
+				{
+					removableComponentsList.Add((IEntityCollectionRemovable)args.Instance);
+				})
 				.SingleInstance();
 		}
 
