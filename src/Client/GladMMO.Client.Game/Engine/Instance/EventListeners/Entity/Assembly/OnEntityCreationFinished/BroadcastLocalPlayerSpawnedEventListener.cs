@@ -22,7 +22,7 @@ namespace GladMMO
 			CharacterDateRepository = characterDateRepository ?? throw new ArgumentNullException(nameof(characterDateRepository));
 		}
 
-		protected override void OnPlayerEntityCreationFinished(EntityCreationFinishedEventArgs args)
+		protected override void OnEntityCreationFinished(EntityCreationFinishedEventArgs args)
 		{
 			//Obviously, we only fire the event if the spawned entity is the local player.
 			if (IsSpawningEntityLocalPlayer(args.EntityGuid))

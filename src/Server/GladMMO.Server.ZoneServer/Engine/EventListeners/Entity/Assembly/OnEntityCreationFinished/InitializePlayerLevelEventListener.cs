@@ -17,7 +17,7 @@ namespace GladMMO
 			EntityDataMappable = entityDataMappable ?? throw new ArgumentNullException(nameof(entityDataMappable));
 		}
 
-		protected override void OnPlayerEntityCreationFinished(EntityCreationFinishedEventArgs args)
+		protected override void OnEntityCreationFinished(EntityCreationFinishedEventArgs args)
 		{
 			//TODO: Demo code.
 			IEntityDataFieldContainer entityDataFieldContainer = EntityDataMappable.RetrieveEntity(args.EntityGuid);
