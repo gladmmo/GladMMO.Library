@@ -7,8 +7,12 @@ using Newtonsoft.Json.Serialization;
 namespace GladMMO
 {
 	[JsonObject]
-	public class WorldTeleporterInstanceModel
+	public class WorldTeleporterInstanceModel : IGameObjectLinkable
 	{
+		//TODO: Combine the TargetGameObjectId and the LinkedGameObjectId. They are conceptually the same, legacy stuff.
+		[JsonIgnore]
+		public int LinkedGameObjectId => TargetGameObjectId;
+
 		/// <summary>
 		/// Defines the GameObject instance that
 		/// this behavior is attached to. It is the primary
