@@ -316,6 +316,7 @@ namespace GladMMO
 			//GameObjectEntityBehaviourComponentCollection : IEntityGuidMappable<BaseGameObjectEntityBehaviourComponent>, IReadonlyEntityGuidMappable<IWorldInteractable>
 			builder.RegisterType<GameObjectEntityBehaviourComponentCollection>()
 				.As<IEntityGuidMappable<BaseGameObjectEntityBehaviourComponent>>()
+				.As<IReadonlyEntityGuidMappable<BaseGameObjectEntityBehaviourComponent>>()
 				.As<IReadonlyEntityGuidMappable<IWorldInteractable>>()
 				.OnActivated(args =>
 				{
