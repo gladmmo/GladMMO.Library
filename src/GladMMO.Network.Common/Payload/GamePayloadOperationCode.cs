@@ -37,5 +37,7 @@ namespace GladMMO
 		PlayerTrackerDataChange = 10,
 
 		ClickToMove = 11,
+
+		GameObjectInteract = 12
 	}
 }
