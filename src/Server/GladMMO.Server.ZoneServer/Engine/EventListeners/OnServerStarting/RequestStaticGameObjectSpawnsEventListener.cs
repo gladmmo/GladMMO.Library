@@ -12,35 +12,25 @@ namespace GladMMO
 	[ServerSceneTypeCreate(ServerSceneType.Default)]
 	public sealed class RequestStaticGameObjectSpawnsEventListener : BaseSingleEventListenerInitializable<IServerStartingEventSubscribable>
 	{
-		private IGameObjectDataServiceClient GameObjectContentDataClient { get; }
-
 		private IEventPublisher<IEntityCreationRequestedEventSubscribable, EntityCreationRequestedEventArgs> EntityCreationRequester { get; }
 
 		private IFactoryCreatable<NetworkEntityGuid, GameObjectInstanceModel> GameObjectGuidFactory { get; }
 
 		private ILog Logger { get; }
 
-		private IEntityGuidMappable<GameObjectTemplateModel> GameObjectTemplateMappable { get; }
-
-		private IEntityGuidMappable<GameObjectInstanceModel> GameObjectInstanceMappable { get; }
-
-		private WorldConfiguration WorldConfiguration { get; }
+		private IGameObjectDataService GameObjectDataService { get; }
 
 		public RequestStaticGameObjectSpawnsEventListener(IServerStartingEventSubscribable subscriptionService,
-			[NotNull] IGameObjectDataServiceClient gameObjectContentDataClient,
 			[NotNull] IEventPublisher<IEntityCreationRequestedEventSubscribable, EntityCreationRequestedEventArgs> entityCreationRequester,
 			[NotNull] IFactoryCreatable<NetworkEntityGuid, GameObjectInstanceModel> gameObjectGuidFactory,
-			[NotNull] ILog logger, [NotNull] IEntityGuidMappable<GameObjectTemplateModel> gameObjectTemplateMappable,
-			[NotNull] IEntityGuidMappable<GameObjectInstanceModel> gameObjectInstanceMappable, WorldConfiguration worldConfiguration)
+			[NotNull] IGameObjectDataService gameObjectDataService,
+			[NotNull] ILog logger)
 			: base(subscriptionService)
 		{
-			GameObjectContentDataClient = gameObjectContentDataClient ?? throw new ArgumentNullException(nameof(gameObjectContentDataClient));
 			EntityCreationRequester = entityCreationRequester ?? throw new ArgumentNullException(nameof(entityCreationRequester));
 			GameObjectGuidFactory = gameObjectGuidFactory ?? throw new ArgumentNullException(nameof(gameObjectGuidFactory));
+			GameObjectDataService = gameObjectDataService ?? throw new ArgumentNullException(nameof(gameObjectDataService));
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
-			GameObjectTemplateMappable = gameObjectTemplateMappable ?? throw new ArgumentNullException(nameof(gameObjectTemplateMappable));
-			GameObjectInstanceMappable = gameObjectInstanceMappable ?? throw new ArgumentNullException(nameof(gameObjectInstanceMappable));
-			WorldConfiguration = worldConfiguration;
 		}
 
 		protected override void OnEventFired(object source, EventArgs args)
@@ -49,57 +39,23 @@ namespace GladMMO
 			//TODO: Don't hardcode the test world id.
 			UnityAsyncHelper.UnityMainThreadContext.PostAsync(async () =>
 			{
-				ResponseModel<ObjectEntryCollectionModel<GameObjectInstanceModel>, ContentEntryCollectionResponseCode > entriesByWorld = await GameObjectContentDataClient.GetGameObjectEntriesByWorld(WorldConfiguration.WorldId);
-				ResponseModel<ObjectEntryCollectionModel<GameObjectTemplateModel>, ContentEntryCollectionResponseCode> templatesByWorld = await GameObjectContentDataClient.GetGameObjectTemplatesByWorld(WorldConfiguration.WorldId);
+				await GameObjectDataService.LoadDataAsync();
 
-				if (entriesByWorld.isSuccessful && templatesByWorld.isSuccessful)
-				{
-					AddGameObjectTemplates(templatesByWorld.Result.Entries);
-					AddGameObjectInstances(entriesByWorld.Result.Entries);
-
-					ProcessGameObjectEntries(entriesByWorld.Result.Entries);
-				}
-				else
-				{
-					if(Logger.IsWarnEnabled)
-						Logger.Warn($"Didn't properly query GameObject Data. This may not actually be an error. Instance Reason: {entriesByWorld.ResultCode} Template Reason: {templatesByWorld.ResultCode}");
-				}
+				ProcessGameObjectEntries(GameObjectDataService.GameObjectInstanceMappable);
 			});
 		}
 
-		private void AddGameObjectInstances([NotNull] IReadOnlyCollection<GameObjectInstanceModel> resultEntries)
-		{
-			if (resultEntries == null) throw new ArgumentNullException(nameof(resultEntries));
-
-			foreach (var instance in resultEntries)
-			{
-				if(Logger.IsInfoEnabled)
-					Logger.Info($"Processing GameObject Instance: {instance.Guid}");
-
-				GameObjectInstanceMappable.Add(instance.Guid, instance);
-			}
-		}
-
-		private void AddGameObjectTemplates([NotNull] IReadOnlyCollection<GameObjectTemplateModel> resultTemplates)
-		{
-			if (resultTemplates == null) throw new ArgumentNullException(nameof(resultTemplates));
-
-			foreach (var template in resultTemplates)
-			{
-				if(Logger.IsInfoEnabled)
-					Logger.Info($"Processing GameObject Template: {template.TemplateId} Name: {template.GameObjectName}");
-
-				GameObjectTemplateMappable.Add(NetworkEntityGuid.Empty, template);
-			}
-		}
-
-		private void ProcessGameObjectEntries([NotNull] IReadOnlyCollection<GameObjectInstanceModel> instanceEntries)
+		private void ProcessGameObjectEntries([NotNull] IEnumerable<GameObjectInstanceModel> instanceEntries)
 		{
 			if (instanceEntries == null) throw new ArgumentNullException(nameof(instanceEntries));
 
 			foreach (var entry in instanceEntries)
 			{
 				NetworkEntityGuid guid = GameObjectGuidFactory.Create(entry);
+
+				if (Logger.IsInfoEnabled)
+					Logger.Info($"Creating GameObject: {guid}");
+
 				EntityCreationRequester.PublishEvent(this, new EntityCreationRequestedEventArgs(guid));
 			}
 		}
