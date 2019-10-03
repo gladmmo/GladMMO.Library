@@ -298,6 +298,11 @@ namespace GladMMO
 				.As<IEntityGuidMappable<GameObjectInstanceModel>>()
 				.As<IReadonlyEntityGuidMappable<GameObjectInstanceModel>>()
 				.SingleInstance();
+
+			builder.RegisterType<InstanceStaticEntityDataCollection<WorldTeleporterInstanceModel>>()
+				.As<IEntityGuidMappable<WorldTeleporterInstanceModel>>()
+				.As<IReadonlyEntityGuidMappable<WorldTeleporterInstanceModel>>()
+				.SingleInstance();
 		}
 
 		private static void RegisterLockingPolicies(ContainerBuilder builder)
