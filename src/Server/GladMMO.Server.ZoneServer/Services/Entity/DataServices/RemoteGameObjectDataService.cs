@@ -65,6 +65,11 @@ namespace GladMMO
 				if (teleportersByWorld.isSuccessful)
 					AddGameObjectInstances(teleportersByWorld.Result.Entries);
 			}
+			else
+			{
+				if(Logger.IsWarnEnabled)
+					Logger.Warn($"Didn't properly query GameObject Data. This may not actually be an error. Instance Reason: {entriesByWorld.ResultCode} Template Reason: {templatesByWorld.ResultCode}");
+			}
 		}
 
 		private void AddGameObjectInstances([NotNull] IReadOnlyCollection<WorldTeleporterInstanceModel> resultEntries)
