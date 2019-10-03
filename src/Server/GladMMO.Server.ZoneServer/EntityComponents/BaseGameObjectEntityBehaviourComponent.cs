@@ -30,11 +30,11 @@ namespace GladMMO
 			if(TargetEntity.EntityType != EntityType.GameObject)
 				throw new ArgumentException($"{nameof(BaseGameObjectEntityBehaviourComponent)} constructed for Guid: {targetEntity} but was not GameObject entity.");
 
-			if(InstanceData.TemplateId != templateData.TemplateId)
-				throw new ArgumentException($"{nameof(BaseGameObjectEntityBehaviourComponent)} constructed for Guid: {targetEntity} but {InstanceData} template referenced does not match {templateData} template id.");
-
 			InstanceData = instanceData ?? throw new ArgumentNullException(nameof(instanceData));
 			TemplateData = templateData ?? throw new ArgumentNullException(nameof(templateData));
+
+			if(InstanceData.TemplateId != templateData.TemplateId)
+				throw new ArgumentException($"{nameof(BaseGameObjectEntityBehaviourComponent)} constructed for Guid: {targetEntity} but {InstanceData} template referenced does not match {templateData} template id.");
 		}
 	}
 }
