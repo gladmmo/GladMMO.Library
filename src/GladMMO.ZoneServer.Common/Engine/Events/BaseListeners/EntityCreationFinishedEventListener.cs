@@ -12,5 +12,7 @@ namespace GladMMO
 		{
 
 		}
+
+		protected abstract void OnEtityCreationFinished(EntityCreationFinishedEventArgs args);
 	}
 }

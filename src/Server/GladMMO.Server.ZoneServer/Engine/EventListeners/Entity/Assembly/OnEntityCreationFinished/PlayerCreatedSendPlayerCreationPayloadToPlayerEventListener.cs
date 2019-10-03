@@ -34,7 +34,7 @@ namespace GladMMO
 			EntityDataMappable = entityDataMappable;
 		}
 
-		protected override void OnPlayerEntityCreationFinished(EntityCreationFinishedEventArgs args)
+		protected override void OnEtityCreationFinished(EntityCreationFinishedEventArgs args)
 		{
 			IMovementData movementData = MovementDataMappable.RetrieveEntity(args.EntityGuid);
 			IEntityDataFieldContainer dataFieldContainer = EntityDataMappable.RetrieveEntity(args.EntityGuid);
