@@ -9,6 +9,7 @@ namespace GladMMO
 	/// Event listener that listens for the finished construction of a GameObject entity.
 	/// It then attaches any required <see cref="BaseGameObjectEntityBehaviourComponent"/>.
 	/// </summary>
+	[ServerSceneTypeCreate(ServerSceneType.Default)]
 	public sealed class GameObjectBehaviourAttachmentEventListener : GameObjectCreationFinishedEventListener
 	{
 		private IGameObjectEntityBehaviourFactory BehaviourFactory { get; }
