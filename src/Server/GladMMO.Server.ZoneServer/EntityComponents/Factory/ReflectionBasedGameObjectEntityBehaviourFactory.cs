@@ -7,11 +7,11 @@ namespace GladMMO
 {
 	public sealed class ReflectionBasedGameObjectEntityBehaviourFactory : IGameObjectEntityBehaviourFactory
 	{
-		private IContainer ReflectionContainer { get; }
+		private ILifetimeScope ReflectionContainer { get; }
 
 		private IGameObjectDataService GameObjectDataContainer { get; }
 
-		public ReflectionBasedGameObjectEntityBehaviourFactory([NotNull] IContainer reflectionContainer, [NotNull] IGameObjectDataService gameObjectDataContainer)
+		public ReflectionBasedGameObjectEntityBehaviourFactory([NotNull] ILifetimeScope reflectionContainer, [NotNull] IGameObjectDataService gameObjectDataContainer)
 		{
 			ReflectionContainer = reflectionContainer ?? throw new ArgumentNullException(nameof(reflectionContainer));
 			GameObjectDataContainer = gameObjectDataContainer ?? throw new ArgumentNullException(nameof(gameObjectDataContainer));
