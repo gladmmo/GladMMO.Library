@@ -176,6 +176,10 @@ namespace GladMMO
 			builder.RegisterType<ServerMovementGeneratorFactory>()
 				.As<IFactoryCreatable<IMovementGenerator<GameObject>, EntityAssociatedData<IMovementData>>>()
 				.AsSelf();
+
+			builder.RegisterType<RemoteGameObjectDataService>()
+				.As<IGameObjectDataService>()
+				.SingleInstance();
 		}
 
 		private void HandleConfigurableDependencies(ContainerBuilder builder)
