@@ -71,5 +71,15 @@ namespace GladMMO
 		{
 			return this.Remove(entityGuid);
 		}
+
+		public IEnumerator<IMovementData> GetEnumerator()
+		{
+			return this.InternallyManagedMovementDictionary.GetEnumerator();
+		}
+
+		IEnumerator IEnumerable.GetEnumerator()
+		{
+			return GetEnumerator();
+		}
 	}
 }

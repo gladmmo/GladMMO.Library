@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using Glader.Essentials;
@@ -68,6 +69,16 @@ namespace GladMMO
 			if(key.EntityType != EntityType.Creature)
 				throw new InvalidOperationException($"Entity: {key} is not a creature.");
 		}
+
+		public IEnumerator<TTemplateModelType> GetEnumerator()
+		{
+			return CreatureTemplateDictionary.Values.GetEnumerator();
+		}
+
+		IEnumerator IEnumerable.GetEnumerator()
+		{
+			return GetEnumerator();
+		}
 	}
 
 	//TODO: Create a simplified interface for this too.
@@ -120,6 +131,11 @@ namespace GladMMO
 		{
 			//Do nothing, we should not remove anything.
 			return false;
+		}
+
+		public IEnumerator<TInstanceModelType> GetEnumerator()
+		{
+			return this.CreatureInstanceDictionary.Values.GetEnumerator();
 		}
 	}
 }
