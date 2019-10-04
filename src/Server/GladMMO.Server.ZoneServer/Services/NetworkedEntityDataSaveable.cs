@@ -15,14 +15,18 @@ namespace GladMMO
 
 		private IReadonlyEntityGuidMappable<EntitySaveableConfiguration> PersistenceConfiguration { get; }
 
+		private WorldConfiguration WorldConfig { get; }
+
 		/// <inheritdoc />
 		public NetworkedEntityDataSaveable([NotNull] IReadonlyEntityGuidMappable<IMovementGenerator<GameObject>> movementDataMap, 
 			[NotNull] IZoneServerToGameServerClient zoneToSeverClient,
-			[NotNull] IReadonlyEntityGuidMappable<EntitySaveableConfiguration> persistenceConfiguration)
+			[NotNull] IReadonlyEntityGuidMappable<EntitySaveableConfiguration> persistenceConfiguration,
+			[NotNull] WorldConfiguration worldConfig)
 		{
 			MovementDataMap = movementDataMap ?? throw new ArgumentNullException(nameof(movementDataMap));
 			ZoneToSeverClient = zoneToSeverClient ?? throw new ArgumentNullException(nameof(zoneToSeverClient));
 			PersistenceConfiguration = persistenceConfiguration ?? throw new ArgumentNullException(nameof(persistenceConfiguration));
+			WorldConfig = worldConfig ?? throw new ArgumentNullException(nameof(worldConfig));
 		}
 
 		/// <inheritdoc />
@@ -57,7 +61,7 @@ namespace GladMMO
 			IMovementGenerator<GameObject> movementData = MovementDataMap.RetrieveEntity(guid);
 
 			//TODO: Handle map ID.
-			await ZoneToSeverClient.SaveCharacterLocation(new ZoneServerCharacterLocationSaveRequest(guid.EntityId, movementData.CurrentPosition, 1))
+			await ZoneToSeverClient.SaveCharacterLocation(new ZoneServerCharacterLocationSaveRequest(guid.EntityId, movementData.CurrentPosition, (int)WorldConfig.WorldId))
 				.ConfigureAwait(false);
 		}
 	}
