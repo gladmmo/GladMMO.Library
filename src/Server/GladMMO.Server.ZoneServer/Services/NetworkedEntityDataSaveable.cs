@@ -13,11 +13,16 @@ namespace GladMMO
 
 		private IZoneServerToGameServerClient ZoneToSeverClient { get; }
 
+		private IReadonlyEntityGuidMappable<EntitySaveableConfiguration> PersistenceConfiguration { get; }
+
 		/// <inheritdoc />
-		public NetworkedEntityDataSaveable([NotNull] IReadonlyEntityGuidMappable<IMovementGenerator<GameObject>> movementDataMap, [NotNull] IZoneServerToGameServerClient zoneToSeverClient)
+		public NetworkedEntityDataSaveable([NotNull] IReadonlyEntityGuidMappable<IMovementGenerator<GameObject>> movementDataMap, 
+			[NotNull] IZoneServerToGameServerClient zoneToSeverClient,
+			[NotNull] IReadonlyEntityGuidMappable<EntitySaveableConfiguration> persistenceConfiguration)
 		{
 			MovementDataMap = movementDataMap ?? throw new ArgumentNullException(nameof(movementDataMap));
 			ZoneToSeverClient = zoneToSeverClient ?? throw new ArgumentNullException(nameof(zoneToSeverClient));
+			PersistenceConfiguration = persistenceConfiguration ?? throw new ArgumentNullException(nameof(persistenceConfiguration));
 		}
 
 		/// <inheritdoc />
@@ -33,14 +38,26 @@ namespace GladMMO
 			if(guid.EntityType != EntityType.Player)
 				return;
 
+			//Player ALWAYS has this existing.
+			EntitySaveableConfiguration saveConfig = PersistenceConfiguration.RetrieveEntity(guid);
+
+			if (saveConfig.isCurrentPositionSaveable)
+			{
+				await SavePositionAsync(guid)
+					.ConfigureAwait(false);
+			}
+
+			await ZoneToSeverClient.ReleaseActiveSession(guid.EntityId)
+				.ConfigureAwait(false);
+		}
+
+		private async Task SavePositionAsync(NetworkEntityGuid guid)
+		{
 			//TODO: Check that the entity actually exists
 			IMovementGenerator<GameObject> movementData = MovementDataMap.RetrieveEntity(guid);
 
 			//TODO: Handle map ID.
 			await ZoneToSeverClient.SaveCharacterLocation(new ZoneServerCharacterLocationSaveRequest(guid.EntityId, movementData.CurrentPosition, 1))
-				.ConfigureAwait(false);
-
-			await ZoneToSeverClient.ReleaseActiveSession(guid.EntityId)
 				.ConfigureAwait(false);
 		}
 	}
