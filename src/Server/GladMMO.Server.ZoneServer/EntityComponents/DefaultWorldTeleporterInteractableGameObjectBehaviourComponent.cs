@@ -9,14 +9,18 @@ namespace GladMMO
 	{
 		private ILog Logger { get; }
 
+		private IEventPublisher<IPlayerWorldTeleporterRequestedEventSubscribable, PlayerWorldTeleporterRequestEventArgs> PlayerTeleportEventPublisher { get; }
+
 		public DefaultWorldTeleporterInteractableGameObjectBehaviourComponent(NetworkEntityGuid targetEntity, 
 			GameObjectInstanceModel instanceData, 
 			GameObjectTemplateModel templateData, 
 			WorldTeleporterInstanceModel behaviourData,
-			[NotNull] ILog logger) 
+			[NotNull] ILog logger,
+			[NotNull] IEventPublisher<IPlayerWorldTeleporterRequestedEventSubscribable, PlayerWorldTeleporterRequestEventArgs> playerTeleportEventPublisher) 
 			: base(targetEntity, instanceData, templateData, behaviourData)
 		{
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
+			PlayerTeleportEventPublisher = playerTeleportEventPublisher ?? throw new ArgumentNullException(nameof(playerTeleportEventPublisher));
 		}
 
 		public void Interact([NotNull] NetworkEntityGuid entityInteracting)
@@ -25,6 +29,8 @@ namespace GladMMO
 
 			if(Logger.IsInfoEnabled)
 				Logger.Info($"Entity: {entityInteracting} interacted with Entity: {TargetEntity}.");
+
+			PlayerTeleportEventPublisher.PublishEvent(this, new PlayerWorldTeleporterRequestEventArgs(this.BehaviourData.LinkedGameObjectId, entityInteracting));
 		}
 	}
 }
