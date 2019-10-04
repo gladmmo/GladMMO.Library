@@ -8,7 +8,7 @@ namespace GladMMO
 	{
 		private readonly object syncObj = new object();
 
-		private readonly bool _isWorldTeleporting = false;
+		private bool _isWorldTeleporting = false;
 
 		/// <summary>
 		/// Indicates if the entity position is saveable.
@@ -26,6 +26,12 @@ namespace GladMMO
 				{
 					return _isWorldTeleporting;
 				}
+			}
+
+			set
+			{
+				lock (syncObj)
+					_isWorldTeleporting = value;
 			}
 		}
 	}
