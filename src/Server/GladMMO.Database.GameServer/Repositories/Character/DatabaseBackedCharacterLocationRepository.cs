@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace GladMMO
 {
+	//TODO: Refactor with new generic repo approach.
 	public sealed class DatabaseBackedCharacterLocationRepository : ICharacterLocationRepository
 	{
 		/// <summary>
@@ -56,7 +57,9 @@ namespace GladMMO
 		/// <inheritdoc />
 		public Task<bool> TryDeleteAsync(int key)
 		{
-			throw new NotSupportedException($"TODO: Implement deleting character_locations");
+			GeneralGenericCrudRepositoryProvider<int, CharacterLocationModel> crudProvider = new GeneralGenericCrudRepositoryProvider<int, CharacterLocationModel>(Context.CharacterLocations, Context);
+
+			return crudProvider.TryDeleteAsync(key);
 		}
 
 		/// <inheritdoc />
