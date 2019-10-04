@@ -10,6 +10,6 @@ namespace GladMMO
 	/// </summary>
 	public interface IZoneServerRepository : IGenericRepositoryCrudable<int, ZoneInstanceEntryModel>
 	{
-
+		Task<ZoneInstanceEntryModel> FindFirstWithWorldId(long worldId);
 	}
 }

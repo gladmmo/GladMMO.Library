@@ -55,5 +55,11 @@ namespace GladMMO
 
 			return crudProvider.UpdateAsync(key, model);
 		}
+
+		public async Task<ZoneInstanceEntryModel> FindFirstWithWorldId(long worldId)
+		{
+			return await Context.ZoneEntries
+				.FirstOrDefaultAsync(z => z.WorldId == worldId);
+		}
 	}
 }
