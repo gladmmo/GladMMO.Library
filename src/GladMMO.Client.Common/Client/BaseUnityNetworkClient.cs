@@ -83,22 +83,22 @@ namespace GladMMO
 					}
 					catch(Exception e)
 					{
-						if(Logger.IsDebugEnabled)
-							Logger.Debug($"Error: {e.Message}\n\n Stack Trace: {e.StackTrace}");
+						if(Logger.IsInfoEnabled)
+							Logger.Info($"Error: {e.Message}\n\n Stack Trace: {e.StackTrace}");
 					}
 					
 				}
 			}
 			catch(Exception e)
 			{
-				if(Logger.IsDebugEnabled)
-					Logger.Debug($"Error: {e.Message}\n\n Stack Trace: {e.StackTrace}");
+				if(Logger.IsInfoEnabled)
+					Logger.Info($"Error: {e.Message}\n\n Stack Trace: {e.StackTrace}");
 
 				throw;
 			}
 
-			if(Logger.IsDebugEnabled)
-				Logger.Debug("Network client stopped reading.");
+			if(Logger.IsInfoEnabled)
+				Logger.Info("Network client stopped reading.");
 		}
 
 		/// <inheritdoc />
