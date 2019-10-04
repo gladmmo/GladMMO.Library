@@ -136,7 +136,7 @@ namespace GladMMO
 				return RestService.For<IPlayfabCharacterClient>($@"https://{63815}.playfabapi.com", new RefitSettings(){ HttpMessageHandlerFactory = () => handler });
 			});
 
-			services.AddSingleton<IServiceDiscoveryService>(provider => RestService.For<IServiceDiscoveryService>("72.190.177.214:5000"));
+			services.AddSingleton<IServiceDiscoveryService>(provider => RestService.For<IServiceDiscoveryService>("http://72.190.177.214:5000"));
 
 			services.AddSingleton<IPlayerSpawnPointDataServiceClient>(provider =>
 			{
