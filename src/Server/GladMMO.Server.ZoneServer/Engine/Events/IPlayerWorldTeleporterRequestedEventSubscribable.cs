@@ -6,7 +6,7 @@ namespace GladMMO
 {
 	public interface IPlayerWorldTeleporterRequestedEventSubscribable
 	{
-		event EventHandler<PlayerSessionClaimedEventArgs> OnWorldTeleporterRequested;
+		event EventHandler<PlayerWorldTeleporterRequestEventArgs> OnWorldTeleporterRequested;
 	}
 
 	public sealed class PlayerWorldTeleporterRequestEventArgs : EventArgs
