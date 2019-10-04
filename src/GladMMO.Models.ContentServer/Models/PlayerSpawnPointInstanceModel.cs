@@ -34,8 +34,16 @@ namespace GladMMO
 		[JsonRequired]
 		public bool isReserved { get; private set; }
 
+		/// <summary>
+		/// The map/zone that this spawn point exists in.
+		/// (Each map/zone has an origin and the <see cref="InitialPosition"/> is based on that).
+		/// </summary>
+		[JsonProperty]
+		[JsonRequired]
+		public long WorldId { get; private set; }
+
 		/// <inheritdoc />
-		public PlayerSpawnPointInstanceModel(int spawnPointId, Vector3 initialPosition, float yRotation, bool isReserved)
+		public PlayerSpawnPointInstanceModel(int spawnPointId, Vector3 initialPosition, float yRotation, bool isReserved, long worldId)
 		{
 			if (spawnPointId <= 0) throw new ArgumentOutOfRangeException(nameof(spawnPointId));
 
@@ -43,6 +51,7 @@ namespace GladMMO
 			InitialPosition = initialPosition;
 			YAxisRotation = yRotation;
 			this.isReserved = isReserved;
+			WorldId = worldId;
 		}
 
 		/// <summary>

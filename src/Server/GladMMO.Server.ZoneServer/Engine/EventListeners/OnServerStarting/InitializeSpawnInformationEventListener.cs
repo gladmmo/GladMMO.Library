@@ -60,7 +60,7 @@ namespace GladMMO
 						if(Logger.IsWarnEnabled)
 							Logger.Debug($"No spawnPoints found.");
 
-						SpawnStrategyQueue.Enqueue(new PlayerSpawnPointInstanceModel(1, Vector3.zero, 0, false));
+						SpawnStrategyQueue.Enqueue(new PlayerSpawnPointInstanceModel(1, Vector3.zero, 0, false, WorldConfiguration.WorldId));
 					}
 				}
 				catch (Exception e)

@@ -91,8 +91,9 @@ namespace GladMMO.SDK
 				{
 					IPlayerSpawnPointDataServiceClient client = new PlayerSpawnPointContentServiceClientFactory().Create(EmptyFactoryContext.Instance);
 
+					//TODO: Is it ok to send a fake world id??
 					//Just sent the updated model.
-					await client.UpdateSpawnPointInstance(GetTarget().PlayerSpawnPointId, new PlayerSpawnPointInstanceModel(GetTarget().PlayerSpawnPointId, GetTarget().transform.position, GetTarget().transform.eulerAngles.y, GetTarget().isInstanceReserved));
+					await client.UpdateSpawnPointInstance(GetTarget().PlayerSpawnPointId, new PlayerSpawnPointInstanceModel(GetTarget().PlayerSpawnPointId, GetTarget().transform.position, GetTarget().transform.eulerAngles.y, GetTarget().isInstanceReserved, 1));
 
 					//Since the data about the creature displayed is probably now stale, we should update it after saving.
 					await RefreshData(client);
