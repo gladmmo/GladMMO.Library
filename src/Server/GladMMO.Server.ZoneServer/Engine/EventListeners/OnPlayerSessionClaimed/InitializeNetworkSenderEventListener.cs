@@ -11,15 +11,20 @@ namespace GladMMO
 	{
 		private IEntityGuidMappable<IPeerPayloadSendService<GameServerPacketPayload>> GuidToSessionMappable { get; }
 
+		private IEntityGuidMappable<IConnectionService> ConnectionServiceMappable { get; }
+
 		public InitializeNetworkSenderEventListener(IPlayerSessionClaimedEventSubscribable subscriptionService,
-			[NotNull] IEntityGuidMappable<IPeerPayloadSendService<GameServerPacketPayload>> guidToSessionMappable) : base(subscriptionService)
+			[NotNull] IEntityGuidMappable<IPeerPayloadSendService<GameServerPacketPayload>> guidToSessionMappable,
+			[NotNull] IEntityGuidMappable<IConnectionService> connectionServiceMappable) : base(subscriptionService)
 		{
 			GuidToSessionMappable = guidToSessionMappable ?? throw new ArgumentNullException(nameof(guidToSessionMappable));
+			ConnectionServiceMappable = connectionServiceMappable ?? throw new ArgumentNullException(nameof(connectionServiceMappable));
 		}
 
 		protected override void OnEventFired(object source, PlayerSessionClaimedEventArgs args)
 		{
 			GuidToSessionMappable.AddObject(args.EntityGuid, args.SessionContext.ZoneSession);
+			ConnectionServiceMappable.AddObject(args.EntityGuid, args.SessionContext.Connection);
 		}
 	}
 }

@@ -79,7 +79,7 @@ namespace GladMMO
 				Logger.Debug($"Recieved player location: {pointData.WorldPosition} from {(locationResponse.isSuccessful ? "Database" : "Spawnpoint")}");
 
 			//Just broadcast successful claim, let listeners figure out what to do with this information.
-			OnSuccessfulSessionClaimed?.Invoke(this, new PlayerSessionClaimedEventArgs(builder.Build(), pointData.WorldPosition, new PlayerEntitySessionContext(context.PayloadSendService, context.Details.ConnectionId)));
+			OnSuccessfulSessionClaimed?.Invoke(this, new PlayerSessionClaimedEventArgs(builder.Build(), pointData.WorldPosition, new PlayerEntitySessionContext(context.PayloadSendService, context.Details.ConnectionId, context.ConnectionService)));
 
 			await context.PayloadSendService.SendMessage(new ClientSessionClaimResponsePayload(ClientSessionClaimResponseCode.Success))
 				.ConfigureAwait(false);
