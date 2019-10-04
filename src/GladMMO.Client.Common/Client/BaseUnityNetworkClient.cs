@@ -65,10 +65,10 @@ namespace GladMMO
 			{
 				IPeerRequestSendService<TOutgoingPayloadType> requestService = new PayloadInterceptMessageSendService<TOutgoingPayloadType>(client, client);
 
-				if(!client.isConnected && Logger.IsWarnEnabled)
+				if (!client.isConnected && Logger.IsWarnEnabled)
 					Logger.Warn($"The client was not connected before dispatching started.");
 
-				while(client.isConnected && !CancelTokenSource.IsCancellationRequested) //if we exported we should reading messages
+				while (client.isConnected && !CancelTokenSource.IsCancellationRequested) //if we exported we should reading messages
 				{
 					NetworkIncomingMessage<TIncomingPayloadType> message = await client.ReadMessageAsync(CancelTokenSource.Token)
 						.ConfigureAwait(false);
@@ -81,24 +81,28 @@ namespace GladMMO
 						bool result = await Handlers.TryHandleMessage(MessageContextFactory.Create(client, client, requestService), message)
 							.ConfigureAwait(false);
 					}
-					catch(Exception e)
+					catch (Exception e)
 					{
-						if(Logger.IsInfoEnabled)
+						if (Logger.IsInfoEnabled)
 							Logger.Info($"Error: {e.Message}\n\n Stack Trace: {e.StackTrace}");
 					}
-					
+
 				}
 			}
-			catch(Exception e)
+			catch (Exception e)
 			{
-				if(Logger.IsInfoEnabled)
+				if (Logger.IsInfoEnabled)
 					Logger.Info($"Error: {e.Message}\n\n Stack Trace: {e.StackTrace}");
 
 				throw;
 			}
+			finally
+			{
+				if(Logger.IsInfoEnabled)
+					Logger.Info("Network client stopped reading.");
 
-			if(Logger.IsInfoEnabled)
-				Logger.Info("Network client stopped reading.");
+				OnClientStoppedHandlingMessages();
+			}
 		}
 
 		protected abstract void OnClientStoppedHandlingMessages();
