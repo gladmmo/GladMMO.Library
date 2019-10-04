@@ -229,7 +229,9 @@ namespace GladMMO
 		[HttpPost("enter/{id}")]
 		[NoResponseCache]
 		[AuthorizeJwt]
-		public async Task<CharacterSessionEnterResponse> EnterSession([FromRoute(Name = "id")] int characterId)
+		public async Task<CharacterSessionEnterResponse> EnterSession([FromRoute(Name = "id")] int characterId,
+			[FromServices] ICharacterLocationRepository characterLocationRepository,
+			[FromServices] IZoneServerRepository zoneServerRepository)
 		{
 			if(!await IsCharacterIdValidForUser(characterId, CharacterRepository))
 				return new CharacterSessionEnterResponse(CharacterSessionEnterResponseCode.InvalidCharacterIdError);
@@ -260,22 +262,48 @@ namespace GladMMO
 
 			try
 			{
-				//If we've made it this far we'll need to create a session (because one does not exist) for the character
-				//but we need player location data first (if they've never entered the world they won't have any
-				//TODO: Handle location loading
-				//TODO: Handle deafult
-				if(!await CharacterSessionRepository.TryCreateAsync(new CharacterSessionModel(characterId, 1)))
+				int targetSessionZoneId = 0;
+
+				//TO know what zone we should connect to we need to check potential
+				//character location.
+				if (await characterLocationRepository.ContainsAsync(characterId))
+				{
+					CharacterLocationModel locationModel = await characterLocationRepository.RetrieveAsync(characterId);
+
+					//We have no session so we need to find a zone that matches this server.
+					ZoneInstanceEntryModel firstWithWorldId = await zoneServerRepository.FindFirstWithWorldId(locationModel.WorldId);
+
+					//TODO: Should we request one be created for the user??
+					//There is NO instance available for this world.
+					if (firstWithWorldId == null)
+					{
+						targetSessionZoneId = 1;
+						//Location is basically invalid since there is no running world
+						await characterLocationRepository.TryDeleteAsync(locationModel.CharacterId);
+					}
+					else
+					{
+						targetSessionZoneId = firstWithWorldId.ZoneId;
+					}
+				}
+				else
+				{
+					targetSessionZoneId = 1;
+				}
+
+
+				if(!await CharacterSessionRepository.TryCreateAsync(new CharacterSessionModel(characterId, targetSessionZoneId)))
+					return new CharacterSessionEnterResponse(targetSessionZoneId);
+				else
 					return new CharacterSessionEnterResponse(CharacterSessionEnterResponseCode.GeneralServerError);
+
 			}
 			catch (Exception e)
 			{
 				if(Logger.IsEnabled(LogLevel.Error))
-					Logger.LogError($"Character with ID: {characterId} failed to create session. Potentially no default world assigned or World with session was deleted and orphaned.");
+					Logger.LogError($"Character with ID: {characterId} failed to create session. Potentially no default world assigned or World with session was deleted and orphaned. Reason: {e.Message}");
 				throw;
 			}
-			
-			//TODO: Better zone handling
-			return new CharacterSessionEnterResponse(1);
 		}
 
 		/// <summary>

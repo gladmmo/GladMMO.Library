@@ -20,8 +20,11 @@ namespace GladMMO
 			IServiceProvider serviceProvider = ControllerTestsHelpers.BuildServiceProvider<CharacterSessionController>("Test", 1);
 			CharacterSessionController controller = serviceProvider.GetService<CharacterSessionController>();
 
+			ICharacterLocationRepository characterLocationRepo = serviceProvider.GetService<ICharacterLocationRepository>();
+			IZoneServerRepository zoneRepository = serviceProvider.GetService<IZoneServerRepository>();
+
 			//act
-			CharacterSessionEnterResponse response = await controller.EnterSession(5);
+			CharacterSessionEnterResponse response = await controller.EnterSession(5, characterLocationRepo, zoneRepository);
 
 			//assert
 			Assert.False(response.isSuccessful);
@@ -38,6 +41,9 @@ namespace GladMMO
 			ICharacterRepository characterRepo = serviceProvider.GetService<ICharacterRepository>();
 			ICharacterSessionRepository sessionRepo = serviceProvider.GetService<ICharacterSessionRepository>();
 
+			ICharacterLocationRepository characterLocationRepo = serviceProvider.GetService<ICharacterLocationRepository>();
+			IZoneServerRepository zoneRepository = serviceProvider.GetService<IZoneServerRepository>();
+
 			await characterRepo.TryCreateAsync(new CharacterEntryModel(1, "Testing"));
 			await sessionRepo.TryCreateAsync(new CharacterSessionModel(1, 0));
 
@@ -49,7 +55,7 @@ namespace GladMMO
 			await context.SaveChangesAsync();
 
 			//act
-			CharacterSessionEnterResponse response = await controller.EnterSession(1);
+			CharacterSessionEnterResponse response = await controller.EnterSession(1, characterLocationRepo, zoneRepository);
 
 			//assert
 			Assert.False(response.isSuccessful, $"Characters that already have ");
@@ -65,11 +71,14 @@ namespace GladMMO
 			ICharacterRepository characterRepo = serviceProvider.GetService<ICharacterRepository>();
 			ICharacterSessionRepository sessionRepo = serviceProvider.GetService<ICharacterSessionRepository>();
 
+			ICharacterLocationRepository characterLocationRepo = serviceProvider.GetService<ICharacterLocationRepository>();
+			IZoneServerRepository zoneRepository = serviceProvider.GetService<IZoneServerRepository>();
+
 			await characterRepo.TryCreateAsync(new CharacterEntryModel(1, "Testing"));
 			await sessionRepo.TryCreateAsync(new CharacterSessionModel(1, 0));
 
 			//act
-			CharacterSessionEnterResponse response = await controller.EnterSession(1);
+			CharacterSessionEnterResponse response = await controller.EnterSession(1, characterLocationRepo, zoneRepository);
 
 			//assert
 			Assert.False(response.isSuccessful, $"Characters should not be able to create sessions when the accountid doesn't match.");
@@ -90,11 +99,14 @@ namespace GladMMO
 			ICharacterRepository characterRepo = serviceProvider.GetService<ICharacterRepository>();
 			ICharacterSessionRepository sessionRepo = serviceProvider.GetService<ICharacterSessionRepository>();
 
+			ICharacterLocationRepository characterLocationRepo = serviceProvider.GetService<ICharacterLocationRepository>();
+			IZoneServerRepository zoneRepository = serviceProvider.GetService<IZoneServerRepository>();
+
 			await characterRepo.TryCreateAsync(new CharacterEntryModel(accountId, "Testing"));
 			await sessionRepo.TryCreateAsync(new CharacterSessionModel(1, zoneid));
 
 			//act
-			CharacterSessionEnterResponse response = await controller.EnterSession(1);
+			CharacterSessionEnterResponse response = await controller.EnterSession(1, characterLocationRepo, zoneRepository);
 
 			//assert
 			Assert.True(response.isSuccessful, $"Created sessions should be granted if no active account session or character session is claimed.");
@@ -113,10 +125,13 @@ namespace GladMMO
 			CharacterSessionController controller = serviceProvider.GetService<CharacterSessionController>();
 			ICharacterRepository characterRepo = serviceProvider.GetService<ICharacterRepository>();
 
+			ICharacterLocationRepository characterLocationRepo = serviceProvider.GetService<ICharacterLocationRepository>();
+			IZoneServerRepository zoneRepository = serviceProvider.GetService<IZoneServerRepository>();
+
 			await characterRepo.TryCreateAsync(new CharacterEntryModel(accountId, "Testing"));
 
 			//act: We also test that we can do it multiple times
-			CharacterSessionEnterResponse response = await controller.EnterSession(1);
+			CharacterSessionEnterResponse response = await controller.EnterSession(1, characterLocationRepo, zoneRepository);
 
 			//assert
 			Assert.True(response.isSuccessful);
