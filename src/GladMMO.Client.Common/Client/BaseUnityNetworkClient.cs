@@ -111,7 +111,7 @@ namespace GladMMO
 		public Task StartHandlingNetworkClient(IManagedNetworkClient<TOutgoingPayloadType, TIncomingPayloadType> client)
 		{
 			//Don't await because we want start to end.
-			Task.Factory.StartNew(async () => await StartDispatchingAsync(client).ConfigureAwait(false), CancelTokenSource.Token, TaskCreationOptions.LongRunning, TaskScheduler.Default)
+			Task.Factory.StartNew(async () => await StartDispatchingAsync(client).ConfigureAwait(false), TaskCreationOptions.LongRunning)
 				.ConfigureAwait(false);
 
 			//We don't want to await it, it needs to run at the same time
