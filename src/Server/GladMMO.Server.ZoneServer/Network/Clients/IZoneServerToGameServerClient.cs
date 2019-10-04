@@ -54,5 +54,9 @@ namespace GladMMO
 		[Post("/api/zoneserver/register")]
 		//[AuthorizeJwt(GuardianApplicationRole.ZoneServer)] //TODO: Eventually we'll need to auth these zoneservers.
 		Task<ZoneServerRegisterationResponse> RegisterZoneServer([JsonBody] ZoneServerRegisterationRequest request);
+
+		//TODO: Auth and move this to a seperate service
+		[Post("/api/ZoneServerCharacter/WorldTeleport")]
+		Task TryWorldTeleportCharacter([JsonBody] ZoneServerWorldTeleportCharacterRequest request);
 	}
 }
