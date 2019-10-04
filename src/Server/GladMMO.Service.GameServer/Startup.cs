@@ -135,6 +135,34 @@ namespace GladMMO
 				//TODO: Let's not hardcode the title id.
 				return RestService.For<IPlayfabCharacterClient>($@"https://{63815}.playfabapi.com", new RefitSettings(){ HttpMessageHandlerFactory = () => handler });
 			});
+
+			services.AddSingleton<IServiceDiscoveryService>(provider => RestService.For<IServiceDiscoveryService>("72.190.177.214:5000"));
+
+			services.AddSingleton<IPlayerSpawnPointDataServiceClient>(provider =>
+			{
+				var serviceDiscClient = provider.GetService<IServiceDiscoveryService>();
+
+				return new AsyncPlayerSpawnPointDataServiceClient(QueryForRemoteServiceEndpoint(serviceDiscClient, "ContentServer"));
+			});
+
+			services.AddSingleton<IWorldTeleporterDataServiceClient>(provider =>
+			{
+				var serviceDiscClient = provider.GetService<IServiceDiscoveryService>();
+
+				return new AsyncWorldTeleporterDataServiceClient(QueryForRemoteServiceEndpoint(serviceDiscClient, "ContentServer"));
+			});
+		}
+
+		//TODO: Put this in a base class or something
+		protected async Task<string> QueryForRemoteServiceEndpoint(IServiceDiscoveryService serviceDiscovery, string serviceType)
+		{
+			ResolveServiceEndpointResponse endpointResponse = await serviceDiscovery.DiscoverService(new ResolveServiceEndpointRequest(ClientRegionLocale.US, serviceType));
+
+			if(!endpointResponse.isSuccessful)
+				throw new System.InvalidOperationException($"Failed to query for Service: {serviceType} Result: {endpointResponse.ResultCode}");
+
+			//TODO: Do we need extra slash?
+			return $"{endpointResponse.Endpoint.EndpointAddress}:{endpointResponse.Endpoint.EndpointPort}/";
 		}
 	}
 }

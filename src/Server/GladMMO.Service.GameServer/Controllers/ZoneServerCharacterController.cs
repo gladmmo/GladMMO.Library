@@ -22,6 +22,7 @@ namespace GladMMO
 
 		}
 
+		//TODO: Really not secure
 		[ProducesJson]
 		[HttpPost("WorldTeleport")]
 		[NoResponseCache]
