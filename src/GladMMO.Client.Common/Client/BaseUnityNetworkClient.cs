@@ -16,7 +16,7 @@ namespace GladMMO
 	/// </summary>
 	/// <typeparam name="TIncomingPayloadType"></typeparam>
 	/// <typeparam name="TOutgoingPayloadType"></typeparam>
-	public class BaseUnityNetworkClient<TIncomingPayloadType, TOutgoingPayloadType> : INetworkClientManager<TIncomingPayloadType, TOutgoingPayloadType>
+	public abstract class BaseUnityNetworkClient<TIncomingPayloadType, TOutgoingPayloadType> : INetworkClientManager<TIncomingPayloadType, TOutgoingPayloadType>
 		where TOutgoingPayloadType : class 
 		where TIncomingPayloadType : class
 	{
@@ -100,6 +100,8 @@ namespace GladMMO
 			if(Logger.IsInfoEnabled)
 				Logger.Info("Network client stopped reading.");
 		}
+
+		protected abstract void OnClientStoppedHandlingMessages();
 
 		/// <inheritdoc />
 		public Task StartHandlingNetworkClient(IManagedNetworkClient<TOutgoingPayloadType, TIncomingPayloadType> client)

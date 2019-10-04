@@ -15,13 +15,20 @@ namespace GladMMO
 	/// <summary>
 	/// The component that manages the game network client.
 	/// </summary>
-	public sealed class GameNetworkClient : BaseUnityNetworkClient<GameServerPacketPayload, GameClientPacketPayload>, INetworkClientManager
+	public sealed class GameNetworkClient : BaseUnityNetworkClient<GameServerPacketPayload, GameClientPacketPayload>, INetworkClientManager, INetworkClientDisconnectedEventSubscribable
 	{
+		public event EventHandler OnNetworkClientDisconnected;
+
 		/// <inheritdoc />
 		public GameNetworkClient(MessageHandlerService<GameServerPacketPayload, GameClientPacketPayload> handlers, ILog logger, IPeerMessageContextFactory messageContextFactory)
 			: base(handlers, logger, messageContextFactory)
 		{
 
+		}
+
+		protected override void OnClientStoppedHandlingMessages()
+		{
+			OnNetworkClientDisconnected?.Invoke(this, EventArgs.Empty);
 		}
 	}
 }
