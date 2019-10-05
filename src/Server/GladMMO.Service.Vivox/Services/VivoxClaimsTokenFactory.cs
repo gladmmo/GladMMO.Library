@@ -38,8 +38,17 @@ namespace GladMMO
 			if (context.Channel == null)
 				throw new ArgumentException($"Provided {nameof(VivoxTokenClaimsCreationContext)} for ChannelJoin lacks channel data.");
 
+			//Properties for 3D audio
+			//$"!p-{_audibleDistance}-{_conversationalDistance}-{_audioFadeIntensityByDistance.ToString("0.000", new System.Globalization.CultureInfo("en-US"))}-{(int) _audioFadeModel}";
+			//Default values found in Vivox source
+			/*_audibleDistance = 32;
+			_conversationalDistance = 1;
+			_audioFadeIntensityByDistance = 1.0f;
+			_audioFadeModel = AudioFadeModel.InverseByDistance;*/
+			string props = context.Channel.isPositionalChannel ? $"!p-{32}-{1}-{1.0f.ToString("0.000", new System.Globalization.CultureInfo("en-US"))}-{(int)1}" : String.Empty;
+			
 			//From ChannelId in the Vivox API assembly: $"sip:confctl-{GetUriDesignator(_type)}-{_issuer}.{_name}{props}@{_domain}"
-			string channelURI = $"sip:confctl-{(context.Channel.isPositionalChannel ? "d" : "g")}-{VIVOX_ISSUER}.{context.Channel.ChannelName}@{VIVOX_DOMAIN}";
+			string channelURI = $"sip:confctl-{(context.Channel.isPositionalChannel ? "d" : "g")}-{VIVOX_ISSUER}.{context.Channel.ChannelName}{props}@{VIVOX_DOMAIN}";
 			return new VivoxTokenClaims(VIVOX_ISSUER, ComputeExpiryTime(), actionType, 1, $"sip:.{VIVOX_ISSUER}.{context.CharacterId}.@{VIVOX_DOMAIN}", channelURI, null);
 		}
 
