@@ -20,7 +20,7 @@ namespace GladMMO
 		[AuthorizeJwt]
 		[NoResponseCache]
 		[HttpPost("join/Proximity")]
-		public async Task<IActionResult> LoginVivox([FromServices] ICharacterSessionRepository characterSessionRepository,
+		public async Task<IActionResult> JoinZoneProximityChat([FromServices] ICharacterSessionRepository characterSessionRepository,
 			[FromServices] IFactoryCreatable<VivoxTokenClaims, VivoxTokenClaimsCreationContext> claimsFactory,
 			[FromServices] IVivoxTokenSignService signService)
 		{
