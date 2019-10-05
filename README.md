@@ -54,4 +54,4 @@ TODO: AWS
 
 ## License
 
-For regular users this repository is licensed under AGPL 3.0. Seperate from the AGPL 3.0, an additional unrestricted, non-exclusive, perpetual, and irrevocable license is also granted to Andrew Blakely for all works in this repository and any dependent repository.
+For regular users this repository is licensed under AGPL 3.0. Seperate from the AGPL 3.0, an additional unrestricted, non-exclusive, perpetual, and irrevocable license is also granted to Andrew Blakely for all works in this repository and any dependent GladMMO repository within the GladMMO Github organization.
