@@ -19,7 +19,7 @@ namespace GladMMO
 		{
 			if (context == null) throw new ArgumentNullException(nameof(context));
 
-			ConvertActionType(context.Action, out string actionType);
+			string actionType = ConvertActionType(context.Action);
 
 			switch (context.Action)
 			{
@@ -56,12 +56,12 @@ namespace GladMMO
 			return (int)TimeSpan.FromSeconds(90).TotalSeconds;
 		}
 
-		private static void ConvertActionType(VivoxAction action, out string actionType)
+		private static string ConvertActionType(VivoxAction action)
 		{
 			switch (action)
 			{
 				case VivoxAction.Login:
-					actionType = "login";
+					return "login";
 					break;
 				default:
 					throw new NotImplementedException($"TODO: Implement string generation for VivoxAction: {action}");
