@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
+using Reinterpret.Net;
 
 namespace GladMMO
 {
@@ -27,6 +29,24 @@ namespace GladMMO
 					throw new NotImplementedException($"TODO: Implement token generation for VivoxAction: {context.Action}");
 			}
 			
+		}
+
+		//We don't currently use this. It was a good idea but may not be supported as usernames for vivox.
+		private unsafe string ComputeCharacterString(int contextCharacterId)
+		{
+			NetworkEntityGuid playerGuid = new NetworkEntityGuidBuilder()
+				.WithType(EntityType.Player)
+				.WithId(contextCharacterId)
+				.Build();
+
+			//Access raw memory of the guid.
+			ulong playerRawGuid = playerGuid.RawGuidValue;
+			byte* rawValue = (byte*) &playerRawGuid;
+
+			//The idea here is we use the player's 64bit guid value directly
+			//as the string character value. That way it can be moved to and from
+			//the player guid efficiently.
+			return Encoding.ASCII.GetString(rawValue, sizeof(ulong));
 		}
 
 		private static int ComputeExpiryTime()
