@@ -34,13 +34,15 @@ namespace GladMMO
 
 		public PositionalVoiceAudioGameTickable(IVoiceSessionAuthenticatedEventSubscribable subscriptionService, 
 			[NotNull] ILocalPlayerSpawnedEventSubscribable playerSpawnedSubscriptionService,
-			[NotNull] PositionalVoiceEntityTickable positionalChannelUpdateTickable) 
+			[NotNull] PositionalVoiceEntityTickable positionalChannelUpdateTickable,
+			[NotNull] INetworkClientDisconnectedEventSubscribable disconnectionEventSubscriptionService) 
 			: base(subscriptionService)
 		{
 			if (playerSpawnedSubscriptionService == null) throw new ArgumentNullException(nameof(playerSpawnedSubscriptionService));
 			PositionalChannelUpdateTickable = positionalChannelUpdateTickable ?? throw new ArgumentNullException(nameof(positionalChannelUpdateTickable));
 
 			playerSpawnedSubscriptionService.OnLocalPlayerSpawned += OnLocalPlayerSpawnedEvent;
+			disconnectionEventSubscriptionService.OnNetworkClientDisconnected += (o, e) => this.State = PositionalAudioState.Default;
 		}
 
 		private void OnLocalPlayerSpawnedEvent(object sender, LocalPlayerSpawnedEventArgs e)
@@ -69,10 +71,16 @@ namespace GladMMO
 
 		private IReadonlyPositionalVoiceChannelCollection PositionalChannels { get; }
 
-		public PositionalVoiceEntityTickable([NotNull] IReadonlyPositionalVoiceChannelCollection positionalChannels, [NotNull] IReadonlyEntityGuidMappable<EntityGameObjectDirectory> gameObjectDirectoryMappable)
+		//We inject this purely because we need data bout the dispose state.
+		private VivoxUnity.Client Client { get; }
+
+		public PositionalVoiceEntityTickable([NotNull] IReadonlyPositionalVoiceChannelCollection positionalChannels, 
+			[NotNull] IReadonlyEntityGuidMappable<EntityGameObjectDirectory> gameObjectDirectoryMappable,
+			[NotNull] VivoxUnity.Client client)
 		{
 			PositionalChannels = positionalChannels ?? throw new ArgumentNullException(nameof(positionalChannels));
 			GameObjectDirectoryMappable = gameObjectDirectoryMappable ?? throw new ArgumentNullException(nameof(gameObjectDirectoryMappable));
+			Client = client ?? throw new ArgumentNullException(nameof(client));
 		}
 
 		public void InitializeTrackerGameObject(NetworkEntityGuid entityGuid)
