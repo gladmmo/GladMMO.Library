@@ -65,7 +65,7 @@ namespace GladMMO
 		{
 			//90 seconds is the example time found here: https://docs.vivox.com/v5/general/unity/5_1_0/Default.htm#AccessTokenDeveloperGuide/GeneratingTokensOnClientUnity.htm%3FTocPath%3DUnity%7CAccess%2520Token%2520Developer%2520Guide%7C_____6
 			//This is basicallt from Vivox GetLoginToken. It's what they do with the provided TimeSpan.
-			return (int)TimeSpan.FromSeconds(90).TotalSeconds;
+			return (int) DateTimeOffset.UtcNow.AddSeconds(90).ToUnixTimeSeconds();
 		}
 
 		private static string ConvertActionType(VivoxAction action)
