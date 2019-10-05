@@ -54,6 +54,7 @@ namespace GladMMO
 
 		public VivoxTokenClaims(string issuer, int expiryTime, string vivoxAction, int vivoxUniqueIdentifier, string originatorSipuri, string destinationSipuri, string sub)
 		{
+			//Some of these are optional parameters so we shouldn't check null.
 			Issuer = issuer;
 			ExpiryTime = expiryTime;
 			VivoxAction = vivoxAction;
