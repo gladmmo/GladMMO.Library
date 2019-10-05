@@ -251,14 +251,32 @@ namespace GladMMO
 			bool hasSession = await CharacterSessionRepository.ContainsAsync(characterId);
 
 			//We need to check active or not
-			if(hasSession)
+			if (hasSession)
 			{
-				//If it's active we can just retrieve the data and send them off on their way
-				CharacterSessionModel sessionModel = await CharacterSessionRepository.RetrieveAsync(characterId);
+				//It's possible that the session no longer matches the character's
+				//persisted location. We should check their location and put them in the correct zone.
 
-				//TODO: Handle case when we have an inactive session that can be claimed
-				return new CharacterSessionEnterResponse(sessionModel.ZoneId);
+				//If it's active we can just retrieve the data and send them off on their way
+				CharacterSessionModel sessionModel = await CharacterSessionRepository.RetrieveAsync(characterId, true);
+
+				if (await characterLocationRepository.ContainsAsync(characterId))
+				{
+					CharacterLocationModel locationModel = await characterLocationRepository.RetrieveAsync(characterId);
+					//They have a location, verify it matches the session
+					if (locationModel.WorldId != sessionModel.ZoneEntry.WorldId)
+					{
+						//The location world and the session's world do not match, so remove the session.
+						await CharacterSessionRepository.TryDeleteAsync(sessionModel.CharacterId);
+					}
+					else
+						return new CharacterSessionEnterResponse(sessionModel.ZoneId);
+				}
+				else
+					//TODO: Handle case when we have an inactive session that can be claimed
+					return new CharacterSessionEnterResponse(sessionModel.ZoneId);
 			}
+
+			//If we didn't return above then we should be in a state where the below can handle this now.
 
 			try
 			{
@@ -292,7 +310,7 @@ namespace GladMMO
 				}
 
 
-				if(!await CharacterSessionRepository.TryCreateAsync(new CharacterSessionModel(characterId, targetSessionZoneId)))
+				if(await CharacterSessionRepository.TryCreateAsync(new CharacterSessionModel(characterId, targetSessionZoneId)))
 					return new CharacterSessionEnterResponse(targetSessionZoneId);
 				else
 					return new CharacterSessionEnterResponse(CharacterSessionEnterResponseCode.GeneralServerError);
