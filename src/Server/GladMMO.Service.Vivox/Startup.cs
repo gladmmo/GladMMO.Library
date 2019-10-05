@@ -48,7 +48,7 @@ namespace GladMMO
 			//This provides JwtBearer support for Authorize attribute/header
 			services.AddJwtAuthorization(cert);
 
-			services.AddTransient<IFactoryCreatable<VivoxTokenClaims, VivoxTokenClaimsCreationContext>>();
+			services.AddTransient<IFactoryCreatable<VivoxTokenClaims, VivoxTokenClaimsCreationContext>, VivoxClaimsTokenFactory>();
 			services.AddTransient<IVivoxTokenSignService, DefaultLocalVivoxTokenSigningService>();
 
 			RegisterDatabaseServices(services);
