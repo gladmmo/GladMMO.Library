@@ -18,17 +18,21 @@ namespace GladMMO
 
 		private ILocalPlayerDetails PlayerDetails { get; }
 
+		private IVivoxAuthorizationService VivoxAutheAuthorizationService { get; }
+
 		public event EventHandler<VoiceSessionAuthenticatedEventArgs> OnVoiceSessionAuthenticated;
 
 		public AuthenticateVoiceSessionEventListener(IVoiceNetworkInitializedEventSubscribable subscriptionService, 
 			[NotNull] ILog logger,
 			[NotNull] VivoxUnity.Client voiceClient,
-			[NotNull] ILocalPlayerDetails playerDetails) 
+			[NotNull] ILocalPlayerDetails playerDetails,
+			[NotNull] IVivoxAuthorizationService vivoxAutheAuthorizationService) 
 			: base(subscriptionService)
 		{
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
 			VoiceClient = voiceClient ?? throw new ArgumentNullException(nameof(voiceClient));
 			PlayerDetails = playerDetails ?? throw new ArgumentNullException(nameof(playerDetails));
+			VivoxAutheAuthorizationService = vivoxAutheAuthorizationService ?? throw new ArgumentNullException(nameof(vivoxAutheAuthorizationService));
 		}
 
 		protected override void OnEventFired(object source, EventArgs args)
@@ -37,11 +41,19 @@ namespace GladMMO
 			{
 				try
 				{
-					ProjectVersionStage.AssertBeta();
-					//TODO: We should use authorative serverside authorization/tokens.
+					//TODO: Expose these vivox stuff as shared constants between client and server.
 					ILoginSession session = VoiceClient.GetLoginSession(new AccountId("vrguardian-vrg-dev", PlayerDetails.LocalPlayerGuid.EntityId.ToString(), "vdx5.vivox.com"));
+					ResponseModel<string, VivoxLoginResponseCode> loginResult = await VivoxAutheAuthorizationService.LoginAsync();
 
-					await session.LoginAsync(new Uri("https://vdx5.www.vivox.com/api2"), session.GetLoginToken(VivoxDemoAPIKey.AccessKey, TimeSpan.FromSeconds(90)))
+					//TODO: Better error and retry handling.
+					if(!loginResult.isSuccessful)
+						if (Logger.IsErrorEnabled)
+						{
+							Logger.Error($"Failed to authenticate Vivox. Reason: {loginResult.ResultCode}");
+							return;
+						}
+
+					await session.LoginAsync(new Uri("https://vdx5.www.vivox.com/api2"), loginResult.Result)
 						.ConfigureAwait(true);
 
 					//TODO: Does this above task complete immediately or does it wait until the state is known??
