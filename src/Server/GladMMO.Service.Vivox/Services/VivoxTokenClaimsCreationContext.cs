@@ -12,13 +12,19 @@ namespace GladMMO
 
 		public VivoxAction Action { get; }
 
-		public VivoxTokenClaimsCreationContext(int characterId, VivoxAction action)
+		public VivoxChannelData Channel { get; }
+
+		public VivoxTokenClaimsCreationContext(int characterId, VivoxAction action, VivoxChannelData channel = null)
 		{
 			if (characterId <= 0) throw new ArgumentOutOfRangeException(nameof(characterId));
 			if (!Enum.IsDefined(typeof(VivoxAction), action)) throw new InvalidEnumArgumentException(nameof(action), (int)action, typeof(VivoxAction));
 
 			CharacterId = characterId;
 			Action = action;
+
+			//Channel data is optional, we don't need to null check it.
+			//it's not my fault that it's designed this dumb way
+			Channel = channel;
 		}
 	}
 }
