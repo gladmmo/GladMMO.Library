@@ -65,15 +65,21 @@ namespace GladMMO
 			return ids;
 		}
 
-		public Task<CharacterEntryModel> RetrieveAsync(int key)
+		public Task<CharacterEntryModel> RetrieveAsync(int key, bool includeNavigationProperties = false)
 		{
+			if(includeNavigationProperties)
+				throw new NotImplementedException($"TODO: Implement nav property loading on {nameof(CharacterEntryModel)}");
+
 			return Context
 				.Characters
 				.FindAsync(key);
 		}
 
-		public Task<CharacterEntryModel> RetrieveAsync(string key)
+		public Task<CharacterEntryModel> RetrieveAsync(string key, bool includeNavigationProperties = false)
 		{
+			if(includeNavigationProperties)
+				throw new NotImplementedException($"TODO: Implement nav properties for {nameof(CharacterEntryModel)}");
+
 			return Context
 				.Characters
 				.FirstAsync(c => c.CharacterName == key);

@@ -46,9 +46,9 @@ namespace GladMMO
 		}
 
 		/// <inheritdoc />
-		public Task<PathWaypointModel> RetrieveAsync(PathWaypointKey key)
+		public Task<PathWaypointModel> RetrieveAsync(PathWaypointKey key, bool includeNavigationProperties = false)
 		{
-			return WaypointCrudProvider.RetrieveAsync(key);
+			return WaypointCrudProvider.RetrieveAsync(key, includeNavigationProperties);
 		}
 
 		/// <inheritdoc />

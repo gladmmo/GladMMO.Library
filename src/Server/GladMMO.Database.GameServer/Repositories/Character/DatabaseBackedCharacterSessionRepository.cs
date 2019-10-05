@@ -56,13 +56,11 @@ namespace GladMMO
 		}
 
 		/// <inheritdoc />
-		public Task<CharacterSessionModel> RetrieveAsync(int key)
+		public Task<CharacterSessionModel> RetrieveAsync(int key, bool includeNavigationProperties = false)
 		{
 			CheckAndThrowKey(key);
 
-			return Context
-				.CharacterSessions
-				.FindAsync(key);
+			return GenericCrudService.RetrieveAsync(key, includeNavigationProperties);
 		}
 
 		private static void CheckAndThrowKey(int key)

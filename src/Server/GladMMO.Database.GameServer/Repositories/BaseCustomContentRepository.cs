@@ -32,9 +32,9 @@ namespace GladMMO
 		}
 
 		/// <inheritdoc />
-		public Task<TCustomContentModelType> RetrieveAsync(long key)
+		public Task<TCustomContentModelType> RetrieveAsync(long key, bool includeNavigationProperties = false)
 		{
-			return DefaultRepository.RetrieveAsync(key);
+			return DefaultRepository.RetrieveAsync(key, includeNavigationProperties);
 		}
 
 		/// <inheritdoc />

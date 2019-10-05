@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GladMMO
 {
+	//TODO: Refactor to generic repository.
 	public sealed class DatabaseBackedZoneServerRepository : IZoneServerRepository
 	{
 		private CharacterDatabaseContext Context { get; }
@@ -35,8 +36,11 @@ namespace GladMMO
 		}
 
 		/// <inheritdoc />
-		public Task<ZoneInstanceEntryModel> RetrieveAsync(int key)
+		public Task<ZoneInstanceEntryModel> RetrieveAsync(int key, bool includeNavigationProperties = false)
 		{
+			if(includeNavigationProperties)
+				throw new NotImplementedException($"TODO: Add nav property support for {nameof(ZoneInstanceEntryModel)}");
+
 			return Context
 				.ZoneEntries
 				.FindAsync(key);

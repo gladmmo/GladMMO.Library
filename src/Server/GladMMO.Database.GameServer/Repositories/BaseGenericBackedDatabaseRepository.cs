@@ -45,9 +45,9 @@ namespace GladMMO
 		}
 
 		/// <inheritdoc />
-		public virtual Task<TModel> RetrieveAsync(TKey key)
+		public virtual Task<TModel> RetrieveAsync(TKey key, bool includeNavigationProperties = false)
 		{
-			return GenericRepository.RetrieveAsync(key);
+			return GenericRepository.RetrieveAsync(key, includeNavigationProperties);
 		}
 
 		/// <inheritdoc />

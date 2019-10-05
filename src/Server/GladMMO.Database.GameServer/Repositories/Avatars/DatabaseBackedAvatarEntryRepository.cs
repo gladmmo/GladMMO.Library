@@ -31,9 +31,9 @@ namespace GladMMO
 		}
 
 		/// <inheritdoc />
-		public Task<AvatarEntryModel> RetrieveAsync(long key)
+		public Task<AvatarEntryModel> RetrieveAsync(long key, bool includeNavigationProperties = false)
 		{
-			return DefaultRepository.RetrieveAsync(key);
+			return DefaultRepository.RetrieveAsync(key, includeNavigationProperties);
 		}
 
 		/// <inheritdoc />

@@ -33,9 +33,9 @@ namespace GladMMO
 		}
 
 		/// <inheritdoc />
-		public Task<CharacterGroupEntryModel> RetrieveAsync(int key)
+		public Task<CharacterGroupEntryModel> RetrieveAsync(int key, bool includeNavigationProperties = false)
 		{
-			return GenericBackedRepository.RetrieveAsync(key);
+			return GenericBackedRepository.RetrieveAsync(key, includeNavigationProperties);
 		}
 
 		/// <inheritdoc />

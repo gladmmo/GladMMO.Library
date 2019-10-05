@@ -31,9 +31,9 @@ namespace GladMMO
 			return GenericRepository.TryCreateAsync(model);
 		}
 
-		public Task<CreatureEntryModel> RetrieveAsync(int key)
+		public Task<CreatureEntryModel> RetrieveAsync(int key, bool includeNavigationProperties = false)
 		{
-			return GenericRepository.RetrieveAsync(key);
+			return GenericRepository.RetrieveAsync(key, includeNavigationProperties);
 		}
 
 		public Task<bool> TryDeleteAsync(int key)

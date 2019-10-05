@@ -35,7 +35,7 @@ namespace GladMMO
 		/// </summary>
 		/// <param name="key"></param>
 		/// <returns></returns>
-		Task<TModel> RetrieveAsync(TKey key);
+		Task<TModel> RetrieveAsync(TKey key, bool includeNavigationProperties = false);
 
 		//TODO: Add Update
 

@@ -44,10 +44,13 @@ namespace GladMMO
 		}
 
 		/// <inheritdoc />
-		public async Task<CharacterLocationModel> RetrieveAsync(int key)
+		public async Task<CharacterLocationModel> RetrieveAsync(int key, bool includeNavigationProperties = false)
 		{
 			if(!await ContainsAsync(key))
 				throw new InvalidOperationException($"Tried to read Key: {key} from character_locations. Does not exist.");
+
+			if(includeNavigationProperties)
+				throw new NotImplementedException($"TODO: Implement nav property loading on {nameof(CharacterLocationModel)}");
 
 			return await Context
 				.CharacterLocations

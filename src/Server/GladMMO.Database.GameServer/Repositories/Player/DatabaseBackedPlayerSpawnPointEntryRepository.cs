@@ -31,9 +31,9 @@ namespace GladMMO
 			return GenericRepository.TryCreateAsync(model);
 		}
 
-		public Task<PlayerSpawnPointEntryModel> RetrieveAsync(int key)
+		public Task<PlayerSpawnPointEntryModel> RetrieveAsync(int key, bool includeNavigationProperties = false)
 		{
-			return GenericRepository.RetrieveAsync(key);
+			return GenericRepository.RetrieveAsync(key, includeNavigationProperties);
 		}
 
 		public Task<bool> TryDeleteAsync(int key)
