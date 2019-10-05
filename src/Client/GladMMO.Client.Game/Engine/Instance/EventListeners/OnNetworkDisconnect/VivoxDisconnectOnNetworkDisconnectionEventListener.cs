@@ -18,7 +18,11 @@ namespace GladMMO
 
 		protected override void OnThreadUnSafeEventFired(object source, EventArgs args)
 		{
-			VoiceClient.Uninitialize();
+			//TODO: Do potential remote cleanup for client. Like saying "Hey, not in this channel maybe"
+			//But we DO NOT need to uninitialize. AutoFac will call Dispose on the VivoxClient.
+			//Meaning uninitialize will be called. If you call it AGAIN the client/editor actually CRASHES
+			//so do not do this.
+			//VoiceClient.Uninitialize();
 		}
 	}
 }
