@@ -20,6 +20,10 @@
     "SocialService": {
       "endpointAddress": "http://72.190.177.214",
       "endpointPort": 5008
+    },
+    "VivoxAuth": {
+      "endpointAddress": "http://72.190.177.214",
+      "endpointPort": 5010
     }
   }
 }
