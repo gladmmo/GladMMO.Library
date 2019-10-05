@@ -11,17 +11,21 @@ namespace GladMMO
 	{
 		private IEntityGuidMappable<IMovementData> MovementDataMappable { get; }
 
+		private INetworkTimeService TimeService { get; }
+
 		public InitializePlayerMovementDataEventListener(IPlayerSessionClaimedEventSubscribable subscriptionService,
-			[NotNull] IEntityGuidMappable<IMovementData> movementDataMappable) 
+			[NotNull] IEntityGuidMappable<IMovementData> movementDataMappable,
+			[NotNull] INetworkTimeService timeService) 
 			: base(subscriptionService)
 		{
 			MovementDataMappable = movementDataMappable ?? throw new ArgumentNullException(nameof(movementDataMappable));
+			TimeService = timeService ?? throw new ArgumentNullException(nameof(timeService));
 		}
 
 		protected override void OnEventFired(object source, PlayerSessionClaimedEventArgs args)
 		{
 			//TODO: We should probably handle initial movement data differently.
-			MovementDataMappable.AddObject(args.EntityGuid, new PositionChangeMovementData(0, args.SpawnPosition, Vector2.zero, 0.0f));
+			MovementDataMappable.AddObject(args.EntityGuid, new PositionChangeMovementData(TimeService.CurrentLocalTime, args.SpawnPosition, Vector2.zero, 0.0f));
 		}
 	}
 }
