@@ -46,6 +46,9 @@ namespace GladMMO
 
 			//This provides JwtBearer support for Authorize attribute/header
 			services.AddJwtAuthorization(cert);
+
+			services.AddTransient<IFactoryCreatable<VivoxTokenClaims, VivoxTokenClaimsCreationContext>>();
+			services.AddTransient<IVivoxTokenSignService, DefaultLocalVivoxTokenSigningService>();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
