@@ -6,7 +6,7 @@ using Glader.Essentials;
 namespace GladMMO
 {
 	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
-	public sealed class VivoxDisconnectOnNetworkDisconnectionEventListener : BaseSingleEventListenerInitializable<INetworkClientDisconnectedEventSubscribable>
+	public sealed class VivoxDisconnectOnNetworkDisconnectionEventListener : ThreadUnSafeBaseSingleEventListenerInitializable<INetworkClientDisconnectedEventSubscribable>
 	{
 		private VivoxUnity.Client VoiceClient { get; }
 
@@ -16,7 +16,7 @@ namespace GladMMO
 			VoiceClient = voiceClient ?? throw new ArgumentNullException(nameof(voiceClient));
 		}
 
-		protected override void OnEventFired(object source, EventArgs args)
+		protected override void OnThreadUnSafeEventFired(object source, EventArgs args)
 		{
 			VoiceClient.Uninitialize();
 		}
