@@ -10,6 +10,15 @@ namespace GladMMO
 {
 	public sealed class DefaultLocalVivoxTokenSigningService : IVivoxTokenSignService
 	{
+		//TODO: Handle this better by injecting and hiding where it comes from
+		private static string VIVOX_API_KEY { get; }
+
+		static DefaultLocalVivoxTokenSigningService()
+		{
+			//TODO: Make enviroment variable name a constant somewhere.
+			VIVOX_API_KEY = Environment.GetEnvironmentVariable("VIVOX_API_KEY");
+		}
+
 		public string CreateSignature([JetBrains.Annotations.NotNull] VivoxTokenClaims claims)
 		{
 			if (claims == null) throw new ArgumentNullException(nameof(claims));
@@ -22,7 +31,7 @@ namespace GladMMO
 			//e30 is {} header
 			string signable = $"e30.{claimsString}";
 
-			return $"{signable}.{SHA256Hash("", signable)}";
+			return $"{signable}.{SHA256Hash(VIVOX_API_KEY, signable)}";
 		}
 
 		private static string SHA256Hash([JetBrains.Annotations.NotNull] string secret, [JetBrains.Annotations.NotNull] string message)
