@@ -9,6 +9,8 @@ namespace GladMMO
 	{
 		protected override void Load(ContainerBuilder builder)
 		{
+			builder.RegisterModule<VivoxAuthServiceDependencyAutofacModule>();
+
 			builder.RegisterType<VivoxUnity.Client>()
 				.AsSelf()
 				.SingleInstance();
