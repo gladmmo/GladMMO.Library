@@ -68,7 +68,7 @@ namespace GladMMO
 
 					WorldDownloader downloader = new WorldDownloader(Logger);
 
-					downloader.DownloadAsync(urlDownloadResponse.DownloadURL);
+					await downloader.DownloadAsync(urlDownloadResponse.DownloadURL);
 
 				}
 				catch (Exception e)
