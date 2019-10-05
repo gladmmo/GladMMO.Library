@@ -125,6 +125,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GladMMO.Client.Game.NetCore
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladMMO.Service.Vivox", "src\Server\GladMMO.Service.Vivox\GladMMO.Service.Vivox.csproj", "{D46A2067-40EB-4FD9-AE49-C2137D8B2A03}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladMMO.Models.Vivox", "src\GladMMO.Models.Vivox\GladMMO.Models.Vivox.csproj", "{322101D1-5155-413E-94E4-248F058AD24B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Database_Migration|Any CPU = Database_Migration|Any CPU
@@ -614,6 +616,16 @@ Global
 		{D46A2067-40EB-4FD9-AE49-C2137D8B2A03}.Debug-Local|Any CPU.Build.0 = Debug|Any CPU
 		{D46A2067-40EB-4FD9-AE49-C2137D8B2A03}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D46A2067-40EB-4FD9-AE49-C2137D8B2A03}.Release|Any CPU.Build.0 = Release|Any CPU
+		{322101D1-5155-413E-94E4-248F058AD24B}.Database_Migration|Any CPU.ActiveCfg = Debug|Any CPU
+		{322101D1-5155-413E-94E4-248F058AD24B}.Database_Migration|Any CPU.Build.0 = Debug|Any CPU
+		{322101D1-5155-413E-94E4-248F058AD24B}.DEBUG_LOCAL|Any CPU.ActiveCfg = Debug|Any CPU
+		{322101D1-5155-413E-94E4-248F058AD24B}.DEBUG_LOCAL|Any CPU.Build.0 = Debug|Any CPU
+		{322101D1-5155-413E-94E4-248F058AD24B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{322101D1-5155-413E-94E4-248F058AD24B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{322101D1-5155-413E-94E4-248F058AD24B}.Debug-Local|Any CPU.ActiveCfg = Debug|Any CPU
+		{322101D1-5155-413E-94E4-248F058AD24B}.Debug-Local|Any CPU.Build.0 = Debug|Any CPU
+		{322101D1-5155-413E-94E4-248F058AD24B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{322101D1-5155-413E-94E4-248F058AD24B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -678,6 +690,7 @@ Global
 		{7F3966BB-C566-46EE-AC82-4DD0008F40D8} = {E4BE989E-6AA4-4CC9-9822-D84A6DEFCA1C}
 		{B2191DAE-0384-4A5B-9BE6-55419D5960F4} = {8C598CE2-9578-41F6-A195-24678617AE6F}
 		{D46A2067-40EB-4FD9-AE49-C2137D8B2A03} = {0478C448-622F-4C60-BDBB-E103D4A2520B}
+		{322101D1-5155-413E-94E4-248F058AD24B} = {572E4B21-970E-4889-9B0D-357816B1307C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {886DD3D7-35E3-42F0-8CE9-74FB5AD7BBD0}
