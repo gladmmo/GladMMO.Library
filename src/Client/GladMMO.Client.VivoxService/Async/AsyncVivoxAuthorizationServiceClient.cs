@@ -26,5 +26,10 @@ namespace GladMMO
 		{
 			return await (await GetService().ConfigureAwait(false)).LoginAsync().ConfigureAwait(false);
 		}
+
+		public async Task<ResponseModel<string, VivoxLoginResponseCode>> JoinProximityChatAsync()
+		{
+			return await (await GetService().ConfigureAwait(false)).JoinProximityChatAsync().ConfigureAwait(false);
+		}
 	}
 }
