@@ -15,13 +15,17 @@ namespace GladMMO
 
 		private IPositionalVoiceChannelCollection PositionalVoiceChannels { get; }
 
+		private IVivoxAuthorizationService VivoxAutheAuthorizationService { get; }
+
 		public JoinWorldVoiceChannelEventListener(IVoiceSessionAuthenticatedEventSubscribable subscriptionService,
 			[NotNull] ILog logger,
-			[NotNull] IPositionalVoiceChannelCollection positionalVoiceChannels) 
+			[NotNull] IPositionalVoiceChannelCollection positionalVoiceChannels,
+			[NotNull] IVivoxAuthorizationService vivoxAutheAuthorizationService) 
 			: base(subscriptionService)
 		{
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
 			PositionalVoiceChannels = positionalVoiceChannels ?? throw new ArgumentNullException(nameof(positionalVoiceChannels));
+			VivoxAutheAuthorizationService = vivoxAutheAuthorizationService ?? throw new ArgumentNullException(nameof(vivoxAutheAuthorizationService));
 		}
 
 		protected override void OnEventFired(object source, VoiceSessionAuthenticatedEventArgs args)
@@ -31,11 +35,25 @@ namespace GladMMO
 			{
 				try
 				{
-					//TODO: Make 3D positional audio.
-					//TODO: We should use channel based on zoneId.
-					IChannelSession testChannel = args.Session.GetChannelSession(new ChannelId("vrguardian-vrg-dev", "lobby", "vdx5.vivox.com", ChannelType.Positional));
+					ResponseModel<VivoxChannelJoinResponse, VivoxLoginResponseCode> channelJoinResponse = await VivoxAutheAuthorizationService.JoinProximityChatAsync();
 
-					await testChannel.ConnectionAsync(true, false, TransmitPolicy.Yes, testChannel.GetConnectToken(VivoxDemoAPIKey.AccessKey, TimeSpan.FromSeconds(90)))
+					//TODO: Better handle failure.
+					if (!channelJoinResponse.isSuccessful)
+					{
+						if(Logger.IsErrorEnabled)
+							Logger.Error($"Failed to join Proximity world channel. Reason: {channelJoinResponse.ResultCode}");
+
+						return;
+					}
+
+					if(Logger.IsInfoEnabled)
+						Logger.Info($"Recieved Vivox Channel URI: {channelJoinResponse.Result.ChannelURI}");
+
+					//TODO: We should share these inputs as shared constants.
+					//IChannelSession testChannel = args.Session.GetChannelSession(new ChannelId("vrguardian-vrg-dev", "lobby", "vdx5.vivox.com", ChannelType.Positional));
+					IChannelSession testChannel = args.Session.GetChannelSession(new ChannelId(channelJoinResponse.Result.ChannelURI));
+
+					await testChannel.ConnectionAsync(true, false, TransmitPolicy.Yes, channelJoinResponse.Result.AuthToken)
 						.ConfigureAwait(true);
 
 					//Documentation says that it doesn't mean the channel has connected yet.
