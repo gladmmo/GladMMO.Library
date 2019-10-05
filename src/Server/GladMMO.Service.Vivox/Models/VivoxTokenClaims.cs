@@ -13,43 +13,43 @@ namespace GladMMO
 		/// <summary>
 		/// Issuer
 		/// </summary>
-		[JsonProperty(PropertyName = "iss")]
+		[JsonProperty(PropertyName = "iss", DefaultValueHandling = DefaultValueHandling.Ignore)]
 		public string Issuer { get; private set; }
 
 		/// <summary>
 		/// Expiration time
 		/// </summary>
-		[JsonProperty(PropertyName = "exp")]
+		[JsonProperty(PropertyName = "exp", DefaultValueHandling = DefaultValueHandling.Ignore)]
 		public int ExpiryTime { get; private set; }
 
 		/// <summary>
 		/// Vivox action
 		/// </summary>
-		[JsonProperty(PropertyName = "vxa")]
+		[JsonProperty(PropertyName = "vxa", DefaultValueHandling = DefaultValueHandling.Ignore)]
 		public string VivoxAction { get; private set; }
 
 		/// <summary>
 		/// Serial number, to guarantee uniqueness within an epoch second
 		/// </summary>
-		[JsonProperty(PropertyName = "vxi")]
+		[JsonProperty(PropertyName = "vxi", DefaultValueHandling = DefaultValueHandling.Ignore)]
 		public int VivoxUniqueIdentifier { get; private set; }
 
 		/// <summary>
 		/// From; the SIP URI of the requestor
 		/// </summary>
-		[JsonProperty(PropertyName = "f")]
+		[JsonProperty(PropertyName = "f", DefaultValueHandling = DefaultValueHandling.Ignore)]
 		public string OriginatorSIPURI { get; private set; }
 
 		/// <summary>
 		/// To; the SIP URI of the channel
 		/// </summary>
-		[JsonProperty(PropertyName = "t")]
+		[JsonProperty(PropertyName = "t", DefaultValueHandling = DefaultValueHandling.Ignore)]
 		public string DestinationSIPURI { get; private set; }
 
 		/// <summary>
 		/// Subject; used in third-party call control
 		/// </summary>
-		[JsonProperty(PropertyName = "sub")]
+		[JsonProperty(PropertyName = "sub", DefaultValueHandling = DefaultValueHandling.Ignore)]
 		public string Subject { get; private set; }
 
 		public VivoxTokenClaims(string issuer, int expiryTime, string vivoxAction, int vivoxUniqueIdentifier, string originatorSipuri, string destinationSipuri, string sub)
