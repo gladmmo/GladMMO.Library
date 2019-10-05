@@ -16,6 +16,6 @@ namespace GladMMO
 
 		[RequiresAuthentication]
 		[Post("/api/VivoxChannel/proximity/join")]
-		Task<ResponseModel<string, VivoxLoginResponseCode>> JoinProximityChatAsync();
+		Task<ResponseModel<VivoxChannelJoinResponse, VivoxLoginResponseCode>> JoinProximityChatAsync();
 	}
 }
