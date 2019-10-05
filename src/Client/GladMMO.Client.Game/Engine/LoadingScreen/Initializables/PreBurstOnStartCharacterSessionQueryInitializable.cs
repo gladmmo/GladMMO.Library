@@ -39,7 +39,7 @@ namespace GladMMO
 			//When we start the loading screen for the game
 			//To know what world we should load we should
 			//To know that we need information about the character session.
-			CharacterSessionDataResponse characterSessionData = await CharacterService.GetCharacterSessionData(LocalCharacterData.CharacterId)
+			CharacterSessionEnterResponse characterSessionData = await CharacterService.TryEnterSession(LocalCharacterData.CharacterId)
 				.ConfigureAwait(false);
 
 			if(!characterSessionData.isSuccessful)
