@@ -35,10 +35,10 @@ namespace GladMMO
 
 			CharacterSessionModel session = await characterSessionRepository.RetrieveAsync(characterId);
 
-			//Players in the same zone will all join the same proximity channel such as Prox:1.
+			//Players in the same zone will all join the same proximity channel such as Prox-1.
 			//They can use this for proximity text and voice chat.
 			//TODO: Use a factory for channel name generation maybe?
-			VivoxTokenClaims claims = claimsFactory.Create(new VivoxTokenClaimsCreationContext(characterId, VivoxAction.JoinChannel, new VivoxChannelData(true, $"Prox:{session.ZoneId}")));
+			VivoxTokenClaims claims = claimsFactory.Create(new VivoxTokenClaimsCreationContext(characterId, VivoxAction.JoinChannel, new VivoxChannelData(true, $"Prox-{session.ZoneId}")));
 
 			//We don't send it back in a JSON form even though it's technically a JSON object
 			//because the client just needs it as a raw string anyway to put through the Vivox client API.
