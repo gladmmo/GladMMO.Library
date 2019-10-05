@@ -25,10 +25,22 @@ namespace GladMMO
 			{
 				case VivoxAction.Login:
 					return new VivoxTokenClaims(VIVOX_ISSUER, ComputeExpiryTime(), actionType, 1, $"sip:.{VIVOX_ISSUER}.{context.CharacterId}.@{VIVOX_DOMAIN}", null, null);
+				case VivoxAction.JoinChannel:
+					return HandleChannelJoinTokenCreation(context, actionType);
 				default:
 					throw new NotImplementedException($"TODO: Implement token generation for VivoxAction: {context.Action}");
 			}
 			
+		}
+
+		private static VivoxTokenClaims HandleChannelJoinTokenCreation(VivoxTokenClaimsCreationContext context, string actionType)
+		{
+			if (context.Channel == null)
+				throw new ArgumentException($"Provided {nameof(VivoxTokenClaimsCreationContext)} for ChannelJoin lacks channel data.");
+
+			//From ChannelId in the Vivox API assembly: $"sip:confctl-{GetUriDesignator(_type)}-{_issuer}.{_name}{props}@{_domain}"
+			string channelURI = $"sip:confctl-{(context.Channel.isPositionalChannel ? "d" : "g")}-{VIVOX_ISSUER}.{context.Channel.ChannelName}@{VIVOX_DOMAIN}";
+			return new VivoxTokenClaims(VIVOX_ISSUER, ComputeExpiryTime(), actionType, 1, $"sip:.{VIVOX_ISSUER}.{context.CharacterId}.@{VIVOX_DOMAIN}", channelURI, null);
 		}
 
 		//We don't currently use this. It was a good idea but may not be supported as usernames for vivox.
@@ -63,6 +75,8 @@ namespace GladMMO
 				case VivoxAction.Login:
 					return "login";
 					break;
+				case VivoxAction.JoinChannel:
+					return "join";
 				default:
 					throw new NotImplementedException($"TODO: Implement string generation for VivoxAction: {action}");
 			}

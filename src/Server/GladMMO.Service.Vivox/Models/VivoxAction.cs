@@ -11,5 +11,7 @@ namespace GladMMO
 	public enum VivoxAction
 	{
 		Login = 1,
+
+		JoinChannel = 2,
 	}
 }
