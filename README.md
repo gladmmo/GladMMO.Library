@@ -48,6 +48,8 @@ Supporting:
 
 **AZURE_STORAGE_CONNECTIONSTRING:** If using Azure Blob for content delivery this is the variable for the secret connection string for Azure Storage.
 
+**VIVOX_API_KEY:** Vivox authorization service requires a secret key for signing tokens for client authorization.
+
 TODO: AWS
 
 ## License
