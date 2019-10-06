@@ -11,35 +11,34 @@ using Nito.AsyncEx;
 
 namespace GladMMO
 {
-	//[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
-	public sealed class ChatInputEventRegisterationEventListener : IGameInitializable
+	[AdditionalRegisterationAs(typeof(IChatTextMessageEnteredEventSubscribable))]
+	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
+	public sealed class ChatInputEventRegisterationEventListener : BaseSingleEventListenerInitializable<IVoiceSessionAuthenticatedEventSubscribable, VoiceSessionAuthenticatedEventArgs>, IChatTextMessageEnteredEventSubscribable
 	{
+		public event EventHandler<ChatTextMessageEnteredEventArgs> OnChatMessageEntered;
+
 		private IUIButton ChatEnterButton { get; }
 
 		private IUIText ChatEnterText { get; }
 
-		private IPeerPayloadSendService<GameClientPacketPayload> SendService { get; }
-		
 		private ILog Logger { get; }
 
 		/// <inheritdoc />
-		public ChatInputEventRegisterationEventListener(
+		public ChatInputEventRegisterationEventListener(IVoiceSessionAuthenticatedEventSubscribable subscriptionService,
 			[NotNull] [KeyFilter(UnityUIRegisterationKey.ChatInput)] IUIButton chatEnterButton,
 			[NotNull] [KeyFilter(UnityUIRegisterationKey.ChatInput)] IUIText chatEnterText,
-			[NotNull] IPeerPayloadSendService<GameClientPacketPayload> sendService,
 			[NotNull] ILog logger)
+			: base(subscriptionService)
 		{
 			ChatEnterButton = chatEnterButton ?? throw new ArgumentNullException(nameof(chatEnterButton));
 			ChatEnterText = chatEnterText ?? throw new ArgumentNullException(nameof(chatEnterText));
-			SendService = sendService ?? throw new ArgumentNullException(nameof(sendService));
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
-		/// <inheritdoc />
-		public Task OnGameInitialized()
+		//Once voice is authenticated we can start listening to and trying to send text messages.
+		protected override void OnEventFired(object source, VoiceSessionAuthenticatedEventArgs args)
 		{
 			ChatEnterButton.AddOnClickListener(OnChatMessageEnterPressed);
-			return Task.CompletedTask;
 		}
 
 		private void OnChatMessageEnterPressed()
@@ -62,39 +61,39 @@ namespace GladMMO
 			ChatEnterButton.IsInteractable = false;
 
 			//Once pressed, we should just send the chat message.
-			//But we send async soooo, let's not block the caller and not assume it happens instantly.
-			UnityAsyncHelper.UnityMainThreadContext.PostAsync(async () =>
+			try
 			{
-				try
-				{
-					//TODO: Renable group invite testing command.
-					/*if(ChatEnterText.Text.Contains("/invite"))
-					{
-						string toInvite = ChatEnterText.Text.Split(' ').Last();
-						if(Logger.IsDebugEnabled)
-							Logger.Debug($"About to invite: {toInvite}");
+				//TODO: We're assuming all chat is proximity chat for now.
+				//TODO: Renable group invite testing command.
+				OnChatMessageEntered?.Invoke(this, new ChatTextMessageEnteredEventArgs(ChatChannelType.Proximity, ChatEnterText.Text));
 
-						await SendService.SendMessage(new ClientGroupInviteRequest(toInvite));
-					}
-					else
-						await SendService.SendMessage(new ChatMessageRequest(new SayPlayerChatMessage(ChatLanguage.LANG_ORCISH, ChatEnterText.Text)))
-							.ConfigureAwait(true);*/
+				//We clear text here because we actually DON'T wanna clear the text if there was an error.
+				ChatEnterText.Text = "";
+			}
+			catch(Exception e)
+			{
+				if(Logger.IsErrorEnabled)
+					Logger.Error($"Could not send chat message. Exception {e.GetType().Name}: {e.Message}\n\nStackTrace:{e.StackTrace}");
 
-					//We clear text here because we actually DON'T wanna clear the text if there was an error.
-					ChatEnterText.Text = "";
-				}
-				catch(Exception e)
-				{
-					if(Logger.IsErrorEnabled)
-						Logger.Error($"Could not send chat message. Exception {e.GetType().Name}: {e.Message}\n\nStackTrace:{e.StackTrace}");
+				throw;
+			}
+			finally
+			{
+				ChatEnterButton.IsInteractable = true;
+			}
 
-					throw;
-				}
-				finally
-				{
-					ChatEnterButton.IsInteractable = true;
-				}
-			});
+			//For reference
+			/*if(ChatEnterText.Text.Contains("/invite"))
+			{
+				string toInvite = ChatEnterText.Text.Split(' ').Last();
+				if(Logger.IsDebugEnabled)
+					Logger.Debug($"About to invite: {toInvite}");
+
+				await SendService.SendMessage(new ClientGroupInviteRequest(toInvite));
+			}
+			else
+				await SendService.SendMessage(new ChatMessageRequest(new SayPlayerChatMessage(ChatLanguage.LANG_ORCISH, ChatEnterText.Text)))
+					.ConfigureAwait(true);*/
 		}
 	}
 }
