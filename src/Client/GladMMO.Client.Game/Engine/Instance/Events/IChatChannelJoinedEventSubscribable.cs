@@ -11,7 +11,7 @@ namespace GladMMO
 		event EventHandler<ChatChannelJoinedEventArgs> OnChatChannelJoined;
 	}
 
-	public sealed class ChatChannelJoinedEventArgs : EventArgs
+	public sealed class ChatChannelJoinedEventArgs : EventArgs, IChatChannelRoutable
 	{
 		public ChatChannelType ChannelType { get; }
 

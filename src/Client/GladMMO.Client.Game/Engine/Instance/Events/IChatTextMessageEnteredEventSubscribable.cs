@@ -10,12 +10,12 @@ namespace GladMMO
 		event EventHandler<ChatTextMessageEnteredEventArgs> OnChatMessageEntered;
 	}
 
-	public sealed class ChatTextMessageEnteredEventArgs : EventArgs
+	public sealed class ChatTextMessageEnteredEventArgs : EventArgs, IChatChannelRoutable
 	{
 		/// <summary>
 		/// The requested channel type of the message.
 		/// </summary>
-		public ChatChannelType RequestedChannelType { get; }
+		public ChatChannelType ChannelType { get; }
 
 		public string Content { get; }
 
@@ -24,7 +24,7 @@ namespace GladMMO
 			if (!Enum.IsDefined(typeof(ChatChannelType), requestedChannelType)) throw new InvalidEnumArgumentException(nameof(requestedChannelType), (int) requestedChannelType, typeof(ChatChannelType));
 			if (string.IsNullOrWhiteSpace(content)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(content));
 
-			RequestedChannelType = requestedChannelType;
+			ChannelType = requestedChannelType;
 			Content = content;
 		}
 	}

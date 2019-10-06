@@ -13,7 +13,7 @@ namespace GladMMO
 	/// <summary>
 	/// Data and Metadata related to a string chat message.
 	/// </summary>
-	public sealed class TextChatEventArgs : EventArgs
+	public sealed class TextChatEventArgs : EventArgs, IChatChannelRoutable
 	{
 		/// <summary>
 		/// The computed full message.
@@ -30,7 +30,7 @@ namespace GladMMO
 		/// <summary>
 		/// The type of the message.
 		/// </summary>
-		public ChatChannelType MessageType { get; }
+		public ChatChannelType ChannelType { get; }
 
 		/// <inheritdoc />
 		public TextChatEventArgs([NotNull] string message, [NotNull] NetworkEntityGuid sender, ChatChannelType messageType)
@@ -38,7 +38,7 @@ namespace GladMMO
 			if(!Enum.IsDefined(typeof(ChatChannelType), messageType)) throw new InvalidEnumArgumentException(nameof(messageType), (int)messageType, typeof(ChatChannelType));
 			Message = message ?? throw new ArgumentNullException(nameof(message));
 			Sender = sender ?? throw new ArgumentNullException(nameof(sender));
-			MessageType = messageType;
+			ChannelType = messageType;
 		}
 
 		/// <inheritdoc />
@@ -46,7 +46,7 @@ namespace GladMMO
 		{
 			if(!Enum.IsDefined(typeof(ChatChannelType), messageType)) throw new InvalidEnumArgumentException(nameof(messageType), (int)messageType, typeof(ChatChannelType));
 			Message = message ?? throw new ArgumentNullException(nameof(message));
-			MessageType = messageType;
+			ChannelType = messageType;
 			Sender = NetworkEntityGuid.Empty;
 		}
 	}
