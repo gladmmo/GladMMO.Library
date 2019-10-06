@@ -6,10 +6,20 @@ using Glader.Essentials;
 
 namespace GladMMO
 {
+	/// <summary>
+	/// Simplified interface for <see cref="IEventPublisher{TEventPublisherInterface,TEventArgsType}"/>
+	/// for event <see cref="IChatChannelJoinedEventSubscribable"/>.
+	/// </summary>
+	public interface IChatChannelJoinedEventPublisher : IEventPublisher<IChatChannelJoinedEventSubscribable, ChatChannelJoinedEventArgs>
+	{
+
+	}
+
 	[AdditionalRegisterationAs(typeof(IEventPublisher<IChatChannelJoinedEventSubscribable, ChatChannelJoinedEventArgs>))]
+	[AdditionalRegisterationAs(typeof(IChatChannelJoinedEventPublisher))]
 	[AdditionalRegisterationAs(typeof(IChatChannelJoinedEventSubscribable))]
 	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
-	public sealed class ChatChannelJoinedEventPublisher : IEventPublisher<IChatChannelJoinedEventSubscribable, ChatChannelJoinedEventArgs>, IChatChannelJoinedEventSubscribable, IGameInitializable
+	public sealed class ChatChannelJoinedEventPublisher : IChatChannelJoinedEventPublisher, IChatChannelJoinedEventSubscribable, IGameInitializable
 	{
 		public event EventHandler<ChatChannelJoinedEventArgs> OnChatChannelJoined;
 
