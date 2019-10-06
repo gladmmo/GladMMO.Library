@@ -27,9 +27,12 @@ namespace GladMMO
 		/// <inheritdoc />
 		public void ClearTrackedChanges()
 		{
-			//TODO: This is slow and inefficient. We should maintain and memcpy an array of false bits. We may have to do this hundreds/thousands of a minute.
-			ChangeTrackingArray.SetAll(false);
-			HasPendingChanges = false;
+			lock (SyncObj)
+			{
+				//TODO: This is slow and inefficient. We should maintain and memcpy an array of false bits. We may have to do this hundreds/thousands of a minute.
+				ChangeTrackingArray.SetAll(false);
+				HasPendingChanges = false;
+			}
 		}
 
 		/// <summary>
@@ -130,9 +133,12 @@ namespace GladMMO
 		/// <inheritdoc />
 		public void ClearTrackedChanges()
 		{
-			//TODO: This is slow and inefficient. We should maintain and memcpy an array of false bits. We may have to do this hundreds/thousands of a minute.
-			ChangeTrackingArray.SetAll(false);
-			HasPendingChanges = false;
+			lock (SyncObj)
+			{
+				//TODO: This is slow and inefficient. We should maintain and memcpy an array of false bits. We may have to do this hundreds/thousands of a minute.
+				ChangeTrackingArray.SetAll(false);
+				HasPendingChanges = false;
+			}
 		}
 
 		/// <summary>
