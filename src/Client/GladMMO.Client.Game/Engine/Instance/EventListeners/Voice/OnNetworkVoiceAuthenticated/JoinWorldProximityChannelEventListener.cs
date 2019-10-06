@@ -17,15 +17,19 @@ namespace GladMMO
 
 		private IVivoxAuthorizationService VivoxAutheAuthorizationService { get; }
 
+		private IChatChannelJoinedEventPublisher ChannelJoinEventPublisher { get; }
+
 		public JoinWorldProximityChannelEventListener(IVoiceSessionAuthenticatedEventSubscribable subscriptionService,
 			[NotNull] ILog logger,
 			[NotNull] IPositionalVoiceChannelCollection positionalVoiceChannels,
-			[NotNull] IVivoxAuthorizationService vivoxAutheAuthorizationService) 
+			[NotNull] IVivoxAuthorizationService vivoxAutheAuthorizationService,
+			[NotNull] IChatChannelJoinedEventPublisher channelJoinEventPublisher) 
 			: base(subscriptionService)
 		{
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
 			PositionalVoiceChannels = positionalVoiceChannels ?? throw new ArgumentNullException(nameof(positionalVoiceChannels));
 			VivoxAutheAuthorizationService = vivoxAutheAuthorizationService ?? throw new ArgumentNullException(nameof(vivoxAutheAuthorizationService));
+			ChannelJoinEventPublisher = channelJoinEventPublisher ?? throw new ArgumentNullException(nameof(channelJoinEventPublisher));
 		}
 
 		protected override void OnEventFired(object source, VoiceSessionAuthenticatedEventArgs args)
@@ -61,6 +65,9 @@ namespace GladMMO
 						Logger.Info($"Vivox ChannelState: {testChannel.AudioState}");
 
 					PositionalVoiceChannels.Add(testChannel);
+
+					//Broadcast that we've joined proximity chat.
+					ChannelJoinEventPublisher.PublishEvent(this, new ChatChannelJoinedEventArgs(ChatChannelType.Proximity, new DefaultVivoxTextChannelSubscribableAdapter(testChannel)));
 				}
 				catch(Exception e)
 				{
