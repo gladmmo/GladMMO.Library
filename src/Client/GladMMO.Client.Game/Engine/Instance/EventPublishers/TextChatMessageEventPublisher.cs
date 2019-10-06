@@ -32,7 +32,7 @@ namespace GladMMO
 
 		public async Task OnGameInitialized()
 		{
-
+			//Hack to load it into the scene
 		}
 	}
 }

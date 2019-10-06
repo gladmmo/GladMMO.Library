@@ -9,7 +9,7 @@ using VivoxUnity;
 namespace GladMMO
 {
 	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
-	public sealed class JoinWorldVoiceChannelEventListener : BaseSingleEventListenerInitializable<IVoiceSessionAuthenticatedEventSubscribable, VoiceSessionAuthenticatedEventArgs>
+	public sealed class JoinWorldProximityChannelEventListener : BaseSingleEventListenerInitializable<IVoiceSessionAuthenticatedEventSubscribable, VoiceSessionAuthenticatedEventArgs>
 	{
 		private ILog Logger { get; }
 
@@ -17,7 +17,7 @@ namespace GladMMO
 
 		private IVivoxAuthorizationService VivoxAutheAuthorizationService { get; }
 
-		public JoinWorldVoiceChannelEventListener(IVoiceSessionAuthenticatedEventSubscribable subscriptionService,
+		public JoinWorldProximityChannelEventListener(IVoiceSessionAuthenticatedEventSubscribable subscriptionService,
 			[NotNull] ILog logger,
 			[NotNull] IPositionalVoiceChannelCollection positionalVoiceChannels,
 			[NotNull] IVivoxAuthorizationService vivoxAutheAuthorizationService) 
