@@ -5,10 +5,15 @@ using System.Text;
 
 namespace GladMMO
 {
+	public interface IChatTextMessageRecievedEventSubscribable
+	{
+		event EventHandler<TextChatEventArgs> OnTextChatMessageRecieved;
+	}
+
 	/// <summary>
 	/// Data and Metadata related to a string chat message.
 	/// </summary>
-	public sealed class TextChatEventData
+	public sealed class TextChatEventArgs : EventArgs
 	{
 		/// <summary>
 		/// The computed full message.
@@ -28,7 +33,7 @@ namespace GladMMO
 		public ChatChannelType MessageType { get; }
 
 		/// <inheritdoc />
-		public TextChatEventData([NotNull] string message, [NotNull] NetworkEntityGuid sender, ChatChannelType messageType)
+		public TextChatEventArgs([NotNull] string message, [NotNull] NetworkEntityGuid sender, ChatChannelType messageType)
 		{
 			if(!Enum.IsDefined(typeof(ChatChannelType), messageType)) throw new InvalidEnumArgumentException(nameof(messageType), (int)messageType, typeof(ChatChannelType));
 			Message = message ?? throw new ArgumentNullException(nameof(message));
@@ -37,7 +42,7 @@ namespace GladMMO
 		}
 
 		/// <inheritdoc />
-		public TextChatEventData([NotNull] string message, ChatChannelType messageType)
+		public TextChatEventArgs([NotNull] string message, ChatChannelType messageType)
 		{
 			if(!Enum.IsDefined(typeof(ChatChannelType), messageType)) throw new InvalidEnumArgumentException(nameof(messageType), (int)messageType, typeof(ChatChannelType));
 			Message = message ?? throw new ArgumentNullException(nameof(message));

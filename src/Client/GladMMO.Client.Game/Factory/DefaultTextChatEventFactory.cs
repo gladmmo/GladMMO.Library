@@ -7,7 +7,7 @@ namespace GladMMO
 	public sealed class DefaultTextChatEventFactory : ITextChatEventFactory
 	{
 		/// <inheritdoc />
-		public TextChatEventData CreateChatData<TMessageType>([NotNull] EntityAssociatedData<TMessageType> incomingChatMessageEventData, [NotNull] string associatedEntityName)
+		public TextChatEventArgs CreateChatData<TMessageType>([NotNull] EntityAssociatedData<TMessageType> incomingChatMessageEventData, [NotNull] string associatedEntityName)
 			where TMessageType : ITextMessageContainable, IChatChannelAssociatable
 		{
 			if(incomingChatMessageEventData == null) throw new ArgumentNullException(nameof(incomingChatMessageEventData));
@@ -22,7 +22,7 @@ namespace GladMMO
 		}
 
 		/// <inheritdoc />
-		public TextChatEventData CreateChatData<TMessageType>([NotNull] TMessageType incomingChatMessageEventData) 
+		public TextChatEventArgs CreateChatData<TMessageType>([NotNull] TMessageType incomingChatMessageEventData) 
 			where TMessageType : ITextMessageContainable, IChatChannelAssociatable
 		{
 			if(incomingChatMessageEventData == null) throw new ArgumentNullException(nameof(incomingChatMessageEventData));

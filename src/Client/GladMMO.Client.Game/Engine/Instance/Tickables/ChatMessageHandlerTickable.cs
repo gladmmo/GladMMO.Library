@@ -7,12 +7,12 @@ namespace GladMMO
 {
 	public sealed class ChatMessageHandlerTickable : IGameTickable
 	{
-		private Queue<TextChatEventData> ChatEventQueue { get; }
+		private Queue<TextChatEventArgs> ChatEventQueue { get; }
 
 		private IChatMessageBoxReciever ChatReciever { get; }
 
 		/// <inheritdoc />
-		public ChatMessageHandlerTickable([NotNull] Queue<TextChatEventData> chatEventQueue, [NotNull] IChatMessageBoxReciever chatReciever)
+		public ChatMessageHandlerTickable([NotNull] Queue<TextChatEventArgs> chatEventQueue, [NotNull] IChatMessageBoxReciever chatReciever)
 		{
 			ChatEventQueue = chatEventQueue ?? throw new ArgumentNullException(nameof(chatEventQueue));
 			ChatReciever = chatReciever ?? throw new ArgumentNullException(nameof(chatReciever));
@@ -25,7 +25,7 @@ namespace GladMMO
 				return;
 
 			//We only want to do one message a frame, or however often this runs.
-			TextChatEventData chatEventData = ChatEventQueue.Dequeue();
+			TextChatEventArgs chatEventData = ChatEventQueue.Dequeue();
 
 			ChatReciever.ReceiveChatMessage(1, chatEventData.Message);
 		}
