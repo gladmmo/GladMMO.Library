@@ -11,17 +11,13 @@ namespace GladMMO
 	{
 		private IEntityGuidMappable<IChangeTrackableEntityDataCollection> ChangeTrackableCollection { get; }
 
-		private IEntityGuidMappable<IEntityDataFieldContainer> DataMappable { get; }
-
 		private IEntityGuidMappable<IMovementData> MovementBlockMappable { get; }
 
 		/// <inheritdoc />
 		public NetworkVisibilityCreationBlockToVisibilityEventFactory([NotNull] IEntityGuidMappable<IChangeTrackableEntityDataCollection> changeTrackableCollection,
-			[NotNull] IEntityGuidMappable<IEntityDataFieldContainer> dataMappable,
 			[NotNull] IEntityGuidMappable<IMovementData> movementBlockMappable)
 		{
 			ChangeTrackableCollection = changeTrackableCollection ?? throw new ArgumentNullException(nameof(changeTrackableCollection));
-			DataMappable = dataMappable ?? throw new ArgumentNullException(nameof(dataMappable));
 			MovementBlockMappable = movementBlockMappable ?? throw new ArgumentNullException(nameof(movementBlockMappable));
 		}
 
@@ -30,9 +26,10 @@ namespace GladMMO
 		{
 			NetworkEntityGuid guid = context.EntityGuid;
 
-			//Build the update values stuff and initialize the initial movement data.
-			DataMappable.AddObject(guid, CreateInitialEntityFieldContainer(context.InitialFieldValues));
-			ChangeTrackableCollection.AddObject(guid, new ChangeTrackingEntityFieldDataCollectionDecorator(DataMappable.RetrieveEntity(guid), context.InitialFieldValues.FieldValueUpdateMask));
+			IEntityDataFieldContainer container = CreateInitialEntityFieldContainer(context.InitialFieldValues);
+			ChangeTrackingEntityFieldDataCollectionDecorator trackingEntityFieldDataCollectionDecorator = new ChangeTrackingEntityFieldDataCollectionDecorator(container, context.InitialFieldValues.FieldValueUpdateMask);
+
+			ChangeTrackableCollection.AddObject(guid, trackingEntityFieldDataCollectionDecorator);
 			MovementBlockMappable.AddObject(guid, context.InitialMovementData);
 
 			return new NetworkEntityNowVisibleEventArgs(guid);

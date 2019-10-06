@@ -323,6 +323,15 @@ namespace GladMMO
 					removableComponentsList.Add((IEntityCollectionRemovable)args.Instance);
 				})
 				.SingleInstance();
+
+			//EntityFieldDataCollectionEntityGuidMappable
+			builder.RegisterType<EntityFieldDataCollectionEntityGuidMappable>()
+				.AsImplementedInterfaces()
+				.OnActivated(args =>
+				{
+					removableComponentsList.Add((IEntityCollectionRemovable)args.Instance);
+				})
+				.SingleInstance();
 		}
 
 		private static void RegisterLockingPolicies(ContainerBuilder builder)
