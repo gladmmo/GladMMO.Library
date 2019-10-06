@@ -10,6 +10,8 @@ namespace GladMMO
 
 		Zone = 1,
 
-		Guild = 2
+		Guild = 2,
+
+		Proximity = 3,
 	}
 }
