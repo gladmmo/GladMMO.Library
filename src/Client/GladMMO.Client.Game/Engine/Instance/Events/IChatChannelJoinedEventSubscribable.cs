@@ -15,11 +15,14 @@ namespace GladMMO
 	{
 		public ChatChannelType ChannelType { get; }
 
-		public ChatChannelJoinedEventArgs(ChatChannelType channelType)
+		public IVivoxTextChannelMessageSubscribable Channel { get; }
+
+		public ChatChannelJoinedEventArgs(ChatChannelType channelType, [NotNull] IVivoxTextChannelMessageSubscribable channel)
 		{
 			if(!Enum.IsDefined(typeof(ChatChannelType), channelType)) throw new InvalidEnumArgumentException(nameof(channelType), (int)channelType, typeof(ChatChannelType));
 
 			ChannelType = channelType;
+			Channel = channel ?? throw new ArgumentNullException(nameof(channel));
 		}
 	}
 }
