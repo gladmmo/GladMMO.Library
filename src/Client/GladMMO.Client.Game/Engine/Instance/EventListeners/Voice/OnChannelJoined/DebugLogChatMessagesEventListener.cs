@@ -21,7 +21,7 @@ namespace GladMMO
 
 		protected override void OnEventFired(object source, ChatChannelJoinedEventArgs args)
 		{
-			args.Channel.OnChannelTextMessageRecieved += (s, message) => Logger.Debug($"Recieved Message. Sender: {message.Sender.Name} Content: {message.Message}")
+			args.Channel.OnChannelTextMessageRecieved += (s, message) => Logger.Debug($"Recieved Message. Sender: {message.Sender.Name} Content: {message.Message}");
 		}
 	}
 }
