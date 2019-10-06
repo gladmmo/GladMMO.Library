@@ -1,33 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Common.Logging;
 using Glader.Essentials;
 
 namespace GladMMO
 {
-	public sealed class ChatMessageHandlerTickable : IGameTickable
+	public sealed class ChatMessageHandlerTickable : EventQueueBasedTickable<IChatTextMessageRecievedEventSubscribable, TextChatEventArgs>
 	{
-		private Queue<TextChatEventArgs> ChatEventQueue { get; }
-
 		private IChatMessageBoxReciever ChatReciever { get; }
 
-		/// <inheritdoc />
-		public ChatMessageHandlerTickable([NotNull] Queue<TextChatEventArgs> chatEventQueue, [NotNull] IChatMessageBoxReciever chatReciever)
+		public ChatMessageHandlerTickable(IChatTextMessageRecievedEventSubscribable subscriptionService, 
+			ILog logger,
+			[NotNull] IChatMessageBoxReciever chatReciever) 
+			: base(subscriptionService, false, logger) //don't service all at once, for performance reasons.
 		{
-			ChatEventQueue = chatEventQueue ?? throw new ArgumentNullException(nameof(chatEventQueue));
 			ChatReciever = chatReciever ?? throw new ArgumentNullException(nameof(chatReciever));
 		}
 
-		/// <inheritdoc />
-		public void Tick()
+		protected override void HandleEvent(TextChatEventArgs args)
 		{
-			if(ChatEventQueue.Count == 0)
-				return;
-
-			//We only want to do one message a frame, or however often this runs.
-			TextChatEventArgs chatEventData = ChatEventQueue.Dequeue();
-
-			ChatReciever.ReceiveChatMessage(1, chatEventData.Message);
+			//TODO: Handle tabs one day... nah
+			ChatReciever.ReceiveChatMessage(1, args.Message);
 		}
 	}
 }
