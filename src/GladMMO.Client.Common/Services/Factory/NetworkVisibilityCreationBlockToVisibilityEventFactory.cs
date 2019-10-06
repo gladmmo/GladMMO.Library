@@ -35,13 +35,22 @@ namespace GladMMO
 			return new NetworkEntityNowVisibleEventArgs(guid);
 		}
 
-		public unsafe IEntityDataFieldContainer CreateInitialEntityFieldContainer(FieldValueUpdate fieldValueData)
+		//Public and static because it's referenced in a unit test. That design oddity is
+		//worth the absolute critical design fault that was uncovered and now protected by a test.
+		public static unsafe IEntityDataFieldContainer CreateInitialEntityFieldContainer(FieldValueUpdate fieldValueData)
 		{
 			//TODO: We could pool this.
 			//we actually CAN'T use the field enum length or count. Since TrinityCore may send additional bytes at the end so that
 			//it's evently divisible by 32.
 			byte[] internalEntityDataBytes = new byte[fieldValueData.FieldValueUpdateMask.Length * sizeof(int)];
-			IEntityDataFieldContainer t = new EntityFieldDataCollection<EUnitFields>(fieldValueData.FieldValueUpdateMask, internalEntityDataBytes);
+
+			//It's absolutely CRITICAL that we don't use the sent fieldvalue internal bits for the set indication data
+			//BECAUSE it also will be used as the initial changed values/change array. So we do the one-time copy here to avoid this critical
+			//fault which is now covered by tests.
+			byte[] copiedFieldUpdateMask = new byte[fieldValueData.FieldValueUpdateMask.InternalIntegerArray.Count];
+			Buffer.BlockCopy(fieldValueData.FieldValueUpdateMask.InternalIntegerArray.ToArrayTryAvoidCopy(), 0, copiedFieldUpdateMask, 0, fieldValueData.FieldValueUpdateMask.InternalIntegerArray.Count);
+
+			IEntityDataFieldContainer t = new EntityFieldDataCollection<EUnitFields>(new WireReadyBitArray(copiedFieldUpdateMask), internalEntityDataBytes);
 
 			int updateDiffIndex = 0;
 			foreach(int setIndex in t.DataSetIndicationArray.EnumerateSetBitsByIndex())

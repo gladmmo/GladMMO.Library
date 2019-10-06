@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Fasterflect;
 using NUnit.Framework;
 
 namespace GladMMO
@@ -67,6 +68,68 @@ namespace GladMMO
 			collection.ClearTrackedChanges();
 			FieldValueUpdate fieldValueUpdate = updateFactory.Create(new EntityFieldUpdateCreationContext(collection, collection.ChangeTrackingArray));
 			
+
+			//assert
+			Assert.AreEqual(0, fieldValueUpdate.FieldValueUpdateMask.EnumerateSetBitsByIndex().Count(), $"Found more than 1 set bit.");
+			Assert.AreEqual(0, fieldValueUpdate.FieldValueUpdates.Count, $"Field updates should be empty due to no changes..");
+		}
+
+		[Test]
+		public void Test_ChangeTracker_With_Multiple_Value_Indicates_Correct_After_Clearing_Then_Setting_FieldValueUpdate()
+		{
+			//arrange
+			ChangeTrackingEntityFieldDataCollectionDecorator<TestFieldType> collection = new ChangeTrackingEntityFieldDataCollectionDecorator<TestFieldType>(new EntityFieldDataCollection<TestFieldType>());
+			FieldValueUpdateFactory updateFactory = new FieldValueUpdateFactory();
+
+			//act
+			collection.SetFieldValue<int>(1, 5);
+			collection.SetFieldValue<int>(2, 4);
+			collection.SetFieldValue<int>(3, 7);
+			collection.ClearTrackedChanges();
+			FieldValueUpdate fieldValueUpdate = updateFactory.Create(new EntityFieldUpdateCreationContext(collection, collection.ChangeTrackingArray));
+
+			collection.SetFieldValue<int>(2, 77);
+			collection.SetFieldValue<int>(3, 89);
+			fieldValueUpdate = updateFactory.Create(new EntityFieldUpdateCreationContext(collection, collection.ChangeTrackingArray));
+
+			//assert
+			Assert.AreEqual(2, fieldValueUpdate.FieldValueUpdateMask.EnumerateSetBitsByIndex().Count(), $"Found more than 1 set bit.");
+			Assert.AreEqual(2, fieldValueUpdate.FieldValueUpdates.Count, $"Field updates should be empty due to no changes..");
+		}
+
+		//Never remove this test. It's critical to prevent shared buffer fault that it covers.
+		[Test]
+		public void Test_ChangeTracker_Doesnt_Set_Change_Bits_On_Same_Value_After_Clear_FieldValueUpdate()
+		{
+			//arrange
+			WireReadyBitArray bitArray = new WireReadyBitArray(1328);
+			bitArray.Set(1, true);
+			bitArray.Set(2, true);
+			bitArray.Set(4, true);
+
+			//Reference the actual client's visibile field update computation.
+			IEntityDataFieldContainer dataCollection = NetworkVisibilityCreationBlockToVisibilityEventFactory.CreateInitialEntityFieldContainer(new FieldValueUpdate(bitArray, new int[] {5, 4, 7}));
+
+			ChangeTrackingEntityFieldDataCollectionDecorator collection = new ChangeTrackingEntityFieldDataCollectionDecorator(dataCollection, bitArray);
+			FieldValueUpdateFactory updateFactory = new FieldValueUpdateFactory();
+
+			//act
+			FieldValueUpdate fieldValueUpdate = updateFactory.Create(new EntityFieldUpdateCreationContext(collection, collection.ChangeTrackingArray));
+
+			Assert.AreEqual(3, fieldValueUpdate.FieldValueUpdateMask.EnumerateSetBitsByIndex().Count(), $"Found more than 1 set bit.");
+			Assert.AreEqual(5, fieldValueUpdate.FieldValueUpdates.First(), $"Serialized value was not expected value.");
+			Assert.AreEqual(1, fieldValueUpdate.FieldValueUpdateMask.EnumerateSetBitsByIndex().First(), $"Index: {1} was expected to be first index.");
+
+			collection.ClearTrackedChanges();
+
+			
+			//Check they're event before setting them again
+			Assert.AreEqual(collection.GetFieldValue<int>(1), 5, $"Values not the same.");
+			Assert.AreEqual(collection.GetFieldValue<int>(2), 4, $"Values not the same.");
+			collection.SetFieldValue(1, 5);
+			collection.SetFieldValue(2, 4);
+
+			fieldValueUpdate = updateFactory.Create(new EntityFieldUpdateCreationContext(collection, collection.ChangeTrackingArray));
 
 			//assert
 			Assert.AreEqual(0, fieldValueUpdate.FieldValueUpdateMask.EnumerateSetBitsByIndex().Count(), $"Found more than 1 set bit.");
