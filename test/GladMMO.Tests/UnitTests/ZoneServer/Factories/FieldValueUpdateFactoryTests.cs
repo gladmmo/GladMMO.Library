@@ -52,5 +52,25 @@ namespace GladMMO
 			Assert.AreEqual(5, fieldValueUpdate.FieldValueUpdates.First(), $"Serialized value was not expected value.");
 			Assert.AreEqual(1, fieldValueUpdate.FieldValueUpdateMask.EnumerateSetBitsByIndex().First(), $"Index: {1} was expected to be first index.");
 		}
+
+		[Test]
+		public void Test_ChangeTracker_With_Multiple_Value_Indicates_No_Changes_After_Clearing_FieldValueUpdate()
+		{
+			//arrange
+			ChangeTrackingEntityFieldDataCollectionDecorator<TestFieldType> collection = new ChangeTrackingEntityFieldDataCollectionDecorator<TestFieldType>(new EntityFieldDataCollection<TestFieldType>());
+			FieldValueUpdateFactory updateFactory = new FieldValueUpdateFactory();
+
+			//act
+			collection.SetFieldValue<int>(1, 5);
+			collection.SetFieldValue<int>(2, 4);
+			collection.SetFieldValue<int>(3, 7);
+			collection.ClearTrackedChanges();
+			FieldValueUpdate fieldValueUpdate = updateFactory.Create(new EntityFieldUpdateCreationContext(collection, collection.ChangeTrackingArray));
+			
+
+			//assert
+			Assert.AreEqual(0, fieldValueUpdate.FieldValueUpdateMask.EnumerateSetBitsByIndex().Count(), $"Found more than 1 set bit.");
+			Assert.AreEqual(0, fieldValueUpdate.FieldValueUpdates.Count, $"Field updates should be empty due to no changes..");
+		}
 	}
 }
