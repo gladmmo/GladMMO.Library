@@ -4,7 +4,7 @@ using System.Text;
 
 namespace GladMMO
 {
-	public enum ChatMessageType
+	public enum ChatChannelType
 	{
 		System = 0,
 

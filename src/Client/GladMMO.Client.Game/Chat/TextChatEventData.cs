@@ -25,21 +25,21 @@ namespace GladMMO
 		/// <summary>
 		/// The type of the message.
 		/// </summary>
-		public ChatMessageType MessageType { get; }
+		public ChatChannelType MessageType { get; }
 
 		/// <inheritdoc />
-		public TextChatEventData([NotNull] string message, [NotNull] NetworkEntityGuid sender, ChatMessageType messageType)
+		public TextChatEventData([NotNull] string message, [NotNull] NetworkEntityGuid sender, ChatChannelType messageType)
 		{
-			if(!Enum.IsDefined(typeof(ChatMessageType), messageType)) throw new InvalidEnumArgumentException(nameof(messageType), (int)messageType, typeof(ChatMessageType));
+			if(!Enum.IsDefined(typeof(ChatChannelType), messageType)) throw new InvalidEnumArgumentException(nameof(messageType), (int)messageType, typeof(ChatChannelType));
 			Message = message ?? throw new ArgumentNullException(nameof(message));
 			Sender = sender ?? throw new ArgumentNullException(nameof(sender));
 			MessageType = messageType;
 		}
 
 		/// <inheritdoc />
-		public TextChatEventData([NotNull] string message, ChatMessageType messageType)
+		public TextChatEventData([NotNull] string message, ChatChannelType messageType)
 		{
-			if(!Enum.IsDefined(typeof(ChatMessageType), messageType)) throw new InvalidEnumArgumentException(nameof(messageType), (int)messageType, typeof(ChatMessageType));
+			if(!Enum.IsDefined(typeof(ChatChannelType), messageType)) throw new InvalidEnumArgumentException(nameof(messageType), (int)messageType, typeof(ChatChannelType));
 			Message = message ?? throw new ArgumentNullException(nameof(message));
 			MessageType = messageType;
 			Sender = NetworkEntityGuid.Empty;

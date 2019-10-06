@@ -35,46 +35,46 @@ namespace GladMMO
 			throw new NotImplementedException($"Haven't reimplemented chat yet.");
 		}
 
-		private string ComputeColorFromChatType(ChatMessageType messageType)
+		private string ComputeColorFromChatType(ChatChannelType messageType)
 		{
 			switch(messageType)
 			{
-				case ChatMessageType.System:
+				case ChatChannelType.System:
 					return "ff0000ff";
-				case ChatMessageType.Zone:
+				case ChatChannelType.Zone:
 					return "AA9E92ff";
-				case ChatMessageType.Guild:
+				case ChatChannelType.Guild:
 					return "42f442ff";
 			}
 
 			throw new NotImplementedException($"Cannot handle Chat Type: {messageType}:{(int)messageType}");
 		}
 
-		private string ComputeChannelText(ChatMessageType messageType)
+		private string ComputeChannelText(ChatChannelType messageType)
 		{
 			switch(messageType)
 			{
-				case ChatMessageType.System:
+				case ChatChannelType.System:
 					return "[System]";
-				case ChatMessageType.Zone:
+				case ChatChannelType.Zone:
 					return "[1. Zone]";
-				case ChatMessageType.Guild:
+				case ChatChannelType.Guild:
 					return "[Guild]";
 			}
 
 			throw new NotImplementedException($"Cannot handle Chat Type: {messageType}:{(int)messageType}");
 		}
 
-		private ChatMessageType MessageTypeFromChannel(ChatChannels channel)
+		private ChatChannelType MessageTypeFromChannel(ChatChannels channel)
 		{
 			switch(channel)
 			{
 				case ChatChannels.Internal:
-					return ChatMessageType.System;
+					return ChatChannelType.System;
 				case ChatChannels.ZoneChannel:
-					return ChatMessageType.Zone;
+					return ChatChannelType.Zone;
 				case ChatChannels.GuildChannel:
-					return ChatMessageType.Guild;
+					return ChatChannelType.Guild;
 			}
 
 			throw new NotImplementedException($"Cannot handle Chat Channel: {channel}:{(int)channel}");
