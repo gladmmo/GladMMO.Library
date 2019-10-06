@@ -57,7 +57,7 @@ namespace GladMMO
 					//IChannelSession testChannel = args.Session.GetChannelSession(new ChannelId("vrguardian-vrg-dev", "lobby", "vdx5.vivox.com", ChannelType.Positional));
 					IChannelSession testChannel = args.Session.GetChannelSession(new ChannelId(channelJoinResponse.Result.ChannelURI));
 
-					await testChannel.ConnectionAsync(true, false, TransmitPolicy.Yes, channelJoinResponse.Result.AuthToken)
+					await testChannel.ConnectionAsync(true, true, TransmitPolicy.Yes, channelJoinResponse.Result.AuthToken)
 						.ConfigureAwait(true);
 
 					//Documentation says that it doesn't mean the channel has connected yet.
