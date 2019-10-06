@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using VivoxUnity;
 
-namespace GladMMO.Chat
+namespace GladMMO
 {
 	public interface IVivoxTextChannelMessageSubscribable
 	{
