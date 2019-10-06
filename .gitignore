@@ -24,7 +24,8 @@ bld/
 [Ll]ib/Dependency Builds/
 
 # We can't distribute licensed software sadly
-[Ss]rc/FinalIK/
+[Ss]rc/[Ff]inalIK/[Ff]inalIK.Editor
+[Ss]rc/[Ff]inalIK/[Ff]inalIK.Core
 [Ll]ib/Vivox/
 
 # Visual Studo 2015 cache/options directory
