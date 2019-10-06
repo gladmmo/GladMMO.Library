@@ -6,10 +6,20 @@ using Glader.Essentials;
 
 namespace GladMMO
 {
+	/// <summary>
+	/// Simplified interface for <see cref="IEventPublisher{TEventPublisherInterface,TEventArgsType}"/>
+	/// for event <see cref="IChatTextMessageRecievedEventSubscribable"/>.
+	/// </summary>
+	public interface IChatTextMessageRecievedEventPublisher : IEventPublisher<IChatTextMessageRecievedEventSubscribable, TextChatEventArgs>
+	{
+
+	}
+
 	[AdditionalRegisterationAs(typeof(IEventPublisher<IChatTextMessageRecievedEventSubscribable, TextChatEventArgs>))]
+	[AdditionalRegisterationAs(typeof(IChatTextMessageRecievedEventPublisher))]
 	[AdditionalRegisterationAs(typeof(IChatTextMessageRecievedEventSubscribable))]
 	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
-	public sealed class TextChatMessageEventPublisher : IEventPublisher<IChatTextMessageRecievedEventSubscribable, TextChatEventArgs>, IChatTextMessageRecievedEventSubscribable, IGameInitializable
+	public sealed class TextChatMessageEventPublisher : IChatTextMessageRecievedEventPublisher, IChatTextMessageRecievedEventSubscribable, IGameInitializable
 	{
 		public event EventHandler<TextChatEventArgs> OnTextChatMessageRecieved;
 
