@@ -67,7 +67,7 @@ namespace GladMMO
 					PositionalVoiceChannels.Add(testChannel);
 
 					//Broadcast that we've joined proximity chat.
-					ChannelJoinEventPublisher.PublishEvent(this, new ChatChannelJoinedEventArgs(ChatChannelType.Proximity, new DefaultVivoxTextChannelSubscribableAdapter(testChannel)));
+					ChannelJoinEventPublisher.PublishEvent(this, new ChatChannelJoinedEventArgs(ChatChannelType.Proximity, new DefaultVivoxTextChannelSubscribableAdapter(testChannel), new DefaultVivoxChatChannelSenderAdapter(testChannel)));
 				}
 				catch(Exception e)
 				{
