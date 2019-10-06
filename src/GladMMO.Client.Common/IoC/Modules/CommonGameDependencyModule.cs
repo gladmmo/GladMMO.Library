@@ -118,6 +118,15 @@ namespace GladMMO
 				.As<IReadOnlyCollection<IEntityCollectionRemovable>>()
 				.AsSelf()
 				.SingleInstance();
+
+			//EntityFieldDataCollectionEntityGuidMappable
+			builder.RegisterType<EntityFieldDataCollectionEntityGuidMappable>()
+				.AsImplementedInterfaces()
+				.OnActivated(args =>
+				{
+					removableComponentsList.Add((IEntityCollectionRemovable)args.Instance);
+				})
+				.SingleInstance();
 		}
 	}
 }
