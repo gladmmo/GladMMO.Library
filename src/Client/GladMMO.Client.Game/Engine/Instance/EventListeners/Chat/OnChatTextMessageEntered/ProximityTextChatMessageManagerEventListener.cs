@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Common.Logging;
 using Glader.Essentials;
+using Nito.AsyncEx;
 
 namespace GladMMO
 {
@@ -31,16 +32,32 @@ namespace GladMMO
 					if (!CheckType(e2))
 						return;
 
-					OnEventFired(e2);
+					OnEventFired(e.MessageSender, e2);
 				};
 			};
 		}
 
-		protected void OnEventFired([NotNull] ChatTextMessageEnteredEventArgs args)
+		protected void OnEventFired(IChatChannelSender sender, [NotNull] ChatTextMessageEnteredEventArgs args)
 		{
 			if (args == null) throw new ArgumentNullException(nameof(args));
 
-			Logger.Debug($"Recieved proximity chat message.");
+			Logger.Debug($"Entered proximity message.");
+
+			//Post it so we can get exception information.
+			UnityAsyncHelper.UnityMainThreadContext.PostAsync(async () =>
+			{
+				try
+				{
+					await sender.SendAsync(args.Content);
+				}
+				catch (Exception e)
+				{
+					if(Logger.IsErrorEnabled)
+						Logger.Error($"Failed to send message. Reason: {e.Message}");
+
+					throw;
+				}
+			});
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
