@@ -20,6 +20,9 @@ namespace GladMMO
 
 		protected override void OnEventFired(object source, CharacterCreationAttemptedEventArgs args)
 		{
+			if (!args.isSuccessful)
+				return;
+
 			//Just simulate a back button press.
 			BackButton.SimulateClick(true);
 		}
