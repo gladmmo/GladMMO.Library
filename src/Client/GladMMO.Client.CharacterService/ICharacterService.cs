@@ -51,5 +51,14 @@ namespace GladMMO
 		[RequiresAuthentication]
 		[Post("/api/charactersession/{charid}/data")]
 		Task<CharacterSessionEnterResponse> SetCharacterSessionData([AliasAs("charid")] int characterId, [JsonBody] int zoneId);
+
+		[RequiresAuthentication]
+		[Get("/api/characters/name/{name}/validate")]
+		Task<CharacterNameValidationResponse> ValidateName([AliasAs("name")] string name);
+
+		//TODO: Accept more than name, we need creation/config details like class and race.
+		[RequiresAuthentication]
+		[Post("/api/characters/name/create/{name}")]
+		Task<CharacterCreationResponse> CreateCharacter([AliasAs("name")] string name);
 	}
 }

@@ -31,8 +31,8 @@ namespace GladMMO
 		[ProducesJson]
 		[ResponseCache(Duration = 10)] //Jagex crumbled for a day due to name checks. So, we should cache for 10 seconds. Probably won't change much.
 		[AllowAnonymous]
-		[HttpGet("name/validate")]
-		public async Task<IActionResult> ValidateCharacterName([FromQuery] string name)
+		[HttpGet("name/{name}/validate")]
+		public async Task<IActionResult> ValidateCharacterName([FromRoute] string name)
 		{
 			if(string.IsNullOrWhiteSpace(name)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(name));
 
