@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
+using System.Threading.Tasks;
 using Fasterflect;
 using Glader.Essentials;
 using GladMMO.Chat;
+using Nito.AsyncEx;
 using VivoxUnity;
 
 namespace GladMMO
@@ -16,13 +18,17 @@ namespace GladMMO
 
 		private ITextChatEventFactory TextDataFactory { get; }
 
+		private IEntityNameQueryable NameQueryService { get; }
+
 		public ChatMessageRecievedDispatcherEventListener(IChatChannelJoinedEventSubscribable subscriptionService,
 			[NotNull] IChatTextMessageRecievedEventPublisher messageRecievedPublisher,
-			[NotNull] ITextChatEventFactory textDataFactory) 
+			[NotNull] ITextChatEventFactory textDataFactory,
+			[NotNull] IEntityNameQueryable nameQueryService)
 			: base(subscriptionService)
 		{
 			MessageRecievedPublisher = messageRecievedPublisher ?? throw new ArgumentNullException(nameof(messageRecievedPublisher));
 			TextDataFactory = textDataFactory ?? throw new ArgumentNullException(nameof(textDataFactory));
+			NameQueryService = nameQueryService ?? throw new ArgumentNullException(nameof(nameQueryService));
 		}
 
 		protected override void OnEventFired(object source, ChatChannelJoinedEventArgs args)
@@ -45,8 +51,24 @@ namespace GladMMO
 				.WithId(characterId)
 				.Build();
 
-			TextChatEventArgs data = TextDataFactory.CreateChatData(new EntityAssociatedData<VivoxChannelTextMessageChatMessageAdapter>(guid, new VivoxChannelTextMessageChatMessageAdapter(args, channelType)), id.Name);
+			if (NameQueryService.Exists(guid))
+			{
+				PublishTextData(channelType, args, guid, NameQueryService.Retrieve(guid));
+			}
+			else
+			{
+				UnityAsyncHelper.UnityMainThreadContext.PostAsync(async () =>
+				{
+					NameQueryResponse queryResponse = await NameQueryService.RetrieveAsync(guid)
+						.ConfigureAwait(false);
+					PublishTextData(channelType, args, guid, queryResponse.EntityName);
+				});
+			}
+		}
 
+		private void PublishTextData(ChatChannelType channelType, IChannelTextMessage args, NetworkEntityGuid guid, string name)
+		{
+			TextChatEventArgs data = TextDataFactory.CreateChatData(new EntityAssociatedData<VivoxChannelTextMessageChatMessageAdapter>(guid, new VivoxChannelTextMessageChatMessageAdapter(args, channelType)), name);
 			MessageRecievedPublisher.PublishEvent(this, data);
 		}
 	}
