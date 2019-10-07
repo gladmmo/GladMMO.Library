@@ -13,7 +13,7 @@ namespace GladMMO
 
 		public ToggleCreationButtonBackOnFailureEventListener(ICharacterCreationAttemptedEventSubscribable subscriptionService,
 			[KeyFilter(UnityUIRegisterationKey.CharacterCreateButton)] [NotNull]
-			IUIButton creationButton) 
+			IUIButton creationButton)
 			: base(subscriptionService)
 		{
 			CreationButton = creationButton ?? throw new ArgumentNullException(nameof(creationButton));
