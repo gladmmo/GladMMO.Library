@@ -64,20 +64,30 @@ namespace GladMMO
 					//If not succesful after the retry.
 					if (!characterSessionData.isSuccessful)
 					{
-						//TODO: Broadcast failure, don't hackily just load scene again.
-						//TODO: Don't hackily hardcode the scene number.
-						SceneManager.LoadSceneAsync(GladMMOClientConstants.CHARACTER_SELECTION_SCENE_NAME).allowSceneActivation = true;
+						await LoadCharacterSelection();
 						return;
 					}
 				}
 				else
-					SceneManager.LoadSceneAsync(GladMMOClientConstants.CHARACTER_SELECTION_SCENE_NAME).allowSceneActivation = true;
+				{
+					await LoadCharacterSelection();
+				}
+					
 			}
 
 			if(Logger.IsInfoEnabled)
 				Logger.Info($"About to broadcasting {nameof(OnCharacterSessionDataChanged)} with Zone: {characterSessionData.ZoneId}");
 
 			OnCharacterSessionDataChanged?.Invoke(this, new CharacterSessionDataChangedEventArgs(characterSessionData.ZoneId));
+		}
+
+		private static async Task LoadCharacterSelection()
+		{
+			await new UnityYieldAwaitable();
+
+			//TODO: Broadcast failure, don't hackily just load scene again.
+			//TODO: Don't hackily hardcode the scene number.
+			SceneManager.LoadSceneAsync(GladMMOClientConstants.CHARACTER_SELECTION_SCENE_NAME).allowSceneActivation = true;
 		}
 	}
 }
