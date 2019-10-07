@@ -17,7 +17,7 @@ namespace GladMMO
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
-		public Task Start()
+		public Task OnGameStart()
 		{
 			Logger.Error($"Scene Initialized called.");
 

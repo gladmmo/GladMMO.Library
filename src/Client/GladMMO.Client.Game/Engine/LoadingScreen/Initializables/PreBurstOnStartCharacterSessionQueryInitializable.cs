@@ -34,7 +34,7 @@ namespace GladMMO
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
-		public async Task Start()
+		public async Task OnGameStart()
 		{
 			//When we start the loading screen for the game
 			//To know what world we should load we should

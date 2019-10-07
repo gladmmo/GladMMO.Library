@@ -23,7 +23,7 @@ namespace GladMMO
 		}
 
 		/// <inheritdoc />
-		public Task Start()
+		public Task OnGameStart()
 		{
 			OnServerStarting?.Invoke(this, EventArgs.Empty);
 

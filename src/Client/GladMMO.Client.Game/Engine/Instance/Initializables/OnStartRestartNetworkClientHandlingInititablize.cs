@@ -39,7 +39,7 @@ namespace GladMMO
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
-		public async Task Start()
+		public async Task OnGameStart()
 		{
 			if(!Client.isConnected)
 			{
