@@ -56,6 +56,9 @@ namespace GladMMO
 				}
 				finally
 				{
+					if(Logger.IsInfoEnabled)
+						Logger.Info($"Character creation request Result: {responseCode}");
+
 					//Now, we dispatch an event for the result on the main thread.
 					await new UnityYieldAwaitable();
 
