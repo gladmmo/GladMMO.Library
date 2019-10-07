@@ -74,9 +74,6 @@
   <ItemGroup>
     <Folder Include="Attributes\" />
     <Folder Include="Component\Base\" />
-    <Folder Include="Engine\CharacterCreation\Events\" />
-    <Folder Include="Engine\CharacterCreation\Initializables\" />
-    <Folder Include="Engine\CharacterCreation\EventListeners\" />
     <Folder Include="Engine\LoadingScreen\Handlers\" />
     <Folder Include="Engine\Shared\Handlers\" />
     <Folder Include="Engine\Shared\Tickables\" />
