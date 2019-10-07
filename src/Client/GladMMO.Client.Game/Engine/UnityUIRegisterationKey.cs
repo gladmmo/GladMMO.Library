@@ -40,5 +40,7 @@ namespace GladMMO
 		TextChatParentWindow = 13,
 
 		LoginTextBox = 14,
+
+		WorldDownloadProgress = 15,
 	}
 }
