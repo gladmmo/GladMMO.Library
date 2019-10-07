@@ -5,8 +5,16 @@ using UnityEngine;
 
 namespace GladMMO
 {
+	/// <summary>
+	/// Simplified interface for <see cref="IFactoryCreatable{TCreateType,TContextType}"/>
+	/// </summary>
+	public interface IEntityPrefabFactory : IFactoryCreatable<GameObject, EntityPrefab>
+	{
+
+	}
+
 	//TODO: This might not be something that should be common between client/server
-	public sealed class EntityPrefabFactory : IFactoryCreatable<GameObject, EntityPrefab>
+	public sealed class EntityPrefabFactory : IEntityPrefabFactory, IFactoryCreatable<GameObject, EntityPrefab>
 	{
 		/// <inheritdoc />
 		public GameObject Create(EntityPrefab context)

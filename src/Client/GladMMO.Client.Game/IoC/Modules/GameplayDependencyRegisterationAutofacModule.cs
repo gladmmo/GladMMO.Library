@@ -22,6 +22,7 @@ namespace GladMMO
 
 			builder.RegisterType<EntityPrefabFactory>()
 				.As<IFactoryCreatable<GameObject, EntityPrefab>>()
+				.As<IEntityPrefabFactory>()
 				.AsSelf()
 				.SingleInstance();
 
