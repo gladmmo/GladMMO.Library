@@ -42,6 +42,14 @@ namespace GladMMO
 			}
 		}
 
+		public bool Exists(NetworkEntityGuid entity)
+		{
+			using (SyncObj.ReaderLock())
+			{
+				return LocalNameMap.ContainsKey(entity);
+			}
+		}
+
 		/// <inheritdoc />
 		public async Task<NameQueryResponse> RetrieveAsync(ulong rawGuidValue)
 		{

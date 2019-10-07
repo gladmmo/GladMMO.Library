@@ -21,5 +21,12 @@ namespace GladMMO
 		/// <exception cref="KeyNotFoundException">Throws if the key is not found.</exception>
 		/// <returns>The name.</returns>
 		string Retrieve(NetworkEntityGuid entity);
+
+		/// <summary>
+		/// Indicates a name is known/exists with the <see cref="NetworkEntityGuid"/>.
+		/// </summary>
+		/// <param name="entity"></param>
+		/// <returns></returns>
+		bool Exists(NetworkEntityGuid entity);
 	}
 }
