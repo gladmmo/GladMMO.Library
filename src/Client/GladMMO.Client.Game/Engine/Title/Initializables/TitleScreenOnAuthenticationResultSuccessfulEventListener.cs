@@ -50,7 +50,7 @@ namespace GladMMO
 				TokenRepository.Update(args.TokenResult.AccessToken);
 
 				//TODO: Use the scene manager service.
-				AsyncOperation loadSceneAsync = SceneManager.LoadSceneAsync(1);
+				AsyncOperation loadSceneAsync = SceneManager.LoadSceneAsync(GladMMOClientConstants.CHARACTER_SELECTION_SCENE_NAME);
 				loadSceneAsync.allowSceneActivation = false;
 
 				await Task.Delay(4500);
