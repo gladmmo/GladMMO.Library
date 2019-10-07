@@ -42,5 +42,11 @@ namespace GladMMO
 		LoginTextBox = 14,
 
 		WorldDownloadProgress = 15,
+
+		CharacterCreateButton = 16,
+
+		BackButton = 17,
+
+		CharacterNameInput = 18
 	}
 }
