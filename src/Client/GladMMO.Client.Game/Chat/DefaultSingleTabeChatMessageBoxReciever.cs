@@ -30,12 +30,25 @@ namespace GladMMO
 			if (text == null) throw new ArgumentNullException(nameof(text));
 			if (tabId <= 0) throw new ArgumentOutOfRangeException(nameof(tabId));
 
-			GameObject textObject = PrefabFactory.Create(EntityPrefab.MessageBoxText);
-			IUIText uiText = textObject.GetComponent<IUIText>(); //BIG problems if this doesn't exist.
+			GameObject textObject = GameObject.Instantiate(PrefabFactory.Create(EntityPrefab.MessageBoxText));
+			IUIText uiText = RetrieveUITextComponent(textObject); 
 			uiText.Text = text;
 
 			//Parent to the message box.
 			ChatWindow.Parent(textObject);
+		}
+
+		private static IUIText RetrieveUITextComponent([NotNull] GameObject textObject)
+		{
+			if (textObject == null) throw new ArgumentNullException(nameof(textObject));
+
+			//BIG problems if this doesn't exist.
+			IUIText text = textObject.GetComponent<IUIText>();
+
+			if (text == null)
+				throw new InvalidOperationException($"Faile to load {nameof(IUIText)} from gameobject {textObject.name}");
+
+			return text;
 		}
 
 		public async Task OnGameInitialized()
