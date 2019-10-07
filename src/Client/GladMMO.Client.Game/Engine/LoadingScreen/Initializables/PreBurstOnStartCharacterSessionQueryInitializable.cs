@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Common.Logging;
 using Glader;
 using Glader.Essentials;
+using UnityEngine.SceneManagement;
 
 namespace GladMMO
 {
@@ -46,7 +47,31 @@ namespace GladMMO
 			{
 				if(Logger.IsErrorEnabled)
 					Logger.Error($"Failed to query Character Session Data: {characterSessionData.ResultCode}:{(int)characterSessionData.ResultCode}");
-				return;
+
+				//If we already have a claim we should repeat.
+				if (characterSessionData.ResultCode == CharacterSessionEnterResponseCode.AccountAlreadyHasCharacterSession)
+				{
+					//Retry 5 times while not successful.
+					for (int i = 0; i < 5 && !characterSessionData.isSuccessful; i++)
+					{
+						characterSessionData = await CharacterService.TryEnterSession(LocalCharacterData.CharacterId)
+							.ConfigureAwait(false);
+
+						await Task.Delay(1500)
+							.ConfigureAwait(false);
+					}
+
+					//If not succesful after the retry.
+					if (!characterSessionData.isSuccessful)
+					{
+						//TODO: Broadcast failure, don't hackily just load scene again.
+						//TODO: Don't hackily hardcode the scene number.
+						SceneManager.LoadSceneAsync(GladMMOClientConstants.CHARACTER_SELECTION_SCENE_NAME).allowSceneActivation = true;
+						return;
+					}
+				}
+				else
+					SceneManager.LoadSceneAsync(GladMMOClientConstants.CHARACTER_SELECTION_SCENE_NAME).allowSceneActivation = true;
 			}
 
 			if(Logger.IsInfoEnabled)
