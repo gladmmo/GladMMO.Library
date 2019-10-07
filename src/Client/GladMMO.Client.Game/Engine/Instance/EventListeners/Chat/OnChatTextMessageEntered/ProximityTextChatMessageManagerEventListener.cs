@@ -41,8 +41,6 @@ namespace GladMMO
 		{
 			if (args == null) throw new ArgumentNullException(nameof(args));
 
-			Logger.Debug($"Entered proximity message.");
-
 			//Post it so we can get exception information.
 			UnityAsyncHelper.UnityMainThreadContext.PostAsync(async () =>
 			{
