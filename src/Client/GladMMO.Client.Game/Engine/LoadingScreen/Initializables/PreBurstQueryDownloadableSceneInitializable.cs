@@ -18,14 +18,17 @@ namespace GladMMO
 	/// has changed and then download the upcoming scene. Maybe it's a Lobby, maybe it's a Forest.
 	/// Either way, we want to download it.
 	/// </summary>
+	[AdditionalRegisterationAs(typeof(IWorldDownloadBeginEventSubscribable))]
 	[SceneTypeCreateGladMMO(GameSceneType.PreZoneBurstingScreen)]
-	public sealed class PreBurstQueryDownloadableSceneInitializable : ThreadUnSafeBaseSingleEventListenerInitializable<ICharacterSessionDataChangedEventSubscribable, CharacterSessionDataChangedEventArgs>
+	public sealed class PreBurstQueryDownloadableSceneInitializable : ThreadUnSafeBaseSingleEventListenerInitializable<ICharacterSessionDataChangedEventSubscribable, CharacterSessionDataChangedEventArgs>, IWorldDownloadBeginEventSubscribable
 	{
 		private IZoneServerService ZoneDataService { get; }
 
 		private IDownloadableContentServerServiceClient ContentService { get; }
 
 		private ILog Logger { get; }
+
+		public event EventHandler<WorldDownloadBeginEventArgs> OnWorldDownloadBegins;
 
 		public PreBurstQueryDownloadableSceneInitializable(ICharacterSessionDataChangedEventSubscribable subscriptionService,
 			[NotNull] ILog logger,
@@ -68,7 +71,10 @@ namespace GladMMO
 
 					WorldDownloader downloader = new WorldDownloader(Logger);
 
-					await downloader.DownloadAsync(urlDownloadResponse.DownloadURL);
+					await downloader.DownloadAsync(urlDownloadResponse.DownloadURL, o =>
+					{
+						OnWorldDownloadBegins?.Invoke(this, new WorldDownloadBeginEventArgs(o));
+					});
 
 				}
 				catch (Exception e)
