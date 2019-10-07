@@ -6,6 +6,7 @@ using Glader.Essentials;
 
 namespace GladMMO
 {
+	[AdditionalRegisterationAs(typeof(ITextChatEventFactory))]
 	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
 	public sealed class DefaultTextChatEventFactory : ITextChatEventFactory, IGameInitializable
 	{
@@ -34,7 +35,6 @@ namespace GladMMO
 			string renderableMessage = $"<color=#{ComputeColorFromChatType(messageType)}>{ComputeChannelText(messageType)}: {incomingChatMessageEventData.Message}</color>";
 
 			return new TextChatEventArgs(renderableMessage, messageType);
-			throw new NotImplementedException($"Haven't reimplemented chat yet.");
 		}
 
 		private string ComputeColorFromChatType(ChatChannelType messageType)
