@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Text;
 using Fasterflect;
 using Glader.Essentials;
+using GladMMO.Chat;
 using VivoxUnity;
 
 namespace GladMMO
@@ -13,11 +14,15 @@ namespace GladMMO
 	{
 		private IChatTextMessageRecievedEventPublisher MessageRecievedPublisher { get; }
 
+		private ITextChatEventFactory TextDataFactory { get; }
+
 		public ChatMessageRecievedDispatcherEventListener(IChatChannelJoinedEventSubscribable subscriptionService,
-			[NotNull] IChatTextMessageRecievedEventPublisher messageRecievedPublisher) 
+			[NotNull] IChatTextMessageRecievedEventPublisher messageRecievedPublisher,
+			[NotNull] ITextChatEventFactory textDataFactory) 
 			: base(subscriptionService)
 		{
 			MessageRecievedPublisher = messageRecievedPublisher ?? throw new ArgumentNullException(nameof(messageRecievedPublisher));
+			TextDataFactory = textDataFactory ?? throw new ArgumentNullException(nameof(textDataFactory));
 		}
 
 		protected override void OnEventFired(object source, ChatChannelJoinedEventArgs args)
@@ -34,12 +39,15 @@ namespace GladMMO
 			AccountId id = args.Sender;
 			int characterId = int.Parse(id.Name);
 
+			//TODO: We need to translate the guid to a name.
 			NetworkEntityGuid guid = NetworkEntityGuidBuilder.New()
 				.WithType(EntityType.Player)
 				.WithId(characterId)
 				.Build();
 
-			MessageRecievedPublisher.PublishEvent(this, new TextChatEventArgs(args.Message, guid, channelType));
+			TextChatEventArgs data = TextDataFactory.CreateChatData(new EntityAssociatedData<VivoxChannelTextMessageChatMessageAdapter>(guid, new VivoxChannelTextMessageChatMessageAdapter(args, channelType)), id.Name);
+
+			MessageRecievedPublisher.PublishEvent(this, data);
 		}
 	}
 }
