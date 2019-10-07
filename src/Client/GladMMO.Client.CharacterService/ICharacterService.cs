@@ -58,7 +58,7 @@ namespace GladMMO
 
 		//TODO: Accept more than name, we need creation/config details like class and race.
 		[RequiresAuthentication]
-		[Post("/api/characters/name/create/{name}")]
+		[Post("/api/characters/create/{name}")]
 		Task<CharacterCreationResponse> CreateCharacter([AliasAs("name")] string name);
 	}
 }
