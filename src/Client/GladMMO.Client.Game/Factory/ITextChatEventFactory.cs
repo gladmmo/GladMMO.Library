@@ -7,9 +7,9 @@ namespace GladMMO
 	public interface ITextChatEventFactory
 	{
 		TextChatEventArgs CreateChatData<TMessageType>(EntityAssociatedData<TMessageType> incomingChatMessageEventData, string associatedEntityName)
-			where TMessageType : ITextMessageContainable, IChatChannelAssociatable;
+			where TMessageType : ITextMessageContainable, IChatChannelRoutable;
 
 		TextChatEventArgs CreateChatData<TMessageType>(TMessageType incomingChatMessageEventData)
-			where TMessageType : ITextMessageContainable, IChatChannelAssociatable;
+			where TMessageType : ITextMessageContainable, IChatChannelRoutable;
 	}
 }

@@ -1,37 +1,39 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
+using Glader.Essentials;
 
 namespace GladMMO
 {
-	public sealed class DefaultTextChatEventFactory : ITextChatEventFactory
+	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
+	public sealed class DefaultTextChatEventFactory : ITextChatEventFactory, IGameInitializable
 	{
 		/// <inheritdoc />
-		public TextChatEventArgs CreateChatData<TMessageType>([NotNull] EntityAssociatedData<TMessageType> incomingChatMessageEventData, [NotNull] string associatedEntityName)
-			where TMessageType : ITextMessageContainable, IChatChannelAssociatable
+		public TextChatEventArgs CreateChatData<TMessageType>([NotNull] EntityAssociatedData<TMessageType> incomingChatMessageEventData, [NotNull] string associatedEntityName) 
+			where TMessageType : ITextMessageContainable, IChatChannelRoutable
 		{
 			if(incomingChatMessageEventData == null) throw new ArgumentNullException(nameof(incomingChatMessageEventData));
 			if(associatedEntityName == null) throw new ArgumentNullException(nameof(associatedEntityName));
 
-			/*ChatMessageType messageType = MessageTypeFromChannel(incomingChatMessageEventData.Data.TargetChannel);
+			ChatChannelType messageType = incomingChatMessageEventData.Data.ChannelType;
 
 			string renderableMessage = $"<color=#{ComputeColorFromChatType(messageType)}>{ComputeChannelText(messageType)} {associatedEntityName}: {incomingChatMessageEventData.Data.Message}</color>";
 
-			return new TextChatEventData(renderableMessage, incomingChatMessageEventData.EntityGuid, messageType);*/
-			throw new NotImplementedException($"Haven't reimplemented chat yet.");
+			return new TextChatEventArgs(renderableMessage, incomingChatMessageEventData.EntityGuid, messageType);
 		}
 
 		/// <inheritdoc />
 		public TextChatEventArgs CreateChatData<TMessageType>([NotNull] TMessageType incomingChatMessageEventData) 
-			where TMessageType : ITextMessageContainable, IChatChannelAssociatable
+			where TMessageType : ITextMessageContainable, IChatChannelRoutable
 		{
 			if(incomingChatMessageEventData == null) throw new ArgumentNullException(nameof(incomingChatMessageEventData));
 
-			/*ChatMessageType messageType = MessageTypeFromChannel(incomingChatMessageEventData.TargetChannel);
+			ChatChannelType messageType = incomingChatMessageEventData.ChannelType;
 
 			string renderableMessage = $"<color=#{ComputeColorFromChatType(messageType)}>{ComputeChannelText(messageType)}: {incomingChatMessageEventData.Message}</color>";
 
-			return new TextChatEventData(renderableMessage, messageType);*/
+			return new TextChatEventArgs(renderableMessage, messageType);
 			throw new NotImplementedException($"Haven't reimplemented chat yet.");
 		}
 
@@ -54,6 +56,8 @@ namespace GladMMO
 		{
 			switch(messageType)
 			{
+				case ChatChannelType.Proximity:
+					return "[Say]";
 				case ChatChannelType.System:
 					return "[System]";
 				case ChatChannelType.Zone:
@@ -65,19 +69,9 @@ namespace GladMMO
 			throw new NotImplementedException($"Cannot handle Chat Type: {messageType}:{(int)messageType}");
 		}
 
-		private ChatChannelType MessageTypeFromChannel(ChatChannels channel)
+		public async Task OnGameInitialized()
 		{
-			switch(channel)
-			{
-				case ChatChannels.Internal:
-					return ChatChannelType.System;
-				case ChatChannels.ZoneChannel:
-					return ChatChannelType.Zone;
-				case ChatChannels.GuildChannel:
-					return ChatChannelType.Guild;
-			}
 
-			throw new NotImplementedException($"Cannot handle Chat Channel: {channel}:{(int)channel}");
 		}
 	}
 }
