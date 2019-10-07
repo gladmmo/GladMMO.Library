@@ -28,5 +28,7 @@ namespace GladMMO
 		/// The default lobby type for PSOBB.
 		/// </summary>
 		InstanceServerScene = 5,
+
+		CharacterCreationScreen = 6,
 	}
 }
