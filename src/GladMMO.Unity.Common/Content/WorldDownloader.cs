@@ -23,7 +23,6 @@ namespace GladMMO
 		{
 			TaskCompletionSource<bool> resultSource = new TaskCompletionSource<bool>();
 
-			long worldId = 0;
 			try
 			{
 				//TODO: Do we need to be on the main unity3d thread
