@@ -13,7 +13,7 @@ namespace GladMMO
 	[SceneTypeCreateGladMMO(GameSceneType.CharacterCreationScreen)]
 	public sealed class CharacterCreationButtonClickedGlueStartable : BaseButtonClickGlueStartable, ICharacterCreationButtonClickedEventSubscribable
 	{
-		public const UnityUIRegisterationKey ButtonKey = UnityUIRegisterationKey.BackButton;
+		public const UnityUIRegisterationKey ButtonKey = UnityUIRegisterationKey.CharacterCreateButton;
 
 		public CharacterCreationButtonClickedGlueStartable([KeyFilter(ButtonKey)] [NotNull] IUIButton createButton) 
 			: base(createButton)
