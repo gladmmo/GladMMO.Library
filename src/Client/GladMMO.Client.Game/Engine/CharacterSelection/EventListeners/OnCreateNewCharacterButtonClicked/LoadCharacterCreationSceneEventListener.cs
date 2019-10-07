@@ -6,9 +6,9 @@ using UnityEngine.SceneManagement;
 namespace GladMMO
 {
 	[SceneTypeCreateGladMMO(GameSceneType.CharacterSelection)]
-	public sealed class LoadCharacterCreationSceneEventListener : ButtonClickedEventListener<ICharacterCreationButtonClickedEventSubscribable>
+	public sealed class LoadCharacterCreationSceneEventListener : ButtonClickedEventListener<ICreateNewCharacterButtonClickedEventSubscribable>
 	{
-		public LoadCharacterCreationSceneEventListener(ICharacterCreationButtonClickedEventSubscribable subscriptionService) 
+		public LoadCharacterCreationSceneEventListener(ICreateNewCharacterButtonClickedEventSubscribable subscriptionService) 
 			: base(subscriptionService)
 		{
 		}
