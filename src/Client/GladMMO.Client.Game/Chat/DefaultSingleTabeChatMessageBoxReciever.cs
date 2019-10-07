@@ -22,7 +22,7 @@ namespace GladMMO
 			[KeyFilter(UnityUIRegisterationKey.TextChatParentWindow)] IUIParentable chatWindow)
 		{
 			PrefabFactory = prefabFactory ?? throw new ArgumentNullException(nameof(prefabFactory));
-			ChatWindow = chatWindow ?? throw new ArgumentNullException(nameof(prefabFactory));
+			ChatWindow = chatWindow ?? throw new ArgumentNullException(nameof(chatWindow));
 		}
 
 		public void ReceiveChatMessage(int tabId, [NotNull] string text)
