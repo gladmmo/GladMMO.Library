@@ -47,6 +47,8 @@ namespace GladMMO
 					return "AA9E92ff";
 				case ChatChannelType.Guild:
 					return "42f442ff";
+				case ChatChannelType.Proximity:
+					return "ffffffff";
 			}
 
 			throw new NotImplementedException($"Cannot handle Chat Type: {messageType}:{(int)messageType}");
