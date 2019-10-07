@@ -6,6 +6,7 @@ using Glader.Essentials;
 
 namespace GladMMO
 {
+	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
 	public sealed class ChatMessageHandlerTickable : EventQueueBasedTickable<IChatTextMessageRecievedEventSubscribable, TextChatEventArgs>
 	{
 		private IChatMessageBoxReciever ChatReciever { get; }
