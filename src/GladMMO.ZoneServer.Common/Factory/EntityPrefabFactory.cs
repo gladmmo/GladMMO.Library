@@ -43,6 +43,8 @@ namespace GladMMO
 					return Resources.Load<GameObject>("Prefabs/NetworkNpc");
 				case EntityPrefab.NetworkGameObject:
 					return Resources.Load<GameObject>("Prefabs/NetworkGameObject");
+				case EntityPrefab.MessageBoxText:
+					return Resources.Load<GameObject>("Prefabs/ChatWindowText");
 			}
 
 			throw new NotImplementedException($"Failed to load prefab for {nameof(EntityPrefab)}: {context}");
