@@ -38,5 +38,7 @@ namespace GladMMO
 		/// The parent of all text objects for text chat.
 		/// </summary>
 		TextChatParentWindow = 13,
+
+		LoginTextBox = 14,
 	}
 }

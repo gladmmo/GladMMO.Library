@@ -16,14 +16,19 @@ namespace GladMMO
 		//TODO: Don't expose Unity directors directly.
 		private IUIPlayable SceneEndPlayable { get; }
 
+		public IUIPlayable LoginBoxFadePlayable { get; }
+
 		private IAuthTokenRepository TokenRepository { get; }
 
 		/// <inheritdoc />
 		public TitleScreenOnAuthenticationResultSuccessfulEventListener(IAuthenticationResultRecievedEventSubscribable subscriptionService,
-			[KeyFilter(UnityUIRegisterationKey.Login)] [NotNull] IUIPlayable sceneEndPlayable, [NotNull] IAuthTokenRepository tokenRepository) 
+			[KeyFilter(UnityUIRegisterationKey.Login)] [NotNull] IUIPlayable sceneEndPlayable,
+			[KeyFilter(UnityUIRegisterationKey.LoginTextBox)] [NotNull] IUIPlayable loginBoxFadePlayable,
+			[NotNull] IAuthTokenRepository tokenRepository) 
 			: base(subscriptionService)
 		{
 			SceneEndPlayable = sceneEndPlayable ?? throw new ArgumentNullException(nameof(sceneEndPlayable));
+			LoginBoxFadePlayable = loginBoxFadePlayable ?? throw new ArgumentNullException(nameof(loginBoxFadePlayable));
 			TokenRepository = tokenRepository ?? throw new ArgumentNullException(nameof(tokenRepository));
 		}
 
@@ -38,6 +43,7 @@ namespace GladMMO
 			UnityAsyncHelper.UnityMainThreadContext.PostAsync(async () =>
 			{
 				SceneEndPlayable.Play();
+				LoginBoxFadePlayable.Play();
 
 				//Init the token repo, otherwise we can't do authorized
 				//requests later at all
