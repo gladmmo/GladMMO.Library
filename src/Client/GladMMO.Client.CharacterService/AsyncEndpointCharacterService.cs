@@ -45,5 +45,15 @@ namespace GladMMO
 		{
 			return await (await GetService().ConfigureAwait(false)).SetCharacterSessionData(characterId, zoneId).ConfigureAwait(false);
 		}
+
+		public async Task<CharacterNameValidationResponse> ValidateName(string name)
+		{
+			return await (await GetService().ConfigureAwait(false)).ValidateName(name).ConfigureAwait(false);
+		}
+
+		public async Task<CharacterCreationResponse> CreateCharacter(string name)
+		{
+			return await (await GetService().ConfigureAwait(false)).CreateCharacter(name).ConfigureAwait(false);
+		}
 	}
 }
