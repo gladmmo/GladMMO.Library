@@ -33,5 +33,10 @@ namespace GladMMO
 		GroupUnitFrames = 11,
 
 		EnterWorld = 12,
+
+		/// <summary>
+		/// The parent of all text objects for text chat.
+		/// </summary>
+		TextChatParentWindow = 13,
 	}
 }

@@ -17,5 +17,7 @@ namespace GladMMO
 		NetworkNpc = 3,
 
 		NetworkGameObject = 4,
+
+		MessageBoxText = 5,
 	}
 }
