@@ -41,6 +41,6 @@ namespace GladMMO
 		/// </summary>
 		[Required]
 		[Range(0, int.MaxValue)]
-		int Version { get; }
+		int Version { get; set; }
 	}
 }

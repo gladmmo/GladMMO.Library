@@ -105,7 +105,24 @@ namespace GladMMO
 			if(ClaimsReader.GetUserIdInt(User) != content.AccountId)
 				return BuildFailedResponseModel(ContentUploadResponseCode.AuthorizationFailed);
 
-			return await GenerateUploadTokenResponse(urlBuilder, content);
+			try
+			{
+				IActionResult response = await GenerateUploadTokenResponse(urlBuilder, content);
+
+				//This is where we update the content versioning.
+				content.Version += 1;
+				await contentEntryRepository.UpdateAsync(content.ContentId, content)
+					.ConfigureAwait(false);
+
+				return response;
+			}
+			catch (Exception e)
+			{
+				if(Logger.IsEnabled(LogLevel.Error))
+					Logger.LogError($"Failed to update content. Reason: {e.Message}");
+
+				return BuildFailedResponseModel(ContentUploadResponseCode.InvalidRequest);
+			}
 		}
 
 		/// <summary>
