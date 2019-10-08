@@ -20,5 +20,11 @@ namespace GladMMO
 		/// players between worlds.
 		/// </summary>
 		WorldTeleporter = 1,
+
+		/// <summary>
+		/// Represents a gamobject that morphs
+		/// a player into a specific avatar model id.
+		/// </summary>
+		AvatarPedestal = 2,
 	}
 }
