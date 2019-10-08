@@ -40,7 +40,7 @@ namespace GladMMO
 		[Required]
 		[Column(Order = 2)]
 		[ForeignKey(nameof(AvatarModel))]
-		public int AvatarModelId { get; set; }
+		public long AvatarModelId { get; set; }
 
 		//Navigation property
 		/// <summary>
