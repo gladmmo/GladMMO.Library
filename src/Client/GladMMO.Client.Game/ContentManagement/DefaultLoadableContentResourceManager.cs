@@ -73,7 +73,7 @@ namespace GladMMO
 			await new UnityYieldAwaitable();
 
 			//TODO: We should handle caching, versioning and etc here.
-			UnityWebRequestAsyncOperation asyncOperation = UnityWebRequestAssetBundle.GetAssetBundle(downloadUrlResponse.DownloadURL, 0).SendWebRequest();
+			UnityWebRequestAsyncOperation asyncOperation = UnityWebRequestAssetBundle.GetAssetBundle(downloadUrlResponse.DownloadURL, (uint)downloadUrlResponse.Version, 0).SendWebRequest();
 
 			//TODO: We should render these operations to the loading screen UI.
 			asyncOperation.completed += operation =>
