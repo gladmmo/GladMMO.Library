@@ -8,7 +8,7 @@ namespace GladMMO
 {
 	public sealed class GameObjectBehaviorComponentFactory : IFactoryCreatable<INetworkGameObjectBehaviour, BehaviourAttachmentContext>
 	{
-		public INetworkGameObjectBehaviour Create([JetBrains.Annotations.NotNull] BehaviourAttachmentContext context)
+		public INetworkGameObjectBehaviour Create([NotNull] BehaviourAttachmentContext context)
 		{
 			if (context == null) throw new ArgumentNullException(nameof(context));
 
