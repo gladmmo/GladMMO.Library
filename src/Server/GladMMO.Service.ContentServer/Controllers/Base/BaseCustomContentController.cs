@@ -61,8 +61,10 @@ namespace GladMMO
 			if(!await downloadAuthorizer.CanUserAccessWorldContet(userId, contentId))
 				return Json(new ContentDownloadURLResponse(ContentDownloadURLResponseCode.AuthorizationFailed));
 
+			TContentType contentEntry = await contentEntryRepository.RetrieveAsync(contentId);
+
 			//We can get the URL from the urlbuilder if we provide the content storage GUID
-			string downloadUrl = await urlBuilder.BuildRetrivalUrl(ContentType, (await contentEntryRepository.RetrieveAsync(contentId)).StorageGuid);
+			string downloadUrl = await urlBuilder.BuildRetrivalUrl(ContentType, contentEntry.StorageGuid);
 
 			//TODO: Should we be validating S3 availability?
 			if(String.IsNullOrEmpty(downloadUrl))
@@ -76,7 +78,7 @@ namespace GladMMO
 			if(Logger.IsEnabled(LogLevel.Information))
 				Logger.LogInformation($"Success. Sending {ClaimsReader.GetUserName(User)} URL: {downloadUrl}");
 
-			return Json(new ContentDownloadURLResponse(downloadUrl));
+			return Json(new ContentDownloadURLResponse(downloadUrl, contentEntry.Version));
 		}
 
 		/// <summary>

@@ -23,6 +23,9 @@ namespace GladMMO
 		[JsonProperty(Required = Required.AllowNull)] //can be null if the request failed.
 		public string DownloadURL { get; private set; }
 
+		[JsonProperty]
+		public int Version { get; private set; }
+
 		/// <inheritdoc />
 		[JsonProperty]
 		public ContentDownloadURLResponseCode ResultCode { get; private set; }
@@ -39,11 +42,13 @@ namespace GladMMO
 		}
 
 		/// <inheritdoc />
-		public ContentDownloadURLResponse(string downloadUrl)
+		public ContentDownloadURLResponse(string downloadUrl, int version)
 		{
 			if(string.IsNullOrWhiteSpace(downloadUrl)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(downloadUrl));
+			if(version < 0) throw new ArgumentOutOfRangeException(nameof(version));
 
 			DownloadURL = downloadUrl;
+			Version = version;
 			ResultCode = ContentDownloadURLResponseCode.Success;
 		}
 
