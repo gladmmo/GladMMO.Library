@@ -71,7 +71,7 @@ namespace GladMMO
 
 					WorldDownloader downloader = new WorldDownloader(Logger);
 
-					await downloader.DownloadAsync(urlDownloadResponse.DownloadURL, o =>
+					await downloader.DownloadAsync(urlDownloadResponse.DownloadURL, urlDownloadResponse.Version, o =>
 					{
 						OnWorldDownloadBegins?.Invoke(this, new WorldDownloadBeginEventArgs(o));
 					});

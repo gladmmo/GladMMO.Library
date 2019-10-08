@@ -44,7 +44,7 @@ namespace GladMMO
 			WorldDownloader downloader = new WorldDownloader(Logger);
 
 			//At this point after this finishes the world shoud be downloaded.
-			await downloader.DownloadAsync(downloadUrlResponse.DownloadURL, null, true); //important that the world loads ontop of the existing scene.
+			await downloader.DownloadAsync(downloadUrlResponse.DownloadURL, downloadUrlResponse.Version, null, true); //important that the world loads ontop of the existing scene.
 		}
 	}
 }

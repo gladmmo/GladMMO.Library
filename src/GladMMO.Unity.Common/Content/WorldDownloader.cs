@@ -19,14 +19,14 @@ namespace GladMMO
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
-		public async Task<bool> DownloadAsync(string worldDownloadUrl, Action<AsyncOperation> onWorldDownloadBegins = null, bool loadSceneAdditive = false)
+		public async Task<bool> DownloadAsync(string worldDownloadUrl, int worldVersion, Action<AsyncOperation> onWorldDownloadBegins = null, bool loadSceneAdditive = false)
 		{
 			TaskCompletionSource<bool> resultSource = new TaskCompletionSource<bool>();
 
 			try
 			{
 				//TODO: Do we need to be on the main unity3d thread
-				UnityWebRequestAsyncOperation asyncOperation = UnityWebRequestAssetBundle.GetAssetBundle(worldDownloadUrl, 0).SendWebRequest();
+				UnityWebRequestAsyncOperation asyncOperation = UnityWebRequestAssetBundle.GetAssetBundle(worldDownloadUrl, (uint)worldVersion, 0).SendWebRequest();
 
 				onWorldDownloadBegins?.Invoke(asyncOperation);
 
