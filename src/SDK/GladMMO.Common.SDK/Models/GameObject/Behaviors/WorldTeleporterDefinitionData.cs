@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using UnityEngine;
 
 namespace GladMMO.SDK
 {
-	public sealed class WorldTeleporterDefinitionData : GladMMOSDKMonoBehaviour, INetworkGameObjectBehaviour
+	public sealed class WorldTeleporterDefinitionData : GladMMOSDKMonoBehaviour, INetworkGameObjectBehaviour, IRemoteModelUpdateable<WorldTeleporterInstanceModel>
 	{
 		public GameObjectType BehaviorType => GameObjectType.WorldTeleporter;
 
@@ -37,6 +38,17 @@ namespace GladMMO.SDK
 		{
 			get => _TargetTeleportWorldId;
 			set => _TargetTeleportWorldId = value;
+		}
+
+		public void Update([NotNull] WorldTeleporterInstanceModel model)
+		{
+			if (model == null) throw new ArgumentNullException(nameof(model));
+
+			LocalSpawnPointId = GameObject
+				.FindObjectsOfType<PlayerStaticSpawnPointDefinition>()
+				.First(sp => sp.PlayerSpawnPointId == model.LocalSpawnPointId);
+
+			RemoteSpawnPointId = model.RemoteSpawnPointId;
 		}
 	}
 }

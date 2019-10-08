@@ -7,6 +7,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\FinalIK.Models\FinalIK.Models.csproj" />
     <ProjectReference Include="..\..\GladMMO.Common\GladMMO.Common.csproj" />
+    <ProjectReference Include="..\..\GladMMO.Models.ContentServer\GladMMO.Models.ContentServer.csproj" />
   </ItemGroup>
 
   <ItemGroup>
