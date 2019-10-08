@@ -5,11 +5,12 @@ using Refit;
 
 namespace GladMMO.SDK
 {
-	public sealed class WorldTeleporterContentServiceClientFactory : IFactoryCreatable<IWorldTeleporterDataServiceClient, EmptyFactoryContext>
+	public sealed class WorldTeleporterContentServiceClientFactory : GenericGameObjectBehaviourServiceClientFactory<WorldTeleporterInstanceModel>
 	{
-		public IWorldTeleporterDataServiceClient Create(EmptyFactoryContext context)
+		public override IGameObjectBehaviourDataServiceClient<WorldTeleporterInstanceModel> Create(EmptyFactoryContext context)
 		{
-			return Refit.RestService.For<IWorldTeleporterDataServiceClient>("http://72.190.177.214:5005/", new RefitSettings() { HttpMessageHandlerFactory = () => new AuthenticatedHttpClientHandler(new ContentSDKAuthenticationTokenRepository()) });
+			//api/WorldTeleporterData
+			return Refit.RestService.For<IGameObjectBehaviourDataServiceClient<WorldTeleporterInstanceModel>>("http://72.190.177.214:5005/api/WorldTeleporterData/", new RefitSettings() { HttpMessageHandlerFactory = () => new AuthenticatedHttpClientHandler(new ContentSDKAuthenticationTokenRepository()) });
 		}
 	}
 }
