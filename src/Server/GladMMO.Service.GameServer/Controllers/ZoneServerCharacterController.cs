@@ -29,7 +29,7 @@ namespace GladMMO
 		//[AuthorizeJwt(GuardianApplicationRole.ZoneServer)] //TODO: Eventually we'll need to auth these zoneservers.
 		public async Task<IActionResult> WorldTeleportCharacter([FromBody] [NotNull] ZoneServerWorldTeleportCharacterRequest requestModel,
 			[FromServices] [NotNull] ICharacterLocationRepository characterLocationRepository,
-			[FromServices] [NotNull] IWorldTeleporterDataServiceClient worldTelporterDataClient,
+			[FromServices] [NotNull] IGameObjectBehaviourDataServiceClient<WorldTeleporterInstanceModel> worldTelporterDataClient,
 			[FromServices] [NotNull] IPlayerSpawnPointDataServiceClient playerSpawnDataClient)
 		{
 			if (requestModel == null) throw new ArgumentNullException(nameof(requestModel));
@@ -45,7 +45,7 @@ namespace GladMMO
 
 			//We don't await so that we can get rolling on this VERY async multi-part process.
 			//TODO: Handle failure
-			ResponseModel<WorldTeleporterInstanceModel, SceneContentQueryResponseCode> teleporterInstanceResponse = await worldTelporterDataClient.GetWorldTeleporterInstance(requestModel.WorldTeleporterId);
+			ResponseModel<WorldTeleporterInstanceModel, SceneContentQueryResponseCode> teleporterInstanceResponse = await worldTelporterDataClient.GetBehaviourInstance(requestModel.WorldTeleporterId);
 
 			//TODO: Handle failure
 			ResponseModel<PlayerSpawnPointInstanceModel, SceneContentQueryResponseCode> pointInstanceResponse = await playerSpawnDataClient.GetSpawnPointInstance(teleporterInstanceResponse.Result.RemoteSpawnPointId);

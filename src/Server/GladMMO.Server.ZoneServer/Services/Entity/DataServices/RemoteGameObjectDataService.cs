@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Common.Logging;
+using GladMMO.SDK;
 
 namespace GladMMO
 {
@@ -23,7 +24,7 @@ namespace GladMMO
 
 		private IGameObjectDataServiceClient DataServiceClient { get; }
 
-		private IWorldTeleporterDataServiceClient TeleporterDataServiceClient { get; }
+		private IGameObjectBehaviourDataServiceClient<WorldTeleporterInstanceModel> TeleporterDataServiceClient { get; }
 
 		private WorldConfiguration WorldConfiguration { get; }
 
@@ -35,7 +36,7 @@ namespace GladMMO
 			[NotNull] IGameObjectDataServiceClient dataServiceClient,
 			[NotNull] WorldConfiguration worldConfiguration,
 			[NotNull] ILog logger,
-			[NotNull] IWorldTeleporterDataServiceClient teleporterDataServiceClient,
+			[NotNull] IGameObjectBehaviourDataServiceClient<WorldTeleporterInstanceModel> teleporterDataServiceClient,
 			[NotNull] IEntityGuidMappable<WorldTeleporterInstanceModel> worldTeleporterInstanceMappable)
 		{
 			_GameObjectTemplateMappable = gameObjectTemplateMappable ?? throw new ArgumentNullException(nameof(gameObjectTemplateMappable));
@@ -54,7 +55,7 @@ namespace GladMMO
 			ResponseModel<ObjectEntryCollectionModel<GameObjectInstanceModel>, ContentEntryCollectionResponseCode> entriesByWorld = await DataServiceClient.GetGameObjectEntriesByWorld(WorldConfiguration.WorldId);
 			ResponseModel<ObjectEntryCollectionModel<GameObjectTemplateModel>, ContentEntryCollectionResponseCode> templatesByWorld = await DataServiceClient.GetGameObjectTemplatesByWorld(WorldConfiguration.WorldId);
 
-			ResponseModel<ObjectEntryCollectionModel<WorldTeleporterInstanceModel>, ContentEntryCollectionResponseCode> teleportersByWorld = await TeleporterDataServiceClient.GetWorldTeleporterEntriesByWorld(WorldConfiguration.WorldId);
+			ResponseModel<ObjectEntryCollectionModel<WorldTeleporterInstanceModel>, ContentEntryCollectionResponseCode> teleportersByWorld = await TeleporterDataServiceClient.GetBehaviourEntriesByWorld(WorldConfiguration.WorldId);
 
 			if (entriesByWorld.isSuccessful && templatesByWorld.isSuccessful)
 			{

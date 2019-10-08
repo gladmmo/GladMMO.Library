@@ -4,7 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Refit;
 
-namespace GladMMO.SDK
+namespace GladMMO
 {
 	[Headers("User-Agent: SDK 0.0.1")]
 	public interface IGameObjectBehaviourDataServiceClient<TBehaviourModelType> 
