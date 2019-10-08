@@ -7,7 +7,7 @@ using Nito.AsyncEx;
 
 namespace GladMMO
 {
-	//[SceneTypeCreateGladMMO(GameSceneType.DefaultLobby)]
+	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
 	public sealed class LocalPlayerSpawnedPlayerNameNameplateUpdateEventListener : BaseSingleEventListenerInitializable<ILocalPlayerSpawnedEventSubscribable, LocalPlayerSpawnedEventArgs>
 	{
 		private IUIText PlayerNameTextField { get; }
@@ -31,11 +31,13 @@ namespace GladMMO
 			//TODO: Find a better way to do async stuff on events.
 			UnityAsyncHelper.UnityMainThreadContext.PostAsync(async () =>
 			{
-				throw new NotImplementedException($"TODO: Reimplement");
-				//string nameQueryResponseValue = await NameQueryable.RetrieveAsync(args.EntityGuid)
-				//	.ConfigureAwait(true);
+				NameQueryResponse queryResponse = await NameQueryable.RetrieveAsync(args.EntityGuid)
+					.ConfigureAwait(true);
 
-				//PlayerNameTextField.Text = nameQueryResponseValue;
+				if (queryResponse.isSuccessful)
+					PlayerNameTextField.Text = queryResponse.EntityName;
+				else
+					PlayerNameTextField.Text = "Unknown";
 			});
 		}
 	}
