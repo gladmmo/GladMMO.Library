@@ -8,7 +8,7 @@ using GladMMO.Database;
 namespace GladMMO
 {
 	[Table("gameobject_worldteleporter")]
-	public class GameObjectWorldTeleporterEntryModel : IInstanceableWorldObjectModel, IModelEntryUpdateable<GameObjectWorldTeleporterEntryModel>
+	public class GameObjectWorldTeleporterEntryModel : IInstanceableWorldObjectModel, IModelEntryUpdateable<GameObjectWorldTeleporterEntryModel>, IGameObjectEntryLinkable
 	{
 		public int ObjectInstanceId => TargetGameObjectId;
 

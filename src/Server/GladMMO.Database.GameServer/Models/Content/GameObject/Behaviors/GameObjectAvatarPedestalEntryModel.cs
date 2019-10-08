@@ -8,7 +8,7 @@ using GladMMO.Database;
 namespace GladMMO
 {
 	[Table("gameobject_avatarpedestal")]
-	public class GameObjectAvatarPedestalEntryModel : IInstanceableWorldObjectModel, IModelEntryUpdateable<GameObjectAvatarPedestalEntryModel>
+	public class GameObjectAvatarPedestalEntryModel : IInstanceableWorldObjectModel, IModelEntryUpdateable<GameObjectAvatarPedestalEntryModel>, IGameObjectEntryLinkable
 	{
 		public int ObjectInstanceId => TargetGameObjectId;
 
