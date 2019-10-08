@@ -85,8 +85,7 @@ namespace GladMMO.SDK
 						INetworkGameObjectBehaviour behaviour = GetTarget().gameObject.GetComponent<INetworkGameObjectBehaviour>();
 						if (behaviour == null)
 						{
-							//TODO: Better handling for created component.
-							GetTarget().gameObject.AddComponent<WorldTeleporterDefinitionData>();
+							new GameObjectBehaviorComponentFactory().Create(new BehaviourAttachmentContext(GetTarget().gameObject, CachedGameObjectType));
 						}
 						else
 						{
