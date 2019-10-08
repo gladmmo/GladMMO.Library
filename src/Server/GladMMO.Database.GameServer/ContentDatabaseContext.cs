@@ -29,6 +29,8 @@ namespace GladMMO
 
 		public DbSet<GameObjectWorldTeleporterEntryModel> WorldTeleporters { get; set; }
 
+		public DbSet<GameObjectAvatarPedestalEntryModel> AvatarPedestals { get; set; }
+
 		public ContentDatabaseContext(DbContextOptions<ContentDatabaseContext> options) 
 			: base(options)
 		{
