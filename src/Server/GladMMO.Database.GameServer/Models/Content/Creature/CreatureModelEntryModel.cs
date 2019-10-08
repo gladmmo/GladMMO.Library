@@ -44,6 +44,13 @@ namespace GladMMO
 		public Guid StorageGuid { get; private set; }
 
 		/// <summary>
+		/// The versioning information for the content.
+		/// </summary>
+		[Required]
+		[Range(0, int.MaxValue)]
+		public int Version { get; set; }
+
+		/// <summary>
 		/// Indicates if the asset bundle has been validated.
 		/// </summary>
 		[Required]
@@ -59,6 +66,7 @@ namespace GladMMO
 			AccountId = accountId;
 			CreationIp = creationIp;
 			StorageGuid = storageGuid;
+			Version = 0;
 		}
 
 		protected CreatureModelEntryModel()

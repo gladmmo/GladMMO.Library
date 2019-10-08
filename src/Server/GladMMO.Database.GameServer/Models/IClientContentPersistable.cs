@@ -35,5 +35,12 @@ namespace GladMMO
 		/// </summary>
 		[Required]
 		Guid StorageGuid { get; }
+
+		/// <summary>
+		/// Integer version for the content.
+		/// </summary>
+		[Required]
+		[Range(0, int.MaxValue)]
+		int Version { get; }
 	}
 }
