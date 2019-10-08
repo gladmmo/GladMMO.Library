@@ -71,16 +71,11 @@ namespace GladMMO
 
 		private IReadonlyPositionalVoiceChannelCollection PositionalChannels { get; }
 
-		//We inject this purely because we need data bout the dispose state.
-		private VivoxUnity.Client Client { get; }
-
 		public PositionalVoiceEntityTickable([NotNull] IReadonlyPositionalVoiceChannelCollection positionalChannels, 
-			[NotNull] IReadonlyEntityGuidMappable<EntityGameObjectDirectory> gameObjectDirectoryMappable,
-			[NotNull] VivoxUnity.Client client)
+			[NotNull] IReadonlyEntityGuidMappable<EntityGameObjectDirectory> gameObjectDirectoryMappable)
 		{
 			PositionalChannels = positionalChannels ?? throw new ArgumentNullException(nameof(positionalChannels));
 			GameObjectDirectoryMappable = gameObjectDirectoryMappable ?? throw new ArgumentNullException(nameof(gameObjectDirectoryMappable));
-			Client = client ?? throw new ArgumentNullException(nameof(client));
 		}
 
 		public void InitializeTrackerGameObject(NetworkEntityGuid entityGuid)
