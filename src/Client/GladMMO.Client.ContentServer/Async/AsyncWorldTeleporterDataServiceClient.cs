@@ -23,19 +23,19 @@ namespace GladMMO
 		}
 
 
-		public async Task<ResponseModel<WorldTeleporterInstanceModel, SceneContentQueryResponseCode>> GetWorldTeleporterInstance(int gameObjectId)
+		public async Task<ResponseModel<WorldTeleporterInstanceModel, SceneContentQueryResponseCode>> GetBehaviourInstance(int gameObjectId)
 		{
-			return await (await GetService().ConfigureAwait(false)).GetWorldTeleporterInstance(gameObjectId).ConfigureAwait(false);
+			return await (await GetService().ConfigureAwait(false)).GetBehaviourInstance(gameObjectId).ConfigureAwait(false);
 		}
 
-		public async Task UpdateGameObjectInstance(int gameObjectId, WorldTeleporterInstanceModel model)
+		public async Task UpdateBehaviourInstance(int gameObjectId, WorldTeleporterInstanceModel model)
 		{
-			await (await GetService().ConfigureAwait(false)).UpdateGameObjectInstance(gameObjectId, model).ConfigureAwait(false);
+			await (await GetService().ConfigureAwait(false)).UpdateBehaviourInstance(gameObjectId, model).ConfigureAwait(false);
 		}
 
-		public async Task<ResponseModel<ObjectEntryCollectionModel<WorldTeleporterInstanceModel>, ContentEntryCollectionResponseCode>> GetWorldTeleporterEntriesByWorld(long worldId)
+		public async Task<ResponseModel<ObjectEntryCollectionModel<WorldTeleporterInstanceModel>, ContentEntryCollectionResponseCode>> GetBehaviourEntriesByWorld(long worldId)
 		{
-			return await (await GetService().ConfigureAwait(false)).GetWorldTeleporterEntriesByWorld(worldId).ConfigureAwait(false);
+			return await (await GetService().ConfigureAwait(false)).GetBehaviourEntriesByWorld(worldId).ConfigureAwait(false);
 		}
 	}
 }
