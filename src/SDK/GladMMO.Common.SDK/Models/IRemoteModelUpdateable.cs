@@ -10,10 +10,11 @@ namespace GladMMO
 	/// <typeparam name="TRemoteModelType">The remote model type.</typeparam>
 	public interface IRemoteModelUpdateable<in TRemoteModelType>
 	{
+		//Can't call this Update, conflicts with Unity magic method.
 		/// <summary>
 		/// Updates the model with the remote <see cref="model"/> counterpart's data.
 		/// </summary>
 		/// <param name="model"></param>
-		void Update(TRemoteModelType model);
+		void UpdateModel(TRemoteModelType model);
 	}
 }

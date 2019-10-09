@@ -109,7 +109,7 @@ namespace GladMMO.SDK
 				var responseModel = await client.GetBehaviourInstance(GetTarget().gameObject.GetComponent<GameObjectStaticSpawnPointDefinition>().GameObjectInstanceId);
 
 				//TODO: Handle failure
-				GetTarget().Update(responseModel.Result);
+				GetTarget().UpdateModel(responseModel.Result);
 			}
 			catch(Exception e)
 			{

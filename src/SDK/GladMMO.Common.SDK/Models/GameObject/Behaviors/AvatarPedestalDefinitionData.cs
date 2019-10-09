@@ -22,7 +22,7 @@ namespace GladMMO.SDK
 			set => _TargetAvatarModelId = value;
 		}
 
-		public void Update([NotNull] AvatarPedestalInstanceModel model)
+		public void UpdateModel([NotNull] AvatarPedestalInstanceModel model)
 		{
 			if (model == null) throw new ArgumentNullException(nameof(model));
 

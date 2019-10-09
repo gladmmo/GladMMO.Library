@@ -40,7 +40,7 @@ namespace GladMMO.SDK
 			set => _TargetTeleportWorldId = value;
 		}
 
-		public void Update([NotNull] WorldTeleporterInstanceModel model)
+		public void UpdateModel([NotNull] WorldTeleporterInstanceModel model)
 		{
 			if (model == null) throw new ArgumentNullException(nameof(model));
 
