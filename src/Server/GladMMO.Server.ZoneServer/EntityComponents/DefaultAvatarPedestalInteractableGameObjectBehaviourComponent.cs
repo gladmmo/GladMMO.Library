@@ -36,7 +36,7 @@ namespace GladMMO
 
 			IEntityDataFieldContainer dataFieldContainer = EntityDataContainer.RetrieveEntity(entityInteracting);
 
-			dataFieldContainer.SetFieldValue(EUnitFields.UNIT_FIELD_DISPLAYID, BehaviourData.AvatarModelId);
+			dataFieldContainer.SetFieldValue(BaseObjectField.UNIT_FIELD_DISPLAYID, BehaviourData.AvatarModelId);
 		}
 	}
 }
