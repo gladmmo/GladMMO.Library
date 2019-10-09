@@ -98,7 +98,7 @@ namespace GladMMO
 				if(Logger.IsInfoEnabled)
 					Logger.Info($"Processing {typeof(TInstanceModelType).Name} Data Instance: {instance.LinkedGameObjectId}");
 
-				BehaviourInstanceDataMappable.Add(typeof(TInstanceModelType), new EntityGuidDictionary<object>());
+				BehaviourInstanceDataMappable.Add(typeof(TInstanceModelType), new InstanceStaticEntityDataCollection<object>());
 
 				NetworkEntityGuid guid = new NetworkEntityGuidBuilder()
 					.WithEntryId(instance.LinkedGameObjectId)
