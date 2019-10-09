@@ -8,16 +8,8 @@ using Reinterpret.Net;
 
 namespace GladMMO
 {
-	public sealed class EntityFieldDataCollection<TFieldType> : IEntityDataFieldContainer, IEntityDataFieldContainer<TFieldType>
-		where TFieldType : struct //TODO: When C# 8.0 or 7.3 is better supported switch to it for Enum constraint
+	public sealed class EntityFieldDataCollection : IEntityDataFieldContainer
 	{
-		//TODO: This is a hack until Enum constraint.
-		static EntityFieldDataCollection()
-		{
-			if(!typeof(TFieldType).IsEnum)
-				throw new InvalidOperationException($"Type: {typeof(TFieldType).Name} {nameof(TFieldType)} MUST be an enum type for Type: {typeof(EntityFieldDataCollection<>)}");
-		}
-
 		//Data fields are modeled as 4 byte fields.
 		//.NET runtime does a really good job of optimizing Int32 operations
 		//and Int32 arrays. Most fields are small enough to be represented by integer fields
@@ -30,18 +22,11 @@ namespace GladMMO
 		/// <inheritdoc />
 		public WireReadyBitArray DataSetIndicationArray { get; }
 
-		public EntityFieldDataCollection()
-		{
-			//TODO: Make this allocation more efficient. Maybe even use pooling.
-			InternalDataFields = new byte[ComputeDataFieldCollectionLength()];
-			DataSetIndicationArray = new WireReadyBitArray(ComputeBitLength());
-		}
-
 		public EntityFieldDataCollection(int fieldCount)
 		{
 			//TODO: Make this allocation more efficient. Maybe even use pooling.
 			InternalDataFields = new byte[fieldCount * sizeof(int)];
-			DataSetIndicationArray = new WireReadyBitArray(fieldCount);
+			DataSetIndicationArray = new WireReadyBitArray(fieldCount * sizeof(int) * 8);
 		}
 
 		/// <summary>
@@ -65,37 +50,15 @@ namespace GladMMO
 			DataSetIndicationArray = initialDataSetIndicationArray;
 		}
 
-		//Same number of bits as fields.
-		private static int ComputeBitLength()
-		{
-			return Enum.GetValues(typeof(TFieldType)).Length;
-		}
-
-		private static int ComputeDataFieldCollectionLength()
-		{
-			return ComputeBitLength() * sizeof(int);
-		}
-
 		/// <inheritdoc />
 		public EntityFieldDataCollection(byte[] internalDataFields)
 		{
 			if(internalDataFields == null) throw new ArgumentNullException(nameof(internalDataFields));
-			if(internalDataFields.Length != ComputeDataFieldCollectionLength())
-				throw new InvalidOperationException($"Cannot initialize: {GetType().Name} with data fields Length: {internalDataFields}. Required exact Length: {ComputeDataFieldCollectionLength()}");
 
 			InternalDataFields = internalDataFields;
 		}
 
-		//TFieldType
-
-		public TValueType GetFieldValue<TValueType>(TFieldType index)
-			where TValueType : struct
-		{
-			return GetFieldValue<TValueType>(GenericMath.Convert<TFieldType, int>(index));
-		}
-
 		//TODO: Would ref return be better here? Maybe only for 64bits?
-
 		public TValueType GetFieldValue<TValueType>(int index)
 			where TValueType : struct
 		{
@@ -108,7 +71,7 @@ namespace GladMMO
 		private void IfIndexExceedsLengthThrow(int index)
 		{
 			if(index >= InternalDataFields.Length)
-				throw new ArgumentOutOfRangeException(nameof(index), $"Provided Index: {index} was out of range. Max index for Type: {typeof(TFieldType).Name} is Index: {InternalDataFields.Length - 1}");
+				throw new ArgumentOutOfRangeException(nameof(index), $"Provided Index: {index} was out of range. Max Index: {InternalDataFields.Length - 1}");
 		}
 
 		/// <inheritdoc />
@@ -123,13 +86,6 @@ namespace GladMMO
 				DataSetIndicationArray.Set(index, true);
 				value.Reinterpret(InternalDataFields, index * sizeof(int));
 			}
-		}
-
-		/// <inheritdoc />
-		public void SetFieldValue<TValueType>(TFieldType index, TValueType value) 
-			where TValueType : struct
-		{
-			SetFieldValue<TValueType>(GenericMath.Convert<TFieldType, int>(index), value);
 		}
 	}
 }

@@ -18,10 +18,4 @@ namespace GladMMO
 		void SetFieldValue<TValueType>(int index, TValueType value)
 			where TValueType : struct;
 	}
-
-	public interface IEntityDataFieldContainer<in TFieldType> : IReadonlyEntityDataFieldContainer<TFieldType>, IEntityDataFieldContainer
-	{
-		void SetFieldValue<TValueType>(TFieldType index, TValueType value)
-			where TValueType : struct;
-	}
 }

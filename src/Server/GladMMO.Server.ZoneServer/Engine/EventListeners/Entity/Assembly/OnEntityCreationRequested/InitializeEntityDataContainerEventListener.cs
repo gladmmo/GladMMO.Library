@@ -34,7 +34,7 @@ namespace GladMMO
 			//TODO: handle non-players
 			//TODO: Fix the issue with having to hardcore the field count.
 			//Build the update values stuff and initialize the initial movement data.
-			ChangeTrackableCollection.AddObject(guid, new ChangeTrackingEntityFieldDataCollectionDecorator(new EntityFieldDataCollection<EUnitFields>(1328)));
+			ChangeTrackableCollection.AddObject(guid, new ChangeTrackingEntityFieldDataCollectionDecorator(new EntityFieldDataCollection(1328)));
 			EntityDataContainer.AddObject(guid, ChangeTrackableCollection.RetrieveEntity(guid));
 		}
 	}

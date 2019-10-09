@@ -20,7 +20,7 @@ namespace GladMMO
 		public void Test_FieldValueFactory_With_Single_Value_Produces_Correct_FieldValueUpdate([EntityDataCollectionTestRange] int index, [Values(1, 2, 3, 4, 5, 6, 7, 8)] int value)
 		{
 			//arrange
-			ChangeTrackingEntityFieldDataCollectionDecorator<TestFieldType> collection = new ChangeTrackingEntityFieldDataCollectionDecorator<TestFieldType>(new EntityFieldDataCollection<TestFieldType>());
+			ChangeTrackingEntityFieldDataCollectionDecorator collection = new ChangeTrackingEntityFieldDataCollectionDecorator(new EntityFieldDataCollection(8));
 			FieldValueUpdateFactory updateFactory = new FieldValueUpdateFactory();
 
 			//act
@@ -38,7 +38,7 @@ namespace GladMMO
 		public void Test_FieldValueFactory_With_Multiple_Value_Produces_Correct_FieldValueUpdate()
 		{
 			//arrange
-			ChangeTrackingEntityFieldDataCollectionDecorator<TestFieldType> collection = new ChangeTrackingEntityFieldDataCollectionDecorator<TestFieldType>(new EntityFieldDataCollection<TestFieldType>());
+			ChangeTrackingEntityFieldDataCollectionDecorator collection = new ChangeTrackingEntityFieldDataCollectionDecorator(new EntityFieldDataCollection(8));
 			FieldValueUpdateFactory updateFactory = new FieldValueUpdateFactory();
 
 			//act
@@ -58,7 +58,7 @@ namespace GladMMO
 		public void Test_ChangeTracker_With_Multiple_Value_Indicates_No_Changes_After_Clearing_FieldValueUpdate()
 		{
 			//arrange
-			ChangeTrackingEntityFieldDataCollectionDecorator<TestFieldType> collection = new ChangeTrackingEntityFieldDataCollectionDecorator<TestFieldType>(new EntityFieldDataCollection<TestFieldType>());
+			ChangeTrackingEntityFieldDataCollectionDecorator collection = new ChangeTrackingEntityFieldDataCollectionDecorator(new EntityFieldDataCollection(8));
 			FieldValueUpdateFactory updateFactory = new FieldValueUpdateFactory();
 
 			//act
@@ -78,7 +78,7 @@ namespace GladMMO
 		public void Test_ChangeTracker_With_Multiple_Value_Indicates_Correct_After_Clearing_Then_Setting_FieldValueUpdate()
 		{
 			//arrange
-			ChangeTrackingEntityFieldDataCollectionDecorator<TestFieldType> collection = new ChangeTrackingEntityFieldDataCollectionDecorator<TestFieldType>(new EntityFieldDataCollection<TestFieldType>());
+			ChangeTrackingEntityFieldDataCollectionDecorator collection = new ChangeTrackingEntityFieldDataCollectionDecorator(new EntityFieldDataCollection(8));
 			FieldValueUpdateFactory updateFactory = new FieldValueUpdateFactory();
 
 			//act

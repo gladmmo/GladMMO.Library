@@ -50,7 +50,7 @@ namespace GladMMO
 			byte[] copiedFieldUpdateMask = new byte[fieldValueData.FieldValueUpdateMask.InternalIntegerArray.Count];
 			Buffer.BlockCopy(fieldValueData.FieldValueUpdateMask.InternalIntegerArray.ToArrayTryAvoidCopy(), 0, copiedFieldUpdateMask, 0, fieldValueData.FieldValueUpdateMask.InternalIntegerArray.Count);
 
-			IEntityDataFieldContainer t = new EntityFieldDataCollection<EUnitFields>(new WireReadyBitArray(copiedFieldUpdateMask), internalEntityDataBytes);
+			IEntityDataFieldContainer t = new EntityFieldDataCollection(new WireReadyBitArray(copiedFieldUpdateMask), internalEntityDataBytes);
 
 			int updateDiffIndex = 0;
 			foreach(int setIndex in t.DataSetIndicationArray.EnumerateSetBitsByIndex())

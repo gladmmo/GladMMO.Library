@@ -13,7 +13,7 @@ namespace GladMMO.Tests.Collections
 		public void Test_Index_Not_Set_Shows_No_Changes_Set([EntityDataCollectionTestRange] int index)
 		{
 			//arrange
-			ChangeTrackingEntityFieldDataCollectionDecorator<TestEnum> collection = new ChangeTrackingEntityFieldDataCollectionDecorator<TestEnum>(base.CreateEntityDataCollection());
+			ChangeTrackingEntityFieldDataCollectionDecorator collection = new ChangeTrackingEntityFieldDataCollectionDecorator(base.CreateEntityDataCollection());
 
 			//act
 			bool isSet = collection.ChangeTrackingArray.Get(index);
@@ -26,7 +26,7 @@ namespace GladMMO.Tests.Collections
 		public void Test_Index_Set_Causes_Dirty_Bit_Set([EntityDataCollectionTestRange] int index, [Values(1, 2, 3, 4, 5, 6, 7, 8)] int value)
 		{
 			//arrange
-			ChangeTrackingEntityFieldDataCollectionDecorator<TestEnum> collection = new ChangeTrackingEntityFieldDataCollectionDecorator<TestEnum>(base.CreateEntityDataCollection());
+			ChangeTrackingEntityFieldDataCollectionDecorator collection = new ChangeTrackingEntityFieldDataCollectionDecorator(base.CreateEntityDataCollection());
 
 			//act
 			collection.SetFieldValue<int>(index, value);
@@ -41,7 +41,7 @@ namespace GladMMO.Tests.Collections
 		public void Test_PendingChanges_Not_True_When_EquivalentValues_Set([EntityDataCollectionTestRange] int index, [Values(1, 2, 3, 4, 5, 6, 7, 8)] int value)
 		{
 			//arrange
-			ChangeTrackingEntityFieldDataCollectionDecorator<TestEnum> collection = new ChangeTrackingEntityFieldDataCollectionDecorator<TestEnum>(base.CreateEntityDataCollection());
+			ChangeTrackingEntityFieldDataCollectionDecorator collection = new ChangeTrackingEntityFieldDataCollectionDecorator(base.CreateEntityDataCollection());
 
 			//act
 			collection.SetFieldValue<int>(index, value);
@@ -59,7 +59,7 @@ namespace GladMMO.Tests.Collections
 		public void Test_PendingChanges_Not_True_When_EquivalentValues_Set_Float([EntityDataCollectionTestRange] int index, [Values(1.2f, 2.5f, 3.6335f, 4.673f, 5.22222f, 6.63f, 7.123f, 8.789f)] float value)
 		{
 			//arrange
-			ChangeTrackingEntityFieldDataCollectionDecorator<TestEnum> collection = new ChangeTrackingEntityFieldDataCollectionDecorator<TestEnum>(base.CreateEntityDataCollection());
+			ChangeTrackingEntityFieldDataCollectionDecorator collection = new ChangeTrackingEntityFieldDataCollectionDecorator(base.CreateEntityDataCollection());
 
 			//act
 			collection.SetFieldValue(index, value);
@@ -76,7 +76,7 @@ namespace GladMMO.Tests.Collections
 		public void Test_Indicies_Set_Are_Tracked_And_Unset_Not_Tracked([Values(1, 2, 3, 4, 5, 6, 7, 8)] int value)
 		{
 			//arrange
-			ChangeTrackingEntityFieldDataCollectionDecorator<TestEnum> collection = new ChangeTrackingEntityFieldDataCollectionDecorator<TestEnum>(base.CreateEntityDataCollection());
+			ChangeTrackingEntityFieldDataCollectionDecorator collection = new ChangeTrackingEntityFieldDataCollectionDecorator(base.CreateEntityDataCollection());
 
 			//act
 			collection.SetFieldValue<int>(2, value);
@@ -95,11 +95,11 @@ namespace GladMMO.Tests.Collections
 		public void Test_Can_Clear_TrackedChanges()
 		{
 			//arrange
-			ChangeTrackingEntityFieldDataCollectionDecorator<TestEnum> collection = new ChangeTrackingEntityFieldDataCollectionDecorator<TestEnum>(base.CreateEntityDataCollection());
+			ChangeTrackingEntityFieldDataCollectionDecorator collection = new ChangeTrackingEntityFieldDataCollectionDecorator(base.CreateEntityDataCollection());
 
 			//act
 			for(int i = 0; i < 4; i++)
-				collection.SetFieldValue<int>((TestEnum)i, 3);
+				collection.SetFieldValue<int>(i, 3);
 
 			collection.ClearTrackedChanges();
 
@@ -109,9 +109,9 @@ namespace GladMMO.Tests.Collections
 		}
 
 		/// <inheritdoc />
-		protected override IEntityDataFieldContainer<TestEnum> CreateEntityDataCollection()
+		protected override IEntityDataFieldContainer CreateEntityDataCollection()
 		{
-			return new ChangeTrackingEntityFieldDataCollectionDecorator<TestEnum>(base.CreateEntityDataCollection());
+			return new ChangeTrackingEntityFieldDataCollectionDecorator(base.CreateEntityDataCollection());
 		}
 	}
 }
