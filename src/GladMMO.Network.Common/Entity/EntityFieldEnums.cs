@@ -16,57 +16,6 @@ namespace GladMMO
 		OBJECT_END = 0x0006
 	};
 
-	public enum EItemFields
-	{
-		ITEM_FIELD_OWNER = EObjectFields.OBJECT_END + 0x0000, // Size: 2, Type: LONG, Flags: PUBLIC
-		ITEM_FIELD_CONTAINED = EObjectFields.OBJECT_END + 0x0002, // Size: 2, Type: LONG, Flags: PUBLIC
-		ITEM_FIELD_CREATOR = EObjectFields.OBJECT_END + 0x0004, // Size: 2, Type: LONG, Flags: PUBLIC
-		ITEM_FIELD_GIFTCREATOR = EObjectFields.OBJECT_END + 0x0006, // Size: 2, Type: LONG, Flags: PUBLIC
-		ITEM_FIELD_STACK_COUNT = EObjectFields.OBJECT_END + 0x0008, // Size: 1, Type: INT, Flags: OWNER, ITEM_OWNER
-		ITEM_FIELD_DURATION = EObjectFields.OBJECT_END + 0x0009, // Size: 1, Type: INT, Flags: OWNER, ITEM_OWNER
-		ITEM_FIELD_SPELL_CHARGES = EObjectFields.OBJECT_END + 0x000A, // Size: 5, Type: INT, Flags: OWNER, ITEM_OWNER
-		ITEM_FIELD_FLAGS = EObjectFields.OBJECT_END + 0x000F, // Size: 1, Type: INT, Flags: PUBLIC
-		ITEM_FIELD_ENCHANTMENT_1_1 = EObjectFields.OBJECT_END + 0x0010, // Size: 2, Type: INT, Flags: PUBLIC
-		ITEM_FIELD_ENCHANTMENT_1_3 = EObjectFields.OBJECT_END + 0x0012, // Size: 1, Type: TWO_SHORT, Flags: PUBLIC
-		ITEM_FIELD_ENCHANTMENT_2_1 = EObjectFields.OBJECT_END + 0x0013, // Size: 2, Type: INT, Flags: PUBLIC
-		ITEM_FIELD_ENCHANTMENT_2_3 = EObjectFields.OBJECT_END + 0x0015, // Size: 1, Type: TWO_SHORT, Flags: PUBLIC
-		ITEM_FIELD_ENCHANTMENT_3_1 = EObjectFields.OBJECT_END + 0x0016, // Size: 2, Type: INT, Flags: PUBLIC
-		ITEM_FIELD_ENCHANTMENT_3_3 = EObjectFields.OBJECT_END + 0x0018, // Size: 1, Type: TWO_SHORT, Flags: PUBLIC
-		ITEM_FIELD_ENCHANTMENT_4_1 = EObjectFields.OBJECT_END + 0x0019, // Size: 2, Type: INT, Flags: PUBLIC
-		ITEM_FIELD_ENCHANTMENT_4_3 = EObjectFields.OBJECT_END + 0x001B, // Size: 1, Type: TWO_SHORT, Flags: PUBLIC
-		ITEM_FIELD_ENCHANTMENT_5_1 = EObjectFields.OBJECT_END + 0x001C, // Size: 2, Type: INT, Flags: PUBLIC
-		ITEM_FIELD_ENCHANTMENT_5_3 = EObjectFields.OBJECT_END + 0x001E, // Size: 1, Type: TWO_SHORT, Flags: PUBLIC
-		ITEM_FIELD_ENCHANTMENT_6_1 = EObjectFields.OBJECT_END + 0x001F, // Size: 2, Type: INT, Flags: PUBLIC
-		ITEM_FIELD_ENCHANTMENT_6_3 = EObjectFields.OBJECT_END + 0x0021, // Size: 1, Type: TWO_SHORT, Flags: PUBLIC
-		ITEM_FIELD_ENCHANTMENT_7_1 = EObjectFields.OBJECT_END + 0x0022, // Size: 2, Type: INT, Flags: PUBLIC
-		ITEM_FIELD_ENCHANTMENT_7_3 = EObjectFields.OBJECT_END + 0x0024, // Size: 1, Type: TWO_SHORT, Flags: PUBLIC
-		ITEM_FIELD_ENCHANTMENT_8_1 = EObjectFields.OBJECT_END + 0x0025, // Size: 2, Type: INT, Flags: PUBLIC
-		ITEM_FIELD_ENCHANTMENT_8_3 = EObjectFields.OBJECT_END + 0x0027, // Size: 1, Type: TWO_SHORT, Flags: PUBLIC
-		ITEM_FIELD_ENCHANTMENT_9_1 = EObjectFields.OBJECT_END + 0x0028, // Size: 2, Type: INT, Flags: PUBLIC
-		ITEM_FIELD_ENCHANTMENT_9_3 = EObjectFields.OBJECT_END + 0x002A, // Size: 1, Type: TWO_SHORT, Flags: PUBLIC
-		ITEM_FIELD_ENCHANTMENT_10_1 = EObjectFields.OBJECT_END + 0x002B, // Size: 2, Type: INT, Flags: PUBLIC
-		ITEM_FIELD_ENCHANTMENT_10_3 = EObjectFields.OBJECT_END + 0x002D, // Size: 1, Type: TWO_SHORT, Flags: PUBLIC
-		ITEM_FIELD_ENCHANTMENT_11_1 = EObjectFields.OBJECT_END + 0x002E, // Size: 2, Type: INT, Flags: PUBLIC
-		ITEM_FIELD_ENCHANTMENT_11_3 = EObjectFields.OBJECT_END + 0x0030, // Size: 1, Type: TWO_SHORT, Flags: PUBLIC
-		ITEM_FIELD_ENCHANTMENT_12_1 = EObjectFields.OBJECT_END + 0x0031, // Size: 2, Type: INT, Flags: PUBLIC
-		ITEM_FIELD_ENCHANTMENT_12_3 = EObjectFields.OBJECT_END + 0x0033, // Size: 1, Type: TWO_SHORT, Flags: PUBLIC
-		ITEM_FIELD_PROPERTY_SEED = EObjectFields.OBJECT_END + 0x0034, // Size: 1, Type: INT, Flags: PUBLIC
-		ITEM_FIELD_RANDOM_PROPERTIES_ID = EObjectFields.OBJECT_END + 0x0035, // Size: 1, Type: INT, Flags: PUBLIC
-		ITEM_FIELD_DURABILITY = EObjectFields.OBJECT_END + 0x0036, // Size: 1, Type: INT, Flags: OWNER, ITEM_OWNER
-		ITEM_FIELD_MAXDURABILITY = EObjectFields.OBJECT_END + 0x0037, // Size: 1, Type: INT, Flags: OWNER, ITEM_OWNER
-		ITEM_FIELD_CREATE_PLAYED_TIME = EObjectFields.OBJECT_END + 0x0038, // Size: 1, Type: INT, Flags: PUBLIC
-		ITEM_FIELD_PAD = EObjectFields.OBJECT_END + 0x0039, // Size: 1, Type: INT, Flags: NONE
-		ITEM_END = EObjectFields.OBJECT_END + 0x003A
-	};
-
-	public enum EContainerFields
-	{
-		CONTAINER_FIELD_NUM_SLOTS = EItemFields.ITEM_END + 0x0000, // Size: 1, Type: INT, Flags: PUBLIC
-		CONTAINER_ALIGN_PAD = EItemFields.ITEM_END + 0x0001, // Size: 1, Type: BYTES, Flags: NONE
-		CONTAINER_FIELD_SLOT_1 = EItemFields.ITEM_END + 0x0002, // Size: 72, Type: LONG, Flags: PUBLIC
-		CONTAINER_END = EItemFields.ITEM_END + 0x004A
-	};
-
 	public enum EUnitFields
 	{
 		UNIT_FIELD_CHARM = EObjectFields.OBJECT_END + 0x0000, // Size: 2, Type: LONG, Flags: PUBLIC
