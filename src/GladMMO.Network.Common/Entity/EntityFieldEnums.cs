@@ -9,20 +9,25 @@ namespace GladMMO
 		UNIT_FIELD_DISPLAYID = 0x0000, // Size: 1, Type: INT, Flags: PUBLIC
 		OBJECT_FIELD_SCALE_X = 0x0001, // Size: 1, Type: FLOAT, Flags: PUBLIC
 		UNIT_FIELD_LEVEL = 0x0002, // Size: 1, Type: INT, Flags: PUBLIC
+		RESERVED_1 = 0x0003,
+		RESERVED_2 = 0x0004,
+		RESERVED_3 = 0x0005,
+		RESERVED_4 = 0x0006,
+		RESERVED_5 = 0x0007,
 
 		//The end of the base fields.
-		OBJECT_END = 0x0003
+		OBJECT_END = RESERVED_5,
 	}
 
 	public enum EntityObjectField
 	{
-		UNIT_FIELD_HEALTH = BaseObjectField.OBJECT_END + 0x0000, // Size: 1, Type: INT, Flags: PUBLIC
-		UNIT_FIELD_MAXHEALTH = BaseObjectField.OBJECT_END + 0x0001, // Size: 1, Type: INT, Flags: PUBLIC
+		UNIT_FIELD_HEALTH = BaseObjectField.OBJECT_END + 0x0001, // Size: 1, Type: INT, Flags: PUBLIC
+		UNIT_FIELD_MAXHEALTH = BaseObjectField.OBJECT_END + 0x0002, // Size: 1, Type: INT, Flags: PUBLIC
 	}
 
 	//TODO: We should move away from this and implement our own, these are just place holders from World of Warcraft/TrinityCore.
 	//These public enums are the update field public enums taken from Trinitycore 3.3.5
-	public enum EObjectFields
+	/*public enum EObjectFields
 	{
 		OBJECT_FIELD_GUID = 0x0000, // Size: 2, Type: LONG, Flags: PUBLIC
 		OBJECT_FIELD_TYPE = 0x0002, // Size: 1, Type: INT, Flags: PUBLIC
@@ -379,5 +384,5 @@ namespace GladMMO
 		CORPSE_FIELD_DYNAMIC_FLAGS = EObjectFields.OBJECT_END + 0x001C, // Size: 1, Type: INT, Flags: DYNAMIC
 		CORPSE_FIELD_PAD = EObjectFields.OBJECT_END + 0x001D, // Size: 1, Type: INT, Flags: NONE
 		CORPSE_END = EObjectFields.OBJECT_END + 0x001E
-	};
+	};*/
 }
