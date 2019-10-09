@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Common.Logging;
+using Glader.Essentials;
 
 namespace GladMMO
 {
@@ -9,8 +10,9 @@ namespace GladMMO
 	/// Event listener that listens for the finished construction of a GameObject entity.
 	/// It then attaches any required <see cref="BaseGameObjectEntityBehaviourComponent"/>.
 	/// </summary>
+	[AdditionalRegisterationAs(typeof(IGameObjectBehaviourCreatedEventSubscribable))]
 	[ServerSceneTypeCreate(ServerSceneType.Default)]
-	public sealed class GameObjectBehaviourAttachmentEventListener : GameObjectCreationFinishedEventListener
+	public sealed class GameObjectBehaviourAttachmentEventListener : GameObjectCreationFinishedEventListener, IGameObjectBehaviourCreatedEventSubscribable
 	{
 		private IGameObjectEntityBehaviourFactory BehaviourFactory { get; }
 
@@ -19,6 +21,8 @@ namespace GladMMO
 		private IEntityGuidMappable<BaseGameObjectEntityBehaviourComponent> GameObjectBehaviorComponentMappable { get; }
 
 		private ILog Logger { get; }
+
+		public event EventHandler<GameObjectBehaviourCreatedEventArgs> OnBehaviourCreated;
 
 		public GameObjectBehaviourAttachmentEventListener(IEntityCreationFinishedEventSubscribable subscriptionService,
 			[NotNull] IGameObjectEntityBehaviourFactory behaviourFactory,
@@ -47,6 +51,8 @@ namespace GladMMO
 				Logger.Info($"Attached {behavior.GetType().Name} to Entity: {args.EntityGuid}");
 
 			GameObjectBehaviorComponentMappable.AddObject(args.EntityGuid, behavior);
+
+			OnBehaviourCreated?.Invoke(this, new GameObjectBehaviourCreatedEventArgs(behavior));
 		}
 	}
 }
