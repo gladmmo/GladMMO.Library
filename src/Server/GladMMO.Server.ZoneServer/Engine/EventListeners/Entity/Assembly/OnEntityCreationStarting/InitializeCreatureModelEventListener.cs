@@ -31,7 +31,7 @@ namespace GladMMO
 			CreatureTemplateModel template = CreatureTemplateMappable.RetrieveEntity(args.EntityGuid);
 
 			//Initialize the creature display model ID.
-			dataContainer.SetFieldValue(EUnitFields.UNIT_FIELD_DISPLAYID, template.ModelId);
+			dataContainer.SetFieldValue(BaseObjectField.UNIT_FIELD_DISPLAYID, template.ModelId);
 		}
 	}
 }

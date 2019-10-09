@@ -26,7 +26,7 @@ namespace GladMMO
 		/// <inheritdoc />
 		protected override void OnLocalPlayerSpawned(LocalPlayerSpawnedEventArgs args)
 		{
-			RegisterPlayerDataChangeCallback<int>(EUnitFields.UNIT_FIELD_LEVEL, OnLevelChanged);
+			RegisterPlayerDataChangeCallback<int>(BaseObjectField.UNIT_FIELD_LEVEL, OnLevelChanged);
 		}
 
 		private void OnLevelChanged(NetworkEntityGuid entity, EntityDataChangedArgs<int> changeArgs)

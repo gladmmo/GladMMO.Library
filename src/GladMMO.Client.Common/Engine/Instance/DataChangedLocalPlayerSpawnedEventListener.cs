@@ -25,11 +25,18 @@ namespace GladMMO
 			PlayerDetails = playerDetails ?? throw new ArgumentNullException(nameof(playerDetails));
 		}
 
-		protected void RegisterPlayerDataChangeCallback<TChangeType>(EUnitFields field, [NotNull] Action<NetworkEntityGuid, EntityDataChangedArgs<TChangeType>> callback)
+		protected void RegisterPlayerDataChangeCallback<TChangeType>(int field, [NotNull] Action<NetworkEntityGuid, EntityDataChangedArgs<TChangeType>> callback)
 			where TChangeType : struct
 		{
 			if(callback == null) throw new ArgumentNullException(nameof(callback));
-			if(!Enum.IsDefined(typeof(EUnitFields), field)) throw new InvalidEnumArgumentException(nameof(field), (int)field, typeof(EUnitFields));
+
+			EntityDataCallbackRegister.RegisterCallback(PlayerDetails.LocalPlayerGuid, (int)field, callback);
+		}
+
+		protected void RegisterPlayerDataChangeCallback<TChangeType>(BaseObjectField field, [NotNull] Action<NetworkEntityGuid, EntityDataChangedArgs<TChangeType>> callback)
+			where TChangeType : struct
+		{
+			if(callback == null) throw new ArgumentNullException(nameof(callback));
 
 			EntityDataCallbackRegister.RegisterCallback(PlayerDetails.LocalPlayerGuid, (int)field, callback);
 		}

@@ -31,8 +31,8 @@ namespace GladMMO
 			EntityBaseStatsModel baseStats = GenerateEntityBaseStats(args.EntityGuid);
 
 			//TODO: Do base eventually. Right now we're only doing regular health fields since that's all we deal with clientside atm.
-			dataContainer.SetFieldValue(EUnitFields.UNIT_FIELD_HEALTH, baseStats.BaseHealth);
-			dataContainer.SetFieldValue(EUnitFields.UNIT_FIELD_MAXHEALTH, baseStats.BaseHealth);
+			dataContainer.SetFieldValue(EntityObjectField.UNIT_FIELD_HEALTH, baseStats.BaseHealth);
+			dataContainer.SetFieldValue(EntityObjectField.UNIT_FIELD_MAXHEALTH, baseStats.BaseHealth);
 		}
 
 		private EntityBaseStatsModel GenerateEntityBaseStats(NetworkEntityGuid entityGuid)

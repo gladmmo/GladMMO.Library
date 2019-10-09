@@ -53,7 +53,7 @@ namespace GladMMO
 						foreach(int changedIndex in changeTrackable.ChangeTrackingArray.EnumerateSetBitsByIndex())
 						{
 							if(Logger.IsDebugEnabled)
-								Logger.Debug($"Entity: {entity.EntityType}:{entity.EntityId} ChangedData: {(EUnitFields)changedIndex}:{changeTrackable.GetFieldValue<int>((int)changedIndex)}");
+								Logger.Debug($"Entity: {entity.EntityType}:{entity.EntityId} ChangedData: {changedIndex}:{changeTrackable.GetFieldValue<int>((int)changedIndex)}");
 
 							//TODO: We don't REALLY want to lock on the dispatching. This could be a REAL bottleneck in the future. We need to redesign this abit
 							//TODO: Might be a better way to handle this API, and provide the value instead of the collection.

@@ -22,7 +22,7 @@ namespace GladMMO
 			//TODO: Demo code.
 			IEntityDataFieldContainer entityDataFieldContainer = EntityDataMappable.RetrieveEntity(args.EntityGuid);
 
-			entityDataFieldContainer.SetFieldValue((int)EUnitFields.UNIT_FIELD_LEVEL, 1);
+			entityDataFieldContainer.SetFieldValue((int)BaseObjectField.UNIT_FIELD_LEVEL, 1);
 		}
 	}
 }

@@ -35,7 +35,7 @@ namespace GladMMO
 			IEntityDataFieldContainer entityDataFieldContainer = EntityFieldMap.RetrieveEntity(guid);
 
 			//This change will be broadcast to anyone interested.
-			entityDataFieldContainer.SetFieldValue((int)EUnitFields.UNIT_FIELD_DISPLAYID, payload.ModelId);
+			entityDataFieldContainer.SetFieldValue(BaseObjectField.UNIT_FIELD_DISPLAYID, payload.ModelId);
 
 			return Task.CompletedTask;
 		}

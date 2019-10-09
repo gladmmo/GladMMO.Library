@@ -41,7 +41,7 @@ namespace GladMMO
 			//We should just decrement every player's health by 10 every second.
 			foreach(var component in EntityDataContainer.Enumerate(KnownEntities))
 			{
-				component.SetFieldValue((int)EUnitFields.UNIT_FIELD_HEALTH, Math.Max(0, component.GetFieldValue<int>((int)EUnitFields.UNIT_FIELD_HEALTH) - 10));
+				component.SetFieldValue(EntityObjectField.UNIT_FIELD_HEALTH, Math.Max(0, component.GetFieldValue<int>((int)EntityObjectField.UNIT_FIELD_HEALTH) - 10));
 			}
 		}
 	}
