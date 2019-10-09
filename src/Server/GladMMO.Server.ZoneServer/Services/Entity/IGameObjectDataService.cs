@@ -27,9 +27,12 @@ namespace GladMMO
 		IReadonlyEntityGuidMappable<GameObjectInstanceModel> GameObjectInstanceMappable { get; }
 
 		/// <summary>
-		/// All loaded <see cref="WorldTeleporterInstanceModel"/>s.
-		/// This will be empty if <see cref="LoadDataAsync"/> is not called.
+		/// Gets a specified GameObject behaviour instance.
 		/// </summary>
-		IReadonlyEntityGuidMappable<WorldTeleporterInstanceModel> WorldTeleporterInstanceMappable { get; }
+		/// <typeparam name="TBehaviourType"></typeparam>
+		/// <param name="entityGuid"></param>
+		/// <returns></returns>
+		TBehaviourType GetBehaviourInstanceData<TBehaviourType>(NetworkEntityGuid entityGuid)
+			where TBehaviourType : IGameObjectLinkable;
 	}
 }

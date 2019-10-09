@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text;
 using Autofac;
 
@@ -21,30 +22,70 @@ namespace GladMMO
 		{
 			if (context == null) throw new ArgumentNullException(nameof(context));
 
+			GameObjectTemplateModel templateModel = GameObjectDataContainer.GameObjectTemplateMappable.RetrieveEntity(context);
+
+			Type behaviourType = ComputeExpectedBehaviourType(templateModel.ObjectType);
+
 			//TODO: Verify that the gameobject is known.
 			using (var scope = ReflectionContainer.BeginLifetimeScope(cb =>
 			{
 				cb.RegisterInstance(GameObjectDataContainer.GameObjectInstanceMappable.RetrieveEntity(context))
 					.AsSelf();
 
-				cb.RegisterInstance(GameObjectDataContainer.GameObjectTemplateMappable.RetrieveEntity(context))
-					.AsSelf();
-
-				//TODO: We're hackily supporting world teleporters here by default
-				if(GameObjectDataContainer.GameObjectTemplateMappable.RetrieveEntity(context).ObjectType != GameObjectType.WorldTeleporter)
-					throw new NotImplementedException($"TODO: Handle other game object types.");
-
-				cb.RegisterInstance(GameObjectDataContainer.WorldTeleporterInstanceMappable.RetrieveEntity(context))
+				cb.RegisterInstance(templateModel)
 					.AsSelf();
 
 				cb.RegisterInstance(context)
 					.AsSelf();
 
-				//TODO: support ANY component type.
-				cb.RegisterType<DefaultWorldTeleporterInteractableGameObjectBehaviourComponent>();
+				//Behaviour instance data and Type
+				RegisterBehaviourInstanceData(templateModel.ObjectType, context, cb);
+				cb.RegisterType(behaviourType);
 			}))
 			{
-				return (DefaultWorldTeleporterInteractableGameObjectBehaviourComponent)scope.Resolve(typeof(DefaultWorldTeleporterInteractableGameObjectBehaviourComponent));
+				return (BaseGameObjectEntityBehaviourComponent)scope.Resolve(behaviourType);
+			}
+		}
+
+		//TODO: Find a way to do this via reflection.
+		private void RegisterBehaviourInstanceData(GameObjectType templateModelObjectType, [NotNull] NetworkEntityGuid context, [NotNull] ContainerBuilder cb)
+		{
+			if (context == null) throw new ArgumentNullException(nameof(context));
+			if (cb == null) throw new ArgumentNullException(nameof(cb));
+			if (!Enum.IsDefined(typeof(GameObjectType), templateModelObjectType)) throw new InvalidEnumArgumentException(nameof(templateModelObjectType), (int) templateModelObjectType, typeof(GameObjectType));
+
+			object instanceData = null;
+
+			switch (templateModelObjectType)
+			{
+				case GameObjectType.WorldTeleporter:
+					instanceData = GameObjectDataContainer.GetBehaviourInstanceData<WorldTeleporterInstanceModel>(context);
+					break;
+				case GameObjectType.AvatarPedestal:
+					instanceData = GameObjectDataContainer.GetBehaviourInstanceData<AvatarPedestalInstanceModel>(context);
+					break;
+				default:
+					throw new ArgumentOutOfRangeException(nameof(templateModelObjectType), templateModelObjectType, $"Cannot load instance data for {nameof(GameObjectType)}: {templateModelObjectType}");
+			}
+
+			cb.RegisterInstance(instanceData)
+				.AsSelf();
+		}
+
+		//TODO: Find a way to do this via reflection.
+		private Type ComputeExpectedBehaviourType(GameObjectType templateModelObjectType)
+		{
+			if (!Enum.IsDefined(typeof(GameObjectType), templateModelObjectType)) throw new InvalidEnumArgumentException(nameof(templateModelObjectType), (int) templateModelObjectType, typeof(GameObjectType));
+
+			switch (templateModelObjectType)
+			{
+				//TODO: Add reflection-based way to discover this stuff.
+				case GameObjectType.WorldTeleporter:
+					return typeof(DefaultWorldTeleporterInteractableGameObjectBehaviourComponent);
+				case GameObjectType.AvatarPedestal:
+					return typeof(DefaultAvatarPedestalInteractableGameObjectBehaviourComponent);
+				default:
+					throw new ArgumentOutOfRangeException(nameof(templateModelObjectType), templateModelObjectType, $"Cannot create behaviour for GameObjectType: {templateModelObjectType}");
 			}
 		}
 	}

@@ -14,21 +14,21 @@ namespace GladMMO
 
 		private IEntityGuidMappable<GameObjectInstanceModel> _GameObjectInstanceMappable { get; }
 
-		private IEntityGuidMappable<WorldTeleporterInstanceModel> _WorldTeleporterInstanceMappable { get; }
-
 		public IReadonlyEntityGuidMappable<GameObjectTemplateModel> GameObjectTemplateMappable => _GameObjectTemplateMappable;
 
 		public IReadonlyEntityGuidMappable<GameObjectInstanceModel> GameObjectInstanceMappable => _GameObjectInstanceMappable;
-
-		public IReadonlyEntityGuidMappable<WorldTeleporterInstanceModel> WorldTeleporterInstanceMappable => _WorldTeleporterInstanceMappable;
 
 		private IGameObjectDataServiceClient DataServiceClient { get; }
 
 		private IGameObjectBehaviourDataServiceClient<WorldTeleporterInstanceModel> TeleporterDataServiceClient { get; }
 
+		private IGameObjectBehaviourDataServiceClient<AvatarPedestalInstanceModel> AvatarPedestalDataServiceClient { get; }
+
 		private WorldConfiguration WorldConfiguration { get; }
 
 		private ILog Logger { get; }
+
+		private Dictionary<Type, IEntityGuidMappable<object>> BehaviourInstanceDataMappable { get; }
 
 		public RemoteGameObjectDataService(
 			[NotNull] IEntityGuidMappable<GameObjectTemplateModel> gameObjectTemplateMappable,
@@ -37,7 +37,7 @@ namespace GladMMO
 			[NotNull] WorldConfiguration worldConfiguration,
 			[NotNull] ILog logger,
 			[NotNull] IGameObjectBehaviourDataServiceClient<WorldTeleporterInstanceModel> teleporterDataServiceClient,
-			[NotNull] IEntityGuidMappable<WorldTeleporterInstanceModel> worldTeleporterInstanceMappable)
+			[NotNull] IGameObjectBehaviourDataServiceClient<AvatarPedestalInstanceModel> avatarPedestalDataServiceClient)
 		{
 			_GameObjectTemplateMappable = gameObjectTemplateMappable ?? throw new ArgumentNullException(nameof(gameObjectTemplateMappable));
 			_GameObjectInstanceMappable = gameObjectInstanceMappable ?? throw new ArgumentNullException(nameof(gameObjectInstanceMappable));
@@ -46,7 +46,15 @@ namespace GladMMO
 			WorldConfiguration = worldConfiguration ?? throw new ArgumentNullException(nameof(worldConfiguration));
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
 			TeleporterDataServiceClient = teleporterDataServiceClient ?? throw new ArgumentNullException(nameof(teleporterDataServiceClient));
-			_WorldTeleporterInstanceMappable = worldTeleporterInstanceMappable ?? throw new ArgumentNullException(nameof(worldTeleporterInstanceMappable));
+			AvatarPedestalDataServiceClient = avatarPedestalDataServiceClient;
+		}
+
+		public TBehaviourType GetBehaviourInstanceData<TBehaviourType>([NotNull] NetworkEntityGuid entityGuid)
+			where TBehaviourType : IGameObjectLinkable
+		{
+			if (entityGuid == null) throw new ArgumentNullException(nameof(entityGuid));
+
+			return (TBehaviourType)BehaviourInstanceDataMappable[typeof(TBehaviourType)];
 		}
 
 		public async Task LoadDataAsync()
@@ -56,8 +64,9 @@ namespace GladMMO
 			ResponseModel<ObjectEntryCollectionModel<GameObjectTemplateModel>, ContentEntryCollectionResponseCode> templatesByWorld = await DataServiceClient.GetGameObjectTemplatesByWorld(WorldConfiguration.WorldId);
 
 			ResponseModel<ObjectEntryCollectionModel<WorldTeleporterInstanceModel>, ContentEntryCollectionResponseCode> teleportersByWorld = await TeleporterDataServiceClient.GetBehaviourEntriesByWorld(WorldConfiguration.WorldId);
+			ResponseModel<ObjectEntryCollectionModel<AvatarPedestalInstanceModel>, ContentEntryCollectionResponseCode> avatarPedestalsByWorld = await AvatarPedestalDataServiceClient.GetBehaviourEntriesByWorld(WorldConfiguration.WorldId);
 
-			if (entriesByWorld.isSuccessful && templatesByWorld.isSuccessful)
+			if(entriesByWorld.isSuccessful && templatesByWorld.isSuccessful)
 			{
 				AddGameObjectTemplates(templatesByWorld.Result.Entries);
 				AddGameObjectInstances(entriesByWorld.Result.Entries);
@@ -65,6 +74,10 @@ namespace GladMMO
 				//It's possible there were none.
 				if (teleportersByWorld.isSuccessful)
 					AddGameObjectInstances(teleportersByWorld.Result.Entries);
+
+				//It's possible there were none.
+				if(teleportersByWorld.isSuccessful)
+					AddGameObjectInstances(avatarPedestalsByWorld.Result.Entries);
 			}
 			else
 			{
@@ -73,21 +86,24 @@ namespace GladMMO
 			}
 		}
 
-		private void AddGameObjectInstances([NotNull] IReadOnlyCollection<WorldTeleporterInstanceModel> resultEntries)
+		private void AddGameObjectInstances<TInstanceModelType>([NotNull] IReadOnlyCollection<TInstanceModelType> resultEntries)
+			where TInstanceModelType : IGameObjectLinkable
 		{
 			if(resultEntries == null) throw new ArgumentNullException(nameof(resultEntries));
 
 			foreach(var instance in resultEntries)
 			{
 				if(Logger.IsInfoEnabled)
-					Logger.Info($"Processing Teleporter Data Instance: {instance.TargetGameObjectId}");
+					Logger.Info($"Processing {typeof(TInstanceModelType).Name} Data Instance: {instance.LinkedGameObjectId}");
+
+				BehaviourInstanceDataMappable.Add(typeof(TInstanceModelType), new EntityGuidDictionary<object>());
 
 				NetworkEntityGuid guid = new NetworkEntityGuidBuilder()
-					.WithEntryId(instance.TargetGameObjectId)
+					.WithEntryId(instance.LinkedGameObjectId)
 					.WithType(EntityType.GameObject)
 					.Build();
 
-				_WorldTeleporterInstanceMappable.Add(guid, instance);
+				BehaviourInstanceDataMappable[typeof(TInstanceModelType)].Add(guid, instance);
 			}
 		}
 
