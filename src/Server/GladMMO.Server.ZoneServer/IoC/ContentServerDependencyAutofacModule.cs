@@ -56,6 +56,15 @@ namespace GladMMO
 				//return new AsyncCreatureDataServiceClient(QueryForRemoteServiceEndpoint(serviceDiscovery, "ContentServer"), new RefitSettings() { HttpMessageHandlerFactory = () => new AuthenticatedHttpClientHandler(tokenRepository) });
 				return new AsyncGameObjectBehaviourDataServiceClient<WorldTeleporterInstanceModel>(CreateBehaviourDataEndpointFromServiceEndpoint(QueryForRemoteServiceEndpoint(serviceDiscovery, "ContentServer"), "WorldTeleporterData"));
 			});
+
+			builder.Register<IGameObjectBehaviourDataServiceClient<AvatarPedestalInstanceModel>>(context =>
+			{
+				IServiceDiscoveryService serviceDiscovery = context.Resolve<IServiceDiscoveryService>();
+				//IReadonlyAuthTokenRepository tokenRepository = context.Resolve<IReadonlyAuthTokenRepository>();
+
+				//return new AsyncCreatureDataServiceClient(QueryForRemoteServiceEndpoint(serviceDiscovery, "ContentServer"), new RefitSettings() { HttpMessageHandlerFactory = () => new AuthenticatedHttpClientHandler(tokenRepository) });
+				return new AsyncGameObjectBehaviourDataServiceClient<AvatarPedestalInstanceModel>(CreateBehaviourDataEndpointFromServiceEndpoint(QueryForRemoteServiceEndpoint(serviceDiscovery, "ContentServer"), "AvatarPedestalData"));
+			});
 		}
 
 		private async Task<string> CreateBehaviourDataEndpointFromServiceEndpoint(Task<string> endpoint, string behaviourNameType)
