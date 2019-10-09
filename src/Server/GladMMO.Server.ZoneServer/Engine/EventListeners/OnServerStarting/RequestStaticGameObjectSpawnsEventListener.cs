@@ -39,9 +39,19 @@ namespace GladMMO
 			//TODO: Don't hardcode the test world id.
 			UnityAsyncHelper.UnityMainThreadContext.PostAsync(async () =>
 			{
-				await GameObjectDataService.LoadDataAsync();
+				try
+				{
+					await GameObjectDataService.LoadDataAsync();
 
-				ProcessGameObjectEntries(GameObjectDataService.GameObjectInstanceMappable);
+					ProcessGameObjectEntries(GameObjectDataService.GameObjectInstanceMappable);
+				}
+				catch (Exception e)
+				{
+					if(Logger.IsErrorEnabled)
+						Logger.Error($"Failed to process GameObjects. Reason: {e.Message}");
+
+					throw;
+				}
 			});
 		}
 
