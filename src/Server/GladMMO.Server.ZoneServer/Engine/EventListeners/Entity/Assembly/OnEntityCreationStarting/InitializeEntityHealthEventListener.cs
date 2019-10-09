@@ -30,6 +30,10 @@ namespace GladMMO
 			IEntityDataFieldContainer dataContainer = EntityDataMappable.RetrieveEntity(args.EntityGuid);
 			EntityBaseStatsModel baseStats = GenerateEntityBaseStats(args.EntityGuid);
 
+			//TODO: This is kinda a hack to avoid GameObjects iniitalizing this.
+			if (args.EntityGuid.EntityType == EntityType.GameObject)
+				return;
+
 			//TODO: Do base eventually. Right now we're only doing regular health fields since that's all we deal with clientside atm.
 			dataContainer.SetFieldValue(EntityObjectField.UNIT_FIELD_HEALTH, baseStats.BaseHealth);
 			dataContainer.SetFieldValue(EntityObjectField.UNIT_FIELD_MAXHEALTH, baseStats.BaseHealth);
