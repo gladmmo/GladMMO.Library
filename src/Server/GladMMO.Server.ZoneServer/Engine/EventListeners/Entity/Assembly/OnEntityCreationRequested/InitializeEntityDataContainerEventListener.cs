@@ -34,8 +34,25 @@ namespace GladMMO
 			//TODO: handle non-players
 			//TODO: Fix the issue with having to hardcore the field count.
 			//Build the update values stuff and initialize the initial movement data.
-			ChangeTrackableCollection.AddObject(guid, new ChangeTrackingEntityFieldDataCollectionDecorator(new EntityFieldDataCollection(1328)));
+			ChangeTrackableCollection.AddObject(guid, new ChangeTrackingEntityFieldDataCollectionDecorator(new EntityFieldDataCollection(ComputeEntityDataFieldLength(args.EntityGuid))));
 			EntityDataContainer.AddObject(guid, ChangeTrackableCollection.RetrieveEntity(guid));
+		}
+
+		private int ComputeEntityDataFieldLength([NotNull] NetworkEntityGuid guid)
+		{
+			if (guid == null) throw new ArgumentNullException(nameof(guid));
+
+			switch (guid.EntityType)
+			{
+				case EntityType.Player:
+					return GladMMOCommonConstants.PLAYER_DATA_FIELD_SIZE;
+				case EntityType.GameObject:
+					return GladMMOCommonConstants.GAMEOBJECT_DATA_FIELD_SIZE;
+				case EntityType.Creature:
+					return GladMMOCommonConstants.PLAYER_DATA_FIELD_SIZE; //TODO: Creature and player size should be different.
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
 		}
 	}
 }
