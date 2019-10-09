@@ -19,7 +19,7 @@ namespace GladMMO
 				case GameObjectType.WorldTeleporter:
 					return context.TargetGameObject.AddComponent<WorldTeleporterDefinitionData>();
 				case GameObjectType.AvatarPedestal:
-					return context.TargetGameObject.AddComponent<WorldTeleporterDefinitionData>();
+					return context.TargetGameObject.AddComponent<AvatarPedestalDefinitionData>();
 				default:
 					throw new InvalidOperationException($"Cannot attach behaviours for {context.DesiredType} object.");
 			}
