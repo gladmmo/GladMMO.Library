@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace GladMMO.SDK
 {
-	public sealed class AvatarPedestalDefinitionData : GladMMOSDKMonoBehaviour, INetworkGameObjectBehaviour
+	public sealed class AvatarPedestalDefinitionData : GladMMOSDKMonoBehaviour, INetworkGameObjectBehaviour, IRemoteModelUpdateable<AvatarPedestalInstanceModel>
 	{
 		public GameObjectType BehaviorType => GameObjectType.AvatarPedestal;
 
@@ -20,6 +20,13 @@ namespace GladMMO.SDK
 		{
 			get => _TargetAvatarModelId;
 			set => _TargetAvatarModelId = value;
+		}
+
+		public void Update([NotNull] AvatarPedestalInstanceModel model)
+		{
+			if (model == null) throw new ArgumentNullException(nameof(model));
+
+			_TargetAvatarModelId = model.AvatarModelId;
 		}
 	}
 }
