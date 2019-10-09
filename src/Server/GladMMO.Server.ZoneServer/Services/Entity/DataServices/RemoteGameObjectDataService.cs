@@ -56,7 +56,7 @@ namespace GladMMO
 		{
 			if (entityGuid == null) throw new ArgumentNullException(nameof(entityGuid));
 
-			return (TBehaviourType)BehaviourInstanceDataMappable[typeof(TBehaviourType)];
+			return (TBehaviourType)BehaviourInstanceDataMappable[typeof(TBehaviourType)].RetrieveEntity(entityGuid);
 		}
 
 		public async Task LoadDataAsync()
