@@ -93,12 +93,12 @@ namespace GladMMO
 		{
 			if(resultEntries == null) throw new ArgumentNullException(nameof(resultEntries));
 
+			BehaviourInstanceDataMappable.Add(typeof(TInstanceModelType), new InstanceStaticEntityDataCollection<object>());
+
 			foreach(var instance in resultEntries)
 			{
 				if(Logger.IsInfoEnabled)
 					Logger.Info($"Processing {typeof(TInstanceModelType).Name} Data Instance: {instance.LinkedGameObjectId}");
-
-				BehaviourInstanceDataMappable.Add(typeof(TInstanceModelType), new InstanceStaticEntityDataCollection<object>());
 
 				NetworkEntityGuid guid = new NetworkEntityGuidBuilder()
 					.WithEntryId(instance.LinkedGameObjectId)
