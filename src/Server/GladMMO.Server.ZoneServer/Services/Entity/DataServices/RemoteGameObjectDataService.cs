@@ -76,7 +76,7 @@ namespace GladMMO
 					AddGameObjectInstances(teleportersByWorld.Result.Entries);
 
 				//It's possible there were none.
-				if(teleportersByWorld.isSuccessful)
+				if(avatarPedestalsByWorld.isSuccessful)
 					AddGameObjectInstances(avatarPedestalsByWorld.Result.Entries);
 			}
 			else
