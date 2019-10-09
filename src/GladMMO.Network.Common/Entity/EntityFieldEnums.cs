@@ -4,6 +4,22 @@ using System.Text;
 
 namespace GladMMO
 {
+	public enum BaseObjectField
+	{
+		UNIT_FIELD_DISPLAYID = 0x0000, // Size: 1, Type: INT, Flags: PUBLIC
+		OBJECT_FIELD_SCALE_X = 0x0001, // Size: 1, Type: FLOAT, Flags: PUBLIC
+		UNIT_FIELD_LEVEL = 0x0002, // Size: 1, Type: INT, Flags: PUBLIC
+
+		//The end of the base fields.
+		OBJECT_END = 0x0003
+	}
+
+	public enum EntityObjectField
+	{
+		UNIT_FIELD_HEALTH = BaseObjectField.OBJECT_END + 0x0000, // Size: 1, Type: INT, Flags: PUBLIC
+		UNIT_FIELD_MAXHEALTH = BaseObjectField.OBJECT_END + 0x0001, // Size: 1, Type: INT, Flags: PUBLIC
+	}
+
 	//TODO: We should move away from this and implement our own, these are just place holders from World of Warcraft/TrinityCore.
 	//These public enums are the update field public enums taken from Trinitycore 3.3.5
 	public enum EObjectFields
