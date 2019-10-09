@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using Autofac;
 using Refit;
 
@@ -53,8 +54,15 @@ namespace GladMMO
 				//IReadonlyAuthTokenRepository tokenRepository = context.Resolve<IReadonlyAuthTokenRepository>();
 
 				//return new AsyncCreatureDataServiceClient(QueryForRemoteServiceEndpoint(serviceDiscovery, "ContentServer"), new RefitSettings() { HttpMessageHandlerFactory = () => new AuthenticatedHttpClientHandler(tokenRepository) });
-				return new AsyncGameObjectBehaviourDataServiceClient<WorldTeleporterInstanceModel>(QueryForRemoteServiceEndpoint(serviceDiscovery, "ContentServer"));
+				return new AsyncGameObjectBehaviourDataServiceClient<WorldTeleporterInstanceModel>(CreateBehaviourDataEndpointFromServiceEndpoint(QueryForRemoteServiceEndpoint(serviceDiscovery, "ContentServer"), "WorldTeleporterData"));
 			});
+		}
+
+		private async Task<string> CreateBehaviourDataEndpointFromServiceEndpoint(Task<string> endpoint, string behaviourNameType)
+		{
+			string endpointString = await endpoint;
+
+			return $"{endpointString}api/{behaviourNameType}/";
 		}
 	}
 }

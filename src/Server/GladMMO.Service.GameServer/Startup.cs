@@ -145,11 +145,11 @@ namespace GladMMO
 				return new AsyncPlayerSpawnPointDataServiceClient(QueryForRemoteServiceEndpoint(serviceDiscClient, "ContentServer"));
 			});
 
-			services.AddSingleton<IWorldTeleporterDataServiceClient>(provider =>
+			services.AddSingleton<IGameObjectBehaviourDataServiceClient<WorldTeleporterInstanceModel>>(provider =>
 			{
 				var serviceDiscClient = provider.GetService<IServiceDiscoveryService>();
 
-				return new AsyncWorldTeleporterDataServiceClient(QueryForRemoteServiceEndpoint(serviceDiscClient, "ContentServer"));
+				return new AsyncGameObjectBehaviourDataServiceClient<WorldTeleporterInstanceModel>(CreateBehaviourDataEndpointFromServiceEndpoint(QueryForRemoteServiceEndpoint(serviceDiscClient, "ContentServer"), "WorldTeleporterData"));
 			});
 		}
 
@@ -163,6 +163,13 @@ namespace GladMMO
 
 			//TODO: Do we need extra slash?
 			return $"{endpointResponse.Endpoint.EndpointAddress}:{endpointResponse.Endpoint.EndpointPort}/";
+		}
+
+		private async Task<string> CreateBehaviourDataEndpointFromServiceEndpoint(Task<string> endpoint, string behaviourNameType)
+		{
+			string endpointString = await endpoint;
+
+			return $"{endpointString}api/{behaviourNameType}/";
 		}
 	}
 }
