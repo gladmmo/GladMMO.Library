@@ -47,6 +47,8 @@ namespace GladMMO
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
 			TeleporterDataServiceClient = teleporterDataServiceClient ?? throw new ArgumentNullException(nameof(teleporterDataServiceClient));
 			AvatarPedestalDataServiceClient = avatarPedestalDataServiceClient;
+
+			BehaviourInstanceDataMappable = new Dictionary<Type, IEntityGuidMappable<object>>(5);
 		}
 
 		public TBehaviourType GetBehaviourInstanceData<TBehaviourType>([NotNull] NetworkEntityGuid entityGuid)
