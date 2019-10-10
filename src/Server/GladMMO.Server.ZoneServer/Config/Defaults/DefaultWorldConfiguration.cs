@@ -7,7 +7,7 @@ namespace GladMMO
 	public sealed class DefaultWorldConfiguration : WorldConfiguration
 	{
 		public DefaultWorldConfiguration()
-			: base(8) //default world 8.
+			: base(15) //default world 15.
 		{
 			
 		}
