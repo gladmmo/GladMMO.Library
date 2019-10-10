@@ -19,6 +19,15 @@ namespace GladMMO
 		OBJECT_END = RESERVED_5,
 	}
 
+	public enum GameObjectField
+	{
+		/// <summary>
+		/// The <see cref="GameObjectType"/>.
+		/// </summary>
+		GAMEOBJECT_TYPE_ID = BaseObjectField.OBJECT_END + 0x0001, // Size: 1, Type: INT, Flags: PUBLIC
+		RESERVED_DATA_1 = BaseObjectField.OBJECT_END + 0x0002
+	}
+
 	public enum EntityObjectField
 	{
 		UNIT_FIELD_HEALTH = BaseObjectField.OBJECT_END + 0x0001, // Size: 1, Type: INT, Flags: PUBLIC
