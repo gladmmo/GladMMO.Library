@@ -23,7 +23,8 @@ namespace GladMMO
 			OnContentPrefabRecieved?.Invoke();
 			OnContentPrefabRecieved = null;
 
-			GameObject avatar = GameObject.Instantiate(args.DownloadedPrefabObject);
+			GameObject avatar = GameObject.Instantiate(args.DownloadedPrefabObject, new Vector3(0, 0, -7), Quaternion.Euler(0, 180, 0));
+			avatar.transform.localScale = Vector3.one;
 
 			OnContentPrefabRecieved += () =>
 			{
