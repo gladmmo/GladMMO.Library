@@ -22,7 +22,7 @@ namespace GladMMO
 		public virtual CharacterEntryModel Character { get; private set; }
 
 		[ForeignKey(nameof(AvatarModel))]
-		public long AvatarModelId { get; private set; }
+		public long AvatarModelId { get; set; }
 
 		/// <summary>
 		/// Navigation property to the avatar model entry table.
