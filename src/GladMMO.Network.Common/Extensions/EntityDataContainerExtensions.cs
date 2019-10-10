@@ -24,5 +24,14 @@ namespace GladMMO
 
 			container.SetFieldValue(GenericMath.Convert<TEnumType, int>(index), value);
 		}
+
+		//TODO: Doc
+		public static TValueType GetFieldValue<TValueType>(this IEntityDataFieldContainer container, GameObjectField index)
+			where TValueType : struct
+		{
+			if(container == null) throw new ArgumentNullException(nameof(container));
+
+			return container.GetFieldValue<TValueType>((int)index);
+		}
 	}
 }
