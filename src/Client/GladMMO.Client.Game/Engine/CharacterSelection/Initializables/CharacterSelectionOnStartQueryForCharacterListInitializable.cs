@@ -60,6 +60,11 @@ namespace GladMMO
 					var appearanceResponse = await CharacterServiceQueryable.GetCharacterAppearance(entityGuid.EntityId)
 						.ConfigureAwait(false);
 
+					//Don't throw, because we actually don't want to stop the
+					//character screen from working just because we can't visually display some stuff.
+					if(!appearanceResponse.isSuccessful)
+						Logger.Error($"Failed to query for Character: {entityGuid.EntityId} appearance. Reason: {appearanceResponse.ResultCode}");
+
 					//TODO: Hanlde error.
 					CharacterAppearanceMappable.AddObject(entityGuid, appearanceResponse.Result);
 
