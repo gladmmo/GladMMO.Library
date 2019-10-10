@@ -20,6 +20,8 @@ namespace GladMMO
 			register.RegisterModule(new EngineInterfaceRegisterationModule((int)SceneType, GetType().Assembly));
 
 			register.RegisterModule(new BaseHandlerRegisterationModule<IPeerMessageHandler<GameClientPacketPayload, GameServerPacketPayload, IPeerSessionMessageContext<GameServerPacketPayload>>>((int)SceneType, GetType().Assembly));
+
+			register.RegisterModule<CharacterServiceDependencyAutofacModule>();
 		}
 	}
 }
