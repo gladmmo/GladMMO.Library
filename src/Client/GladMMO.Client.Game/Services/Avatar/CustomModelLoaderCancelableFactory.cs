@@ -30,12 +30,12 @@ namespace GladMMO
 
 		public CustomModelLoaderCancelable Create(CustomModelLoaderCreationContext context)
 		{
-			if (!ContentResourceManagers.ContainsKey(ConvertEntityTypeToUserContentType(context)))
+			if (!ContentResourceManagers.ContainsKey(context.ContentType))
 			{
 				throw new InvalidOperationException($"Cannot load content for EntityType: {context.EntityGuid.EntityType}");
 			}
 
-			ILoadableContentResourceManager contentResourceManager = ContentResourceManagers[ConvertEntityTypeToUserContentType(context)];
+			ILoadableContentResourceManager contentResourceManager = ContentResourceManagers[context.ContentType];
 
 			return CreateFromResourceManager(context, contentResourceManager);
 		}
@@ -51,23 +51,6 @@ namespace GladMMO
 
 				OnContentPrefabCompletedDownloading?.Invoke(this, new ContentPrefabCompletedDownloadEventArgs(handle, prefab, context.EntityGuid));
 			});
-		}
-
-		private static UserContentType ConvertEntityTypeToUserContentType(CustomModelLoaderCreationContext context)
-		{
-			switch (context.EntityGuid.EntityType)
-			{
-				case EntityType.None:
-					throw new NotImplementedException();
-				case EntityType.Player:
-					return UserContentType.Avatar;
-				case EntityType.GameObject:
-					return UserContentType.GameObject;
-				case EntityType.Creature:
-					return UserContentType.Creature;
-				default:
-					throw new ArgumentOutOfRangeException();
-			}
 		}
 	}
 }
