@@ -50,7 +50,7 @@ namespace GladMMO
 			{
 				try
 				{
-					await ZoneServerDataClient.UpdatePlayerAvatar(new ZoneServerAvatarPedestalInteractionCharacterRequest(entityInteracting, BehaviourData.AvatarModelId));
+					await ZoneServerDataClient.UpdatePlayerAvatar(new ZoneServerAvatarPedestalInteractionCharacterRequest(entityInteracting, TargetEntity.EntryId));
 				}
 				catch (Exception e)
 				{
