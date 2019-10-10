@@ -64,7 +64,7 @@ namespace GladMMO
 				case GameObjectType.WorldTeleporter:
 					return typeof(StubWorldTeleporterGameObjectBehaviour);
 				case GameObjectType.AvatarPedestal:
-					return typeof(StubAvatarPedestalGameObjectBehaviour);
+					return typeof(DefaultAvatarPedestalGameObjectBehaviour);
 				default:
 					throw new ArgumentOutOfRangeException(nameof(templateModelObjectType), templateModelObjectType, $"Cannot create behaviour for GameObjectType: {templateModelObjectType}");
 			}
