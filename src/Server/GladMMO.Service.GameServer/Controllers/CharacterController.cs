@@ -106,7 +106,7 @@ namespace GladMMO
 		[ProducesJson]
 		public async Task<IActionResult> GetCharacterAppearance([FromRoute(Name = "id")] int characterId, [FromServices] [NotNull] ICharacterAppearanceRepository characterAppearanceRepository)
 		{
-			if (await characterAppearanceRepository.ContainsAsync(characterId))
+			if (!await characterAppearanceRepository.ContainsAsync(characterId))
 				return BuildFailedResponseModel(CharacterDataQueryReponseCode.CharacterNotFound);
 
 			CharacterAppearanceModel appearanceModel = await characterAppearanceRepository.RetrieveAsync(characterId);
