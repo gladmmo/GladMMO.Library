@@ -50,7 +50,7 @@ namespace GladMMO
 			{
 				try
 				{
-					await ZoneServerDataClient.UpdatePlayerAvatar(new ZoneServerAvatarPedestalInteractionCharacterRequest(entityInteracting, currentAvatarId));
+					await ZoneServerDataClient.UpdatePlayerAvatar(new ZoneServerAvatarPedestalInteractionCharacterRequest(entityInteracting, BehaviourData.AvatarModelId));
 				}
 				catch (Exception e)
 				{
@@ -61,7 +61,8 @@ namespace GladMMO
 
 					//Even if the player has left, we still reference the data container so it should be safe
 					//even if they no longer exist.
-					dataFieldContainer.SetFieldValue(BaseObjectField.UNIT_FIELD_DISPLAYID, currentAvatarId);
+					if(currentAvatarId != 0) //special case, we cannot handle this so don't touch this. Just let them "pretend" for now.
+						dataFieldContainer.SetFieldValue(BaseObjectField.UNIT_FIELD_DISPLAYID, currentAvatarId);
 					throw;
 				}
 			});
