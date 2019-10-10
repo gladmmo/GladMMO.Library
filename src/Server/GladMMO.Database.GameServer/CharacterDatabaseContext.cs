@@ -39,6 +39,8 @@ namespace GladMMO
 		/// </summary>
 		public DbSet<CharacterGroupInviteEntryModel> GroupInvites { get; set; }
 
+		public DbSet<CharacterAppearanceModel> CharacterAppearances { get; set; }
+
 		public CharacterDatabaseContext(DbContextOptions<CharacterDatabaseContext> options) 
 			: base(options)
 		{
