@@ -101,6 +101,19 @@ namespace GladMMO
 			return Created("TODO", new CharacterCreationResponse(CharacterCreationResponseCode.Success));
 		}
 
+		[HttpGet("{id}/appearance")]
+		[AuthorizeJwt]
+		[ProducesJson]
+		public async Task<IActionResult> GetCharacterAppearance([FromRoute(Name = "id")] int characterId, [FromServices] [NotNull] ICharacterAppearanceRepository characterAppearanceRepository)
+		{
+			if (await characterAppearanceRepository.ContainsAsync(characterId))
+				return BuildFailedResponseModel(CharacterDataQueryReponseCode.CharacterNotFound);
+
+			CharacterAppearanceModel appearanceModel = await characterAppearanceRepository.RetrieveAsync(characterId);
+
+			return BuildSuccessfulResponseModel(new CharacterAppearanceResponse(appearanceModel.CharacterId));
+		}
+
 		[HttpGet]
 		[AuthorizeJwt]
 		[ProducesJson]
