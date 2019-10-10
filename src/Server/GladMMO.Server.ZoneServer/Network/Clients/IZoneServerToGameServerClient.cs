@@ -58,5 +58,8 @@ namespace GladMMO
 		//TODO: Auth and move this to a seperate service
 		[Post("/api/ZoneServerCharacter/WorldTeleport")]
 		Task TryWorldTeleportCharacter([JsonBody] ZoneServerWorldTeleportCharacterRequest request);
+
+		[Patch("/api/ZoneServerCharacter/ChangeAvatar")]
+		Task UpdatePlayerAvatar([JsonBody] ZoneServerAvatarPedestalInteractionCharacterRequest request);
 	}
 }

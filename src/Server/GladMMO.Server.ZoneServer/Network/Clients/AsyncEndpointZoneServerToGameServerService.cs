@@ -68,5 +68,10 @@ namespace GladMMO
 		{
 			await (await GetService().ConfigureAwait(false)).TryWorldTeleportCharacter(request).ConfigureAwait(false);
 		}
+
+		public async Task UpdatePlayerAvatar(ZoneServerAvatarPedestalInteractionCharacterRequest request)
+		{
+			await (await GetService().ConfigureAwait(false)).UpdatePlayerAvatar(request).ConfigureAwait(false);
+		}
 	}
 }
