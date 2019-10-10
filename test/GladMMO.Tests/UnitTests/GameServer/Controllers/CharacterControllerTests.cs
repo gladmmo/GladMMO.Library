@@ -205,10 +205,11 @@ namespace GladMMO
 			//arrange
 			IServiceProvider serviceProvider = BuildServiceProvider<CharacterController>("Test", 1);
 			Mock<IPlayfabCharacterClient> playfabCharacterClientMock = CreatePlayFabCharacterClientMock();
+			Mock<ICharacterAppearanceRepository> appearanceRepository = new Mock<ICharacterAppearanceRepository>();
 			CharacterController controller = serviceProvider.GetService<CharacterController>();
 
 			//act
-			CharacterCreationResponse result = ControllerTestsHelpers.GetActionResultObject<CharacterCreationResponse>(await controller.CreateCharacter(name, playfabCharacterClientMock.Object));
+			CharacterCreationResponse result = ControllerTestsHelpers.GetActionResultObject<CharacterCreationResponse>(await controller.CreateCharacter(name, playfabCharacterClientMock.Object, appearanceRepository.Object));
 
 			//assert
 			Assert.True(result.isSuccessful);
@@ -238,10 +239,11 @@ namespace GladMMO
 			IServiceProvider serviceProvider = BuildServiceProvider<CharacterController>("Test", 1);
 			CharacterController controller = serviceProvider.GetService<CharacterController>();
 			Mock<IPlayfabCharacterClient> playfabCharacterClientMock = CreatePlayFabCharacterClientMock();
+			Mock<ICharacterAppearanceRepository> appearanceRepository = new Mock<ICharacterAppearanceRepository>();
 
 			//act
-			await controller.CreateCharacter(name, playfabCharacterClientMock.Object);
-			CharacterCreationResponse result = ControllerTestsHelpers.GetActionResultObject<CharacterCreationResponse>(await controller.CreateCharacter(name, playfabCharacterClientMock.Object));
+			await controller.CreateCharacter(name, playfabCharacterClientMock.Object, appearanceRepository.Object);
+			CharacterCreationResponse result = ControllerTestsHelpers.GetActionResultObject<CharacterCreationResponse>(await controller.CreateCharacter(name, playfabCharacterClientMock.Object, appearanceRepository.Object));
 
 			//assert
 			Assert.False(result.isSuccessful);

@@ -55,10 +55,13 @@ namespace GladMMO
 		[AuthorizeJwt] //is it IMPORTANT that this method authorize the user. Don't know the accountid otherwise even, would be impossible.
 		[HttpPost("create/{name}")]
 		[NoResponseCache]
-		public async Task<IActionResult> CreateCharacter([FromRoute] string name, [FromServices] [NotNull] IPlayfabCharacterClient playfabCharacterClient)
+		public async Task<IActionResult> CreateCharacter([FromRoute] string name, 
+			[FromServices] [NotNull] IPlayfabCharacterClient playfabCharacterClient,
+			[FromServices] [NotNull] ICharacterAppearanceRepository characterAppearanceRepository)
 		{
 			if (playfabCharacterClient == null) throw new ArgumentNullException(nameof(playfabCharacterClient));
-			if(string.IsNullOrWhiteSpace(name)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(name));
+			if (characterAppearanceRepository == null) throw new ArgumentNullException(nameof(characterAppearanceRepository));
+			if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(name));
 
 			int accountId = ClaimsReader.GetUserIdInt(User);
 
@@ -82,10 +85,17 @@ namespace GladMMO
 				return BadRequest(new CharacterCreationResponse(CharacterCreationResponseCode.GeneralServerError));
 			}
 
+			CharacterEntryModel characterEntryModel = new CharacterEntryModel(accountId, name, playfabId, playFabResultModel.Data.CharacterId);
+
+			//TODO: We need a transition around the creation of the below entries.
+			ProjectVersionStage.AssertBeta();
 			//TODO: Don't expose the database table model
 			//Otherwise we should try to create. There is a race condition here that can cause it to still fail
 			//since others could create a character with this name before we finish after checking
-			bool result = await CharacterRepository.TryCreateAsync(new CharacterEntryModel(accountId, name, playfabId, playFabResultModel.Data.CharacterId));
+			bool result = await CharacterRepository.TryCreateAsync(characterEntryModel);
+
+			if (result)
+				await characterAppearanceRepository.TryCreateAsync(new CharacterAppearanceModel(characterEntryModel.CharacterId, 9)); //Default is 9 right now.
 
 			//TODO: JSON
 			return Created("TODO", new CharacterCreationResponse(CharacterCreationResponseCode.Success));
