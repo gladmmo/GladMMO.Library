@@ -30,9 +30,7 @@ namespace GladMMO
 				case GameObjectType.Visual:
 					return;
 				default:
-				{
 					CreateBehaviourComponent(args.EntityGuid);
-				}
 					break;
 			}
 		}
