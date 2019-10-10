@@ -60,5 +60,10 @@ namespace GladMMO
 		[RequiresAuthentication]
 		[Post("/api/characters/create/{name}")]
 		Task<CharacterCreationResponse> CreateCharacter([AliasAs("name")] string name);
+
+		[Headers("Cache-Control: NoCache")]
+		[RequiresAuthentication]
+		[Get("/api/characters/{id}/appearance")]
+		Task<ResponseModel<CharacterAppearanceResponse, CharacterDataQueryReponseCode>> GetCharacterAppearance([AliasAs("id")] int characterId);
 	}
 }

@@ -55,5 +55,10 @@ namespace GladMMO
 		{
 			return await (await GetService().ConfigureAwait(false)).CreateCharacter(name).ConfigureAwait(false);
 		}
+
+		public async Task<ResponseModel<CharacterAppearanceResponse, CharacterDataQueryReponseCode>> GetCharacterAppearance(int characterId)
+		{
+			return await (await GetService().ConfigureAwait(false)).GetCharacterAppearance(characterId).ConfigureAwait(false);
+		}
 	}
 }
