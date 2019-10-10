@@ -40,7 +40,7 @@ namespace GladMMO
 				return BadRequest($"Cannot query data for Avatar Pedestal: {requestModel.AvatarPedestalId} Reason: {behaviourInstanceResponse.ResultCode.ToString()}");
 
 			CharacterAppearanceModel appearanceModel = await characterAppearanceRepository.RetrieveAsync(requestModel.CharacterGuid.EntityId);
-			appearanceModel.AvatarModelId = requestModel.AvatarPedestalId;
+			appearanceModel.AvatarModelId = behaviourInstanceResponse.Result.AvatarModelId;
 			await characterAppearanceRepository.UpdateAsync(requestModel.CharacterGuid.EntityId, appearanceModel);
 
 			//If we make it here, everything above was successful.
