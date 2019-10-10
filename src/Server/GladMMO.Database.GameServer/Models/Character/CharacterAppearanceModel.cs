@@ -21,9 +21,8 @@ namespace GladMMO
 		/// </summary>
 		public virtual CharacterEntryModel Character { get; private set; }
 
-		[Key]
 		[ForeignKey(nameof(AvatarModel))]
-		public int AvatarModelId { get; private set; }
+		public long AvatarModelId { get; private set; }
 
 		/// <summary>
 		/// Navigation property to the avatar model entry table.
@@ -37,6 +36,14 @@ namespace GladMMO
 
 			CharacterId = characterId;
 			AvatarModelId = avatarModelId;
+		}
+
+		/// <summary>
+		/// EF constructor.
+		/// </summary>
+		private CharacterAppearanceModel()
+		{
+
 		}
 	}
 }
