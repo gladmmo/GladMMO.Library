@@ -6,10 +6,9 @@ namespace GladMMO
 {
 	public static class GladMMOCommonConstants
 	{
-		//These are just 8 right now because that's the minimum size.
 		public const int PLAYER_DATA_FIELD_SIZE = 16;
 
-		public const int GAMEOBJECT_DATA_FIELD_SIZE = 8;
+		public const int GAMEOBJECT_DATA_FIELD_SIZE = 16;
 
 		static GladMMOCommonConstants()
 		{
