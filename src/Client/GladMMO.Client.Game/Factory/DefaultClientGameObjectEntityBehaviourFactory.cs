@@ -31,7 +31,7 @@ namespace GladMMO
 			IEntityDataFieldContainer dataFieldContainer = EntityDataMappable.RetrieveEntity(context);
 			GameObject worldObject = WorldObjectMappable.RetrieveEntity(context);
 
-			Type behaviourType = ComputeExpectedBehaviourType(dataFieldContainer.GetFieldValue<GameObjectType>(GameObjectField.GAMEOBJECT_TYPE_ID));
+			Type behaviourType = ComputeExpectedBehaviourType(dataFieldContainer.GetEnumFieldValue<GameObjectType>(GameObjectField.GAMEOBJECT_TYPE_ID));
 
 			using(var scope = ReflectionContainer.BeginLifetimeScope(cb =>
 			{

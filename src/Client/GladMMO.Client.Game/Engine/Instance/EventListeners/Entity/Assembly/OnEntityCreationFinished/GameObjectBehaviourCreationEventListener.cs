@@ -24,7 +24,7 @@ namespace GladMMO
 		{
 			IEntityDataFieldContainer dataContainer = EntityDataMappable.RetrieveEntity(args.EntityGuid);
 
-			switch (dataContainer.GetFieldValue<GameObjectType>(GameObjectField.GAMEOBJECT_TYPE_ID))
+			switch (dataContainer.GetEnumFieldValue<GameObjectType>(GameObjectField.GAMEOBJECT_TYPE_ID))
 			{
 				//Visual doesn't have behaviours
 				case GameObjectType.Visual:

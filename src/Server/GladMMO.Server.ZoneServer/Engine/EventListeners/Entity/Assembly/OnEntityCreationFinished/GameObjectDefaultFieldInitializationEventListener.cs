@@ -27,7 +27,7 @@ namespace GladMMO
 
 			//We should generally consider this field static. I cannot even IMAGINE how we'd handle a change to this field on either
 			//client or server.
-			entityData.SetFieldValue(GameObjectField.GAMEOBJECT_TYPE_ID, objectTemplateModel.ObjectType);
+			entityData.SetFieldValue(GameObjectField.GAMEOBJECT_TYPE_ID, (int)objectTemplateModel.ObjectType);
 		}
 	}
 }

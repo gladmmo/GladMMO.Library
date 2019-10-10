@@ -33,5 +33,13 @@ namespace GladMMO
 
 			return container.GetFieldValue<TValueType>((int)index);
 		}
+
+		public static TValueType GetEnumFieldValue<TValueType>(this IEntityDataFieldContainer container, GameObjectField index)
+			where TValueType : Enum
+		{
+			if(container == null) throw new ArgumentNullException(nameof(container));
+
+			return GenericMath.Convert<int, TValueType>(container.GetFieldValue<int>((int)index));
+		}
 	}
 }
