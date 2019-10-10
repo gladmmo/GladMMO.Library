@@ -22,6 +22,31 @@ namespace GladMMO
 
 		}
 
+		//TODO: Need to verify WHAT zone server is requesting this and if they can request this avatar pedestal change.
+		[ProducesJson]
+		[HttpPatch("ChangeAvatar")]
+		[NoResponseCache]
+		//[AuthorizeJwt(GuardianApplicationRole.ZoneServer)] //TODO: Eventually we'll need to auth these zoneservers.
+		public async Task<IActionResult> UpdatePlayerAvatar([FromBody] [NotNull] ZoneServerAvatarPedestalInteractionCharacterRequest requestModel,
+			[FromServices] [NotNull] IGameObjectBehaviourDataServiceClient<AvatarPedestalInstanceModel> avatarPedestalModel,
+			[FromServices] [NotNull] ICharacterAppearanceRepository characterAppearanceRepository)
+		{
+			if (avatarPedestalModel == null) throw new ArgumentNullException(nameof(avatarPedestalModel));
+			if (characterAppearanceRepository == null) throw new ArgumentNullException(nameof(characterAppearanceRepository));
+
+			var behaviourInstanceResponse = await avatarPedestalModel.GetBehaviourInstance(requestModel.AvatarPedestalId);
+
+			if (!behaviourInstanceResponse.isSuccessful)
+				return BadRequest($"Cannot query data for Avatar Pedestal: {requestModel.AvatarPedestalId} Reason: {behaviourInstanceResponse.ResultCode.ToString()}");
+
+			CharacterAppearanceModel appearanceModel = await characterAppearanceRepository.RetrieveAsync(requestModel.CharacterGuid.EntityId);
+			appearanceModel.AvatarModelId = requestModel.AvatarPedestalId;
+			await characterAppearanceRepository.UpdateAsync(requestModel.CharacterGuid.EntityId, appearanceModel);
+
+			//If we make it here, everything above was successful.
+			return Ok();
+		}
+
 		//TODO: Really not secure
 		[ProducesJson]
 		[HttpPost("WorldTeleport")]
