@@ -152,6 +152,13 @@ namespace GladMMO
 
 				return new AsyncGameObjectBehaviourDataServiceClient<WorldTeleporterInstanceModel>(CreateBehaviourDataEndpointFromServiceEndpoint(QueryForRemoteServiceEndpoint(serviceDiscClient, "ContentServer"), "WorldTeleporterData"));
 			});
+
+			services.AddSingleton<IGameObjectBehaviourDataServiceClient<AvatarPedestalInstanceModel>>(provider =>
+			{
+				var serviceDiscClient = provider.GetService<IServiceDiscoveryService>();
+
+				return new AsyncGameObjectBehaviourDataServiceClient<AvatarPedestalInstanceModel>(CreateBehaviourDataEndpointFromServiceEndpoint(QueryForRemoteServiceEndpoint(serviceDiscClient, "ContentServer"), "AvatarPedestalData"));
+			});
 		}
 
 		//TODO: Put this in a base class or something
