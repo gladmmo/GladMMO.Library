@@ -7,27 +7,27 @@ namespace GladMMO
 {
 	//TODO: Generalize serverside player interactions
 	[JsonObject]
-	public sealed class ZoneServerWorldTeleportCharacterRequest
+	public sealed class ZoneServerAvatarPedestalInteractionCharacterRequest
 	{
 		[JsonProperty]
 		public NetworkEntityGuid CharacterGuid { get; private set; }
 
 		[JsonProperty]
-		public int WorldTeleporterId { get; private set; }
+		public int AvatarPedestalId { get; private set; }
 
-		public ZoneServerWorldTeleportCharacterRequest([NotNull] NetworkEntityGuid characterGuid, int worldTeleporterId)
+		public ZoneServerAvatarPedestalInteractionCharacterRequest([NotNull] NetworkEntityGuid characterGuid, int avatarPedestalId)
 		{
-			if (worldTeleporterId <= 0) throw new ArgumentOutOfRangeException(nameof(worldTeleporterId));
+			if (avatarPedestalId <= 0) throw new ArgumentOutOfRangeException(nameof(avatarPedestalId));
 
 			CharacterGuid = characterGuid ?? throw new ArgumentNullException(nameof(characterGuid));
-			WorldTeleporterId = worldTeleporterId;
+			AvatarPedestalId = avatarPedestalId;
 		}
 
 		/// <summary>
 		/// Serializer ctor.
 		/// </summary>
 		[JsonConstructor]
-		protected ZoneServerWorldTeleportCharacterRequest()
+		protected ZoneServerAvatarPedestalInteractionCharacterRequest()
 		{
 
 		}
