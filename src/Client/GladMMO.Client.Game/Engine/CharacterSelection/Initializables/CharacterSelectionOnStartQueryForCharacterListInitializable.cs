@@ -22,49 +22,55 @@ namespace GladMMO
 
 		private IEntityNameQueryable EntityNameQueryable { get; }
 
+		private IEntityGuidMappable<CharacterAppearanceResponse> CharacterAppearanceMappable { get; }
+
 		/// <inheritdoc />
 		public CharacterSelectionOnStartQueryForCharacterListInitializable([NotNull] ILog logger,
 			[NotNull] ICharacterService characterServiceQueryable,
-			[NotNull] IEntityNameQueryable entityNameQueryable)
+			[NotNull] IEntityNameQueryable entityNameQueryable,
+			[NotNull] IEntityGuidMappable<CharacterAppearanceResponse> characterAppearanceMappable)
 		{
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
 			CharacterServiceQueryable = characterServiceQueryable ?? throw new ArgumentNullException(nameof(characterServiceQueryable));
 			EntityNameQueryable = entityNameQueryable ?? throw new ArgumentNullException(nameof(entityNameQueryable));
+			CharacterAppearanceMappable = characterAppearanceMappable ?? throw new ArgumentNullException(nameof(characterAppearanceMappable));
 		}
 
 		/// <inheritdoc />
 		public async Task OnGameInitialized()
 		{
-			UnityAsyncHelper.UnityMainThreadContext.PostAsync(async () =>
+			try
 			{
-				try
+				CharacterListResponse listResponse = await CharacterServiceQueryable.GetCharacters()
+					.ConfigureAwait(false);
+
+				//TODO: Handle errors
+				foreach(var character in listResponse.CharacterIds)
 				{
-					CharacterListResponse listResponse = await CharacterServiceQueryable.GetCharacters()
+					var entityGuid = new NetworkEntityGuidBuilder()
+						.WithId(character)
+						.WithType(EntityType.Player)
+						.Build();
+
+					//TODO: Optimize below awaits.
+					//Do a namequery so it's in the cache for when anything tries to get entities name.
+					await EntityNameQueryable.RetrieveAsync(entityGuid)
 						.ConfigureAwait(false);
 
-					//TODO: Handle errors
-					foreach(var character in listResponse.CharacterIds)
-					{
-						var entityGuid = new NetworkEntityGuidBuilder()
-							.WithId(character)
-							.WithType(EntityType.Player)
-							.Build();
+					var appearanceResponse = await CharacterServiceQueryable.GetCharacterAppearance(entityGuid.EntityId)
+						.ConfigureAwait(false);
 
-						//Do a namequery so it's in the cache for when anything tries to get entities name.
-						await EntityNameQueryable.RetrieveAsync(entityGuid)
-							.ConfigureAwait(false);
+					//TODO: Hanlde error.
+					CharacterAppearanceMappable.AddObject(entityGuid, appearanceResponse.Result);
 
-						OnCharacterSelectionEntryChanged?.Invoke(this, new CharacterSelectionEntryDataChangeEventArgs(entityGuid));
-					}
+					OnCharacterSelectionEntryChanged?.Invoke(this, new CharacterSelectionEntryDataChangeEventArgs(entityGuid));
 				}
-				catch(Exception e)
-				{
-					Logger.Error($"Encountered Error: {e.Message}");
-					throw;
-				}
-			});
-
-			return;
+			}
+			catch(Exception e)
+			{
+				Logger.Error($"Encountered Error: {e.Message}");
+				throw;
+			}
 		}
 	}
 }
