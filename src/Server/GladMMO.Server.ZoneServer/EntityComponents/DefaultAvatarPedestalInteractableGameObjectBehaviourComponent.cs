@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 using Common.Logging;
+using Glader.Essentials;
+using Nito.AsyncEx;
 
 namespace GladMMO
 {
@@ -11,16 +13,20 @@ namespace GladMMO
 
 		private IReadonlyEntityGuidMappable<IEntityDataFieldContainer> EntityDataContainer { get; }
 
+		private IZoneServerToGameServerClient ZoneServerDataClient { get; }
+
 		public DefaultAvatarPedestalInteractableGameObjectBehaviourComponent(NetworkEntityGuid targetEntity, 
 			GameObjectInstanceModel instanceData, 
 			GameObjectTemplateModel templateData,
 			AvatarPedestalInstanceModel behaviourData,
 			[NotNull] ILog logger,
-			[NotNull] IReadonlyEntityGuidMappable<IEntityDataFieldContainer> entityDataContainer) 
+			[NotNull] IReadonlyEntityGuidMappable<IEntityDataFieldContainer> entityDataContainer,
+			[NotNull] IZoneServerToGameServerClient zoneServerDataClient) 
 			: base(targetEntity, instanceData, templateData, behaviourData)
 		{
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
 			EntityDataContainer = entityDataContainer ?? throw new ArgumentNullException(nameof(entityDataContainer));
+			ZoneServerDataClient = zoneServerDataClient ?? throw new ArgumentNullException(nameof(zoneServerDataClient));
 		}
 
 		public void Interact([NotNull] NetworkEntityGuid entityInteracting)
@@ -36,7 +42,29 @@ namespace GladMMO
 
 			IEntityDataFieldContainer dataFieldContainer = EntityDataContainer.RetrieveEntity(entityInteracting);
 
+			int currentAvatarId = dataFieldContainer.GetFieldValue<int>(BaseObjectField.UNIT_FIELD_DISPLAYID);
 			dataFieldContainer.SetFieldValue(BaseObjectField.UNIT_FIELD_DISPLAYID, BehaviourData.AvatarModelId);
+
+			//We update IMMEDIATELY for reponsiveness, but we can revert if it fails to save.
+			UnityAsyncHelper.UnityMainThreadContext.PostAsync(async () =>
+			{
+				try
+				{
+					await ZoneServerDataClient.UpdatePlayerAvatar(new ZoneServerAvatarPedestalInteractionCharacterRequest(entityInteracting, currentAvatarId));
+				}
+				catch (Exception e)
+				{
+					//TODO: Better log.
+					if(Logger.IsErrorEnabled)
+						Logger.Error($"Failed to save Avatar Change. Reason: {e.Message}");
+
+
+					//Even if the player has left, we still reference the data container so it should be safe
+					//even if they no longer exist.
+					dataFieldContainer.SetFieldValue(BaseObjectField.UNIT_FIELD_DISPLAYID, currentAvatarId);
+					throw;
+				}
+			});
 		}
 
 		public void Initialize()
