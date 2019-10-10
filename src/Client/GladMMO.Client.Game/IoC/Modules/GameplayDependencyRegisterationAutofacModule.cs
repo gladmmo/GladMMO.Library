@@ -89,6 +89,11 @@ namespace GladMMO
 				.As<IFactoryCreatable<PlayerNetworkTrackerChangeUpdateRequest, NetworkMovementTrackerTypeFlags>>()
 				.SingleInstance();
 
+			//DefaultClientGameObjectEntityBehaviourFactory : IClientGameObjectEntityBehaviourFactory
+			builder.RegisterType<DefaultClientGameObjectEntityBehaviourFactory>()
+				.As<IClientGameObjectEntityBehaviourFactory>()
+				.SingleInstance();
+
 			//Ok, now we actually register update block types manually
 			//because it's not worth it to do an assembly-wide search for them.
 			/*builder.RegisterType<DefaultObjectUpdateBlockDispatcher>()
