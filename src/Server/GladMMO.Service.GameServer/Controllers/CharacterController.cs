@@ -111,7 +111,7 @@ namespace GladMMO
 
 			CharacterAppearanceModel appearanceModel = await characterAppearanceRepository.RetrieveAsync(characterId);
 
-			return BuildSuccessfulResponseModel(new CharacterAppearanceResponse(appearanceModel.CharacterId));
+			return BuildSuccessfulResponseModel(new CharacterAppearanceResponse((int)appearanceModel.AvatarModelId));
 		}
 
 		[HttpGet]
