@@ -9,6 +9,10 @@ namespace GladMMO
 {
 	public sealed class GameplayDependencyRegisterationModule : AutofacBasedDependencyRegister<GameplayDependencyRegisterationAutofacModule>
 	{
-		
+		public override void Register(ContainerBuilder register)
+		{
+			base.Register(register);
+			register.RegisterModule<DynamicContentDownloadingAutofacModule>();
+		}
 	}
 }

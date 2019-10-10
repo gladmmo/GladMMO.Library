@@ -14,6 +14,7 @@ namespace GladMMO
 		public CreateSelectedCharacterAvatarDisplayEventListener(IContentPrefabCompletedDownloadEventSubscribable subscriptionService) 
 			: base(subscriptionService)
 		{
+
 		}
 
 		protected override void OnThreadUnSafeEventFired(object source, ContentPrefabCompletedDownloadEventArgs args)
