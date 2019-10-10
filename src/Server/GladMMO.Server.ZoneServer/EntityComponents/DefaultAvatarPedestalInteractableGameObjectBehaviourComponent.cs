@@ -5,7 +5,7 @@ using Common.Logging;
 
 namespace GladMMO
 {
-	public sealed class DefaultAvatarPedestalInteractableGameObjectBehaviourComponent : BaseDefinedGameObjectEntityBehaviourComponent<AvatarPedestalInstanceModel>, IWorldInteractable
+	public sealed class DefaultAvatarPedestalInteractableGameObjectBehaviourComponent : BaseDefinedGameObjectEntityBehaviourComponent<AvatarPedestalInstanceModel>, IWorldInteractable, IBehaviourComponentInitializable
 	{
 		private ILog Logger { get; }
 
@@ -37,6 +37,15 @@ namespace GladMMO
 			IEntityDataFieldContainer dataFieldContainer = EntityDataContainer.RetrieveEntity(entityInteracting);
 
 			dataFieldContainer.SetFieldValue(BaseObjectField.UNIT_FIELD_DISPLAYID, BehaviourData.AvatarModelId);
+		}
+
+		public void Initialize()
+		{
+			//On initialization of this behaviour we want to basically set
+			//some GameObject field data to indicate what this Pedestal is actually for.
+			//We want the client to know the model id so that it can load relevant information when attempt to show it.
+			IEntityDataFieldContainer entityData = EntityDataContainer.RetrieveEntity(TargetEntity);
+			entityData.SetFieldValue(GameObjectField.RESERVED_DATA_1, BehaviourData.AvatarModelId);
 		}
 	}
 }
