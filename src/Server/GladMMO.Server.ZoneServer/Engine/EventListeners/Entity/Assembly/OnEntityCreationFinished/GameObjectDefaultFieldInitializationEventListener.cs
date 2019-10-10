@@ -25,6 +25,8 @@ namespace GladMMO
 			IEntityDataFieldContainer entityData = EntityDataMappable.RetrieveEntity(args.EntityGuid);
 			GameObjectTemplateModel objectTemplateModel = GameObjectTemplateMappable.RetrieveEntity(args.EntityGuid);
 
+			//We should generally consider this field static. I cannot even IMAGINE how we'd handle a change to this field on either
+			//client or server.
 			entityData.SetFieldValue(GameObjectField.GAMEOBJECT_TYPE_ID, objectTemplateModel.ObjectType);
 		}
 	}
