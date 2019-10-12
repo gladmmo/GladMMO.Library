@@ -38,6 +38,19 @@ namespace GladMMO
 		{
 			if (message == null) throw new ArgumentNullException(nameof(message));
 
+			if (!isInitialized)
+			{
+				if (ExtractPotentialStateMessage(message, out var initMessage))
+					InitializeState(initMessage.State);
+				else
+				{
+					if(Logger.IsWarnEnabled)
+						Logger.Warn($"EntityActor encountered MessageType: {message.GetType().Name} before INITIALIZATION.");
+
+					return;
+				}
+			}
+
 			EntityActorMessage castedMessage = (EntityActorMessage)message;
 			EntityActorMessageContext context = new EntityActorMessageContext(Sender, Self);
 
@@ -46,6 +59,19 @@ namespace GladMMO
 					Logger.Warn($"EntityActor encountered unhandled MessageType: {message.GetType().Name}");
 		}
 
+		protected virtual bool ExtractPotentialStateMessage(object message, out EntityActorStateInitializeMessage<TActorStateType> entityActorStateInitializeMessage)
+		{
+			if (message is EntityActorStateInitializeMessage<TActorStateType> initMessage)
+			{
+				entityActorStateInitializeMessage = initMessage;
+				return true;
+			}
+
+			entityActorStateInitializeMessage = null;
+			return false;
+		}
+
+		//This is never called publicly, but I used an interface because I didn't fully grasp Akka when I wrote this.
 		public void InitializeState(TActorStateType state)
 		{
 			lock (SyncObj)
