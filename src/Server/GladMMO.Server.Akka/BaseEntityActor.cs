@@ -11,7 +11,7 @@ namespace GladMMO
 	/// </summary>
 	/// <typeparam name="TActorStateType"></typeparam>
 	/// <typeparam name="TChildActorType"></typeparam>
-	public abstract class BaseEntityActor<TChildActorType, TActorStateType> : Akka.Actor.UntypedActor
+	public abstract class BaseEntityActor<TChildActorType, TActorStateType> : Akka.Actor.UntypedActor, IEntityActor
 		where TActorStateType : class, IEntityActorStateContainable
 		where TChildActorType : BaseEntityActor<TChildActorType, TActorStateType>
 	{
