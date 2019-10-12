@@ -63,6 +63,20 @@ namespace GladMMO
 				.As<IDependencyResolver>()
 				.AsSelf()
 				.SingleInstance();
+
+			//This creates the World actor.
+			builder.Register(context =>
+				{
+					IDependencyResolver resolver = context.Resolve<IDependencyResolver>();
+					IActorRef worldActorReference = actorSystem.ActorOf(resolver.Create<DefaultWorldActor>(), "World");
+
+					//TODO: Eventually we should treat the world as a network object.
+					worldActorReference.Tell(new EntityActorStateInitializeMessage<DefaultEntityActorStateContainer>(new DefaultEntityActorStateContainer(new EntityFieldDataCollection(8), NetworkEntityGuid.Empty)));
+
+					return new WorldActorReferenceAdapter(worldActorReference);
+				})
+				.As<IWorldActorRef>()
+				.SingleInstance();
 		}
 	}
 }
