@@ -8,6 +8,12 @@ namespace GladMMO
 		where TEntityStateType : IEntityActorStateContainable
 		where TEntityMessageType : EntityActorMessage
 	{
+		/// <summary>
+		/// Non-reflection based message type getter.
+		/// May not match the signature of the HandleMessage method.
+		/// </summary>
+		Type MessageType { get; }
+
 		void HandleMessage(EntityActorMessageContext messageContext, TEntityStateType state, TEntityMessageType message);
 	}
 }

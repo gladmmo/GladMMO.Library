@@ -10,6 +10,8 @@ namespace GladMMO
 		where TEntityStateType : IEntityActorStateContainable 
 		where TEntityMessageType : EntityActorMessage
 	{
+		public Type MessageType => typeof(TEntityMessageType);
+
 		public void HandleMessage(EntityActorMessageContext messageContext, TEntityStateType state, EntityActorMessage message)
 		{
 			//Assume caller has verified this will work
