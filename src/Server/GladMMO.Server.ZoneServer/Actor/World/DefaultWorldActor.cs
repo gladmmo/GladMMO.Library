@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Akka.Actor;
 using Common.Logging;
 
 namespace GladMMO
@@ -29,6 +30,17 @@ namespace GladMMO
 			}
 
 			return false;
+		}
+
+		protected override SupervisorStrategy SupervisorStrategy()
+		{
+			return new OneForOneStrategy(0, -1, exception =>
+			{
+				if(Logger.IsErrorEnabled)
+					Logger.Error($"ActorException: {exception.Message}\n\nStack: {exception.StackTrace}");
+
+				return Directive.Escalate;
+			});
 		}
 	}
 }
