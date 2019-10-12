@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using Common.Logging;
 
 namespace GladMMO
 {
@@ -11,19 +12,23 @@ namespace GladMMO
 	{
 		private Dictionary<Type, IEntityActorMessageHandler<TEntityActorStateType, EntityActorMessage>> EntityHandlerMap { get; }
 
-		public ReflectionBasedGenericMessageRouter(IEnumerable<IEntityActorMessageHandler<TEntityActorStateType, EntityActorMessage>> actorAssemblyDefinitions)
+		private ILog Logger { get; }
+
+		public ReflectionBasedGenericMessageRouter(IEnumerable<IEntityActorMessageHandler<TEntityActorStateType, EntityActorMessage>> actorAssemblyDefinitions, ILog logger)
 		{
+			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
+
 			EntityHandlerMap = new Dictionary<Type, IEntityActorMessageHandler<TEntityActorStateType, EntityActorMessage>>(10);
 
-			//TODO: Handle external assembly loading.
-			//foreach (Assembly actorAssemblyToParse in actorAssemblyDefinitions.AssemblyNames
-			//	.Select(d => AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(a => d == a.FullName.ToString())))
 			foreach (var handler in actorAssemblyDefinitions)
 			{
 				foreach(EntityActorMessageHandlerAttribute actorHandlerAttribute in handler.GetType().GetCustomAttributes<EntityActorMessageHandlerAttribute>())
 				{
 					if (actorHandlerAttribute.TargetActorType == typeof(TEntityActorType))
 					{
+						if(Logger.IsDebugEnabled)
+							Logger.Debug($"Registering: {handler.GetType().Name} for Actor: {actorHandlerAttribute.TargetActorType}");
+
 						EntityHandlerMap[handler.MessageType] = handler;
 						break;
 					}
