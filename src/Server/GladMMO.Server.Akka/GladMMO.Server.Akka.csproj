@@ -9,4 +9,13 @@
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Adapters\" />
+    <Folder Include="Extensions\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\GladMMO.Common\GladMMO.Common.csproj" />
+  </ItemGroup>
+
 </Project>
