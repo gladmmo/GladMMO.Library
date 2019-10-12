@@ -13,6 +13,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Akka.DI.AutoFac" Version="1.3.9" />
     <PackageReference Include="Autofac" Version="4.8.1" />
     <PackageReference Include="Glader.Essentials.Unity" Version="1.0.27" />
     <PackageReference Include="GladNet3.Client.DotNetTcpClient" Version="3.0.46" />
