@@ -40,6 +40,7 @@
     <ProjectReference Include="..\..\GladMMO.Unity.Common\GladMMO.Unity.Common.csproj" />
     <ProjectReference Include="..\..\GladMMO.ZoneServer.Common\GladMMO.ZoneServer.Common.csproj" />
     <ProjectReference Include="..\..\SDK\GladMMO.Common.SDK\GladMMO.Common.SDK.csproj" />
+    <ProjectReference Include="..\GladMMO.Server.Akka\GladMMO.Server.Akka.csproj" />
     <ProjectReference Include="..\GladMMO.Server.Common\GladMMO.Server.Common.csproj" />
   </ItemGroup>
 
