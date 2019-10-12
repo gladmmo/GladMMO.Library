@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using Akka.Actor;
+using Akka.DI.AutoFac;
+using Akka.DI.Core;
 using Autofac;
 using Module = Autofac.Module;
 
@@ -18,6 +21,7 @@ namespace GladMMO
 			//The below loads the actor assemblies defined in the configuration.
 			//It then searches for all message handlers and then registers them.
 			//It's a complicated process.
+			//TODO: Support actually loading unloaded assemblies (like 3rd party user assemblies)
 			foreach (Assembly actorAssemblyToParse in actorAssemblyConfig.AssemblyNames
 				.Select(d => AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(a => d == a.FullName.ToString()))
 				.Where(a => a != null))
@@ -44,6 +48,20 @@ namespace GladMMO
 			//this makes it EASY to inject into the actors
 			builder.RegisterGeneric(typeof(ReflectionBasedGenericMessageRouter<,>))
 				.As(typeof(IEntityActorMessageRouteable<,>))
+				.SingleInstance();
+
+			//Create the root of the actor system.
+			ActorSystem actorSystem = ActorSystem.Create("Root");
+			builder.RegisterInstance(actorSystem)
+				.AsSelf()
+				.As<IActorRefFactory>()
+				.SingleInstance();
+
+			//Creates the autofac dependency resolver that can be used to actually resolve
+			//the Actor's dependencies.
+			builder.Register(context => new AutoFacDependencyResolver(context.Resolve<ILifetimeScope>(), actorSystem))
+				.As<IDependencyResolver>()
+				.AsSelf()
 				.SingleInstance();
 		}
 	}
