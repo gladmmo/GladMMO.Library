@@ -73,6 +73,9 @@ namespace GladMMO
 				.AsSelf()
 				.SingleInstance();
 
+			builder.RegisterType<DefaultWorldActor>()
+				.AsSelf();
+
 			//This creates the World actor.
 			builder.Register(context =>
 				{
