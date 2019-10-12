@@ -12,5 +12,23 @@ namespace GladMMO
 		{
 
 		}
+
+		protected override bool ExtractPotentialStateMessage(object message, out EntityActorStateInitializeMessage<WorldActorState> entityActorStateInitializeMessage)
+		{
+			bool result = base.ExtractPotentialStateMessage(message, out entityActorStateInitializeMessage);
+
+			if (result)
+				return result;
+			else
+			{
+				if (message is EntityActorStateInitializeMessage<DefaultEntityActorStateContainer> defaultStateMessage)
+				{
+					entityActorStateInitializeMessage = new EntityActorStateInitializeMessage<WorldActorState>(new WorldActorState(Context));
+					return true;
+				}
+			}
+
+			return false;
+		}
 	}
 }
