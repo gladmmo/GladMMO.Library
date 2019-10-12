@@ -18,8 +18,8 @@ namespace GladMMO
 			AssemblyNames = assemblyNames ?? throw new ArgumentNullException(nameof(assemblyNames));
 			AssemblyNames = assemblyNames.Select(s => s.ToLower()).ToArray();
 
-			if (!AssemblyNames.Contains("gladmmo.server.zoneserver"))
-				AssemblyNames = assemblyNames.ToList().Concat(new string[] {"GladMMO.Server.ZoneServer"}).ToArray();
+			if (!AssemblyNames.Contains("GladMMO.Server.ZoneServer".ToLower()))
+				AssemblyNames = assemblyNames.ToList().Concat(new string[] {"GladMMO.Server.ZoneServer".ToLower()}).ToArray();
 		}
 
 		/// <summary>

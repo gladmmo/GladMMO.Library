@@ -7,6 +7,7 @@ using Akka.Actor;
 using Akka.DI.AutoFac;
 using Akka.DI.Core;
 using Autofac;
+using UnityEngine;
 using Module = Autofac.Module;
 
 namespace GladMMO
@@ -18,19 +19,27 @@ namespace GladMMO
 			//TODO: Expose and register this as appart of configuration system
 			ActorAssemblyDefinitionConfiguration actorAssemblyConfig = new ActorAssemblyDefinitionConfiguration(Array.Empty<string>());
 
+			foreach(var s in actorAssemblyConfig.AssemblyNames)
+				Debug.Log($"Actor Assembly: {s}");
+
+			Debug.Log(AppDomain.CurrentDomain.GetAssemblies().Aggregate("Loaded Assemblies: ", (s, assembly) => $"{s} {assembly.GetName().Name}"));
+
 			//The below loads the actor assemblies defined in the configuration.
 			//It then searches for all message handlers and then registers them.
 			//It's a complicated process.
 			//TODO: Support actually loading unloaded assemblies (like 3rd party user assemblies)
 			foreach (Assembly actorAssemblyToParse in actorAssemblyConfig.AssemblyNames
-				.Select(d => AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(a => d == a.FullName.ToString()))
+				.Select(d => AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(a => d == a.GetName().Name.ToLower()))
 				.Where(a => a != null))
 			{
+				Debug.Log($"Parsing ActorAssembly: {actorAssemblyToParse.GetName().Name}");
 				foreach (Type t in actorAssemblyToParse.GetTypes())
 				{
 					//If they have the handler attribute, we should just register it.
-					if (t.GetCustomAttribute<EntityActorMessageHandlerAttribute>() != null)
+					if (t.GetCustomAttribute<EntityActorMessageHandlerAttribute>(true) != null)
 					{
+						Debug.Log($"Register ActorMessageHandler: {t.Name}");
+
 						//Now we need to find the actor state type
 						Type actorStateType = t.GetInterfaces()
 							.First(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IEntityActorMessageHandler<,>))
@@ -67,13 +76,21 @@ namespace GladMMO
 			//This creates the World actor.
 			builder.Register(context =>
 				{
-					IDependencyResolver resolver = context.Resolve<IDependencyResolver>();
-					IActorRef worldActorReference = actorSystem.ActorOf(resolver.Create<DefaultWorldActor>(), "World");
+					try
+					{
+						IDependencyResolver resolver = context.Resolve<IDependencyResolver>();
+						IActorRef worldActorReference = actorSystem.ActorOf(resolver.Create<DefaultWorldActor>(), "World");
 
-					//TODO: Eventually we should treat the world as a network object.
-					worldActorReference.Tell(new EntityActorStateInitializeMessage<DefaultEntityActorStateContainer>(new DefaultEntityActorStateContainer(new EntityFieldDataCollection(8), NetworkEntityGuid.Empty)));
+						//TODO: Eventually we should treat the world as a network object.
+						worldActorReference.Tell(new EntityActorStateInitializeMessage<DefaultEntityActorStateContainer>(new DefaultEntityActorStateContainer(new EntityFieldDataCollection(8), NetworkEntityGuid.Empty)));
 
-					return new WorldActorReferenceAdapter(worldActorReference);
+						return new WorldActorReferenceAdapter(worldActorReference);
+					}
+					catch (Exception e)
+					{
+						Debug.LogError($"Failed to create WorldActor in IoC. Reason: {e.Message}\n\nStack: {e.StackTrace}");
+						throw;
+					}
 				})
 				.As<IWorldActorRef>()
 				.SingleInstance();
