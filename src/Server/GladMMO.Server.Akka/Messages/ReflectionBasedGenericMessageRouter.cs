@@ -14,13 +14,13 @@ namespace GladMMO
 
 		private ILog Logger { get; }
 
-		public ReflectionBasedGenericMessageRouter(IEnumerable<IEntityActorMessageHandler<TEntityActorStateType, EntityActorMessage>> actorAssemblyDefinitions, ILog logger)
+		public ReflectionBasedGenericMessageRouter(IEnumerable<IEntityActorMessageHandler<TEntityActorStateType, EntityActorMessage>> messageHandler, ILog logger)
 		{
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
 			EntityHandlerMap = new Dictionary<Type, IEntityActorMessageHandler<TEntityActorStateType, EntityActorMessage>>(10);
 
-			foreach (var handler in actorAssemblyDefinitions)
+			foreach (var handler in messageHandler)
 			{
 				foreach(EntityActorMessageHandlerAttribute actorHandlerAttribute in handler.GetType().GetCustomAttributes<EntityActorMessageHandlerAttribute>())
 				{
