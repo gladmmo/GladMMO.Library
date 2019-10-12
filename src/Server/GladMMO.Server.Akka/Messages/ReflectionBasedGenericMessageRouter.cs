@@ -14,20 +14,24 @@ namespace GladMMO
 
 		private ILog Logger { get; }
 
-		public ReflectionBasedGenericMessageRouter(IEnumerable<IEntityActorMessageHandler<TEntityActorStateType, EntityActorMessage>> messageHandler, ILog logger)
+		public ReflectionBasedGenericMessageRouter(IEnumerable<IEntityActorMessageHandler<TEntityActorStateType, EntityActorMessage>> messageHandlers, ILog logger)
 		{
+			if (messageHandlers == null) throw new ArgumentNullException(nameof(messageHandlers));
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
+
+			if(Logger.IsInfoEnabled)
+				Logger.Info($"ReflectionBasedGenericMessageRouter<{typeof(TEntityActorType).Name}, {typeof(TEntityActorStateType)}> handler count: {messageHandlers.Count()}");
 
 			EntityHandlerMap = new Dictionary<Type, IEntityActorMessageHandler<TEntityActorStateType, EntityActorMessage>>(10);
 
-			foreach (var handler in messageHandler)
+			foreach (var handler in messageHandlers)
 			{
-				foreach(EntityActorMessageHandlerAttribute actorHandlerAttribute in handler.GetType().GetCustomAttributes<EntityActorMessageHandlerAttribute>())
+				foreach(EntityActorMessageHandlerAttribute actorHandlerAttribute in handler.GetType().GetCustomAttributes<EntityActorMessageHandlerAttribute>(true))
 				{
 					if (actorHandlerAttribute.TargetActorType == typeof(TEntityActorType))
 					{
-						if(Logger.IsDebugEnabled)
-							Logger.Debug($"Registering: {handler.GetType().Name} for Actor: {actorHandlerAttribute.TargetActorType}");
+						if(Logger.IsInfoEnabled)
+							Logger.Info($"Registering: {handler.GetType().Name} for Actor: {actorHandlerAttribute.TargetActorType}");
 
 						EntityHandlerMap[handler.MessageType] = handler;
 						break;
