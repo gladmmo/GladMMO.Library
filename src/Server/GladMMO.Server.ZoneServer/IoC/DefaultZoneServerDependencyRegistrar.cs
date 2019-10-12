@@ -24,6 +24,7 @@ namespace GladMMO
 		public override void Register(ContainerBuilder builder)
 		{
 			builder.RegisterModule<DefaultZoneServerDependencyModule>();
+			builder.RegisterModule<ActorSystemDependencyAutofacModule>();
 		}
 	}
 }
