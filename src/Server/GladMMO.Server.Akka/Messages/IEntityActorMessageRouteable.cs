@@ -8,9 +8,10 @@ namespace GladMMO
 	/// Contract for types that can route messages.
 	/// </summary>
 	/// <typeparam name="TEntityStateType"></typeparam>
-	public interface IEntityActorMessageRouteable<in TEntityStateType>
+	/// <typeparam name="TActorType">This generic parameter exists mostly for IoC magic.</typeparam>
+	public interface IEntityActorMessageRouteable<in TActorType, in TEntityStateType>
 		where TEntityStateType : IEntityActorStateContainable
 	{
-		void RouteMessage(EntityActorMessageContext messageContext, TEntityStateType state, EntityActorMessage message);
+		bool RouteMessage(EntityActorMessageContext messageContext, TEntityStateType state, EntityActorMessage message);
 	}
 }
