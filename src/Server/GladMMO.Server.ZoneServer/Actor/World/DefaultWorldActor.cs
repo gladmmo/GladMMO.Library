@@ -42,5 +42,11 @@ namespace GladMMO
 				return Directive.Escalate;
 			});
 		}
+
+		protected override void OnInitialized()
+		{
+			if(Logger.IsInfoEnabled)
+				Logger.Info($"WorldActor state initialized.");
+		}
 	}
 }

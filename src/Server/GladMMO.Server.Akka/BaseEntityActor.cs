@@ -74,13 +74,22 @@ namespace GladMMO
 			return false;
 		}
 
+		protected virtual void OnInitialized()
+		{
+
+		}
+
 		//This is never called publicly, but I used an interface because I didn't fully grasp Akka when I wrote this.
 		public void InitializeState(TActorStateType state)
 		{
 			lock (SyncObj)
 			{
+				if(isInitialized)
+					throw new InvalidOperationException($"Cannot initialize actor: {GetType().Name} more than once.");
+
 				ActorState = state;
 				isInitialized = true;
+				OnInitialized();
 			}
 		}
 	}
