@@ -73,7 +73,7 @@ namespace GladMMO
 			{
 				//TODO: Add reflection-based way to discover this stuff.
 				case GameObjectType.Visual:
-					return typeof(DefaultGameObjectActorState);
+					return typeof(DefaultGameObjectEntityActor);
 				case GameObjectType.WorldTeleporter:
 					return typeof(GameObjectWorldTeleporterEntityActor);
 				case GameObjectType.AvatarPedestal:

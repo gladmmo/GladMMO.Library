@@ -107,6 +107,10 @@ namespace GladMMO
 			builder.RegisterType<UnityLoggerActor>()
 				.AsSelf();
 
+			builder.RegisterType<DefaultGameObjectEntityActorFactory>()
+				.As<IGameObjectEntityActorFactory>()
+				.SingleInstance();
+
 			//This creates the World actor.
 			builder.Register(context =>
 				{
