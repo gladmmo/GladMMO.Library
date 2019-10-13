@@ -30,7 +30,7 @@ namespace GladMMO
 			if (!ActorReferenceMappable.ContainsKey(payload.TargetGameObjectGuid))
 			{
 				if(Logger.IsWarnEnabled)
-					Logger.Warn($"Client: {guid} attempted to interact with unknown actor.");
+					Logger.Warn($"Client: {guid} attempted to interact with unknown actor {payload.TargetGameObjectGuid}.");
 			}
 			else
 			{
