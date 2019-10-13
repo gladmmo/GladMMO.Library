@@ -4,7 +4,15 @@ using System.Text;
 
 namespace GladMMO
 {
-	public interface IEntityActorMessageHandler<in TEntityStateType, in TEntityMessageType>
+	/// <summary>
+	/// Marker interface.
+	/// </summary>
+	public interface IEntityActorMessageHandler
+	{
+
+	}
+
+	public interface IEntityActorMessageHandler<in TEntityStateType, in TEntityMessageType> : IEntityActorMessageHandler
 		where TEntityStateType : IEntityActorStateContainable
 		where TEntityMessageType : EntityActorMessage
 	{
