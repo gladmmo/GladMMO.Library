@@ -4,7 +4,12 @@ using System.Text;
 
 namespace GladMMO
 {
-	public sealed class EntityActorStateInitializeMessage<TStateType> : EntityActorMessage
+	public interface IEntityActorStateInitializeMessage<out TStateType>
+	{
+		TStateType State { get; }
+	}
+
+	public sealed class EntityActorStateInitializeMessage<TStateType> : EntityActorMessage, IEntityActorStateInitializeMessage<TStateType>
 		where TStateType : class, IEntityActorStateContainable
 	{
 		public TStateType State { get; }
