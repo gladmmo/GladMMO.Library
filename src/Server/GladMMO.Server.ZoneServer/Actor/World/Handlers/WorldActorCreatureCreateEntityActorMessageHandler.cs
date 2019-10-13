@@ -8,7 +8,7 @@ using Common.Logging;
 namespace GladMMO
 {
 	[EntityActorMessageHandler(typeof(DefaultWorldActor))]
-	public sealed class WorldActorCreatureCreateEntityActorMessageHandler : BaseEntityActorMessageHandler<WorldActorState, CreateGameObjectEntityActorMessage>
+	public sealed class WorldActorCreatureCreateEntityActorMessageHandler : BaseEntityActorMessageHandler<WorldActorState, CreateCreatureEntityActorMessage>
 	{
 		private ILog Logger { get; }
 
