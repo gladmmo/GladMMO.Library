@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using Akka.Actor;
 using Common.Logging;
 using GladNet;
 
@@ -10,35 +11,34 @@ namespace GladMMO
 	[ServerSceneTypeCreate(ServerSceneType.Default)]
 	public sealed class PlayerGameObjectInteractRequestHandler : ControlledEntityRequestHandler<ClientInteractGameObjectRequestPayload>
 	{
-		private IReadonlyEntityGuidMappable<IWorldInteractable> WorldInteractables { get; }
+		private IReadonlyEntityGuidMappable<IActorRef> ActorReferenceMappable { get; }
 
 		/// <inheritdoc />
 		public PlayerGameObjectInteractRequestHandler(
 			ILog logger,
 			IReadonlyConnectionEntityCollection connectionIdToEntityMap,
 			IContextualResourceLockingPolicy<NetworkEntityGuid> lockingPolicy,
-			[NotNull] IReadonlyEntityGuidMappable<IWorldInteractable> worldInteractables)
+			[NotNull] IReadonlyEntityGuidMappable<IActorRef> actorReferenceMappable)
 			: base(logger, connectionIdToEntityMap, lockingPolicy)
 		{
-			WorldInteractables = worldInteractables ?? throw new ArgumentNullException(nameof(worldInteractables));
+			ActorReferenceMappable = actorReferenceMappable ?? throw new ArgumentNullException(nameof(actorReferenceMappable));
 		}
 
 		/// <inheritdoc />
 		protected override Task HandleMessage(IPeerSessionMessageContext<GameServerPacketPayload> context, ClientInteractGameObjectRequestPayload payload, NetworkEntityGuid guid)
 		{
-			if (!WorldInteractables.ContainsKey(payload.TargetGameObjectGuid))
+			if (!ActorReferenceMappable.ContainsKey(payload.TargetGameObjectGuid))
 			{
 				if(Logger.IsWarnEnabled)
-					Logger.Warn($"Client: {guid} attempted to interact with unknown interactable.");
+					Logger.Warn($"Client: {guid} attempted to interact with unknown actor.");
 			}
 			else
 			{
-				IWorldInteractable interactable = WorldInteractables.RetrieveEntity(payload.TargetGameObjectGuid);
-
 				ProjectVersionStage.AssertBeta();
-				//TODO: We probably shouldn't interact with networked objects off of the main thread without aquiring a resource lock on them
-				//TODO: Somewhere, somehow, there should be like a distance check or a check to see if they CAN interact with this object.
-				interactable.Interact(guid);
+				//TODO: Race condition where THIS CAN FAIL since IActorRefs are removed currently.
+				IActorRef interactable = ActorReferenceMappable.RetrieveEntity(payload.TargetGameObjectGuid);
+				
+				interactable.Tell(new InteractWithEntityActorMessage(guid));
 			}
 
 			return Task.CompletedTask;
