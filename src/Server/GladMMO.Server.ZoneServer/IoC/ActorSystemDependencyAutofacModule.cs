@@ -50,6 +50,11 @@ namespace GladMMO
 							.As(typeof(IEntityActorMessageHandler<,>).MakeGenericType(new Type[2] {actorStateType, typeof(EntityActorMessage)}))
 							.SingleInstance();
 					}
+					else if (typeof(IEntityActor).IsAssignableFrom(t))
+					{
+						builder.RegisterType(t)
+							.AsSelf();
+					}
 				}
 			}
 
