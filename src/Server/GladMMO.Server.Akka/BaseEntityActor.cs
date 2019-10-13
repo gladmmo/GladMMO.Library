@@ -45,7 +45,7 @@ namespace GladMMO
 				else
 				{
 					if(Logger.IsWarnEnabled)
-						Logger.Warn($"EntityActor encountered MessageType: {message.GetType().Name} before INITIALIZATION.");
+						Logger.Warn($"{GetType().Name} encountered MessageType: {message.GetType().Name} before INITIALIZATION.");
 				}
 
 				//Even if we're initialized now, it's an init message we shouldn't continue with.
