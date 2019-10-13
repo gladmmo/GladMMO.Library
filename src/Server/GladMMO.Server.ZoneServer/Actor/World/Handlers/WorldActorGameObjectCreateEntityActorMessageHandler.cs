@@ -18,15 +18,19 @@ namespace GladMMO
 
 		private IEntityGuidMappable<IActorRef> ActorRefMappable { get; }
 
+		private IEventPublisher<IEntityDeconstructionRequestedEventSubscribable, EntityDeconstructionRequestedEventArgs> DestructionEventPublisher { get; }
+
 		public WorldActorGameObjectCreateEntityActorMessageHandler([NotNull] ILog logger,
 			[NotNull] IGameObjectEntityActorFactory entityActorFactory,
 			[NotNull] IDependencyResolver resolver,
-			[NotNull] IEntityGuidMappable<IActorRef> actorRefMappable)
+			[NotNull] IEntityGuidMappable<IActorRef> actorRefMappable,
+			[NotNull] IEventPublisher<IEntityDeconstructionRequestedEventSubscribable, EntityDeconstructionRequestedEventArgs> destructionEventPublisher)
 		{
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
 			EntityActorFactory = entityActorFactory ?? throw new ArgumentNullException(nameof(entityActorFactory));
 			Resolver = resolver ?? throw new ArgumentNullException(nameof(resolver));
 			ActorRefMappable = actorRefMappable ?? throw new ArgumentNullException(nameof(actorRefMappable));
+			DestructionEventPublisher = destructionEventPublisher ?? throw new ArgumentNullException(nameof(destructionEventPublisher));
 		}
 
 		protected override void HandleMessage(EntityActorMessageContext messageContext, WorldActorState state, CreateGameObjectEntityActorMessage message)
@@ -42,7 +46,9 @@ namespace GladMMO
 			{
 				if(Logger.IsErrorEnabled)
 					Logger.Error($"Failed to create Actor: {e.Message}\n\nStack: {e.StackTrace}");
-				throw;
+
+				//Rather than throw and kill the world let's just despawn this failed object
+				DestructionEventPublisher.PublishEvent(this, new EntityDeconstructionRequestedEventArgs(message.EntityGuid));
 			}
 		}
 
