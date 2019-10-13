@@ -34,6 +34,20 @@ namespace GladMMO
 			if(message.EntityGuid.EntityType != EntityType.GameObject)
 				throw new InvalidOperationException($"Tried to create GameObject Actor for non-GameObject Entity: {message.EntityGuid}");
 
+			try
+			{
+				CreateActor(state, message);
+			}
+			catch (Exception e)
+			{
+				if(Logger.IsErrorEnabled)
+					Logger.Error($"Failed to create Actor: {e.Message}\n\nStack: {e.StackTrace}");
+				throw;
+			}
+		}
+
+		private void CreateActor(WorldActorState state, CreateGameObjectEntityActorMessage message)
+		{
 			//Even visual objects now get actors
 			EntityActorCreationResult actorCreationData = EntityActorFactory.Create(message.EntityGuid);
 
@@ -43,7 +57,7 @@ namespace GladMMO
 
 			ActorRefMappable.AddObject(message.EntityGuid, actorRef);
 
-			if(Logger.IsInfoEnabled)
+			if (Logger.IsInfoEnabled)
 				Logger.Info($"Created GameObject Actor: {actorCreationData.DesiredActorType} for Entity: {message.EntityGuid}");
 		}
 	}

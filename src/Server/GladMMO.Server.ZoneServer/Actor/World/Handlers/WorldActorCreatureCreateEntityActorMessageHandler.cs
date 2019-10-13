@@ -29,18 +29,32 @@ namespace GladMMO
 			EntityDataMappable = entityDataMappable ?? throw new ArgumentNullException(nameof(entityDataMappable));
 		}
 
-		protected override void HandleMessage(EntityActorMessageContext messageContext, WorldActorState state, CreateGameObjectEntityActorMessage message)
+		protected override void HandleMessage(EntityActorMessageContext messageContext, WorldActorState state, CreateCreatureEntityActorMessage message)
 		{
 			if(message.EntityGuid.EntityType != EntityType.Creature)
 				throw new InvalidOperationException($"Tried to create Creature Actor for non-Creature Entity: {message.EntityGuid}");
 
+			try
+			{
+				CreateActor(state, message);
+			}
+			catch (Exception e)
+			{
+				if(Logger.IsErrorEnabled)
+					Logger.Error($"Failed to create Actor: {e.Message}\n\nStack: {e.StackTrace}");
+				throw;
+			}
+		}
+
+		private void CreateActor(WorldActorState state, CreateCreatureEntityActorMessage message)
+		{
 			//Create the actor and tell it to initialize.
 			IActorRef actorRef = state.WorldActorFactory.ActorOf(Resolver.Create<DefaultCreatureEntityActor>(), message.EntityGuid.RawGuidValue.ToString());
 			actorRef.Tell(new EntityActorStateInitializeMessage<DefaultEntityActorStateContainer>(new DefaultEntityActorStateContainer(EntityDataMappable.RetrieveEntity(message.EntityGuid), message.EntityGuid)));
 
 			ActorRefMappable.AddObject(message.EntityGuid, actorRef);
 
-			if(Logger.IsInfoEnabled)
+			if (Logger.IsInfoEnabled)
 				Logger.Info($"Created Creature Actor: {typeof(DefaultCreatureEntityActor)} for Entity: {message.EntityGuid}");
 		}
 	}
