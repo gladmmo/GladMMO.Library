@@ -51,17 +51,18 @@ namespace GladMMO
 						builder.RegisterType(t)
 							.AsSelf()
 							.As(typeof(IEntityActorMessageHandler<,>).MakeGenericType(new Type[2] {actorStateType, typeof(EntityActorMessage)}))
+							.As<IEntityActorMessageHandler>()
 							.SingleInstance();
 					}
 					else if (typeof(IEntityActor).IsAssignableFrom(t))
 					{
 						//Don't want to register abstract entities.
-						/*if (!t.IsAbstract)
+						if (!t.IsAbstract)
 						{
 							Debug.Log($"Register Actor: {t.Name}");
 							builder.RegisterType(t)
 								.AsSelf();
-						}*/
+						}
 					}
 				}
 			}
@@ -113,14 +114,8 @@ namespace GladMMO
 					{
 						IDependencyResolver resolver = context.Resolve<IDependencyResolver>();
 						ActorSystem actorSystem = context.Resolve<ActorSystem>();
-						Props props = resolver.Create<DefaultWorldActor>();
-						//IEntityActorMessageRouteable<DefaultWorldActor, WorldActorState> messageRouteable = context.Resolve<IEntityActorMessageRouteable<DefaultWorldActor, WorldActorState>>();
-
 						actorSystem.ActorOf(resolver.Create<UnityLoggerActor>(), "Logger");
-
-						IActorRef worldActorReference = actorSystem.ActorOf(props, "World");
-
-						Task.Delay(3000);
+						IActorRef worldActorReference = actorSystem.ActorOf(resolver.Create<DefaultWorldActor>(), "World");
 
 						if(worldActorReference.IsNobody())
 							Debug.LogError($"FAILED TO CREATE WORLD ACTOR.");
