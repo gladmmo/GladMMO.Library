@@ -4,11 +4,11 @@ using System.Text;
 
 namespace GladMMO
 {
-	public class CreateEntityActorMessage : EntityActorMessage
+	public class CreatePlayerEntityActorMessage : EntityActorMessage
 	{
 		public NetworkEntityGuid EntityGuid { get; }
 
-		public CreateEntityActorMessage([NotNull] NetworkEntityGuid entityGuid)
+		public CreatePlayerEntityActorMessage([NotNull] NetworkEntityGuid entityGuid)
 		{
 			EntityGuid = entityGuid ?? throw new ArgumentNullException(nameof(entityGuid));
 		}
