@@ -46,20 +46,27 @@ namespace GladMMO
 				{
 					if(Logger.IsWarnEnabled)
 						Logger.Warn($"EntityActor encountered MessageType: {message.GetType().Name} before INITIALIZATION.");
-
-					
 				}
 
 				//Even if we're initialized now, it's an init message we shouldn't continue with.
 				return;
 			}
 
-			EntityActorMessage castedMessage = (EntityActorMessage)message;
-			EntityActorMessageContext context = new EntityActorMessageContext(Sender, Self);
+			try
+			{
+				EntityActorMessage castedMessage = (EntityActorMessage)message;
+				EntityActorMessageContext context = new EntityActorMessageContext(Sender, Self);
 
-			if(!MessageRouter.RouteMessage(context, ActorState, castedMessage))
-				if(Logger.IsWarnEnabled)
-					Logger.Warn($"EntityActor encountered unhandled MessageType: {message.GetType().Name}");
+				if(!MessageRouter.RouteMessage(context, ActorState, castedMessage))
+					if(Logger.IsWarnEnabled)
+						Logger.Warn($"EntityActor encountered unhandled MessageType: {message.GetType().Name}");
+			}
+			catch (Exception e)
+			{
+				if(Logger.IsErrorEnabled)
+					Logger.Error($"Actor: {ActorState.EntityGuid} failed to handle MessageType: {message.GetType().Name} without Exception: {e.Message}\n\nStack: {e.StackTrace}");
+				throw;
+			}
 		}
 
 		protected virtual bool ExtractPotentialStateMessage(object message, out EntityActorStateInitializeMessage<TActorStateType> entityActorStateInitializeMessage)
