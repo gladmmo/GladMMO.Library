@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
 using Akka.Actor;
+using Akka.Configuration;
 using Akka.DI.AutoFac;
 using Akka.DI.Core;
+using Akka.Event;
 using Autofac;
-using UnityEngine;
+using Debug = UnityEngine.Debug;
 using Module = Autofac.Module;
 
 namespace GladMMO
@@ -52,8 +55,13 @@ namespace GladMMO
 					}
 					else if (typeof(IEntityActor).IsAssignableFrom(t))
 					{
-						builder.RegisterType(t)
-							.AsSelf();
+						//Don't want to register abstract entities.
+						/*if (!t.IsAbstract)
+						{
+							Debug.Log($"Register Actor: {t.Name}");
+							builder.RegisterType(t)
+								.AsSelf();
+						}*/
 					}
 				}
 			}
@@ -65,20 +73,37 @@ namespace GladMMO
 				.SingleInstance();
 
 			//Create the root of the actor system.
-			ActorSystem actorSystem = ActorSystem.Create("Root");
-			builder.RegisterInstance(actorSystem)
+			builder.RegisterInstance(ActorSystem.Create("Root"))
 				.AsSelf()
+				.As<ActorSystem>()
 				.As<IActorRefFactory>()
 				.SingleInstance();
 
 			//Creates the autofac dependency resolver that can be used to actually resolve
 			//the Actor's dependencies.
-			builder.Register(context => new AutoFacDependencyResolver(context.Resolve<ILifetimeScope>(), actorSystem))
+			builder.Register(context =>
+				{
+					if(!context.IsRegistered<IEntityActorMessageRouteable<DefaultWorldActor, WorldActorState>>())
+						Debug.LogError($"CRITICAL dependency for Actor IOC not registered.");
+
+					if(!context.IsRegistered<DefaultWorldActor>())
+						Debug.LogError($"CRITICAL dependency for Actor IOC not registered.");
+
+					return new AutoFacDependencyResolver(context.Resolve<ILifetimeScope>(), context.Resolve<ActorSystem>());
+				})
 				.As<IDependencyResolver>()
 				.AsSelf()
 				.SingleInstance();
 
 			builder.RegisterType<DefaultWorldActor>()
+				.AsSelf();
+
+			builder.RegisterType<UnityAkkaActorLoggerAdapter>()
+				.AsSelf()
+				.As<ILoggingAdapter>()
+				.SingleInstance();
+
+			builder.RegisterType<UnityLoggerActor>()
 				.AsSelf();
 
 			//This creates the World actor.
@@ -87,10 +112,18 @@ namespace GladMMO
 					try
 					{
 						IDependencyResolver resolver = context.Resolve<IDependencyResolver>();
-						IActorRef worldActorReference = actorSystem.ActorOf(resolver.Create<DefaultWorldActor>(), "World");
+						ActorSystem actorSystem = context.Resolve<ActorSystem>();
+						Props props = resolver.Create<DefaultWorldActor>();
+						//IEntityActorMessageRouteable<DefaultWorldActor, WorldActorState> messageRouteable = context.Resolve<IEntityActorMessageRouteable<DefaultWorldActor, WorldActorState>>();
 
-						//TODO: Eventually we should treat the world as a network object.
-						worldActorReference.Tell(new EntityActorStateInitializeMessage<DefaultEntityActorStateContainer>(new DefaultEntityActorStateContainer(new EntityFieldDataCollection(8), NetworkEntityGuid.Empty)));
+						actorSystem.ActorOf(resolver.Create<UnityLoggerActor>(), "Logger");
+
+						IActorRef worldActorReference = actorSystem.ActorOf(props, "World");
+
+						Task.Delay(3000);
+
+						if(worldActorReference.IsNobody())
+							Debug.LogError($"FAILED TO CREATE WORLD ACTOR.");
 
 						return new WorldActorReferenceAdapter(worldActorReference);
 					}
