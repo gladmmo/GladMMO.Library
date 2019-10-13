@@ -24,27 +24,62 @@ namespace GladMMO
 			if (context == null) throw new ArgumentNullException(nameof(context));
 
 			GameObjectTemplateModel templateModel = GameObjectDataContainer.GameObjectTemplateMappable.RetrieveEntity(context);
-			GameObjectInstanceModel instanceModel = GameObjectDataContainer.GameObjectInstanceMappable.RetrieveEntity(context);
 
-			Type behaviourType = ComputeExpectedBehaviourType(templateModel.ObjectType);
+			Type behaviourType = ComputeExpectedActorType(templateModel.ObjectType);
 
-			return new EntityActorCreationResult(behaviourType, new EntityActorStateInitializeMessage<DefaultGameObjectActorState>(new DefaultGameObjectActorState(EntityDataMappable.RetrieveEntity(context), context, instanceModel, templateModel)));
+			return new EntityActorCreationResult(behaviourType, CreateInitialState(context, templateModel.ObjectType));
 		}
 
-		//TODO: Find a way to do this via reflection.
-		private Type ComputeExpectedBehaviourType(GameObjectType templateModelObjectType)
+		private IEntityActorStateInitializeMessage<DefaultGameObjectActorState> CreateInitialState([NotNull] NetworkEntityGuid entityGuid, GameObjectType objectType)
+		{
+			if (entityGuid == null) throw new ArgumentNullException(nameof(entityGuid));
+			if (!Enum.IsDefined(typeof(GameObjectType), objectType)) throw new InvalidEnumArgumentException(nameof(objectType), (int) objectType, typeof(GameObjectType));
+
+			switch(objectType)
+			{
+				case GameObjectType.Visual:
+					return CreateDefaultInitializationState(entityGuid);
+				//TODO: Add reflection-based way to discover this stuff.
+				case GameObjectType.WorldTeleporter:
+					return CreateState<WorldTeleporterInstanceModel>(entityGuid);
+				case GameObjectType.AvatarPedestal:
+					return CreateState<AvatarPedestalInstanceModel>(entityGuid);
+				default:
+					throw new ArgumentOutOfRangeException(nameof(objectType), objectType, $"Cannot create Actor for GameObjectType: {objectType}");
+			}
+		}
+
+		private IEntityActorStateInitializeMessage<DefaultGameObjectActorState> CreateDefaultInitializationState(NetworkEntityGuid entityGuid)
+		{
+			GameObjectTemplateModel templateModel = GameObjectDataContainer.GameObjectTemplateMappable.RetrieveEntity(entityGuid);
+			GameObjectInstanceModel instanceModel = GameObjectDataContainer.GameObjectInstanceMappable.RetrieveEntity(entityGuid);
+			return new EntityActorStateInitializeMessage<DefaultGameObjectActorState>(new DefaultGameObjectActorState(EntityDataMappable.RetrieveEntity(entityGuid), entityGuid, instanceModel, templateModel));
+		}
+
+		private EntityActorStateInitializeMessage<BehaviourGameObjectState<TBehaviourType>> CreateState<TBehaviourType>(NetworkEntityGuid entityGuid) 
+			where TBehaviourType : class, IGameObjectLinkable
+		{
+			GameObjectTemplateModel templateModel = GameObjectDataContainer.GameObjectTemplateMappable.RetrieveEntity(entityGuid);
+			GameObjectInstanceModel instanceModel = GameObjectDataContainer.GameObjectInstanceMappable.RetrieveEntity(entityGuid);
+
+			return new EntityActorStateInitializeMessage<BehaviourGameObjectState<TBehaviourType>>(new BehaviourGameObjectState<TBehaviourType>(EntityDataMappable.RetrieveEntity(entityGuid), entityGuid, instanceModel, templateModel, GameObjectDataContainer.GetBehaviourInstanceData<TBehaviourType>(entityGuid)));
+		}
+
+		private Type ComputeExpectedActorType(GameObjectType templateModelObjectType)
 		{
 			if (!Enum.IsDefined(typeof(GameObjectType), templateModelObjectType)) throw new InvalidEnumArgumentException(nameof(templateModelObjectType), (int) templateModelObjectType, typeof(GameObjectType));
 
 			switch (templateModelObjectType)
 			{
 				//TODO: Add reflection-based way to discover this stuff.
+				case GameObjectType.Visual:
+					return typeof(DefaultGameObjectActorState);
 				case GameObjectType.WorldTeleporter:
-					return typeof(DefaultWorldTeleporterInteractableGameObjectBehaviourComponent);
+					return typeof(GameObjectWorldTeleporterEntityActor);
 				case GameObjectType.AvatarPedestal:
-					return typeof(DefaultAvatarPedestalInteractableGameObjectBehaviourComponent);
+					return typeof(GameObjectAvatarPedestalEntityActor);
 				default:
-					throw new ArgumentOutOfRangeException(nameof(templateModelObjectType), templateModelObjectType, $"Cannot create behaviour for GameObjectType: {templateModelObjectType}");
+					throw new ArgumentOutOfRangeException(nameof(templateModelObjectType), templateModelObjectType, $"Cannot create Actor for GameObjectType: {templateModelObjectType}");
 			}
 		}
 	}
