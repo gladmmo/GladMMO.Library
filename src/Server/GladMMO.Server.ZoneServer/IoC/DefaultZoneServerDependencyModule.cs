@@ -308,17 +308,6 @@ namespace GladMMO
 				.As<IReadonlyEntityGuidMappable<WorldTeleporterInstanceModel>>()
 				.SingleInstance();
 
-			//GameObjectEntityBehaviourComponentCollection : IEntityGuidMappable<BaseGameObjectEntityBehaviourComponent>, IReadonlyEntityGuidMappable<IWorldInteractable>
-			builder.RegisterType<GameObjectEntityBehaviourComponentCollection>()
-				.As<IEntityGuidMappable<BaseGameObjectEntityBehaviourComponent>>()
-				.As<IReadonlyEntityGuidMappable<BaseGameObjectEntityBehaviourComponent>>()
-				.As<IReadonlyEntityGuidMappable<IWorldInteractable>>()
-				.OnActivated(args =>
-				{
-					removableComponentsList.Add((IEntityCollectionRemovable)args.Instance);
-				})
-				.SingleInstance();
-
 			//EntityFieldDataCollectionEntityGuidMappable
 			builder.RegisterType<EntityFieldDataCollectionEntityGuidMappable>()
 				.AsImplementedInterfaces()
