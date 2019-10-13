@@ -8,7 +8,7 @@ using Common.Logging;
 namespace GladMMO
 {
 	[EntityActorMessageHandler(typeof(DefaultWorldActor))]
-	public sealed class WorldActorPlayerCreateEntityActorMessageHandler : BaseEntityActorMessageHandler<WorldActorState, CreateGameObjectEntityActorMessage>
+	public sealed class WorldActorCreatureCreateEntityActorMessageHandler : BaseEntityActorMessageHandler<WorldActorState, CreateGameObjectEntityActorMessage>
 	{
 		private ILog Logger { get; }
 
@@ -18,7 +18,7 @@ namespace GladMMO
 
 		private IReadonlyEntityGuidMappable<IEntityDataFieldContainer> EntityDataMappable { get; }
 
-		public WorldActorPlayerCreateEntityActorMessageHandler([NotNull] ILog logger,
+		public WorldActorCreatureCreateEntityActorMessageHandler([NotNull] ILog logger,
 			[NotNull] IDependencyResolver resolver,
 			[NotNull] IEntityGuidMappable<IActorRef> actorRefMappable,
 			[NotNull] IReadonlyEntityGuidMappable<IEntityDataFieldContainer> entityDataMappable)
@@ -31,17 +31,17 @@ namespace GladMMO
 
 		protected override void HandleMessage(EntityActorMessageContext messageContext, WorldActorState state, CreateGameObjectEntityActorMessage message)
 		{
-			if(message.EntityGuid.EntityType != EntityType.Player)
-				throw new InvalidOperationException($"Tried to create Player Actor for non-Player Entity: {message.EntityGuid}");
+			if(message.EntityGuid.EntityType != EntityType.Creature)
+				throw new InvalidOperationException($"Tried to create Creature Actor for non-Creature Entity: {message.EntityGuid}");
 
 			//Create the actor and tell it to initialize.
-			IActorRef actorRef = state.WorldActorFactory.ActorOf(Resolver.Create<DefaultPlayerEntityActor>(), message.EntityGuid.RawGuidValue.ToString());
+			IActorRef actorRef = state.WorldActorFactory.ActorOf(Resolver.Create<DefaultCreatureEntityActor>(), message.EntityGuid.RawGuidValue.ToString());
 			actorRef.Tell(new EntityActorStateInitializeMessage<DefaultEntityActorStateContainer>(new DefaultEntityActorStateContainer(EntityDataMappable.RetrieveEntity(message.EntityGuid), message.EntityGuid)));
 
 			ActorRefMappable.AddObject(message.EntityGuid, actorRef);
 
 			if(Logger.IsInfoEnabled)
-				Logger.Info($"Created Player Actor: {typeof(DefaultPlayerEntityActor)} for Entity: {message.EntityGuid}");
+				Logger.Info($"Created Creature Actor: {typeof(DefaultCreatureEntityActor)} for Entity: {message.EntityGuid}");
 		}
 	}
 }
