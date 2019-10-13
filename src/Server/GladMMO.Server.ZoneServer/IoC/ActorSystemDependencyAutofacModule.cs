@@ -39,7 +39,7 @@ namespace GladMMO
 				foreach (Type t in actorAssemblyToParse.GetTypes())
 				{
 					//If they have the handler attribute, we should just register it.
-					if (t.GetCustomAttribute<EntityActorMessageHandlerAttribute>(true) != null)
+					if (t.GetCustomAttributes<EntityActorMessageHandlerAttribute>().Any())
 					{
 						Debug.Log($"Register ActorMessageHandler: {t.Name}");
 
@@ -48,11 +48,29 @@ namespace GladMMO
 							.First(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IEntityActorMessageHandler<,>))
 							.GenericTypeArguments.First();
 
-						builder.RegisterType(t)
+						var handlerRegisteration = builder.RegisterType(t)
 							.AsSelf()
 							.As(typeof(IEntityActorMessageHandler<,>).MakeGenericType(new Type[2] {actorStateType, typeof(EntityActorMessage)}))
 							.As<IEntityActorMessageHandler>()
 							.SingleInstance();
+
+						foreach(var attri in t.GetCustomAttributes<EntityActorMessageHandlerAttribute>())
+						{
+							//TODO: Support multiple level inherited types.
+							//If the actor has a different state type we should assume it's valid if it can be assigned.
+							Type specificActorStateType = attri.TargetActorType.BaseType.GenericTypeArguments.Reverse().First();
+							
+							if (specificActorStateType != actorStateType)
+							{
+								if (actorStateType.IsAssignableFrom(specificActorStateType))
+								{
+									handlerRegisteration = handlerRegisteration
+										.As(typeof(IEntityActorMessageHandler<,>).MakeGenericType(new Type[2] { specificActorStateType, typeof(EntityActorMessage) }));
+								}
+								else
+									throw new InvalidOperationException($"Actor: {attri.TargetActorType.Name} attempted to use Handler: {t.Name} but had non-matching state Types: {actorStateType.Name}/{specificActorStateType.Name}");
+							}
+						}
 					}
 					else if (typeof(IEntityActor).IsAssignableFrom(t))
 					{
