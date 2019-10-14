@@ -55,7 +55,18 @@ namespace GladMMO
 			IActorRef actorRef = state.WorldActorFactory.ActorOf(Resolver.Create<DefaultPlayerEntityActor>(), message.EntityGuid.RawGuidValue.ToString());
 			actorRef.Tell(new EntityActorStateInitializeMessage<DefaultEntityActorStateContainer>(new DefaultEntityActorStateContainer(EntityDataMappable.RetrieveEntity(message.EntityGuid), message.EntityGuid)));
 
-			ActorRefMappable.AddObject(message.EntityGuid, actorRef);
+			//Actors aren't removed from this
+			//they are just replaced with nobody.
+			if (ActorRefMappable.ContainsKey(message.EntityGuid))
+			{
+				//If nobody, all good. Otherwise THIS SHOULD NEVER HAPPEN
+				if(ActorRefMappable[message.EntityGuid].IsNobody())
+					ActorRefMappable.ReplaceObject(message.EntityGuid, actorRef);
+				else
+					throw new InvalidOperationException($"World attempted to spawn multiple of the same player actor/"); //this will literally kill the world actor.
+			}
+			else
+				ActorRefMappable.AddObject(message.EntityGuid, actorRef);
 
 			if (Logger.IsInfoEnabled)
 				Logger.Info($"Created Player Actor: {typeof(DefaultPlayerEntityActor)} for Entity: {message.EntityGuid}");
