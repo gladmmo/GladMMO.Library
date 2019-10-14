@@ -27,7 +27,13 @@ namespace GladMMO
 
 		public void PublishEvent(object sender, GeneralErrorEncounteredEventArgs eventArgs)
 		{
-			OnErrorEncountered?.Invoke(sender, eventArgs);
+			if (OnErrorEncountered == null)
+			{
+				//Republish later.
+				UnityAsyncHelper.UnityMainThreadContext.Post(state => PublishEvent(sender, eventArgs), null);
+			}
+			else
+				OnErrorEncountered?.Invoke(sender, eventArgs);
 		}
 
 		public Task OnGameInitialized()
