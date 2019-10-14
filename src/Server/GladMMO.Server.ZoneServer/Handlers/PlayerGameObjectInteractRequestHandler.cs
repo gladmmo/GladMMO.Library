@@ -37,8 +37,10 @@ namespace GladMMO
 				ProjectVersionStage.AssertBeta();
 				//TODO: Race condition where THIS CAN FAIL since IActorRefs are removed currently.
 				IActorRef interactable = ActorReferenceMappable.RetrieveEntity(payload.TargetGameObjectGuid);
-				
-				interactable.Tell(new InteractWithEntityActorMessage(guid));
+				IActorRef playerRef = ActorReferenceMappable.RetrieveEntity(guid);
+
+				//Important to indicate that the player itself is sending it.
+				interactable.Tell(new InteractWithEntityActorMessage(guid), playerRef);
 			}
 
 			return Task.CompletedTask;
