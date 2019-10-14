@@ -9,18 +9,14 @@ using JetBrains.Annotations;
 
 namespace GladMMO
 {
-	[AdditionalRegisterationAs(typeof(ISessionDisconnectionEventSubscribable))]
 	[AdditionalRegisterationAs(typeof(IFactoryCreatable<ManagedClientSession<GameServerPacketPayload, GameClientPacketPayload>, ManagedClientSessionCreationContext>))]
 	[AdditionalRegisterationAs(typeof(IManagedClientSessionFactory))]
 	[ServerSceneTypeCreate(ServerSceneType.Default)]
-	public sealed class DefaultManagedClientSessionFactory : IManagedClientSessionFactory, ISessionDisconnectionEventSubscribable, IGameInitializable
+	public sealed class DefaultManagedClientSessionFactory : IManagedClientSessionFactory, IGameInitializable
 	{
 		private ILog Logger { get; }
 
 		private MessageHandlerService<GameClientPacketPayload, GameServerPacketPayload, IPeerSessionMessageContext<GameServerPacketPayload>> HandlerService { get; }
-
-		/// <inheritdoc />
-		public event EventHandler<SessionStatusChangeEventArgs> OnSessionDisconnection;
 
 		/// <inheritdoc />
 		public DefaultManagedClientSessionFactory(
@@ -43,12 +39,6 @@ namespace GladMMO
 			{
 
 				ZoneClientSession clientSession = new ZoneClientSession(context.Client, context.Details, HandlerService, Logger);
-
-				clientSession.OnSessionDisconnection += (source, args) =>
-				{
-					OnSessionDisconnection?.Invoke(source, args);
-					return Task.CompletedTask;
-				};
 
 				return clientSession;
 			}
