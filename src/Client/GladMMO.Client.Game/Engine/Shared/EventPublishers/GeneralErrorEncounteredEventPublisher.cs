@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using Glader.Essentials;
 
 namespace GladMMO
@@ -20,13 +21,19 @@ namespace GladMMO
 	[SceneTypeCreateGladMMO(GameSceneType.TitleScreen)]
 	[SceneTypeCreateGladMMO(GameSceneType.PreZoneBurstingScreen)]
 	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
-	public sealed class GeneralErrorEncounteredEventPublisher : IEventPublisher<IGeneralErrorEncounteredEventSubscribable, GeneralErrorEncounteredEventArgs>, IGeneralErrorEncounteredEventSubscribable
+	public sealed class GeneralErrorEncounteredEventPublisher : IGeneralErrorEncounteredEventSubscribable, IGameInitializable, IGeneralErrorEncounteredEventPublisher
 	{
 		public event EventHandler<GeneralErrorEncounteredEventArgs> OnErrorEncountered;
 
 		public void PublishEvent(object sender, GeneralErrorEncounteredEventArgs eventArgs)
 		{
 			OnErrorEncountered?.Invoke(sender, eventArgs);
+		}
+
+		public Task OnGameInitialized()
+		{
+			//Hack to get it into scene.
+			return Task.CompletedTask;
 		}
 	}
 }
