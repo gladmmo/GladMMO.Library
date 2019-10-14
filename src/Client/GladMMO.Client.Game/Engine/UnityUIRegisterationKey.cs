@@ -47,6 +47,14 @@ namespace GladMMO
 
 		BackButton = 17,
 
-		CharacterNameInput = 18
+		CharacterNameInput = 18,
+
+		ErrorTitle = 19,
+
+		ErrorMessage = 20,
+
+		ErrorOkButton = 21,
+
+		ErrorBox = 22,
 	}
 }
