@@ -7,7 +7,7 @@ using Common.Logging;
 
 namespace GladMMO
 {
-	[EntityActorMessageHandler(typeof(GameObjectAvatarPedestalEntityActor))]
+	[EntityActorMessageHandler(typeof(GameObjectWorldTeleporterEntityActor))]
 	public sealed class WorldTeleporterInteractionMessageHandler : BaseEntityActorMessageHandler<BehaviourGameObjectState<WorldTeleporterInstanceModel>, InteractWithEntityActorMessage>
 	{
 		private ILog Logger { get; }
