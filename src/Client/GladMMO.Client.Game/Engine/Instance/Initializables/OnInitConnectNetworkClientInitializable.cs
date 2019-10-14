@@ -22,44 +22,59 @@ namespace GladMMO
 
 		private ILog Logger { get; }
 
+		private IGeneralErrorEncounteredEventPublisher GeneralErrorPublisher { get; }
+
 		public OnInitConnectNetworkClientInitializable(
 			[NotNull] IManagedNetworkClient<GameClientPacketPayload, GameServerPacketPayload> client,
 			[NotNull] IZoneServerService zoneServiceClient,
 			[NotNull] IReadonlyZoneDataRepository zoneDataRepository,
-			[NotNull] ILog logger)
+			[NotNull] ILog logger,
+			[NotNull] IGeneralErrorEncounteredEventPublisher generalErrorPublisher)
 		{
 			Client = client ?? throw new ArgumentNullException(nameof(client));
 			ZoneServiceClient = zoneServiceClient ?? throw new ArgumentNullException(nameof(zoneServiceClient));
 			ZoneDataRepository = zoneDataRepository ?? throw new ArgumentNullException(nameof(zoneDataRepository));
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
+			GeneralErrorPublisher = generalErrorPublisher ?? throw new ArgumentNullException(nameof(generalErrorPublisher));
 		}
 
 		public async Task OnGameInitialized()
 		{
-			if(Client.isConnected)
-				throw new InvalidOperationException($"Encountered network client already initialized.");
-
-			//To know where we must connect, we must query for the zone-endpoint that we should be connecting to.
-			ResolveServiceEndpointResponse endpointResponse = await ZoneServiceClient.GetServerEndpoint(ZoneDataRepository.ZoneId);
-
-			//TODO: Handle failed queries, probably have to sent back to titlescreen
-			if (endpointResponse.isSuccessful)
+			try
 			{
-				if(Logger.IsInfoEnabled)
-					Logger.Info($"Recieved ZoneEndpoint: {endpointResponse.ToString()}");
+				if(Client.isConnected)
+					throw new InvalidOperationException($"Encountered network client already initialized.");
 
-				//TODO: Handle DNS
-				if (await Client.ConnectAsync(endpointResponse.Endpoint.EndpointAddress,
-					endpointResponse.Endpoint.EndpointPort))
+				//To know where we must connect, we must query for the zone-endpoint that we should be connecting to.
+				ResolveServiceEndpointResponse endpointResponse = await ZoneServiceClient.GetServerEndpoint(ZoneDataRepository.ZoneId);
+
+				//TODO: Handle failed queries, probably have to sent back to titlescreen
+				if(endpointResponse.isSuccessful)
 				{
-					//TODO: We could broadcast a successful connection, but no listeners/interest right now.
-					if(Logger.IsDebugEnabled)
-						Logger.Debug($"Connected to: {endpointResponse}");
+					if(Logger.IsInfoEnabled)
+						Logger.Info($"Recieved ZoneEndpoint: {endpointResponse.ToString()}");
+
+					//TODO: Handle DNS
+					if(await Client.ConnectAsync(endpointResponse.Endpoint.EndpointAddress,
+						endpointResponse.Endpoint.EndpointPort))
+					{
+						//TODO: We could broadcast a successful connection, but no listeners/interest right now.
+						if(Logger.IsDebugEnabled)
+							Logger.Debug($"Connected to: {endpointResponse}");
+					}
 				}
+				else
+				if(Logger.IsErrorEnabled)
+					Logger.Error($"Failed to query ZoneEndpoint.");
 			}
-			else
-			if(Logger.IsErrorEnabled)
-				Logger.Error($"Failed to query ZoneEndpoint.");
+			catch (Exception e)
+			{
+				if(Logger.IsErrorEnabled)
+					Logger.Error($"Failed to initialize instance server connection. Reason: {e.Message}");
+
+				//We NEVER throw within an initializer
+				GeneralErrorPublisher.PublishEvent(this, new GeneralErrorEncounteredEventArgs("Network Error", "Failed to initialize instance server connection."));
+			}
 		}
 	}
 }
