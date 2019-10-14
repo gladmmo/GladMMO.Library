@@ -11,11 +11,18 @@ namespace GladMMO
 		/// </summary>
 		public int WorldSpawnPointId { get; }
 
-		public WorldTeleportPlayerEntityActorMessage(int worldSpawnPointId)
+		/// <summary>
+		/// The the world teleporter's game object id.
+		/// </summary>
+		public int WorldTeleportGameObjectId { get; }
+
+		public WorldTeleportPlayerEntityActorMessage(int worldSpawnPointId, int worldTeleportGameObjectId)
 		{
 			if (worldSpawnPointId <= 0) throw new ArgumentOutOfRangeException(nameof(worldSpawnPointId));
+			if (worldTeleportGameObjectId <= 0) throw new ArgumentOutOfRangeException(nameof(worldTeleportGameObjectId));
 
 			WorldSpawnPointId = worldSpawnPointId;
+			WorldTeleportGameObjectId = worldTeleportGameObjectId;
 		}
 	}
 }

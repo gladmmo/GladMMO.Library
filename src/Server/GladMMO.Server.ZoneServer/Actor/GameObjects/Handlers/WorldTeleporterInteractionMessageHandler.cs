@@ -27,7 +27,7 @@ namespace GladMMO
 				return;
 
 			//Right now there is no validation, just teleport them.
-			messageContext.Sender.Tell(new WorldTeleportPlayerEntityActorMessage(state.BehaviourData.RemoteSpawnPointId));
+			messageContext.Sender.Tell(new WorldTeleportPlayerEntityActorMessage(state.BehaviourData.RemoteSpawnPointId, state.BehaviourData.LinkedGameObjectId));
 		}
 	}
 }
