@@ -5,7 +5,7 @@ using Glader.Essentials;
 
 namespace GladMMO
 {
-	public interface IGeneralErrorEncounteredEventPublisher
+	public interface IGeneralErrorEncounteredEventPublisher : IEventPublisher<IGeneralErrorEncounteredEventSubscribable, GeneralErrorEncounteredEventArgs>
 	{
 
 	}
