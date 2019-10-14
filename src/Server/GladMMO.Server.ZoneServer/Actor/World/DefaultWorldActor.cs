@@ -24,7 +24,7 @@ namespace GladMMO
 			{
 				if (message is EntityActorStateInitializeMessage<DefaultEntityActorStateContainer> defaultStateMessage)
 				{
-					entityActorStateInitializeMessage = new EntityActorStateInitializeMessage<WorldActorState>(new WorldActorState(Context));
+					entityActorStateInitializeMessage = new EntityActorStateInitializeMessage<WorldActorState>(new WorldActorState(Context, Context));
 					return true;
 				}
 			}
