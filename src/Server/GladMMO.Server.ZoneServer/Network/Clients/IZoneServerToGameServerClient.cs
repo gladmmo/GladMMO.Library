@@ -60,6 +60,6 @@ namespace GladMMO
 		Task TryWorldTeleportCharacter([JsonBody] ZoneServerWorldTeleportCharacterRequest request);
 
 		[Patch("/api/ZoneServerCharacter/ChangeAvatar")]
-		Task UpdatePlayerAvatar([JsonBody] ZoneServerAvatarPedestalInteractionCharacterRequest request);
+		Task<AvatarPedestalChangeResponse> UpdatePlayerAvatar([JsonBody] ZoneServerAvatarPedestalInteractionCharacterRequest request);
 	}
 }

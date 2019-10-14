@@ -34,17 +34,29 @@ namespace GladMMO
 			if (avatarPedestalModel == null) throw new ArgumentNullException(nameof(avatarPedestalModel));
 			if (characterAppearanceRepository == null) throw new ArgumentNullException(nameof(characterAppearanceRepository));
 
-			var behaviourInstanceResponse = await avatarPedestalModel.GetBehaviourInstance(requestModel.AvatarPedestalId);
-
-			if (!behaviourInstanceResponse.isSuccessful)
-				return BadRequest($"Cannot query data for Avatar Pedestal: {requestModel.AvatarPedestalId} Reason: {behaviourInstanceResponse.ResultCode.ToString()}");
-
+			//If this fails we have problems that can be mitigated.
 			CharacterAppearanceModel appearanceModel = await characterAppearanceRepository.RetrieveAsync(requestModel.CharacterGuid.EntityId);
-			appearanceModel.AvatarModelId = behaviourInstanceResponse.Result.AvatarModelId;
-			await characterAppearanceRepository.UpdateAsync(requestModel.CharacterGuid.EntityId, appearanceModel);
 
-			//If we make it here, everything above was successful.
-			return Ok();
+			try
+			{
+				var behaviourInstanceResponse = await avatarPedestalModel.GetBehaviourInstance(requestModel.AvatarPedestalId);
+
+				if (behaviourInstanceResponse.isSuccessful)
+				{
+					//we can properly change.
+					appearanceModel.AvatarModelId = behaviourInstanceResponse.Result.AvatarModelId;
+					await characterAppearanceRepository.UpdateAsync(requestModel.CharacterGuid.EntityId, appearanceModel);
+					//return BadRequest($"Cannot query data for Avatar Pedestal: {requestModel.AvatarPedestalId} Reason: {behaviourInstanceResponse.ResultCode.ToString()}");
+				}
+			}
+			catch (Exception e)
+			{
+				if(Logger.IsEnabled(LogLevel.Error))
+					Logger.LogError($"Encountered exception: {e.Message} in {nameof(UpdatePlayerAvatar)}.\n\nStack: {e.StackTrace}");
+			}
+
+			//No matter what we should return the current.
+			return Json(new AvatarPedestalChangeResponse((int)appearanceModel.AvatarModelId));
 		}
 
 		//TODO: Really not secure
