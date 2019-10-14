@@ -6,10 +6,16 @@ using Glader.Essentials;
 
 namespace GladMMO
 {
+	public interface IEntityDestructionRequestedEventPublisher : IEventPublisher<IEntityDeconstructionRequestedEventSubscribable, EntityDeconstructionRequestedEventArgs>
+	{
+
+	}
+
 	[AdditionalRegisterationAs(typeof(IEventPublisher<IEntityDeconstructionRequestedEventSubscribable, EntityDeconstructionRequestedEventArgs>))]
 	[AdditionalRegisterationAs(typeof(IEntityDeconstructionRequestedEventSubscribable))]
+	[AdditionalRegisterationAs(typeof(IEntityDestructionRequestedEventPublisher))]
 	[ServerSceneTypeCreate(ServerSceneType.Default)]
-	public sealed class EntityDeconstructionRequestEventPublisher : IEventPublisher<IEntityDeconstructionRequestedEventSubscribable, EntityDeconstructionRequestedEventArgs>, IEntityDeconstructionRequestedEventSubscribable, IGameInitializable
+	public sealed class EntityDeconstructionRequestEventPublisher : IEntityDestructionRequestedEventPublisher, IEntityDeconstructionRequestedEventSubscribable, IGameInitializable
 	{
 		public event EventHandler<EntityDeconstructionRequestedEventArgs> OnEntityDeconstructionRequested;
 
