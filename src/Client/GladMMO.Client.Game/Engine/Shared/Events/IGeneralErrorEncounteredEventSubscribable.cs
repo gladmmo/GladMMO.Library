@@ -4,7 +4,7 @@ using System.Text;
 
 namespace GladMMO
 {
-	public interface IGeneralErrorEncounteredEventListener
+	public interface IGeneralErrorEncounteredEventSubscribable
 	{
 		event EventHandler<GeneralErrorEncounteredEventArgs> OnErrorEncountered;
 	}

@@ -11,16 +11,16 @@ namespace GladMMO
 	}
 
 	//I need a better way to specify "all scenes" lol.
-	[AdditionalRegisterationAs(typeof(IEventPublisher<IGeneralErrorEncounteredEventListener, GeneralErrorEncounteredEventArgs>))]
+	[AdditionalRegisterationAs(typeof(IEventPublisher<IGeneralErrorEncounteredEventSubscribable, GeneralErrorEncounteredEventArgs>))]
 	[AdditionalRegisterationAs(typeof(IGeneralErrorEncounteredEventPublisher))]
-	[AdditionalRegisterationAs(typeof(IGeneralErrorEncounteredEventListener))]
+	[AdditionalRegisterationAs(typeof(IGeneralErrorEncounteredEventSubscribable))]
 	[SceneTypeCreateGladMMO(GameSceneType.CharacterCreationScreen)]
 	[SceneTypeCreateGladMMO(GameSceneType.CharacterSelection)]
 	[SceneTypeCreateGladMMO(GameSceneType.CharacterCreationScreen)]
 	[SceneTypeCreateGladMMO(GameSceneType.TitleScreen)]
 	[SceneTypeCreateGladMMO(GameSceneType.PreZoneBurstingScreen)]
 	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
-	public sealed class GeneralErrorEncounteredEventPublisher : IEventPublisher<IGeneralErrorEncounteredEventListener, GeneralErrorEncounteredEventArgs>, IGeneralErrorEncounteredEventListener
+	public sealed class GeneralErrorEncounteredEventPublisher : IEventPublisher<IGeneralErrorEncounteredEventSubscribable, GeneralErrorEncounteredEventArgs>, IGeneralErrorEncounteredEventSubscribable
 	{
 		public event EventHandler<GeneralErrorEncounteredEventArgs> OnErrorEncountered;
 
