@@ -34,7 +34,7 @@ namespace GladMMO
 		/// <inheritdoc />
 		public void Tick()
 		{
-			long currentTime = DateTime.UtcNow.Ticks;
+			long currentTime = TimeService.CurrentLocalTime;
 
 			foreach(var entry in MovementGenerators.EnumerateWithGuid(KnownEntities))
 				entry.ComponentValue.Update(WorldObjectMap.RetrieveEntity(entry.EntityGuid), currentTime);
