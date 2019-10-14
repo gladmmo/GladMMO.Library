@@ -20,6 +20,8 @@ namespace GladMMO
 			gameObject.SetActive(state);
 		}
 
+		public bool isActive => gameObject.activeSelf;
+
 		/// <inheritdoc />
 		public void AddOnToggleChangedListener(Action<bool> action)
 		{
