@@ -36,7 +36,10 @@ namespace GladMMO
 
 			try
 			{
-				CreateActor(state, message);
+				IActorRef actor = CreateActor(state, message);
+
+				//If it succeeded, add the death watch message
+				state.DeathWatchService.WatchWith(actor, new KillPlayerActorMessage(message.EntityGuid));
 			}
 			catch (Exception e)
 			{
@@ -46,7 +49,7 @@ namespace GladMMO
 			}
 		}
 
-		private void CreateActor(WorldActorState state, CreatePlayerEntityActorMessage message)
+		private IActorRef CreateActor(WorldActorState state, CreatePlayerEntityActorMessage message)
 		{
 			//Create the actor and tell it to initialize.
 			IActorRef actorRef = state.WorldActorFactory.ActorOf(Resolver.Create<DefaultPlayerEntityActor>(), message.EntityGuid.RawGuidValue.ToString());
@@ -56,6 +59,8 @@ namespace GladMMO
 
 			if (Logger.IsInfoEnabled)
 				Logger.Info($"Created Player Actor: {typeof(DefaultPlayerEntityActor)} for Entity: {message.EntityGuid}");
+
+			return actorRef;
 		}
 	}
 }
