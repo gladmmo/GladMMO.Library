@@ -316,6 +316,11 @@ namespace GladMMO
 					removableComponentsList.Add((IEntityCollectionRemovable)args.Instance);
 				})
 				.SingleInstance();
+
+			//AkkaActorReferenceEntityGuidMappable
+			builder.RegisterType<AkkaActorReferenceEntityGuidMappable>()
+				.AsImplementedInterfaces()
+				.SingleInstance();
 		}
 
 		private static void RegisterLockingPolicies(ContainerBuilder builder)
