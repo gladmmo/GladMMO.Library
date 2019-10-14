@@ -99,5 +99,16 @@ namespace GladMMO
 				OnInitialized();
 			}
 		}
+
+		protected override SupervisorStrategy SupervisorStrategy()
+		{
+			return new OneForOneStrategy(0, -1, exception =>
+			{
+				if(Logger.IsErrorEnabled)
+					Logger.Error($"{GetType().Name} Exception ACTOR STOP: {exception.Message}\n\nStack: {exception.StackTrace}");
+
+				return Directive.Stop;
+			});
+		}
 	}
 }

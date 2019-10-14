@@ -37,7 +37,7 @@ namespace GladMMO
 			return new OneForOneStrategy(0, -1, exception =>
 			{
 				if(Logger.IsErrorEnabled)
-					Logger.Error($"ActorException: {exception.Message}\n\nStack: {exception.StackTrace}");
+					Logger.Error($"World Actor CRITICAL FAILURE STOPPING: {exception.Message}\n\nStack: {exception.StackTrace}");
 
 				return Directive.Escalate;
 			});
