@@ -123,8 +123,9 @@ namespace GladMMO
 				}
 			}
 
+			//TODO: We're always assuming there are two points here.
 			isPathingEnabled = false;
-			return new PathState(MovementData.MovementPath.Count - 1, currentTime, 0);
+			return new PathState(MovementData.MovementPath.Count - 1, currentTime, CalculateDistanceLengthInTicks(ComputeDistanceOffsetByMovementDataIndex(0).magnitude, movementSpeedPerSecond));
 		}
 
 		private Vector3 ComputeDistanceOffsetByMovementDataIndex(int i)
@@ -138,7 +139,7 @@ namespace GladMMO
 			//(distance / movementSpeedInSeconds) = seconds taken to travel distance.
 			// * 1000 converts to milliseconds
 			// * TicksPerMillisecond converts it to ticks.
-			return ((long)(distance / movementSpeedInSeconds) * 1000 * TimeSpan.TicksPerMillisecond);
+			return ((long)((distance / movementSpeedInSeconds) * 1000) * TimeSpan.TicksPerMillisecond);
 		}
 
 		/// <inheritdoc />
