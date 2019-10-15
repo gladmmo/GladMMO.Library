@@ -31,13 +31,29 @@ namespace GladMMO
 					return new IdleMovementGenerator(context.Data.InitialPosition);
 				case EntityType.Creature:
 					//TODO: Support non-static NPCs.
-					return new IdleMovementGenerator(context.Data.InitialPosition);
+					return CreateCreatureMovementGenerator(context);
 				default:
 					throw new ArgumentOutOfRangeException();
 			}
-			
 
 			throw new NotSupportedException($"TODO: Encountered unsupported movement data: {context.Data.GetType().Name}");
+		}
+
+		private static IMovementGenerator<GameObject> CreateCreatureMovementGenerator(EntityAssociatedData<IMovementData> context)
+		{
+			if (context.Data is PositionChangeMovementData pcmd)
+			{
+				if(pcmd.Direction == Vector2.zero)
+					return new IdleMovementGenerator(context.Data.InitialPosition);
+				else
+					throw new InvalidOperationException($"Cannot move creatures via movement change like players!");
+			}
+			else if (context.Data is PathBasedMovementData pathData)
+			{
+				return new PathMovementGenerator(pathData);
+			}
+
+			throw new InvalidOperationException($"Recieved unhandled Movement Type: {context.Data.GetType().Name} for Creature: {context.EntityGuid}.");
 		}
 
 		private IMovementGenerator<GameObject> CreatePlayerMovementGenerator(EntityAssociatedData<IMovementData> context)
