@@ -64,6 +64,10 @@ namespace GladMMO
 			//entity.transform.position;
 			State = ComputeInitialPathState(currentTime);
 
+			//If pathing was disabled it means we're at the end when we start, we need to set to last point
+			if (!isPathingEnabled)
+				return entity.transform.position = MovementData.MovementPath[MovementData.MovementPath.Count - 1];
+
 			//Just call update, which will set the position.
 			return InternalUpdate(entity, currentTime);
 		}
@@ -82,6 +86,8 @@ namespace GladMMO
 			if(startTimeDiff < 0)
 				throw new InvalidOperationException($"Encountered Negative Time Diff. CurrentTime: {currentTime} MovementStamp: {MovementData.TimeStamp}");
 
+			//Special case for initial to first path point
+			//Signify this with -1
 			for(int i = 0; i < this.MovementData.MovementPath.Count - 1; i++)
 			{
 				Vector3 distanceVectorOffset = ComputeDistanceOffsetByMovementDataIndex(i);
@@ -117,7 +123,14 @@ namespace GladMMO
 				}
 			}
 
+			isPathingEnabled = false;
 			return new PathState(MovementData.MovementPath.Count - 1, currentTime, 0);
+		}
+
+		private Vector3 ComputeDistanceOffsetByMovementDataIndex(int i)
+		{
+			//We need B - A to find direction from A to B, made a mistake earlier with vector math and did A - B. That was wrong
+			return this.MovementData.MovementPath[i] - this.MovementData.MovementPath[i + 1];
 		}
 
 		private static long CalculateDistanceLengthInTicks(float distance, float movementSpeedInSeconds)
@@ -128,19 +141,6 @@ namespace GladMMO
 			return ((long)(distance / movementSpeedInSeconds) * 1000 * TimeSpan.TicksPerMillisecond);
 		}
 
-		private Vector3 ComputeDistanceOffsetByMovementDataIndex(int i)
-		{
-			//We need B - A to find direction from A to B, made a mistake earlier with vector math and did A - B. That was wrong
-			return this.MovementData.MovementPath[i] - this.MovementData.MovementPath[i + 1];
-		}
-
-		private static long CalculateInitialTickOffsetForPathState(float movementSpeedPerSecond, float distance, float distancedTraveledSince)
-		{
-			//This computes how many ticks initially passed since the path segement started
-			//distance (total) - distanceTraveled = displacement
-			return CalculateDistanceLengthInTicks(distance - distancedTraveledSince, movementSpeedPerSecond);
-		}
-
 		/// <inheritdoc />
 		protected override Vector3 InternalUpdate(GameObject entity, long currentTime)
 		{
@@ -148,18 +148,24 @@ namespace GladMMO
 			if (!isPathingEnabled)
 				return entity.transform.position;
 
+			ProjectVersionStage.AssertAlpha();
+			for(int i = 0; i < MovementData.MovementPath.Count - 1; i++)
+				Debug.DrawLine(MovementData.MovementPath[i], MovementData.MovementPath[i + 1], Color.red, 0.1f);
+
 			//Knowing the two points is enough to linerally interpolate between them.
 			long timeSinceSegementState = currentTime - State.TimePathStateCreated;
 			float lerpRatio = (float)timeSinceSegementState / State.PathSegementDuration;
+
 			entity.transform.position = Vector3.Lerp(MovementData.MovementPath[State.PathIndex], MovementData.MovementPath[State.PathIndex + 1], lerpRatio);
 
 			if(lerpRatio >= 1.0f)
-			{
-				if(State.PathIndex + 1 >= MovementData.MovementPath.Count)
+				if (State.PathIndex + 2 >= MovementData.MovementPath.Count)
+				{
+					State = new PathState(MovementData.MovementPath.Count - 1, currentTime, 0);
 					isPathingEnabled = false;
+				}
 				else
-					State = new PathState(State.PathIndex + 1, currentTime, CalculateDistanceLengthInTicks(ComputeDistanceOffsetByMovementDataIndex(State.PathIndex + 1).magnitude, 1.0f));
-			}
+					State = new PathState(State.PathIndex + 1, currentTime, CalculateDistanceLengthInTicks((MovementData.MovementPath[State.PathIndex + 2] - MovementData.MovementPath[State.PathIndex + 1]).magnitude, 1.0f));
 
 			return entity.transform.position;
 		}
