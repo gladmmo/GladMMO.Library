@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Text;
 using Generic.Math;
 using Glader.Essentials;
@@ -39,7 +40,7 @@ namespace GladMMO
 		{
 			if(callback == null) throw new ArgumentNullException(nameof(callback));
 
-			EntityDataCallbackRegister.RegisterCallback(PlayerDetails.LocalPlayerGuid, GenericMath.Convert<Enum, int>(field), callback);
+			EntityDataCallbackRegister.RegisterCallback(PlayerDetails.LocalPlayerGuid, Unsafe.As<Enum, int>(ref field), callback);
 		}
 
 		protected void RegisterPlayerDataChangeCallback<TChangeType>(BaseObjectField field, [NotNull] Action<NetworkEntityGuid, EntityDataChangedArgs<TChangeType>> callback)
