@@ -27,6 +27,12 @@ namespace GladMMO
 			Controller = controller ?? throw new ArgumentNullException(nameof(controller));
 		}
 
+		public CharacterControllerInputMovementGenerator(PositionChangeMovementData movementData, [NotNull] Lazy<CharacterController> controller, Vector3 initialPosition)
+			: base(movementData, initialPosition)
+		{
+			Controller = controller ?? throw new ArgumentNullException(nameof(controller));
+		}
+
 		protected override Vector3 Start([NotNull] GameObject entity, long currentTime)
 		{
 			if (entity == null) throw new ArgumentNullException(nameof(entity));

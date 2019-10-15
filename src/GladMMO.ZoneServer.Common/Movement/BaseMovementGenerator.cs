@@ -38,6 +38,16 @@ namespace GladMMO
 
 		protected abstract Vector3 Start(GameObject entity, long currentTime);
 
+		protected MoveGenerator()
+		{
+			
+		}
+
+		protected MoveGenerator(Vector3 currentPosition)
+		{
+			CurrentPosition = currentPosition;
+		}
+
 		/// <inheritdoc />
 		public void Update(GameObject entity, long currentTime)
 		{
@@ -72,6 +82,13 @@ namespace GladMMO
 
 		/// <inheritdoc />
 		protected BaseMovementGenerator([NotNull] TDataInputType movementData)
+			: base()
+		{
+			MovementData = movementData ?? throw new ArgumentNullException(nameof(movementData));
+		}
+
+		protected BaseMovementGenerator([NotNull] TDataInputType movementData, Vector3 initialPosition)
+			: base(initialPosition)
 		{
 			MovementData = movementData ?? throw new ArgumentNullException(nameof(movementData));
 		}

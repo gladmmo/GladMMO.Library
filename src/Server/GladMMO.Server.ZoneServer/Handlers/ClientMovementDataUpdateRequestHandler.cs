@@ -63,7 +63,7 @@ namespace GladMMO
 
 		private CharacterControllerInputMovementGenerator BuildCharacterControllerMovementGenerator(NetworkEntityGuid guid, PositionChangeMovementData data, IMovementGenerator<GameObject> generator, IMovementData movementData)
 		{
-			return new CharacterControllerInputMovementGenerator(data, new Lazy<CharacterController>(() => this.CharacterControllerMappable.RetrieveEntity(guid)));
+			return new CharacterControllerInputMovementGenerator(data, new Lazy<CharacterController>(() => this.CharacterControllerMappable.RetrieveEntity(guid)), generator.CurrentPosition);
 		}
 
 		private PositionChangeMovementData BuildPositionChangeMovementData(ClientMovementDataUpdateRequest payload, IMovementGenerator<GameObject> generator, IMovementData originalMovementData)
