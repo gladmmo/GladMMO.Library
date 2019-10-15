@@ -56,5 +56,7 @@ namespace GladMMO
 		ErrorOkButton = 21,
 
 		ErrorBox = 22,
+
+		TargetUnitFrame = 23,
 	}
 }
