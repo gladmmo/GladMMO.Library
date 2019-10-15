@@ -175,6 +175,7 @@ namespace GladMMO
 			//ServerMovementGeneratorFactory : IFactoryCreatable<IMovementGenerator<GameObject>, EntityAssociatedData<IMovementData>>
 			builder.RegisterType<ServerMovementGeneratorFactory>()
 				.As<IFactoryCreatable<IMovementGenerator<GameObject>, EntityAssociatedData<IMovementData>>>()
+				.As<IMovementGeneratorFactory>()
 				.AsSelf();
 
 			builder.RegisterType<RemoteGameObjectDataService>()
