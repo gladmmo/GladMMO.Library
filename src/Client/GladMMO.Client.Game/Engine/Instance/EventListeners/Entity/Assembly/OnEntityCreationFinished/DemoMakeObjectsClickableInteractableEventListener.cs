@@ -8,13 +8,13 @@ using UnityEngine;
 namespace GladMMO
 {
 	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
-	public sealed class DemoMakeGameObjectsClickableInteractableEventListener : GameObjectCreationFinishedEventListener
+	public sealed class DemoMakeObjectsClickableInteractableEventListener : EntityCreationFinishedEventListener
 	{
 		private IReadonlyEntityGuidMappable<GameObject> GameObjectMappable { get; }
 
 		private IPeerPayloadSendService<GameClientPacketPayload> SendService { get; }
 
-		public DemoMakeGameObjectsClickableInteractableEventListener(IEntityCreationFinishedEventSubscribable subscriptionService,
+		public DemoMakeObjectsClickableInteractableEventListener(IEntityCreationFinishedEventSubscribable subscriptionService,
 			[NotNull] IReadonlyEntityGuidMappable<GameObject> gameObjectMappable,
 			[NotNull] IPeerPayloadSendService<GameClientPacketPayload> sendService) 
 			: base(subscriptionService)
@@ -24,6 +24,11 @@ namespace GladMMO
 		}
 
 		protected override void OnEntityCreationFinished(EntityCreationFinishedEventArgs args)
+		{
+			//TODO: left over from bad desigh.
+		}
+
+		protected override void OnEventFired(object source, EntityCreationFinishedEventArgs args)
 		{
 			GameObject entity = GameObjectMappable.RetrieveEntity(args.EntityGuid);
 
