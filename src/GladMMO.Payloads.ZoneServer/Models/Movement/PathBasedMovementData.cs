@@ -23,7 +23,8 @@ namespace GladMMO
 		[ProtoIgnore]
 		public Vector3 InitialPosition => _MovementPath[0]; //TODO: We should never get an empty path, but we may want to handle this more gracefully
 
-		public float Rotation => throw new NotSupportedException("TODO: Implement.");
+		//TODO: Don't know how to deal with rotation for path movement without computing pathing.
+		public float Rotation => 0;
 
 		/// <summary>
 		/// The array of points that make up the movement path.
