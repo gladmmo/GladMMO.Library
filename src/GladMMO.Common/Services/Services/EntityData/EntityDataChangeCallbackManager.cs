@@ -8,11 +8,11 @@ namespace GladMMO
 	//TODO: We need some handling for callback cleanup, especially when an entity disappears.
 	public sealed class EntityDataChangeCallbackManager : IEntityDataChangeCallbackRegisterable, IEntityDataChangeCallbackService, IEntityCollectionRemovable
 	{
-		private Dictionary<NetworkEntityGuid, Dictionary<int, Action<int>>> CallbackMap { get; }
+		private Dictionary<NetworkEntityGuid, Dictionary<int, Action<IEntityDataFieldContainer>>> CallbackMap { get; }
 
 		public EntityDataChangeCallbackManager()
 		{
-			CallbackMap = new Dictionary<NetworkEntityGuid, Dictionary<int, Action<int>>>(NetworkGuidEqualityComparer<NetworkEntityGuid>.Instance);
+			CallbackMap = new Dictionary<NetworkEntityGuid, Dictionary<int, Action<IEntityDataFieldContainer>>>(NetworkGuidEqualityComparer<NetworkEntityGuid>.Instance);
 		}
 
 		/// <inheritdoc />
@@ -21,14 +21,14 @@ namespace GladMMO
 		{
 			//TODO: Anyway we can avoid this for registering callbacks, wasted cycles kinda
 			if(!CallbackMap.ContainsKey(entity))
-				CallbackMap.Add(entity, new Dictionary<int, Action<int>>());
+				CallbackMap.Add(entity, new Dictionary<int, Action<IEntityDataFieldContainer>>());
 
 			//TODO: This isn't thread safe, this whole thinjg isn't. That could be problematic
-			Action<int> dataChangeEvent = newValue =>
+			Action<IEntityDataFieldContainer> dataChangeEvent = fields =>
 			{
 				//TODO: If we ever support original value we should change this
 				//So, the callback needs to send the entity guid and the entity data change args which contain the original (not working yet) and new value.
-				callback(entity, new EntityDataChangedArgs<TCallbackValueCastType>(default(TCallbackValueCastType), Unsafe.As<int, TCallbackValueCastType>(ref newValue)));
+				callback(entity, new EntityDataChangedArgs<TCallbackValueCastType>(default(TCallbackValueCastType), fields.GetFieldValue<TCallbackValueCastType>(dataField)));
 			};
 
 			//We need to add a null action here or it will throw when we try to add the action. But if one exists we need to Delegate.Combine
@@ -71,7 +71,7 @@ namespace GladMMO
 		}
 
 		/// <inheritdoc />
-		public void InvokeChangeEvents(NetworkEntityGuid entity, int field, int newValueAsInt)
+		public void InvokeChangeEvents(NetworkEntityGuid entity, IEntityDataFieldContainer fieldContainer, int field)
 		{
 			//We aren't watching ANY data changes for this particular entity.
 			if(!CallbackMap.ContainsKey(entity))
@@ -79,7 +79,7 @@ namespace GladMMO
 
 			//If we have any registered callbacks for this entity's data change we should dispatch it (they will all be called)
 			if(CallbackMap[entity].ContainsKey(field))
-				CallbackMap[entity][field]?.Invoke(newValueAsInt);
+				CallbackMap[entity][field]?.Invoke(fieldContainer);
 		}
 
 		public bool RemoveEntityEntry(NetworkEntityGuid entityGuid)

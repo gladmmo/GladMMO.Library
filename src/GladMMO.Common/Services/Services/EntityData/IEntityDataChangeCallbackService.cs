@@ -11,8 +11,8 @@ namespace GladMMO
 		/// if callbacks have been registered for changes involving <see cref="field"/>.
 		/// </summary>
 		/// <param name="entity"></param>
+		/// <param name="fieldContainer"></param>
 		/// <param name="field"></param>
-		/// <param name="dataValueAsInt">The new data value as an integer.</param>
-		void InvokeChangeEvents(NetworkEntityGuid entity, int field, int dataValueAsInt);
+		void InvokeChangeEvents(NetworkEntityGuid entity, IEntityDataFieldContainer fieldContainer, int field);
 	}
 }
