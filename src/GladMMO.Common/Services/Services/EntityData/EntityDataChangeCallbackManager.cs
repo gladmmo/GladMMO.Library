@@ -32,12 +32,42 @@ namespace GladMMO
 			};
 
 			//We need to add a null action here or it will throw when we try to add the action. But if one exists we need to Delegate.Combine
-			if(!CallbackMap[entity].ContainsKey(dataField))
-				CallbackMap[entity].Add(dataField, dataChangeEvent);
+			if (!CallbackMap[entity].ContainsKey(dataField))
+			{
+				if (IsRequestedTypeLong<TCallbackValueCastType>())
+				{
+					CallbackMap[entity].Add(dataField, dataChangeEvent);
+					CallbackMap[entity].Add(dataField + 1, dataChangeEvent);
+				}
+				else
+					CallbackMap[entity].Add(dataField, dataChangeEvent);
+			}
 			else
-				CallbackMap[entity][dataField] += dataChangeEvent;
+			{
+				if (IsRequestedTypeLong<TCallbackValueCastType>())
+				{
+					CallbackMap[entity][dataField] += dataChangeEvent;
+					CallbackMap[entity][dataField + 1] += dataChangeEvent;
+				}
+				else
+					CallbackMap[entity][dataField] += dataChangeEvent;
+			}
 
-			return new DefaultEntityDataEventUnregisterable(() => CallbackMap[entity][dataField] -= dataChangeEvent);
+			return new DefaultEntityDataEventUnregisterable(() =>
+			{
+				if (IsRequestedTypeLong<TCallbackValueCastType>())
+				{
+					CallbackMap[entity][dataField] -= dataChangeEvent;
+					CallbackMap[entity][dataField + 1] -= dataChangeEvent;
+				}
+				else
+					CallbackMap[entity][dataField] -= dataChangeEvent;
+			});
+		}
+
+		private static bool IsRequestedTypeLong<TCallbackValueCastType>() where TCallbackValueCastType : struct
+		{
+			return typeof(TCallbackValueCastType) == typeof(long) || typeof(TCallbackValueCastType) == typeof(ulong);
 		}
 
 		/// <inheritdoc />
