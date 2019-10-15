@@ -125,7 +125,10 @@ namespace GladMMO
 
 			//TODO: We're always assuming there are two points here.
 			isPathingEnabled = false;
-			return new PathState(MovementData.MovementPath.Count - 1, currentTime, CalculateDistanceLengthInTicks(ComputeDistanceOffsetByMovementDataIndex(0).magnitude, movementSpeedPerSecond));
+			if(MovementData.MovementPath.Count >= 2)
+				return new PathState(MovementData.MovementPath.Count - 1, currentTime, CalculateDistanceLengthInTicks(ComputeDistanceOffsetByMovementDataIndex(MovementData.MovementPath.Count - 2).magnitude, movementSpeedPerSecond));
+			else
+				return new PathState(MovementData.MovementPath.Count - 1, currentTime, 0); //only 1 point, nothing we can do.
 		}
 
 		private Vector3 ComputeDistanceOffsetByMovementDataIndex(int i)
