@@ -57,7 +57,7 @@ namespace GladMMO
 
 							//TODO: We don't REALLY want to lock on the dispatching. This could be a REAL bottleneck in the future. We need to redesign this abit
 							//TODO: Might be a better way to handle this API, and provide the value instead of the collection.
-							EntityDataCallbackDispatcher.InvokeChangeEvents(entity, changeTrackable, changeTrackable.GetFieldValue<int>((int)changedIndex));
+							EntityDataCallbackDispatcher.InvokeChangeEvents(entity, changeTrackable, changedIndex);
 						}
 
 						//After we're done servicing the changes, we should clear the changes.
