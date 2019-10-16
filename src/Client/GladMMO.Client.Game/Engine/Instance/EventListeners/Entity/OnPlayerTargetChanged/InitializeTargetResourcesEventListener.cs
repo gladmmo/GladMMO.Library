@@ -32,6 +32,10 @@ namespace GladMMO
 			//Listen for both max and current health.
 			EntityDataChangeCallbackService.RegisterCallback<int>(args.TargetedEntity, (int)EntityObjectField.UNIT_FIELD_HEALTH, OnTargetEntityHealthChanged);
 			EntityDataChangeCallbackService.RegisterCallback<int>(args.TargetedEntity, (int)EntityObjectField.UNIT_FIELD_MAXHEALTH, OnTargetEntityHealthChanged);
+
+			//Only initialize if we have their values
+			if (entityData.DataSetIndicationArray.Get((int) EntityObjectField.UNIT_FIELD_HEALTH))
+				OnTargetEntityHealthChanged(args.TargetedEntity, new EntityDataChangedArgs<int>(0, 0));
 		}
 
 		private void OnTargetEntityHealthChanged(NetworkEntityGuid entity, EntityDataChangedArgs<int> args)
