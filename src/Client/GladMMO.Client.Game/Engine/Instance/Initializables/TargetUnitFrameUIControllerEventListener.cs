@@ -18,15 +18,36 @@ namespace GladMMO
 
 		public event EventHandler<LocalPlayerTargetChangedEventArgs> OnPlayerTargetChanged;
 
+		//Initially Empty because we have no target.
+		public NetworkEntityGuid CurrentTarget { get; private set; } = NetworkEntityGuid.Empty;
+
 		public TargetUnitFrameUIControllerEventListener(ILocalPlayerSpawnedEventSubscribable subscriptionService, 
 			IEntityDataChangeCallbackRegisterable entityDataCallbackRegister, 
 			IReadonlyLocalPlayerDetails playerDetails,
 			[NotNull] [KeyFilter(UnityUIRegisterationKey.TargetUnitFrame)] IUIUnitFrame targetUnitFrame,
-			[NotNull] ILog logger)
+			[NotNull] ILog logger,
+			INetworkEntityVisibilityLostEventSubscribable networkVisibilityLostSubscriptionService)
 			: base(subscriptionService, entityDataCallbackRegister, playerDetails)
 		{
 			TargetUnitFrame = targetUnitFrame ?? throw new ArgumentNullException(nameof(targetUnitFrame));
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
+
+			//Subscribe to when the target actually disappears.
+			networkVisibilityLostSubscriptionService.OnNetworkEntityVisibilityLost += (sender, args) =>
+			{
+				if (args.EntityGuid == this.CurrentTarget)
+					OnPlayerTargetDisappeared();
+			};
+		}
+
+		private void OnPlayerTargetDisappeared()
+		{
+			if(Logger.IsDebugEnabled)
+				Logger.Debug($"Player Target has disappeared.");
+
+			//Disable it and let everyone know.
+			TargetUnitFrame.SetElementActive(false);
+			CurrentTarget = NetworkEntityGuid.Empty;
 		}
 
 		protected override void OnLocalPlayerSpawned(LocalPlayerSpawnedEventArgs args)
@@ -41,6 +62,7 @@ namespace GladMMO
 			if(Logger.IsDebugEnabled)
 				Logger.Debug($"Player Target Changed to: {guid}");
 
+			CurrentTarget = guid;
 			OnPlayerTargetChanged?.Invoke(this, new LocalPlayerTargetChangedEventArgs(guid));
 
 			//We can at least set this active here I guess.
