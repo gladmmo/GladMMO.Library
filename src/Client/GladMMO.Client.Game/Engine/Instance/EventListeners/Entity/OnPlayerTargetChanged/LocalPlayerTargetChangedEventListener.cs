@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Autofac.Features.AttributeFilters;
+using Common.Logging;
 using Glader.Essentials;
 
 namespace GladMMO
@@ -10,11 +11,15 @@ namespace GladMMO
 	{
 		protected IUIUnitFrame TargetUnitFrame { get; }
 
+		protected ILog Logger { get; }
+
 		protected LocalPlayerTargetChangedEventListener(ILocalPlayerTargetChangedEventListener subscriptionService,
+			[NotNull] ILog logger,
 			[NotNull] [KeyFilter(UnityUIRegisterationKey.TargetUnitFrame)] IUIUnitFrame targetUnitFrame) 
 			: base(subscriptionService)
 		{
 			TargetUnitFrame = targetUnitFrame ?? throw new ArgumentNullException(nameof(targetUnitFrame));
+			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
 		protected override void OnEventFired(object source, LocalPlayerTargetChangedEventArgs args)
