@@ -35,8 +35,13 @@ namespace GladMMO
 			//Subscribe to when the target actually disappears.
 			networkVisibilityLostSubscriptionService.OnNetworkEntityVisibilityLost += (sender, args) =>
 			{
-				if (args.EntityGuid == this.CurrentTarget)
-					OnPlayerTargetDisappeared();
+				UnityAsyncHelper.UnityMainThreadContext.Post(o =>
+				{
+					//This should be safe, we're checking if it was the current target still
+					//user may have clicked on something else but this should be safe this way.
+					if(args.EntityGuid == this.CurrentTarget)
+						OnPlayerTargetDisappeared();
+				}, null);
 			};
 		}
 
