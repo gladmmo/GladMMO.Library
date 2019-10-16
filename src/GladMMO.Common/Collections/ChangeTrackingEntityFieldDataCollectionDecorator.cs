@@ -77,8 +77,6 @@ namespace GladMMO
 		public void SetFieldValue<TValueType>(int index, TValueType value)
 			where TValueType : struct
 		{
-			int potentialNewValue = Unsafe.As<TValueType, int>(ref value);
-
 			//We lock here because it's possible that we're in the middle of setting
 			//and someone clears HasPendingCHanges since they went through the collection
 			//This could cause a race condition between networking coming in and changing entity data
@@ -88,9 +86,13 @@ namespace GladMMO
 			{
 				//If the values aren't equal we need to set the tracking/dirty stuff
 				//Then we also should set the data
-				if(!potentialNewValue.Equals(EntityDataCollection.GetFieldValue<int>(index)))
+				if(!value.Equals(EntityDataCollection.GetFieldValue<TValueType>(index)))
 				{
+					
 					ChangeTrackingArray.Set(index, true);
+					if(typeof(TValueType) == typeof(ulong) || typeof(TValueType) == typeof(long))
+						ChangeTrackingArray.Set(index + 1, true);
+
 					EntityDataCollection.SetFieldValue(index, value);
 
 					//We only have pending changes if the value is not equal
@@ -101,6 +103,9 @@ namespace GladMMO
 					//TODO: This kinda exposing an implementation detail because if we started with 0 and setting 0 the above if will fail.
 					//The reasoning is if we explictly set 0 then we set the bit because it might not be set
 					DataSetIndicationArray.Set(index, true);
+
+					if(typeof(TValueType) == typeof(ulong) || typeof(TValueType) == typeof(long))
+						ChangeTrackingArray.Set(index + 1, true);
 				}
 			}
 		}

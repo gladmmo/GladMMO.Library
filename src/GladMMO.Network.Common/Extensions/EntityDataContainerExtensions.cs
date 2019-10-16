@@ -41,6 +41,20 @@ namespace GladMMO
 			container.SetFieldValue(GenericMath.Convert<TEnumType, int>(index), guid.RawGuidValue);
 		}
 
+		/// <summary>
+		/// Helper extension for setting entity data in <see cref="IEntityDataFieldContainer"/>
+		/// based on the int value of a specified Enum value <see cref="index"/>.
+		/// </summary>
+		/// <param name="container"></param>
+		/// <param name="index"></param>
+		/// <param name="guid"></param>
+		public static void SetFieldValue(this IEntityDataFieldContainer container, int index, NetworkEntityGuid guid)
+		{
+			if(container == null) throw new ArgumentNullException(nameof(container));
+
+			container.SetFieldValue(index, guid.RawGuidValue);
+		}
+
 		//TODO: Doc
 		public static TValueType GetFieldValue<TValueType>(this IEntityDataFieldContainer container, GameObjectField index)
 			where TValueType : struct

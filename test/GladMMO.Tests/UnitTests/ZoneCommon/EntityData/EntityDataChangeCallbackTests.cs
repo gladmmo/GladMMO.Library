@@ -41,6 +41,30 @@ namespace GladMMO
 			Assert.DoesNotThrow(() => callbackManager.RegisterCallback<float>(new NetworkEntityGuid((ulong)guid), fieldType, (eg, args) => { }));
 		}
 
+		[Test]
+		public void Test_Can_Register_Long_Callback_With_Correct_Value()
+		{
+			//arrange
+			Mock<IEnumerable> testCallback = new Mock<IEnumerable>(MockBehavior.Loose);
+			IEntityDataFieldContainer fieldData = new EntityFieldDataCollection(8);
+			EntityDataChangeCallbackManager callbackManager = new EntityDataChangeCallbackManager();
+			fieldData.SetFieldValue(1, new NetworkEntityGuid(ulong.MaxValue));
+
+			//act
+			callbackManager.RegisterCallback<ulong>(new NetworkEntityGuid((ulong)1), 1, (eg, args) =>
+			{
+				Assert.AreEqual(ulong.MaxValue, args.NewValue);
+
+				//Call so we can check for test purposes
+				testCallback.Object.GetEnumerator();
+			});
+
+			callbackManager.InvokeChangeEvents(new NetworkEntityGuid((ulong)1), fieldData, 1);
+
+			//assert
+			testCallback.Verify(enumerable => enumerable.GetEnumerator(), Times.Once);
+		}
+
 		//TODO: Fix an renable tests.
 		/*
 		[Test]

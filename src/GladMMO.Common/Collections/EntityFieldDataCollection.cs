@@ -84,6 +84,11 @@ namespace GladMMO
 			{
 				//Whenever someone sets, even if the value is not changing, we should set it being set (not changed).
 				DataSetIndicationArray.Set(index, true);
+				
+				//Important to set the next index too so long replication works.
+				if (typeof(TValueType) == typeof(ulong) || typeof(TValueType) == typeof(long))
+					DataSetIndicationArray.Set(index + 1, true);
+
 				value.Reinterpret(InternalDataFields, index * sizeof(int));
 			}
 		}
