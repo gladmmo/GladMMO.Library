@@ -46,9 +46,6 @@ namespace GladMMO
 			int health = entityData.GetFieldValue<int>(EntityObjectField.UNIT_FIELD_HEALTH);
 			int maxHealth = entityData.GetFieldValue<int>(EntityObjectField.UNIT_FIELD_MAXHEALTH);
 
-			//TODO: This is just a test value.
-			health /= 2;
-
 			TargetUnitFrame.HealthBar.BarFillable.FillAmount = (float)health / maxHealth;
 		}
 	}
