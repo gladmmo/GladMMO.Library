@@ -15,7 +15,7 @@
   <ItemGroup>
     <PackageReference Include="Akka.DI.AutoFac" Version="1.3.9" />
     <PackageReference Include="Autofac" Version="4.8.1" />
-    <PackageReference Include="Glader.Essentials.Unity" Version="1.0.29" />
+    <PackageReference Include="Glader.Essentials.Unity" Version="1.0.30" />
     <PackageReference Include="GladNet3.Client.DotNetTcpClient" Version="3.0.46" />
     <PackageReference Include="GladNet3.Handler.API" Version="3.0.46" />
     <PackageReference Include="GladNet3.Serializer.ProtobufNet" Version="3.0.46" />
