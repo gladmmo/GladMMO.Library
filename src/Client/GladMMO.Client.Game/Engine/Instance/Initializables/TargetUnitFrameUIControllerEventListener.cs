@@ -8,39 +8,43 @@ using Glader.Essentials;
 
 namespace GladMMO
 {
+	[AdditionalRegisterationAs(typeof(ILocalPlayerTargetChangedEventListener))]
 	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
-	public sealed class TargetUnitFrameUIControllerEventListener : DataChangedLocalPlayerSpawnedEventListener
+	public sealed class TargetUnitFrameUIControllerEventListener : DataChangedLocalPlayerSpawnedEventListener, ILocalPlayerTargetChangedEventListener
 	{
-		private IUIElement RootTargetUnitFrame { get; }
-
 		private IUIUnitFrame TargetUnitFrame { get; }
 
 		private ILog Logger { get; }
 
+		public event EventHandler<LocalPlayerTargetChangedEventArgs> OnPlayerTargetChanged;
+
 		public TargetUnitFrameUIControllerEventListener(ILocalPlayerSpawnedEventSubscribable subscriptionService, 
 			IEntityDataChangeCallbackRegisterable entityDataCallbackRegister, 
 			IReadonlyLocalPlayerDetails playerDetails,
-			[NotNull] [KeyFilter(UnityUIRegisterationKey.TargetUnitFrame)] IUIElement rootTargetUnitFrame,
 			[NotNull] [KeyFilter(UnityUIRegisterationKey.TargetUnitFrame)] IUIUnitFrame targetUnitFrame,
-			[NotNull] ILog logger) 
+			[NotNull] ILog logger)
 			: base(subscriptionService, entityDataCallbackRegister, playerDetails)
 		{
-			RootTargetUnitFrame = rootTargetUnitFrame ?? throw new ArgumentNullException(nameof(rootTargetUnitFrame));
 			TargetUnitFrame = targetUnitFrame ?? throw new ArgumentNullException(nameof(targetUnitFrame));
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
 		protected override void OnLocalPlayerSpawned(LocalPlayerSpawnedEventArgs args)
 		{
-			RegisterPlayerDataChangeCallback<ulong>(EntityObjectField.UNIT_FIELD_TARGET, OnPlayerTargetChanged);
+			RegisterPlayerDataChangeCallback<ulong>(EntityObjectField.UNIT_FIELD_TARGET, OnPlayerTargetEntityDatChanged);
 		}
 
-		private void OnPlayerTargetChanged(NetworkEntityGuid entity, EntityDataChangedArgs<ulong> changeArgs)
+		private void OnPlayerTargetEntityDatChanged(NetworkEntityGuid entity, EntityDataChangedArgs<ulong> changeArgs)
 		{
 			NetworkEntityGuid guid = new NetworkEntityGuid(changeArgs.NewValue);
 
 			if(Logger.IsDebugEnabled)
 				Logger.Debug($"Player Target Changed to: {guid}");
+
+			OnPlayerTargetChanged?.Invoke(this, new LocalPlayerTargetChangedEventArgs(guid));
+
+			//We can at least set this active here I guess.
+			TargetUnitFrame.SetElementActive(true);
 		}
 	}
 }
