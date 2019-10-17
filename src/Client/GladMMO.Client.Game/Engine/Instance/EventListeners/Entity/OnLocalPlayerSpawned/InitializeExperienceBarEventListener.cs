@@ -17,7 +17,7 @@ namespace GladMMO
 			IEntityDataChangeCallbackRegisterable entityDataCallbackRegister, 
 			IReadonlyLocalPlayerDetails playerDetails,
 			[NotNull] IEntityExperienceLevelStrategy levelStrategy,
-			[NotNull] [KeyFilter(UnityUIRegisterationKey.ExperienceBar)] IUIFillable experienceBar) 
+			[NotNull] [KeyFilter(UnityUIRegisterationKey.ExperienceBar)] IUIFillableImage experienceBar) 
 			: base(subscriptionService, entityDataCallbackRegister, playerDetails)
 		{
 			LevelStrategy = levelStrategy ?? throw new ArgumentNullException(nameof(levelStrategy));
