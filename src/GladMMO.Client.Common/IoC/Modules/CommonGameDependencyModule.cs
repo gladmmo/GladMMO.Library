@@ -87,7 +87,7 @@ namespace GladMMO
 				IServiceDiscoveryService serviceDiscovery = context.Resolve<IServiceDiscoveryService>();
 
 				//TODO: Eventually gameserver won't be endpoint for namequeries.
-				return new AsyncEndpointNameQueryService(QueryForRemoteServiceEndpoint(serviceDiscovery, "GameServer"), new RefitSettings() { HttpMessageHandlerFactory = () => new FiddlerEnabledWebProxyHandler() });
+				return new AsyncEndpointNameQueryService(QueryForRemoteServiceEndpoint(serviceDiscovery, "NameQuery"), new RefitSettings() { HttpMessageHandlerFactory = () => new FiddlerEnabledWebProxyHandler() });
 			});
 
 			builder.RegisterType<CacheableEntityNameQueryable>()
