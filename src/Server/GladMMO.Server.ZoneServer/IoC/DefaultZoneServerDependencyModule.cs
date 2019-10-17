@@ -322,6 +322,10 @@ namespace GladMMO
 			builder.RegisterType<AkkaActorReferenceEntityGuidMappable>()
 				.AsImplementedInterfaces()
 				.SingleInstance();
+
+			builder.RegisterType<DefaultEntityExperienceLevelStrategy>()
+				.As<IEntityExperienceLevelStrategy>()
+				.SingleInstance();
 		}
 
 		private static void RegisterLockingPolicies(ContainerBuilder builder)
