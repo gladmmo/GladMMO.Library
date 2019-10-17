@@ -119,6 +119,24 @@ namespace GladMMO
 			return BuildSuccessfulResponseModel(new CharacterAppearanceResponse((int)appearanceModel.AvatarModelId));
 		}
 
+		[NoResponseCache]
+		[HttpGet("{id}/data")]
+		[AuthorizeJwt]
+		[ProducesJson]
+		public async Task<IActionResult> GetCharacterData([FromRoute(Name = "id")] int characterId, 
+			[FromServices] [NotNull] ICharacterDataRepository characterDataRepository)
+		{
+			//TODO: We should only let the user themselves get their own character's data OR zoneservers who have a claimed session.
+			ProjectVersionStage.AssertBeta();
+
+			if(!await characterDataRepository.ContainsAsync(characterId))
+				return BuildFailedResponseModel(CharacterDataQueryReponseCode.CharacterNotFound);
+
+			CharacterDataModel characterData = await characterDataRepository.RetrieveAsync(characterId);
+
+			return BuildSuccessfulResponseModel(new CharacterDataResponse(characterData.ExperiencePoints));
+		}
+
 		[HttpGet]
 		[AuthorizeJwt]
 		[ProducesJson]
