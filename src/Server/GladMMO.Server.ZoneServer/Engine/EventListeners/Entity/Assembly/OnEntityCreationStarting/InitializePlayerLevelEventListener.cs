@@ -34,6 +34,7 @@ namespace GladMMO
 
 			//Set the level from the initial experience data.
 			entityDataFieldContainer.SetFieldValue((int)BaseObjectField.UNIT_FIELD_LEVEL, LevelStrategy.ComputeLevelFromExperience(entity.Experience));
+			entityDataFieldContainer.SetFieldValue((int)PlayerObjectField.PLAYER_TOTAL_EXPERIENCE, entity.Experience);
 		}
 	}
 }
