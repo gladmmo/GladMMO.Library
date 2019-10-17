@@ -4,7 +4,7 @@ using System.Text;
 
 namespace GladMMO
 {
-	public sealed class LocalCharacterDataRepository : ICharacterDataRepository
+	public sealed class LocalCharacterDataRepository : ILocalCharacterDataRepository
 	{
 		private readonly object SyncObj = new object();
 

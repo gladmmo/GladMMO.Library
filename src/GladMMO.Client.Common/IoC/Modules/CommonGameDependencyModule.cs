@@ -53,7 +53,7 @@ namespace GladMMO
 				.SingleInstance();
 
 			builder.RegisterType<LocalCharacterDataRepository>()
-				.As<ICharacterDataRepository>()
+				.As<ILocalCharacterDataRepository>()
 				.SingleInstance();
 
 			builder.RegisterType<LocalZoneDataRepository>()

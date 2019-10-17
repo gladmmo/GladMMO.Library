@@ -11,12 +11,12 @@ namespace GladMMO
 	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
 	public sealed class BroadcastLocalPlayerSpawnedEventListener : PlayerCreationFinishedEventListener, ILocalPlayerSpawnedEventSubscribable
 	{
-		private ICharacterDataRepository CharacterDateRepository { get; }
+		private ILocalCharacterDataRepository CharacterDateRepository { get; }
 
 		public event EventHandler<LocalPlayerSpawnedEventArgs> OnLocalPlayerSpawned;
 
 		public BroadcastLocalPlayerSpawnedEventListener(IEntityCreationFinishedEventSubscribable subscriptionService,
-			[NotNull] ICharacterDataRepository characterDateRepository) 
+			[NotNull] ILocalCharacterDataRepository characterDateRepository) 
 			: base(subscriptionService)
 		{
 			CharacterDateRepository = characterDateRepository ?? throw new ArgumentNullException(nameof(characterDateRepository));

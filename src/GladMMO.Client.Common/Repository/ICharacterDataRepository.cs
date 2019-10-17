@@ -4,7 +4,7 @@ using System.Text;
 
 namespace GladMMO
 {
-	public interface ICharacterDataRepository
+	public interface ILocalCharacterDataRepository
 	{
 		/// <summary>
 		/// The character id.

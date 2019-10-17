@@ -11,12 +11,12 @@ namespace GladMMO
 	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
 	public sealed class ClientOnEntityCreatingCreateWorldObjectRepresentationEventListener : SharedOnEntityCreatingCreateWorldObjectRepresentationEventListener, IEntityWorldRepresentationCreatedEventSubscribable
 	{
-		private ICharacterDataRepository CharacterDataRepository { get; }
+		private ILocalCharacterDataRepository CharacterDataRepository { get; }
 
 		public ClientOnEntityCreatingCreateWorldObjectRepresentationEventListener(IEntityCreationStartingEventSubscribable subscriptionService, 
 			IFactoryCreatable<GameObject, EntityPrefab> prefabFactory, 
 			IReadonlyEntityGuidMappable<IMovementData> movementDataMappable, 
-			ICharacterDataRepository characterDataRepository) 
+			ILocalCharacterDataRepository characterDataRepository) 
 			: base(subscriptionService, prefabFactory, movementDataMappable)
 		{
 			CharacterDataRepository = characterDataRepository;

@@ -19,7 +19,7 @@ namespace GladMMO
 		//TODO: Refactor this behind its own object to provide download URL for character.
 		private ICharacterService CharacterService { get; }
 
-		private ICharacterDataRepository LocalCharacterData { get; }
+		private ILocalCharacterDataRepository LocalCharacterData { get; }
 
 		private ILog Logger { get; }
 
@@ -27,7 +27,7 @@ namespace GladMMO
 
 		public PreBurstOnStartCharacterSessionQueryStartable(
 			[NotNull] ICharacterService characterService,
-			[NotNull] ICharacterDataRepository localCharacterData,
+			[NotNull] ILocalCharacterDataRepository localCharacterData,
 			[NotNull] ILog logger)
 		{
 			CharacterService = characterService ?? throw new ArgumentNullException(nameof(characterService));

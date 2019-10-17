@@ -17,7 +17,7 @@ namespace GladMMO
 	[SceneTypeCreateGladMMO(GameSceneType.CharacterSelection)]
 	public sealed class CharacterSelectionSelectCharacterImmediatelyOnButtonClickedEventListener : BaseSingleEventListenerInitializable<ICharacterSelectionButtonClickedEventSubscribable, CharacterButtonClickedEventArgs>, IServerRequestedSceneChangeEventSubscribable
 	{
-		private ICharacterDataRepository CharacterData { get; }
+		private ILocalCharacterDataRepository CharacterData { get; }
 
 		private ILog Logger { get; }
 
@@ -33,7 +33,7 @@ namespace GladMMO
 		/// <inheritdoc />
 		public CharacterSelectionSelectCharacterImmediatelyOnButtonClickedEventListener(
 			[NotNull] ICharacterSelectionButtonClickedEventSubscribable subscriptionService, 
-			[NotNull] ICharacterDataRepository characterData, 
+			[NotNull] ILocalCharacterDataRepository characterData, 
 			[NotNull] ILog logger,
 			[KeyFilter(UnityUIRegisterationKey.EnterWorld)] [NotNull] IUIButton enterWorldButton,
 			[NotNull] ICharacterService characterServiceQueryable)

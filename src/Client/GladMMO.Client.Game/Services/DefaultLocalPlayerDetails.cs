@@ -24,10 +24,10 @@ namespace GladMMO
 		/// </summary>
 		private IReadonlyEntityGuidMappable<IEntityDataFieldContainer> FieldDataMap { get; }
 
-		private ICharacterDataRepository CharacterDataRepo { get; }
+		private ILocalCharacterDataRepository CharacterDataRepo { get; }
 
 		/// <inheritdoc />
-		public DefaultLocalPlayerDetails(IReadonlyEntityGuidMappable<IEntityDataFieldContainer> fieldDataMap, [NotNull] ICharacterDataRepository characterDataRepo)
+		public DefaultLocalPlayerDetails(IReadonlyEntityGuidMappable<IEntityDataFieldContainer> fieldDataMap, [NotNull] ILocalCharacterDataRepository characterDataRepo)
 		{
 			FieldDataMap = fieldDataMap ?? throw new ArgumentNullException(nameof(fieldDataMap));
 			CharacterDataRepo = characterDataRepo ?? throw new ArgumentNullException(nameof(characterDataRepo));
