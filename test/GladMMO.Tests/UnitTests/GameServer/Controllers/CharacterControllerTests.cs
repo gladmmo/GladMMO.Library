@@ -84,7 +84,7 @@ namespace GladMMO
 			Assert.False(response.isSuccessful);
 		}
 
-		[Test]
+		/*[Test]
 		public async Task Test_Can_Get_Name_From_Character_Id([Range(1, 20)] int count)
 		{
 			//arrange
@@ -134,7 +134,7 @@ namespace GladMMO
 			Assert.False(result.isSuccessful);
 			Assert.True(result.ResultCode == NameQueryResponseCode.UnknownIdError);
 			Assert.True(String.IsNullOrWhiteSpace(result.EntityName));
-		}
+		}*/
 
 		[Test]
 		[TestCase("Test")]

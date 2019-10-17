@@ -12,12 +12,12 @@ namespace GladMMO
 	{
 		private IUIText PlayerNameTextField { get; }
 
-		private INameQueryService NameQueryable { get; }
+		private IEntityNameQueryable NameQueryable { get; }
 
 			/// <inheritdoc />
 		public LocalPlayerSpawnedPlayerNameNameplateUpdateEventListener([NotNull] ILocalPlayerSpawnedEventSubscribable subscriptionService,
 				[NotNull] [KeyFilter(UnityUIRegisterationKey.PlayerUnitFrame)] IUIText playerNameTextField,
-				[NotNull] INameQueryService nameQueryable)
+				[NotNull] IEntityNameQueryable nameQueryable)
 				: base(subscriptionService)
 		{
 			if(subscriptionService == null) throw new ArgumentNullException(nameof(subscriptionService));
@@ -31,13 +31,10 @@ namespace GladMMO
 			//TODO: Find a better way to do async stuff on events.
 			UnityAsyncHelper.UnityMainThreadContext.PostAsync(async () =>
 			{
-				NameQueryResponse queryResponse = await NameQueryable.RetrieveAsync(args.EntityGuid)
+				string queryResponse = await NameQueryable.RetrieveAsync(args.EntityGuid)
 					.ConfigureAwait(true);
 
-				if (queryResponse.isSuccessful)
-					PlayerNameTextField.Text = queryResponse.EntityName;
-				else
-					PlayerNameTextField.Text = "Unknown";
+				PlayerNameTextField.Text = queryResponse;
 			});
 		}
 	}

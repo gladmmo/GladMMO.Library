@@ -129,7 +129,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GladMMO.Models.Vivox", "src
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GladMMO.Client.VivoxService", "src\Client\GladMMO.Client.VivoxService\GladMMO.Client.VivoxService.csproj", "{68D9861A-0C9E-4B28-961B-B0EEAFBF73B5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladMMO.Server.Akka", "src\Server\GladMMO.Server.Akka\GladMMO.Server.Akka.csproj", "{59313ED7-C931-4C73-924C-F30721C42888}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GladMMO.Server.Akka", "src\Server\GladMMO.Server.Akka\GladMMO.Server.Akka.csproj", "{59313ED7-C931-4C73-924C-F30721C42888}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladMMO.Service.NameQuery", "src\Server\GladMMO.Service.NameQuery\GladMMO.Service.NameQuery.csproj", "{79B1BEF9-95BE-48B6-B959-5CC0CE993D51}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -650,6 +652,16 @@ Global
 		{59313ED7-C931-4C73-924C-F30721C42888}.Debug-Local|Any CPU.Build.0 = Debug|Any CPU
 		{59313ED7-C931-4C73-924C-F30721C42888}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{59313ED7-C931-4C73-924C-F30721C42888}.Release|Any CPU.Build.0 = Release|Any CPU
+		{79B1BEF9-95BE-48B6-B959-5CC0CE993D51}.Database_Migration|Any CPU.ActiveCfg = Debug|Any CPU
+		{79B1BEF9-95BE-48B6-B959-5CC0CE993D51}.Database_Migration|Any CPU.Build.0 = Debug|Any CPU
+		{79B1BEF9-95BE-48B6-B959-5CC0CE993D51}.DEBUG_LOCAL|Any CPU.ActiveCfg = Debug|Any CPU
+		{79B1BEF9-95BE-48B6-B959-5CC0CE993D51}.DEBUG_LOCAL|Any CPU.Build.0 = Debug|Any CPU
+		{79B1BEF9-95BE-48B6-B959-5CC0CE993D51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{79B1BEF9-95BE-48B6-B959-5CC0CE993D51}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{79B1BEF9-95BE-48B6-B959-5CC0CE993D51}.Debug-Local|Any CPU.ActiveCfg = Debug|Any CPU
+		{79B1BEF9-95BE-48B6-B959-5CC0CE993D51}.Debug-Local|Any CPU.Build.0 = Debug|Any CPU
+		{79B1BEF9-95BE-48B6-B959-5CC0CE993D51}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{79B1BEF9-95BE-48B6-B959-5CC0CE993D51}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -717,6 +729,7 @@ Global
 		{322101D1-5155-413E-94E4-248F058AD24B} = {572E4B21-970E-4889-9B0D-357816B1307C}
 		{68D9861A-0C9E-4B28-961B-B0EEAFBF73B5} = {8C598CE2-9578-41F6-A195-24678617AE6F}
 		{59313ED7-C931-4C73-924C-F30721C42888} = {98B85CCA-E727-485B-AD3C-68AC2A2B0364}
+		{79B1BEF9-95BE-48B6-B959-5CC0CE993D51} = {0478C448-622F-4C60-BDBB-E103D4A2520B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {886DD3D7-35E3-42F0-8CE9-74FB5AD7BBD0}

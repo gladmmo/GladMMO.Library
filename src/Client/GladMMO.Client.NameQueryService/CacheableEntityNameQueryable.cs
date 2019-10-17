@@ -51,18 +51,16 @@ namespace GladMMO
 		}
 
 		/// <inheritdoc />
-		public async Task<NameQueryResponse> RetrieveAsync(ulong rawGuidValue)
+		public async Task<string> RetrieveAsync(NetworkEntityGuid entity)
 		{
-			NetworkEntityGuid entity = new NetworkEntityGuid(rawGuidValue);
-
 			using(await SyncObj.ReaderLockAsync())
 			{
 				if(LocalNameMap.ContainsKey(entity))
-					return new NameQueryResponse(LocalNameMap[entity]); //do not call Retrieve, old versions of Unity3D don't support recursive readwrite locking.
+					return LocalNameMap[entity]; //do not call Retrieve, old versions of Unity3D don't support recursive readwrite locking.
 			}
 
 			//If we're here, it wasn't contained
-			var result = await NameServiceQueryable.RetrieveAsync(entity);
+			var result = await QueryRemoteNameService(entity);
 
 			if(!result.isSuccessful)
 				throw new InvalidOperationException($"Failed to query name for Entity: {entity}. Result: {result.ResultCode}.");
@@ -73,9 +71,24 @@ namespace GladMMO
 				//Check if some other thing already initialized it
 
 				if(LocalNameMap.ContainsKey(entity))
-					return new NameQueryResponse(LocalNameMap[entity]); //do not call Retrieve, old versions of Unity3D don't support recursive readwrite locking.
+					return LocalNameMap[entity]; //do not call Retrieve, old versions of Unity3D don't support recursive readwrite locking.
 
-				return new NameQueryResponse(LocalNameMap[entity] = result.EntityName);
+				return LocalNameMap[entity] = result.isSuccessful ? result.Result.EntityName : "Unknown";
+			}
+		}
+
+		private async Task<ResponseModel<NameQueryResponse, NameQueryResponseCode>> QueryRemoteNameService(NetworkEntityGuid entity)
+		{
+			switch (entity.EntityType)
+			{
+				case EntityType.Player:
+					return await NameServiceQueryable.RetrievePlayerNameAsync(entity.RawGuidValue);
+				case EntityType.GameObject:
+					return await NameServiceQueryable.RetrieveGameObjectNameAsync(entity.RawGuidValue);
+				case EntityType.Creature:
+					return await NameServiceQueryable.RetrieveCreatureNameAsync(entity.RawGuidValue);
+				default:
+					throw new ArgumentOutOfRangeException();
 			}
 		}
 	}

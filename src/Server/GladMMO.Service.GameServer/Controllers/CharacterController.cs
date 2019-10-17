@@ -194,10 +194,5 @@ namespace GladMMO
 			//TODO: Integrate Map Id design into Schema, and implement it here.
 			return Json(new ZoneServerCharacterLocationResponse(new Vector3(locationModel.XPosition, locationModel.YPosition, locationModel.ZPosition), 1));
 		}
-
-		private IActionResult BuildNotFoundUnknownIdResponse()
-		{
-			return NotFound(new NameQueryResponse(NameQueryResponseCode.UnknownIdError));
-		}
 	}
 }

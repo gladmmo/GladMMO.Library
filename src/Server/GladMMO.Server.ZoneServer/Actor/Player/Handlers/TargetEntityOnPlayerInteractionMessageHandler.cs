@@ -7,6 +7,7 @@ using Common.Logging;
 using Glader.Essentials;
 using UnityEngine;
 using UnityEngine.AI;
+using Random = System.Random;
 
 namespace GladMMO
 {
@@ -27,6 +28,9 @@ namespace GladMMO
 
 			//Just tell whatever interacted with us that they should now target us.
 			messageContext.Sender.Tell(new SetEntityActorTargetMessage(state.EntityGuid));
+
+			//TODO: This is just for testing
+			messageContext.Entity.Tell(new DamageEntityActorCurrentHealthMessage(1));
 		}
 	}
 }
