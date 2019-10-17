@@ -33,6 +33,13 @@ namespace GladMMO
 		UNIT_FIELD_HEALTH = BaseObjectField.OBJECT_END + 0x0001, // Size: 1, Type: INT, Flags: PUBLIC
 		UNIT_FIELD_MAXHEALTH = BaseObjectField.OBJECT_END + 0x0002, // Size: 1, Type: INT, Flags: PUBLIC
 		UNIT_FIELD_TARGET = BaseObjectField.OBJECT_END + 0x0003, // Size: 2, Type: LONG, Flags: PUBLIC
+
+		UNIT_END = UNIT_FIELD_TARGET + 1,
+	}
+
+	public enum PlayerObjectField
+	{
+		PLAYER_TOTAL_EXPERIENCE = EntityObjectField.UNIT_END + 0x0001,
 	}
 
 	//TODO: We should move away from this and implement our own, these are just place holders from World of Warcraft/TrinityCore.
