@@ -64,6 +64,14 @@ namespace GladMMO
 			return container.GetFieldValue<TValueType>((int)index);
 		}
 
+		public static TValueType GetFieldValue<TValueType>(this IEntityDataFieldContainer container, PlayerObjectField index)
+			where TValueType : struct
+		{
+			if(container == null) throw new ArgumentNullException(nameof(container));
+
+			return container.GetFieldValue<TValueType>((int)index);
+		}
+
 		//TODO: Doc
 		public static TValueType GetFieldValue<TValueType>(this IEntityDataFieldContainer container, EntityObjectField index)
 			where TValueType : struct
