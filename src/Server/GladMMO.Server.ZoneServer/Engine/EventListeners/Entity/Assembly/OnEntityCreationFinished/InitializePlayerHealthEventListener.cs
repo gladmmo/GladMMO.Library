@@ -7,7 +7,7 @@ namespace GladMMO
 {
 	//TODO: Refactor to consolidate with creature health initialization first.
 	[ServerSceneTypeCreate(ServerSceneType.Default)]
-	public sealed class InitializeEntityHealthEventListener : CreatureCreationFinishedEventListener
+	public sealed class InitializePlayerHealthEventListener : PlayerCreationFinishedEventListener
 	{
 		private IFactoryCreatable<EntityBaseStatsModel, EntityDataStatsDerivable> EntityBaseStatsFactory { get; }
 
@@ -15,7 +15,7 @@ namespace GladMMO
 
 		private IEntityGuidMappable<EntityBaseStatsModel> EntityBaseStatsMappable { get; }
 
-		public InitializeEntityHealthEventListener(IEntityCreationFinishedEventSubscribable subscriptionService,
+		public InitializePlayerHealthEventListener(IEntityCreationFinishedEventSubscribable subscriptionService,
 			[NotNull] IFactoryCreatable<EntityBaseStatsModel, EntityDataStatsDerivable> entityBaseStatsFactory,
 			[NotNull] IReadonlyEntityGuidMappable<IEntityDataFieldContainer> entityDataMappable,
 			[NotNull] IEntityGuidMappable<EntityBaseStatsModel> entityBaseStatsMappable) 
@@ -42,12 +42,13 @@ namespace GladMMO
 
 		private EntityBaseStatsModel GenerateEntityBaseStats(NetworkEntityGuid entityGuid)
 		{
+			IEntityDataFieldContainer entityData = EntityDataMappable.RetrieveEntity(entityGuid);
+
 			//We don't assume we've created the entity base stats component
 			if (EntityBaseStatsMappable.ContainsKey(entityGuid))
 				return EntityBaseStatsMappable.RetrieveEntity(entityGuid);
 
-			//TODO: We should get actual level somewhere else. During creation time (before CreationStarted since it's a persisted data.
-			EntityBaseStatsModel baseStats = EntityBaseStatsFactory.Create(new EntityDataStatsDerivable(entityGuid.EntityType, 1));
+			EntityBaseStatsModel baseStats = EntityBaseStatsFactory.Create(new EntityDataStatsDerivable(entityGuid.EntityType, entityData.GetFieldValue<int>(BaseObjectField.UNIT_FIELD_LEVEL)));
 			EntityBaseStatsMappable.AddObject(entityGuid, baseStats);
 
 			return baseStats;
