@@ -57,10 +57,12 @@ namespace GladMMO
 		[NoResponseCache]
 		public async Task<IActionResult> CreateCharacter([FromRoute] string name, 
 			[FromServices] [NotNull] IPlayfabCharacterClient playfabCharacterClient,
-			[FromServices] [NotNull] ICharacterAppearanceRepository characterAppearanceRepository)
+			[FromServices] [NotNull] ICharacterAppearanceRepository characterAppearanceRepository,
+			[FromServices] [NotNull] ICharacterDataRepository characterDataRepository)
 		{
 			if (playfabCharacterClient == null) throw new ArgumentNullException(nameof(playfabCharacterClient));
 			if (characterAppearanceRepository == null) throw new ArgumentNullException(nameof(characterAppearanceRepository));
+			if (characterDataRepository == null) throw new ArgumentNullException(nameof(characterDataRepository));
 			if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(name));
 
 			int accountId = ClaimsReader.GetUserIdInt(User);
@@ -94,11 +96,14 @@ namespace GladMMO
 			//since others could create a character with this name before we finish after checking
 			bool result = await CharacterRepository.TryCreateAsync(characterEntryModel);
 
-			if (result)
+			//TODO: Also needs to be apart of the transaction
+			if(result)
+			{
+				await characterDataRepository.TryCreateAsync(new CharacterDataModel(characterEntryModel.CharacterId, 0));
 				await characterAppearanceRepository.TryCreateAsync(new CharacterAppearanceModel(characterEntryModel.CharacterId, 9)); //Default is 9 right now.
+			}
 
-			//TODO: JSON
-			return Created("TODO", new CharacterCreationResponse(CharacterCreationResponseCode.Success));
+			return Json(new CharacterCreationResponse(CharacterCreationResponseCode.Success));
 		}
 
 		[HttpGet("{id}/appearance")]

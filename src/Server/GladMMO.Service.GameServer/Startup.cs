@@ -80,6 +80,8 @@ namespace GladMMO
 			services.AddTransient<IZoneServerRepository, DatabaseBackedZoneServerRepository>();
 			services.AddTransient<IGuildCharacterMembershipRepository, DatabaseBackedGuildCharacterMembershipRepository>();
 			services.AddTransient<ICharacterAppearanceRepository, DatabaseBackedCharacterAppearanceRepository>();
+			services.AddTransient<ICharacterDataRepository, DatabaseBackedCharacterDataRepository>();
+			//DatabaseBackedCharacterDataRepository
 
 			services.AddDbContext<NpcDatabaseContext>(o =>
 			{
