@@ -85,17 +85,17 @@ namespace GladMMO
 			if(Logger.IsDebugEnabled)
 				Logger.Debug($"Recieved player location: {pointData.WorldPosition} from {(locationResponse.isSuccessful ? "Database" : "Spawnpoint")}");
 
-			//Just broadcast successful claim, let listeners figure out what to do with this information.
-			OnSuccessfulSessionClaimed?.Invoke(this, new PlayerSessionClaimedEventArgs(entityGuid, pointData.WorldPosition, new PlayerEntitySessionContext(context.PayloadSendService, context.Details.ConnectionId, context.ConnectionService)));
-
-			await context.PayloadSendService.SendMessage(new ClientSessionClaimResponsePayload(ClientSessionClaimResponseCode.Success))
-				.ConfigureAwait(false);
-
 			//TODO: We need a cleaner/better way to load initial player data.
 			ResponseModel<CharacterDataInstance, CharacterDataQueryReponseCode> characterData = await CharacterService.GetCharacterData(payload.CharacterId);
 
 			//TODO: Check success.
 			InitialCharacterDataMappable.AddObject(entityGuid, characterData.Result);
+
+			//Just broadcast successful claim, let listeners figure out what to do with this information.
+			OnSuccessfulSessionClaimed?.Invoke(this, new PlayerSessionClaimedEventArgs(entityGuid, pointData.WorldPosition, new PlayerEntitySessionContext(context.PayloadSendService, context.Details.ConnectionId, context.ConnectionService)));
+
+			await context.PayloadSendService.SendMessage(new ClientSessionClaimResponsePayload(ClientSessionClaimResponseCode.Success))
+				.ConfigureAwait(false);
 		}
 	}
 }
