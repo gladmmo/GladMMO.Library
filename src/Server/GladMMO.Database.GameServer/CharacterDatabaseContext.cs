@@ -41,6 +41,8 @@ namespace GladMMO
 
 		public DbSet<CharacterAppearanceModel> CharacterAppearances { get; set; }
 
+		public DbSet<CharacterDataModel> CharacterData { get; set; }
+
 		public CharacterDatabaseContext(DbContextOptions<CharacterDatabaseContext> options) 
 			: base(options)
 		{
