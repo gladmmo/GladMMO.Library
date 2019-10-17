@@ -134,7 +134,7 @@ namespace GladMMO
 
 			CharacterDataModel characterData = await characterDataRepository.RetrieveAsync(characterId);
 
-			return BuildSuccessfulResponseModel(new CharacterDataResponse(characterData.ExperiencePoints));
+			return BuildSuccessfulResponseModel(new CharacterDataInstance(characterData.ExperiencePoints));
 		}
 
 		[HttpGet]

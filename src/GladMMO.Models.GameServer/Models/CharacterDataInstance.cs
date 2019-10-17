@@ -6,13 +6,13 @@ using Newtonsoft.Json;
 namespace GladMMO
 {
 	[JsonObject]
-	public sealed class CharacterDataResponse
+	public sealed class CharacterDataInstance
 	{
 		//We may have more stuff eventually, right now we only have the model id.
 		[JsonProperty]
 		public int Experience { get; private set; }
 
-		public CharacterDataResponse(int experience)
+		public CharacterDataInstance(int experience)
 		{
 			if (experience < 0) throw new ArgumentOutOfRangeException(nameof(experience));
 
@@ -20,7 +20,7 @@ namespace GladMMO
 		}
 
 		//Serializer ctor
-		private CharacterDataResponse()
+		private CharacterDataInstance()
 		{
 
 		}

@@ -13,12 +13,12 @@ namespace GladMMO
 
 		private IEntityExperienceLevelStrategy LevelStrategy { get; }
 
-		private IReadonlyEntityGuidMappable<CharacterDataResponse> InitialCharacterDataMappable { get; }
+		private IReadonlyEntityGuidMappable<CharacterDataInstance> InitialCharacterDataMappable { get; }
 
 		public InitializePlayerLevelEventListener(IEntityCreationStartingEventSubscribable subscriptionService,
 			[NotNull] IReadonlyEntityGuidMappable<IEntityDataFieldContainer> entityDataMappable,
 			[NotNull] IEntityExperienceLevelStrategy levelStrategy,
-			[NotNull] IReadonlyEntityGuidMappable<CharacterDataResponse> initialCharacterDataMappable) 
+			[NotNull] IReadonlyEntityGuidMappable<CharacterDataInstance> initialCharacterDataMappable) 
 			: base(subscriptionService)
 		{
 			EntityDataMappable = entityDataMappable ?? throw new ArgumentNullException(nameof(entityDataMappable));
@@ -28,7 +28,7 @@ namespace GladMMO
 
 		protected override void OnEventFired(object source, EntityCreationStartingEventArgs args)
 		{
-			CharacterDataResponse entity = InitialCharacterDataMappable.RetrieveEntity(args.EntityGuid);
+			CharacterDataInstance entity = InitialCharacterDataMappable.RetrieveEntity(args.EntityGuid);
 
 			IEntityDataFieldContainer entityDataFieldContainer = EntityDataMappable.RetrieveEntity(args.EntityGuid);
 

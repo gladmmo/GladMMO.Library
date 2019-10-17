@@ -23,14 +23,14 @@ namespace GladMMO
 
 		private ICharacterService CharacterService { get; }
 
-		private IEntityGuidMappable<CharacterDataResponse> InitialCharacterDataMappable { get; }
+		private IEntityGuidMappable<CharacterDataInstance> InitialCharacterDataMappable { get; }
 
 		/// <inheritdoc />
 		public ClientSessionClaimRequestHandler(
 			[NotNull] IZoneServerToGameServerClient gameServerClient,
 			[NotNull] ILog logger,
 			[NotNull] ISpawnPointStrategy spawnPointProvider,
-			[NotNull] IEntityGuidMappable<CharacterDataResponse> initialCharacterDataMappable,
+			[NotNull] IEntityGuidMappable<CharacterDataInstance> initialCharacterDataMappable,
 			[NotNull] ICharacterService characterService)
 			: base(logger)
 		{
@@ -92,7 +92,7 @@ namespace GladMMO
 				.ConfigureAwait(false);
 
 			//TODO: We need a cleaner/better way to load initial player data.
-			ResponseModel<CharacterDataResponse, CharacterDataQueryReponseCode> characterData = await CharacterService.GetCharacterData(payload.CharacterId);
+			ResponseModel<CharacterDataInstance, CharacterDataQueryReponseCode> characterData = await CharacterService.GetCharacterData(payload.CharacterId);
 
 			//TODO: Check success.
 			InitialCharacterDataMappable.AddObject(entityGuid, characterData.Result);
