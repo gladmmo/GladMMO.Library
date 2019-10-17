@@ -15,18 +15,22 @@ namespace GladMMO
 
 		private IReadonlyEntityGuidMappable<EntitySaveableConfiguration> PersistenceConfiguration { get; }
 
+		private IReadonlyEntityGuidMappable<IEntityDataFieldContainer> EntityDataMappable { get; }
+
 		private WorldConfiguration WorldConfig { get; }
 
 		/// <inheritdoc />
 		public NetworkedEntityDataSaveable([NotNull] IReadonlyEntityGuidMappable<IMovementGenerator<GameObject>> movementDataMap, 
 			[NotNull] IZoneServerToGameServerClient zoneToSeverClient,
 			[NotNull] IReadonlyEntityGuidMappable<EntitySaveableConfiguration> persistenceConfiguration,
-			[NotNull] WorldConfiguration worldConfig)
+			[NotNull] WorldConfiguration worldConfig,
+			[NotNull] IReadonlyEntityGuidMappable<IEntityDataFieldContainer> entityDataMappable)
 		{
 			MovementDataMap = movementDataMap ?? throw new ArgumentNullException(nameof(movementDataMap));
 			ZoneToSeverClient = zoneToSeverClient ?? throw new ArgumentNullException(nameof(zoneToSeverClient));
 			PersistenceConfiguration = persistenceConfiguration ?? throw new ArgumentNullException(nameof(persistenceConfiguration));
 			WorldConfig = worldConfig ?? throw new ArgumentNullException(nameof(worldConfig));
+			EntityDataMappable = entityDataMappable ?? throw new ArgumentNullException(nameof(entityDataMappable));
 		}
 
 		/// <inheritdoc />
@@ -44,12 +48,17 @@ namespace GladMMO
 
 			//Player ALWAYS has this existing.
 			EntitySaveableConfiguration saveConfig = PersistenceConfiguration.RetrieveEntity(guid);
+			IEntityDataFieldContainer entityData = EntityDataMappable.RetrieveEntity(guid);
 
 			if (saveConfig.isCurrentPositionSaveable)
 			{
 				await SavePositionAsync(guid)
 					.ConfigureAwait(false);
 			}
+
+			//Save the player's experience.
+			await ZoneToSeverClient.UpdatePlayerData(guid.EntityId, new CharacterDataInstance(entityData.GetFieldValue<int>(PlayerObjectField.PLAYER_TOTAL_EXPERIENCE)))
+				.ConfigureAwait(false);
 
 			await ZoneToSeverClient.ReleaseActiveSession(guid.EntityId)
 				.ConfigureAwait(false);
