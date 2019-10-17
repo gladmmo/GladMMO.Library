@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using Common.Logging;
@@ -24,16 +25,20 @@ namespace GladMMO
 
 		private IEntityGuidMappable<CharacterAppearanceResponse> CharacterAppearanceMappable { get; }
 
+		private IEntityGuidMappable<CharacterDataInstance> InitialCharacterDataInstance { get; }
+
 		/// <inheritdoc />
 		public CharacterSelectionOnStartQueryForCharacterListInitializable([NotNull] ILog logger,
 			[NotNull] ICharacterService characterServiceQueryable,
 			[NotNull] IEntityNameQueryable entityNameQueryable,
-			[NotNull] IEntityGuidMappable<CharacterAppearanceResponse> characterAppearanceMappable)
+			[NotNull] IEntityGuidMappable<CharacterAppearanceResponse> characterAppearanceMappable,
+			[NotNull] IEntityGuidMappable<CharacterDataInstance> initialCharacterDataInstance)
 		{
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
 			CharacterServiceQueryable = characterServiceQueryable ?? throw new ArgumentNullException(nameof(characterServiceQueryable));
 			EntityNameQueryable = entityNameQueryable ?? throw new ArgumentNullException(nameof(entityNameQueryable));
 			CharacterAppearanceMappable = characterAppearanceMappable ?? throw new ArgumentNullException(nameof(characterAppearanceMappable));
+			InitialCharacterDataInstance = initialCharacterDataInstance ?? throw new ArgumentNullException(nameof(initialCharacterDataInstance));
 		}
 
 		/// <inheritdoc />
@@ -60,13 +65,17 @@ namespace GladMMO
 					var appearanceResponse = await CharacterServiceQueryable.GetCharacterAppearance(entityGuid.EntityId)
 						.ConfigureAwait(false);
 
+					var characterData = await CharacterServiceQueryable.GetCharacterData(entityGuid.EntityId)
+						.ConfigureAwait(false);
+
 					//Don't throw, because we actually don't want to stop the
 					//character screen from working just because we can't visually display some stuff.
 					if(!appearanceResponse.isSuccessful)
 						Logger.Error($"Failed to query for Character: {entityGuid.EntityId} appearance. Reason: {appearanceResponse.ResultCode}");
 
-					//TODO: Hanlde error.
+					//TODO: Handle errors.
 					CharacterAppearanceMappable.AddObject(entityGuid, appearanceResponse.Result);
+					InitialCharacterDataInstance.AddObject(entityGuid, characterData.Result);
 
 					OnCharacterSelectionEntryChanged?.Invoke(this, new CharacterSelectionEntryDataChangeEventArgs(entityGuid));
 				}

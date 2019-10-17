@@ -24,15 +24,23 @@ namespace GladMMO
 		/// <inheritdoc />
 		public event EventHandler<CharacterButtonClickedEventArgs> OnCharacterButtonClicked;
 
+		private IReadonlyEntityGuidMappable<CharacterDataInstance> InitialCharacterDataMappable { get; }
+
+		private IEntityExperienceLevelStrategy LevelStrategy { get; }
+
 		/// <inheritdoc />
 		public CharacterSelectionCharacterButtonDataInitOnEntryChangedEventListener(ILog logger,
 			[NotNull] ICharacterSelectionEntryDataChangeEventSubscribable subscriptionService,
 			[KeyFilter(UnityUIRegisterationKey.CharacterSelection)] [NotNull] IReadOnlyCollection<IUICharacterSlot> characterButtons,
-			[NotNull] IEntityNameQueryable nameQueryable)
+			[NotNull] IEntityNameQueryable nameQueryable,
+			[NotNull] IReadonlyEntityGuidMappable<CharacterDataInstance> initialCharacterDataMappable,
+			[NotNull] IEntityExperienceLevelStrategy levelStrategy)
 			: base(subscriptionService, false, logger)
 		{
 			CharacterButtons = characterButtons ?? throw new ArgumentNullException(nameof(characterButtons));
 			NameQueryable = nameQueryable ?? throw new ArgumentNullException(nameof(nameQueryable));
+			InitialCharacterDataMappable = initialCharacterDataMappable ?? throw new ArgumentNullException(nameof(initialCharacterDataMappable));
+			LevelStrategy = levelStrategy ?? throw new ArgumentNullException(nameof(levelStrategy));
 		}
 
 		/// <inheritdoc />
@@ -49,6 +57,8 @@ namespace GladMMO
 				//Once we have the result, we can assign the name.
 				button = CharacterButtons.ElementAt(slot);
 				InitializeCharacterName(args.CharacterEntityGuid, button);
+				InitializeCharacterLevel(args.CharacterEntityGuid, button);
+				InitializeCharacterLocation(args.CharacterEntityGuid, button);
 				button.IsInteractable = true;
 				button.SetElementActive(true);
 			}
@@ -63,6 +73,23 @@ namespace GladMMO
 				if(toggleState)
 					OnCharacterButtonClicked?.Invoke(this, new CharacterButtonClickedEventArgs(args.CharacterEntityGuid, slot));
 			});
+		}
+
+		private void InitializeCharacterLocation([NotNull] NetworkEntityGuid guid, [NotNull] IUICharacterSlot button)
+		{
+			if (guid == null) throw new ArgumentNullException(nameof(guid));
+			if (button == null) throw new ArgumentNullException(nameof(button));
+
+			button.LocationText.Text = "Unknown";
+		}
+
+		private void InitializeCharacterLevel([NotNull] NetworkEntityGuid guid, [NotNull] IUICharacterSlot button)
+		{
+			if (guid == null) throw new ArgumentNullException(nameof(guid));
+			if (button == null) throw new ArgumentNullException(nameof(button));
+
+			CharacterDataInstance dataInstance = InitialCharacterDataMappable.RetrieveEntity(guid);
+			button.LevelText.Text = $"Level {LevelStrategy.ComputeLevelFromExperience(dataInstance.Experience).ToString()}";
 		}
 
 		private void InitializeCharacterName([NotNull] NetworkEntityGuid guid, [NotNull] IUICharacterSlot button)
