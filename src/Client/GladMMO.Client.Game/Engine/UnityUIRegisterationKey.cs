@@ -58,5 +58,7 @@ namespace GladMMO
 		ErrorBox = 22,
 
 		TargetUnitFrame = 23,
+
+		ExperienceBar = 24
 	}
 }
