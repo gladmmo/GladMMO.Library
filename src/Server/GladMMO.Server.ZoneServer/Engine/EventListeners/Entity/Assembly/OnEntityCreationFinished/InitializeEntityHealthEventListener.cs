@@ -6,7 +6,7 @@ using Glader.Essentials;
 namespace GladMMO
 {
 	[ServerSceneTypeCreate(ServerSceneType.Default)]
-	public sealed class InitializeEntityHealthEventListener : BaseSingleEventListenerInitializable<IEntityCreationFinishedEventSubscribable, EntityCreationFinishedEventArgs>
+	public sealed class InitializeEntityHealthEventListener : CreatureCreationFinishedEventListener
 	{
 		private IFactoryCreatable<EntityBaseStatsModel, EntityDataStatsDerivable> EntityBaseStatsFactory { get; }
 
@@ -25,13 +25,13 @@ namespace GladMMO
 			EntityBaseStatsMappable = entityBaseStatsMappable ?? throw new ArgumentNullException(nameof(entityBaseStatsMappable));
 		}
 
-		protected override void OnEventFired(object source, EntityCreationFinishedEventArgs args)
+		protected override void OnEntityCreationFinished(EntityCreationFinishedEventArgs args)
 		{
 			IEntityDataFieldContainer dataContainer = EntityDataMappable.RetrieveEntity(args.EntityGuid);
 			EntityBaseStatsModel baseStats = GenerateEntityBaseStats(args.EntityGuid);
 
 			//TODO: This is kinda a hack to avoid GameObjects iniitalizing this.
-			if (args.EntityGuid.EntityType == EntityType.GameObject)
+			if(args.EntityGuid.EntityType == EntityType.GameObject)
 				return;
 
 			//TODO: Do base eventually. Right now we're only doing regular health fields since that's all we deal with clientside atm.
