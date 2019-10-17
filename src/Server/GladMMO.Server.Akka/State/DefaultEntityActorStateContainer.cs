@@ -4,7 +4,7 @@ using System.Text;
 
 namespace GladMMO
 {
-	public sealed class DefaultEntityActorStateContainer : IEntityActorStateContainable
+	public class DefaultEntityActorStateContainer : IEntityActorStateContainable
 	{
 		public IEntityDataFieldContainer EntityData { get; }
 

@@ -4,12 +4,8 @@ using System.Text;
 
 namespace GladMMO
 {
-	public class DefaultGameObjectActorState : IEntityActorStateContainable
+	public class DefaultGameObjectActorState : DefaultEntityActorStateContainer
 	{
-		public IEntityDataFieldContainer EntityData { get; }
-
-		public NetworkEntityGuid EntityGuid { get; }
-
 		public GameObjectInstanceModel InstanceModel { get; }
 
 		public GameObjectTemplateModel TemplateModel { get; }
@@ -18,9 +14,9 @@ namespace GladMMO
 			[NotNull] NetworkEntityGuid entityGuid,
 			[NotNull] GameObjectInstanceModel instanceModel,
 			[NotNull] GameObjectTemplateModel templateModel)
+			: base(entityData, entityGuid)
 		{
-			EntityData = entityData ?? throw new ArgumentNullException(nameof(entityData));
-			EntityGuid = entityGuid ?? throw new ArgumentNullException(nameof(entityGuid));
+			
 			InstanceModel = instanceModel ?? throw new ArgumentNullException(nameof(instanceModel));
 			TemplateModel = templateModel ?? throw new ArgumentNullException(nameof(templateModel));
 		}
