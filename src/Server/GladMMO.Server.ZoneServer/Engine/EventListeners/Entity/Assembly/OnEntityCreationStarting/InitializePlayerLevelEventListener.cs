@@ -7,7 +7,7 @@ namespace GladMMO
 {
 	//Basically a stub for where/how to implement player level initialization.
 	[ServerSceneTypeCreate(ServerSceneType.Default)]
-	public sealed class InitializePlayerLevelEventListener : BaseSingleEventListenerInitializable<IEntityCreationStartingEventSubscribable, EntityCreationStartingEventArgs>
+	public sealed class InitializePlayerLevelEventListener : PlayerCreationStartingEventListener
 	{
 		private IReadonlyEntityGuidMappable<IEntityDataFieldContainer> EntityDataMappable { get; }
 
@@ -26,7 +26,7 @@ namespace GladMMO
 			InitialCharacterDataMappable = initialCharacterDataMappable ?? throw new ArgumentNullException(nameof(initialCharacterDataMappable));
 		}
 
-		protected override void OnEventFired(object source, EntityCreationStartingEventArgs args)
+		protected override void OnPlayerEntityCreationStarting(EntityCreationStartingEventArgs args)
 		{
 			CharacterDataInstance entity = InitialCharacterDataMappable.RetrieveEntity(args.EntityGuid);
 
