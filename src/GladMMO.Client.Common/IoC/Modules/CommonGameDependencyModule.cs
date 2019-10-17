@@ -93,6 +93,11 @@ namespace GladMMO
 			builder.RegisterType<CacheableEntityNameQueryable>()
 				.As<IEntityNameQueryable>()
 				.SingleInstance();
+
+			//Used on character selection too.
+			builder.RegisterType<DefaultEntityExperienceLevelStrategy>()
+				.As<IEntityExperienceLevelStrategy>()
+				.SingleInstance();
 		}
 
 		private static void RegisterEntityContainers(ContainerBuilder builder)
