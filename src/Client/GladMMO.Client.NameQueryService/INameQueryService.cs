@@ -16,7 +16,8 @@ namespace GladMMO
 		/// <param name="rawGuidValue">The id of the player entity.</param>
 		/// <returns>Result of the player namequery.</returns>
 		[Headers("Cache-Control: max-age=600")]
-		[Get("/api/namequery/" + nameof(EntityType.Player) + "/{EntityGuid}/name")]
+		//[Get("/api/namequery/" + nameof(EntityType.Player) + "/{EntityGuid}/name")]
+		[Get("/api/namequery/Player/{EntityGuid}/name")]
 		Task<ResponseModel<NameQueryResponse, NameQueryResponseCode>> RetrievePlayerNameAsync([AliasAs("EntityGuid")] ulong rawGuidValue);
 
 		/// <summary>
@@ -26,7 +27,7 @@ namespace GladMMO
 		/// <param name="rawGuidValue">The id of the creature entity.</param>
 		/// <returns>Result of the creature namequery.</returns>
 		[Headers("Cache-Control: max-age=600")]
-		[Get("/api/namequery/" + nameof(EntityType.Creature) + "/{EntityGuid}/name")]
+		[Get("/api/namequery/Creature/{EntityGuid}/name")]
 		Task<ResponseModel<NameQueryResponse, NameQueryResponseCode>> RetrieveCreatureNameAsync([AliasAs("EntityGuid")] ulong rawGuidValue);
 
 		/// <summary>
@@ -36,7 +37,7 @@ namespace GladMMO
 		/// <param name="rawGuidValue">The id of the gameobject entity.</param>
 		/// <returns>Result of the gameobject namequery.</returns>
 		[Headers("Cache-Control: max-age=600")]
-		[Get("/api/namequery/" + nameof(EntityType.GameObject) + "/{EntityGuid}/name")]
+		[Get("/api/namequery/GameObject/{EntityGuid}/name")]
 		Task<ResponseModel<NameQueryResponse, NameQueryResponseCode>> RetrieveGameObjectNameAsync([AliasAs("EntityGuid")] ulong rawGuidValue);
 	}
 }
