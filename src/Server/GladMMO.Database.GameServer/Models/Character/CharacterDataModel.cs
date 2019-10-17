@@ -28,7 +28,7 @@ namespace GladMMO
 		/// <summary>
 		/// The current experience of the player.
 		/// </summary>
-		public int ExperiencePoints { get; private set; }
+		public int ExperiencePoints { get; set; } //TODO: Make this a model updatable.
 		
 		//TODO: We can have stuff like player class and other things here too.
 

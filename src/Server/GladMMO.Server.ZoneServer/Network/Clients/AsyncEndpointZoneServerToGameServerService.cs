@@ -73,5 +73,10 @@ namespace GladMMO
 		{
 			return await (await GetService().ConfigureAwait(false)).UpdatePlayerAvatar(request).ConfigureAwait(false);
 		}
+
+		public async Task UpdatePlayerData(int characterId, CharacterDataInstance request)
+		{
+			await (await GetService().ConfigureAwait(false)).UpdatePlayerData(characterId, request).ConfigureAwait(false);
+		}
 	}
 }

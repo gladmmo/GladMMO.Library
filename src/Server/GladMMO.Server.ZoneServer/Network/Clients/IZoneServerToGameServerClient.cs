@@ -61,5 +61,8 @@ namespace GladMMO
 
 		[Patch("/api/ZoneServerCharacter/ChangeAvatar")]
 		Task<AvatarPedestalChangeResponse> UpdatePlayerAvatar([JsonBody] ZoneServerAvatarPedestalInteractionCharacterRequest request);
+
+		[Patch("/api/ZoneServerCharacter/{id}/UpdateData")]
+		Task UpdatePlayerData([AliasAs("id")] int characterId, [JsonBody] CharacterDataInstance request);
 	}
 }
