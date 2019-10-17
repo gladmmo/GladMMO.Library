@@ -10,12 +10,15 @@ namespace GladMMO
 		{
 			if (experience < 0) throw new ArgumentOutOfRangeException(nameof(experience));
 
+			//Simplier to just start with the highest
+			if(experience >= 1300)
+				return 3;
+
+			if(experience >= 400)
+				return 2;
+
 			if (experience < 400)
 				return 1;
-			if (experience >= 400)
-				return 2;
-			else if (experience >= 1300)
-				return 3;
 
 			throw new NotImplementedException($"TODO: Haven't implemented full level/experience system.");
 		}
