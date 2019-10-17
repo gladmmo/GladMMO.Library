@@ -6,7 +6,7 @@ using Glader.Essentials;
 namespace GladMMO
 {
 	[ServerSceneTypeCreate(ServerSceneType.Default)]
-	public sealed class InitializeEntityHealthEventListener : BaseSingleEventListenerInitializable<IEntityCreationStartingEventSubscribable, EntityCreationStartingEventArgs>
+	public sealed class InitializeEntityHealthEventListener : BaseSingleEventListenerInitializable<IEntityCreationFinishedEventSubscribable, EntityCreationFinishedEventArgs>
 	{
 		private IFactoryCreatable<EntityBaseStatsModel, EntityDataStatsDerivable> EntityBaseStatsFactory { get; }
 
@@ -14,7 +14,7 @@ namespace GladMMO
 
 		private IEntityGuidMappable<EntityBaseStatsModel> EntityBaseStatsMappable { get; }
 
-		public InitializeEntityHealthEventListener(IEntityCreationStartingEventSubscribable subscriptionService,
+		public InitializeEntityHealthEventListener(IEntityCreationFinishedEventSubscribable subscriptionService,
 			[NotNull] IFactoryCreatable<EntityBaseStatsModel, EntityDataStatsDerivable> entityBaseStatsFactory,
 			[NotNull] IReadonlyEntityGuidMappable<IEntityDataFieldContainer> entityDataMappable,
 			[NotNull] IEntityGuidMappable<EntityBaseStatsModel> entityBaseStatsMappable) 
@@ -25,7 +25,7 @@ namespace GladMMO
 			EntityBaseStatsMappable = entityBaseStatsMappable ?? throw new ArgumentNullException(nameof(entityBaseStatsMappable));
 		}
 
-		protected override void OnEventFired(object source, EntityCreationStartingEventArgs args)
+		protected override void OnEventFired(object source, EntityCreationFinishedEventArgs args)
 		{
 			IEntityDataFieldContainer dataContainer = EntityDataMappable.RetrieveEntity(args.EntityGuid);
 			EntityBaseStatsModel baseStats = GenerateEntityBaseStats(args.EntityGuid);
