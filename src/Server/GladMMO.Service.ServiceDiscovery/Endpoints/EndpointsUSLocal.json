@@ -24,6 +24,10 @@
     "VivoxAuth": {
       "endpointAddress": "http://72.190.177.214",
       "endpointPort": 5010
+    },
+    "NameQuery": {
+      "endpointAddress": "http://72.190.177.214",
+      "endpointPort": 5011
     }
   }
 }
