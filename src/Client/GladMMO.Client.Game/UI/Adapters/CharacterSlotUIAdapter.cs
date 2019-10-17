@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Glader.Essentials;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace GladMMO
@@ -12,7 +13,25 @@ namespace GladMMO
 	{
 		public Toggle ToggleObject;
 
-		public Text TextObject;
+		[FormerlySerializedAs("TextObject")]
+		public Text ButtonTextObject;
+
+		public Text LevelTextObject;
+
+		public Text LocationTextObject;
+
+		private Lazy<IUIText> _levelText { get; }
+		private Lazy<IUIText> _locationText { get; }
+
+		public IUIText LevelText => _levelText.Value;
+
+		public IUIText LocationText => _locationText.Value;
+
+		public CharacterSlotUIAdapter()
+		{
+			_levelText = new Lazy<IUIText>(() => new UnityTextUITextAdapterImplementation(LevelTextObject));
+			_locationText = new Lazy<IUIText>(() => new UnityTextUITextAdapterImplementation(LocationTextObject));
+		}
 
 		/// <inheritdoc />
 		public void SetElementActive(bool state)
@@ -49,8 +68,8 @@ namespace GladMMO
 		/// <inheritdoc />
 		public string Text
 		{
-			get => TextObject.text;
-			set => TextObject.text = value;
+			get => ButtonTextObject.text;
+			set => ButtonTextObject.text = value;
 		}
 	}
 }

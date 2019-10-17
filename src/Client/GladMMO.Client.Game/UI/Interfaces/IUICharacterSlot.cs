@@ -7,6 +7,8 @@ namespace GladMMO
 {
 	public interface IUICharacterSlot : IUIElement, IUIToggle, IUIText
 	{
-		
+		IUIText LevelText { get; }
+
+		IUIText LocationText { get; }
 	}
 }
