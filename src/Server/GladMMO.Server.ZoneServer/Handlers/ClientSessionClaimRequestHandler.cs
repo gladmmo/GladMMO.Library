@@ -21,15 +21,23 @@ namespace GladMMO
 
 		private ISpawnPointStrategy SpawnPointProvider { get; }
 
+		private ICharacterService CharacterService { get; }
+
+		private IEntityGuidMappable<CharacterDataResponse> InitialCharacterDataMappable { get; }
+
 		/// <inheritdoc />
 		public ClientSessionClaimRequestHandler(
 			[NotNull] IZoneServerToGameServerClient gameServerClient,
 			[NotNull] ILog logger,
-			[NotNull] ISpawnPointStrategy spawnPointProvider)
+			[NotNull] ISpawnPointStrategy spawnPointProvider,
+			[NotNull] IEntityGuidMappable<CharacterDataResponse> initialCharacterDataMappable,
+			[NotNull] ICharacterService characterService)
 			: base(logger)
 		{
 			GameServerClient = gameServerClient ?? throw new ArgumentNullException(nameof(gameServerClient));
 			SpawnPointProvider = spawnPointProvider ?? throw new ArgumentNullException(nameof(spawnPointProvider));
+			InitialCharacterDataMappable = initialCharacterDataMappable ?? throw new ArgumentNullException(nameof(initialCharacterDataMappable));
+			CharacterService = characterService ?? throw new ArgumentNullException(nameof(characterService));
 		}
 
 		/// <inheritdoc />
@@ -60,12 +68,11 @@ namespace GladMMO
 
 				return;
 			}
-			
-			NetworkEntityGuidBuilder builder = new NetworkEntityGuidBuilder();
 
-			builder
+			NetworkEntityGuid entityGuid = new NetworkEntityGuidBuilder()
 				.WithId(payload.CharacterId)
-				.WithType(EntityType.Player);
+				.WithType(EntityType.Player)
+				.Build();
 
 			//TODO: We assume they are authenticated, we don't check at the moment but we WILL and SHOULD. Just load their location.
 			ZoneServerCharacterLocationResponse locationResponse = await GameServerClient.GetCharacterLocation(payload.CharacterId)
@@ -79,10 +86,16 @@ namespace GladMMO
 				Logger.Debug($"Recieved player location: {pointData.WorldPosition} from {(locationResponse.isSuccessful ? "Database" : "Spawnpoint")}");
 
 			//Just broadcast successful claim, let listeners figure out what to do with this information.
-			OnSuccessfulSessionClaimed?.Invoke(this, new PlayerSessionClaimedEventArgs(builder.Build(), pointData.WorldPosition, new PlayerEntitySessionContext(context.PayloadSendService, context.Details.ConnectionId, context.ConnectionService)));
+			OnSuccessfulSessionClaimed?.Invoke(this, new PlayerSessionClaimedEventArgs(entityGuid, pointData.WorldPosition, new PlayerEntitySessionContext(context.PayloadSendService, context.Details.ConnectionId, context.ConnectionService)));
 
 			await context.PayloadSendService.SendMessage(new ClientSessionClaimResponsePayload(ClientSessionClaimResponseCode.Success))
 				.ConfigureAwait(false);
+
+			//TODO: We need a cleaner/better way to load initial player data.
+			ResponseModel<CharacterDataResponse, CharacterDataQueryReponseCode> characterData = await CharacterService.GetCharacterData(payload.CharacterId);
+
+			//TODO: Check success.
+			InitialCharacterDataMappable.AddObject(entityGuid, characterData.Result);
 		}
 	}
 }
