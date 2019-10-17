@@ -21,3 +21,7 @@ cd ..
 cd vivox
 start "vivox" dotnet GladMMO.Service.Vivox.dll --url=http://192.168.0.12:5010
 cd ..
+
+cd namequery
+start "namequery" dotnet GladMMO.Service.NameQuery.dll --url=http://192.168.0.12:5011
+cd ..
