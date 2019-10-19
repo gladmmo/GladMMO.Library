@@ -27,6 +27,15 @@ namespace GladMMO
 		/// <inheritdoc />
 		protected override Task HandleMessage(IPeerSessionMessageContext<GameServerPacketPayload> context, ClientInteractGameObjectRequestPayload payload, NetworkEntityGuid guid)
 		{
+			//Special case here that indicates the client wants to clear their target.
+			if (payload.TargetGameObjectGuid == NetworkEntityGuid.Empty)
+			{
+				IActorRef playerRef = ActorReferenceMappable.RetrieveEntity(guid);
+				playerRef.Tell(new SetEntityActorTargetMessage(payload.TargetGameObjectGuid));
+				//Just send the empty set target to the player entity
+				return Task.CompletedTask;
+			}
+
 			if (!ActorReferenceMappable.ContainsKey(payload.TargetGameObjectGuid))
 			{
 				if(Logger.IsWarnEnabled)
