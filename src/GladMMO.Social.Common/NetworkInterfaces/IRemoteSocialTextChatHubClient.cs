@@ -7,7 +7,7 @@ namespace GladMMO
 {
 	public interface IRemoteSocialTextChatHubClient
 	{
-		/// <summary>
+		/*/// <summary>
 		/// Async method that handles recieveing a <see cref="ZoneChatMessageEventModel"/>
 		/// (a zone text chat message) with information about the sender.
 		/// </summary>
@@ -21,6 +21,6 @@ namespace GladMMO
 		/// </summary>
 		/// <param name="message">The message to send.</param>
 		/// <returns>Awaitable.</returns>
-		Task RecieveGuildChannelTextChatMessageAsync(GuildChatMessageEventModel message);
+		Task RecieveGuildChannelTextChatMessageAsync(GuildChatMessageEventModel message);*/
 	}
 }

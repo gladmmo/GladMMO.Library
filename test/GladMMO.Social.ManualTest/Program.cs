@@ -42,7 +42,7 @@ namespace GladMMO.Social.ManualTest
 
 			while(true)
 			{
-				string input = Console.ReadLine();
+				/*string input = Console.ReadLine();
 
 				if(input.Contains("/guild"))
 				{
@@ -51,14 +51,14 @@ namespace GladMMO.Social.ManualTest
 				}
 				else
 					await client.SendZoneChannelTextChatMessageAsync(new ZoneChatMessageRequestModel(input))
-						.ConfigureAwait(false);
+						.ConfigureAwait(false);*/
 			}
 		}
 	}
 
 	public class TestClientHandler : IRemoteSocialTextChatHubClient
 	{
-		public Task RecieveZoneChannelTextChatMessageAsync(ZoneChatMessageEventModel message)
+		/*public Task RecieveZoneChannelTextChatMessageAsync(ZoneChatMessageEventModel message)
 		{
 			Console.WriteLine($"[{message.ChannelMessage.Data.TargetChannel}] User {message.ChannelMessage.EntityGuid}: {message.ChannelMessage.Data.Message}");
 
@@ -71,6 +71,6 @@ namespace GladMMO.Social.ManualTest
 			Console.WriteLine($"[{message.ChannelMessage.Data.TargetChannel}] User {message.ChannelMessage.EntityGuid}: {message.ChannelMessage.Data.Message}");
 
 			return Task.CompletedTask;
-		}
+		}*/
 	}
 }

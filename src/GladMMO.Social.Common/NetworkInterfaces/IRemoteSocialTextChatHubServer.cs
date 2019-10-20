@@ -10,20 +10,6 @@ namespace GladMMO
 	/// </summary>
 	public interface IRemoteSocialTextChatHubServer
 	{
-		/// <summary>
-		/// Async method that sends a <see cref="ZoneChatMessageRequestModel"/>
-		/// (a zone text chat message).
-		/// </summary>
-		/// <param name="message">The message to send.</param>
-		/// <returns>Awaitable.</returns>
-		Task SendZoneChannelTextChatMessageAsync(ZoneChatMessageRequestModel message);
 
-		/// <summary>
-		/// Async method that sends a <see cref="GuildChatMessageRequestModel"/>
-		/// (a guild chat message).
-		/// </summary>
-		/// <param name="message">The message to send.</param>
-		/// <returns>Awaitable.</returns>
-		Task SendGuildChannelTextChatMessageAsync(GuildChatMessageRequestModel message);
 	}
 }

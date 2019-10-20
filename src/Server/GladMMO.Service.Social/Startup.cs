@@ -80,12 +80,6 @@ namespace GladMMO
 			services.AddSingleton<IOnHubConnectionEventListener, CharacterZoneOnHubConnectionEventListener>();
 			services.AddSingleton<IOnHubConnectionEventListener, CharacterGuildOnHubConnectionEventListener>();
 
-			services.AddSingleton<ZoneMessageBroadcastMessageHandler, ZoneMessageBroadcastMessageHandler>();
-			services.AddSingleton<GuildMessageBroadcastMessageHandler, GuildMessageBroadcastMessageHandler>();
-
-			services.AddSingleton<IFactoryCreatable<GuildChatMessageEventModel, GenericChatMessageContext<GuildChatMessageRequestModel>>, GuildChatMessageEnvelopeFactory>();
-			services.AddSingleton<IFactoryCreatable<ZoneChatMessageEventModel, GenericChatMessageContext<ZoneChatMessageRequestModel>>, ZoneChatMessageEnvelopeFactory>();
-
 			services.AddSingleton<IEntityDataLockingService, RefCountedEntityDataLockingService>();
 		}
 
@@ -159,7 +153,7 @@ namespace GladMMO
 
 			app.UseSignalR(routes =>
 			{
-				routes.MapHub<TextChatHub>("/realtime/textchat");
+				//routes.MapHub<TextChatHub>("/realtime/textchat");
 			});
 		}
 	}

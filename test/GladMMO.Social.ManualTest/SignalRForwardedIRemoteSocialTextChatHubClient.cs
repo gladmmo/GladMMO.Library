@@ -18,7 +18,7 @@ namespace GladMMO
 		}
 
 		/// <inheritdoc />
-		public Task SendZoneChannelTextChatMessageAsync(ZoneChatMessageRequestModel message)
+		/*public Task SendZoneChannelTextChatMessageAsync(ZoneChatMessageRequestModel message)
 		{
 			return Connection.SendAsync(nameof(SendZoneChannelTextChatMessageAsync), message);
 		}
@@ -27,6 +27,6 @@ namespace GladMMO
 		public Task SendGuildChannelTextChatMessageAsync(GuildChatMessageRequestModel message)
 		{
 			return Connection.SendAsync(nameof(SendGuildChannelTextChatMessageAsync), message);
-		}
+		}*/
 	}
 }
