@@ -62,7 +62,7 @@ namespace GladMMO
 			//Registers service discovery client.
 			services.AddSingleton<IServiceDiscoveryService>(provider =>
 			{
-				return Refit.RestService.For<IServiceDiscoveryService>("http://sd.vrguardians.net:5000");
+				return Refit.RestService.For<IServiceDiscoveryService>(@"http://72.190.177.214:5000");
 			});
 
 			services.AddSingleton<IAuthenticationService, AsyncEndpointAuthenticationService>(provider =>
