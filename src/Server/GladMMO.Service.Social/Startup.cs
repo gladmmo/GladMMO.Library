@@ -79,8 +79,6 @@ namespace GladMMO
 			//This is for Hub connection event listeners
 			services.AddSingleton<IOnHubConnectionEventListener, CharacterZoneOnHubConnectionEventListener>();
 			services.AddSingleton<IOnHubConnectionEventListener, CharacterGuildOnHubConnectionEventListener>();
-
-			services.AddSingleton<IEntityDataLockingService, RefCountedEntityDataLockingService>();
 		}
 
 		private async Task<string> GetSocialServiceAuthorizationToken([JetBrains.Annotations.NotNull] IAuthenticationService authService)
