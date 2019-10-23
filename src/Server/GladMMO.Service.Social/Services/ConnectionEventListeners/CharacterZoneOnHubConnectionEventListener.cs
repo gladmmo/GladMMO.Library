@@ -15,20 +15,15 @@ namespace GladMMO
 
 		private IClaimsPrincipalReader ClaimsReader { get; }
 
-		//I am not happy about this, but we need to maintain some state so that we know what zone a connection is in.
-		private IConnectionToZoneMappable ZoneLookupService { get; }
-
 		/// <inheritdoc />
 		public CharacterZoneOnHubConnectionEventListener(
 			[JetBrains.Annotations.NotNull] ILogger<CharacterZoneOnHubConnectionEventListener> logger, 
 			[JetBrains.Annotations.NotNull] ISocialServiceToGameServiceClient socialToGameClient, 
-			[JetBrains.Annotations.NotNull] IClaimsPrincipalReader claimsReader,
-			[JetBrains.Annotations.NotNull] IConnectionToZoneMappable zoneLookupService)
+			[JetBrains.Annotations.NotNull] IClaimsPrincipalReader claimsReader)
 		{
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
 			SocialToGameClient = socialToGameClient ?? throw new ArgumentNullException(nameof(socialToGameClient));
 			ClaimsReader = claimsReader ?? throw new ArgumentNullException(nameof(claimsReader));
-			ZoneLookupService = zoneLookupService ?? throw new ArgumentNullException(nameof(zoneLookupService));
 		}
 
 		/// <inheritdoc />
@@ -68,9 +63,6 @@ namespace GladMMO
 
 			if(Logger.IsEnabled(LogLevel.Information))
 				Logger.LogInformation($"Recieved SessionData: Id: {characterSessionDataResponse.CharacterId} ZoneId: {characterSessionDataResponse.ZoneId}");
-
-			//Registers for lookup so that we can tell where a connection is zone-wise.
-			ZoneLookupService.Register(hubConnectedTo.Context.ConnectionId, characterSessionDataResponse.ZoneId);
 
 			//TODO: We should have group name builders. Not hardcoded
 			//Join the zoneserver's chat channel group
