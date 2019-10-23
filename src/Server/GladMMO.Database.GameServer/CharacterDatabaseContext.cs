@@ -43,6 +43,8 @@ namespace GladMMO
 
 		public DbSet<CharacterDataModel> CharacterData { get; set; }
 
+		public DbSet<CharacterFriendModel> CharacterFriends { get; set; }
+
 		public CharacterDatabaseContext(DbContextOptions<CharacterDatabaseContext> options) 
 			: base(options)
 		{
@@ -148,6 +150,14 @@ namespace GladMMO
 			EntityTypeBuilder<CharacterGroupEntryModel> groupsEntries = modelBuilder.Entity<CharacterGroupEntryModel>();
 			groupsEntries
 				.HasAlternateKey(model => model.LeaderCharacterId);
+
+			EntityTypeBuilder<CharacterFriendModel> characterFriendsEntity = modelBuilder.Entity<CharacterFriendModel>();
+
+			characterFriendsEntity
+				.HasKey(model => new {model.CharacterId, model.FriendCharacterId});
+
+			characterFriendsEntity
+				.HasIndex(model => model.CharacterId);
 		}
 #endif
 	}
