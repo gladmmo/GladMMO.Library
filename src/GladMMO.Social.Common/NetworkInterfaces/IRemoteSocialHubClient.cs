@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace GladMMO
 {
-	public interface IRemoteSocialTextChatHubClient
+	public interface IRemoteSocialHubClient
 	{
 		/*/// <summary>
 		/// Async method that handles recieveing a <see cref="ZoneChatMessageEventModel"/>

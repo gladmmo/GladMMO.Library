@@ -7,12 +7,12 @@ using Microsoft.AspNetCore.SignalR.Client;
 
 namespace GladMMO
 {
-	public sealed class SignalRForwardedIRemoteSocialTextChatHubClient : IRemoteSocialTextChatHubServer
+	public sealed class SignalRForwardedIRemoteSocialHubClient : IRemoteSocialHubServer
 	{
 		private HubConnection Connection { get; }
 
 		/// <inheritdoc />
-		public SignalRForwardedIRemoteSocialTextChatHubClient([JetBrains.Annotations.NotNull] HubConnection connection)
+		public SignalRForwardedIRemoteSocialHubClient([JetBrains.Annotations.NotNull] HubConnection connection)
 		{
 			Connection = connection ?? throw new ArgumentNullException(nameof(connection));
 		}

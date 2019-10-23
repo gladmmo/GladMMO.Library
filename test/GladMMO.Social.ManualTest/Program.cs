@@ -44,9 +44,9 @@ namespace GladMMO.Social.ManualTest
 			await connection.StartAsync()
 				.ConfigureAwait(false);
 
-			connection.RegisterClientInterface<IRemoteSocialTextChatHubClient>(new TestClientHandler());
+			connection.RegisterClientInterface<IRemoteSocialHubClient>(new TestClientHandler());
 
-			SignalRForwardedIRemoteSocialTextChatHubClient client = new SignalRForwardedIRemoteSocialTextChatHubClient(connection);
+			SignalRForwardedIRemoteSocialHubClient client = new SignalRForwardedIRemoteSocialHubClient(connection);
 
 			while(true)
 			{
@@ -70,7 +70,7 @@ namespace GladMMO.Social.ManualTest
 		}
 	}
 
-	public class TestClientHandler : IRemoteSocialTextChatHubClient
+	public class TestClientHandler : IRemoteSocialHubClient
 	{
 		/*public Task RecieveZoneChannelTextChatMessageAsync(ZoneChatMessageEventModel message)
 		{

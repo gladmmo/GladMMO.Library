@@ -8,7 +8,7 @@ namespace GladMMO
 	/// <summary>
 	/// Contract for remote interface for Server Hub.
 	/// </summary>
-	public interface IRemoteSocialTextChatHubServer
+	public interface IRemoteSocialHubServer
 	{
 
 	}
