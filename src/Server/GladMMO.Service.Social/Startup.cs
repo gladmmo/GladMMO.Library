@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 using Autofac;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -78,6 +77,18 @@ namespace GladMMO
 			//This is for Hub connection event listeners
 			services.AddSingleton<IOnHubConnectionEventListener, CharacterZoneOnHubConnectionEventListener>();
 			services.AddSingleton<IOnHubConnectionEventListener, CharacterGuildOnHubConnectionEventListener>();
+
+			RegisterDatabaseServices(services);
+		}
+
+		private static void RegisterDatabaseServices(IServiceCollection services)
+		{
+			services.AddDbContext<CharacterDatabaseContext>(o =>
+			{
+				o.UseMySql("Server=127.0.0.1;Database=guardians.gameserver;Uid=root;Pwd=test;");
+			});
+
+			services.AddTransient<ICharacterFriendRepository, DatabaseBackedCharacterFriendRepository>();
 		}
 
 		private async Task<string> GetSocialServiceAuthorizationToken([JetBrains.Annotations.NotNull] IAuthenticationService authService)
