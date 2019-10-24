@@ -59,6 +59,8 @@ namespace GladMMO
 
 		TargetUnitFrame = 23,
 
-		ExperienceBar = 24
+		ExperienceBar = 24,
+
+		FriendsWindow = 25,
 	}
 }
