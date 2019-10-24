@@ -19,5 +19,7 @@ namespace GladMMO
 		NetworkGameObject = 4,
 
 		MessageBoxText = 5,
+
+		CharacterFriendSlot = 6
 	}
 }
