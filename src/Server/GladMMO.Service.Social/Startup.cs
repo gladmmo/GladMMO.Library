@@ -78,6 +78,9 @@ namespace GladMMO
 			services.AddSingleton<IOnHubConnectionEventListener, CharacterZoneOnHubConnectionEventListener>();
 			services.AddSingleton<IOnHubConnectionEventListener, CharacterGuildOnHubConnectionEventListener>();
 
+			//SocialSignalRMessageRouter<TRemoteClientHubInterfaceType> : ISocialModelMessageRouter<TRemoteClientHubInterfaceType>
+			services.AddSingleton<ISocialModelMessageRouter<IRemoteSocialHubClient>, SocialSignalRMessageRouter<IRemoteSocialHubClient>>();
+
 			RegisterDatabaseServices(services);
 		}
 
@@ -97,6 +100,7 @@ namespace GladMMO
 
 			//TODO: Don't hardcode the authentication details
 			ProjectVersionStage.AssertBeta();
+
 			//TODO: Handle errors
 			return (await authService.TryAuthenticate(new AuthenticationRequestModel("SocialService", "Test69!"))).AccessToken;
 		}
@@ -161,7 +165,7 @@ namespace GladMMO
 
 			app.UseSignalR(routes =>
 			{
-				//routes.MapHub<TextChatHub>("/realtime/textchat");
+				routes.MapHub<GeneralSocialSignalRHub>("/realtime/social");
 			});
 		}
 	}
