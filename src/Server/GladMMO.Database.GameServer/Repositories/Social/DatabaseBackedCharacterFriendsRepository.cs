@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GladMMO
 {
-	public sealed class DatabaseBackedCharacterFriendsRepository : ICharacterFriendsRepository
+	public sealed class DatabaseBackedCharacterFriendsRepository : ICharacterFriendRelationshipRepository
 	{
 		private GeneralGenericCrudRepositoryProvider<int, CharacterFriendRelationshipModel> GenericRepository { get; }
 

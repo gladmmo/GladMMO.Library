@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace GladMMO
 {
-	public interface ICharacterFriendsRepository : IGenericRepositoryCrudable<int, CharacterFriendRelationshipModel>
+	public interface ICharacterFriendRelationshipRepository : IGenericRepositoryCrudable<int, CharacterFriendRelationshipModel>
 	{
 		/// <summary>
 		/// Indicates if the two ids <see cref="characterIdOne"/>
