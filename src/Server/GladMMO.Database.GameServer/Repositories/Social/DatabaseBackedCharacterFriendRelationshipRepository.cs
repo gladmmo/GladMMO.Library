@@ -7,14 +7,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GladMMO
 {
-	public sealed class DatabaseBackedCharacterFriendsRepository : ICharacterFriendRelationshipRepository
+	public sealed class DatabaseBackedCharacterFriendRelationshipRepository : ICharacterFriendRelationshipRepository
 	{
 		private GeneralGenericCrudRepositoryProvider<int, CharacterFriendRelationshipModel> GenericRepository { get; }
 
 		private CharacterDatabaseContext Context { get; }
 
 		/// <inheritdoc />
-		public DatabaseBackedCharacterFriendsRepository([JetBrains.Annotations.NotNull] CharacterDatabaseContext context)
+		public DatabaseBackedCharacterFriendRelationshipRepository([JetBrains.Annotations.NotNull] CharacterDatabaseContext context)
 		{
 			Context = context ?? throw new ArgumentNullException(nameof(context));
 
