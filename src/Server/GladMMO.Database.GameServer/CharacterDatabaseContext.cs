@@ -65,6 +65,7 @@ namespace GladMMO
 
 			base.OnConfiguring(optionsBuilder);
 		}
+#endif
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
@@ -159,6 +160,5 @@ namespace GladMMO
 			characterFriendsEntity
 				.HasIndex(model => model.CharacterId);
 		}
-#endif
 	}
 }
