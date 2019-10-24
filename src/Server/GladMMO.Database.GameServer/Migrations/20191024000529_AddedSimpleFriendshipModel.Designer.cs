@@ -3,14 +3,16 @@ using System;
 using GladMMO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GladMMO.Database.GameServer.Migrations
 {
     [DbContext(typeof(CharacterDatabaseContext))]
-    partial class CharacterDatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20191024000529_AddedSimpleFriendshipModel")]
+    partial class AddedSimpleFriendshipModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
