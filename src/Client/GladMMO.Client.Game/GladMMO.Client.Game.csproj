@@ -55,6 +55,7 @@
     <ProjectReference Include="..\GladMMO.Client.NameQueryService\GladMMO.Client.NameQueryService.csproj" />
     <ProjectReference Include="..\GladMMO.Client.ServerSelection\GladMMO.Client.ServerSelection.csproj" />
     <ProjectReference Include="..\GladMMO.Client.ServiceDiscovery\GladMMO.Client.ServiceDiscovery.csproj" />
+    <ProjectReference Include="..\GladMMO.Client.Social\GladMMO.Client.Social.csproj" />
     <ProjectReference Include="..\GladMMO.Client.VivoxService\GladMMO.Client.VivoxService.csproj" />
     <ProjectReference Include="..\GladMMO.Client.ZoneService\GladMMO.Client.ZoneService.csproj" />
   </ItemGroup>

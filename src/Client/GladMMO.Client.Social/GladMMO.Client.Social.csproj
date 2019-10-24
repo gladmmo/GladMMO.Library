@@ -12,8 +12,4 @@
     <ProjectReference Include="..\..\GladMMO.Models.Social\GladMMO.Models.Social.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Async\" />
-  </ItemGroup>
-
 </Project>
