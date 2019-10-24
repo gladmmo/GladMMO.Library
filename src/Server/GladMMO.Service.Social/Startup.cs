@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Autofac;
@@ -29,6 +32,11 @@ namespace GladMMO
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
+			//https://stackoverflow.com/questions/4926676/mono-https-webrequest-fails-with-the-authentication-or-decryption-has-failed
+			ServicePointManager.ServerCertificateValidationCallback = MyRemoteCertificateValidationCallback;
+			ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+			ServicePointManager.CheckCertificateRevocationList = false;
+
 			services.AddMvc(options =>
 				{
 					//This prevents ASP Core from trying to validate Vector3's children, which contain Vector3 (because Unity3D thanks)
@@ -65,7 +73,8 @@ namespace GladMMO
 
 			services.AddSingleton<IAuthenticationService, AsyncEndpointAuthenticationService>(provider =>
 			{
-				return new AsyncEndpointAuthenticationService(QueryForRemoteServiceEndpoint(provider.GetService<IServiceDiscoveryService>(), "Authentication"));
+				return new AsyncEndpointAuthenticationService(QueryForRemoteServiceEndpoint(provider.GetService<IServiceDiscoveryService>(), "Authentication"),
+					new RefitSettings() { HttpMessageHandlerFactory = () => new BypassHttpsValidationHandler() });
 			});
 
 			services.AddSingleton<ISocialServiceToGameServiceClient, AsyncEndpointISocialServiceToGameServiceClient>(provider =>
@@ -82,6 +91,12 @@ namespace GladMMO
 			services.AddSingleton<ISocialModelMessageRouter<IRemoteSocialHubClient>, SocialSignalRMessageRouter<IRemoteSocialHubClient>>();
 
 			RegisterDatabaseServices(services);
+		}
+
+		//https://stackoverflow.com/questions/4926676/mono-https-webrequest-fails-with-the-authentication-or-decryption-has-failed
+		private bool MyRemoteCertificateValidationCallback(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslpolicyerrors)
+		{
+			return true;
 		}
 
 		private static void RegisterDatabaseServices(IServiceCollection services)
