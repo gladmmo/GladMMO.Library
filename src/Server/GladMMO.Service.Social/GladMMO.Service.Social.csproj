@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
@@ -11,10 +11,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.ResponseCaching" Version="2.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.1.2" />
     <PackageReference Include="Autofac" Version="4.8.1" />
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="4.3.1" />
     <PackageReference Include="GladNet3.Handler.API" Version="3.0.46" />
-    <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Refit" Version="4.6.107" />
   </ItemGroup>
 
@@ -26,6 +29,7 @@
     <ProjectReference Include="..\..\GladMMO.Models.Social\GladMMO.Models.Social.csproj" />
     <ProjectReference Include="..\..\GladMMO.Network.Common\GladMMO.Network.Common.csproj" />
     <ProjectReference Include="..\..\GladMMO.Social.Common\GladMMO.Social.Common.csproj" />
+    <ProjectReference Include="..\GladMMO.Database.GameServer\GladMMO.Database.GameServer.csproj" />
     <ProjectReference Include="..\GladMMO.Server.Common\GladMMO.Server.Common.csproj" />
     <ProjectReference Include="..\GladMMO.Service.Common\GladMMO.Service.Common.csproj" />
   </ItemGroup>
