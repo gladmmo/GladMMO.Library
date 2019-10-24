@@ -20,14 +20,12 @@ namespace GladMMO
 		[ProducesJson]
 		[ResponseCache(Duration = 10)] //This should be good for caching
 		[AuthorizeJwt]
-		[HttpGet("{id}")]
-		public async Task<IActionResult> GetCharacterFriends([FromRoute(Name = "id")] int characterId,
-			[FromServices] [JetBrains.Annotations.NotNull] ICharacterFriendRepository friendsRepository,
+		[HttpGet]
+		public async Task<IActionResult> GetCharacterFriends([FromServices] [JetBrains.Annotations.NotNull] ICharacterFriendRepository friendsRepository,
 			[FromServices] [JetBrains.Annotations.NotNull] ISocialServiceToGameServiceClient socialServiceClient)
 		{
 			if (friendsRepository == null) throw new ArgumentNullException(nameof(friendsRepository));
 			if (socialServiceClient == null) throw new ArgumentNullException(nameof(socialServiceClient));
-			if (characterId <= 0) throw new ArgumentOutOfRangeException(nameof(characterId));
 
 			//Find the character
 			CharacterSessionDataResponse response = await socialServiceClient.GetCharacterSessionDataByAccount(ClaimsReader.GetUserIdInt(User));
