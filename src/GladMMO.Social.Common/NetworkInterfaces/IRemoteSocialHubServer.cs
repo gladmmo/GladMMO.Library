@@ -10,6 +10,6 @@ namespace GladMMO
 	/// </summary>
 	public interface IRemoteSocialHubServer
 	{
-
+		Task SendTestMessageAsync(TestSocialModel testModel);
 	}
 }

@@ -34,7 +34,7 @@ namespace GladMMO.Social.ManualTest
 				.ConfigureAwait(false)).AccessToken;
 
 			HubConnection connection = new HubConnectionBuilder()
-				.WithUrl("http://127.0.0.1:7777/realtime/textchat", options =>
+				.WithUrl("http://127.0.0.1:7777/realtime/social", options =>
 				{
 					options.Headers.Add(SocialNetworkConstants.CharacterIdRequestHeaderName, characterId);
 					options.AccessTokenProvider = () => Task.FromResult(token);
@@ -50,9 +50,11 @@ namespace GladMMO.Social.ManualTest
 
 			while(true)
 			{
-				/*string input = Console.ReadLine();
+				string input = Console.ReadLine();
 
-				if(input.Contains("/guild"))
+				await client.SendTestMessageAsync(new TestSocialModel(input));
+
+				/*if(input.Contains("/guild"))
 				{
 					await client.SendGuildChannelTextChatMessageAsync(new GuildChatMessageRequestModel(input))
 						.ConfigureAwait(false);

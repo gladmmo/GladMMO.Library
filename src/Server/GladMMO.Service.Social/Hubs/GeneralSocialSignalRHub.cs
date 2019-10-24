@@ -69,7 +69,7 @@ namespace GladMMO
 			catch(Exception e)
 			{
 				if(Logger.IsEnabled(LogLevel.Error))
-					Logger.LogError($"Account: {ClaimsReader.GetUserName(Context.User)}:{ClaimsReader.GetUserId(Context.User)} failed to properly connect to hub. Error: {e.Message}\n\nStack: {e.StackTrace}");
+					Logger.LogError($"Account: {ClaimsReader.GetUserName(Context.User)}:{ClaimsReader.GetUserId(Context.User)} failed to properly connect to hub. Error: {e.ToString()}\n\nStack: {e.StackTrace}");
 
 				Context.Abort();
 			}
@@ -124,6 +124,11 @@ namespace GladMMO
 		Task<TResponseType> IPeerRequestSendService<object>.SendRequestAsync<TResponseType>(object request, DeliveryMethod method, CancellationToken cancellationToken)
 		{
 			throw new NotSupportedException($"This does not make sense for SignalR.");
+		}
+
+		public Task SendTestMessageAsync(TestSocialModel testModel)
+		{
+			return MessageRouter.TryHandleMessage(CreateHubContext(), new NetworkIncomingMessage<BaseSocialModel>(new HeaderlessPacketHeader(0), testModel));
 		}
 	}
 }
