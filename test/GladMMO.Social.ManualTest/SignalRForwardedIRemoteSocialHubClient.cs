@@ -31,7 +31,7 @@ namespace GladMMO
 
 		public Task SendTestMessageAsync(TestSocialModel testModel)
 		{
-			return Connection.SendAsync(nameof(TestSocialModel), testModel);
+			return Connection.SendAsync(nameof(SendTestMessageAsync), testModel);
 		}
 	}
 }
