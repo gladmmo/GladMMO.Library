@@ -25,3 +25,7 @@ cd ..
 cd namequery
 start "namequery" dotnet GladMMO.Service.NameQuery.dll --url=http://192.168.0.12:5011
 cd ..
+
+cd social
+start "social" dotnet GladMMO.Service.Social.dll --url=http://192.168.0.12:5008
+cd ..
