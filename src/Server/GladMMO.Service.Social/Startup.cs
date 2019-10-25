@@ -83,6 +83,12 @@ namespace GladMMO
 					new RefitSettings() { AuthorizationHeaderValueGetter = () => GetSocialServiceAuthorizationToken(provider.GetService<IAuthenticationService>()) });
 			});
 
+			services.AddSingleton<INameQueryService>(provider =>
+			{
+				return new AsyncEndpointNameQueryService(QueryForRemoteServiceEndpoint(provider.GetService<IServiceDiscoveryService>(), "NameQuery"),
+					new RefitSettings() { AuthorizationHeaderValueGetter = () => GetSocialServiceAuthorizationToken(provider.GetService<IAuthenticationService>()) });
+			});
+
 			//This is for Hub connection event listeners
 			services.AddSingleton<IOnHubConnectionEventListener, CharacterZoneOnHubConnectionEventListener>();
 			services.AddSingleton<IOnHubConnectionEventListener, CharacterGuildOnHubConnectionEventListener>();

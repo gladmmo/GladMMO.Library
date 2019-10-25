@@ -13,5 +13,9 @@ namespace GladMMO
 		[RequiresAuthentication]
 		[Get("/api/CharacterFriends")]
 		Task<CharacterFriendListResponseModel> GetCharacterListAsync();
+
+		[RequiresAuthentication]
+		[Post("/api/CharacterFriends/befriend/{name}")]
+		Task<ResponseModel<CharacterFriendAddResponseModel, CharacterFriendAddResponseCode>> TryAddFriendAsync([AliasAs("name")] string characterName);
 	}
 }

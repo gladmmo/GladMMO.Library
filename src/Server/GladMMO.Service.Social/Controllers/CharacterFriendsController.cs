@@ -37,5 +37,53 @@ namespace GladMMO
 
 			return Json(new CharacterFriendListResponseModel(friendsCharacterIds));
 		}
+
+		[ProducesJson]
+		[AuthorizeJwt]
+		[HttpPost("befriend/{name}")]
+		public async Task<IActionResult> TryAddFriend([FromRoute(Name = "name")] [JetBrains.Annotations.NotNull] string characterFriendName,
+			[FromServices] [JetBrains.Annotations.NotNull] ICharacterFriendRepository friendsRepository,
+			[FromServices] [JetBrains.Annotations.NotNull] ISocialServiceToGameServiceClient socialServiceClient,
+			[FromServices] INameQueryService nameQueryService)
+		{
+			if (friendsRepository == null) throw new ArgumentNullException(nameof(friendsRepository));
+			if (socialServiceClient == null) throw new ArgumentNullException(nameof(socialServiceClient));
+			if (string.IsNullOrEmpty(characterFriendName)) throw new ArgumentException("Value cannot be null or empty.", nameof(characterFriendName));
+
+			//Find the character
+			CharacterSessionDataResponse response = await socialServiceClient.GetCharacterSessionDataByAccount(ClaimsReader.GetUserIdInt(User));
+
+			if (response.ResultCode == CharacterSessionDataResponseCode.NoSessionAvailable)
+				return BadRequest();
+
+			var nameReverseQueryResponse = await nameQueryService.RetrievePlayerGuidAsync(characterFriendName);
+
+			//If the player is trying to add himself, just say not found
+			if (nameReverseQueryResponse.Result.EntityId == response.CharacterId)
+				return BuildFailedResponseModel(CharacterFriendAddResponseCode.CharacterNotFound);
+
+			switch (nameReverseQueryResponse.ResultCode)
+			{
+				case NameQueryResponseCode.UnknownIdError:
+					return BuildFailedResponseModel(CharacterFriendAddResponseCode.CharacterNotFound);
+				case NameQueryResponseCode.GeneralServerError:
+					return BuildFailedResponseModel(CharacterFriendAddResponseCode.GeneralServerError);
+			}
+
+			//Ok, reverse namequery is a success
+			//now we must check some stuff
+
+			//Already friends check
+			if (await friendsRepository.IsFriendshipPresentAsync(response.CharacterId, nameReverseQueryResponse.Result.EntityId))
+				return BuildFailedResponseModel(CharacterFriendAddResponseCode.AlreadyFriends);
+
+			if (await friendsRepository.TryCreateAsync(new CharacterFriendModel(response.CharacterId, nameReverseQueryResponse.Result.EntityId)))
+			{
+				//This is a success, let's tell them about who they added.
+				return BuildSuccessfulResponseModel(new CharacterFriendAddResponseModel(nameReverseQueryResponse.Result));
+			}
+			else
+				return BuildFailedResponseModel(CharacterFriendAddResponseCode.GeneralServerError);
+		}
 	}
 }

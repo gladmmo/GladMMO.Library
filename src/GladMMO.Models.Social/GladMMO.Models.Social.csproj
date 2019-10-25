@@ -9,10 +9,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ResultCodes\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\GladMMO.Models.Common\GladMMO.Models.Common.csproj" />
   </ItemGroup>
 
