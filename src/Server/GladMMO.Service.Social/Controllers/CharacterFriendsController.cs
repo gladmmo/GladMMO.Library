@@ -58,10 +58,7 @@ namespace GladMMO
 
 			var nameReverseQueryResponse = await nameQueryService.RetrievePlayerGuidAsync(characterFriendName);
 
-			//If the player is trying to add himself, just say not found
-			if (nameReverseQueryResponse.Result.EntityId == response.CharacterId)
-				return BuildFailedResponseModel(CharacterFriendAddResponseCode.CharacterNotFound);
-
+			//Handle known failure cases first.
 			switch (nameReverseQueryResponse.ResultCode)
 			{
 				case NameQueryResponseCode.UnknownIdError:
@@ -69,6 +66,10 @@ namespace GladMMO
 				case NameQueryResponseCode.GeneralServerError:
 					return BuildFailedResponseModel(CharacterFriendAddResponseCode.GeneralServerError);
 			}
+
+			//If the player is trying to add himself, just say not found
+			if(nameReverseQueryResponse.Result.EntityId == response.CharacterId)
+				return BuildFailedResponseModel(CharacterFriendAddResponseCode.CharacterNotFound);
 
 			//Ok, reverse namequery is a success
 			//now we must check some stuff
