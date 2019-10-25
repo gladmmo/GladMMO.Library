@@ -14,5 +14,7 @@ namespace GladMMO
 		/// <param name="characterId">The character to query friends list for.</param>
 		/// <returns>Array of friend characterIds</returns>
 		Task<int[]> GetCharactersFriendsList(int characterId);
+
+		Task<bool> IsFriendshipPresentAsync(int characterId, int friendCharacterId);
 	}
 }
