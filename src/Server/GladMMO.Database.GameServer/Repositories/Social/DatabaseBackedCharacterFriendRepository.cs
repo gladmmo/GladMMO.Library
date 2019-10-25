@@ -27,7 +27,7 @@ namespace GladMMO
 		public async Task<bool> IsFriendshipPresentAsync(int characterId, int friendCharacterId)
 		{
 			CharacterFriendModel model = await Context.CharacterFriends
-				.FindAsync(new {characterId, friendCharacterId});
+				.FindAsync(characterId, friendCharacterId);
 
 			return model != null;
 		}
