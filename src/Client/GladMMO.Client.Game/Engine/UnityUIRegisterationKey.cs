@@ -62,5 +62,7 @@ namespace GladMMO
 		ExperienceBar = 24,
 
 		FriendsWindow = 25,
+
+		AddFriendsButton = 26,
 	}
 }
