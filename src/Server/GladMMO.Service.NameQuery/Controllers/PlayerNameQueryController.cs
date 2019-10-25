@@ -58,7 +58,7 @@ namespace GladMMO
 			//Else if it is a known id we should grab the name of the character
 			CharacterEntryModel characterModel = await CharacterRepository.RetrieveAsync(characterPlayerName);
 
-			return BuildSuccessfulResponseModel(NetworkEntityGuidBuilder.New().WithType(EntityType.Player).WithId(characterModel.CharacterId));
+			return BuildSuccessfulResponseModel(NetworkEntityGuidBuilder.New().WithType(EntityType.Player).WithId(characterModel.CharacterId).Build());
 		}
 	}
 }
