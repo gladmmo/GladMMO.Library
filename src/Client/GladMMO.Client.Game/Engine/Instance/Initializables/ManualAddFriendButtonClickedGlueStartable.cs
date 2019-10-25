@@ -7,7 +7,7 @@ using Glader.Essentials;
 namespace GladMMO
 {
 	[AdditionalRegisterationAs(typeof(IManualAddFriendClickedEventSubscribable))]
-	[SceneTypeCreateGladMMO(GameSceneType.CharacterCreationScreen)]
+	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
 	public sealed class ManualAddFriendButtonClickedGlueStartable : BaseButtonClickGlueStartable, IManualAddFriendClickedEventSubscribable
 	{
 		public const UnityUIRegisterationKey ButtonKey = UnityUIRegisterationKey.SocialWindowAddFriendButton;
