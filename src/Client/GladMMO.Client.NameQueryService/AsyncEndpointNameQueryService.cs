@@ -27,6 +27,11 @@ namespace GladMMO
 			return await (await GetService().ConfigureAwait(false)).RetrievePlayerNameAsync(rawGuidValue).ConfigureAwait(false);
 		}
 
+		public async Task<ResponseModel<NetworkEntityGuid, NameQueryResponseCode>> RetrievePlayerGuidAsync(string characterName)
+		{
+			return await (await GetService().ConfigureAwait(false)).RetrievePlayerGuidAsync(characterName).ConfigureAwait(false);
+		}
+
 		public async Task<ResponseModel<NameQueryResponse, NameQueryResponseCode>> RetrieveCreatureNameAsync(ulong rawGuidValue)
 		{
 			return await (await GetService().ConfigureAwait(false)).RetrieveCreatureNameAsync(rawGuidValue).ConfigureAwait(false);

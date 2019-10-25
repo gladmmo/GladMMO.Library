@@ -30,6 +30,13 @@ namespace GladMMO
 				.AnyAsync(c => c.CharacterId == key);
 		}
 
+		public Task<CharacterEntryModel> RetrieveAsync(string characterName)
+		{
+			return Context
+				.Characters
+				.FirstOrDefaultAsync(c => c.CharacterName == characterName);
+		}
+
 		public Task<bool> ContainsAsync(string key)
 		{
 			return Context

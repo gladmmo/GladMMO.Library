@@ -21,6 +21,16 @@ namespace GladMMO
 		Task<ResponseModel<NameQueryResponse, NameQueryResponseCode>> RetrievePlayerNameAsync([AliasAs("EntityGuid")] ulong rawGuidValue);
 
 		/// <summary>
+		/// Does a reverse name query for a player entity by name.
+		/// </summary>
+		/// <param name="characterName">The player/character name.</param>
+		/// <returns></returns>
+		[Headers("Cache-Control: max-age=600")]
+		//[Get("/api/namequery/" + nameof(EntityType.Player) + "/{EntityGuid}/name")]
+		[Get("/api/namequery/Player/{name}/reverse")]
+		Task<ResponseModel<NetworkEntityGuid, NameQueryResponseCode>> RetrievePlayerGuidAsync([AliasAs("name")] string characterName);
+
+		/// <summary>
 		/// Retrieves the name of the creature entity
 		/// from the provided <see cref="rawGuidValue"/>.
 		/// </summary>

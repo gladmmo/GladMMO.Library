@@ -8,6 +8,9 @@ namespace GladMMO
 	public interface ICharacterRepository : 
 		IGenericRepositoryCrudable<int, CharacterEntryModel>, INameQueryableRepository<int>
 	{
+		//TODO: Doc
+		Task<CharacterEntryModel> RetrieveAsync(string characterName);
+
 		/// <summary>
 		/// Checks if the repository contains a model with the specified charactername.
 		/// </summary>

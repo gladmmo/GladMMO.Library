@@ -38,5 +38,27 @@ namespace GladMMO
 
 			return BuildSuccessfulResponseModel(new NameQueryResponse(name));
 		}
+
+		//return ResponseModel of NameQueryResponseCode and NetworkEntityGuid
+		[AllowAnonymous]
+		[ProducesJson]
+		[ResponseCache(Duration = 360)] //We want to cache this for a long time. But it's possible with name changes that we want to not cache forever
+		[HttpGet("{name}/reverse")]
+		public async Task<IActionResult> ReverseNameQuery([FromRoute(Name = "name")] [JetBrains.Annotations.NotNull] string characterPlayerName)
+		{
+			if (string.IsNullOrWhiteSpace(characterPlayerName))
+				return BuildFailedResponseModel(NameQueryResponseCode.UnknownIdError);
+
+			bool knownId = await CharacterRepository.ContainsAsync(characterPlayerName);
+
+			//TODO: JSON Response
+			if(!knownId)
+				return BuildFailedResponseModel(NameQueryResponseCode.UnknownIdError);
+
+			//Else if it is a known id we should grab the name of the character
+			CharacterEntryModel characterModel = await CharacterRepository.RetrieveAsync(characterPlayerName);
+
+			return BuildSuccessfulResponseModel(NetworkEntityGuidBuilder.New().WithType(EntityType.Player).WithId(characterModel.CharacterId));
+		}
 	}
 }
