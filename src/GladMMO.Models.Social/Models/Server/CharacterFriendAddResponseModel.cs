@@ -11,7 +11,8 @@ namespace GladMMO
 		/// <summary>
 		/// The GUID for the newly added player.
 		/// </summary>
-		public NetworkEntityGuid NewFriendEntityGuid { get; }
+		[JsonProperty]
+		public NetworkEntityGuid NewFriendEntityGuid { get; private set; }
 
 		public CharacterFriendAddResponseModel([JetBrains.Annotations.NotNull] NetworkEntityGuid newFriendEntityGuid)
 		{
