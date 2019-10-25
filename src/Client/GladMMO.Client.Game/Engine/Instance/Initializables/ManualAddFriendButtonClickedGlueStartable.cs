@@ -10,7 +10,7 @@ namespace GladMMO
 	[SceneTypeCreateGladMMO(GameSceneType.CharacterCreationScreen)]
 	public sealed class ManualAddFriendButtonClickedGlueStartable : BaseButtonClickGlueStartable, IManualAddFriendClickedEventSubscribable
 	{
-		public const UnityUIRegisterationKey ButtonKey = UnityUIRegisterationKey.AddFriendsButton;
+		public const UnityUIRegisterationKey ButtonKey = UnityUIRegisterationKey.SocialWindowAddFriendButton;
 
 		public ManualAddFriendButtonClickedGlueStartable([KeyFilter(ButtonKey)] [NotNull] IUIButton createButton)
 			: base(createButton)

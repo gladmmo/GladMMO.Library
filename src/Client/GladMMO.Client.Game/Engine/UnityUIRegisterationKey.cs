@@ -63,6 +63,8 @@ namespace GladMMO
 
 		FriendsWindow = 25,
 
-		AddFriendsButton = 26,
+		SocialWindowAddFriendButton = 26,
+
+		AddFriendModalWindow = 27
 	}
 }
