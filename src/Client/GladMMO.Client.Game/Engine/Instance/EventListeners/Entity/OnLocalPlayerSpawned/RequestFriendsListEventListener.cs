@@ -7,19 +7,20 @@ using Nito.AsyncEx;
 
 namespace GladMMO
 {
-	[AdditionalRegisterationAs(typeof(ICharacterFriendAddedEventSubscribable))]
 	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
-	public sealed class RequestFriendsListEventListener : OnLocalPlayerSpawnedEventListener, ICharacterFriendAddedEventSubscribable
+	public sealed class RequestFriendsListEventListener : OnLocalPlayerSpawnedEventListener
 	{
 		private ISocialService SocialService { get; }
 
-		public event EventHandler<CharacterFriendAddedEventArgs> OnCharacterFriendAdded;
+		private ICharacterFriendAddedEventPublisher FriendAddedPublisher { get; }
 
 		public RequestFriendsListEventListener(ILocalPlayerSpawnedEventSubscribable subscriptionService,
-			[NotNull] ISocialService socialService) 
+			[NotNull] ISocialService socialService,
+			[NotNull] ICharacterFriendAddedEventPublisher friendAddedPublisher) 
 			: base(subscriptionService)
 		{
 			SocialService = socialService ?? throw new ArgumentNullException(nameof(socialService));
+			FriendAddedPublisher = friendAddedPublisher ?? throw new ArgumentNullException(nameof(friendAddedPublisher));
 		}
 
 		protected override void OnLocalPlayerSpawned(LocalPlayerSpawnedEventArgs args)
@@ -35,7 +36,7 @@ namespace GladMMO
 						.WithId(characterId)
 						.Build();
 
-					OnCharacterFriendAdded?.Invoke(this, new CharacterFriendAddedEventArgs(entityGuid));
+					FriendAddedPublisher.PublishEvent(this, new CharacterFriendAddedEventArgs(entityGuid));
 				}
 			});
 		}

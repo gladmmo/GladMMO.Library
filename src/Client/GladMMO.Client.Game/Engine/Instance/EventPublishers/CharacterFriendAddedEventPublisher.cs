@@ -15,7 +15,7 @@ namespace GladMMO
 	[AdditionalRegisterationAs(typeof(ICharacterFriendAddedEventPublisher))]
 	[AdditionalRegisterationAs(typeof(IEventPublisher<ICharacterFriendAddedEventSubscribable, CharacterFriendAddedEventArgs>))]
 	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
-	public sealed class CharacterFriendAddedEventPublisher : ICharacterFriendAddedEventSubscribable, IEventPublisher<ICharacterFriendAddedEventSubscribable, CharacterFriendAddedEventArgs>, IGameInitializable
+	public sealed class CharacterFriendAddedEventPublisher : ICharacterFriendAddedEventSubscribable, ICharacterFriendAddedEventPublisher, IGameInitializable
 	{
 		public event EventHandler<CharacterFriendAddedEventArgs> OnCharacterFriendAdded;
 

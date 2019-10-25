@@ -21,12 +21,15 @@ namespace GladMMO
 
 		private ILog Logger { get; }
 
+		private ICharacterFriendAddedEventPublisher FriendAddedPublisher { get; }
+
 		public RequestAddFriendEventListener(IAddFriendModalClickedEventSubscribable subscriptionService,
 			[NotNull] [KeyFilter(UnityUIRegisterationKey.AddFriendModalWindow)] IUIButton addFriendButton,
 			[NotNull] ISocialService socialService,
 			[NotNull] [KeyFilter(UnityUIRegisterationKey.AddFriendModalWindow)] IUIElement friendsAddModalWindow,
 			[NotNull] [KeyFilter(UnityUIRegisterationKey.AddFriendModalWindow)] IUIText friendInputText,
-			[NotNull] ILog logger) 
+			[NotNull] ILog logger,
+			[NotNull] ICharacterFriendAddedEventPublisher friendAddedPublisher) 
 			: base(subscriptionService)
 		{
 			AddFriendButton = addFriendButton ?? throw new ArgumentNullException(nameof(addFriendButton));
@@ -34,6 +37,7 @@ namespace GladMMO
 			FriendsAddModalWindow = friendsAddModalWindow;
 			FriendInputText = friendInputText ?? throw new ArgumentNullException(nameof(friendInputText));
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
+			FriendAddedPublisher = friendAddedPublisher ?? throw new ArgumentNullException(nameof(friendAddedPublisher));
 		}
 
 		protected override void OnEventFired(object source, ButtonClickedEventArgs args)
@@ -56,6 +60,9 @@ namespace GladMMO
 					{
 						if(Logger.IsInfoEnabled)
 							Logger.Info($"Friend add successful. EntityId: {responseModel.Result.NewFriendEntityGuid}");
+
+						//Just publish us gaining a new friend.
+						FriendAddedPublisher.PublishEvent(this, new CharacterFriendAddedEventArgs(responseModel.Result.NewFriendEntityGuid));
 					}
 					else
 						if(Logger.IsWarnEnabled)
