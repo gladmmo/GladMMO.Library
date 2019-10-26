@@ -1,6 +1,6 @@
 # GladMMO.Library
 
-An in development MMORPG framework. Based on ASP Core, SignalR Core, Unity3D, GladNet3 and Protobuf-net.
+An in development MMORPG framework. Based on ASP Core, SignalR Core, Unity3D, GladNet3, Akka.NET and Protobuf-Net.
 
 Supporting:
 
