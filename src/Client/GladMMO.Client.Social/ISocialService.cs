@@ -20,5 +20,9 @@ namespace GladMMO
 
 		[Get("/api/guild/character/{id}")]
 		Task<ResponseModel<CharacterGuildMembershipStatusResponse, CharacterGuildMembershipStatusResponseCode>> GetCharacterMembershipGuildStatus([AliasAs("id")] int characterId);
+
+		[RequiresAuthentication]
+		[Get("/api/guild/{id}/list")]
+		Task<ResponseModel<CharacterGuildListResponseModel, CharacterGuildMembershipStatusResponseCode>> GetGuildListAsync();
 	}
 }
