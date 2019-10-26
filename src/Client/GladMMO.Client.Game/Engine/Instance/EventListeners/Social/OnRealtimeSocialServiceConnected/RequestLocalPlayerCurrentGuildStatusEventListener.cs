@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Autofac.Features.AttributeFilters;
+using Common.Logging;
 using Glader.Essentials;
 using Nito.AsyncEx;
 
@@ -20,15 +21,19 @@ namespace GladMMO
 
 		private IEntityGuidMappable<CharacterGuildMembershipStatusResponse> GuildMembershipMappable { get; }
 
+		private ILog Logger { get; }
+
 		public RequestLocalPlayerCurrentGuildStatusEventListener(IRealtimeSocialServiceConnectedEventSubscribable subscriptionService,
 			[NotNull] ISocialService socialSerive,
 			[NotNull] IReadonlyLocalPlayerDetails playerDetails,
-			[NotNull] IEntityGuidMappable<CharacterGuildMembershipStatusResponse> guildMembershipMappable) 
+			[NotNull] IEntityGuidMappable<CharacterGuildMembershipStatusResponse> guildMembershipMappable,
+			[NotNull] ILog logger) 
 			: base(subscriptionService)
 		{
 			SocialService = socialSerive ?? throw new ArgumentNullException(nameof(socialSerive));
 			PlayerDetails = playerDetails ?? throw new ArgumentNullException(nameof(playerDetails));
 			GuildMembershipMappable = guildMembershipMappable ?? throw new ArgumentNullException(nameof(guildMembershipMappable));
+			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
 		protected override void OnEventFired(object source, EventArgs args)
@@ -36,6 +41,9 @@ namespace GladMMO
 			UnityAsyncHelper.UnityMainThreadContext.PostAsync(async () =>
 			{
 				var guildStatus = await SocialService.GetCharacterMembershipGuildStatus(PlayerDetails.LocalPlayerGuid.EntityId);
+
+				if (Logger.IsInfoEnabled)
+					Logger.Info($"Local Player GuildStatus: {guildStatus.ResultCode} Id: {guildStatus?.Result?.GuildId}");
 
 				if (guildStatus.isSuccessful)
 				{
