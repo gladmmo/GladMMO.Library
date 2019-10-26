@@ -65,6 +65,8 @@ namespace GladMMO
 
 		SocialWindowAddFriendButton = 26,
 
-		AddFriendModalWindow = 27
+		AddFriendModalWindow = 27,
+
+		GuildList = 28,
 	}
 }
