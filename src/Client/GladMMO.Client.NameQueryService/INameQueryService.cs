@@ -49,5 +49,15 @@ namespace GladMMO
 		[Headers("Cache-Control: max-age=600")]
 		[Get("/api/namequery/GameObject/{EntityGuid}/name")]
 		Task<ResponseModel<NameQueryResponse, NameQueryResponseCode>> RetrieveGameObjectNameAsync([AliasAs("EntityGuid")] ulong rawGuidValue);
+
+		/// <summary>
+		/// Retrieves the name of the guild entity
+		/// from the provided <see cref="guildId"/>.
+		/// </summary>
+		/// <param name="guildId">The id of the guild.</param>
+		/// <returns>Result of the guild namequery.</returns>
+		[Headers("Cache-Control: max-age=600")]
+		[Get("/api/namequery/Guild/{id}/name")]
+		Task<ResponseModel<NameQueryResponse, NameQueryResponseCode>> RetrieveGuildNameAsync([AliasAs("id")] int guildId);
 	}
 }
