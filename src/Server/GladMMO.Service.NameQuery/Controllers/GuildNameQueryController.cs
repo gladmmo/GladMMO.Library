@@ -15,7 +15,7 @@ namespace GladMMO
 		private IGuildCharacterMembershipRepository GuildMembershipRepository { get; }
 
 		/// <inheritdoc />
-		protected GuildNameQueryController(IClaimsPrincipalReader claimsReader, 
+		public GuildNameQueryController(IClaimsPrincipalReader claimsReader, 
 			ILogger<AuthorizationReadyController> logger,
 			[JetBrains.Annotations.NotNull] IGuildCharacterMembershipRepository guildMembershipRepository)
 			: base(claimsReader, logger)
