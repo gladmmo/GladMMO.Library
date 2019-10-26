@@ -119,6 +119,7 @@ namespace GladMMO
 				o.UseMySql("Server=127.0.0.1;Database=guardians.gameserver;Uid=root;Pwd=test;");
 			});
 
+			services.AddTransient<IGuildCharacterMembershipRepository, DatabaseBackedGuildCharacterMembershipRepository>();
 			services.AddTransient<ICharacterFriendRepository, DatabaseBackedCharacterFriendRepository>();
 		}
 
