@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <Folder Include="Services\Factory\" />
+    <Folder Include="Services\Guild\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
@@ -23,6 +24,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Client\GladMMO.Client.NameQueryService\GladMMO.Client.NameQueryService.csproj" />
     <ProjectReference Include="..\..\Client\GladMMO.Client.ServiceDiscovery\GladMMO.Client.ServiceDiscovery.csproj" />
+    <ProjectReference Include="..\..\Client\GladMMO.Client.Social\GladMMO.Client.Social.csproj" />
     <ProjectReference Include="..\..\GladMMO.Client.Authentication\GladMMO.Client.Authentication.csproj" />
     <ProjectReference Include="..\..\GladMMO.Models.GameServer\GladMMO.Models.GameServer.csproj" />
     <ProjectReference Include="..\..\GladMMO.Models.ServiceDiscovery\GladMMO.Models.ServiceDiscovery.csproj" />

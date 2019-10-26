@@ -31,5 +31,10 @@ namespace GladMMO
 		{
 			return await (await GetService().ConfigureAwait(false)).TryAddFriendAsync(characterName).ConfigureAwait(false);
 		}
+
+		public async Task<ResponseModel<CharacterGuildMembershipStatusResponse, CharacterGuildMembershipStatusResponseCode>> GetCharacterMembershipGuildStatus(int characterId)
+		{
+			return await (await GetService().ConfigureAwait(false)).GetCharacterMembershipGuildStatus(characterId).ConfigureAwait(false);
+		}
 	}
 }

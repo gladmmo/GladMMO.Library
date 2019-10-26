@@ -17,9 +17,5 @@ namespace GladMMO
 		[Headers("Authorization: Bearer")] //see Refits example for tokenless auto-injection to the header.
 		[Get("/api/CharacterSession/account/{id}/data")]
 		Task<CharacterSessionDataResponse> GetCharacterSessionDataByAccount([AliasAs("id")] int accountId);
-
-		//No auth needed
-		[Get("/api/guild/character/{id}")]
-		Task<CharacterGuildMembershipStatusResponse> GetCharacterMembershipGuildStatus([AliasAs("id")] int characterId);
 	}
 }

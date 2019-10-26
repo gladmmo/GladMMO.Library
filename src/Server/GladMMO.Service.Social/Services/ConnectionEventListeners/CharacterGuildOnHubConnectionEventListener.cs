@@ -12,20 +12,19 @@ namespace GladMMO
 	{
 		private ILogger<CharacterGuildOnHubConnectionEventListener> Logger { get; }
 
-		private ISocialServiceToGameServiceClient SocialToGameClient { get; }
-
-		private IClaimsPrincipalReader ClaimsReader { get; }
-
 		//TODO: We don't want to directly expose the response
 		private IEntityGuidMappable<CharacterGuildMembershipStatusResponse> GuildStatusMappable { get; }
 
+		private ISocialService SocialService { get; }
+
 		/// <inheritdoc />
-		public CharacterGuildOnHubConnectionEventListener([JetBrains.Annotations.NotNull] ILogger<CharacterGuildOnHubConnectionEventListener> logger, [JetBrains.Annotations.NotNull] ISocialServiceToGameServiceClient socialToGameClient, [JetBrains.Annotations.NotNull] IClaimsPrincipalReader claimsReader, IEntityGuidMappable<CharacterGuildMembershipStatusResponse> guildStatusMappable)
+		public CharacterGuildOnHubConnectionEventListener([JetBrains.Annotations.NotNull] ILogger<CharacterGuildOnHubConnectionEventListener> logger,
+			IEntityGuidMappable<CharacterGuildMembershipStatusResponse> guildStatusMappable,
+			[JetBrains.Annotations.NotNull] ISocialService socialService)
 		{
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
-			SocialToGameClient = socialToGameClient ?? throw new ArgumentNullException(nameof(socialToGameClient));
-			ClaimsReader = claimsReader ?? throw new ArgumentNullException(nameof(claimsReader));
 			GuildStatusMappable = guildStatusMappable;
+			SocialService = socialService ?? throw new ArgumentNullException(nameof(socialService));
 		}
 
 		/// <inheritdoc />
@@ -41,9 +40,7 @@ namespace GladMMO
 
 			//We may already be able to register.
 			if(await TryRegisterGuildStatus(guid, hubConnectedTo.Groups, hubConnectedTo.Context.ConnectionId).ConfigureAwait(false) == HubOnConnectionState.Success)
-			{
 				return HubOnConnectionState.Success;
-			}
 
 			HubOnConnectionState state = await TryRequestCharacterGuildStatus(guid, hubConnectedTo.Context.UserIdentifier)
 				.ConfigureAwait(false);
@@ -73,11 +70,11 @@ namespace GladMMO
 
 		private async Task<HubOnConnectionState> TryRequestCharacterGuildStatus(NetworkEntityGuid guid, string userIdentifier)
 		{
-			CharacterGuildMembershipStatusResponse response = null;
+			ResponseModel<CharacterGuildMembershipStatusResponse, CharacterGuildMembershipStatusResponseCode> response = null;
 
 			try
 			{
-				response = await SocialToGameClient.GetCharacterMembershipGuildStatus(int.Parse(userIdentifier))
+				response = await SocialService.GetCharacterMembershipGuildStatus(int.Parse(userIdentifier))
 					.ConfigureAwait(false);
 			}
 			catch(Exception e)
@@ -90,18 +87,17 @@ namespace GladMMO
 
 			//Don't ADD, we have to assume that we might have an entity, maybe web or mobile, already connected
 			//and merely just update the guild status
-			GuildStatusMappable.Add(guid, response);
+			if(response.isSuccessful)
+				GuildStatusMappable.Add(guid, response.Result);
+
 			return HubOnConnectionState.Success;
 		}
 
 		private async Task RegisterGuildOnExistingResponse(NetworkEntityGuid guid, IGroupManager groupManager, string connectionId)
 		{
-			if(GuildStatusMappable[guid].isSuccessful)
-			{
-				//TODO: don't hardcode
-				await groupManager.AddToGroupAsync(connectionId, $"guild:{GuildStatusMappable.RetrieveEntity(guid).GuildId}")
-					.ConfigureAwait(false);
-			}
+			//TODO: don't hardcode
+			await groupManager.AddToGroupAsync(connectionId, $"guild:{GuildStatusMappable.RetrieveEntity(guid).GuildId}")
+				.ConfigureAwait(false);
 		}
 	}
 }
