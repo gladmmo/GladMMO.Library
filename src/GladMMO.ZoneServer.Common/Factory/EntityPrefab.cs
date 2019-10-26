@@ -20,6 +20,8 @@ namespace GladMMO
 
 		MessageBoxText = 5,
 
-		CharacterFriendSlot = 6
+		CharacterFriendSlot = 6,
+
+		CharacterGuildSlot = 7
 	}
 }
