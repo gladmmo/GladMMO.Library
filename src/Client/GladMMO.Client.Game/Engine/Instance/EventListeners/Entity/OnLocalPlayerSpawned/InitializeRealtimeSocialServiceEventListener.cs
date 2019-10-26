@@ -10,8 +10,9 @@ using Nito.AsyncEx;
 
 namespace GladMMO
 {
+	[AdditionalRegisterationAs(typeof(IRealtimeSocialServiceConnectedEventSubscribable))]
 	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
-	public sealed class InitializeRealtimeSocialServiceEventListener : OnLocalPlayerSpawnedEventListener
+	public sealed class InitializeRealtimeSocialServiceEventListener : OnLocalPlayerSpawnedEventListener, IRealtimeSocialServiceConnectedEventSubscribable
 	{
 		private ILog Logger { get; }
 
@@ -22,6 +23,8 @@ namespace GladMMO
 		private IReadonlyAuthTokenRepository AuthTokenProvider { get; }
 
 		private IRemoteSocialHubClient RemoteSocialClient { get; }
+
+		public event EventHandler OnRealtimeSocialServiceConnected;
 
 		public InitializeRealtimeSocialServiceEventListener(ILocalPlayerSpawnedEventSubscribable subscriptionService,
 			[NotNull] ILog logger,
@@ -76,6 +79,8 @@ namespace GladMMO
 
 					if(Logger.IsInfoEnabled)
 						Logger.Info($"Connected to realtime Social Service.");
+
+					OnRealtimeSocialServiceConnected?.Invoke(this, EventArgs.Empty);
 				}
 				catch (Exception e)
 				{
