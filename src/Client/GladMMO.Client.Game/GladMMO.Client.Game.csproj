@@ -29,6 +29,8 @@
     <PackageReference Include="GladNet3.Client.DotNetTcpClient" Version="3.0.46" />
     <PackageReference Include="GladNet3.Handler.API" Version="3.0.46" />
     <PackageReference Include="GladNet3.Serializer.ProtobufNet" Version="3.0.46" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client.Core" Version="1.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="1.1.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.2.0" />
     <PackageReference Include="Nito.AsyncEx" Version="5.0.0-pre-05" />
     <PackageReference Include="Refit" Version="4.6.107" />
@@ -79,6 +81,7 @@
     <Folder Include="Engine\Shared\Handlers\" />
     <Folder Include="Engine\Shared\Tickables\" />
     <Folder Include="Engine\Title\Tickables\" />
+    <Folder Include="Network\" />
     <Folder Include="UI\CharacterSelection\" />
   </ItemGroup>
 
