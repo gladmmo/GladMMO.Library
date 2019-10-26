@@ -47,6 +47,8 @@ namespace GladMMO
 					return Resources.Load<GameObject>("Prefabs/ChatWindowText");
 				case EntityPrefab.CharacterFriendSlot:
 					return Resources.Load<GameObject>("Prefabs/Character_Friend_Slot");
+				case EntityPrefab.CharacterGuildSlot:
+					return Resources.Load<GameObject>("Prefabs/Character_Guild_Slot");
 			}
 
 			throw new NotImplementedException($"Failed to load prefab for {nameof(EntityPrefab)}: {context}");
