@@ -7,11 +7,11 @@ using Glader.Essentials;
 namespace GladMMO
 {
 	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
-	public sealed class ToggleGuildSocialTabeEventListener : OnLocalPlayerGuildStatusChangedEventListener
+	public sealed class ToggleGuildSocialTabEventListener : OnLocalPlayerGuildStatusChangedEventListener
 	{
 		private IUIToggle GuildListToggle { get; }
 
-		public ToggleGuildSocialTabeEventListener(IGuildStatusChangedEventSubscribable subscriptionService, IReadonlyLocalPlayerDetails localPlayerDetails,
+		public ToggleGuildSocialTabEventListener(IGuildStatusChangedEventSubscribable subscriptionService, IReadonlyLocalPlayerDetails localPlayerDetails,
 			[KeyFilter(UnityUIRegisterationKey.GuildList)] [NotNull] IUIToggle guildListToggle) 
 			: base(subscriptionService, localPlayerDetails)
 		{
