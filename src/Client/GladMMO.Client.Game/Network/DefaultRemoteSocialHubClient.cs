@@ -26,5 +26,13 @@ namespace GladMMO
 			if(Logger.IsInfoEnabled)
 				Logger.Info($"Received Guild Invite Response: {message.ResultCode}");
 		}
+
+		public async Task ReceiveGuildInviteEventAsync(GuildMemberInviteEventModel message)
+		{
+			if(message == null) throw new ArgumentNullException(nameof(message));
+
+			if(Logger.IsInfoEnabled)
+				Logger.Info($"Received Guild Invite From: {message.InviterGuid} to GuildId: {message.GuildId}");
+		}
 	}
 }
