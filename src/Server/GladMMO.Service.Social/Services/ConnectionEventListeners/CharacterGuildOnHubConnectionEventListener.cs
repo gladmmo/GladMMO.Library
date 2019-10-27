@@ -38,33 +38,18 @@ namespace GladMMO
 				.WithType(EntityType.Player)
 				.Build();
 
-			//We may already be able to register.
-			if(await TryRegisterGuildStatus(guid, hubConnectedTo.Groups, hubConnectedTo.Context.ConnectionId).ConfigureAwait(false) == HubOnConnectionState.Success)
-				return HubOnConnectionState.Success;
-
 			HubOnConnectionState state = await TryRequestCharacterGuildStatus(guid, hubConnectedTo.Context.UserIdentifier)
 				.ConfigureAwait(false);
 
-			if(state == HubOnConnectionState.Success)
-				return await TryRegisterGuildStatus(guid, hubConnectedTo.Groups, hubConnectedTo.Context.ConnectionId)
-					.ConfigureAwait(false);
-
-			//Just error, we don't need to abort. Something didn't work right though.
-			return HubOnConnectionState.Error;
-		}
-
-		private async Task<HubOnConnectionState> TryRegisterGuildStatus(NetworkEntityGuid guid, IGroupManager groups, string connectionId)
-		{
-			//It's possible we already maintain guild information for this entity
-			//This can happen if multiple connections share an entity.
-			if(GuildStatusMappable.ContainsKey(guid))
+			if (state == HubOnConnectionState.Success)
 			{
-				await RegisterGuildOnExistingResponse(guid, groups, connectionId)
+				await RegisterGuildOnExistingResponse(guid, hubConnectedTo.Groups, hubConnectedTo.Context.ConnectionId)
 					.ConfigureAwait(false);
 
 				return HubOnConnectionState.Success;
 			}
 
+			//Just error, we don't need to abort. Something didn't work right though.
 			return HubOnConnectionState.Error;
 		}
 
