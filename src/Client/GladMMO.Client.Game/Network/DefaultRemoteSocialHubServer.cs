@@ -30,7 +30,7 @@ namespace GladMMO
 		public Task SendGuildInviteRequestAsync(GuildMemberInviteRequestModel model)
 		{
 			if(CheckConnectionInitialized())
-				return Connection.SendAsync(nameof(SendTestMessageAsync), model);
+				return Connection.SendAsync(nameof(SendGuildInviteRequestAsync), model);
 
 			return Task.CompletedTask;
 		}
