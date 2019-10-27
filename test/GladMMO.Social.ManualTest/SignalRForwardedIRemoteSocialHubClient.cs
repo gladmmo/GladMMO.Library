@@ -38,5 +38,10 @@ namespace GladMMO
 		{
 			return Connection.SendAsync(nameof(SendGuildInviteRequestAsync), invitationRequest);
 		}
+
+		public Task SendGuildInviteEventResponseAsync(PendingGuildInviteHandleRequest message)
+		{
+			return Connection.SendAsync(nameof(SendGuildInviteEventResponseAsync), message);
+		}
 	}
 }

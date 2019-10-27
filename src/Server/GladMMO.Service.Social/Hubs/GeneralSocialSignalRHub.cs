@@ -128,12 +128,22 @@ namespace GladMMO
 
 		public Task SendTestMessageAsync(TestSocialModel testModel)
 		{
-			return MessageRouter.TryHandleMessage(CreateHubContext(), new NetworkIncomingMessage<BaseSocialModel>(new HeaderlessPacketHeader(0), testModel));
+			return MessageRouter.TryHandleMessage(CreateHubContext(), BuildIncomingMessage(testModel));
 		}
 
 		public Task SendGuildInviteRequestAsync(GuildMemberInviteRequestModel invitationRequest)
 		{
-			return MessageRouter.TryHandleMessage(CreateHubContext(), new NetworkIncomingMessage<BaseSocialModel>(new HeaderlessPacketHeader(0), invitationRequest));
+			return MessageRouter.TryHandleMessage(CreateHubContext(), BuildIncomingMessage(invitationRequest));
+		}
+
+		public Task SendGuildInviteEventResponseAsync(PendingGuildInviteHandleRequest message)
+		{
+			return MessageRouter.TryHandleMessage(CreateHubContext(), BuildIncomingMessage(message));
+		}
+
+		private static NetworkIncomingMessage<BaseSocialModel> BuildIncomingMessage(BaseSocialModel message)
+		{
+			return new NetworkIncomingMessage<BaseSocialModel>(new HeaderlessPacketHeader(0), message);
 		}
 	}
 }

@@ -13,5 +13,7 @@ namespace GladMMO
 		Task SendTestMessageAsync(TestSocialModel testModel);
 
 		Task SendGuildInviteRequestAsync(GuildMemberInviteRequestModel invitationRequest);
+
+		Task SendGuildInviteEventResponseAsync(PendingGuildInviteHandleRequest message);
 	}
 }
