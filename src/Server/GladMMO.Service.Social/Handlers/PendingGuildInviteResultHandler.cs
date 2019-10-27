@@ -59,7 +59,7 @@ namespace GladMMO
 				//$"guild:{GuildStatusMappable.RetrieveEntity(guid).GuildId}
 				//Their membership is within the database now.
 				//Broadcast to everyone that a player joined the guild.
-				await context.Clients.Group($"guild:{inviteData.GuildId}").ReceiveGuildMemberJoinedEventAsync(new GuildMemberJoinedEventModel(context.CallerGuid, inviteData.GuildId));
+				await context.Clients.Group($"guild:{inviteData.GuildId}").ReceiveGuildMemberJoinedEventAsync(new GuildMemberJoinedEventModel(context.CallerGuid));
 				await context.Groups.AddToGroupAsync(context.HubConntext.ConnectionId, $"guild:{inviteData.GuildId}");
 			}
 			else
