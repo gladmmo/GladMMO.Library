@@ -14,12 +14,18 @@ namespace GladMMO
 
 		public int GuildId { get; }
 
+		/// <summary>
+		/// The GUID of the entity inviting them to the guild.
+		/// </summary>
+		public NetworkEntityGuid InviterGuid { get; }
+
 		public const int MAXIMUM_PENDING_GUILD_INVITE_TIME_SECONDS = 60;
 
-		public PendingGuildInviteData(int guildId)
+		public PendingGuildInviteData(int guildId, [JetBrains.Annotations.NotNull] NetworkEntityGuid inviterGuid)
 		{
 			InvitedTimeStamp = DateTime.UtcNow;
 			GuildId = guildId;
+			InviterGuid = inviterGuid ?? throw new ArgumentNullException(nameof(inviterGuid));
 		}
 
 		public bool isInviteExpired()
