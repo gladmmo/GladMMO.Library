@@ -26,5 +26,7 @@ namespace GladMMO
 		Task ReceiveGuildInviteResponseAsync(GuildMemberInviteResponseModel message);
 
 		Task ReceiveGuildInviteEventAsync(GuildMemberInviteEventModel message);
+
+		Task ReceiveGuildMemberJoinedEventAsync(GuildMemberJoinedEventModel message);
 	}
 }

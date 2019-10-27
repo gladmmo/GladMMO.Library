@@ -98,5 +98,10 @@ namespace GladMMO.Social.ManualTest
 		{
 			throw new NotImplementedException();
 		}
+
+		public async Task ReceiveGuildMemberJoinedEventAsync(GuildMemberJoinedEventModel message)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }
