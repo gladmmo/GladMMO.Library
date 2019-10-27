@@ -20,5 +20,10 @@ namespace GladMMO
 		/// Indicates that no session character session is actually active for the account.
 		/// </summary>
 		NoActiveCharacterSession = 3,
+
+		/// <summary>
+		/// This can happen if they attempt to join channels they don't belong in.
+		/// </summary>
+		ChannelUnavailable = 4,
 	}
 }

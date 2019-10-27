@@ -8,6 +8,7 @@ using VivoxUnity;
 
 namespace GladMMO
 {
+	//TODO: Refactor with guild channel join.
 	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
 	public sealed class JoinWorldProximityChannelEventListener : BaseSingleEventListenerInitializable<IVoiceSessionAuthenticatedEventSubscribable, VoiceSessionAuthenticatedEventArgs>
 	{

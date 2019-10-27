@@ -64,6 +64,7 @@ namespace GladMMO
 			});
 
 			services.AddTransient<ICharacterSessionRepository, DatabaseBackedCharacterSessionRepository>();
+			services.AddTransient<IGuildCharacterMembershipRepository, DatabaseBackedGuildCharacterMembershipRepository>();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
