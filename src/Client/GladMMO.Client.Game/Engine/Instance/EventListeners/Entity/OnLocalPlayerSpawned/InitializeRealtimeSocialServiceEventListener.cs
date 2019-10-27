@@ -24,6 +24,8 @@ namespace GladMMO
 
 		private IRemoteSocialHubClient RemoteSocialClient { get; }
 
+		private IEnumerable<IConnectionHubInitializable> ConnectionHubInitializable { get; }
+
 		public event EventHandler OnRealtimeSocialServiceConnected;
 
 		public InitializeRealtimeSocialServiceEventListener(ILocalPlayerSpawnedEventSubscribable subscriptionService,
@@ -31,7 +33,8 @@ namespace GladMMO
 			[NotNull] IServiceDiscoveryService serviceDiscoveryService,
 			[NotNull] ILocalPlayerDetails playerDetails,
 			[NotNull] IReadonlyAuthTokenRepository authTokenProvider,
-			[NotNull] IRemoteSocialHubClient remoteSocialClient) 
+			[NotNull] IRemoteSocialHubClient remoteSocialClient,
+			[NotNull] IEnumerable<IConnectionHubInitializable> connectionHubInitializable) 
 			: base(subscriptionService)
 		{
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -39,6 +42,7 @@ namespace GladMMO
 			PlayerDetails = playerDetails ?? throw new ArgumentNullException(nameof(playerDetails));
 			AuthTokenProvider = authTokenProvider ?? throw new ArgumentNullException(nameof(authTokenProvider));
 			RemoteSocialClient = remoteSocialClient ?? throw new ArgumentNullException(nameof(remoteSocialClient));
+			ConnectionHubInitializable = connectionHubInitializable ?? throw new ArgumentNullException(nameof(connectionHubInitializable));
 		}
 
 		protected override void OnLocalPlayerSpawned(LocalPlayerSpawnedEventArgs args)
@@ -71,6 +75,9 @@ namespace GladMMO
 
 					//Register the reciever interface instance for the Connection Hub
 					connection.RegisterClientInterface<IRemoteSocialHubClient>(RemoteSocialClient);
+
+					foreach (var initable in ConnectionHubInitializable)
+						initable.Connection = connection;
 
 					//Just start the service when the game initializes
 					//This will make it so that the signalR clients will start to recieve messages.

@@ -11,5 +11,7 @@ namespace GladMMO
 	public interface IRemoteSocialHubServer
 	{
 		Task SendTestMessageAsync(TestSocialModel testModel);
+
+		Task SendGuildInviteRequestAsync(GuildMemberInviteRequestModel invitationRequest);
 	}
 }
