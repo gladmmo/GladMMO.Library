@@ -19,7 +19,7 @@ namespace GladMMO
 				return new AsyncSocialServiceClient(QueryForRemoteServiceEndpoint(serviceDiscovery, "SocialService"), new RefitSettings() { HttpMessageHandlerFactory = () => new AuthenticatedHttpClientHandler(tokenRepository) });
 			});
 
-			builder.RegisterType<DefaultRemoteSocialHubClient>()
+			builder.RegisterType<DefaultRemoteSocialServiceHub>()
 				.As<IRemoteSocialHubClient>()
 				.SingleInstance();
 		}

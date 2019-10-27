@@ -4,7 +4,7 @@ using System.Text;
 
 namespace GladMMO
 {
-	public sealed class DefaultRemoteSocialHubClient : IRemoteSocialHubClient
+	public sealed class DefaultRemoteSocialServiceHub : IRemoteSocialHubClient
 	{
 
 	}
