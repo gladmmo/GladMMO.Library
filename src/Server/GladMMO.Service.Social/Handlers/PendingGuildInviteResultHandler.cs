@@ -1,0 +1,78 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Logging;
+
+namespace GladMMO
+{
+	public sealed class PendingGuildInviteResultHandler : BaseSignalRMessageHandler<PendingGuildInviteHandleRequest, IRemoteSocialHubClient>
+	{
+		[JetBrains.Annotations.NotNull]
+		public ILogger<GuildMemberInviteRequestModelHandler> Logger { get; }
+
+		private IEntityGuidMappable<PendingGuildInviteData> PendingInviteData { get; }
+
+		private IGuildCharacterMembershipRepository CharacterGuildMembershipRepository { get; }
+
+		public PendingGuildInviteResultHandler([JetBrains.Annotations.NotNull] ILogger<GuildMemberInviteRequestModelHandler> logger,
+			[JetBrains.Annotations.NotNull] IEntityGuidMappable<PendingGuildInviteData> pendingInviteData,
+			[JetBrains.Annotations.NotNull] IGuildCharacterMembershipRepository characterGuildMembershipRepository)
+		{
+			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
+			PendingInviteData = pendingInviteData ?? throw new ArgumentNullException(nameof(pendingInviteData));
+			CharacterGuildMembershipRepository = characterGuildMembershipRepository ?? throw new ArgumentNullException(nameof(characterGuildMembershipRepository));
+		}
+
+		protected override async Task OnMessageRecieved(IHubConnectionMessageContext<IRemoteSocialHubClient> context, PendingGuildInviteHandleRequest payload)
+		{
+			//Really shouldn't happen, don't tell client anything.
+			if (!PendingInviteData.ContainsKey(context.CallerGuid))
+			{
+				if(Logger.IsEnabled(LogLevel.Error))
+					Logger.LogError($"User: {context.CallerGuid} tried to claim pending guild invite but none existed.");
+
+				return;
+			}
+
+			PendingGuildInviteData inviteData = PendingInviteData.RetrieveEntity(context.CallerGuid);
+
+			//Now we can check if they wanted to join
+			if (payload.isSuccessful)
+			{
+				//When successful, we must add them to the guild database
+				//and then alert the guild channel (everyone in the guild) that they joined
+				//AND let the client itself know that it joined a guild.
+				bool guildJoinResult = await CharacterGuildMembershipRepository.TryCreateAsync(new CharacterGuildMemberRelationshipModel(context.CallerGuid.EntityId, inviteData.GuildId));
+
+				//This should never happen
+				if (!guildJoinResult)
+				{
+					if(Logger.IsEnabled(LogLevel.Error))
+						Logger.LogError($"User: {context.CallerGuid} tried to join Guild: {inviteData.GuildId} but failed.");
+
+					return;
+				}
+
+				//TODO: Don't hardcode this
+				//$"guild:{GuildStatusMappable.RetrieveEntity(guid).GuildId}
+				//Their membership is within the database now.
+				//Broadcast to everyone that a player joined the guild.
+				await context.Clients.Group($"guild:{inviteData.GuildId}").ReceiveGuildMemberJoinedEventAsync(new GuildMemberJoinedEventModel(context.CallerGuid));
+				await context.Groups.AddToGroupAsync(context.HubConntext.ConnectionId, $"guild:{inviteData.GuildId}");
+			}
+			else
+			{
+				//On failure, we just remove the pending invite
+				//and let the inviting client know that they declined an invite.
+				PendingInviteData.RemoveEntityEntry(context.CallerGuid);
+
+				IRemoteSocialHubClient inviterClient = context.Clients.RetrievePlayerClient(inviteData.InviterGuid);
+
+				//Tell the inviter this failed.
+				await inviterClient.ReceiveGuildInviteResponseAsync(new GuildMemberInviteResponseModel(GuildMemberInviteResponseCode.PlayerDeclinedGuildInvite, context.CallerGuid));
+			}
+		}
+	}
+}
