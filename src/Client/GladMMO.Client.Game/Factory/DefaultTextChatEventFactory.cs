@@ -46,7 +46,7 @@ namespace GladMMO
 			switch(messageType)
 			{
 				case ChatChannelType.System:
-					return "ff0000ff";
+					return "eff233ff";
 				case ChatChannelType.Zone:
 					return "AA9E92ff";
 				case ChatChannelType.Guild:
