@@ -17,7 +17,7 @@ namespace GladMMO
 		/// <returns>The remote client RPC interface.</returns>
 		public static TRemoteClientHubInterfaceType RetrievePlayerClient<TRemoteClientHubInterfaceType>(this IHubCallerClients<TRemoteClientHubInterfaceType> clientGroup, NetworkEntityGuid clientGuid)
 		{
-			return clientGroup.Client(clientGuid.EntityId.ToString());
+			return clientGroup.User(clientGuid.EntityId.ToString());
 		}
 	}
 }
