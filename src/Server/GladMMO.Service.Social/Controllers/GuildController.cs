@@ -53,9 +53,8 @@ namespace GladMMO
 
 		[ProducesJson]
 		[AuthorizeJwt]
-		[HttpGet("{id}/list")]
-		public async Task<IActionResult> GetCharacterGuildList([FromRoute(Name = "id")] int guildId,
-			[NotNull] [FromServices] IGuildCharacterMembershipRepository guildCharacterMembershipRepository,
+		[HttpGet("list")]
+		public async Task<IActionResult> GetCharacterGuildList([NotNull] [FromServices] IGuildCharacterMembershipRepository guildCharacterMembershipRepository,
 			[FromServices] ISocialServiceToGameServiceClient socialToGameClient)
 		{
 			if(guildCharacterMembershipRepository == null) throw new ArgumentNullException(nameof(guildCharacterMembershipRepository));
@@ -69,7 +68,9 @@ namespace GladMMO
 			if (!await guildCharacterMembershipRepository.ContainsAsync(session.CharacterId))
 				return BuildFailedResponseModel(CharacterGuildMembershipStatusResponseCode.NoGuild);
 
-			int[] roster = await guildCharacterMembershipRepository.GetEntireGuildRosterAsync(guildId);
+			var playerGuildMembership = await guildCharacterMembershipRepository.RetrieveAsync(session.CharacterId);
+
+			int[] roster = await guildCharacterMembershipRepository.GetEntireGuildRosterAsync(playerGuildMembership.GuildId);
 
 			return BuildSuccessfulResponseModel(new CharacterGuildListResponseModel(roster));
 		}
