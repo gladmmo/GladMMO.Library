@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 
 namespace GladMMO
@@ -53,7 +54,15 @@ namespace GladMMO
 				await SendGuildInviteResponse(context, GuildMemberInviteResponseCode.PlayerNotFound);
 				return;
 			}
-			
+
+			//Now check if the user is already guilded
+			//If they are we should indicate that to the client.
+			if (await CheckIfGuilded(nameQueryResponse.Result))
+			{
+				await SendGuildInviteResponse(context, GuildMemberInviteResponseCode.PlayerAlreadyInGuild);
+				return;
+			}
+
 			//Ok, the reverse name query was successful. Check if there is a pending invite.
 			//TODO: Right now we rely on local state to indicate if there is a pending invite. We need to NOT do that because it won't work when we scale out.
 			ProjectVersionStage.AssertBeta();
@@ -75,6 +84,8 @@ namespace GladMMO
 				}
 			}
 
+			//TODO: There is currently no handling to indicate that they are online.
+
 			//Now they have a valid pending invite, so let's address the client
 			//that needs to recieve the guild invite.
 			IRemoteSocialHubClient playerClient = context.Clients.RetrievePlayerClient(nameQueryResponse.Result);
@@ -84,6 +95,14 @@ namespace GladMMO
 
 			//Now tell the remote/target player they're being invited to a guild.
 			await playerClient.ReceiveGuildInviteEventAsync(new GuildMemberInviteEventModel(guildStatus.Result.GuildId, context.CallerGuid));
+		}
+
+		private async Task<bool> CheckIfGuilded(NetworkEntityGuid guid)
+		{
+			var guildStatus = await SocialService.GetCharacterMembershipGuildStatus(guid.EntityId);
+
+			//If the query was successful then they ARE in a guild.
+			return guildStatus.ResultCode == CharacterGuildMembershipStatusResponseCode.Success;
 		}
 
 		private PendingGuildInviteData GeneratePendingInviteData(NetworkEntityGuid inviterGuid, int guildId)
