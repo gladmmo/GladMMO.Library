@@ -33,7 +33,7 @@ namespace GladMMO
 
 		private bool CheckConnectionInitialized()
 		{
-			if (Connection == null)
+			if (Connection == null || Connection.State == HubConnectionState.Disconnected)
 				if(Logger.IsErrorEnabled)
 					Logger.Error($"Social connection not initialized.");
 
