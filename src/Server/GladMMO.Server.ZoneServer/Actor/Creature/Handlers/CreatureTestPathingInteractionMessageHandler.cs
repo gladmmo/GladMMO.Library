@@ -29,6 +29,8 @@ namespace GladMMO
 			if(Logger.IsDebugEnabled)
 				Logger.Debug($"Entity: {message.EntityInteracting} Interacted with Creature: {state.EntityGuid}");
 
+			messageContext.Sender.Tell(new AddPlayerExperienceActorMessage(50));
+
 			//Let's create the path data.
 			IMovementGenerator<GameObject> movementGenerator = MovementGeneratorMappable.RetrieveEntity(state.EntityGuid);
 			var playerMovementGenerator = MovementGeneratorMappable.RetrieveEntity(message.EntityInteracting);
