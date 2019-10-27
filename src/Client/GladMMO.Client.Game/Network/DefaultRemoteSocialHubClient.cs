@@ -24,8 +24,6 @@ namespace GladMMO
 
 		public event EventHandler<GenericSocialEventArgs<GuildMemberInviteEventModel>> OnGuildMemberInviteEvent;
 
-		public event EventHandler<GenericSocialEventArgs<GuildMemberJoinedEventModel>> OnGuildMemberJoined;
-
 		public DefaultRemoteSocialHubClient([NotNull] ILog logger,
 			[NotNull] ICharacterJoinedGuildEventPublisher joinedGuildEventPublisher)
 		{
