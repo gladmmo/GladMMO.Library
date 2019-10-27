@@ -19,16 +19,20 @@ namespace GladMMO
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
-		public async Task SendTestMessageAsync(TestSocialModel testModel)
+		public Task SendTestMessageAsync(TestSocialModel model)
 		{
 			if(CheckConnectionInitialized())
-				throw new NotImplementedException();
+				return Connection.SendAsync(nameof(SendTestMessageAsync), model);
+
+			return Task.CompletedTask;
 		}
 
-		public async Task SendGuildInviteRequestAsync(GuildMemberInviteRequestModel invitationRequest)
+		public Task SendGuildInviteRequestAsync(GuildMemberInviteRequestModel model)
 		{
 			if(CheckConnectionInitialized())
-				throw new NotImplementedException();
+				return Connection.SendAsync(nameof(SendTestMessageAsync), model);
+
+			return Task.CompletedTask;
 		}
 
 		private bool CheckConnectionInitialized()
