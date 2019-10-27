@@ -61,6 +61,9 @@ namespace GladMMO
 				//Broadcast to everyone that a player joined the guild.
 				await context.Clients.Group($"guild:{inviteData.GuildId}").ReceiveGuildMemberJoinedEventAsync(new GuildMemberJoinedEventModel(context.CallerGuid));
 				await context.Groups.AddToGroupAsync(context.HubConntext.ConnectionId, $"guild:{inviteData.GuildId}");
+
+				//Let the local client know that their guild status also changed.
+				await context.Clients.RetrievePlayerClient(context.CallerGuid).ReceiveGuildStatusChangedEventAsync(new GuildStatusChangedEventModel(context.CallerGuid, inviteData.GuildId));
 			}
 			else
 			{
