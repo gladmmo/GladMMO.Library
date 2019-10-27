@@ -63,9 +63,31 @@ namespace GladMMO
 			//Once pressed, we should just send the chat message.
 			try
 			{
-				//TODO: We're assuming all chat is proximity chat for now.
-				//TODO: Renable group invite testing command.
-				OnChatMessageEntered?.Invoke(this, new ChatTextMessageEnteredEventArgs(ChatChannelType.Proximity, ChatEnterText.Text));
+				ChatChannelType type = ChatChannelType.Proximity;
+				string chatMessage = ChatEnterText.Text;
+
+				//If the first character is a slash
+				//then they may want a specific channel
+				if (ChatEnterText.Text[0] == '/')
+				{
+					string inputType = ChatEnterText.Text.Split(' ').First().ToLower();
+					//Removed input type
+					chatMessage = new string(ChatEnterText.Text.Skip(inputType.Length).ToArrayTryAvoidCopy());
+
+					switch (inputType)
+					{
+						case "/guild":
+						case "/g":
+							type = ChatChannelType.Guild;
+							break;
+						case "/say":
+						case "/s":
+							type = ChatChannelType.Proximity;
+							break;
+					}
+				}
+
+				OnChatMessageEntered?.Invoke(this, new ChatTextMessageEnteredEventArgs(type, chatMessage));
 
 				//We clear text here because we actually DON'T wanna clear the text if there was an error.
 				ChatEnterText.Text = "";
