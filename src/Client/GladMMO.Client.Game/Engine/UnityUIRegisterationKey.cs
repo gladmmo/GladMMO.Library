@@ -72,5 +72,7 @@ namespace GladMMO
 		SocialWindowAddGuildMember = 29,
 
 		AddGuildMemberModalWindow = 30,
+
+		InvitedToGuildWindow = 31
 	}
 }
