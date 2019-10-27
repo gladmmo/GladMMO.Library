@@ -16,17 +16,23 @@ namespace GladMMO
 
 		private IEntityNameQueryable EntityNameQueryable { get; }
 
+		private IRemoteSocialHubServer SocialHub { get; }
+
 		public PopupGuildInviteWindowEventListener(IGuildMemberInviteEventEventSubscribable subscriptionService,
 			[KeyFilter(UnityUIRegisterationKey.InvitedToGuildWindow)] [NotNull] IUIGuildInviteWindow guildInviteWindow, 
 			INameQueryService nameQueryService,
-			[NotNull] IEntityNameQueryable entityNameQueryable) 
+			[NotNull] IEntityNameQueryable entityNameQueryable,
+			[NotNull] IRemoteSocialHubServer socialHub) 
 			: base(subscriptionService)
 		{
 			GuildInviteWindow = guildInviteWindow ?? throw new ArgumentNullException(nameof(guildInviteWindow));
 			NameQueryService = nameQueryService;
 			EntityNameQueryable = entityNameQueryable ?? throw new ArgumentNullException(nameof(entityNameQueryable));
+			SocialHub = socialHub ?? throw new ArgumentNullException(nameof(socialHub));
 
 			//Here we rig up the decline and accept invite buttons
+			guildInviteWindow.AcceptInviteButton.AddOnClickListener(() => SocialHub.SendGuildInviteEventResponseAsync(new PendingGuildInviteHandleRequest(true)));
+			guildInviteWindow.DeclineInviteButton.AddOnClickListener(() => SocialHub.SendGuildInviteEventResponseAsync(new PendingGuildInviteHandleRequest(false)));
 		}
 
 		protected override void OnThreadUnSafeEventFired(object source, GenericSocialEventArgs<GuildMemberInviteEventModel> args)
