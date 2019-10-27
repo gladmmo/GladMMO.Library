@@ -35,6 +35,14 @@ namespace GladMMO
 			return Task.CompletedTask;
 		}
 
+		public Task SendGuildInviteEventResponseAsync(PendingGuildInviteHandleRequest message)
+		{
+			if(CheckConnectionInitialized())
+				return Connection.SendAsync(nameof(SendGuildInviteEventResponseAsync), message);
+
+			return Task.CompletedTask;
+		}
+
 		private bool CheckConnectionInitialized()
 		{
 			if (Connection == null || Connection.State == HubConnectionState.Disconnected)
