@@ -103,5 +103,10 @@ namespace GladMMO.Social.ManualTest
 		{
 			throw new NotImplementedException();
 		}
+
+		public async Task ReceiveGuildStatusChangedEventAsync(GuildStatusChangedEventModel message)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

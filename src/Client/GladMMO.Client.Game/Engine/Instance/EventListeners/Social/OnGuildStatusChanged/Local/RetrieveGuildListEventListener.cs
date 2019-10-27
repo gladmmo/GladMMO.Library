@@ -28,7 +28,7 @@ namespace GladMMO
 			GuildJoinEventPublisher = guildJoinEventPublisher ?? throw new ArgumentNullException(nameof(guildJoinEventPublisher));
 		}
 
-		protected override void OnGuildStatusChanged(GuildStatusChangedEventArgs changeArgs)
+		protected override void OnGuildStatusChanged(GuildStatusChangedEventModel changeArgs)
 		{
 			UnityAsyncHelper.UnityMainThreadContext.PostAsync(async () =>
 			{

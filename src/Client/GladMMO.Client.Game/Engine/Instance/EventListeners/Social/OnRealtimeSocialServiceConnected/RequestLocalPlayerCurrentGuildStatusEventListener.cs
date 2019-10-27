@@ -8,32 +8,32 @@ using Nito.AsyncEx;
 
 namespace GladMMO
 {
-	//TODO: IGuildStatusChangedEventSubscribable should be an event publisher since many things should handle/deal with it.
-	[AdditionalRegisterationAs(typeof(IGuildStatusChangedEventSubscribable))]
 	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
-	public sealed class RequestLocalPlayerCurrentGuildStatusEventListener : OnRealtimeSocialServiceConnectedEventListener, IGuildStatusChangedEventSubscribable
+	public sealed class RequestLocalPlayerCurrentGuildStatusEventListener : OnRealtimeSocialServiceConnectedEventListener
 	{
 		private ISocialService SocialService { get; }
 
 		private IReadonlyLocalPlayerDetails PlayerDetails { get; }
 
-		public event EventHandler<GuildStatusChangedEventArgs> OnGuildStatusChanged;
-
 		private IEntityGuidMappable<CharacterGuildMembershipStatusResponse> GuildMembershipMappable { get; }
 
 		private ILog Logger { get; }
 
+		private IRemoteSocialHubClient SocialClient { get; }
+
 		public RequestLocalPlayerCurrentGuildStatusEventListener(IRealtimeSocialServiceConnectedEventSubscribable subscriptionService,
-			[NotNull] ISocialService socialSerive,
+			[NotNull] ISocialService socialService,
 			[NotNull] IReadonlyLocalPlayerDetails playerDetails,
 			[NotNull] IEntityGuidMappable<CharacterGuildMembershipStatusResponse> guildMembershipMappable,
-			[NotNull] ILog logger) 
+			[NotNull] ILog logger,
+			[NotNull] IRemoteSocialHubClient socialClient) 
 			: base(subscriptionService)
 		{
-			SocialService = socialSerive ?? throw new ArgumentNullException(nameof(socialSerive));
+			SocialService = socialService ?? throw new ArgumentNullException(nameof(socialService));
 			PlayerDetails = playerDetails ?? throw new ArgumentNullException(nameof(playerDetails));
 			GuildMembershipMappable = guildMembershipMappable ?? throw new ArgumentNullException(nameof(guildMembershipMappable));
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
+			SocialClient = socialClient ?? throw new ArgumentNullException(nameof(socialClient));
 		}
 
 		protected override void OnEventFired(object source, EventArgs args)
@@ -47,11 +47,13 @@ namespace GladMMO
 
 				if (guildStatus.isSuccessful)
 				{
+					//TODO: Don't do it this way. It's useless
 					//Add the guild status change.
 					GuildMembershipMappable.AddObject(PlayerDetails.LocalPlayerGuid, guildStatus.Result);
-
-					OnGuildStatusChanged?.Invoke(this, new GuildStatusChangedEventArgs(PlayerDetails.LocalPlayerGuid, guildStatus.Result.GuildId));
 				}
+
+				//Kinda hacky but we spoof a guild status change here
+				await SocialClient.ReceiveGuildStatusChangedEventAsync(new GuildStatusChangedEventModel(PlayerDetails.LocalPlayerGuid, guildStatus.isSuccessful ? guildStatus.Result.GuildId : 0));
 			});
 		}
 	}

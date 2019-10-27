@@ -24,7 +24,7 @@ namespace GladMMO
 			NameQueryService = nameQueryService ?? throw new ArgumentNullException(nameof(nameQueryService));
 		}
 
-		protected override void OnGuildStatusChanged(GuildStatusChangedEventArgs changeArgs)
+		protected override void OnGuildStatusChanged(GuildStatusChangedEventModel changeArgs)
 		{
 			UnityAsyncHelper.UnityMainThreadContext.PostAsync(async () =>
 			{

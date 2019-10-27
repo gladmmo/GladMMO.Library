@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.SignalR.Client;
 namespace GladMMO
 {
 	public sealed class DefaultRemoteSocialHubClient : IRemoteSocialHubClient, IConnectionHubInitializable,
-		IGuildInviteResponseEventSubscribable, IGuildMemberInviteEventEventSubscribable
+		IGuildInviteResponseEventSubscribable, IGuildMemberInviteEventEventSubscribable, IGuildStatusChangedEventSubscribable
 	{
 		[CanBeNull]
 		public HubConnection Connection { get; set; }
@@ -23,6 +23,8 @@ namespace GladMMO
 		public event EventHandler<GenericSocialEventArgs<GuildMemberInviteResponseModel>> OnGuildMemberInviteResponse;
 
 		public event EventHandler<GenericSocialEventArgs<GuildMemberInviteEventModel>> OnGuildMemberInviteEvent;
+
+		public event EventHandler<GenericSocialEventArgs<GuildStatusChangedEventModel>> OnGuildStatusChanged;
 
 		public DefaultRemoteSocialHubClient([NotNull] ILog logger,
 			[NotNull] ICharacterJoinedGuildEventPublisher joinedGuildEventPublisher)
@@ -49,6 +51,11 @@ namespace GladMMO
 		{
 			//Not hidden, we can show people this is raised event.
 			JoinedGuildEventPublisher.PublishEvent(this, new CharacterJoinedGuildEventArgs(message.JoineeGuid, false));
+		}
+
+		public async Task ReceiveGuildStatusChangedEventAsync(GuildStatusChangedEventModel message)
+		{
+			OnGuildStatusChanged?.Invoke(this, GenericSocialEventArgs.Create(message));
 		}
 	}
 }

@@ -18,7 +18,7 @@ namespace GladMMO
 			GuildListToggle = guildListToggle ?? throw new ArgumentNullException(nameof(guildListToggle));
 		}
 
-		protected override void OnGuildStatusChanged(GuildStatusChangedEventArgs changeArgs)
+		protected override void OnGuildStatusChanged(GuildStatusChangedEventModel changeArgs)
 		{
 			//The guild tab should be accessible if we're not guildless.
 			GuildListToggle.IsInteractable = !changeArgs.IsGuildless;
