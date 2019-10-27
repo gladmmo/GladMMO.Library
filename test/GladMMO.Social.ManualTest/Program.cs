@@ -88,5 +88,10 @@ namespace GladMMO.Social.ManualTest
 
 			return Task.CompletedTask;
 		}*/
+
+		public async Task ReceiveGuildInviteResponseAsync(GuildMemberInviteResponseModel message)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }
