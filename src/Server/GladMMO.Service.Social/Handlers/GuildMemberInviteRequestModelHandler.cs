@@ -83,7 +83,8 @@ namespace GladMMO
 					PendingInviteData.ReplaceObject(nameQueryResponse.Result, GeneratePendingInviteData(context.CallerGuid, guildStatus.Result.GuildId));
 				}
 			}
-
+			else
+				PendingInviteData.AddObject(nameQueryResponse.Result, GeneratePendingInviteData(context.CallerGuid, guildStatus.Result.GuildId));
 			//TODO: There is currently no handling to indicate that they are online.
 
 			//Now they have a valid pending invite, so let's address the client
