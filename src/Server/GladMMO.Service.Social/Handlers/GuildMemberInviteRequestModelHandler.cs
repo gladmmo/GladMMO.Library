@@ -72,7 +72,7 @@ namespace GladMMO
 			if (PendingInviteData.ContainsKey(nameQueryResponse.Result))
 			{
 				//If NOT expired then we need to say they're currently pending an invite
-				if (PendingInviteData[nameQueryResponse.Result].isInviteExpired())
+				if (!PendingInviteData[nameQueryResponse.Result].isInviteExpired())
 				{
 					await SendGuildInviteResponse(context, GuildMemberInviteResponseCode.PlayerAlreadyHasPendingInvite, nameQueryResponse.Result);
 					return;
