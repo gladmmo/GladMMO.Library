@@ -23,11 +23,24 @@ namespace GladMMO
 	{
 		public event EventHandler<TextChatEventArgs> OnTextChatMessageRecieved;
 
+		private ITextChatEventFactory FormattedTextChatFactory { get; }
+
+		public TextChatMessageEventPublisher([NotNull] ITextChatEventFactory formattedTextChatFactory)
+		{
+			FormattedTextChatFactory = formattedTextChatFactory ?? throw new ArgumentNullException(nameof(formattedTextChatFactory));
+		}
+
 		public void PublishEvent(object sender, [NotNull] TextChatEventArgs eventArgs)
 		{
 			if (eventArgs == null) throw new ArgumentNullException(nameof(eventArgs));
 
-			OnTextChatMessageRecieved?.Invoke(sender, eventArgs);
+			//We need to handle unformatted text chat events.
+			if(eventArgs.isFormattedText)
+				OnTextChatMessageRecieved?.Invoke(sender, eventArgs);
+			else
+			{
+				OnTextChatMessageRecieved?.Invoke(sender, FormattedTextChatFactory.CreateChatData(eventArgs));
+			}
 		}
 
 		public async Task OnGameInitialized()

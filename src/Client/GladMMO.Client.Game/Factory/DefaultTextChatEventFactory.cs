@@ -21,7 +21,9 @@ namespace GladMMO
 
 			string renderableMessage = $"<color=#{ComputeColorFromChatType(messageType)}>{ComputeChannelText(messageType)} {associatedEntityName}: {incomingChatMessageEventData.Data.Message}</color>";
 
-			return new TextChatEventArgs(renderableMessage, incomingChatMessageEventData.EntityGuid, messageType);
+			TextChatEventArgs args = new TextChatEventArgs(renderableMessage, incomingChatMessageEventData.EntityGuid, messageType);
+			args.isFormattedText = true;
+			return args;
 		}
 
 		/// <inheritdoc />
@@ -34,7 +36,9 @@ namespace GladMMO
 
 			string renderableMessage = $"<color=#{ComputeColorFromChatType(messageType)}>{ComputeChannelText(messageType)}: {incomingChatMessageEventData.Message}</color>";
 
-			return new TextChatEventArgs(renderableMessage, messageType);
+			TextChatEventArgs args = new TextChatEventArgs(renderableMessage, messageType);
+			args.isFormattedText = true;
+			return args;
 		}
 
 		private string ComputeColorFromChatType(ChatChannelType messageType)

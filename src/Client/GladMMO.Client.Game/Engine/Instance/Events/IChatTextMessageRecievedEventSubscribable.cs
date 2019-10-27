@@ -13,7 +13,7 @@ namespace GladMMO
 	/// <summary>
 	/// Data and Metadata related to a string chat message.
 	/// </summary>
-	public sealed class TextChatEventArgs : EventArgs, IChatChannelRoutable
+	public sealed class TextChatEventArgs : EventArgs, IChatChannelRoutable, ITextMessageContainable
 	{
 		/// <summary>
 		/// The computed full message.
@@ -31,6 +31,12 @@ namespace GladMMO
 		/// The type of the message.
 		/// </summary>
 		public ChatChannelType ChannelType { get; }
+
+		//Initially this is false.
+		/// <summary>
+		/// Indicates if the text event is formatted.
+		/// </summary>
+		internal bool isFormattedText { get; set; } = false;
 
 		/// <inheritdoc />
 		public TextChatEventArgs([NotNull] string message, [NotNull] NetworkEntityGuid sender, ChatChannelType messageType)
