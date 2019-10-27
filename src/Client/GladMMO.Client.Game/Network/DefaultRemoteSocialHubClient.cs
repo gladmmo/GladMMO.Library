@@ -8,12 +8,16 @@ using Microsoft.AspNetCore.SignalR.Client;
 namespace GladMMO
 {
 	public sealed class DefaultRemoteSocialHubClient : IRemoteSocialHubClient, IConnectionHubInitializable,
-		IGuildInviteResponseEventSubscribable, IGuildMemberInviteEventEventSubscribable, IGuildMemberJoinedEventEventSubscribable
+		IGuildInviteResponseEventSubscribable, IGuildMemberInviteEventEventSubscribable
 	{
 		[CanBeNull]
 		public HubConnection Connection { get; set; }
 
 		private ILog Logger { get; }
+
+		//not normal event from this client because other things publish this event
+		//within the client.
+		private ICharacterJoinedGuildEventPublisher JoinedGuildEventPublisher { get; }
 
 		//The event publishers for the received data.
 		public event EventHandler<GenericSocialEventArgs<GuildMemberInviteResponseModel>> OnGuildMemberInviteResponse;
@@ -22,9 +26,11 @@ namespace GladMMO
 
 		public event EventHandler<GenericSocialEventArgs<GuildMemberJoinedEventModel>> OnGuildMemberJoined;
 
-		public DefaultRemoteSocialHubClient([NotNull] ILog logger)
+		public DefaultRemoteSocialHubClient([NotNull] ILog logger,
+			[NotNull] ICharacterJoinedGuildEventPublisher joinedGuildEventPublisher)
 		{
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
+			JoinedGuildEventPublisher = joinedGuildEventPublisher ?? throw new ArgumentNullException(nameof(joinedGuildEventPublisher));
 		}
 
 		public async Task ReceiveGuildInviteResponseAsync([NotNull] GuildMemberInviteResponseModel message)
@@ -43,7 +49,8 @@ namespace GladMMO
 
 		public async Task ReceiveGuildMemberJoinedEventAsync(GuildMemberJoinedEventModel message)
 		{
-			OnGuildMemberJoined?.Invoke(this, GenericSocialEventArgs.Create(message));
+			//Not hidden, we can show people this is raised event.
+			JoinedGuildEventPublisher.PublishEvent(this, new CharacterJoinedGuildEventArgs(message.JoineeGuid, false));
 		}
 	}
 }
