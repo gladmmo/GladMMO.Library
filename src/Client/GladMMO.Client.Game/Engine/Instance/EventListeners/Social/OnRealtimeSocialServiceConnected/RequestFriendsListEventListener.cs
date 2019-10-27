@@ -8,13 +8,13 @@ using Nito.AsyncEx;
 namespace GladMMO
 {
 	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
-	public sealed class RequestFriendsListEventListener : OnLocalPlayerSpawnedEventListener
+	public sealed class RequestFriendsListEventListener : OnRealtimeSocialServiceConnectedEventListener
 	{
 		private ISocialService SocialService { get; }
 
 		private ICharacterFriendAddedEventPublisher FriendAddedPublisher { get; }
 
-		public RequestFriendsListEventListener(ILocalPlayerSpawnedEventSubscribable subscriptionService,
+		public RequestFriendsListEventListener(IRealtimeSocialServiceConnectedEventSubscribable subscriptionService,
 			[NotNull] ISocialService socialService,
 			[NotNull] ICharacterFriendAddedEventPublisher friendAddedPublisher) 
 			: base(subscriptionService)
@@ -23,13 +23,13 @@ namespace GladMMO
 			FriendAddedPublisher = friendAddedPublisher ?? throw new ArgumentNullException(nameof(friendAddedPublisher));
 		}
 
-		protected override void OnLocalPlayerSpawned(LocalPlayerSpawnedEventArgs args)
+		protected override void OnEventFired(object source, EventArgs args)
 		{
 			UnityAsyncHelper.UnityMainThreadContext.PostAsync(async () =>
 			{
 				CharacterFriendListResponseModel friendsResponse = await SocialService.GetCharacterListAsync();
 
-				foreach (int characterId in friendsResponse.CharacterFriendsId)
+				foreach(int characterId in friendsResponse.CharacterFriendsId)
 				{
 					NetworkEntityGuid entityGuid = NetworkEntityGuidBuilder.New()
 						.WithType(EntityType.Player)
