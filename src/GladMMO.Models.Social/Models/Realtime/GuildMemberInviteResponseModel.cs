@@ -21,11 +21,12 @@ namespace GladMMO
 		[JsonIgnore]
 		public bool isSuccessful => ResultCode == GuildMemberInviteResponseCode.Success;
 
-		public GuildMemberInviteResponseModel(GuildMemberInviteResponseCode resultCode)
+		public GuildMemberInviteResponseModel(GuildMemberInviteResponseCode resultCode, NetworkEntityGuid invitedEntityGuid)
 		{
 			if (!Enum.IsDefined(typeof(GuildMemberInviteResponseCode), resultCode)) throw new InvalidEnumArgumentException(nameof(resultCode), (int) resultCode, typeof(GuildMemberInviteResponseCode));
 
 			ResultCode = resultCode;
+			InvitedEntityGuid = invitedEntityGuid;
 		}
 
 		/// <summary>
