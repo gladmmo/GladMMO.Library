@@ -20,8 +20,7 @@ namespace GladMMO
 			});
 
 			builder.RegisterType<DefaultRemoteSocialHubServer>()
-				.As<IRemoteSocialHubServer>()
-				.As<IConnectionHubInitializable>()
+				.AsImplementedInterfaces()
 				.SingleInstance();
 
 			builder.RegisterType<DefaultRemoteSocialHubClient>()

@@ -7,12 +7,18 @@ using Microsoft.AspNetCore.SignalR.Client;
 
 namespace GladMMO
 {
-	public sealed class DefaultRemoteSocialHubClient : IRemoteSocialHubClient, IConnectionHubInitializable
+	public sealed class DefaultRemoteSocialHubClient : IRemoteSocialHubClient, IConnectionHubInitializable,
+		IGuildInviteResponseEventSubscribable, IGuildMemberInviteEventEventSubscribable
 	{
 		[CanBeNull]
 		public HubConnection Connection { get; set; }
 
 		private ILog Logger { get; }
+
+		//The event publishers for the received data.
+		public event EventHandler<GenericSocialEventArgs<GuildMemberInviteResponseModel>> OnGuildMemberInviteResponse;
+
+		public event EventHandler<GenericSocialEventArgs<GuildMemberInviteEventModel>> OnGuildMemberInviteEvent;
 
 		public DefaultRemoteSocialHubClient([NotNull] ILog logger)
 		{
@@ -23,16 +29,14 @@ namespace GladMMO
 		{
 			if (message == null) throw new ArgumentNullException(nameof(message));
 
-			if(Logger.IsInfoEnabled)
-				Logger.Info($"Received Guild Invite Response: {message.ResultCode}");
+			OnGuildMemberInviteResponse?.Invoke(this, GenericSocialEventArgs.Create(message));
 		}
 
 		public async Task ReceiveGuildInviteEventAsync(GuildMemberInviteEventModel message)
 		{
 			if(message == null) throw new ArgumentNullException(nameof(message));
 
-			if(Logger.IsInfoEnabled)
-				Logger.Info($"Received Guild Invite From: {message.InviterGuid} to GuildId: {message.GuildId}");
+			OnGuildMemberInviteEvent?.Invoke(this, GenericSocialEventArgs.Create(message));
 		}
 	}
 }
