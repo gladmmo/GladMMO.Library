@@ -59,7 +59,7 @@ namespace GladMMO
 			{
 				try
 				{
-					ResponseModel<VivoxChannelJoinResponse, VivoxLoginResponseCode> channelJoinResponse = await VivoxAutheAuthorizationService.JoinProximityChatAsync();
+					ResponseModel<VivoxChannelJoinResponse, VivoxLoginResponseCode> channelJoinResponse = await VivoxAutheAuthorizationService.JoinGuildChatAsync();
 
 					//TODO: Better handle failure.
 					if (!channelJoinResponse.isSuccessful)
