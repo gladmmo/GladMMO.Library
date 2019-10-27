@@ -102,6 +102,7 @@ namespace GladMMO
 			//SocialSignalRMessageRouter<TRemoteClientHubInterfaceType> : ISocialModelMessageRouter<TRemoteClientHubInterfaceType>
 			services.AddSingleton<ISocialModelMessageRouter<IRemoteSocialHubClient>, SocialSignalRMessageRouter<IRemoteSocialHubClient>>();
 			services.AddSingleton<ISocialModelPayloadHandler<IRemoteSocialHubClient>, TestSocialModelHandler>();
+			services.AddSingleton<ISocialModelPayloadHandler<IRemoteSocialHubClient>, GuildMemberInviteRequestModelHandler>();
 
 			RegisterDatabaseServices(services);
 		}
