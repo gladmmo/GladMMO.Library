@@ -9,7 +9,14 @@ namespace GladMMO
 	public sealed class GuildMemberInviteRequestModel : BaseSocialModel
 	{
 		[JsonProperty]
-		public NetworkEntityGuid MemberToInviteEntityGuid { get; private set; }
+		public string MemberToInvite { get; private set; }
+
+		public GuildMemberInviteRequestModel([JetBrains.Annotations.NotNull] string memberToInvite)
+		{
+			if (string.IsNullOrWhiteSpace(memberToInvite)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(memberToInvite));
+
+			MemberToInvite = memberToInvite;
+		}
 
 		/// <summary>
 		/// Serializer ctor.
