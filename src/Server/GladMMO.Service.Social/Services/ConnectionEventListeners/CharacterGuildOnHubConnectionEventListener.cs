@@ -80,6 +80,10 @@ namespace GladMMO
 
 		private async Task RegisterGuildOnExistingResponse(NetworkEntityGuid guid, IGroupManager groupManager, string connectionId)
 		{
+			//If no guild status exists we cannot register a guild channel.
+			if (!GuildStatusMappable.ContainsKey(guid))
+				return;
+
 			//TODO: don't hardcode
 			await groupManager.AddToGroupAsync(connectionId, $"guild:{GuildStatusMappable.RetrieveEntity(guid).GuildId}")
 				.ConfigureAwait(false);
