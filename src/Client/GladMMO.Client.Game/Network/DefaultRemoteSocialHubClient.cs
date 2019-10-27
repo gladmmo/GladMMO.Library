@@ -18,5 +18,13 @@ namespace GladMMO
 		{
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
+
+		public async Task ReceiveGuildInviteResponseAsync([NotNull] GuildMemberInviteResponseModel message)
+		{
+			if (message == null) throw new ArgumentNullException(nameof(message));
+
+			if(Logger.IsInfoEnabled)
+				Logger.Info($"Received Guild Invite Response: {message.ResultCode}");
+		}
 	}
 }

@@ -22,5 +22,7 @@ namespace GladMMO
 		/// <param name="message">The message to send.</param>
 		/// <returns>Awaitable.</returns>
 		Task RecieveGuildChannelTextChatMessageAsync(GuildChatMessageEventModel message);*/
+
+		Task ReceiveGuildInviteResponseAsync(GuildMemberInviteResponseModel message);
 	}
 }
