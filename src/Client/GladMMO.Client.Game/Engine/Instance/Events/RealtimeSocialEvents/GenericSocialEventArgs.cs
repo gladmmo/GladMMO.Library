@@ -4,6 +4,20 @@ using System.Text;
 
 namespace GladMMO
 {
+	public static class GenericSocialEventArgs
+	{
+		/// <summary>
+		/// Creates a new generic social event args model.
+		/// </summary>
+		/// <param name="data">The social model data.</param>
+		/// <returns></returns>
+		public static GenericSocialEventArgs<TSocialModel> Create<TSocialModel>(TSocialModel data) 
+			where TSocialModel : BaseSocialModel
+		{
+			return new GenericSocialEventArgs<TSocialModel>(data);
+		}
+	}
+
 	/// <summary>
 	/// Generic social event args.
 	/// </summary>
