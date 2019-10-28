@@ -13,5 +13,7 @@ namespace GladMMO
 		public const string WORLD_DOWNLOAD_SCENE_NAME = "PreLobbyLoadScreen";
 
 		public const string CHARACTER_CREATION_SCENE_NAME = "CharacterCreation_v2";
+
+		public const string TITLE_SCREEN_NAME = "MainTitleScreen_v5";
 	}
 }
