@@ -8,6 +8,7 @@ using UnityEngine.SceneManagement;
 namespace GladMMO
 {
 	[SceneTypeCreateGladMMO(GameSceneType.CharacterCreationScreen)]
+	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
 	public sealed class ReturnCharacterSelectionEventListener : ButtonClickedEventListener<ISceneBackButtonClickedSubscribable>
 	{
 		private ILog Logger { get; }
