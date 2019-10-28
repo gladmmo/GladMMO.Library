@@ -24,5 +24,11 @@ namespace GladMMO
 				.Select(gm => gm.CharacterId)
 				.ToArrayAsync();
 		}
+
+		//Sometimes manual handling of the context disposal is required.
+		public void Dispose()
+		{
+			Context.Dispose();
+		}
 	}
 }

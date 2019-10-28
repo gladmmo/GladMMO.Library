@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace GladMMO
 {
-	public interface IGuildCharacterMembershipRepository : IGenericRepositoryCrudable<int, CharacterGuildMemberRelationshipModel>
+	public interface IGuildCharacterMembershipRepository : IGenericRepositoryCrudable<int, CharacterGuildMemberRelationshipModel>, IDisposable
 	{
 		Task<int[]> GetEntireGuildRosterAsync(int guildId);
 	}

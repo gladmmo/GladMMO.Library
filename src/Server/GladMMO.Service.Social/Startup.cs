@@ -179,6 +179,12 @@ namespace GladMMO
 				.As<IEnumerable<IEntityCollectionRemovable>>()
 				.AsSelf()
 				.SingleInstance();
+
+			//Now we register repository factories
+			builder.RegisterGeneric(typeof(RepositoryFactory<>))
+				.AsSelf()
+				.As(typeof(IRepositoryFactory<>))
+				.SingleInstance();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

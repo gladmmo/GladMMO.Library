@@ -14,11 +14,11 @@ namespace GladMMO
 
 		private IEntityGuidMappable<PendingGuildInviteData> PendingInviteData { get; }
 
-		private Func<IGuildCharacterMembershipRepository> CharacterGuildMembershipRepositoryFactory { get; }
+		private IRepositoryFactory<IGuildCharacterMembershipRepository> CharacterGuildMembershipRepositoryFactory { get; }
 
 		public PendingGuildInviteResultHandler([JetBrains.Annotations.NotNull] ILogger<GuildMemberInviteRequestModelHandler> logger,
 			[JetBrains.Annotations.NotNull] IEntityGuidMappable<PendingGuildInviteData> pendingInviteData,
-			[JetBrains.Annotations.NotNull] Func<IGuildCharacterMembershipRepository> characterGuildMembershipRepository)
+			[JetBrains.Annotations.NotNull] IRepositoryFactory<IGuildCharacterMembershipRepository> characterGuildMembershipRepository)
 		{
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
 			PendingInviteData = pendingInviteData ?? throw new ArgumentNullException(nameof(pendingInviteData));
@@ -37,20 +37,25 @@ namespace GladMMO
 			}
 
 			PendingGuildInviteData inviteData = PendingInviteData.RetrieveEntity(context.CallerGuid);
-			var characterGuildMembershipRepository = CharacterGuildMembershipRepositoryFactory();
-
+			
 			//Now we can check if they wanted to join
 			if (payload.isSuccessful)
 			{
-				//When successful, we must add them to the guild database
-				//and then alert the guild channel (everyone in the guild) that they joined
-				//AND let the client itself know that it joined a guild.
-				bool guildJoinResult = await characterGuildMembershipRepository.TryCreateAsync(new CharacterGuildMemberRelationshipModel(context.CallerGuid.EntityId, inviteData.GuildId));
+				bool guildJoinResult = false;
+
+				//Important that we dispose of this, since this handler is not created every request.
+				using (var characterGuildMembershipRepository = CharacterGuildMembershipRepositoryFactory.Create())
+				{
+					//When successful, we must add them to the guild database
+					//and then alert the guild channel (everyone in the guild) that they joined
+					//AND let the client itself know that it joined a guild.
+					guildJoinResult = await characterGuildMembershipRepository.TryCreateAsync(new CharacterGuildMemberRelationshipModel(context.CallerGuid.EntityId, inviteData.GuildId));
+				}
 
 				//This should never happen
 				if (!guildJoinResult)
 				{
-					if(Logger.IsEnabled(LogLevel.Error))
+					if (Logger.IsEnabled(LogLevel.Error))
 						Logger.LogError($"User: {context.CallerGuid} tried to join Guild: {inviteData.GuildId} but failed.");
 
 					return;
