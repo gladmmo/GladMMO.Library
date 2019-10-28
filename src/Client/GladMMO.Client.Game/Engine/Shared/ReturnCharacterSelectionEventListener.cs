@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Autofac;
 using Common.Logging;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -13,16 +14,21 @@ namespace GladMMO
 	{
 		private ILog Logger { get; }
 
+		private ILifetimeScope AutofacScope { get; }
+
 		public ReturnCharacterSelectionEventListener(ISceneBackButtonClickedSubscribable subscriptionService,
-			[NotNull] ILog logger) 
+			[NotNull] ILog logger,
+			[NotNull] ILifetimeScope autofacScope) 
 			: base(subscriptionService)
 		{
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
+			AutofacScope = autofacScope ?? throw new ArgumentNullException(nameof(autofacScope));
 		}
 
 		protected override void OnEventFired(object source, ButtonClickedEventArgs args)
 		{
 			args.Button.IsInteractable = false;
+			AutofacScope.Dispose();
 			SceneManager.LoadSceneAsync(GladMMOClientConstants.CHARACTER_SELECTION_SCENE_NAME).allowSceneActivation = true;
 		}
 	}

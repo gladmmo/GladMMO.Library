@@ -9,17 +9,18 @@ namespace GladMMO
 	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
 	public sealed class ReturnToWorldDownloadScreenOnDisconnectionEventListener : ThreadUnSafeBaseSingleEventListenerInitializable<INetworkClientDisconnectedEventSubscribable>
 	{
-		public ReturnToWorldDownloadScreenOnDisconnectionEventListener(INetworkClientDisconnectedEventSubscribable subscriptionService) 
+		private IGeneralErrorEncounteredEventPublisher ErrorPublisher { get; }
+
+		public ReturnToWorldDownloadScreenOnDisconnectionEventListener(INetworkClientDisconnectedEventSubscribable subscriptionService,
+			[NotNull] IGeneralErrorEncounteredEventPublisher errorPublisher) 
 			: base(subscriptionService)
 		{
-
+			ErrorPublisher = errorPublisher ?? throw new ArgumentNullException(nameof(errorPublisher));
 		}
 
 		protected override void OnThreadUnSafeEventFired(object source, EventArgs args)
 		{
-			//TODO: Use the scene manager service.
-			//TODO: Don't hardcode scene ids. Don't load scenes directly.
-			SceneManager.LoadSceneAsync(GladMMOClientConstants.WORLD_DOWNLOAD_SCENE_NAME).allowSceneActivation = true;
+			ErrorPublisher.PublishEvent(this, new GeneralErrorEncounteredEventArgs($"Disconnected", "Connection to the instance server was lost."));
 		}
 	}
 }
