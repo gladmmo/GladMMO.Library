@@ -4,21 +4,29 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 
-namespace GladMMO.Service.ZoneManager
+namespace GladMMO
 {
 	public class Program
 	{
 		public static void Main(string[] args)
 		{
-			CreateWebHostBuilder(args).Build().Run();
+			BuildWebHost(args).Run();
 		}
 
-		public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
+		public static IWebHost BuildWebHost(string[] args) =>
 			WebHost.CreateDefaultBuilder(args)
-				.UseStartup<Startup>();
+				.UseKestrelGuardiansConfig(args)
+				//.UseKestrel()
+				.UseIISIntegration()
+				.UseStartup<Startup>()
+				//TODO: remove this logging when we finally deploy properly
+				.UseSetting("detailedErrors", "true")
+				.CaptureStartupErrors(true)
+				.UseApplicationInsights()
+				.Build();
 	}
 }
