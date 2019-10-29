@@ -27,6 +27,17 @@ namespace GladMMO
 		[JsonProperty]
 		public string ZonePassword { get; private set; }
 
+		public ZoneServerRegistrationResponse(int zoneId, string zoneUserName, string zonePassword)
+		{
+			if (zoneId <= 0) throw new ArgumentOutOfRangeException(nameof(zoneId));
+			if (string.IsNullOrWhiteSpace(zoneUserName)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(zoneUserName));
+			if (string.IsNullOrWhiteSpace(zonePassword)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(zonePassword));
+
+			ZoneId = zoneId;
+			ZoneUserName = zoneUserName;
+			ZonePassword = zonePassword;
+		}
+
 		/// <summary>
 		/// Serializer ctor.
 		/// </summary>
