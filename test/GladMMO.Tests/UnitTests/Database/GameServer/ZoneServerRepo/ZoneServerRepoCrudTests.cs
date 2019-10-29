@@ -14,10 +14,12 @@ namespace GladMMO
 	{
 		public override IEnumerable<int> TestCaseKeys => new int[] { 1, 2, 3, 5, 6, 7, 8, 9, 22, 6666, short.MaxValue, int.MaxValue };
 
+		private int incrementalKey = 1;
+
 		/// <inheritdoc />
 		public override ZoneInstanceEntryModel BuildRandomModel(bool generateKey)
 		{
-			return new ZoneInstanceEntryModel("127.0.0.1", 5080, 1);
+			return new ZoneInstanceEntryModel(Interlocked.Increment(ref incrementalKey), "127.0.0.1", 5080, 1);
 		}
 
 		/// <inheritdoc />

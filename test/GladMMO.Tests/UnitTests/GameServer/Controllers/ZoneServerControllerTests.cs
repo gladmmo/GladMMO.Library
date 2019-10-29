@@ -46,9 +46,9 @@ namespace GladMMO
 			IServiceProvider provider = BuildServiceProvider<ZoneServerController>("Test", 1);
 			ZoneServerController controller = provider.GetService<ZoneServerController>();
 			IZoneServerRepository repo = provider.GetService<IZoneServerRepository>();
-			await repo.TryCreateAsync(new ZoneInstanceEntryModel("127.0.0.1", 1080, 1));
-			await repo.TryCreateAsync(new ZoneInstanceEntryModel("127.0.0.1", 1080, 1));
-			await repo.TryCreateAsync(new ZoneInstanceEntryModel("127.0.0.1", 1080, 1));
+			await repo.TryCreateAsync(new ZoneInstanceEntryModel(1, "127.0.0.1", 1080, 1));
+			await repo.TryCreateAsync(new ZoneInstanceEntryModel(2, "127.0.0.1", 1080, 1));
+			await repo.TryCreateAsync(new ZoneInstanceEntryModel(3, "127.0.0.1", 1080, 1));
 
 			//assert
 			ResolveServiceEndpointResponse result = GetActionResultObject<ResolveServiceEndpointResponse>(await controller.GetServerEndpoint(25));
@@ -66,7 +66,7 @@ namespace GladMMO
 			IServiceProvider provider = BuildServiceProvider<ZoneServerController>("Test", 1);
 			ZoneServerController controller = provider.GetService<ZoneServerController>();
 			IZoneServerRepository repo = provider.GetService<IZoneServerRepository>();
-			await repo.TryCreateAsync(new ZoneInstanceEntryModel(endpoint, (short)port, 1));
+			await repo.TryCreateAsync(new ZoneInstanceEntryModel(1, endpoint, (short)port, 1));
 
 			//assert
 			ResolveServiceEndpointResponse result = GetActionResultObject<ResolveServiceEndpointResponse>(await controller.GetServerEndpoint(1));

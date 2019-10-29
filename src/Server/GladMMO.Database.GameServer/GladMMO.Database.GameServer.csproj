@@ -17,6 +17,10 @@
     <Compile Remove="Migrations\20190113003227_AddUniqueDirectionalConstraintToFriendRequestsMigration.cs" />
     <Compile Remove="Migrations\20191017094122_AddedCharacterDataModel.cs" />
     <Compile Remove="Migrations\20191017094122_AddedCharacterDataModel.Designer.cs" />
+    <Compile Remove="Migrations\20191029101438_DisabledZoneIdAutoGenerationAttemptTwo.cs" />
+    <Compile Remove="Migrations\20191029101438_DisabledZoneIdAutoGenerationAttemptTwo.Designer.cs" />
+    <Compile Remove="Migrations\20191029101555_DisabledZoneIdAutoGenerationAttemptTwo.cs" />
+    <Compile Remove="Migrations\20191029101555_DisabledZoneIdAutoGenerationAttemptTwo.Designer.cs" />
     <Compile Remove="Migrations\WorldDatabase\20190926211932_AddedGameObjectModelTable.cs" />
     <Compile Remove="Migrations\WorldDatabase\20190926211932_AddedGameObjectModelTable.Designer.cs" />
   </ItemGroup>

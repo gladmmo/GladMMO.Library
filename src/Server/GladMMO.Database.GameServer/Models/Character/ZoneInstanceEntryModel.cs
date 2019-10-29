@@ -11,7 +11,7 @@ namespace GladMMO
 	public class ZoneInstanceEntryModel
 	{
 		[Key]
-		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+		[DatabaseGenerated(DatabaseGeneratedOption.None)]
 		public int ZoneId { get; private set; }
 
 		/// <summary>
@@ -43,12 +43,14 @@ namespace GladMMO
 		public virtual WorldEntryModel WorldEntry { get; private set; }
 
 		/// <inheritdoc />
-		public ZoneInstanceEntryModel(string zoneServerAddress, short zoneServerPort, long worldId)
+		public ZoneInstanceEntryModel(int zoneId, string zoneServerAddress, short zoneServerPort, long worldId)
 		{
 			if(string.IsNullOrWhiteSpace(zoneServerAddress)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(zoneServerAddress));
 			if(zoneServerPort < 0) throw new ArgumentOutOfRangeException(nameof(zoneServerPort));
 			if(worldId <= 0) throw new ArgumentOutOfRangeException(nameof(worldId));
+			if (zoneId <= 0) throw new ArgumentOutOfRangeException(nameof(zoneId));
 
+			ZoneId = zoneId;
 			ZoneServerAddress = zoneServerAddress;
 			ZoneServerPort = zoneServerPort;
 			WorldId = worldId;
