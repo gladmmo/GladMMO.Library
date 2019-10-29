@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 
 namespace GladMMO
 {
-	[Route("api/ZoneData")]
+	[Route("api/[controller]")]
 	public class ZoneDataController : AuthorizationReadyController
 	{
 		private IZoneServerRepository ZoneRepository { get; }
