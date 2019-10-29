@@ -56,7 +56,8 @@ namespace GladMMO
 				//Here we inherit each role the user account has to the zoneserver account
 				foreach (var claim in User.Claims)
 					if (claim.Type == "role") //TODO: Is there a constant for this??
-						await UserManager.AddToRoleAsync(user, claim.Value);
+						if(claim.Value.ToLower() != GladMMOAuthConstants.PLAYERACCOUNT_AUTHORIZATION_ROLE) //DO NOT add the player role.
+							await UserManager.AddToRoleAsync(user, claim.Value);
 
 				//Also add the ZoneServer role
 				await UserManager.AddToRoleAsync(user, GladMMOAuthConstants.ZONESERVER_AUTHORIZATION_ROLE);
