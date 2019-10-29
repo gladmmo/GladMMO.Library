@@ -10,6 +10,12 @@ namespace GladMMO
 	[Table("zone_endpoints")]
 	public class ZoneInstanceEntryModel
 	{
+		/// <summary>
+		/// The zone instance expiration time.
+		/// Checkins must happen before this 10 minute mark.
+		/// </summary>
+		public static long ExpirationTimeLength = TimeSpan.FromMinutes(10).Ticks;
+
 		[Key]
 		[DatabaseGenerated(DatabaseGeneratedOption.None)]
 		public int ZoneId { get; private set; }
@@ -42,6 +48,23 @@ namespace GladMMO
 		[ForeignKey(nameof(WorldId))]
 		public virtual WorldEntryModel WorldEntry { get; private set; }
 
+		/// <summary>
+		/// The UTC tick time of the initial zone registration.
+		/// </summary>
+		[Required]
+		public long RegistrationTime { get; private set; }
+
+		/// <summary>
+		/// The UTC tick time of the last zoneserver checkin time.
+		/// </summary>
+		[Required]
+		public long LastCheckinTime { get; private set; }
+
+		/// <summary>
+		/// Indicates if the registration has expired due to lack of checkin.
+		/// </summary>
+		public bool isExpired => (DateTime.UtcNow.Ticks - LastCheckinTime) >= ExpirationTimeLength;
+
 		/// <inheritdoc />
 		public ZoneInstanceEntryModel(int zoneId, string zoneServerAddress, short zoneServerPort, long worldId)
 		{
@@ -54,6 +77,9 @@ namespace GladMMO
 			ZoneServerAddress = zoneServerAddress;
 			ZoneServerPort = zoneServerPort;
 			WorldId = worldId;
+
+			RegistrationTime = DateTime.UtcNow.Ticks;
+			LastCheckinTime = RegistrationTime;
 		}
 
 		private ZoneInstanceEntryModel()
