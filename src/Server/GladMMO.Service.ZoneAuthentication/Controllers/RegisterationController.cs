@@ -28,7 +28,7 @@ namespace GladMMO
 		[HttpPost]
 		[AuthorizeJwt] //Zoneservers actually need to register themselves with authorization from a user account.
 		[ProducesJson]
-		public async Task<IActionResult> RegisterZoneServer([FromBody] [JetBrains.Annotations.NotNull] ZoneServerRegistrationRequest request)
+		public async Task<IActionResult> CreateZoneServerAccount([FromBody] [JetBrains.Annotations.NotNull] ZoneServerRegistrationRequest request)
 		{
 			if (request == null) throw new ArgumentNullException(nameof(request));
 
