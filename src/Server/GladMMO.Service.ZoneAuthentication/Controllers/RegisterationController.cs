@@ -63,7 +63,7 @@ namespace GladMMO
 				await UserManager.AddToRoleAsync(user, GladMMOAuthConstants.ZONESERVER_AUTHORIZATION_ROLE);
 
 				//At this point, the account has the PlayFab id claim so it's ready for use.
-				return Ok();
+				return Json(new ZoneServerRegistrationResponse(user.Id, zoneUserName, zonePassword));
 			}
 			else
 				return BadRequest(identityResult.Errors.Aggregate("", (s, error) => $"{s} {error.Code}:{error.Description}"));
