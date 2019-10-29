@@ -21,5 +21,11 @@ namespace GladMMO
 		/// It can only be registered once ever (nothing ensures this yet though)
 		/// </summary>
 		ZoneAlreadyRegistered = 3,
+
+		/// <summary>
+		/// Indicates the world id the zone server is attempting to use
+		/// does not exist.
+		/// </summary>
+		WorldRequestedNotFound = 4,
 	}
 }

@@ -30,8 +30,11 @@ namespace GladMMO
 		[AuthorizeJwt(GuardianApplicationRole.ZoneServer)] //only zone servers obviously.
 		[HttpPost("register")]
 		[ProducesJson]
-		public async Task<IActionResult> TryRegisterZoneServer([FromBody] ZoneServerRegistrationRequest request)
+		public async Task<IActionResult> TryRegisterZoneServer([FromBody] ZoneServerRegistrationRequest request,
+			[FromServices] [NotNull] IWorldDataServiceClient worldDataClient)
 		{
+			if (worldDataClient == null) throw new ArgumentNullException(nameof(worldDataClient));
+
 			if (!ModelState.IsValid)
 				return BuildFailedResponseModel(ZoneServerRegistrationResponseCode.GeneralServerError);
 
@@ -43,6 +46,10 @@ namespace GladMMO
 
 				return BuildFailedResponseModel(ZoneServerRegistrationResponseCode.ZoneAlreadyRegistered);
 			}
+
+			//Check world exists
+			if(!await worldDataClient.CheckWorldExistsAsync(request.WorldId))
+				return BuildFailedResponseModel(ZoneServerRegistrationResponseCode.WorldRequestedNotFound);
 
 			//TODO: Should we check world rights ownership here?
 			bool registerResult = await ZoneRepository.TryCreateAsync(new ZoneInstanceEntryModel(ClaimsReader.GetAccountIdInt(User), HttpContext.Connection.RemoteIpAddress.ToString(), request.NetworkPort, request.WorldId));

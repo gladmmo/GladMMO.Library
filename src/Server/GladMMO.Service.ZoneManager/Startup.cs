@@ -72,6 +72,25 @@ namespace GladMMO
 		private void RegisterRefitInterfaces([NotNull] IServiceCollection services)
 		{
 			if (services == null) throw new ArgumentNullException(nameof(services));
+
+			services.AddSingleton<IWorldDataServiceClient>(provider =>
+			{
+				var serviceDiscClient = provider.GetService<IServiceDiscoveryService>();
+
+				return new AsyncWorldDataServiceClient(QueryForRemoteServiceEndpoint(serviceDiscClient, "ContentServer"));
+			});
+		}
+
+		//TODO: Put this in a base class or something
+		protected async Task<string> QueryForRemoteServiceEndpoint(IServiceDiscoveryService serviceDiscovery, string serviceType)
+		{
+			ResolveServiceEndpointResponse endpointResponse = await serviceDiscovery.DiscoverService(new ResolveServiceEndpointRequest(ClientRegionLocale.US, serviceType));
+
+			if(!endpointResponse.isSuccessful)
+				throw new System.InvalidOperationException($"Failed to query for Service: {serviceType} Result: {endpointResponse.ResultCode}");
+
+			//TODO: Do we need extra slash?
+			return $"{endpointResponse.Endpoint.EndpointAddress}:{endpointResponse.Endpoint.EndpointPort}/";
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
