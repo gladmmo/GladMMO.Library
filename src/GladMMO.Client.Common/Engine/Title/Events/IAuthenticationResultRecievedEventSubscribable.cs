@@ -13,7 +13,7 @@ namespace GladMMO
 	{
 		public bool isSuccessful => TokenResult != null && TokenResult.isTokenValid;
 
-		public JWTModel TokenResult { get; }
+		public PlayerAccountJWTModel TokenResult { get; }
 
 		/// <summary>
 		/// A failed authentication result.
@@ -24,7 +24,7 @@ namespace GladMMO
 		}
 
 		/// <inheritdoc />
-		public AuthenticationResultEventArgs(JWTModel tokenResult)
+		public AuthenticationResultEventArgs(PlayerAccountJWTModel tokenResult)
 		{
 			TokenResult = tokenResult;
 		}

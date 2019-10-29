@@ -65,18 +65,18 @@ namespace GladMMO
 			//We should not do async OnEventFired because we will get silent failures.
 			UnityAsyncHelper.UnityMainThreadContext.PostAsync(async () =>
 			{
-				JWTModel jwtModel = null;
+				PlayerAccountJWTModel PlayerAccountJWTModel = null;
 
 				//TODO: Validate username and password
 				//We can't do error code supression with refit anymore, so we have to do this crap.
 				try
 				{
-					jwtModel = await AuthService.TryAuthenticate(BuildAuthRequestModel())
+					PlayerAccountJWTModel = await AuthService.TryAuthenticate(BuildAuthRequestModel())
 						.ConfigureAwait(false);
 				}
 				catch (ApiException e)
 				{
-					jwtModel = e.GetContentAs<JWTModel>();
+					PlayerAccountJWTModel = e.GetContentAs<PlayerAccountJWTModel>();
 
 					if (Logger.IsErrorEnabled)
 						Logger.Error($"Encountered Auth Error: {e.Message}");
@@ -89,10 +89,10 @@ namespace GladMMO
 				finally
 				{
 					if(Logger.IsDebugEnabled)
-						Logger.Debug($"Auth Response for User: {UsernameText.Text} Result: {jwtModel?.isTokenValid} OptionalError: {jwtModel?.Error} OptionalErrorDescription: {jwtModel?.ErrorDescription}");
+						Logger.Debug($"Auth Response for User: {UsernameText.Text} Result: {PlayerAccountJWTModel?.isTokenValid} OptionalError: {PlayerAccountJWTModel?.Error} OptionalErrorDescription: {PlayerAccountJWTModel?.ErrorDescription}");
 
 					//Even if it's null, we should broadcast the event.
-					OnAuthenticationResultRecieved?.Invoke(this, new AuthenticationResultEventArgs(jwtModel));
+					OnAuthenticationResultRecieved?.Invoke(this, new AuthenticationResultEventArgs(PlayerAccountJWTModel));
 				}
 			});
 		}

@@ -9,7 +9,7 @@ using NUnit.Framework;
 namespace GladMMO
 {
 	[TestFixture]
-	public static class JWTModelTests
+	public static class PlayerAccountJWTModelTests
 	{
 		[Test]
 		[TestCase(null)]
@@ -18,7 +18,7 @@ namespace GladMMO
 		public static void Test_Throws_On_Construction_With_Invalid_AccessToken(string accessToken)
 		{
 			//assert
-			Assert.Throws<ArgumentException>(() => new JWTModel(accessToken));
+			Assert.Throws<ArgumentException>(() => new PlayerAccountJWTModel(accessToken));
 		}
 
 		[Test]
@@ -37,7 +37,7 @@ namespace GladMMO
 		public static void Test_Throws_On_Construction_With_Invalid_ErrorArgs(string error, string errorDefinition)
 		{
 			//assert
-			Assert.Throws<ArgumentException>(() => new JWTModel(error, errorDefinition));
+			Assert.Throws<ArgumentException>(() => new PlayerAccountJWTModel(error, errorDefinition));
 		}
 
 		[Test]
@@ -46,7 +46,7 @@ namespace GladMMO
 		public static void Test_Doesnt_Throw_On_Valid_AccessToken(string accessToken)
 		{
 			//assert
-			Assert.DoesNotThrow(() => new JWTModel(accessToken));
+			Assert.DoesNotThrow(() => new PlayerAccountJWTModel(accessToken));
 		}
 
 		[Test]
@@ -55,7 +55,7 @@ namespace GladMMO
 		public static void Test_Doesnt_Throw_On_Valid_ErrorArgs(string error, string errorDefinition)
 		{
 			//assert
-			Assert.DoesNotThrow(() => new JWTModel(error, errorDefinition));
+			Assert.DoesNotThrow(() => new PlayerAccountJWTModel(error, errorDefinition));
 		}
 
 		[Test]
@@ -64,7 +64,7 @@ namespace GladMMO
 		public static void Test_Can_JSON_Serialize_To_NonNull_Non_Whitespace_ErrorArgs(string error, string errorDefinition)
 		{
 			//arrange
-			JWTModel model = new JWTModel(error, errorDefinition);
+			PlayerAccountJWTModel model = new PlayerAccountJWTModel(error, errorDefinition);
 
 			//act
 			string serializedModel = JsonConvert.SerializeObject(model);
@@ -82,10 +82,10 @@ namespace GladMMO
 		public static void Test_Can_JSON_Serialize_Then_Deserialize_ErrorArgs(string error, string errorDefinition)
 		{
 			//arrange
-			JWTModel model = new JWTModel(error, errorDefinition);
+			PlayerAccountJWTModel model = new PlayerAccountJWTModel(error, errorDefinition);
 
 			//act
-			JWTModel deserializedModel = JsonConvert.DeserializeObject<JWTModel>(JsonConvert.SerializeObject(model));
+			PlayerAccountJWTModel deserializedModel = JsonConvert.DeserializeObject<PlayerAccountJWTModel>(JsonConvert.SerializeObject(model));
 
 			//assert
 			Assert.NotNull(deserializedModel);
@@ -101,7 +101,7 @@ namespace GladMMO
 		public static void Test_Can_JSON_Serialize_To_NonNull_Non_Whitespace_AccessToken(string accessToken)
 		{
 			//arrange
-			JWTModel model = new JWTModel(accessToken);
+			PlayerAccountJWTModel model = new PlayerAccountJWTModel(accessToken);
 
 			//act
 			string serializedModel = JsonConvert.SerializeObject(model);
@@ -120,10 +120,10 @@ namespace GladMMO
 		public static void Test_Can_JSON_Serialize_Then_Deserialize_AccessToken(string accessToken)
 		{
 			//arrange
-			JWTModel model = new JWTModel(accessToken);
+			PlayerAccountJWTModel model = new PlayerAccountJWTModel(accessToken);
 
 			//act
-			JWTModel deserializedModel = JsonConvert.DeserializeObject<JWTModel>(JsonConvert.SerializeObject(model));
+			PlayerAccountJWTModel deserializedModel = JsonConvert.DeserializeObject<PlayerAccountJWTModel>(JsonConvert.SerializeObject(model));
 
 			//assert
 			Assert.NotNull(deserializedModel);
@@ -135,13 +135,13 @@ namespace GladMMO
 		[Test]
 		[TestCase("Token")]
 		[TestCase(@"8insdf89snhdf89h*(H*(hdf89HFSHs8hfsf8h*h@*@*$H$")]
-		public static void Test_JWTModel_Indicates_IsValid_When_AccessToken_IsPresent(string accessToken)
+		public static void Test_PlayerAccountJWTModel_Indicates_IsValid_When_AccessToken_IsPresent(string accessToken)
 		{
 			//arrange
-			JWTModel model = new JWTModel(accessToken);
+			PlayerAccountJWTModel model = new PlayerAccountJWTModel(accessToken);
 
 			//act
-			JWTModel deserializedModel = JsonConvert.DeserializeObject<JWTModel>(JsonConvert.SerializeObject(model));
+			PlayerAccountJWTModel deserializedModel = JsonConvert.DeserializeObject<PlayerAccountJWTModel>(JsonConvert.SerializeObject(model));
 
 			//assert
 			Assert.IsTrue(deserializedModel.isTokenValid);
@@ -150,13 +150,13 @@ namespace GladMMO
 		[Test]
 		[TestCase("Error", "ErrorDef")]
 		[TestCase("Blahblahblah", "Something terrible wrong so bad it crashes the whole backend.")]
-		public static void Test_JWTModel_Indicates_IsValid_When_Error_Is_Present(string error, string errorDescription)
+		public static void Test_PlayerAccountJWTModel_Indicates_IsValid_When_Error_Is_Present(string error, string errorDescription)
 		{
 			//arrange
-			JWTModel model = new JWTModel(error, errorDescription);
+			PlayerAccountJWTModel model = new PlayerAccountJWTModel(error, errorDescription);
 
 			//act
-			JWTModel deserializedModel = JsonConvert.DeserializeObject<JWTModel>(JsonConvert.SerializeObject(model));
+			PlayerAccountJWTModel deserializedModel = JsonConvert.DeserializeObject<PlayerAccountJWTModel>(JsonConvert.SerializeObject(model));
 
 			//assert
 			Assert.IsFalse(deserializedModel.isTokenValid);

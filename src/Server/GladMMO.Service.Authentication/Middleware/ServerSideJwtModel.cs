@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 namespace GladMMO
 {
 	[JsonObject]
-	public sealed class ServerSideJwtModel
+	public sealed class ServerSidePlayerAccountJWTModel
 	{
 		//Only used on the server.
 		[CanBeNull]
@@ -21,7 +21,7 @@ namespace GladMMO
 		[JsonProperty(PropertyName = "access_token", Required = Required.Default)] //optional because could be an error
 		public string AccessToken { get; private set; } //WARNING: Don't make these readonly. It breakes for some reason.
 
-		public ServerSideJwtModel([NotNull] string openId)
+		public ServerSidePlayerAccountJWTModel([NotNull] string openId)
 		{
 			if (string.IsNullOrWhiteSpace(openId))
 				throw new ArgumentException("Value cannot be null or whitespace.", nameof(openId));
@@ -30,7 +30,7 @@ namespace GladMMO
 		}
 
 		[JsonConstructor]
-		public ServerSideJwtModel()
+		public ServerSidePlayerAccountJWTModel()
 			: base()
 		{
 			

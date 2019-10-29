@@ -53,16 +53,16 @@ namespace GladMMO
 					if (context.Response.StatusCode == StatusCodes.Status200OK)
 					{
 						newBodyStream.Seek(0, SeekOrigin.Begin);
-						ServerSideJwtModel jwtModel = Deserialize<ServerSideJwtModel>(newBodyStream);
+						ServerSidePlayerAccountJWTModel PlayerAccountJWTModel = Deserialize<ServerSidePlayerAccountJWTModel>(newBodyStream);
 						newBodyStream.Seek(0, SeekOrigin.Begin);
 
 						//At this point, we need to actually query PlayFab and authenticate the user.
-						GladMMOPlayFabLoginResult playAuthToken = await AuthenticateWithPlayfab(jwtModel.OpenId);
+						GladMMOPlayFabLoginResult playAuthToken = await AuthenticateWithPlayfab(PlayerAccountJWTModel.OpenId);
 
 						if(String.IsNullOrWhiteSpace(playAuthToken.SessionTicket))
 							throw new InvalidOperationException($"Encountered Null PlayFab Authentication Token.");
 
-						JWTModel jwtResponseModel = new JWTModel(jwtModel.AccessToken);
+						PlayerAccountJWTModel jwtResponseModel = new PlayerAccountJWTModel(PlayerAccountJWTModel.AccessToken);
 						jwtResponseModel.PlayfabAuthenticationToken = playAuthToken.SessionTicket;
 						jwtResponseModel.PlayfabId = playAuthToken.PlayFabId;
 

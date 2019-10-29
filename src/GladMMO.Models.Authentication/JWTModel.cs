@@ -12,7 +12,7 @@ namespace GladMMO
 	/// JWT Token model.
 	/// </summary>
 	[JsonObject]
-	public class JWTModel
+	public class PlayerAccountJWTModel
 	{
 		/// <summary>
 		/// JWT access token if authentication was successful.
@@ -53,10 +53,10 @@ namespace GladMMO
 		public bool isTokenValid => _isTokenValid.Value;
 
 		/// <summary>
-		/// Creates a JWTModel that contains an valid non-null <see cref="AccessToken"/>.
+		/// Creates a PlayerAccountJWTModel that contains an valid non-null <see cref="AccessToken"/>.
 		/// </summary>
 		/// <param name="accessToken"></param>
-		public JWTModel([NotNull] string accessToken)
+		public PlayerAccountJWTModel([NotNull] string accessToken)
 			: this()
 		{
 			if (string.IsNullOrWhiteSpace(accessToken)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(accessToken));
@@ -65,11 +65,11 @@ namespace GladMMO
 		}
 
 		/// <summary>
-		/// Creates an invalid <see cref="JWTModel"/> that contains an <see cref="Error"/> and <see cref="ErrorDescription"/>.
+		/// Creates an invalid <see cref="PlayerAccountJWTModel"/> that contains an <see cref="Error"/> and <see cref="ErrorDescription"/>.
 		/// </summary>
 		/// <param name="error"></param>
 		/// <param name="errorDescription"></param>
-		public JWTModel([NotNull] string error, [NotNull] string errorDescription)
+		public PlayerAccountJWTModel([NotNull] string error, [NotNull] string errorDescription)
 			: this()
 		{
 			if(string.IsNullOrWhiteSpace(error)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(error));
@@ -83,7 +83,7 @@ namespace GladMMO
 		/// Serializer ctor
 		/// </summary>
 		[JsonConstructor]
-		protected JWTModel()
+		protected PlayerAccountJWTModel()
 		{
 			_isTokenValid = new Lazy<bool>(CheckIfTokenIsValid, true);
 		}
