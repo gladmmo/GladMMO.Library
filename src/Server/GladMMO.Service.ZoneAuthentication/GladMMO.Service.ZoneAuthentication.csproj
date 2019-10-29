@@ -34,6 +34,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\GladMMO.Models.ZoneAuthentication\GladMMO.Models.ZoneAuthentication.csproj" />
     <ProjectReference Include="..\GladMMO.Server.Authentication.Common\GladMMO.Server.Authentication.Common.csproj" />
     <ProjectReference Include="..\GladMMO.Server.Common\GladMMO.Server.Common.csproj" />
     <ProjectReference Include="..\GladMMO.Service.Common\GladMMO.Service.Common.csproj" />
