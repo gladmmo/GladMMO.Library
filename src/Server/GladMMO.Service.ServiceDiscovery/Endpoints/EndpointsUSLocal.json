@@ -28,6 +28,14 @@
     "NameQuery": {
       "endpointAddress": "http://72.190.177.214",
       "endpointPort": 5011
+    },
+    "ZoneAuth": {
+      "endpointAddress": "http://72.190.177.214",
+      "endpointPort": 5009
+    },
+    "ZoneManager": {
+      "endpointAddress": "http://72.190.177.214",
+      "endpointPort": 5012
     }
   }
 }
