@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Refit" Version="4.6.107" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\GladMMO.Models.Authentication\GladMMO.Models.Authentication.csproj" />
+    <ProjectReference Include="..\..\GladMMO.Models.ZoneAuthentication\GladMMO.Models.ZoneAuthentication.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -137,9 +137,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GladMMO.Client.Social", "sr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GladMMO.Service.ZoneAuthentication", "src\Server\GladMMO.Service.ZoneAuthentication\GladMMO.Service.ZoneAuthentication.csproj", "{A3C48424-50C2-482C-94B1-AB6FE885C40A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladMMO.Server.Authentication.Common", "src\Server\GladMMO.Server.Authentication.Common\GladMMO.Server.Authentication.Common.csproj", "{CD7B7D97-0CF0-4056-8951-3DA7A4F78DB2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GladMMO.Server.Authentication.Common", "src\Server\GladMMO.Server.Authentication.Common\GladMMO.Server.Authentication.Common.csproj", "{CD7B7D97-0CF0-4056-8951-3DA7A4F78DB2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladMMO.Models.ZoneAuthentication", "src\GladMMO.Models.ZoneAuthentication\GladMMO.Models.ZoneAuthentication.csproj", "{3E67EFED-9D58-4D5E-B908-2E05B742EF4C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GladMMO.Models.ZoneAuthentication", "src\GladMMO.Models.ZoneAuthentication\GladMMO.Models.ZoneAuthentication.csproj", "{3E67EFED-9D58-4D5E-B908-2E05B742EF4C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladMMO.Client.ZoneAuthentication", "src\Client\GladMMO.Client.ZoneAuthentication\GladMMO.Client.ZoneAuthentication.csproj", "{8153E73B-9680-4A67-A10C-8FECF0703506}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -710,6 +712,16 @@ Global
 		{3E67EFED-9D58-4D5E-B908-2E05B742EF4C}.Debug-Local|Any CPU.Build.0 = Debug|Any CPU
 		{3E67EFED-9D58-4D5E-B908-2E05B742EF4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3E67EFED-9D58-4D5E-B908-2E05B742EF4C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8153E73B-9680-4A67-A10C-8FECF0703506}.Database_Migration|Any CPU.ActiveCfg = Debug|Any CPU
+		{8153E73B-9680-4A67-A10C-8FECF0703506}.Database_Migration|Any CPU.Build.0 = Debug|Any CPU
+		{8153E73B-9680-4A67-A10C-8FECF0703506}.DEBUG_LOCAL|Any CPU.ActiveCfg = Debug|Any CPU
+		{8153E73B-9680-4A67-A10C-8FECF0703506}.DEBUG_LOCAL|Any CPU.Build.0 = Debug|Any CPU
+		{8153E73B-9680-4A67-A10C-8FECF0703506}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8153E73B-9680-4A67-A10C-8FECF0703506}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8153E73B-9680-4A67-A10C-8FECF0703506}.Debug-Local|Any CPU.ActiveCfg = Debug|Any CPU
+		{8153E73B-9680-4A67-A10C-8FECF0703506}.Debug-Local|Any CPU.Build.0 = Debug|Any CPU
+		{8153E73B-9680-4A67-A10C-8FECF0703506}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8153E73B-9680-4A67-A10C-8FECF0703506}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -782,6 +794,7 @@ Global
 		{A3C48424-50C2-482C-94B1-AB6FE885C40A} = {0478C448-622F-4C60-BDBB-E103D4A2520B}
 		{CD7B7D97-0CF0-4056-8951-3DA7A4F78DB2} = {98B85CCA-E727-485B-AD3C-68AC2A2B0364}
 		{3E67EFED-9D58-4D5E-B908-2E05B742EF4C} = {572E4B21-970E-4889-9B0D-357816B1307C}
+		{8153E73B-9680-4A67-A10C-8FECF0703506} = {8C598CE2-9578-41F6-A195-24678617AE6F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {886DD3D7-35E3-42F0-8CE9-74FB5AD7BBD0}
