@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -59,6 +60,13 @@ namespace GladMMO
 		private void RegisterDatabaseServices([NotNull] IServiceCollection services)
 		{
 			if (services == null) throw new ArgumentNullException(nameof(services));
+
+			services.AddDbContext<CharacterDatabaseContext>(o =>
+			{
+				o.UseMySql("Server=127.0.0.1;Database=guardians.gameserver;Uid=root;Pwd=test;");
+			});
+
+			services.AddTransient<IZoneServerRepository, DatabaseBackedZoneServerRepository>();
 		}
 
 		private void RegisterRefitInterfaces([NotNull] IServiceCollection services)
