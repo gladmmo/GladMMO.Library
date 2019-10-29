@@ -18,27 +18,27 @@ using Microsoft.Extensions.Logging;
 
 namespace GladMMO
 {
-
+	//TODO: A lot of code duplication between AuthServer and ZoneAuthServer. Not much value in combining it right now though.
 	//From an old OpenIddict OAuth sample and a slightly modified version that I personally use
 	//in https://github.com/GladLive/GladLive.Authentication/blob/master/src/GladLive.Authentication.OAuth/Controllers/AuthorizationController.cs
 	[Route(AUTHENTICATION_ROUTE_VALUE)]
-	public class AuthenticationController : Controller
+	public class ZoneAuthenticationController : Controller
 	{
 		internal const string AUTHENTICATION_ROUTE_VALUE = "api/auth";
 
 		private IOptions<IdentityOptions> IdentityOptions { get; }
 
-		private SignInManager<GuardiansApplicationUser> SignInManager { get; }
+		private SignInManager<ZoneServerApplicationUser> SignInManager { get; }
 
-		private UserManager<GuardiansApplicationUser> UserManager { get; }
+		private UserManager<ZoneServerApplicationUser> UserManager { get; }
 
-		private ILogger<AuthenticationController> Logger { get; }
+		private ILogger<ZoneAuthenticationController> Logger { get; }
 
-		public AuthenticationController(
+		public ZoneAuthenticationController(
 			IOptions<IdentityOptions> identityOptions,
-			SignInManager<GuardiansApplicationUser> signInManager,
-			UserManager<GuardiansApplicationUser> userManager, 
-			ILogger<AuthenticationController> logger)
+			SignInManager<ZoneServerApplicationUser> signInManager,
+			UserManager<ZoneServerApplicationUser> userManager, 
+			ILogger<ZoneAuthenticationController> logger)
 		{
 			IdentityOptions = identityOptions;
 			SignInManager = signInManager;
@@ -146,7 +146,7 @@ namespace GladMMO
 			});
 		}
 		
-		private async Task<AuthenticationTicket> CreateTicketAsync(IEnumerable<string> scopes, GuardiansApplicationUser user)
+		private async Task<AuthenticationTicket> CreateTicketAsync(IEnumerable<string> scopes, ZoneServerApplicationUser user)
 		{
 			// Create a new ClaimsPrincipal containing the claims that
 			// will be used to create an id_token, a token or a code.
@@ -165,7 +165,7 @@ namespace GladMMO
 				OpenIddictConstants.Scopes.Roles
 			}.Intersect(scopes.Concat(new string[1] { OpenIdConnectConstants.Scopes.OpenId }))); //HelloKitty: Always include the OpenId, it's required for the Playfab authentication
 
-			ticket.SetResources("auth-server");
+			ticket.SetResources("zoneauth-server");
 
 			// Note: by default, claims are NOT automatically included in the access and identity tokens.
 			// To allow OpenIddict to serialize them, you must attach them a destination, that specifies
