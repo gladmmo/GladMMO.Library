@@ -18,6 +18,13 @@ namespace GladMMO
 		//or instance owner or if there are like configurations
 		//such as speed or who knows what.
 
+		public ZoneWorldConfigurationResponse(int worldId)
+		{
+			if (worldId <= 0) throw new ArgumentOutOfRangeException(nameof(worldId));
+
+			WorldId = worldId;
+		}
+
 		/// <summary>
 		/// Serializer ctor.
 		/// </summary>
