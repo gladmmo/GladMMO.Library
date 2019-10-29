@@ -22,7 +22,7 @@ namespace GladMMO
 	[SceneTypeCreateGladMMO(GameSceneType.PreZoneBurstingScreen)]
 	public sealed class PreBurstQueryDownloadableSceneInitializable : ThreadUnSafeBaseSingleEventListenerInitializable<ICharacterSessionDataChangedEventSubscribable, CharacterSessionDataChangedEventArgs>, IWorldDownloadBeginEventSubscribable
 	{
-		private IZoneServerService ZoneDataService { get; }
+		private IZoneDataService ZoneDataService { get; }
 
 		private IDownloadableContentServerServiceClient ContentService { get; }
 
@@ -33,7 +33,7 @@ namespace GladMMO
 		public PreBurstQueryDownloadableSceneInitializable(ICharacterSessionDataChangedEventSubscribable subscriptionService,
 			[NotNull] ILog logger,
 			[NotNull] IDownloadableContentServerServiceClient contentService,
-			[NotNull] IZoneServerService zoneDataService) 
+			[NotNull] IZoneDataService zoneDataService) 
 			: base(subscriptionService)
 		{
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));

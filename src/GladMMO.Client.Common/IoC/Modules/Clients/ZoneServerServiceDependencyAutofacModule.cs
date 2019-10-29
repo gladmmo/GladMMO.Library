@@ -11,11 +11,11 @@ namespace GladMMO
 		/// <inheritdoc />
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.Register<IZoneServerService>(context =>
+			builder.Register<IZoneDataService>(context =>
 			{
 				IServiceDiscoveryService serviceDiscovery = context.Resolve<IServiceDiscoveryService>();
 
-				return new AsyncEndpointZoneServerService(QueryForRemoteServiceEndpoint(serviceDiscovery, "GameServer"), new RefitSettings() { HttpMessageHandlerFactory = () => new FiddlerEnabledWebProxyHandler() });
+				return new AsyncEndpointZoneDataService(QueryForRemoteServiceEndpoint(serviceDiscovery, "GameServer"), new RefitSettings() { HttpMessageHandlerFactory = () => new FiddlerEnabledWebProxyHandler() });
 			});
 		}
 	}

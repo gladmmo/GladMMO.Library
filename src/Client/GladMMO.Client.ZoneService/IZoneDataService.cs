@@ -10,7 +10,7 @@ namespace GladMMO
 	/// Proxy interface for zone server data service requests.
 	/// </summary>
 	[Headers("User-Agent: GuardiansClient")]
-	public interface IZoneServerService
+	public interface IZoneDataService
 	{
 		/// <summary>
 		/// Queries for the world id of the provided zone server

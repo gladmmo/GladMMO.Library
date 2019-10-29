@@ -16,7 +16,7 @@ namespace GladMMO
 		/// </summary>
 		private IManagedNetworkClient<GameClientPacketPayload, GameServerPacketPayload> Client { get; }
 
-		private IZoneServerService ZoneServiceClient { get; }
+		private IZoneDataService ZoneServiceClient { get; }
 
 		private IReadonlyZoneDataRepository ZoneDataRepository { get; }
 
@@ -26,7 +26,7 @@ namespace GladMMO
 
 		public OnInitConnectNetworkClientInitializable(
 			[NotNull] IManagedNetworkClient<GameClientPacketPayload, GameServerPacketPayload> client,
-			[NotNull] IZoneServerService zoneServiceClient,
+			[NotNull] IZoneDataService zoneServiceClient,
 			[NotNull] IReadonlyZoneDataRepository zoneDataRepository,
 			[NotNull] ILog logger,
 			[NotNull] IGeneralErrorEncounteredEventPublisher generalErrorPublisher)

@@ -7,16 +7,16 @@ using Refit;
 
 namespace GladMMO
 {
-	public sealed class AsyncEndpointZoneServerService : BaseAsyncEndpointService<IZoneServerService>, IZoneServerService
+	public sealed class AsyncEndpointZoneDataService : BaseAsyncEndpointService<IZoneDataService>, IZoneDataService
 	{
 		/// <inheritdoc />
-		public AsyncEndpointZoneServerService(Task<string> futureEndpoint)
+		public AsyncEndpointZoneDataService(Task<string> futureEndpoint)
 			: base(futureEndpoint)
 		{
 		}
 
 		/// <inheritdoc />
-		public AsyncEndpointZoneServerService(Task<string> futureEndpoint, RefitSettings settings)
+		public AsyncEndpointZoneDataService(Task<string> futureEndpoint, RefitSettings settings)
 			: base(futureEndpoint, settings)
 		{
 
