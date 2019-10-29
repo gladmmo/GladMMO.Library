@@ -58,12 +58,6 @@ namespace GladMMO
 			//This provides JwtBearer support for Authorize attribute/header
 			services.AddJwtAuthorization(cert);
 
-			services.AddSingleton<IZoneInstanceWorkQueue, LocalInMemoryZoneInstanceWorkQueue>(provider =>
-			{
-				//TODO: This is for testing purposes, we want and have the request to boot up at map 1 as an instance.
-				return new LocalInMemoryZoneInstanceWorkQueue(new ZoneInstanceWorkEntry(1), new ZoneInstanceWorkEntry(1));
-			});
-
 			RegisterRefitInterfaces(services);
 		}
 
