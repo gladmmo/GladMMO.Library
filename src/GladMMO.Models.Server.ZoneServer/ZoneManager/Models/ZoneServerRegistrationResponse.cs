@@ -9,6 +9,11 @@ namespace GladMMO
 	public sealed class ZoneServerRegistrationResponse
 	{
 		//TODO: Should the zone registry service indicate anything to the zone?
+		/// <summary>
+		/// The id of the registered zone.
+		/// </summary>
+		[JsonProperty]
+		public int ZoneId { get; private set; }
 
 		/// <summary>
 		/// Serializer ctor.
