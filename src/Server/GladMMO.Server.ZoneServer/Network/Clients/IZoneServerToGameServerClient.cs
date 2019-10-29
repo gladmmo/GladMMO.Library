@@ -50,11 +50,6 @@ namespace GladMMO
 		//[NoResponseCache] //TODO: No cache
 		Task<int> GetAccountIdFromToken([AuthenticationToken] string authToken);
 
-		//TODO: Auth
-		[Post("/api/zoneserver/register")]
-		//[AuthorizeJwt(GuardianApplicationRole.ZoneServer)] //TODO: Eventually we'll need to auth these zoneservers.
-		Task<ZoneServerRegisterationResponse> RegisterZoneServer([JsonBody] ZoneServerRegisterationRequest request);
-
 		//TODO: Auth and move this to a seperate service
 		[Post("/api/ZoneServerCharacter/WorldTeleport")]
 		Task TryWorldTeleportCharacter([JsonBody] ZoneServerWorldTeleportCharacterRequest request);

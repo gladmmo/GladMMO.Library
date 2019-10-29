@@ -7,26 +7,25 @@ using Microsoft.Extensions.Logging;
 
 namespace GladMMO
 {
-	[Route("api/[controller]")]
-	public class ZoneServerController : AuthorizationReadyController
+	[Route("api/ZoneData")]
+	public class ZoneDataController : AuthorizationReadyController
 	{
 		private IZoneServerRepository ZoneRepository { get; }
+
 		/// <inheritdoc />
-		public ZoneServerController([FromServices] IZoneServerRepository zoneRepository, IClaimsPrincipalReader claimsReader, ILogger<AuthorizationReadyController> logger) 
+		public ZoneDataController([FromServices] IZoneServerRepository zoneRepository, IClaimsPrincipalReader claimsReader, ILogger<AuthorizationReadyController> logger) 
 			: base(claimsReader, logger)
 		{
 			ZoneRepository = zoneRepository ?? throw new ArgumentNullException(nameof(zoneRepository));
 		}
 
-		//TODO: Create response model instead, incase the zoneserver doesn't exist.
-		//We don't need to auth this, anyone can know the world.
 		/// <summary>
 		/// Returns the world (think map) of the zone.
 		/// This can be used by clients to determine what world they should start downloading.
 		/// </summary>
 		/// <param name="zoneId"></param>
 		/// <returns>The world id or a failure.</returns>
-		[HttpGet("{id}/worldid")]
+		[HttpGet("{id}/config")]
 		[ResponseCache(Duration = 300)]
 		public async Task<IActionResult> GetZoneWorld([FromRoute(Name = "id")] int zoneId)
 		{
