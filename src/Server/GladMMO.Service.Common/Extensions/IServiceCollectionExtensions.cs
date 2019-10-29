@@ -19,13 +19,9 @@ namespace GladMMO
 		public static IServiceCollection AddJwtAuthorization(this IServiceCollection services, X509Certificate2 jwtCertificate)
 			=> services.AddJwtAuthorization<GuardiansApplicationUser, GuardiansApplicationRole>(jwtCertificate);
 
-		//TODO: Figure out why referencing OpenIdConnectConstants causes missing method exceptions.
-		public static IServiceCollection AddJwtAuthorization<TUser, TRole>(this IServiceCollection services, X509Certificate2 jwtCertificate) 
-			where TUser : class 
-			where TRole : class
+		//TODO: Rename
+		public static IServiceCollection AddJustAuthorization(this IServiceCollection services, X509Certificate2 jwtCertificate)
 		{
-			if(services == null) throw new ArgumentNullException(nameof(services));
-
 			//This is CRITICAL for now.
 			//See https://github.com/aspnet/Security/issues/1043
 			JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
@@ -33,20 +29,6 @@ namespace GladMMO
 
 			//Service required for reading the JWT claims.
 			services.AddSingleton<IClaimsPrincipalReader, ClaimsPrincipalReader>();
-
-			//will cause identity data to be overridden
-			//We also need to enable identity
-			services.AddIdentity<TUser, TRole>(options =>
-			{
-				//These disable the ridiculous requirements that the default password scheme has
-				options.Password.RequireNonAlphanumeric = false;
-
-				//For some reason I can't figure out how to get the JWT middleware to spit out sub claims
-				//so we need to map the Identity to expect nameidentifier
-				options.ClaimsIdentity.UserIdClaimType = /*OpenIdConnectConstants.Claims.Subject*/"sub";
-				options.ClaimsIdentity.RoleClaimType = /*OpenIdConnectConstants.Claims.Role*/"role";
-				options.ClaimsIdentity.UserNameClaimType = /*OpenIdConnectConstants.Claims.Name*/"name";
-			});
 
 			//See: https://github.com/openiddict/openiddict-core/issues/436
 			services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -69,6 +51,32 @@ namespace GladMMO
 						RoleClaimType = /*OpenIdConnectConstants.Claims.Role*/"role"
 					};
 				});
+
+			return services;
+		}
+
+		//TODO: Figure out why referencing OpenIdConnectConstants causes missing method exceptions.
+		public static IServiceCollection AddJwtAuthorization<TUser, TRole>(this IServiceCollection services, X509Certificate2 jwtCertificate) 
+			where TUser : class 
+			where TRole : class
+		{
+			if(services == null) throw new ArgumentNullException(nameof(services));
+
+			AddJustAuthorization(services, jwtCertificate);
+
+			//will cause identity data to be overridden
+			//We also need to enable identity
+			services.AddIdentity<TUser, TRole>(options =>
+			{
+				//These disable the ridiculous requirements that the default password scheme has
+				options.Password.RequireNonAlphanumeric = false;
+
+				//For some reason I can't figure out how to get the JWT middleware to spit out sub claims
+				//so we need to map the Identity to expect nameidentifier
+				options.ClaimsIdentity.UserIdClaimType = /*OpenIdConnectConstants.Claims.Subject*/"sub";
+				options.ClaimsIdentity.RoleClaimType = /*OpenIdConnectConstants.Claims.Role*/"role";
+				options.ClaimsIdentity.UserNameClaimType = /*OpenIdConnectConstants.Claims.Name*/"name";
+			});
 
 			return services;
 		}
