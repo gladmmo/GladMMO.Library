@@ -15,6 +15,13 @@ namespace GladMMO
 		[JsonProperty]
 		public int ZoneId { get; private set; }
 
+		public ZoneServerRegistrationResponse(int zoneId)
+		{
+			if (zoneId <= 0) throw new ArgumentOutOfRangeException(nameof(zoneId));
+
+			ZoneId = zoneId;
+		}
+
 		/// <summary>
 		/// Serializer ctor.
 		/// </summary>
