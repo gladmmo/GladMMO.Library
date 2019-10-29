@@ -33,3 +33,7 @@ cd ..
 cd zoneauth
 start "zoneauth" dotnet GladMMO.Service.ZoneAuthentication.dll --url=http://192.168.0.12:5009
 cd ..
+
+cd zonemanager
+start "zonemanager" dotnet GladMMO.Service.ZoneManager.dll --url=http://192.168.0.12:5012
+cd ..
