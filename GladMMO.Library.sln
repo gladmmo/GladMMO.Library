@@ -141,11 +141,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GladMMO.Server.Authenticati
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GladMMO.Models.ZoneAuthentication", "src\GladMMO.Models.ZoneAuthentication\GladMMO.Models.ZoneAuthentication.csproj", "{3E67EFED-9D58-4D5E-B908-2E05B742EF4C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladMMO.Client.ZoneAuthentication", "src\Client\GladMMO.Client.ZoneAuthentication\GladMMO.Client.ZoneAuthentication.csproj", "{8153E73B-9680-4A67-A10C-8FECF0703506}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GladMMO.Client.ZoneAuthentication", "src\Client\GladMMO.Client.ZoneAuthentication\GladMMO.Client.ZoneAuthentication.csproj", "{8153E73B-9680-4A67-A10C-8FECF0703506}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladMMO.Service.ZoneManager", "src\Server\GladMMO.Service.ZoneManager\GladMMO.Service.ZoneManager.csproj", "{C8F89F3C-BABE-44C5-8D41-CEEAE0665D96}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GladMMO.Service.ZoneManager", "src\Server\GladMMO.Service.ZoneManager\GladMMO.Service.ZoneManager.csproj", "{C8F89F3C-BABE-44C5-8D41-CEEAE0665D96}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladMMO.Models.ZoneManager", "src\GladMMO.Models.ZoneManager\GladMMO.Models.ZoneManager.csproj", "{250FD331-75BD-4EF0-BD0E-3C7983FADD9A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GladMMO.Models.ZoneManager", "src\GladMMO.Models.ZoneManager\GladMMO.Models.ZoneManager.csproj", "{250FD331-75BD-4EF0-BD0E-3C7983FADD9A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladMMO.Client.ZoneService.Server", "src\Client\GladMMO.Client.ZoneService.Server\GladMMO.Client.ZoneService.Server.csproj", "{5738049B-735C-413F-9517-C609233306BF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -746,6 +748,16 @@ Global
 		{250FD331-75BD-4EF0-BD0E-3C7983FADD9A}.Debug-Local|Any CPU.Build.0 = Debug|Any CPU
 		{250FD331-75BD-4EF0-BD0E-3C7983FADD9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{250FD331-75BD-4EF0-BD0E-3C7983FADD9A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5738049B-735C-413F-9517-C609233306BF}.Database_Migration|Any CPU.ActiveCfg = Debug|Any CPU
+		{5738049B-735C-413F-9517-C609233306BF}.Database_Migration|Any CPU.Build.0 = Debug|Any CPU
+		{5738049B-735C-413F-9517-C609233306BF}.DEBUG_LOCAL|Any CPU.ActiveCfg = Debug|Any CPU
+		{5738049B-735C-413F-9517-C609233306BF}.DEBUG_LOCAL|Any CPU.Build.0 = Debug|Any CPU
+		{5738049B-735C-413F-9517-C609233306BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5738049B-735C-413F-9517-C609233306BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5738049B-735C-413F-9517-C609233306BF}.Debug-Local|Any CPU.ActiveCfg = Debug|Any CPU
+		{5738049B-735C-413F-9517-C609233306BF}.Debug-Local|Any CPU.Build.0 = Debug|Any CPU
+		{5738049B-735C-413F-9517-C609233306BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5738049B-735C-413F-9517-C609233306BF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -821,6 +833,7 @@ Global
 		{8153E73B-9680-4A67-A10C-8FECF0703506} = {8C598CE2-9578-41F6-A195-24678617AE6F}
 		{C8F89F3C-BABE-44C5-8D41-CEEAE0665D96} = {0478C448-622F-4C60-BDBB-E103D4A2520B}
 		{250FD331-75BD-4EF0-BD0E-3C7983FADD9A} = {572E4B21-970E-4889-9B0D-357816B1307C}
+		{5738049B-735C-413F-9517-C609233306BF} = {8C598CE2-9578-41F6-A195-24678617AE6F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {886DD3D7-35E3-42F0-8CE9-74FB5AD7BBD0}
