@@ -18,7 +18,7 @@ namespace GladMMO
 
 		protected override GameObjectModelEntryModel GenerateNewModel()
 		{
-			int userId = ClaimsReader.GetUserIdInt(User);
+			int userId = ClaimsReader.GetAccountIdInt(User);
 			return new GameObjectModelEntryModel(userId, HttpContext.Connection.RemoteIpAddress.ToString(), Guid.NewGuid());
 		}
 	}

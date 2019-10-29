@@ -49,7 +49,7 @@ namespace GladMMO
 				.ConfigureAwait(false);
 
 			if(Logger.IsEnabled(LogLevel.Information))
-				Logger.LogInformation($"Account Connected: {ClaimsReader.GetUserName(Context.User)}:{ClaimsReader.GetUserId(Context.User)} with SignalR UserId: {Context.UserIdentifier}");
+				Logger.LogInformation($"Account Connected: {ClaimsReader.GetAccountName(Context.User)}:{ClaimsReader.GetAccountId(Context.User)} with SignalR UserId: {Context.UserIdentifier}");
 
 			try
 			{
@@ -69,7 +69,7 @@ namespace GladMMO
 			catch(Exception e)
 			{
 				if(Logger.IsEnabled(LogLevel.Error))
-					Logger.LogError($"Account: {ClaimsReader.GetUserName(Context.User)}:{ClaimsReader.GetUserId(Context.User)} failed to properly connect to hub. Error: {e.ToString()}\n\nStack: {e.StackTrace}");
+					Logger.LogError($"Account: {ClaimsReader.GetAccountName(Context.User)}:{ClaimsReader.GetAccountId(Context.User)} failed to properly connect to hub. Error: {e.ToString()}\n\nStack: {e.StackTrace}");
 
 				Context.Abort();
 			}

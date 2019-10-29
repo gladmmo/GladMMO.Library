@@ -34,7 +34,7 @@ namespace GladMMO
 			//We should never be here unless auth worked
 			//so we can assume that and just try to request character session data
 			//for the account.
-			CharacterSessionDataResponse characterSessionDataResponse = await SocialToGameClient.GetCharacterSessionDataByAccount(ClaimsReader.GetUserIdInt(hubConnectedTo.Context.User))
+			CharacterSessionDataResponse characterSessionDataResponse = await SocialToGameClient.GetCharacterSessionDataByAccount(ClaimsReader.GetAccountIdInt(hubConnectedTo.Context.User))
 				.ConfigureAwait(false);
 
 			//TODO: To support website chat we shouldn't disconnect just because they don't have a zone session.
@@ -43,7 +43,7 @@ namespace GladMMO
 			if(!characterSessionDataResponse.isSuccessful)
 			{
 				if(Logger.IsEnabled(LogLevel.Warning))
-					Logger.LogWarning($"Failed to Query SessionData for AccountId: {ClaimsReader.GetUserId(hubConnectedTo.Context.User)} Reason: {characterSessionDataResponse.ResultCode}");
+					Logger.LogWarning($"Failed to Query SessionData for AccountId: {ClaimsReader.GetAccountId(hubConnectedTo.Context.User)} Reason: {characterSessionDataResponse.ResultCode}");
 
 				//TODO: Eventually we don't want to do this.
 				return HubOnConnectionState.Abort;
@@ -56,7 +56,7 @@ namespace GladMMO
 			{
 				//We can log account name and id here, because they were successfully authed.
 				if(Logger.IsEnabled(LogLevel.Warning))
-					Logger.LogWarning($"User with AccountId: {ClaimsReader.GetUserName(hubConnectedTo.Context.User)}:{ClaimsReader.GetUserId(hubConnectedTo.Context.User)} attempted to spoof as CharacterId: {hubConnectedTo.Context.UserIdentifier} but had session for CharacterID: {characterSessionDataResponse.CharacterId}.");
+					Logger.LogWarning($"User with AccountId: {ClaimsReader.GetAccountName(hubConnectedTo.Context.User)}:{ClaimsReader.GetAccountId(hubConnectedTo.Context.User)} attempted to spoof as CharacterId: {hubConnectedTo.Context.UserIdentifier} but had session for CharacterID: {characterSessionDataResponse.CharacterId}.");
 
 				return HubOnConnectionState.Abort;
 			}

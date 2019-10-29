@@ -36,10 +36,10 @@ namespace GladMMO
 		{
 			Mock<IClaimsPrincipalReader> claimsReaderMock = new Mock<IClaimsPrincipalReader>();
 
-			claimsReaderMock.Setup(c => c.GetUserName(It.IsAny<ClaimsPrincipal>()))
+			claimsReaderMock.Setup(c => c.GetAccountName(It.IsAny<ClaimsPrincipal>()))
 				.Returns(() => userName);
 
-			claimsReaderMock.Setup(c => c.GetUserId(It.IsAny<ClaimsPrincipal>()))
+			claimsReaderMock.Setup(c => c.GetAccountId(It.IsAny<ClaimsPrincipal>()))
 				.Returns(accountId.ToString);
 
 			Mock<ILogger<TControllerType>> loggingMock = new Mock<ILogger<TControllerType>>();

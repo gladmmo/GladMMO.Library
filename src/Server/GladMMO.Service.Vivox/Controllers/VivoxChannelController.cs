@@ -24,7 +24,7 @@ namespace GladMMO
 			[FromServices] IFactoryCreatable<VivoxTokenClaims, VivoxTokenClaimsCreationContext> claimsFactory,
 			[FromServices] IVivoxTokenSignService signService)
 		{
-			int accountId = this.ClaimsReader.GetUserIdInt(User);
+			int accountId = this.ClaimsReader.GetAccountIdInt(User);
 
 			//If the user doesn't actually have a claimed session in the game
 			//then we shouldn't log them into Vivox.
@@ -53,7 +53,7 @@ namespace GladMMO
 			[FromServices] IGuildCharacterMembershipRepository guildMembershipRepository,
 			[FromServices] IVivoxTokenSignService signService)
 		{
-			int accountId = this.ClaimsReader.GetUserIdInt(User);
+			int accountId = this.ClaimsReader.GetAccountIdInt(User);
 
 			//If the user doesn't actually have a claimed session in the game
 			//then we shouldn't log them into Vivox.

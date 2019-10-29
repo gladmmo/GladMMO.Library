@@ -18,7 +18,7 @@ namespace GladMMO
 
 		protected override CreatureModelEntryModel GenerateNewModel()
 		{
-			int userId = ClaimsReader.GetUserIdInt(User);
+			int userId = ClaimsReader.GetAccountIdInt(User);
 			return new CreatureModelEntryModel(userId, HttpContext.Connection.RemoteIpAddress.ToString(), Guid.NewGuid());
 		}
 	}

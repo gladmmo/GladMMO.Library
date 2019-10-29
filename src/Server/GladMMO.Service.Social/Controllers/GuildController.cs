@@ -59,7 +59,7 @@ namespace GladMMO
 		{
 			if(guildCharacterMembershipRepository == null) throw new ArgumentNullException(nameof(guildCharacterMembershipRepository));
 
-			CharacterSessionDataResponse session = await socialToGameClient.GetCharacterSessionDataByAccount(ClaimsReader.GetUserIdInt(User));
+			CharacterSessionDataResponse session = await socialToGameClient.GetCharacterSessionDataByAccount(ClaimsReader.GetAccountIdInt(User));
 
 			if (!session.isSuccessful)
 				return BuildFailedResponseModel(CharacterGuildMembershipStatusResponseCode.GeneralServerError);

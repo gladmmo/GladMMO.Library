@@ -40,7 +40,7 @@ namespace GladMMO
 			if(characterId <= 0)
 			{
 				if(Logger.IsEnabled(LogLevel.Warning))
-					Logger.LogWarning($"Encountered client: {ClaimsReader.GetUserName(connection.User)}:{ClaimsReader.GetUserId(connection.User)} with invalid characterId {characterId}");
+					Logger.LogWarning($"Encountered client: {ClaimsReader.GetAccountName(connection.User)}:{ClaimsReader.GetAccountId(connection.User)} with invalid characterId {characterId}");
 
 				connection.Abort();
 				return String.Empty;

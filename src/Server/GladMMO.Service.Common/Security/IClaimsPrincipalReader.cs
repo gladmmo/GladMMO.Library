@@ -19,7 +19,7 @@ namespace GladMMO
 		/// <param name="principal">The <see cref="ClaimsPrincipal"/> instance.</param>
 		/// <returns>The User ID claim value, or null if the claim is not present.</returns>
 		/// <remarks>The User ID claim is identified by <see cref="ClaimTypes.NameIdentifier"/>.</remarks>
-		string GetUserId(ClaimsPrincipal principal);
+		string GetAccountId(ClaimsPrincipal principal);
 
 		/// <summary>
 		/// Returns the Name claim value if present otherwise returns null.
@@ -27,7 +27,7 @@ namespace GladMMO
 		/// <param name="principal">The <see cref="ClaimsPrincipal"/> instance.</param>
 		/// <returns>The Name claim value, or null if the claim is not present.</returns>
 		/// <remarks>The Name claim is identified by <see cref="ClaimsIdentity.DefaultNameClaimType"/>.</remarks>
-		string GetUserName(ClaimsPrincipal principal);
+		string GetAccountName(ClaimsPrincipal principal);
 
 		/// <summary>
 		/// Returns the pfid claim if present otherwise null.

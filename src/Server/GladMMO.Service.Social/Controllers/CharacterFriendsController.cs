@@ -28,7 +28,7 @@ namespace GladMMO
 			if (socialServiceClient == null) throw new ArgumentNullException(nameof(socialServiceClient));
 
 			//Find the character
-			CharacterSessionDataResponse response = await socialServiceClient.GetCharacterSessionDataByAccount(ClaimsReader.GetUserIdInt(User));
+			CharacterSessionDataResponse response = await socialServiceClient.GetCharacterSessionDataByAccount(ClaimsReader.GetAccountIdInt(User));
 
 			if (response.ResultCode == CharacterSessionDataResponseCode.NoSessionAvailable)
 				return Json(new CharacterFriendListResponseModel(Array.Empty<int>()));
@@ -51,7 +51,7 @@ namespace GladMMO
 			if (string.IsNullOrEmpty(characterFriendName)) throw new ArgumentException("Value cannot be null or empty.", nameof(characterFriendName));
 
 			//Find the character
-			CharacterSessionDataResponse response = await socialServiceClient.GetCharacterSessionDataByAccount(ClaimsReader.GetUserIdInt(User));
+			CharacterSessionDataResponse response = await socialServiceClient.GetCharacterSessionDataByAccount(ClaimsReader.GetAccountIdInt(User));
 
 			if (response.ResultCode == CharacterSessionDataResponseCode.NoSessionAvailable)
 				return BadRequest();

@@ -15,10 +15,10 @@ namespace GladMMO
 		/// <returns>The User ID claim value. Will throw if the principal doesn't contain the id.</returns>
 		/// <exception cref="ArgumentException">Throws if the provided principal doesn't contain an id.</exception>
 		/// <remarks>The User ID claim is identified by <see cref="ClaimTypes.NameIdentifier"/>.</remarks>
-		public static int GetUserIdInt(this IClaimsPrincipalReader reader, ClaimsPrincipal principal)
+		public static int GetAccountIdInt(this IClaimsPrincipalReader reader, ClaimsPrincipal principal)
 		{
 			int accountId;
-			if(!int.TryParse(reader.GetUserId(principal), out accountId))
+			if(!int.TryParse(reader.GetAccountId(principal), out accountId))
 			{
 				throw new ArgumentException($"Provided {nameof(ClaimsPrincipal)} does not contain a user id.", nameof(principal));
 			}

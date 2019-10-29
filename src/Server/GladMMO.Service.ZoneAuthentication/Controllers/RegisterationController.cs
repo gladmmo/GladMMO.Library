@@ -34,13 +34,13 @@ namespace GladMMO
 
 			//We want to log this out for information purposes whenever an auth request begins
 			if(Logger.IsEnabled(LogLevel.Information))
-				Logger.LogInformation($"Zone Register Request by UserAccount: {ClaimsReader.GetUserName(this.User)}:{ClaimsReader.GetUserIdInt(this.User)} {HttpContext.Connection.RemoteIpAddress}:{HttpContext.Connection.RemotePort}");
+				Logger.LogInformation($"Zone Register Request by UserAccount: {ClaimsReader.GetAccountName(this.User)}:{ClaimsReader.GetAccountIdInt(this.User)} {HttpContext.Connection.RemoteIpAddress}:{HttpContext.Connection.RemotePort}");
 
 			//TODO: Create cryptographically secure random bytes for password and user.
 			string zoneUserName = Guid.NewGuid().ToString();
 			string zonePassword = Guid.NewGuid().ToString();
 
-			ZoneServerApplicationUser user = new ZoneServerApplicationUser(ClaimsReader.GetUserIdInt(this.User))
+			ZoneServerApplicationUser user = new ZoneServerApplicationUser(ClaimsReader.GetAccountIdInt(this.User))
 			{
 				UserName = zoneUserName,
 				Email = "dev@dev.com", //TODO: Real email???
@@ -51,7 +51,7 @@ namespace GladMMO
 			if (identityResult.Succeeded)
 			{
 				//Adds the vrgid account owner claim.
-				await UserManager.AddClaimAsync(user, new Claim(GladMMOAuthConstants.ACCOUNT_ID_OWNER_CLAIM_NAME, ClaimsReader.GetUserId(this.User)));
+				await UserManager.AddClaimAsync(user, new Claim(GladMMOAuthConstants.ACCOUNT_ID_OWNER_CLAIM_NAME, ClaimsReader.GetAccountId(this.User)));
 				
 				//Here we inherit each role the user account has to the zoneserver account
 				foreach (var claim in User.Claims)

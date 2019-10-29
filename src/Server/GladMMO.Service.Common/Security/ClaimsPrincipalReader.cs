@@ -25,7 +25,7 @@ namespace GladMMO
 		}
 
 		/// <inheritdoc />
-		public string GetUserId(ClaimsPrincipal principal)
+		public string GetAccountId(ClaimsPrincipal principal)
 		{
 			if(principal == null)
 			{
@@ -35,7 +35,7 @@ namespace GladMMO
 		}
 
 		/// <inheritdoc />
-		public string GetUserName(ClaimsPrincipal principal)
+		public string GetAccountName(ClaimsPrincipal principal)
 		{
 			if(principal == null)
 			{

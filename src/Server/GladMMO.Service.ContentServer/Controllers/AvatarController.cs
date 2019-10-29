@@ -43,7 +43,7 @@ namespace GladMMO
 				.ConfigureAwait(false);
 
 			//Check the model is associated with this account. Only 1 account can own a world resource
-			if(model.AccountId != ClaimsReader.GetUserIdInt(User))
+			if(model.AccountId != ClaimsReader.GetAccountIdInt(User))
 				return Unauthorized();
 
 			//Now that we know the world is in the database and the account making this authorized requests owns it
@@ -73,7 +73,7 @@ namespace GladMMO
 
 		protected override AvatarEntryModel GenerateNewModel()
 		{
-			int userId = ClaimsReader.GetUserIdInt(User);
+			int userId = ClaimsReader.GetAccountIdInt(User);
 
 			return new AvatarEntryModel(userId, HttpContext.Connection.RemoteIpAddress.ToString(), Guid.NewGuid());
 		}

@@ -44,7 +44,7 @@ namespace GladMMO
 
 			//TODO: Consolidate this shared logic between controllers
 			if(Logger.IsEnabled(LogLevel.Information))
-				Logger.LogInformation($"Recieved {nameof(RequestContentDownloadURL)} request from {ClaimsReader.GetUserName(User)}:{ClaimsReader.GetUserId(User)}.");
+				Logger.LogInformation($"Recieved {nameof(RequestContentDownloadURL)} request from {ClaimsReader.GetAccountName(User)}:{ClaimsReader.GetAccountId(User)}.");
 
 			//TODO: We should probably check the flags of content to see if it's private (IE hidden from user). Or if it's unlisted or removed.
 			//It's possible a user is requesting a content that doesn't exist
@@ -55,7 +55,7 @@ namespace GladMMO
 			//TODO: Refactor this into a validation dependency
 			//Now we need to do some validation to determine if they should even be downloading this content
 			//we do not want people downloading a content they have no business of going to
-			int userId = ClaimsReader.GetUserIdInt(User);
+			int userId = ClaimsReader.GetAccountIdInt(User);
 
 			//TODO: Need to NOT call it world content
 			if(!await downloadAuthorizer.CanUserAccessWorldContet(userId, contentId))
@@ -70,13 +70,13 @@ namespace GladMMO
 			if(String.IsNullOrEmpty(downloadUrl))
 			{
 				if(Logger.IsEnabled(LogLevel.Error))
-					Logger.LogError($"Failed to create content upload URL for {ClaimsReader.GetUserName(User)}:{ClaimsReader.GetUserId(User)} with ID: {contentId}.");
+					Logger.LogError($"Failed to create content upload URL for {ClaimsReader.GetAccountName(User)}:{ClaimsReader.GetAccountId(User)} with ID: {contentId}.");
 
 				return Json(new ContentDownloadURLResponse(ContentDownloadURLResponseCode.ContentDownloadServiceUnavailable));
 			}
 
 			if(Logger.IsEnabled(LogLevel.Information))
-				Logger.LogInformation($"Success. Sending {ClaimsReader.GetUserName(User)} URL: {downloadUrl}");
+				Logger.LogInformation($"Success. Sending {ClaimsReader.GetAccountName(User)} URL: {downloadUrl}");
 
 			return Json(new ContentDownloadURLResponse(downloadUrl, contentEntry.Version));
 		}
@@ -102,7 +102,7 @@ namespace GladMMO
 				.ConfigureAwait(false);
 
 			//WE MUST MAKE SURE THE AUTHORIZED USER OWNS THE CONTENT!!
-			if(ClaimsReader.GetUserIdInt(User) != content.AccountId)
+			if(ClaimsReader.GetAccountIdInt(User) != content.AccountId)
 				return BuildFailedResponseModel(ContentUploadResponseCode.AuthorizationFailed);
 
 			try
@@ -142,7 +142,7 @@ namespace GladMMO
 			//TODO: We should use both app logging but also another logging service that always gets hit
 
 			if(Logger.IsEnabled(LogLevel.Information))
-				Logger.LogInformation($"Recieved {nameof(RequestContentUploadUrl)} request from {ClaimsReader.GetUserName(User)}:{ClaimsReader.GetUserId(User)}.");
+				Logger.LogInformation($"Recieved {nameof(RequestContentUploadUrl)} request from {ClaimsReader.GetAccountName(User)}:{ClaimsReader.GetAccountId(User)}.");
 
 			//TODO: Check if the result is valid? We should maybe return bool from this API (we do return bool from this API now)
 			//The idea is to create an entry which will contain a GUID. From that GUID we can then generate the upload URL
@@ -159,13 +159,13 @@ namespace GladMMO
 			if (String.IsNullOrEmpty(uploadUrl))
 			{
 				if (Logger.IsEnabled(LogLevel.Error))
-					Logger.LogError($"Failed to create content upload URL for {ClaimsReader.GetUserName(User)}:{ClaimsReader.GetUserId(User)} with GUID: {content.StorageGuid}.");
+					Logger.LogError($"Failed to create content upload URL for {ClaimsReader.GetAccountName(User)}:{ClaimsReader.GetAccountId(User)} with GUID: {content.StorageGuid}.");
 
 				return BuildFailedResponseModel(ContentUploadResponseCode.ServiceUnavailable);
 			}
 
 			if (Logger.IsEnabled(LogLevel.Information))
-				Logger.LogInformation($"Success. Sending {ClaimsReader.GetUserName(User)} URL: {uploadUrl}");
+				Logger.LogInformation($"Success. Sending {ClaimsReader.GetAccountName(User)} URL: {uploadUrl}");
 
 			return BuildSuccessfulResponseModel(new ContentUploadToken(uploadUrl, content.ContentId, content.StorageGuid));
 		}

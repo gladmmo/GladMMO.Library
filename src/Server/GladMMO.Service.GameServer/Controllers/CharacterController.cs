@@ -65,7 +65,7 @@ namespace GladMMO
 			if (characterDataRepository == null) throw new ArgumentNullException(nameof(characterDataRepository));
 			if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(name));
 
-			int accountId = ClaimsReader.GetUserIdInt(User);
+			int accountId = ClaimsReader.GetAccountIdInt(User);
 
 			bool nameIsAvailable = await ValidateNameAvailability(name);
 
@@ -142,7 +142,7 @@ namespace GladMMO
 		[ProducesJson]
 		public async Task<CharacterListResponse> GetCharacters()
 		{
-			int accountId = ClaimsReader.GetUserIdInt(User);
+			int accountId = ClaimsReader.GetAccountIdInt(User);
 
 			//So to check characters we just need to query for the
 			//characters with this account id

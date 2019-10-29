@@ -36,12 +36,12 @@ namespace GladMMO
 		[HttpGet("user/name")]
 		[NoResponseCache]
 		public string GetName() 
-			=> ClaimsReader.GetUserName(this.User);
+			=> ClaimsReader.GetAccountName(this.User);
 
 		[AuthorizeJwt]
 		[HttpGet("user/id")]
 		[NoResponseCache]
 		public int GetId()
-			=> ClaimsReader.GetUserIdInt(this.User);
+			=> ClaimsReader.GetAccountIdInt(this.User);
 	}
 }

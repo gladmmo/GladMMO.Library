@@ -73,7 +73,7 @@ namespace GladMMO
 
 			//This case is actually pretty likely, they will likely be trying to move to another server
 			//before their active session is cleaned up. Retry logic will be required to get past this.
-			if(await CharacterSessionRepository.AccountHasActiveSession(ClaimsReader.GetUserIdInt(User)))
+			if(await CharacterSessionRepository.AccountHasActiveSession(ClaimsReader.GetAccountIdInt(User)))
 			{
 				//TODO: Return JSON that says active session
 				return new CharacterSessionEnterResponse(CharacterSessionEnterResponseCode.AccountAlreadyHasCharacterSession);
@@ -109,7 +109,7 @@ namespace GladMMO
 		/// <returns></returns>
 		public async Task<bool> VerifyCharacterOwnedByAccount(int characterId)
 		{
-			int accountId = ClaimsReader.GetUserIdInt(User);
+			int accountId = ClaimsReader.GetAccountIdInt(User);
 
 			//TODO: Do we want to expose this to non-controlers?
 			//First we should validate that the account that is authorized owns the character it is requesting session data from
@@ -123,7 +123,7 @@ namespace GladMMO
 		[NoResponseCache]
 		public async Task<CharacterSessionDataResponse> GetCharacterSessionData([FromRoute(Name = "id")] int characterId)
 		{
-			int accountId = ClaimsReader.GetUserIdInt(User);
+			int accountId = ClaimsReader.GetAccountIdInt(User);
 
 			//TODO: Do we want to expose this to non-controlers?
 			//First we should validate that the account that is authorized owns the character it is requesting session data from
@@ -236,7 +236,7 @@ namespace GladMMO
 			if(!await IsCharacterIdValidForUser(characterId, CharacterRepository))
 				return new CharacterSessionEnterResponse(CharacterSessionEnterResponseCode.InvalidCharacterIdError);
 
-			int accountId = ClaimsReader.GetUserIdInt(User);
+			int accountId = ClaimsReader.GetAccountIdInt(User);
 
 			//This checks to see if the account, not just the character, has an active session.
 			//We do this before we check anything to reject quick even though the query behind this
@@ -337,7 +337,7 @@ namespace GladMMO
 			//or if it's an not a known character
 			return characterId >= 0 &&
 				await characterRepository.ContainsAsync(characterId) && 
-				(await characterRepository.RetrieveAsync(characterId)).AccountId == ClaimsReader.GetUserIdInt(User);
+				(await characterRepository.RetrieveAsync(characterId)).AccountId == ClaimsReader.GetAccountIdInt(User);
 		}
 	}
 }
