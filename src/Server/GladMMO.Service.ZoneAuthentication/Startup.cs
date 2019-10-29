@@ -66,7 +66,7 @@ namespace GladMMO
 			services.AddAuthentication();
 
 			//TODO: Renable
-			/*services.AddDbContext<GuardiansAuthenticationDbContext>(options =>
+			services.AddDbContext<GuardiansZoneAuthenticationDbContext>(options =>
 			{
 				//TODO: Setup db options
 
@@ -74,14 +74,14 @@ namespace GladMMO
 #if !DEBUG_LOCAL && !RELEASE_LOCAL
 				options.UseMySql(authOptions.Value.AuthenticationDatabaseString);
 #else
-				options.UseMySql("Server=127.0.0.1;Database=guardians.auth;Uid=root;Pwd=test;");
+				options.UseMySql("Server=127.0.0.1;Database=guardians.zoneauth;Uid=root;Pwd=test;");
 #endif
 				options.UseOpenIddict<int>();
 			});
 
 			//Below is the OpenIddict registration
 			//This is the recommended setup from the official Github: https://github.com/openiddict/openiddict-core
-			services.AddIdentity<GuardiansApplicationUser, GuardiansApplicationRole>(options =>
+			services.AddIdentity<ZoneServerApplicationUser, GuardiansApplicationRole>(options =>
 				{
 					//These disable the ridiculous requirements that the defauly password scheme has
 					options.Password.RequireNonAlphanumeric = false;
@@ -92,13 +92,13 @@ namespace GladMMO
 					options.ClaimsIdentity.RoleClaimType = OpenIdConnectConstants.Claims.Role;
 					options.ClaimsIdentity.UserNameClaimType = OpenIdConnectConstants.Claims.Name;
 				})
-				.AddEntityFrameworkStores<GuardiansAuthenticationDbContext>()
+				.AddEntityFrameworkStores<GuardiansZoneAuthenticationDbContext>()
 				.AddDefaultTokenProviders();
 
 			services.AddOpenIddict<int>(options =>
 			{
 				// Register the Entity Framework stores.
-				options.AddEntityFrameworkCoreStores<GuardiansAuthenticationDbContext>();
+				options.AddEntityFrameworkCoreStores<GuardiansZoneAuthenticationDbContext>();
 
 				// Register the ASP.NET Core MVC binder used by OpenIddict.
 				// Note: if you don't call this method, you won't be able to
@@ -123,9 +123,9 @@ namespace GladMMO
 					throw new InvalidOperationException($"Failed to load cert at Path: {authOptions.Value.JwtSigningX509Certificate2Path} with Root: {Directory.GetCurrentDirectory()}. Error: {e.Message} \n\n Stack: {e.StackTrace}", e);
 				}
 
-				options.SetIssuer(new Uri(@"https://auth.vrguardians.net"));
+				options.SetIssuer(new Uri(@"https://zoneauth.vrguardians.net"));
 				options.RequireClientIdentification();
-			});*/
+			});
 
 #warning This is just for the test build, we don't actually want to do this
 			services.Configure<IdentityOptions>(options =>

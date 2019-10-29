@@ -4,6 +4,6 @@
 
     "JwtSigningX509Certificate2Path": "Certs/TestCert.pfx",
 
-    "AuthenticationDatabaseString": "Server=127.0.0.1;Database=guardians.auth;Uid=root;Pwd=test;"
+    "AuthenticationDatabaseString": "Server=127.0.0.1;Database=guardians.zoneauth;Uid=root;Pwd=test;"
   }
 }
