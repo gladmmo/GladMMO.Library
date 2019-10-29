@@ -58,6 +58,9 @@ namespace GladMMO
 					if (claim.Type == "role") //TODO: Is there a constant for this??
 						await UserManager.AddToRoleAsync(user, claim.Value);
 
+				//Also add the ZoneServer role
+				await UserManager.AddToRoleAsync(user, GladMMOAuthConstants.ZONESERVER_AUTHORIZATION_ROLE);
+
 				//At this point, the account has the PlayFab id claim so it's ready for use.
 				return Ok();
 			}
