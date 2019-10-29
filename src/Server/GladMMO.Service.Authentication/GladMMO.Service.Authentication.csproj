@@ -37,6 +37,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\GladMMO.Client.Authentication\GladMMO.Client.Authentication.csproj" />
     <ProjectReference Include="..\..\GladMMO.Models.Authentication\GladMMO.Models.Authentication.csproj" />
+    <ProjectReference Include="..\GladMMO.Server.Authentication.Common\GladMMO.Server.Authentication.Common.csproj" />
     <ProjectReference Include="..\GladMMO.Server.Common\GladMMO.Server.Common.csproj" />
     <ProjectReference Include="..\GladMMO.Server.PlayFab\GladMMO.Server.PlayFab.csproj" />
     <ProjectReference Include="..\GladMMO.Service.Common\GladMMO.Service.Common.csproj" />
