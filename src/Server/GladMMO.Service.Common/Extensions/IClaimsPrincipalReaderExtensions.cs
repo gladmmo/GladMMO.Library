@@ -25,5 +25,20 @@ namespace GladMMO
 
 			return accountId;
 		}
+
+		//TODO: Doc.
+		public static int GetPlayerAccountId(this IClaimsPrincipalReader reader, ClaimsPrincipal principal)
+		{
+			//Cannot get playeraccountid claim from non-zoneserver roles
+			if(!principal.IsInRole(GladMMOAuthConstants.ZONESERVER_AUTHORIZATION_ROLE))
+				throw new InvalidOperationException($"Failed to read Player AccountId Claim: {GladMMOAuthConstants.ACCOUNT_ID_OWNER_CLAIM_NAME} because provided identity did not have the zoneserver role.");
+
+			string accountIdString = principal.FindFirstValue(GladMMOAuthConstants.ACCOUNT_ID_OWNER_CLAIM_NAME);
+
+			if(int.TryParse(accountIdString, out int resultValue))
+				return resultValue;
+			else
+				throw new InvalidOperationException($"Failed to read Player AccountId Claim: {GladMMOAuthConstants.ACCOUNT_ID_OWNER_CLAIM_NAME}");
+		}
 	}
 }
