@@ -20,6 +20,15 @@ namespace GladMMO
 			ILogger<AuthorizationReadyController> logger) 
 			: base(claimsReader, logger, UserContentType.World)
 		{
+
+		}
+
+		[AllowAnonymous]
+		[HttpGet("{id}/exists")]
+		public async Task<IActionResult> CheckExists([FromRoute(Name = "id")] long worldId,
+			[FromServices] IWorldEntryRepository worldEntryRepository)
+		{
+			return Ok(await worldEntryRepository.ContainsAsync(worldId));
 		}
 
 		[HttpPost("{id}/uploaded")]
