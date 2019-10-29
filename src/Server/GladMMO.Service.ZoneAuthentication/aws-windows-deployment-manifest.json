@@ -1,0 +1,17 @@
+﻿{
+  "manifestVersion": 1,
+  "deployments":
+  {
+    "aspNetCoreWeb": 
+    [
+      {
+        "name": "ZoneAuthentication",
+        "parameters":
+        {
+          "appBundle": ".",
+          "iisPath": "/"
+        }
+      }
+    ]
+  }
+}
