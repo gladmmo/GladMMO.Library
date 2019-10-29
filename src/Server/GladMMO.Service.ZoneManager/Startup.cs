@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Refit;
 
 namespace GladMMO
 {
@@ -72,6 +73,8 @@ namespace GladMMO
 		private void RegisterRefitInterfaces([NotNull] IServiceCollection services)
 		{
 			if (services == null) throw new ArgumentNullException(nameof(services));
+
+			services.AddSingleton<IServiceDiscoveryService>(provider => RestService.For<IServiceDiscoveryService>("http://72.190.177.214:5000"));
 
 			services.AddSingleton<IWorldDataServiceClient>(provider =>
 			{
