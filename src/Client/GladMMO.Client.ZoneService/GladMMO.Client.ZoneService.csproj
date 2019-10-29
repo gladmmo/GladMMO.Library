@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\GladMMO.Models.ServiceDiscovery\GladMMO.Models.ServiceDiscovery.csproj" />
+    <ProjectReference Include="..\..\GladMMO.Models.ZoneManager\GladMMO.Models.ZoneManager.csproj" />
   </ItemGroup>
 
 </Project>

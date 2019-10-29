@@ -27,6 +27,7 @@ namespace GladMMO
 		/// <returns>The world id or a failure.</returns>
 		[HttpGet("{id}/config")]
 		[ResponseCache(Duration = 300)]
+		[ProducesJson]
 		public async Task<IActionResult> GetZoneWorldConfiguration([FromRoute(Name = "id")] int zoneId)
 		{
 			if(!await ZoneRepository.ContainsAsync(zoneId).ConfigureAwait(false))
