@@ -82,6 +82,14 @@ namespace GladMMO
 			LastCheckinTime = RegistrationTime;
 		}
 
+		/// <summary>
+		/// Updates the <see cref="LastCheckinTime"/> to the current time.
+		/// </summary>
+		public void UpdateCheckinTime()
+		{
+			LastCheckinTime = DateTime.UtcNow.Ticks;
+		}
+
 		private ZoneInstanceEntryModel()
 		{
 			
