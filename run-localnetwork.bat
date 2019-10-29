@@ -31,5 +31,5 @@ start "social" dotnet GladMMO.Service.Social.dll --url=http://192.168.0.12:5008
 cd ..
 
 cd zoneauth
-start "zoneauth" dotnet GladMMO.Service.ZoneAuthentication.dll --usehttps Certs/TLSCert.pfx --url=https://192.168.0.12:5009
+start "zoneauth" dotnet GladMMO.Service.ZoneAuthentication.dll --url=http://192.168.0.12:5009
 cd ..
