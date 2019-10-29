@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Security.Claims;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using AspNet.Security.OpenIdConnect.Primitives;
 using Microsoft.AspNetCore.Builder;
@@ -136,6 +137,22 @@ namespace GladMMO
 				options.Password.RequireLowercase = false;
 				options.Password.RequireNonAlphanumeric = false;
 			});
+
+			//TODO: Don't hardcode cert
+			X509Certificate2 cert = null;
+			string certPath = "Certs/TestCert.pfx";
+
+			try
+			{
+				cert = X509Certificate2Loader.Create(certPath).Load();
+			}
+			catch(Exception e)
+			{
+				throw new System.InvalidOperationException($"Failed to load {nameof(X509Certificate2)} from Path: {certPath} \n\n StackTrace: {e.StackTrace}", e);
+			}
+
+			//This provides JwtBearer support for Authorize attribute/header
+			services.AddJustAuthorization(cert);
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
