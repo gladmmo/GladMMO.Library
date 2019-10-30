@@ -28,6 +28,7 @@ namespace GladMMO
 			ServicePointManager.CheckCertificateRevocationList = false;
 
 			builder.RegisterModule<ContentServerDependencyAutofacModule>();
+			builder.RegisterModule<ZoneClientDependencyAutofacModule>();
 
 			//TODO: Extract to seperate module like the client.
 			//Register the serialization models.
