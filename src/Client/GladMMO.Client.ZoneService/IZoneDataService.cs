@@ -12,22 +12,6 @@ namespace GladMMO
 	[Headers("User-Agent: GuardiansClient")]
 	public interface IZoneDataService
 	{
-		/// <summary>
-		/// Queries for the world id of the provided zone server
-		/// with ID: <see cref="zoneId"/>
-		/// </summary>
-		/// <param name="zoneId">The zone id.</param>
-		/// <returns>The id of the zoneserver. Throws if it doesn't exist.</returns>
-		[Obsolete("We are migrating to new zone handling")]
-		[Get("/api/zoneserver/{id}/worldid")]
-		[Headers("Cache-Control: max-age=300")]
-		Task<long> GetZoneWorld([AliasAs("id")] int zoneId);
-
-		[Obsolete("We are migrating to new zone handling")]
-		[Get("/api/zoneserver/{id}/endpoint")]
-		//[ResponseCache(Duration = 300)] //TODO: Cache
-		Task<ResolveServiceEndpointResponse> GetServerEndpoint([AliasAs("id")] int zoneId);
-
 		//New zone stuff
 		//TODO: We should add authorization to this
 		[Get("/api/ZoneData/{id}/config")]

@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 namespace GladMMO
 {
 	[JsonObject]
-	public sealed class ZoneServerRegistrationResponse
+	public sealed class ZoneServerAccountRegistrationResponse
 	{
 		/// <summary>
 		/// The expected zoneId (after registering online status) which is also
@@ -27,7 +27,7 @@ namespace GladMMO
 		[JsonProperty]
 		public string ZonePassword { get; private set; }
 
-		public ZoneServerRegistrationResponse(int zoneId, string zoneUserName, string zonePassword)
+		public ZoneServerAccountRegistrationResponse(int zoneId, string zoneUserName, string zonePassword)
 		{
 			if (zoneId <= 0) throw new ArgumentOutOfRangeException(nameof(zoneId));
 			if (string.IsNullOrWhiteSpace(zoneUserName)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(zoneUserName));
@@ -42,7 +42,7 @@ namespace GladMMO
 		/// Serializer ctor.
 		/// </summary>
 		[JsonConstructor]
-		private ZoneServerRegistrationResponse()
+		private ZoneServerAccountRegistrationResponse()
 		{
 			
 		}

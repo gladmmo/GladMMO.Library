@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using Common.Logging;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
@@ -79,6 +80,13 @@ namespace GladMMO
 			});
 
 			return services;
+		}
+
+		public static IServiceCollection AddCommonLoggingAdapter([JetBrains.Annotations.NotNull] this IServiceCollection services)
+		{
+			if (services == null) throw new ArgumentNullException(nameof(services));
+
+			return services.AddSingleton<ILog, CommonLoggingASPCoreLoggingAdapter>();
 		}
 	}
 }

@@ -46,7 +46,7 @@ namespace GladMMO
 					throw new InvalidOperationException($"Encountered network client already initialized.");
 
 				//To know where we must connect, we must query for the zone-endpoint that we should be connecting to.
-				ResolveServiceEndpointResponse endpointResponse = await ZoneServiceClient.GetServerEndpoint(ZoneDataRepository.ZoneId);
+				ResolveServiceEndpointResponse endpointResponse = await ZoneServiceClient.GetZoneConnectionEndpointAsync(ZoneDataRepository.ZoneId);
 
 				//TODO: Handle failed queries, probably have to sent back to titlescreen
 				if(endpointResponse.isSuccessful)

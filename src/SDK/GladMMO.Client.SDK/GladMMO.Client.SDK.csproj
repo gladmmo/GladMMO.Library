@@ -14,7 +14,7 @@
     <PackageReference Include="Fasterflect.Netstandard" Version="1.0.9" />
     <PackageReference Include="Glader.Essentials.Unity" Version="1.0.31" />
     <PackageReference Include="Microsoft.Azure.Storage.Blob" Version="10.0.3" />
-    <PackageReference Include="Refit" Version="4.6.107" />
+    <PackageReference Include="Refit" Version="4.7.51" />
   </ItemGroup>
 
   <ItemGroup>

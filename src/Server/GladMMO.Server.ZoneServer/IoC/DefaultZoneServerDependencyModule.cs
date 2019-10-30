@@ -28,6 +28,8 @@ namespace GladMMO
 			ServicePointManager.CheckCertificateRevocationList = false;
 
 			builder.RegisterModule<ContentServerDependencyAutofacModule>();
+			builder.RegisterModule<ZoneClientDependencyAutofacModule>();
+			builder.RegisterModule<ZoneAzureServiceQueueDependencyAutofacModule>();
 
 			//TODO: Extract to seperate module like the client.
 			//Register the serialization models.
@@ -47,6 +49,7 @@ namespace GladMMO
 			//ZoneServerAuthenticationTokenRepository: IReadonlyAuthTokenRepository
 			builder.RegisterType<ZoneServerAuthenticationTokenRepository>()
 				.As<IReadonlyAuthTokenRepository>()
+				.As<IAuthTokenRepository>()
 				.SingleInstance();
 
 			builder.RegisterType<ProtobufNetGladNetSerializerAdapter>()

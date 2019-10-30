@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
@@ -64,6 +66,22 @@ namespace GladMMO
 		{
 			return await Context.ZoneEntries
 				.FirstOrDefaultAsync(z => z.WorldId == worldId);
+		}
+
+		public async Task CleanupExpiredZonesAsync(CancellationToken cancellationToken = default(CancellationToken))
+		{
+			//Can't rely on IsExpired property in LINQ EF.
+			long currentTickTime = DateTime.UtcNow.Ticks;
+			long expirationTimeLength = ZoneInstanceEntryModel.ExpirationTimeLength;
+
+			//TODO: We can reduce the memory we're loading here most likely.
+			//Query all expired zoneid
+			var expiredZoneModels = await Context.ZoneEntries
+				.Where(z => (currentTickTime - z.LastCheckinTime) >= expirationTimeLength)
+				.ToArrayAsync(cancellationToken);
+
+			Context.ZoneEntries.RemoveRange(expiredZoneModels);
+			await Context.SaveChangesAsync(cancellationToken);
 		}
 	}
 }

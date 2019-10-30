@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 namespace GladMMO
 {
 	[JsonObject]
-	public sealed class ZoneServerRegistrationRequest
+	public sealed class ZoneServerAccountRegistrationRequest
 	{
 		//TODO: Add something here if we ever need it.
 
@@ -14,7 +14,7 @@ namespace GladMMO
 		/// Serializer ctor.
 		/// </summary>
 		[JsonConstructor]
-		public ZoneServerRegistrationRequest()
+		public ZoneServerAccountRegistrationRequest()
 		{
 			
 		}

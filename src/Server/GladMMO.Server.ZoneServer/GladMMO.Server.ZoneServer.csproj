@@ -22,16 +22,18 @@
     <PackageReference Include="GladNet3.Server.DotNetTcpServer" Version="3.0.47" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
     <PackageReference Include="Nito.AsyncEx" Version="5.0.0-pre-05" />
-    <PackageReference Include="PostSharp.Patterns.Caching" Version="5.0.52" />
-    <PackageReference Include="Refit" Version="4.6.107" />
+    <PackageReference Include="Refit" Version="4.7.51" />
     <PackageReference Include="SceneJect.Common" Version="3.0.31" />
     <PackageReference Include="SceneJect.Editor" Version="3.0.31" />
     <PackageReference Include="SceneJect.Metadata" Version="3.0.31" />
+    <PackageReference Include="System.Diagnostics.DiagnosticSource" Version="4.6.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\Client\GladMMO.Client.ContentServer\GladMMO.Client.ContentServer.csproj" />
     <ProjectReference Include="..\..\Client\GladMMO.Client.ServiceDiscovery\GladMMO.Client.ServiceDiscovery.csproj" />
+    <ProjectReference Include="..\..\Client\GladMMO.Client.ZoneAuthentication\GladMMO.Client.ZoneAuthentication.csproj" />
+    <ProjectReference Include="..\..\Client\GladMMO.Client.ZoneService.Server\GladMMO.Client.ZoneService.Server.csproj" />
     <ProjectReference Include="..\..\GladMMO.Client.Common\GladMMO.Client.Common.csproj" />
     <ProjectReference Include="..\..\GladMMO.Common\GladMMO.Common.csproj" />
     <ProjectReference Include="..\..\GladMMO.Models.Server.ZoneServer\GladMMO.Models.Server.ZoneServer.csproj" />
@@ -42,10 +44,14 @@
     <ProjectReference Include="..\..\GladMMO.ZoneServer.Common\GladMMO.ZoneServer.Common.csproj" />
     <ProjectReference Include="..\..\SDK\GladMMO.Common.SDK\GladMMO.Common.SDK.csproj" />
     <ProjectReference Include="..\GladMMO.Server.Akka\GladMMO.Server.Akka.csproj" />
+    <ProjectReference Include="..\GladMMO.Server.AzureServiceBus\GladMMO.Server.AzureServiceBus.csproj" />
     <ProjectReference Include="..\GladMMO.Server.Common\GladMMO.Server.Common.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="Microsoft.Azure.ServiceBus">
+      <HintPath>..\..\..\lib\AzureServiceBusUnity\Microsoft.Azure.ServiceBus.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine">
       <HintPath>..\..\..\lib\Unity\UnityEngine.dll</HintPath>
     </Reference>

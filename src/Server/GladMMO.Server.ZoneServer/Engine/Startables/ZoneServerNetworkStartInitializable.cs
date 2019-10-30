@@ -8,13 +8,16 @@ using GladNet;
 namespace GladMMO
 {
 	//Initializable that just starts the zoneserver network listener.
+	[AdditionalRegisterationAs(typeof(IServerStartedEventSubscribable))]
 	[AdditionalRegisterationAs(typeof(IServerStartingEventSubscribable))]
 	[ServerSceneTypeCreate(ServerSceneType.Default)]
-	public sealed class ZoneServerNetworkStartInitializable : IGameStartable, IServerStartingEventSubscribable
+	public sealed class ZoneServerNetworkStartInitializable : IGameStartable, IServerStartingEventSubscribable, IServerStartedEventSubscribable
 	{
 		private ZoneServerApplicationBase ApplicationBase { get; }
 
 		public event EventHandler OnServerStarting;
+
+		public event EventHandler OnServerStarted;
 
 		/// <inheritdoc />
 		public ZoneServerNetworkStartInitializable([NotNull] ZoneServerApplicationBase applicationBase)
@@ -23,7 +26,7 @@ namespace GladMMO
 		}
 
 		/// <inheritdoc />
-		public Task OnGameStart()
+		public async Task OnGameStart()
 		{
 			OnServerStarting?.Invoke(this, EventArgs.Empty);
 
@@ -37,8 +40,14 @@ namespace GladMMO
 				throw new InvalidOperationException(error);
 			}
 
+			TaskCompletionSource<object> completionSource = new TaskCompletionSource<object>();
+
+#pragma warning disable 4014
 			Task.Factory.StartNew(async () =>
+#pragma warning restore 4014
 			{
+				completionSource.SetResult(null);
+
 				await ApplicationBase.BeginListening()
 					.ConfigureAwait(false);
 
@@ -47,7 +56,10 @@ namespace GladMMO
 
 			}, TaskCreationOptions.LongRunning);
 
-			return Task.CompletedTask;
+			await completionSource.Task;
+
+			//This is the closest we can get to "started" without GladNet exposing event API
+			OnServerStarted?.Invoke(this, EventArgs.Empty);
 		}
 	}
 }

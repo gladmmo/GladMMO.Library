@@ -12,7 +12,7 @@
     <PackageReference Include="Glader.Essentials.Common" Version="1.0.31" />
     <PackageReference Include="GladNet3.Client.DotNetTcpClient" Version="3.0.46" />
     <PackageReference Include="GladNet3.Handler.API" Version="3.0.46" />
-    <PackageReference Include="Refit" Version="4.6.107" />
+    <PackageReference Include="Refit" Version="4.7.51" />
     <PackageReference Include="SceneJect.Metadata" Version="3.0.31" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.5.0" />
   </ItemGroup>

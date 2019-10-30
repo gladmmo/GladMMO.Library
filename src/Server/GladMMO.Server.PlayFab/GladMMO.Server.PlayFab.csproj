@@ -6,7 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="PlayFabAllSDK" Version="1.51.190520" />
-    <PackageReference Include="Refit" Version="4.6.107" />
+    <PackageReference Include="Refit" Version="4.7.51" />
   </ItemGroup>
 
 </Project>

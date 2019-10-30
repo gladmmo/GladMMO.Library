@@ -12,7 +12,7 @@ namespace GladMMO
 	{
 		[RequiresAuthentication]
 		[Post("/api/register")]
-		Task<ZoneServerRegistrationResponse> CreateZoneServerAccount([JsonBody] ZoneServerRegistrationRequest request);
+		Task<ZoneServerAccountRegistrationResponse> CreateZoneServerAccount([JsonBody] ZoneServerAccountRegistrationRequest request);
 
 		/// <summary>
 		/// Authenticate request method. Sends the request model as a URLEncoded body.
