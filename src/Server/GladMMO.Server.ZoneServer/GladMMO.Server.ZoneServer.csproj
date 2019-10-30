@@ -22,7 +22,7 @@
     <PackageReference Include="GladNet3.Server.DotNetTcpServer" Version="3.0.47" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
     <PackageReference Include="Nito.AsyncEx" Version="5.0.0-pre-05" />
-    <PackageReference Include="Refit" Version="4.6.107" />
+    <PackageReference Include="Refit" Version="4.7.51" />
     <PackageReference Include="SceneJect.Common" Version="3.0.31" />
     <PackageReference Include="SceneJect.Editor" Version="3.0.31" />
     <PackageReference Include="SceneJect.Metadata" Version="3.0.31" />

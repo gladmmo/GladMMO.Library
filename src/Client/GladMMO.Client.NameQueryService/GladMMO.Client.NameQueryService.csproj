@@ -6,7 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="Nito.AsyncEx" Version="5.0.0-pre-05" />
-    <PackageReference Include="Refit" Version="4.6.107" />
+    <PackageReference Include="Refit" Version="4.7.51" />
   </ItemGroup>
 
   <ItemGroup>

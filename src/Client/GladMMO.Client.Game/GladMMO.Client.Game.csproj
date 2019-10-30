@@ -33,7 +33,7 @@
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="1.1.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.2.0" />
     <PackageReference Include="Nito.AsyncEx" Version="5.0.0-pre-05" />
-    <PackageReference Include="Refit" Version="4.6.107" />
+    <PackageReference Include="Refit" Version="4.7.51" />
     <PackageReference Include="SceneJect.Common" Version="3.0.31" />
     <PackageReference Include="SceneJect.Metadata" Version="3.0.31" />
     <PackageReference Include="System.Collections.Immutable" Version="1.5.0" />
