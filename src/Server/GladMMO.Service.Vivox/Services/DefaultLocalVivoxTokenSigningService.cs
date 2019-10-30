@@ -16,7 +16,7 @@ namespace GladMMO
 		static DefaultLocalVivoxTokenSigningService()
 		{
 			//TODO: Make enviroment variable name a constant somewhere.
-			VIVOX_API_KEY = Environment.GetEnvironmentVariable("VIVOX_API_KEY");
+			VIVOX_API_KEY = Environment.GetEnvironmentVariable(SecurityEnvironmentVariables.VIVOX_API_KEY_PATH);
 		}
 
 		public string CreateSignature([JetBrains.Annotations.NotNull] VivoxTokenClaims claims)
