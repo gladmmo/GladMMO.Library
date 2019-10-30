@@ -10,7 +10,7 @@ namespace GladMMO
 	public interface IZoneRegistryServiceQueueable
 	{
 		[RequiresAuthentication]
-		[Post("/api/ZoneRegistry/checkin")]
+		[Patch("/api/ZoneRegistry/checkin")]
 		Task ZoneServerCheckinAsync();
 	}
 }
