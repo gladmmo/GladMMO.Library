@@ -42,6 +42,12 @@ Supporting:
 
 \* Not included
 
+## FAQ
+
+**Q. Why does the library use a precompiled version of Microsoft.Azure.ServiceBus?**
+
+Due to issues with Unity3D's netstandard2.0 compatibility with some assemblies it was required, at the time of this writing at least, to fork it to this repository [Glader.Azure.ServiceBus.Unity](https://github.com/HelloKitty/Glader.Azure.ServiceBus.Unity). It removed some of the dependencies and ensure Unity3D compatibility without breaking assembly references.
+
 ## Path Variables
 
 **PLAYFAB_KEY:** The secret backend key for PlayFab authorization.
