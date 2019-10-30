@@ -12,16 +12,18 @@ namespace GladMMO
 	[Headers("User-Agent: AzureServiceBus")]
 	public interface IAzureServiceQueueProxiedHttpClient
 	{
-		[Post("{route}")]
+		//** ensures that the slashes exist.
+		//First slash is required by Refit sadly.
+		[Post("/{**route}")]
 		[Headers("Content-Type: application/json")]
-		Task SendProxiedPostAsync(string jsonBodyContent, [AliasAs("route")] string requestPath, [Header("Authorization")] string authorizationToken);
+		Task SendProxiedPostAsync([Body] string jsonBodyContent, [AliasAs("route")] string requestPath, [Header("Authorization")] string authorizationToken);
 
-		[Patch("{route}")]
+		[Patch("/{**route}")]
 		[Headers("Content-Type: application/json")]
-		Task SendProxiedPatchAsync(string jsonBodyContent, [AliasAs("route")] string requestPath, [Header("Authorization")] string authorizationToken);
+		Task SendProxiedPatchAsync([Body] string jsonBodyContent, [AliasAs("route")] string requestPath, [Header("Authorization")] string authorizationToken);
 
-		[Put("{route}")]
+		[Put("/{**route}")]
 		[Headers("Content-Type: application/json")]
-		Task SendProxiedPutAsync(string jsonBodyContent, [AliasAs("route")] string requestPath, [Header("Authorization")] string authorizationToken);
+		Task SendProxiedPutAsync([Body] string jsonBodyContent, [AliasAs("route")] string requestPath, [Header("Authorization")] string authorizationToken);
 	}
 }
