@@ -53,13 +53,13 @@ namespace GladMMO
 				switch(httpRequestModel.Method)
 				{
 					case ProxiedHttpMethod.Post:
-						await ProxyClient.SendProxiedPostAsync(httpRequestModel.SerializedJsonBody, route, httpRequestModel.AuthorizationToken);
+						await ProxyClient.SendProxiedPostAsync(route, httpRequestModel.SerializedJsonBody, httpRequestModel.AuthorizationToken);
 						break;
 					case ProxiedHttpMethod.Put:
-						await ProxyClient.SendProxiedPutAsync(httpRequestModel.SerializedJsonBody, route, httpRequestModel.AuthorizationToken);
+						await ProxyClient.SendProxiedPutAsync(route, httpRequestModel.SerializedJsonBody, httpRequestModel.AuthorizationToken);
 						break;
 					case ProxiedHttpMethod.Patch:
-						await ProxyClient.SendProxiedPatchAsync(httpRequestModel.SerializedJsonBody, route, httpRequestModel.AuthorizationToken);
+						await ProxyClient.SendProxiedPatchAsync(route, httpRequestModel.SerializedJsonBody, httpRequestModel.AuthorizationToken);
 						break;
 					default:
 						throw new ArgumentOutOfRangeException($"Cannot handle MethodType: {httpRequestModel.Method}");
