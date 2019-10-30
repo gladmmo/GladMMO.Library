@@ -36,7 +36,7 @@ namespace GladMMO
 				Logger.Error($"Encountered AzureQueue Error. Context: {exceptionEventArgs.ExceptionReceivedContext} Reason: {exceptionEventArgs.Exception.ToString()}");
 		}
 
-		protected override Task HandleQueueIncomingMessageAsync(Message message, CancellationToken cancellationToken)
+		protected override async Task HandleQueueIncomingMessageAsync(Message message, CancellationToken cancellationToken)
 		{
 			//TODO: Handle failure case.
 			//Assume all messages in this queue are proxied request models.
@@ -45,16 +45,34 @@ namespace GladMMO
 			if(Logger.IsInfoEnabled)
 				Logger.Info($"Sending proxied Azure Service Queue HTTP Request. Method: {httpRequestModel.Method.ToString()} Route: {httpRequestModel.Route} Content: {httpRequestModel.SerializedJsonBody}");
 
-			switch (httpRequestModel.Method)
+			try
 			{
-				case ProxiedHttpMethod.Post:
-					return ProxyClient.SendProxiedPostAsync(httpRequestModel.SerializedJsonBody, httpRequestModel.Route, httpRequestModel.AuthorizationToken);
-				case ProxiedHttpMethod.Put:
-					return ProxyClient.SendProxiedPutAsync(httpRequestModel.SerializedJsonBody, httpRequestModel.Route, httpRequestModel.AuthorizationToken);
-				case ProxiedHttpMethod.Patch:
-					return ProxyClient.SendProxiedPatchAsync(httpRequestModel.SerializedJsonBody, httpRequestModel.Route, httpRequestModel.AuthorizationToken);
-				default:
-					throw new ArgumentOutOfRangeException($"Cannot handle MethodType: {httpRequestModel.Method}");
+				switch(httpRequestModel.Method)
+				{
+					case ProxiedHttpMethod.Post:
+						await ProxyClient.SendProxiedPostAsync(httpRequestModel.SerializedJsonBody, httpRequestModel.Route, httpRequestModel.AuthorizationToken);
+						break;
+					case ProxiedHttpMethod.Put:
+						await ProxyClient.SendProxiedPutAsync(httpRequestModel.SerializedJsonBody, httpRequestModel.Route, httpRequestModel.AuthorizationToken);
+						break;
+					case ProxiedHttpMethod.Patch:
+						await ProxyClient.SendProxiedPatchAsync(httpRequestModel.SerializedJsonBody, httpRequestModel.Route, httpRequestModel.AuthorizationToken);
+						break;
+					default:
+						throw new ArgumentOutOfRangeException($"Cannot handle MethodType: {httpRequestModel.Method}");
+				}
+
+				//Indicate that the message has been consumed if we haven't canceled.
+				if(!cancellationToken.IsCancellationRequested)
+					await ServiceQueue.CompleteAsync(message.SystemProperties.LockToken);
+			}
+			catch (Exception e)
+			{
+				//If not canceled, we want to abandon it so that other consumers maybe can handle it.
+				if(!cancellationToken.IsCancellationRequested)
+					await ServiceQueue.AbandonAsync(message.SystemProperties.LockToken);
+
+				throw;
 			}
 		}
 	}
