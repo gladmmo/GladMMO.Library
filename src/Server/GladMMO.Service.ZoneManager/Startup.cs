@@ -72,7 +72,7 @@ namespace GladMMO
 		private void RegisterAzureServiceQueue(IServiceCollection services)
 		{
 			string zoneManagerQueueClientAccessKey = Environment.GetEnvironmentVariable(SecurityEnvironmentVariables.AZURE_SERVICE_BUS_API_KEY);
-			ServiceBusConnectionStringBuilder serviceHubConnectionBuilder = new ServiceBusConnectionStringBuilder($@"Endpoint=sb://projectvindictive.servicebus.windows.net/;SharedAccessKeyName=Admin;SharedAccessKey={zoneManagerQueueClientAccessKey}=;EntityPath=zoneservermanagement");
+			ServiceBusConnectionStringBuilder serviceHubConnectionBuilder = new ServiceBusConnectionStringBuilder($@"Endpoint=sb://projectvindictive.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey={zoneManagerQueueClientAccessKey}=;EntityPath=zoneservermanagement");
 			//https://projectvindictive.servicebus.windows.net/zoneservermanagement
 			//Azure Service Bus register
 			IQueueClient zoneManagerServiceQueue = new QueueClient(serviceHubConnectionBuilder);
