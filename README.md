@@ -50,6 +50,8 @@ Supporting:
 
 **VIVOX_API_KEY:** Vivox authorization service requires a secret key for signing tokens for client authorization.
 
+**AZURE_SERVICE_BUS_KEY:** Global Azure Service Bus secret key that allows the backend to manage, send and listen on Service Queues and Topics.
+
 TODO: AWS
 
 ## License
