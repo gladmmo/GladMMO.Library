@@ -5,8 +5,8 @@ using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Common.Logging;
 using Microsoft.Azure.ServiceBus;
-using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
 namespace GladMMO
@@ -19,11 +19,11 @@ namespace GladMMO
 	{
 		private IAzureServiceQueueProxiedHttpClient ProxyClient { get; }
 
-		private ILogger<ProxiedHttpRequestAzureServiceQueueManager> Logger { get; }
+		private ILog Logger { get; }
 
 		public ProxiedHttpRequestAzureServiceQueueManager(IQueueClient serviceQueue,
 			[NotNull] IAzureServiceQueueProxiedHttpClient proxyClient,
-			[NotNull] ILogger<ProxiedHttpRequestAzureServiceQueueManager> logger) 
+			[NotNull] ILog logger) 
 			: base(serviceQueue)
 		{
 			ProxyClient = proxyClient ?? throw new ArgumentNullException(nameof(proxyClient));
@@ -32,8 +32,8 @@ namespace GladMMO
 
 		protected override async Task HandleQueueExceptionAsync(ExceptionReceivedEventArgs exceptionEventArgs)
 		{
-			if(Logger.IsEnabled(LogLevel.Error))
-				Logger.LogError($"Encountered AzureQueue Error. Context: {exceptionEventArgs.ExceptionReceivedContext} Reason: {exceptionEventArgs.Exception.ToString()}");
+			if(Logger.IsErrorEnabled)
+				Logger.Error($"Encountered AzureQueue Error. Context: {exceptionEventArgs.ExceptionReceivedContext} Reason: {exceptionEventArgs.Exception.ToString()}");
 		}
 
 		protected override Task HandleQueueIncomingMessageAsync(Message message, CancellationToken cancellationToken)
@@ -42,8 +42,8 @@ namespace GladMMO
 			//Assume all messages in this queue are proxied request models.
 			ProxiedHttpRequestModel httpRequestModel = JsonConvert.DeserializeObject<ProxiedHttpRequestModel>(Encoding.UTF8.GetString(message.Body));
 
-			if(Logger.IsEnabled(LogLevel.Information))
-				Logger.LogInformation($"Sending proxied Azure Service Queue HTTP Request. Method: {httpRequestModel.Method.ToString()} Route: {httpRequestModel.Route} Content: {httpRequestModel.SerializedJsonBody}");
+			if(Logger.IsInfoEnabled)
+				Logger.Info($"Sending proxied Azure Service Queue HTTP Request. Method: {httpRequestModel.Method.ToString()} Route: {httpRequestModel.Route} Content: {httpRequestModel.SerializedJsonBody}");
 
 			switch (httpRequestModel.Method)
 			{
