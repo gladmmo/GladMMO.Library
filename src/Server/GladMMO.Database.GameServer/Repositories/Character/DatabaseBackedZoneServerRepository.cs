@@ -81,6 +81,7 @@ namespace GladMMO
 				.ToArrayAsync(cancellationToken);
 
 			Context.ZoneEntries.RemoveRange(expiredZoneModels);
+			await Context.SaveChangesAsync(cancellationToken);
 		}
 	}
 }
