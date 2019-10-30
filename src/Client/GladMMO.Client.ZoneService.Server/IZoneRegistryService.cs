@@ -10,14 +10,10 @@ namespace GladMMO
 	/// Proxy interface for zone registry controller/service.
 	/// </summary>
 	[Headers("User-Agent: GuardiansServer")]
-	public interface IZoneRegistryService
+	public interface IZoneRegistryService : IZoneRegistryServiceQueueable
 	{
 		[RequiresAuthentication]
 		[Post("/api/ZoneRegistry/register")]
 		Task<ResponseModel<ZoneServerRegistrationResponse, ZoneServerRegistrationResponseCode>> TryRegisterZoneServerAsync([JsonBody] ZoneServerRegistrationRequest request);
-
-		[RequiresAuthentication]
-		[Post("/api/ZoneRegistry/checkin")]
-		Task ZoneServerCheckinAsync();
 	}
 }
