@@ -11,6 +11,6 @@ namespace GladMMO
 	{
 		[RequiresAuthentication]
 		[Patch("/api/ZoneRegistry/checkin")]
-		Task ZoneServerCheckinAsync();
+		Task ZoneServerCheckinAsync(ZoneServerCheckinRequestModel request);
 	}
 }
