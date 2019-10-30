@@ -19,6 +19,14 @@ namespace GladMMO
 
 				return new AsyncZoneAuthenticationServiceClient(QueryForRemoteServiceEndpoint(serviceDiscovery, "ZoneAuth"), new RefitSettings() { HttpMessageHandlerFactory = () => new AuthenticatedHttpClientHandler(tokenRepository) });
 			});
+
+			builder.Register<IZoneRegistryService>(context =>
+			{
+				IServiceDiscoveryService serviceDiscovery = context.Resolve<IServiceDiscoveryService>();
+				IReadonlyAuthTokenRepository tokenRepository = context.Resolve<IReadonlyAuthTokenRepository>();
+
+				return new AsyncEndpointZoneRegistryService(QueryForRemoteServiceEndpoint(serviceDiscovery, "ZoneManager"), new RefitSettings() { HttpMessageHandlerFactory = () => new AuthenticatedHttpClientHandler(tokenRepository) });
+			});
 		}
 	}
 }
