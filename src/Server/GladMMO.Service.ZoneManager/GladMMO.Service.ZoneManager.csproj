@@ -33,6 +33,7 @@
     <ProjectReference Include="..\..\GladMMO.Models.ZoneManager\GladMMO.Models.ZoneManager.csproj" />
     <ProjectReference Include="..\GladMMO.Database.Common\GladMMO.Database.Common.csproj" />
     <ProjectReference Include="..\GladMMO.Database.GameServer\GladMMO.Database.GameServer.csproj" />
+    <ProjectReference Include="..\GladMMO.Server.AzureServiceBus\GladMMO.Server.AzureServiceBus.csproj" />
     <ProjectReference Include="..\GladMMO.Server.Common\GladMMO.Server.Common.csproj" />
     <ProjectReference Include="..\GladMMO.Service.Common\GladMMO.Service.Common.csproj" />
   </ItemGroup>
