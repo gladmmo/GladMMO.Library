@@ -47,6 +47,7 @@ namespace GladMMO
 			//ZoneServerAuthenticationTokenRepository: IReadonlyAuthTokenRepository
 			builder.RegisterType<ZoneServerAuthenticationTokenRepository>()
 				.As<IReadonlyAuthTokenRepository>()
+				.As<IAuthTokenRepository>()
 				.SingleInstance();
 
 			builder.RegisterType<ProtobufNetGladNetSerializerAdapter>()

@@ -32,6 +32,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Client\GladMMO.Client.ContentServer\GladMMO.Client.ContentServer.csproj" />
     <ProjectReference Include="..\..\Client\GladMMO.Client.ServiceDiscovery\GladMMO.Client.ServiceDiscovery.csproj" />
+    <ProjectReference Include="..\..\Client\GladMMO.Client.ZoneAuthentication\GladMMO.Client.ZoneAuthentication.csproj" />
     <ProjectReference Include="..\..\GladMMO.Client.Common\GladMMO.Client.Common.csproj" />
     <ProjectReference Include="..\..\GladMMO.Common\GladMMO.Common.csproj" />
     <ProjectReference Include="..\..\GladMMO.Models.Server.ZoneServer\GladMMO.Models.Server.ZoneServer.csproj" />
