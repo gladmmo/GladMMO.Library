@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace GladMMO
@@ -17,6 +18,6 @@ namespace GladMMO
 		/// AKA haven't updated their checkin value in awhile.
 		/// </summary>
 		/// <returns>Awaitable.</returns>
-		Task CleanupExpiredZonesAsync();
+		Task CleanupExpiredZonesAsync(CancellationToken cancellationToken = default(CancellationToken));
 	}
 }
