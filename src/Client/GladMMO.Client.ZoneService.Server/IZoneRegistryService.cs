@@ -15,5 +15,9 @@ namespace GladMMO
 		[RequiresAuthentication]
 		[Post("/api/ZoneRegistry/register")]
 		Task<ResponseModel<ZoneServerRegistrationResponse, ZoneServerRegistrationResponseCode>> TryRegisterZoneServerAsync([JsonBody] ZoneServerRegistrationRequest request);
+
+		[RequiresAuthentication]
+		[Post("/api/ZoneRegistry/checkin")]
+		Task ZoneServerCheckinAsync();
 	}
 }
