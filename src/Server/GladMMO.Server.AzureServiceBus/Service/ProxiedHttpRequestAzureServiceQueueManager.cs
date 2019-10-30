@@ -38,25 +38,28 @@ namespace GladMMO
 
 		protected override async Task HandleQueueIncomingMessageAsync(Message message, CancellationToken cancellationToken)
 		{
-			//TODO: Handle failure case.
-			//Assume all messages in this queue are proxied request models.
-			ProxiedHttpRequestModel httpRequestModel = JsonConvert.DeserializeObject<ProxiedHttpRequestModel>(Encoding.UTF8.GetString(message.Body));
-
-			if(Logger.IsInfoEnabled)
-				Logger.Info($"Sending proxied Azure Service Queue HTTP Request. Method: {httpRequestModel.Method.ToString()} Route: {httpRequestModel.Route} Content: {httpRequestModel.SerializedJsonBody}");
-
 			try
 			{
+				//TODO: Handle failure case.
+				//Assume all messages in this queue are proxied request models.
+				ProxiedHttpRequestModel httpRequestModel = JsonConvert.DeserializeObject<ProxiedHttpRequestModel>(Encoding.UTF8.GetString(message.Body));
+
+				if(Logger.IsInfoEnabled)
+					Logger.Info($"Sending proxied Azure Service Queue HTTP Request. Method: {httpRequestModel.Method.ToString()} Route: {httpRequestModel.Route} Content: {httpRequestModel.SerializedJsonBody}");
+
+				//Skip the first slash.
+				string route = httpRequestModel.Route.Remove(0, 1);
+
 				switch(httpRequestModel.Method)
 				{
 					case ProxiedHttpMethod.Post:
-						await ProxyClient.SendProxiedPostAsync(httpRequestModel.SerializedJsonBody, httpRequestModel.Route, httpRequestModel.AuthorizationToken);
+						await ProxyClient.SendProxiedPostAsync(httpRequestModel.SerializedJsonBody, route, httpRequestModel.AuthorizationToken);
 						break;
 					case ProxiedHttpMethod.Put:
-						await ProxyClient.SendProxiedPutAsync(httpRequestModel.SerializedJsonBody, httpRequestModel.Route, httpRequestModel.AuthorizationToken);
+						await ProxyClient.SendProxiedPutAsync(httpRequestModel.SerializedJsonBody, route, httpRequestModel.AuthorizationToken);
 						break;
 					case ProxiedHttpMethod.Patch:
-						await ProxyClient.SendProxiedPatchAsync(httpRequestModel.SerializedJsonBody, httpRequestModel.Route, httpRequestModel.AuthorizationToken);
+						await ProxyClient.SendProxiedPatchAsync(httpRequestModel.SerializedJsonBody, route, httpRequestModel.AuthorizationToken);
 						break;
 					default:
 						throw new ArgumentOutOfRangeException($"Cannot handle MethodType: {httpRequestModel.Method}");
