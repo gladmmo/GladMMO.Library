@@ -26,7 +26,7 @@ namespace GladMMO
 		}
 
 		public TimedJobConfig(TimeSpan timeSpan)
-			: base(timeSpan.Milliseconds)
+			: base((int)(timeSpan.Ticks / TimeSpan.TicksPerMillisecond))
 		{
 			
 		}
