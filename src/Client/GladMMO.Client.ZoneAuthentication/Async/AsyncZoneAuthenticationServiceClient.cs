@@ -22,7 +22,7 @@ namespace GladMMO
 
 		}
 
-		public async Task<ZoneServerRegistrationResponse> CreateZoneServerAccount(ZoneServerRegistrationRequest request)
+		public async Task<ZoneServerAccountRegistrationResponse> CreateZoneServerAccount(ZoneServerAccountRegistrationRequest request)
 		{
 			return await (await GetService().ConfigureAwait(false)).CreateZoneServerAccount(request).ConfigureAwait(false);
 		}

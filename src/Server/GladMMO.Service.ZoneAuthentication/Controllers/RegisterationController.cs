@@ -28,7 +28,7 @@ namespace GladMMO
 		[HttpPost]
 		[AuthorizeJwt] //Zoneservers actually need to register themselves with authorization from a user account.
 		[ProducesJson]
-		public async Task<IActionResult> CreateZoneServerAccount([FromBody] [JetBrains.Annotations.NotNull] ZoneServerRegistrationRequest request)
+		public async Task<IActionResult> CreateZoneServerAccount([FromBody] [JetBrains.Annotations.NotNull] ZoneServerAccountRegistrationRequest request)
 		{
 			if (request == null) throw new ArgumentNullException(nameof(request));
 
@@ -63,7 +63,7 @@ namespace GladMMO
 				await UserManager.AddToRoleAsync(user, GladMMOAuthConstants.ZONESERVER_AUTHORIZATION_ROLE);
 
 				//At this point, the account has the PlayFab id claim so it's ready for use.
-				return Json(new ZoneServerRegistrationResponse(user.Id, zoneUserName, zonePassword));
+				return Json(new ZoneServerAccountRegistrationResponse(user.Id, zoneUserName, zonePassword));
 			}
 			else
 				return BadRequest(identityResult.Errors.Aggregate("", (s, error) => $"{s} {error.Code}:{error.Description}"));
