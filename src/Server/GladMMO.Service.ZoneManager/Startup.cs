@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Azure.ServiceBus;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -57,8 +59,37 @@ namespace GladMMO
 
 			RegisterRefitInterfaces(services);
 
+			RegisterAzureServiceQueue(services);
+
+			services.AddCommonLoggingAdapter();
+
 			services.AddHostedService<ExpiredZoneServerCleanupJob>();
+			
+
 			services.AddSingleton<TimedJobConfig<ExpiredZoneServerCleanupJob>>(new TimedJobConfig<ExpiredZoneServerCleanupJob>(TimeSpan.FromMinutes(11)));
+		}
+
+		private void RegisterAzureServiceQueue(IServiceCollection services)
+		{
+			string zoneManagerQueueClientAccessKey = Environment.GetEnvironmentVariable(SecurityEnvironmentVariables.AZURE_SERVICE_BUS_API_KEY);
+			ServiceBusConnectionStringBuilder serviceHubConnectionBuilder = new ServiceBusConnectionStringBuilder($@"Endpoint=sb://projectvindictive.servicebus.windows.net/;SharedAccessKeyName=Admin;SharedAccessKey={zoneManagerQueueClientAccessKey}=;EntityPath=zoneservermanagement");
+			//https://projectvindictive.servicebus.windows.net/zoneservermanagement
+			//Azure Service Bus register
+			IQueueClient zoneManagerServiceQueue = new QueueClient(serviceHubConnectionBuilder);
+			services.AddSingleton(zoneManagerServiceQueue);
+
+			services.AddHostedService<StartAzureHttpProxyServiceQueueJob>();
+
+			services.AddTransient<ProxiedHttpRequestAzureServiceQueueManager>();
+
+			//TODO: Find a way to avoid this loopback
+			//Now we need to the proxy client stuff.
+			services.AddSingleton<IAzureServiceQueueProxiedHttpClient>(provider =>
+			{
+				var serviceDiscClient = provider.GetService<IServiceDiscoveryService>();
+
+				return new AsyncAzureServiceQueueProxiedClient(QueryForRemoteServiceEndpoint(serviceDiscClient, "ZoneManager"));
+			});
 		}
 
 		private void RegisterDatabaseServices([NotNull] IServiceCollection services)
