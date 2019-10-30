@@ -149,6 +149,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GladMMO.Models.ZoneManager"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladMMO.Client.ZoneService.Server", "src\Client\GladMMO.Client.ZoneService.Server\GladMMO.Client.ZoneService.Server.csproj", "{5738049B-735C-413F-9517-C609233306BF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladMMO.Server.AzureServiceBus", "src\Server\GladMMO.Server.AzureServiceBus\GladMMO.Server.AzureServiceBus.csproj", "{3B951C1A-F52B-4716-ADD5-C117F611CC7F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Database_Migration|Any CPU = Database_Migration|Any CPU
@@ -758,6 +760,16 @@ Global
 		{5738049B-735C-413F-9517-C609233306BF}.Debug-Local|Any CPU.Build.0 = Debug|Any CPU
 		{5738049B-735C-413F-9517-C609233306BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5738049B-735C-413F-9517-C609233306BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3B951C1A-F52B-4716-ADD5-C117F611CC7F}.Database_Migration|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B951C1A-F52B-4716-ADD5-C117F611CC7F}.Database_Migration|Any CPU.Build.0 = Debug|Any CPU
+		{3B951C1A-F52B-4716-ADD5-C117F611CC7F}.DEBUG_LOCAL|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B951C1A-F52B-4716-ADD5-C117F611CC7F}.DEBUG_LOCAL|Any CPU.Build.0 = Debug|Any CPU
+		{3B951C1A-F52B-4716-ADD5-C117F611CC7F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B951C1A-F52B-4716-ADD5-C117F611CC7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B951C1A-F52B-4716-ADD5-C117F611CC7F}.Debug-Local|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B951C1A-F52B-4716-ADD5-C117F611CC7F}.Debug-Local|Any CPU.Build.0 = Debug|Any CPU
+		{3B951C1A-F52B-4716-ADD5-C117F611CC7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B951C1A-F52B-4716-ADD5-C117F611CC7F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -834,6 +846,7 @@ Global
 		{C8F89F3C-BABE-44C5-8D41-CEEAE0665D96} = {0478C448-622F-4C60-BDBB-E103D4A2520B}
 		{250FD331-75BD-4EF0-BD0E-3C7983FADD9A} = {572E4B21-970E-4889-9B0D-357816B1307C}
 		{5738049B-735C-413F-9517-C609233306BF} = {8C598CE2-9578-41F6-A195-24678617AE6F}
+		{3B951C1A-F52B-4716-ADD5-C117F611CC7F} = {98B85CCA-E727-485B-AD3C-68AC2A2B0364}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {886DD3D7-35E3-42F0-8CE9-74FB5AD7BBD0}
