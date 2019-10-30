@@ -11,5 +11,12 @@ namespace GladMMO
 	public interface IZoneServerRepository : IGenericRepositoryCrudable<int, ZoneInstanceEntryModel>
 	{
 		Task<ZoneInstanceEntryModel> FindFirstWithWorldId(long worldId);
+
+		/// <summary>
+		/// Removed all <see cref="ZoneInstanceEntryModel"/> that are expired.
+		/// AKA haven't updated their checkin value in awhile.
+		/// </summary>
+		/// <returns>Awaitable.</returns>
+		Task CleanupExpiredZonesAsync();
 	}
 }
