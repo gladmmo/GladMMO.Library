@@ -13,12 +13,13 @@ namespace GladMMO
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.Register<IZoneAuthenticationService>(context =>
-			{
-				IServiceDiscoveryService serviceDiscovery = context.Resolve<IServiceDiscoveryService>();
-				IReadonlyAuthTokenRepository tokenRepository = context.Resolve<IReadonlyAuthTokenRepository>();
+				{
+					IServiceDiscoveryService serviceDiscovery = context.Resolve<IServiceDiscoveryService>();
+					IReadonlyAuthTokenRepository tokenRepository = context.Resolve<IReadonlyAuthTokenRepository>();
 
-				return new AsyncZoneAuthenticationServiceClient(QueryForRemoteServiceEndpoint(serviceDiscovery, "ZoneAuth"), new RefitSettings() { HttpMessageHandlerFactory = () => new AuthenticatedHttpClientHandler(tokenRepository) });
-			});
+					return new AsyncZoneAuthenticationServiceClient(QueryForRemoteServiceEndpoint(serviceDiscovery, "ZoneAuth"), new RefitSettings() {HttpMessageHandlerFactory = () => new AuthenticatedHttpClientHandler(tokenRepository)});
+				})
+				.SingleInstance();
 
 			builder.Register<IZoneRegistryService>(context =>
 			{
@@ -26,7 +27,10 @@ namespace GladMMO
 				IReadonlyAuthTokenRepository tokenRepository = context.Resolve<IReadonlyAuthTokenRepository>();
 
 				return new AsyncEndpointZoneRegistryService(QueryForRemoteServiceEndpoint(serviceDiscovery, "ZoneManager"), new RefitSettings() { HttpMessageHandlerFactory = () => new AuthenticatedHttpClientHandler(tokenRepository) });
-			});
+			})
+				//.As<IZoneRegistryServiceQueueable>()
+				.As<IZoneRegistryService>()
+				.SingleInstance();
 		}
 	}
 }
