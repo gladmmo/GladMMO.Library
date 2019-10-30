@@ -37,8 +37,12 @@ namespace GladMMO
 				throw new InvalidOperationException(error);
 			}
 
+			TaskCompletionSource<object> completionSource = new TaskCompletionSource<object>();
+
 			Task.Factory.StartNew(async () =>
 			{
+				completionSource.SetResult(null);
+
 				await ApplicationBase.BeginListening()
 					.ConfigureAwait(false);
 
@@ -47,7 +51,7 @@ namespace GladMMO
 
 			}, TaskCreationOptions.LongRunning);
 
-			return Task.CompletedTask;
+			return completionSource.Task;
 		}
 	}
 }
