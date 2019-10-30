@@ -17,7 +17,6 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.3" />
     <PackageReference Include="Microsoft.AspNetCore.ResponseCaching" Version="2.0.3" />
-    <PackageReference Include="Microsoft.Azure.ServiceBus" Version="4.1.0" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.1.2" />
   </ItemGroup>
 
@@ -39,6 +38,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="Microsoft.Azure.ServiceBus">
+      <HintPath>..\..\..\lib\AzureServiceBusUnity\Microsoft.Azure.ServiceBus.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine">
       <HintPath>..\..\..\lib\Unity\UnityEngine.dll</HintPath>
     </Reference>

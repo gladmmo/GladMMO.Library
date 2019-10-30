@@ -6,11 +6,22 @@
 
   <ItemGroup>
     <PackageReference Include="Common.Logging" Version="3.4.1" />
-    <PackageReference Include="Microsoft.Azure.ServiceBus" Version="4.1.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\GladMMO.Common\GladMMO.Common.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Microsoft.Azure.Amqp">
+      <HintPath>..\..\..\lib\AzureServiceBusUnity\Microsoft.Azure.Amqp.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Azure.ServiceBus">
+      <HintPath>..\..\..\lib\AzureServiceBusUnity\Microsoft.Azure.ServiceBus.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.OpenSsl">
+      <HintPath>..\..\..\lib\AzureServiceBusUnity\System.Security.Cryptography.OpenSsl.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>
