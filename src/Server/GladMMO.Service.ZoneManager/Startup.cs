@@ -56,6 +56,9 @@ namespace GladMMO
 			services.AddJwtAuthorization(cert);
 
 			RegisterRefitInterfaces(services);
+
+			services.AddHostedService<ExpiredZoneServerCleanupJob>();
+			services.AddSingleton<TimedJobConfig<ExpiredZoneServerCleanupJob>>(new TimedJobConfig<ExpiredZoneServerCleanupJob>(TimeSpan.FromMinutes(11)));
 		}
 
 		private void RegisterDatabaseServices([NotNull] IServiceCollection services)

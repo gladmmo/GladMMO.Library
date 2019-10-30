@@ -24,5 +24,11 @@ namespace GladMMO
 		{
 
 		}
+
+		public TimedJobConfig(TimeSpan timeSpan)
+			: base(timeSpan.Milliseconds)
+		{
+			
+		}
 	}
 }
