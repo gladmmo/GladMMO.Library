@@ -7,7 +7,7 @@ using Microsoft.Azure.ServiceBus;
 
 namespace GladMMO
 {
-	public abstract class BaseAzureServiceQueueManager
+	public abstract class BaseAzureServiceQueueManager : IDisposable
 	{
 		/// <summary>
 		/// The async Azure Queue client.
@@ -17,8 +17,6 @@ namespace GladMMO
 		protected BaseAzureServiceQueueManager([NotNull] IQueueClient serviceQueue)
 		{
 			ServiceQueue = serviceQueue ?? throw new ArgumentNullException(nameof(serviceQueue));
-
-			SetupQueue(serviceQueue);
 		}
 
 		private void SetupQueue([NotNull] IQueueClient serviceQueue)
@@ -48,5 +46,22 @@ namespace GladMMO
 		/// <param name="cancellationToken">Token that indicates cancellation state of the client.</param>
 		/// <returns>Awaitable.</returns>
 		protected abstract Task HandleQueueIncomingMessageAsync([NotNull] Message message, CancellationToken cancellationToken);
+
+		public Task StartAsync()
+		{
+			SetupQueue(ServiceQueue);
+			return Task.CompletedTask;
+		}
+
+		public void Dispose()
+		{
+			//TODO: Capture exception handling.
+			ServiceQueue.CloseAsync();
+		}
+
+		public Task DisposeAsync()
+		{
+			return ServiceQueue.CloseAsync();;
+		}
 	}
 }
