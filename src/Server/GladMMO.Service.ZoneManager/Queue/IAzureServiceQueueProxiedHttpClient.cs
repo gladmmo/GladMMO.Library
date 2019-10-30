@@ -7,6 +7,9 @@ using UnityEngine.Scripting;
 
 namespace GladMMO
 {
+	/// <summary>
+	/// Refit interface for proxied HTTP actions using input from AzureServiceBus.
+	/// </summary>
 	[Headers("User-Agent: AzureServiceBus")]
 	public interface IAzureServiceQueueProxiedHttpClient
 	{
