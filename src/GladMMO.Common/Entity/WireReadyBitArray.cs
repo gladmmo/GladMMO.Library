@@ -8,6 +8,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Newtonsoft.Json;
 using ProtoBuf;
 
 namespace GladMMO
@@ -19,20 +20,24 @@ namespace GladMMO
 	public sealed class WireReadyBitArray
 	{
 		// XPerY=n means that n Xs can be stored in 1 Y.
+		[JsonIgnore]
 		private const int BitsPerByte = 8;
 
 		/// <summary>
 		/// The length in bits of the bit array.
 		/// </summary>
+		[JsonIgnore]
 		public int Length => InternalArray.Length * BitsPerByte; //32 bits in an int
 
 		//WoW sends a byte-prefixed int array representing the bitarray.
+		[JsonProperty]
 		[ProtoMember(1, IsRequired = true)]
 		internal byte[] InternalArray { get; private set; }
 
 		/// <summary>
 		/// The internal integer array representing the bitmask.
 		/// </summary>
+		[JsonIgnore]
 		public IReadOnlyCollection<byte> InternalIntegerArray => InternalArray;
 
 		/// <summary>
