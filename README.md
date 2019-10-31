@@ -78,7 +78,7 @@ Based on Microsoft's SignalR it utilizes ASP Core and SignalR together to delive
 
 ## [GladMMO.Service.ZoneAuthentication](https://github.com/gladmmo/GladMMO.Library/tree/master/src/Server/GladMMO.Service.ZoneAuthentication)
 
-Similar in feature set and technology to GladMMO's player authentication service the GladMMO Zone Authentication service is an account registeration and authentication service specifically for zone/instance servers. It creates ephemeral one-time accounts for Zone/Instance Servers that are spun up either on the backend or by user's themselves. Supporting the user self-hosting feature of GladMMO securely. It uses linked JWT authorization for zone registeration to allow only authorized players to create zone server accounts.
+[GladMMO Zone Authentication service](https://github.com/gladmmo/GladMMO.Library/tree/master/src/Server/GladMMO.Service.ZoneAuthentication) is similar in feature set and technology to GladMMO's player authentication service. However, this is an account registeration and authentication service specifically for zone/instance servers. It creates ephemeral one-time accounts for Zone/Instance Servers that are spun up either on the backend or by user's themselves. Supporting the user self-hosting feature of GladMMO securely. It uses linked JWT authorization for zone registeration to allow only authorized players to create zone server accounts.
 
 ## [GladMMO.Service.ZoneManager](https://github.com/gladmmo/GladMMO.Library/tree/master/src/Server/GladMMO.Service.ZoneManager)
 
