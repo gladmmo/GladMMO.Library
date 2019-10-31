@@ -157,40 +157,6 @@ namespace GladMMO
 			return new CharacterListResponse(characterIds);
 		}
 
-		//There is a reason we have the zone send the mapid instead of looking up the world/map id
-		//based on the zone that is requesting this location be set. That's because a zone may be linked in some way
-		//to another map/zone. So it may set the location of the character to another map (example it may walk through a dungeon instance portal)
-		//and to provide the ability for the zone to set the new position it should have in the new map we use mapid.
-		[AllowAnonymous]
-		[HttpPost("location")]
-		public async Task<IActionResult> UpdateCharacterLocation(
-			[FromBody] ZoneServerCharacterLocationSaveRequest saveRequest,
-			[NotNull] [FromServices] ICharacterLocationRepository locationRepository)
-		{
-			if(locationRepository == null) throw new ArgumentNullException(nameof(locationRepository));
-
-			int characterId = saveRequest.CharacterId;
-
-			if(characterId <= 0 || !await CharacterRepository.ContainsAsync(characterId)
-				.ConfigureAwait(false))
-				return NotFound();
-
-			//TODO: Is this the best way to deal with this?
-			if(await locationRepository.ContainsAsync(characterId).ConfigureAwait(false))
-				await locationRepository.UpdateAsync(characterId, BuildCharacterLocationFromSave(characterId, saveRequest))
-					.ConfigureAwait(false);
-			else
-				await locationRepository.TryCreateAsync(BuildCharacterLocationFromSave(characterId, saveRequest))
-					.ConfigureAwait(false);
-
-			return Ok();
-		}
-
-		private static CharacterLocationModel BuildCharacterLocationFromSave(int characterId, ZoneServerCharacterLocationSaveRequest saveRequest)
-		{
-			return new CharacterLocationModel(characterId, saveRequest.Position.x, saveRequest.Position.y, saveRequest.Position.z, saveRequest.MapId);
-		}
-
 		[ProducesJson]
 		[HttpGet("location/{id}")]
 		[NoResponseCache]

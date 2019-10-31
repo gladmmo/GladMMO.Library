@@ -30,17 +30,11 @@ namespace GladMMO
 		Task<ZoneServerCharacterLocationResponse> GetCharacterLocation([AliasAs("id")] int characterId);
 
 		//TODO: Doc
-		[Post("/api/characters/location")]
-		Task SaveCharacterLocation([JsonBody] ZoneServerCharacterLocationSaveRequest saveRequest);
+		//[Post("/api/characters/location")]
+		//Task SaveCharacterLocation([JsonBody] ZoneServerCharacterLocationSaveRequest saveRequest);
 
 		[Get("/api/zoneserverdata/waypoint/{id}")]
 		Task<ZoneServerWaypointQueryResponse> GetPathWaypoints([AliasAs("id")] int pathId);
-
-		//TODO: Eventually will require auth
-		[Delete("/api/charactersession/{id}")]
-		//[NoResponseCache] //TODO
-		//[AuthorizeJwt(GuardianApplicationRole.ZoneServer)] //only zone servers should EVER be able to release the active session. They should also likely only be able to release an active session if it's on them.
-		Task ReleaseActiveSession([AliasAs("id")] int characterId);
 
 		[Post("/api/charactersession/claim")]
 		Task<ZoneServerTryClaimSessionResponse> TryClaimSession([JsonBody] ZoneServerTryClaimSessionRequest request);
@@ -56,8 +50,5 @@ namespace GladMMO
 
 		[Patch("/api/ZoneServerCharacter/ChangeAvatar")]
 		Task<AvatarPedestalChangeResponse> UpdatePlayerAvatar([JsonBody] ZoneServerAvatarPedestalInteractionCharacterRequest request);
-
-		[Patch("/api/ZoneServerCharacter/{id}/UpdateData")]
-		Task UpdatePlayerData([AliasAs("id")] int characterId, [JsonBody] CharacterDataInstance request);
 	}
 }

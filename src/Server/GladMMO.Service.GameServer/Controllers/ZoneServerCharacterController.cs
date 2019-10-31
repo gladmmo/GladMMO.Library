@@ -22,23 +22,6 @@ namespace GladMMO
 
 		}
 
-		//TODO: Secure this so only authenticated zoneservers who own a claimed session of for this character can update their data.
-		[ProducesJson]
-		[HttpPatch("{id}/UpdateData")]
-		[NoResponseCache]
-		public async Task<IActionResult> UpdatePlayerData([FromRoute(Name = "id")] int characterId, [FromBody] [NotNull] CharacterDataInstance requestModel,
-			[FromServices] [NotNull] ICharacterDataRepository characterDataRepository)
-		{
-			CharacterDataModel dataModel = await characterDataRepository.RetrieveAsync(characterId);
-
-			//TODO: Make this updatable
-			dataModel.ExperiencePoints = requestModel.Experience;
-
-			await characterDataRepository.UpdateAsync(characterId, dataModel);
-
-			return Ok();
-		}
-
 		//TODO: Need to verify WHAT zone server is requesting this and if they can request this avatar pedestal change.
 		[ProducesJson]
 		[HttpPatch("ChangeAvatar")]

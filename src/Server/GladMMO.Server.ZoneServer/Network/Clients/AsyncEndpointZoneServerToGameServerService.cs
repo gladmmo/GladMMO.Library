@@ -28,21 +28,9 @@ namespace GladMMO
 		}
 
 		/// <inheritdoc />
-		public async Task SaveCharacterLocation(ZoneServerCharacterLocationSaveRequest saveRequest)
-		{
-			await (await GetService().ConfigureAwait(false)).SaveCharacterLocation(saveRequest).ConfigureAwait(false);
-		}
-
-		/// <inheritdoc />
 		public async Task<ZoneServerWaypointQueryResponse> GetPathWaypoints(int pathId)
 		{
 			return await (await GetService().ConfigureAwait(false)).GetPathWaypoints(pathId).ConfigureAwait(false);
-		}
-
-		/// <inheritdoc />
-		public async Task ReleaseActiveSession(int characterId)
-		{
-			await (await GetService().ConfigureAwait(false)).ReleaseActiveSession(characterId);
 		}
 
 		/// <inheritdoc />
@@ -66,11 +54,6 @@ namespace GladMMO
 		public async Task<AvatarPedestalChangeResponse> UpdatePlayerAvatar(ZoneServerAvatarPedestalInteractionCharacterRequest request)
 		{
 			return await (await GetService().ConfigureAwait(false)).UpdatePlayerAvatar(request).ConfigureAwait(false);
-		}
-
-		public async Task UpdatePlayerData(int characterId, CharacterDataInstance request)
-		{
-			await (await GetService().ConfigureAwait(false)).UpdatePlayerData(characterId, request).ConfigureAwait(false);
 		}
 	}
 }
