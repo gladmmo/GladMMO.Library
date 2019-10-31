@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net.Mime;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Common.Logging;
 using Glader.Essentials;
@@ -74,6 +75,9 @@ namespace GladMMO
 							//TODO: Don't do this every second.
 							await Task.Delay(5 * 60 * 1000)
 								.ConfigureAwait(false);
+
+							//Get back onto the main thread for the Application.isPlaying check.
+							await new UnityYieldAwaitable();
 						}
 						catch (Exception e)
 						{
