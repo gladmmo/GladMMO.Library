@@ -15,6 +15,6 @@ namespace GladMMO
 
 		[RequiresAuthentication]
 		[Patch("/api/ZonePersistence/{id}/location")]
-		Task SaveCharacterLocation([JsonBody] ZoneServerCharacterLocationSaveRequest saveRequest);
+		Task SaveCharacterLocation([AliasAs("id")] int characterId, [JsonBody] ZoneServerCharacterLocationSaveRequest saveRequest);
 	}
 }
