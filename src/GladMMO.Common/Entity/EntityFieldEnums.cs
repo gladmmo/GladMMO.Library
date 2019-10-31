@@ -6,14 +6,14 @@ namespace GladMMO
 {
 	public enum BaseObjectField
 	{
-		UNIT_FIELD_DISPLAYID = 0x0000, // Size: 1, Type: INT, Flags: PUBLIC
-		OBJECT_FIELD_SCALE_X = 0x0001, // Size: 1, Type: FLOAT, Flags: PUBLIC
-		UNIT_FIELD_LEVEL = 0x0002, // Size: 1, Type: INT, Flags: PUBLIC
-		RESERVED_1 = 0x0003,
-		RESERVED_2 = 0x0004,
-		RESERVED_3 = 0x0005,
-		RESERVED_4 = 0x0006,
-		RESERVED_5 = 0x0007,
+		UNIT_FIELD_DISPLAYID = 0, // Size: 1, Type: INT, Flags: PUBLIC
+		OBJECT_FIELD_SCALE_X = 1, // Size: 1, Type: FLOAT, Flags: PUBLIC
+		UNIT_FIELD_LEVEL = 2, // Size: 1, Type: INT, Flags: PUBLIC
+		RESERVED_1 = 3,
+		RESERVED_2 = 4,
+		RESERVED_3 = 5,
+		RESERVED_4 = 6,
+		RESERVED_5 = 7,
 
 		//The end of the base fields.
 		OBJECT_END = RESERVED_5,
@@ -24,22 +24,22 @@ namespace GladMMO
 		/// <summary>
 		/// The <see cref="GameObjectType"/>.
 		/// </summary>
-		GAMEOBJECT_TYPE_ID = BaseObjectField.OBJECT_END + 0x0001, // Size: 1, Type: INT, Flags: PUBLIC
-		RESERVED_DATA_1 = BaseObjectField.OBJECT_END + 0x0002
+		GAMEOBJECT_TYPE_ID = BaseObjectField.OBJECT_END + 1, // Size: 1, Type: INT, Flags: PUBLIC
+		RESERVED_DATA_1 = BaseObjectField.OBJECT_END + 2
 	}
 
 	public enum EntityObjectField
 	{
-		UNIT_FIELD_HEALTH = BaseObjectField.OBJECT_END + 0x0001, // Size: 1, Type: INT, Flags: PUBLIC
-		UNIT_FIELD_MAXHEALTH = BaseObjectField.OBJECT_END + 0x0002, // Size: 1, Type: INT, Flags: PUBLIC
-		UNIT_FIELD_TARGET = BaseObjectField.OBJECT_END + 0x0003, // Size: 2, Type: LONG, Flags: PUBLIC
+		UNIT_FIELD_HEALTH = BaseObjectField.OBJECT_END + 1, // Size: 1, Type: INT, Flags: PUBLIC
+		UNIT_FIELD_MAXHEALTH = BaseObjectField.OBJECT_END + 2, // Size: 1, Type: INT, Flags: PUBLIC
+		UNIT_FIELD_TARGET = BaseObjectField.OBJECT_END + 3, // Size: 2, Type: LONG, Flags: PUBLIC
 
 		UNIT_END = UNIT_FIELD_TARGET + 1,
 	}
 
 	public enum PlayerObjectField
 	{
-		PLAYER_TOTAL_EXPERIENCE = EntityObjectField.UNIT_END + 0x0001,
+		PLAYER_TOTAL_EXPERIENCE = EntityObjectField.UNIT_END + 1,
 	}
 
 	//TODO: We should move away from this and implement our own, these are just place holders from World of Warcraft/TrinityCore.
