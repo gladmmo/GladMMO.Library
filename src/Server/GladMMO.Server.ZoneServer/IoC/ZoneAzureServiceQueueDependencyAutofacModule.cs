@@ -17,8 +17,7 @@ namespace GladMMO
 		{
 			//TODO: Renable one day when Unity3D can support netstandard2.0 c
 			builder.RegisterType<ProxiedAzureServiceBusHttpClientHandler>()
-				.AsSelf()
-				.SingleInstance();
+				.AsSelf();
 
 			//This is not dangerous to distribute the SAS.
 			//The reasoning for this is that zones need to be able to push into the queue anyway.

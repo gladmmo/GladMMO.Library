@@ -68,9 +68,12 @@ namespace GladMMO
 							if (Logger.IsInfoEnabled)
 								Logger.Error($"Checking in.");
 
-							//TODO: Don't do this every second.
-							await Task.Delay(1000);
 							await ZoneRegisterQueueable.ZoneServerCheckinAsync(new ZoneServerCheckinRequestModel());
+
+							//TODO: Make this a constant
+							//TODO: Don't do this every second.
+							await Task.Delay(5 * 60 * 1000)
+								.ConfigureAwait(false);
 						}
 						catch (Exception e)
 						{
