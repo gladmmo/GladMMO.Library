@@ -30,6 +30,10 @@ namespace GladMMO
 
 		protected override void OnGuildStatusChanged(GuildStatusChangedEventModel changeArgs)
 		{
+			//Don't need to get the guild list if we're guildless.
+			if (changeArgs.IsGuildless)
+				return;
+
 			UnityAsyncHelper.UnityMainThreadContext.PostAsync(async () =>
 			{
 				var rosterResponseModel = await SocialService.GetGuildListAsync();
