@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 using Autofac;
 using Common.Logging;
+using Glader.Essentials;
+using Nito.AsyncEx;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -28,8 +30,14 @@ namespace GladMMO
 		protected override void OnEventFired(object source, ButtonClickedEventArgs args)
 		{
 			args.Button.IsInteractable = false;
-			AutofacScope.Dispose();
-			SceneManager.LoadSceneAsync(GladMMOClientConstants.CHARACTER_SELECTION_SCENE_NAME).allowSceneActivation = true;
+
+			UnityAsyncHelper.UnityMainThreadContext.PostAsync(async () =>
+			{
+				AutofacScope.Dispose();
+
+				//TODO: Vivox is causing crashes again if another gametick happens so we do a blocking call here.
+				SceneManager.LoadScene(GladMMOClientConstants.CHARACTER_SELECTION_SCENE_NAME);
+			});
 		}
 	}
 }
