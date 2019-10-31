@@ -18,13 +18,19 @@ namespace GladMMO
 
 		private IEntityGuidMappable<IChangeTrackableEntityDataCollection> ChangeTrackableCollection { get; }
 
+		//Rare instance a user may want to access the raw and direct entity data collection
+		//One such case is the serialization of the entire data collection for persistence.
+		private IEntityGuidMappable<EntityFieldDataCollection> DataCollectionMappable { get; }
+
 		public InitializeEntityDataContainerEventListener(IEntityCreationRequestedEventSubscribable subscriptionService,
 			[NotNull] IEntityGuidMappable<IEntityDataFieldContainer> entityDataContainer,
-			[NotNull] IEntityGuidMappable<IChangeTrackableEntityDataCollection> changeTrackableCollection) 
+			[NotNull] IEntityGuidMappable<IChangeTrackableEntityDataCollection> changeTrackableCollection,
+			[NotNull] IEntityGuidMappable<EntityFieldDataCollection> dataCollectionMappable) 
 			: base(subscriptionService)
 		{
 			EntityDataContainer = entityDataContainer ?? throw new ArgumentNullException(nameof(entityDataContainer));
 			ChangeTrackableCollection = changeTrackableCollection ?? throw new ArgumentNullException(nameof(changeTrackableCollection));
+			DataCollectionMappable = dataCollectionMappable ?? throw new ArgumentNullException(nameof(dataCollectionMappable));
 		}
 
 		protected override void OnEventFired(object source, EntityCreationRequestedEventArgs args)
@@ -34,7 +40,10 @@ namespace GladMMO
 			//TODO: handle non-players
 			//TODO: Fix the issue with having to hardcore the field count.
 			//Build the update values stuff and initialize the initial movement data.
-			ChangeTrackableCollection.AddObject(guid, new ChangeTrackingEntityFieldDataCollectionDecorator(new EntityFieldDataCollection(ComputeEntityDataFieldLength(args.EntityGuid))));
+			EntityFieldDataCollection container = new EntityFieldDataCollection(ComputeEntityDataFieldLength(args.EntityGuid));
+
+			DataCollectionMappable.AddObject(guid, container);
+			ChangeTrackableCollection.AddObject(guid, new ChangeTrackingEntityFieldDataCollectionDecorator(container));
 			EntityDataContainer.AddObject(guid, ChangeTrackableCollection.RetrieveEntity(guid));
 		}
 
