@@ -26,7 +26,7 @@ namespace GladMMO
 		//the expectation is this request will be proxied through a message queue.
 		[AuthorizeJwt(GuardianApplicationRole.ZoneServer)]
 		[HttpPatch("checkin")]
-		public async Task<IActionResult> RegisteredZoneCheckin()
+		public async Task<IActionResult> RegisteredZoneCheckin([FromBody] ZoneServerCheckinRequestModel zoneCheckinRequest)
 		{
 			//This is ok, it means the zone was unregistered before the checkin message was recieved.
 			//It doesn't alone indicate a failure.
