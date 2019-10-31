@@ -15,7 +15,7 @@ namespace GladMMO
 {
 	// A vector of bits.  Use this to store bits efficiently, without having to do bit 
 	// shifting yourself.
-	[Serializable]
+	[JsonObject]
 	[ProtoContract]
 	public sealed class WireReadyBitArray
 	{
@@ -43,6 +43,7 @@ namespace GladMMO
 		/// <summary>
 		/// Serializer ctor.
 		/// </summary>
+		[JsonConstructor]
 		private WireReadyBitArray()
 		{
 

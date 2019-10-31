@@ -25,7 +25,7 @@ namespace GladMMO
 
 		/// <inheritdoc />
 		[JsonProperty]
-		public WireReadyBitArray DataSetIndicationArray { get; }
+		public WireReadyBitArray DataSetIndicationArray { get; private set; }
 
 		public EntityFieldDataCollection(int fieldCount)
 		{
