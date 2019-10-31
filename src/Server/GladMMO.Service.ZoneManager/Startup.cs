@@ -113,6 +113,7 @@ namespace GladMMO
 			services.AddTransient<IZoneServerRepository, DatabaseBackedZoneServerRepository>();
 			services.AddTransient<ICharacterLocationRepository, DatabaseBackedCharacterLocationRepository>();
 			services.AddTransient<ICharacterDataRepository, DatabaseBackedCharacterDataRepository>();
+			services.AddTransient<ICharacterSessionRepository, DatabaseBackedCharacterSessionRepository>();
 		}
 
 		private void RegisterRefitInterfaces([NotNull] IServiceCollection services)
