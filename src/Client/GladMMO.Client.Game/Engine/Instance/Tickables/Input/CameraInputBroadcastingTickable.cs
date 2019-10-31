@@ -4,6 +4,7 @@ using System.Text;
 using Common.Logging;
 using Glader.Essentials;
 using UnityEngine;
+using UnityEngine.Experimental.UIElements;
 
 namespace GladMMO
 {
@@ -88,6 +89,10 @@ namespace GladMMO
 		public void Tick()
 		{
 			if (!isLocalPlayerSpawned)
+				return;
+
+			//If not right-clicking then we shouldn't rotate the camera.
+			if (!Input.GetMouseButton((int) MouseButton.RightMouse))
 				return;
 
 			float mouseX = Input.GetAxis("Mouse X");
