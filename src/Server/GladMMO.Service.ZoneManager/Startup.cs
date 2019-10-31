@@ -9,6 +9,7 @@ using Autofac;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Azure.ServiceBus;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -16,6 +17,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Refit;
+using UnityEngine;
 using InvalidOperationException = System.InvalidOperationException;
 
 namespace GladMMO
@@ -36,7 +38,7 @@ namespace GladMMO
 				{
 					//This prevents ASP Core from trying to validate Vector3's children, which contain Vector3 (because Unity3D thanks)
 					//so it will cause stack overflows. This will avoid it.
-					//options.ModelMetadataDetailsProviders.Add(new SuppressChildValidationMetadataProvider(typeof(Vector3)));
+					options.ModelMetadataDetailsProviders.Add(new SuppressChildValidationMetadataProvider(typeof(Vector3)));
 				})
 				.RegisterHealthCheckController();
 
