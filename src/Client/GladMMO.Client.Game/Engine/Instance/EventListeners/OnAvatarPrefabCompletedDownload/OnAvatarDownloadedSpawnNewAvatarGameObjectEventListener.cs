@@ -4,6 +4,7 @@ using System.Text;
 using Common.Logging;
 using Glader.Essentials;
 using GladMMO.FinalIK;
+using GladMMO.SDK;
 using UnityEngine;
 
 namespace GladMMO
@@ -39,6 +40,21 @@ namespace GladMMO
 				GameObject ikRootGameObject = GameObjectDirectoryMappable.RetrieveEntity(args.EntityGuid).GetGameObject(EntityGameObjectDirectory.Type.IKRoot);
 				GameObject currentAvatarRootGameObject = ikRootGameObject.transform.GetChild(0).gameObject;
 				GameObject newlySpawnedAvatar = InstantiateNewFromPrefab(args.DownloadedPrefabObject, currentAvatarRootGameObject);
+
+				//Try to get AvatarBoneSDKData from root spawned model
+				AvatarBoneSDKData boneSdkData = newlySpawnedAvatar.GetComponent<AvatarBoneSDKData>();
+
+				//TODO: Head height.
+				//We can set relative camera height for VR users or first person users.
+				//Don't do it for desktop.
+				if (boneSdkData != null)
+				{
+					GameObject nameRoot = GameObjectDirectoryMappable.RetrieveEntity(args.EntityGuid).GetGameObject(EntityGameObjectDirectory.Type.NameRoot);
+					if (nameRoot != null)
+					{
+						nameRoot.transform.localPosition = new Vector3(nameRoot.transform.localPosition.x, boneSdkData.FloatingNameHeight, nameRoot.transform.localPosition.z);
+					}
+				}
 
 				GameObject.DestroyImmediate(currentAvatarRootGameObject, false);
 

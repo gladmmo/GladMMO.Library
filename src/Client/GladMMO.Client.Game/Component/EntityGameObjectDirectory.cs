@@ -27,13 +27,17 @@ namespace GladMMO
 		[SerializeField]
 		private GameObject LeftHand;
 
+		[SerializeField]
+		private GameObject NameRoot;
+
 		public enum Type
 		{
 			Root = 0,
 			IKRoot = 1,
 			CameraRoot = 2,
 			RightHand = 3,
-			LeftHand = 4
+			LeftHand = 4,
+			NameRoot = 5,
 		}
 
 		public GameObject GetGameObject(EntityGameObjectDirectory.Type gameObjectType)
@@ -52,6 +56,8 @@ namespace GladMMO
 					return RightHand;
 				case Type.LeftHand:
 					return LeftHand;
+				case Type.NameRoot:
+					return NameRoot;
 				default:
 					throw new ArgumentOutOfRangeException(nameof(gameObjectType), gameObjectType, null);
 			}
