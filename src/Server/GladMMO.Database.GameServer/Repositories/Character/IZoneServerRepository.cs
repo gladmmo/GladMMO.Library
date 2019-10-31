@@ -9,7 +9,7 @@ namespace GladMMO
 	/// <summary>
 	/// Contract for zone server entry data access.
 	/// </summary>
-	public interface IZoneServerRepository : IGenericRepositoryCrudable<int, ZoneInstanceEntryModel>
+	public interface IZoneServerRepository : IGenericRepositoryCrudable<int, ZoneInstanceEntryModel>, IDisposable
 	{
 		Task<ZoneInstanceEntryModel> FindFirstWithWorldId(long worldId);
 
