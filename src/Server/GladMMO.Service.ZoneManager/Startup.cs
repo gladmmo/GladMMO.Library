@@ -4,6 +4,8 @@ using System.Linq;
 using System.Net;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
+using Amazon.CloudWatchLogs.Model;
+using Autofac;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -109,6 +111,8 @@ namespace GladMMO
 			});
 
 			services.AddTransient<IZoneServerRepository, DatabaseBackedZoneServerRepository>();
+			services.AddTransient<ICharacterLocationRepository, DatabaseBackedCharacterLocationRepository>();
+			services.AddTransient<ICharacterDataRepository, DatabaseBackedCharacterDataRepository>();
 		}
 
 		private void RegisterRefitInterfaces([NotNull] IServiceCollection services)
@@ -135,6 +139,17 @@ namespace GladMMO
 
 			//TODO: Do we need extra slash?
 			return $"{endpointResponse.Endpoint.EndpointAddress}:{endpointResponse.Endpoint.EndpointPort}/";
+		}
+
+		//AutoFac DI/IoC registeration method.
+		//See: https://autofaccn.readthedocs.io/en/latest/integration/aspnetcore.html
+		public void ConfigureContainer(ContainerBuilder builder)
+		{
+		//Now we register repository factories
+			builder.RegisterGeneric(typeof(RepositoryFactory<>))
+				.AsSelf()
+				.As(typeof(IRepositoryFactory<>))
+				.SingleInstance();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

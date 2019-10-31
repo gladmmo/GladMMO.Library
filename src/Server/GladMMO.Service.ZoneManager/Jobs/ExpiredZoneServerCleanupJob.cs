@@ -10,11 +10,12 @@ namespace GladMMO
 {
 	public sealed class ExpiredZoneServerCleanupJob : ReOccurringTimedJob
 	{
-		private IZoneServerRepository ZoneServerRepository { get; }
+		//Important that we don't maintain open DB contextexts so we need to create on the fly
+		private RepositoryFactory<IZoneServerRepository> ZoneServerRepository { get; }
 
 		public ExpiredZoneServerCleanupJob(TimedJobConfig<ExpiredZoneServerCleanupJob> jobConfig, 
 			ILogger<ReOccurringTimedJob> logger,
-			[NotNull] IZoneServerRepository zoneServerRepository) 
+			[NotNull] RepositoryFactory<IZoneServerRepository> zoneServerRepository) 
 			: base(jobConfig, logger)
 		{
 			ZoneServerRepository = zoneServerRepository ?? throw new ArgumentNullException(nameof(zoneServerRepository));
@@ -25,7 +26,9 @@ namespace GladMMO
 			//All we need to do is cleanup the expired zones
 			try
 			{
-				await ZoneServerRepository.CleanupExpiredZonesAsync(cancellationToken);
+				//Important that we don't maintain open DB contextexts so we need to create on the fly
+				using(var repo = ZoneServerRepository.Create())
+					await repo.CleanupExpiredZonesAsync(cancellationToken);
 			}
 			catch (Exception e)
 			{
