@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -20,6 +21,7 @@ namespace GladMMO
 		public static IWebHost BuildWebHost(string[] args) =>
 			WebHost.CreateDefaultBuilder(args)
 				.UseKestrelGuardiansConfig(args)
+				.ConfigureServices(services => services.AddAutofac()) //this enables AutoFac configuration support
 				//.UseKestrel()
 				.UseIISIntegration()
 				.UseStartup<Startup>()
