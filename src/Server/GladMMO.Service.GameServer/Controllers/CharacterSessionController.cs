@@ -295,7 +295,6 @@ namespace GladMMO
 					//There is NO instance available for this world.
 					if (firstWithWorldId == null)
 					{
-						targetSessionZoneId = 1;
 						//Location is basically invalid since there is no running world
 						await characterLocationRepository.TryDeleteAsync(locationModel.CharacterId);
 					}
@@ -304,11 +303,19 @@ namespace GladMMO
 						targetSessionZoneId = firstWithWorldId.ZoneId;
 					}
 				}
-				else
+
+				//Try to get into any zone
+				if (targetSessionZoneId == 0)
 				{
-					targetSessionZoneId = 1;
+					ZoneInstanceEntryModel entryModel = await zoneServerRepository.AnyAsync();
+
+					if (entryModel != null)
+						targetSessionZoneId = entryModel.ZoneId;
 				}
 
+				//Still zero means literally no zone servers are available.
+				if(targetSessionZoneId == 0)
+					return new CharacterSessionEnterResponse(CharacterSessionEnterResponseCode.GeneralServerError);
 
 				if(await CharacterSessionRepository.TryCreateAsync(new CharacterSessionModel(characterId, targetSessionZoneId)))
 					return new CharacterSessionEnterResponse(targetSessionZoneId);

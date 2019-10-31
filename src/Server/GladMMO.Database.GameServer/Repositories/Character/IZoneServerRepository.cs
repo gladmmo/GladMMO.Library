@@ -19,5 +19,7 @@ namespace GladMMO
 		/// </summary>
 		/// <returns>Awaitable.</returns>
 		Task CleanupExpiredZonesAsync(CancellationToken cancellationToken = default(CancellationToken));
+
+		Task<ZoneInstanceEntryModel> AnyAsync(CancellationToken cancellationToken = default(CancellationToken));
 	}
 }

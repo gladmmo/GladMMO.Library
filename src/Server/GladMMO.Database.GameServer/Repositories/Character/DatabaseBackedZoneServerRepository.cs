@@ -84,6 +84,11 @@ namespace GladMMO
 			await Context.SaveChangesAsync(cancellationToken);
 		}
 
+		public Task<ZoneInstanceEntryModel> AnyAsync(CancellationToken cancellationToken = default(CancellationToken))
+		{
+			return Context.ZoneEntries.FirstOrDefaultAsync(cancellationToken);
+		}
+
 		public void Dispose()
 		{
 			Context?.Dispose();
