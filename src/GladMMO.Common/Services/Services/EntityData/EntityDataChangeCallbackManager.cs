@@ -34,34 +34,16 @@ namespace GladMMO
 			//We need to add a null action here or it will throw when we try to add the action. But if one exists we need to Delegate.Combine
 			if (!CallbackMap[entity].ContainsKey(dataField))
 			{
-				if (IsRequestedTypeLong<TCallbackValueCastType>())
-				{
-					CallbackMap[entity].Add(dataField, dataChangeEvent);
-					CallbackMap[entity].Add(dataField + 1, dataChangeEvent);
-				}
-				else
-					CallbackMap[entity].Add(dataField, dataChangeEvent);
+				CallbackMap[entity].Add(dataField, dataChangeEvent);
 			}
 			else
 			{
-				if (IsRequestedTypeLong<TCallbackValueCastType>())
-				{
-					CallbackMap[entity][dataField] += dataChangeEvent;
-					CallbackMap[entity][dataField + 1] += dataChangeEvent;
-				}
-				else
-					CallbackMap[entity][dataField] += dataChangeEvent;
+				CallbackMap[entity][dataField] += dataChangeEvent;
 			}
 
 			return new DefaultEntityDataEventUnregisterable(() =>
 			{
-				if (IsRequestedTypeLong<TCallbackValueCastType>())
-				{
-					CallbackMap[entity][dataField] -= dataChangeEvent;
-					CallbackMap[entity][dataField + 1] -= dataChangeEvent;
-				}
-				else
-					CallbackMap[entity][dataField] -= dataChangeEvent;
+				CallbackMap[entity][dataField] -= dataChangeEvent;
 			});
 		}
 
