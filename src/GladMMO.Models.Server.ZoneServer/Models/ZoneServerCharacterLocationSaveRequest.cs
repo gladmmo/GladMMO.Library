@@ -9,10 +9,6 @@ namespace GladMMO
 	[JsonObject]
 	public sealed class ZoneServerCharacterLocationSaveRequest
 	{
-		//TODO: Should we sent EntityGuid?
-		[JsonProperty]
-		public int CharacterId { get; private set; }
-
 		/// <summary>
 		/// The position to save.
 		/// </summary>
@@ -20,31 +16,22 @@ namespace GladMMO
 		[JsonProperty]
 		public Vector3 Position { get; private set; }
 
-		/// <summary>
-		/// The ID of the map the character is located in.
-		/// </summary>
-		[JsonProperty]
-		public int MapId { get; private set; }
+		//We don't need mapid anymore since we have zoneserver authorization now. It authoratively knows which world it is.
 
 		/// <summary>
 		/// 
 		/// </summary>
 		/// <param name="characterId"></param>
 		/// <param name="position"></param>
-		/// <param name="mapId"></param>
-		public ZoneServerCharacterLocationSaveRequest(int characterId, Vector3 position, int mapId)
+		public ZoneServerCharacterLocationSaveRequest(Vector3 position)
 		{
-			if(characterId <= 0) throw new ArgumentOutOfRangeException(nameof(characterId));
-			if(mapId <= 0) throw new ArgumentOutOfRangeException(nameof(mapId));
-
-			CharacterId = characterId;
 			Position = position;
-			MapId = mapId;
 		}
 
 		/// <summary>
 		/// Serializer ctor.
 		/// </summary>
+		[JsonConstructor]
 		protected ZoneServerCharacterLocationSaveRequest()
 		{
 			
