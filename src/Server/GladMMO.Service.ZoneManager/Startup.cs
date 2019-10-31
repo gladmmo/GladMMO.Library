@@ -14,6 +14,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Refit;
+using InvalidOperationException = System.InvalidOperationException;
 
 namespace GladMMO
 {
@@ -72,7 +73,13 @@ namespace GladMMO
 		private void RegisterAzureServiceQueue(IServiceCollection services)
 		{
 			string zoneManagerQueueClientAccessKey = Environment.GetEnvironmentVariable(SecurityEnvironmentVariables.AZURE_SERVICE_BUS_API_KEY);
-			ServiceBusConnectionStringBuilder serviceHubConnectionBuilder = new ServiceBusConnectionStringBuilder($@"Endpoint=sb://projectvindictive.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey={zoneManagerQueueClientAccessKey}=;EntityPath=zoneservermanagement");
+
+			if (String.IsNullOrWhiteSpace(zoneManagerQueueClientAccessKey))
+			{
+				throw new InvalidOperationException($"Failed to load Azure Service Bus key from Enviroment Variable: {nameof(SecurityEnvironmentVariables.AZURE_SERVICE_BUS_API_KEY)} VariableName: {SecurityEnvironmentVariables.AZURE_SERVICE_BUS_API_KEY}");
+			}
+
+			ServiceBusConnectionStringBuilder serviceHubConnectionBuilder = new ServiceBusConnectionStringBuilder($@"Endpoint=sb://projectvindictive.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey={zoneManagerQueueClientAccessKey};EntityPath=zoneservermanagement");
 			//https://projectvindictive.servicebus.windows.net/zoneservermanagement
 			//Azure Service Bus register
 			IQueueClient zoneManagerServiceQueue = new QueueClient(serviceHubConnectionBuilder);
