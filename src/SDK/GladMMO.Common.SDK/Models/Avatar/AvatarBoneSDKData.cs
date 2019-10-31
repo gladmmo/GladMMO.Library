@@ -23,6 +23,7 @@ namespace GladMMO.SDK
 		[SerializeField]
 		public float FloatingNameHeight = 1.0f;
 
+		[Range(0.0f, 5.0f)]
 		[SerializeField]
 		public float HeadHeight = 1.6f;
 
