@@ -9,7 +9,7 @@ namespace GladMMO
 	{
 		public ServerClearEntityCollectionRemovablesEventListener(IEntityWorldRepresentationDeconstructionFinishedEventSubscribable subscriptionService, 
 			IReadOnlyCollection<IEntityCollectionRemovable> removableCollections) 
-			: base(subscriptionService, removableCollections)
+			: base(subscriptionService, removableCollections, false)
 		{
 
 		}
