@@ -43,6 +43,14 @@ namespace GladMMO
 
 				return new AsyncEndpointZoneRegistryService(QueryForRemoteServiceEndpoint(serviceDiscovery, "ZoneManager"), new RefitSettings(){ HttpMessageHandlerFactory = () => handler });
 			});
+
+			builder.Register<IZonePersistenceServiceQueueable>(context =>
+			{
+				IServiceDiscoveryService serviceDiscovery = context.Resolve<IServiceDiscoveryService>();
+				ProxiedAzureServiceBusHttpClientHandler handler = context.Resolve<ProxiedAzureServiceBusHttpClientHandler>();
+
+				return new AsyncEndpointZonePersistenceService(QueryForRemoteServiceEndpoint(serviceDiscovery, "ZoneManager"), new RefitSettings() { HttpMessageHandlerFactory = () => handler });
+			});
 		}
 	}
 }
