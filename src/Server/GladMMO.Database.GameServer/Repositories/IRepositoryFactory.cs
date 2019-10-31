@@ -1,10 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace GladMMO
 {
-	public interface IRepositoryFactory<out TRepositoryType> : IFactoryCreatable<TRepositoryType, EmptyFactoryContext>
+	public sealed class DisposableRepository<TRepositoryType> : IDisposable
+	{
+		public TRepositoryType Repository { get; }
+
+		internal IDisposable DisposableScope { get; }
+
+		public DisposableRepository([JetBrains.Annotations.NotNull] TRepositoryType repository, IDisposable disposableScope)
+		{
+			Repository = repository;
+			DisposableScope = disposableScope;
+		}
+
+		public void Dispose()
+		{
+			DisposableScope?.Dispose();
+		}
+	}
+
+	public interface IRepositoryFactory<TRepositoryType> : IFactoryCreatable<DisposableRepository<TRepositoryType>, EmptyFactoryContext>
 		where TRepositoryType : IDisposable
 	{
 
@@ -13,19 +32,20 @@ namespace GladMMO
 	public sealed class RepositoryFactory<TRepositoryType> : IRepositoryFactory<TRepositoryType>
 		where TRepositoryType : IDisposable
 	{
-		/// <summary>
-		/// Likely provided by Autofac.
-		/// </summary>
-		private Func<TRepositoryType> RepositoryCreationFactory { get; }
+		//We must used a scope factory so that
+		//we're able to resolved scope services and not have issues
+		//with DbContext disposal.
+		private IServiceScopeFactory ScopeFactory { get; }
 
-		public RepositoryFactory([JetBrains.Annotations.NotNull] Func<TRepositoryType> repositoryCreationFactory)
+		public RepositoryFactory([JetBrains.Annotations.NotNull] IServiceScopeFactory scopeFactory)
 		{
-			RepositoryCreationFactory = repositoryCreationFactory ?? throw new ArgumentNullException(nameof(repositoryCreationFactory));
+			ScopeFactory = scopeFactory ?? throw new ArgumentNullException(nameof(scopeFactory));
 		}
 
-		public TRepositoryType Create(EmptyFactoryContext context)
+		public DisposableRepository<TRepositoryType> Create(EmptyFactoryContext context)
 		{
-			return RepositoryCreationFactory();
+			IServiceScope scope = ScopeFactory.CreateScope();
+			return new DisposableRepository<TRepositoryType>(scope.ServiceProvider.GetService<TRepositoryType>(), scope);
 		}
 	}
 }

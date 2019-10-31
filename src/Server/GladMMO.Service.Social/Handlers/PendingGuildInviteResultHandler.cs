@@ -44,12 +44,12 @@ namespace GladMMO
 				bool guildJoinResult = false;
 
 				//Important that we dispose of this, since this handler is not created every request.
-				using (var characterGuildMembershipRepository = CharacterGuildMembershipRepositoryFactory.Create())
+				using (var characterGuildMembershipRepositoryContainer = CharacterGuildMembershipRepositoryFactory.Create())
 				{
 					//When successful, we must add them to the guild database
 					//and then alert the guild channel (everyone in the guild) that they joined
 					//AND let the client itself know that it joined a guild.
-					guildJoinResult = await characterGuildMembershipRepository.TryCreateAsync(new CharacterGuildMemberRelationshipModel(context.CallerGuid.EntityId, inviteData.GuildId));
+					guildJoinResult = await characterGuildMembershipRepositoryContainer.Repository.TryCreateAsync(new CharacterGuildMemberRelationshipModel(context.CallerGuid.EntityId, inviteData.GuildId));
 				}
 
 				//This should never happen
