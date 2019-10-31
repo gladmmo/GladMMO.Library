@@ -4,6 +4,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using Glader.Essentials;
+using Nito.AsyncEx;
 
 namespace GladMMO
 {
@@ -23,11 +24,11 @@ namespace GladMMO
 			if (args.EntityGuid.EntityType != EntityType.Player)
 				return;
 
-			ConfiguredTaskAwaitable awaitable = EntityDataSaveable.SaveAsync(args.EntityGuid)
-				.ConfigureAwait(false);
-
-			//TODO: Do we need to do this?
-			Task.Factory.StartNew(async () => await awaitable);
+			UnityAsyncHelper.UnityMainThreadContext.PostAsync(async () =>
+			{
+				await EntityDataSaveable.SaveAsync(args.EntityGuid)
+					.ConfigureAwait(false);
+			});
 		}
 	}
 }
