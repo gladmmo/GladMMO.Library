@@ -4,22 +4,27 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Text;
 using Generic.Math;
+using Newtonsoft.Json;
 using Reinterpret.Net;
 
 namespace GladMMO
 {
+	[JsonObject]
 	public sealed class EntityFieldDataCollection : IEntityDataFieldContainer
 	{
 		//Data fields are modeled as 4 byte fields.
 		//.NET runtime does a really good job of optimizing Int32 operations
 		//and Int32 arrays. Most fields are small enough to be represented by integer fields
 		//and the largest 64bit fields can just take up 2 slots.
-		private byte[] InternalDataFields { get; }
+		[JsonProperty]
+		private byte[] InternalDataFields { get; set; }
 
 		/// <inheritdoc />
+		[JsonIgnore]
 		public object SyncObj { get; } = new object();
 
 		/// <inheritdoc />
+		[JsonProperty]
 		public WireReadyBitArray DataSetIndicationArray { get; }
 
 		public EntityFieldDataCollection(int fieldCount)
@@ -91,6 +96,12 @@ namespace GladMMO
 
 				value.Reinterpret(InternalDataFields, index * sizeof(int));
 			}
+		}
+
+		[JsonConstructor]
+		private EntityFieldDataCollection()
+		{
+			
 		}
 	}
 }
