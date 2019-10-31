@@ -12,6 +12,17 @@ namespace GladMMO
 	public sealed class FullCharacterDataSaveRequest
 	{
 		/// <summary>
+		/// Indicates if the character session should be released after saving.
+		/// </summary>
+		[JsonProperty]
+		public bool ShouldReleaseCharacterSession { get; private set; }
+
+		//TODO: We should use this timestamp somehow to prevent stale character save data overwriting newer data in cases of backend recovery.
+		//TODO: Create simple TimeStamp type
+		[JsonProperty]
+		public long UtcTickTimeStamp { get; private set; }
+
+		/// <summary>
 		/// Indicates if the position should be saved.
 		/// </summary>
 		[JsonProperty]
@@ -30,13 +41,16 @@ namespace GladMMO
 		/// </summary>
 		[JsonProperty]
 		public EntityFieldDataCollection PlayerDataSnapshot { get; private set; }
-
 		
-		public FullCharacterDataSaveRequest(bool isPositionSaved, [NotNull] ZoneServerCharacterLocationSaveRequest characterLocationData, [NotNull] EntityFieldDataCollection playerDataSnapshot)
+		public FullCharacterDataSaveRequest(bool shouldReleaseCharacterSession, bool isPositionSaved, [NotNull] ZoneServerCharacterLocationSaveRequest characterLocationData, [NotNull] EntityFieldDataCollection playerDataSnapshot)
 		{
+			ShouldReleaseCharacterSession = shouldReleaseCharacterSession;
 			this.isPositionSaved = isPositionSaved;
 			CharacterLocationData = characterLocationData ?? throw new ArgumentNullException(nameof(characterLocationData));
 			PlayerDataSnapshot = playerDataSnapshot ?? throw new ArgumentNullException(nameof(playerDataSnapshot));
+
+			//Snapshot current time.
+			UtcTickTimeStamp = DateTime.UtcNow.Ticks;
 		}
 
 		[JsonConstructor]
