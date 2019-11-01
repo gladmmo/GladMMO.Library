@@ -102,6 +102,8 @@ Due to issues with Unity3D's netstandard2.0 compatibility with some assemblies i
 
 **AZURE_SERVICE_BUS_KEY:** Global Azure Service Bus secret key that allows the backend to manage, send and listen on Service Queues and Topics.
 
+**AUTHENTICATION_DATABASE_CONNECTION_STRING:** Variable for authentication database connection string. It's used in cloud deployments in lieu of the connection configuration file.
+
 TODO: AWS
 
 # License
