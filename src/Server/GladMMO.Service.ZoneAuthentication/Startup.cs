@@ -69,13 +69,19 @@ namespace GladMMO
 			//TODO: Renable
 			services.AddDbContext<GuardiansZoneAuthenticationDbContext>(options =>
 			{
-				//TODO: Setup db options
-
-				//On local builds we don't want to use config. We want to default to local
-#if !DEBUG_LOCAL && !RELEASE_LOCAL
-				options.UseMySql(authOptions.Value.AuthenticationDatabaseString);
+				//Fuck configuration, I'm sick of it and we can't check it into source control
+				//so we're using enviroment variables for sensitive deployment specific values.
+#if AZURE_RELEASE || AZURE_DEBUG
+				try
+				{
+					options.UseMySql(Environment.GetEnvironmentVariable(GladMMOServiceConstants.AUTHENTICATION_DATABASE_CONNECTION_STRING_ENV_VAR_PATH));
+				}
+				catch(Exception e)
+				{
+					throw new InvalidOperationException($"Failed to register Authentication Database. Make sure Env Variable path: {GladMMOServiceConstants.AUTHENTICATION_DATABASE_CONNECTION_STRING_ENV_VAR_PATH} is correctly configured.", e);
+				}
 #else
-				options.UseMySql("Server=127.0.0.1;Database=guardians.zoneauth;Uid=root;Pwd=test;");
+				options.UseMySql(authOptions.Value.AuthenticationDatabaseString);
 #endif
 				options.UseOpenIddict<int>();
 			});
