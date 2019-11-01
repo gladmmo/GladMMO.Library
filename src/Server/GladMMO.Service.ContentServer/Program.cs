@@ -19,13 +19,18 @@ namespace GladMMO
 
 		public static IWebHost BuildWebHost(string[] args) =>
 			WebHost.CreateDefaultBuilder(args)
+#if AZURE_RELEASE || AZURE_DEBUG
+				.UseKestrelGuardiansConfigWithStandardEndpoints(args)
+#else
 				.UseKestrelGuardiansConfig(args)
+#endif
 				//.UseKestrel()
 				.UseIISIntegration()
 				.UseStartup<Startup>()
 				//TODO: remove this logging when we finally deploy properly
 				.UseSetting("detailedErrors", "true")
 				.CaptureStartupErrors(true)
+				.UseApplicationInsights()
 				.Build();
 	}
 }
