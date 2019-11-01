@@ -33,7 +33,8 @@ namespace GladMMO
 					{
 						//Added for things can address the current endpoint.
 #if AZURE_RELEASE || AZURE_DEBUG
-						collection.AddSingleton(new PreferredEndpoint("http://127.0.0.1", 80));
+						//TODO: Don't hardcode the endpoint here.
+						collection.AddSingleton(new PreferredEndpoint("http://test-guardians-auth.azurewebsites.net", 80));
 #else
 						collection.AddSingleton(new PreferredEndpoint("https://127.0.0.1", 443));
 #endif
