@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
-    <Configurations>Debug;Release;debug_azure</Configurations>
+    <Configurations>Debug;Release;debug_azure;azure_release</Configurations>
   </PropertyGroup>
 
   <ItemGroup>

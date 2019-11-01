@@ -153,6 +153,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GladMMO.Server.AzureService
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		azure_release|Any CPU = azure_release|Any CPU
 		Database_Migration|Any CPU = Database_Migration|Any CPU
 		debug_azure|Any CPU = debug_azure|Any CPU
 		DEBUG_LOCAL|Any CPU = DEBUG_LOCAL|Any CPU
@@ -161,6 +162,8 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9A3A80BD-9A88-4604-B1C2-3BEB94773807}.azure_release|Any CPU.ActiveCfg = azure_release|Any CPU
+		{9A3A80BD-9A88-4604-B1C2-3BEB94773807}.azure_release|Any CPU.Build.0 = azure_release|Any CPU
 		{9A3A80BD-9A88-4604-B1C2-3BEB94773807}.Database_Migration|Any CPU.ActiveCfg = Database_Migration|Any CPU
 		{9A3A80BD-9A88-4604-B1C2-3BEB94773807}.Database_Migration|Any CPU.Build.0 = Database_Migration|Any CPU
 		{9A3A80BD-9A88-4604-B1C2-3BEB94773807}.debug_azure|Any CPU.ActiveCfg = debug_azure|Any CPU
@@ -173,6 +176,8 @@ Global
 		{9A3A80BD-9A88-4604-B1C2-3BEB94773807}.Debug-Local|Any CPU.Build.0 = Debug-Local|Any CPU
 		{9A3A80BD-9A88-4604-B1C2-3BEB94773807}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9A3A80BD-9A88-4604-B1C2-3BEB94773807}.Release|Any CPU.Build.0 = Release|Any CPU
+		{04FD917B-A6D1-419F-B51E-0D5BD0EDECDD}.azure_release|Any CPU.ActiveCfg = azure_release|Any CPU
+		{04FD917B-A6D1-419F-B51E-0D5BD0EDECDD}.azure_release|Any CPU.Build.0 = azure_release|Any CPU
 		{04FD917B-A6D1-419F-B51E-0D5BD0EDECDD}.Database_Migration|Any CPU.ActiveCfg = Database_Migration|Any CPU
 		{04FD917B-A6D1-419F-B51E-0D5BD0EDECDD}.Database_Migration|Any CPU.Build.0 = Database_Migration|Any CPU
 		{04FD917B-A6D1-419F-B51E-0D5BD0EDECDD}.debug_azure|Any CPU.ActiveCfg = debug_azure|Any CPU
@@ -185,6 +190,8 @@ Global
 		{04FD917B-A6D1-419F-B51E-0D5BD0EDECDD}.Debug-Local|Any CPU.Build.0 = Debug-Local|Any CPU
 		{04FD917B-A6D1-419F-B51E-0D5BD0EDECDD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{04FD917B-A6D1-419F-B51E-0D5BD0EDECDD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FCC1F528-C205-4201-B86A-50194F11FC99}.azure_release|Any CPU.ActiveCfg = azure_release|Any CPU
+		{FCC1F528-C205-4201-B86A-50194F11FC99}.azure_release|Any CPU.Build.0 = azure_release|Any CPU
 		{FCC1F528-C205-4201-B86A-50194F11FC99}.Database_Migration|Any CPU.ActiveCfg = Database_Migration|Any CPU
 		{FCC1F528-C205-4201-B86A-50194F11FC99}.Database_Migration|Any CPU.Build.0 = Database_Migration|Any CPU
 		{FCC1F528-C205-4201-B86A-50194F11FC99}.debug_azure|Any CPU.ActiveCfg = debug_azure|Any CPU
@@ -197,6 +204,8 @@ Global
 		{FCC1F528-C205-4201-B86A-50194F11FC99}.Debug-Local|Any CPU.Build.0 = Debug-Local|Any CPU
 		{FCC1F528-C205-4201-B86A-50194F11FC99}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FCC1F528-C205-4201-B86A-50194F11FC99}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5080C03E-8E6D-4C27-BE39-3E563821E3D2}.azure_release|Any CPU.ActiveCfg = azure_release|Any CPU
+		{5080C03E-8E6D-4C27-BE39-3E563821E3D2}.azure_release|Any CPU.Build.0 = azure_release|Any CPU
 		{5080C03E-8E6D-4C27-BE39-3E563821E3D2}.Database_Migration|Any CPU.ActiveCfg = Database_Migration|Any CPU
 		{5080C03E-8E6D-4C27-BE39-3E563821E3D2}.Database_Migration|Any CPU.Build.0 = Database_Migration|Any CPU
 		{5080C03E-8E6D-4C27-BE39-3E563821E3D2}.debug_azure|Any CPU.ActiveCfg = debug_azure|Any CPU
@@ -209,6 +218,8 @@ Global
 		{5080C03E-8E6D-4C27-BE39-3E563821E3D2}.Debug-Local|Any CPU.Build.0 = Debug-Local|Any CPU
 		{5080C03E-8E6D-4C27-BE39-3E563821E3D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5080C03E-8E6D-4C27-BE39-3E563821E3D2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E2B40445-D90B-430D-8BA4-A321628D6C9E}.azure_release|Any CPU.ActiveCfg = azure_release|Any CPU
+		{E2B40445-D90B-430D-8BA4-A321628D6C9E}.azure_release|Any CPU.Build.0 = azure_release|Any CPU
 		{E2B40445-D90B-430D-8BA4-A321628D6C9E}.Database_Migration|Any CPU.ActiveCfg = Debug|Any CPU
 		{E2B40445-D90B-430D-8BA4-A321628D6C9E}.Database_Migration|Any CPU.Build.0 = Debug|Any CPU
 		{E2B40445-D90B-430D-8BA4-A321628D6C9E}.debug_azure|Any CPU.ActiveCfg = debug_azure|Any CPU
@@ -221,6 +232,8 @@ Global
 		{E2B40445-D90B-430D-8BA4-A321628D6C9E}.Debug-Local|Any CPU.Build.0 = Debug|Any CPU
 		{E2B40445-D90B-430D-8BA4-A321628D6C9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E2B40445-D90B-430D-8BA4-A321628D6C9E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C4FE235-CEEE-4787-9C7F-9E6198D02364}.azure_release|Any CPU.ActiveCfg = azure_release|Any CPU
+		{9C4FE235-CEEE-4787-9C7F-9E6198D02364}.azure_release|Any CPU.Build.0 = azure_release|Any CPU
 		{9C4FE235-CEEE-4787-9C7F-9E6198D02364}.Database_Migration|Any CPU.ActiveCfg = Database_Migration|Any CPU
 		{9C4FE235-CEEE-4787-9C7F-9E6198D02364}.Database_Migration|Any CPU.Build.0 = Database_Migration|Any CPU
 		{9C4FE235-CEEE-4787-9C7F-9E6198D02364}.debug_azure|Any CPU.ActiveCfg = debug_azure|Any CPU
@@ -233,6 +246,8 @@ Global
 		{9C4FE235-CEEE-4787-9C7F-9E6198D02364}.Debug-Local|Any CPU.Build.0 = Debug-Local|Any CPU
 		{9C4FE235-CEEE-4787-9C7F-9E6198D02364}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9C4FE235-CEEE-4787-9C7F-9E6198D02364}.Release|Any CPU.Build.0 = Release|Any CPU
+		{07357D90-27C3-4CA3-BB57-201DDCD03875}.azure_release|Any CPU.ActiveCfg = azure_release|Any CPU
+		{07357D90-27C3-4CA3-BB57-201DDCD03875}.azure_release|Any CPU.Build.0 = azure_release|Any CPU
 		{07357D90-27C3-4CA3-BB57-201DDCD03875}.Database_Migration|Any CPU.ActiveCfg = Debug|Any CPU
 		{07357D90-27C3-4CA3-BB57-201DDCD03875}.Database_Migration|Any CPU.Build.0 = Debug|Any CPU
 		{07357D90-27C3-4CA3-BB57-201DDCD03875}.debug_azure|Any CPU.ActiveCfg = debug_azure|Any CPU
@@ -245,6 +260,8 @@ Global
 		{07357D90-27C3-4CA3-BB57-201DDCD03875}.Debug-Local|Any CPU.Build.0 = Debug|Any CPU
 		{07357D90-27C3-4CA3-BB57-201DDCD03875}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{07357D90-27C3-4CA3-BB57-201DDCD03875}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A4A46064-B720-4B94-862F-7FEEAC4127EA}.azure_release|Any CPU.ActiveCfg = azure_release|Any CPU
+		{A4A46064-B720-4B94-862F-7FEEAC4127EA}.azure_release|Any CPU.Build.0 = azure_release|Any CPU
 		{A4A46064-B720-4B94-862F-7FEEAC4127EA}.Database_Migration|Any CPU.ActiveCfg = Database_Migration|Any CPU
 		{A4A46064-B720-4B94-862F-7FEEAC4127EA}.Database_Migration|Any CPU.Build.0 = Database_Migration|Any CPU
 		{A4A46064-B720-4B94-862F-7FEEAC4127EA}.debug_azure|Any CPU.ActiveCfg = debug_azure|Any CPU
@@ -257,6 +274,8 @@ Global
 		{A4A46064-B720-4B94-862F-7FEEAC4127EA}.Debug-Local|Any CPU.Build.0 = Debug-Local|Any CPU
 		{A4A46064-B720-4B94-862F-7FEEAC4127EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A4A46064-B720-4B94-862F-7FEEAC4127EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2CE6DE11-C258-4723-BBB5-8CA4F3CC926A}.azure_release|Any CPU.ActiveCfg = azure_release|Any CPU
+		{2CE6DE11-C258-4723-BBB5-8CA4F3CC926A}.azure_release|Any CPU.Build.0 = azure_release|Any CPU
 		{2CE6DE11-C258-4723-BBB5-8CA4F3CC926A}.Database_Migration|Any CPU.ActiveCfg = Debug|Any CPU
 		{2CE6DE11-C258-4723-BBB5-8CA4F3CC926A}.Database_Migration|Any CPU.Build.0 = Debug|Any CPU
 		{2CE6DE11-C258-4723-BBB5-8CA4F3CC926A}.debug_azure|Any CPU.ActiveCfg = debug_azure|Any CPU
@@ -269,6 +288,8 @@ Global
 		{2CE6DE11-C258-4723-BBB5-8CA4F3CC926A}.Debug-Local|Any CPU.Build.0 = Debug_Local|Any CPU
 		{2CE6DE11-C258-4723-BBB5-8CA4F3CC926A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2CE6DE11-C258-4723-BBB5-8CA4F3CC926A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4E15BFBA-E442-453F-BD29-0C9F4E0711B6}.azure_release|Any CPU.ActiveCfg = azure_release|Any CPU
+		{4E15BFBA-E442-453F-BD29-0C9F4E0711B6}.azure_release|Any CPU.Build.0 = azure_release|Any CPU
 		{4E15BFBA-E442-453F-BD29-0C9F4E0711B6}.Database_Migration|Any CPU.ActiveCfg = Debug|Any CPU
 		{4E15BFBA-E442-453F-BD29-0C9F4E0711B6}.Database_Migration|Any CPU.Build.0 = Debug|Any CPU
 		{4E15BFBA-E442-453F-BD29-0C9F4E0711B6}.debug_azure|Any CPU.ActiveCfg = debug_azure|Any CPU
@@ -281,6 +302,8 @@ Global
 		{4E15BFBA-E442-453F-BD29-0C9F4E0711B6}.Debug-Local|Any CPU.Build.0 = Debug_Local|Any CPU
 		{4E15BFBA-E442-453F-BD29-0C9F4E0711B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4E15BFBA-E442-453F-BD29-0C9F4E0711B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C41FF379-086B-4911-A4B6-4EAFFE20366F}.azure_release|Any CPU.ActiveCfg = azure_release|Any CPU
+		{C41FF379-086B-4911-A4B6-4EAFFE20366F}.azure_release|Any CPU.Build.0 = azure_release|Any CPU
 		{C41FF379-086B-4911-A4B6-4EAFFE20366F}.Database_Migration|Any CPU.ActiveCfg = Debug_Local|Any CPU
 		{C41FF379-086B-4911-A4B6-4EAFFE20366F}.Database_Migration|Any CPU.Build.0 = Debug_Local|Any CPU
 		{C41FF379-086B-4911-A4B6-4EAFFE20366F}.debug_azure|Any CPU.ActiveCfg = debug_azure|Any CPU
@@ -293,6 +316,8 @@ Global
 		{C41FF379-086B-4911-A4B6-4EAFFE20366F}.Debug-Local|Any CPU.Build.0 = Debug_Local|Any CPU
 		{C41FF379-086B-4911-A4B6-4EAFFE20366F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C41FF379-086B-4911-A4B6-4EAFFE20366F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0371103-0B15-4DED-A7E1-D49EBD697822}.azure_release|Any CPU.ActiveCfg = azure_release|Any CPU
+		{D0371103-0B15-4DED-A7E1-D49EBD697822}.azure_release|Any CPU.Build.0 = azure_release|Any CPU
 		{D0371103-0B15-4DED-A7E1-D49EBD697822}.Database_Migration|Any CPU.ActiveCfg = Debug|Any CPU
 		{D0371103-0B15-4DED-A7E1-D49EBD697822}.Database_Migration|Any CPU.Build.0 = Debug|Any CPU
 		{D0371103-0B15-4DED-A7E1-D49EBD697822}.debug_azure|Any CPU.ActiveCfg = debug_azure|Any CPU
@@ -305,6 +330,8 @@ Global
 		{D0371103-0B15-4DED-A7E1-D49EBD697822}.Debug-Local|Any CPU.Build.0 = Debug|Any CPU
 		{D0371103-0B15-4DED-A7E1-D49EBD697822}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D0371103-0B15-4DED-A7E1-D49EBD697822}.Release|Any CPU.Build.0 = Release|Any CPU
+		{400DECE1-46A9-4E9F-8F6C-D0A87CA2AD03}.azure_release|Any CPU.ActiveCfg = azure_release|Any CPU
+		{400DECE1-46A9-4E9F-8F6C-D0A87CA2AD03}.azure_release|Any CPU.Build.0 = azure_release|Any CPU
 		{400DECE1-46A9-4E9F-8F6C-D0A87CA2AD03}.Database_Migration|Any CPU.ActiveCfg = Debug|Any CPU
 		{400DECE1-46A9-4E9F-8F6C-D0A87CA2AD03}.Database_Migration|Any CPU.Build.0 = Debug|Any CPU
 		{400DECE1-46A9-4E9F-8F6C-D0A87CA2AD03}.debug_azure|Any CPU.ActiveCfg = debug_azure|Any CPU
@@ -317,6 +344,8 @@ Global
 		{400DECE1-46A9-4E9F-8F6C-D0A87CA2AD03}.Debug-Local|Any CPU.Build.0 = Debug|Any CPU
 		{400DECE1-46A9-4E9F-8F6C-D0A87CA2AD03}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{400DECE1-46A9-4E9F-8F6C-D0A87CA2AD03}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A541ABAF-5F9B-4800-8CD0-3BC722DD2699}.azure_release|Any CPU.ActiveCfg = azure_release|Any CPU
+		{A541ABAF-5F9B-4800-8CD0-3BC722DD2699}.azure_release|Any CPU.Build.0 = azure_release|Any CPU
 		{A541ABAF-5F9B-4800-8CD0-3BC722DD2699}.Database_Migration|Any CPU.ActiveCfg = Debug|Any CPU
 		{A541ABAF-5F9B-4800-8CD0-3BC722DD2699}.Database_Migration|Any CPU.Build.0 = Debug|Any CPU
 		{A541ABAF-5F9B-4800-8CD0-3BC722DD2699}.debug_azure|Any CPU.ActiveCfg = debug_azure|Any CPU
@@ -329,6 +358,8 @@ Global
 		{A541ABAF-5F9B-4800-8CD0-3BC722DD2699}.Debug-Local|Any CPU.Build.0 = Debug|Any CPU
 		{A541ABAF-5F9B-4800-8CD0-3BC722DD2699}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A541ABAF-5F9B-4800-8CD0-3BC722DD2699}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2896B433-69F7-46AB-B266-0F7274AA9C97}.azure_release|Any CPU.ActiveCfg = azure_release|Any CPU
+		{2896B433-69F7-46AB-B266-0F7274AA9C97}.azure_release|Any CPU.Build.0 = azure_release|Any CPU
 		{2896B433-69F7-46AB-B266-0F7274AA9C97}.Database_Migration|Any CPU.ActiveCfg = Debug|Any CPU
 		{2896B433-69F7-46AB-B266-0F7274AA9C97}.Database_Migration|Any CPU.Build.0 = Debug|Any CPU
 		{2896B433-69F7-46AB-B266-0F7274AA9C97}.debug_azure|Any CPU.ActiveCfg = debug_azure|Any CPU
@@ -341,6 +372,8 @@ Global
 		{2896B433-69F7-46AB-B266-0F7274AA9C97}.Debug-Local|Any CPU.Build.0 = Debug|Any CPU
 		{2896B433-69F7-46AB-B266-0F7274AA9C97}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2896B433-69F7-46AB-B266-0F7274AA9C97}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7E754EE8-795A-4CDB-B2C4-C5B61940D5A5}.azure_release|Any CPU.ActiveCfg = azure_release|Any CPU
+		{7E754EE8-795A-4CDB-B2C4-C5B61940D5A5}.azure_release|Any CPU.Build.0 = azure_release|Any CPU
 		{7E754EE8-795A-4CDB-B2C4-C5B61940D5A5}.Database_Migration|Any CPU.ActiveCfg = Debug|Any CPU
 		{7E754EE8-795A-4CDB-B2C4-C5B61940D5A5}.Database_Migration|Any CPU.Build.0 = Debug|Any CPU
 		{7E754EE8-795A-4CDB-B2C4-C5B61940D5A5}.debug_azure|Any CPU.ActiveCfg = debug_azure|Any CPU
@@ -353,6 +386,8 @@ Global
 		{7E754EE8-795A-4CDB-B2C4-C5B61940D5A5}.Debug-Local|Any CPU.Build.0 = Debug|Any CPU
 		{7E754EE8-795A-4CDB-B2C4-C5B61940D5A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7E754EE8-795A-4CDB-B2C4-C5B61940D5A5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{73252DFC-DE22-464B-8E30-C53C4B0348B4}.azure_release|Any CPU.ActiveCfg = azure_release|Any CPU
+		{73252DFC-DE22-464B-8E30-C53C4B0348B4}.azure_release|Any CPU.Build.0 = azure_release|Any CPU
 		{73252DFC-DE22-464B-8E30-C53C4B0348B4}.Database_Migration|Any CPU.ActiveCfg = Debug|Any CPU
 		{73252DFC-DE22-464B-8E30-C53C4B0348B4}.Database_Migration|Any CPU.Build.0 = Debug|Any CPU
 		{73252DFC-DE22-464B-8E30-C53C4B0348B4}.debug_azure|Any CPU.ActiveCfg = debug_azure|Any CPU
@@ -365,6 +400,8 @@ Global
 		{73252DFC-DE22-464B-8E30-C53C4B0348B4}.Debug-Local|Any CPU.Build.0 = Debug|Any CPU
 		{73252DFC-DE22-464B-8E30-C53C4B0348B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{73252DFC-DE22-464B-8E30-C53C4B0348B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{983F41F2-7851-4544-867C-E25F81F8DFEB}.azure_release|Any CPU.ActiveCfg = azure_release|Any CPU
+		{983F41F2-7851-4544-867C-E25F81F8DFEB}.azure_release|Any CPU.Build.0 = azure_release|Any CPU
 		{983F41F2-7851-4544-867C-E25F81F8DFEB}.Database_Migration|Any CPU.ActiveCfg = Debug|Any CPU
 		{983F41F2-7851-4544-867C-E25F81F8DFEB}.Database_Migration|Any CPU.Build.0 = Debug|Any CPU
 		{983F41F2-7851-4544-867C-E25F81F8DFEB}.debug_azure|Any CPU.ActiveCfg = debug_azure|Any CPU
@@ -377,6 +414,8 @@ Global
 		{983F41F2-7851-4544-867C-E25F81F8DFEB}.Debug-Local|Any CPU.Build.0 = Debug|Any CPU
 		{983F41F2-7851-4544-867C-E25F81F8DFEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{983F41F2-7851-4544-867C-E25F81F8DFEB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FDC602F7-05D3-432E-BD39-F6FBBD65A32E}.azure_release|Any CPU.ActiveCfg = azure_release|Any CPU
+		{FDC602F7-05D3-432E-BD39-F6FBBD65A32E}.azure_release|Any CPU.Build.0 = azure_release|Any CPU
 		{FDC602F7-05D3-432E-BD39-F6FBBD65A32E}.Database_Migration|Any CPU.ActiveCfg = Debug|Any CPU
 		{FDC602F7-05D3-432E-BD39-F6FBBD65A32E}.Database_Migration|Any CPU.Build.0 = Debug|Any CPU
 		{FDC602F7-05D3-432E-BD39-F6FBBD65A32E}.debug_azure|Any CPU.ActiveCfg = debug_azure|Any CPU
@@ -389,6 +428,8 @@ Global
 		{FDC602F7-05D3-432E-BD39-F6FBBD65A32E}.Debug-Local|Any CPU.Build.0 = Debug|Any CPU
 		{FDC602F7-05D3-432E-BD39-F6FBBD65A32E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FDC602F7-05D3-432E-BD39-F6FBBD65A32E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6F43D196-DB82-4429-8BD8-8D759B153B88}.azure_release|Any CPU.ActiveCfg = azure_release|Any CPU
+		{6F43D196-DB82-4429-8BD8-8D759B153B88}.azure_release|Any CPU.Build.0 = azure_release|Any CPU
 		{6F43D196-DB82-4429-8BD8-8D759B153B88}.Database_Migration|Any CPU.ActiveCfg = Debug|Any CPU
 		{6F43D196-DB82-4429-8BD8-8D759B153B88}.Database_Migration|Any CPU.Build.0 = Debug|Any CPU
 		{6F43D196-DB82-4429-8BD8-8D759B153B88}.debug_azure|Any CPU.ActiveCfg = debug_azure|Any CPU
@@ -401,6 +442,8 @@ Global
 		{6F43D196-DB82-4429-8BD8-8D759B153B88}.Debug-Local|Any CPU.Build.0 = Debug|Any CPU
 		{6F43D196-DB82-4429-8BD8-8D759B153B88}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6F43D196-DB82-4429-8BD8-8D759B153B88}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CB062265-D346-4483-9BCE-1F9B9001398E}.azure_release|Any CPU.ActiveCfg = azure_release|Any CPU
+		{CB062265-D346-4483-9BCE-1F9B9001398E}.azure_release|Any CPU.Build.0 = azure_release|Any CPU
 		{CB062265-D346-4483-9BCE-1F9B9001398E}.Database_Migration|Any CPU.ActiveCfg = Debug|Any CPU
 		{CB062265-D346-4483-9BCE-1F9B9001398E}.Database_Migration|Any CPU.Build.0 = Debug|Any CPU
 		{CB062265-D346-4483-9BCE-1F9B9001398E}.debug_azure|Any CPU.ActiveCfg = debug_azure|Any CPU
@@ -413,6 +456,8 @@ Global
 		{CB062265-D346-4483-9BCE-1F9B9001398E}.Debug-Local|Any CPU.Build.0 = Debug|Any CPU
 		{CB062265-D346-4483-9BCE-1F9B9001398E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CB062265-D346-4483-9BCE-1F9B9001398E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FEA15159-99D2-43C2-89BC-85C3ABFA9756}.azure_release|Any CPU.ActiveCfg = azure_release|Any CPU
+		{FEA15159-99D2-43C2-89BC-85C3ABFA9756}.azure_release|Any CPU.Build.0 = azure_release|Any CPU
 		{FEA15159-99D2-43C2-89BC-85C3ABFA9756}.Database_Migration|Any CPU.ActiveCfg = Debug|Any CPU
 		{FEA15159-99D2-43C2-89BC-85C3ABFA9756}.Database_Migration|Any CPU.Build.0 = Debug|Any CPU
 		{FEA15159-99D2-43C2-89BC-85C3ABFA9756}.debug_azure|Any CPU.ActiveCfg = debug_azure|Any CPU
@@ -425,6 +470,8 @@ Global
 		{FEA15159-99D2-43C2-89BC-85C3ABFA9756}.Debug-Local|Any CPU.Build.0 = Debug|Any CPU
 		{FEA15159-99D2-43C2-89BC-85C3ABFA9756}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FEA15159-99D2-43C2-89BC-85C3ABFA9756}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8066613B-2495-484B-988D-F99E665D2D5D}.azure_release|Any CPU.ActiveCfg = azure_release|Any CPU
+		{8066613B-2495-484B-988D-F99E665D2D5D}.azure_release|Any CPU.Build.0 = azure_release|Any CPU
 		{8066613B-2495-484B-988D-F99E665D2D5D}.Database_Migration|Any CPU.ActiveCfg = Debug|Any CPU
 		{8066613B-2495-484B-988D-F99E665D2D5D}.Database_Migration|Any CPU.Build.0 = Debug|Any CPU
 		{8066613B-2495-484B-988D-F99E665D2D5D}.debug_azure|Any CPU.ActiveCfg = debug_azure|Any CPU
@@ -437,6 +484,8 @@ Global
 		{8066613B-2495-484B-988D-F99E665D2D5D}.Debug-Local|Any CPU.Build.0 = Debug|Any CPU
 		{8066613B-2495-484B-988D-F99E665D2D5D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8066613B-2495-484B-988D-F99E665D2D5D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0419C966-A7EE-4C32-AEB0-A406C31F733B}.azure_release|Any CPU.ActiveCfg = azure_release|Any CPU
+		{0419C966-A7EE-4C32-AEB0-A406C31F733B}.azure_release|Any CPU.Build.0 = azure_release|Any CPU
 		{0419C966-A7EE-4C32-AEB0-A406C31F733B}.Database_Migration|Any CPU.ActiveCfg = Debug|Any CPU
 		{0419C966-A7EE-4C32-AEB0-A406C31F733B}.Database_Migration|Any CPU.Build.0 = Debug|Any CPU
 		{0419C966-A7EE-4C32-AEB0-A406C31F733B}.debug_azure|Any CPU.ActiveCfg = debug_azure|Any CPU
@@ -449,6 +498,8 @@ Global
 		{0419C966-A7EE-4C32-AEB0-A406C31F733B}.Debug-Local|Any CPU.Build.0 = Debug|Any CPU
 		{0419C966-A7EE-4C32-AEB0-A406C31F733B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0419C966-A7EE-4C32-AEB0-A406C31F733B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F224F16-CED0-4F27-92E1-5D9764B89DBF}.azure_release|Any CPU.ActiveCfg = azure_release|Any CPU
+		{7F224F16-CED0-4F27-92E1-5D9764B89DBF}.azure_release|Any CPU.Build.0 = azure_release|Any CPU
 		{7F224F16-CED0-4F27-92E1-5D9764B89DBF}.Database_Migration|Any CPU.ActiveCfg = Debug|Any CPU
 		{7F224F16-CED0-4F27-92E1-5D9764B89DBF}.Database_Migration|Any CPU.Build.0 = Debug|Any CPU
 		{7F224F16-CED0-4F27-92E1-5D9764B89DBF}.debug_azure|Any CPU.ActiveCfg = debug_azure|Any CPU
@@ -461,6 +512,8 @@ Global
 		{7F224F16-CED0-4F27-92E1-5D9764B89DBF}.Debug-Local|Any CPU.Build.0 = Debug|Any CPU
 		{7F224F16-CED0-4F27-92E1-5D9764B89DBF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7F224F16-CED0-4F27-92E1-5D9764B89DBF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{730F0707-7974-4EA9-A1DC-0339C9279D5F}.azure_release|Any CPU.ActiveCfg = azure_release|Any CPU
+		{730F0707-7974-4EA9-A1DC-0339C9279D5F}.azure_release|Any CPU.Build.0 = azure_release|Any CPU
 		{730F0707-7974-4EA9-A1DC-0339C9279D5F}.Database_Migration|Any CPU.ActiveCfg = Database_Migration|Any CPU
 		{730F0707-7974-4EA9-A1DC-0339C9279D5F}.Database_Migration|Any CPU.Build.0 = Database_Migration|Any CPU
 		{730F0707-7974-4EA9-A1DC-0339C9279D5F}.debug_azure|Any CPU.ActiveCfg = debug_azure|Any CPU
@@ -473,6 +526,8 @@ Global
 		{730F0707-7974-4EA9-A1DC-0339C9279D5F}.Debug-Local|Any CPU.Build.0 = Debug|Any CPU
 		{730F0707-7974-4EA9-A1DC-0339C9279D5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{730F0707-7974-4EA9-A1DC-0339C9279D5F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{468603D7-6D01-441B-BCEC-BED7F377562E}.azure_release|Any CPU.ActiveCfg = azure_release|Any CPU
+		{468603D7-6D01-441B-BCEC-BED7F377562E}.azure_release|Any CPU.Build.0 = azure_release|Any CPU
 		{468603D7-6D01-441B-BCEC-BED7F377562E}.Database_Migration|Any CPU.ActiveCfg = Database_Migration|Any CPU
 		{468603D7-6D01-441B-BCEC-BED7F377562E}.Database_Migration|Any CPU.Build.0 = Database_Migration|Any CPU
 		{468603D7-6D01-441B-BCEC-BED7F377562E}.debug_azure|Any CPU.ActiveCfg = debug_azure|Any CPU
@@ -485,6 +540,8 @@ Global
 		{468603D7-6D01-441B-BCEC-BED7F377562E}.Debug-Local|Any CPU.Build.0 = Debug_Local|Any CPU
 		{468603D7-6D01-441B-BCEC-BED7F377562E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{468603D7-6D01-441B-BCEC-BED7F377562E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{45191700-B9F8-4643-8C2A-08D2D7B8D8A9}.azure_release|Any CPU.ActiveCfg = azure_release|Any CPU
+		{45191700-B9F8-4643-8C2A-08D2D7B8D8A9}.azure_release|Any CPU.Build.0 = azure_release|Any CPU
 		{45191700-B9F8-4643-8C2A-08D2D7B8D8A9}.Database_Migration|Any CPU.ActiveCfg = Debug_Local|Any CPU
 		{45191700-B9F8-4643-8C2A-08D2D7B8D8A9}.Database_Migration|Any CPU.Build.0 = Debug_Local|Any CPU
 		{45191700-B9F8-4643-8C2A-08D2D7B8D8A9}.debug_azure|Any CPU.ActiveCfg = debug_azure|Any CPU
@@ -497,6 +554,8 @@ Global
 		{45191700-B9F8-4643-8C2A-08D2D7B8D8A9}.Debug-Local|Any CPU.Build.0 = Debug_Local|Any CPU
 		{45191700-B9F8-4643-8C2A-08D2D7B8D8A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{45191700-B9F8-4643-8C2A-08D2D7B8D8A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{054BC8CE-5703-445A-BD6E-B438791739A3}.azure_release|Any CPU.ActiveCfg = azure_release|Any CPU
+		{054BC8CE-5703-445A-BD6E-B438791739A3}.azure_release|Any CPU.Build.0 = azure_release|Any CPU
 		{054BC8CE-5703-445A-BD6E-B438791739A3}.Database_Migration|Any CPU.ActiveCfg = Database_Migration|Any CPU
 		{054BC8CE-5703-445A-BD6E-B438791739A3}.Database_Migration|Any CPU.Build.0 = Database_Migration|Any CPU
 		{054BC8CE-5703-445A-BD6E-B438791739A3}.debug_azure|Any CPU.ActiveCfg = debug_azure|Any CPU
@@ -509,6 +568,8 @@ Global
 		{054BC8CE-5703-445A-BD6E-B438791739A3}.Debug-Local|Any CPU.Build.0 = Debug_Local|Any CPU
 		{054BC8CE-5703-445A-BD6E-B438791739A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{054BC8CE-5703-445A-BD6E-B438791739A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F9CDA439-A658-4699-A5C4-091242F7E5D1}.azure_release|Any CPU.ActiveCfg = azure_release|Any CPU
+		{F9CDA439-A658-4699-A5C4-091242F7E5D1}.azure_release|Any CPU.Build.0 = azure_release|Any CPU
 		{F9CDA439-A658-4699-A5C4-091242F7E5D1}.Database_Migration|Any CPU.ActiveCfg = Debug|Any CPU
 		{F9CDA439-A658-4699-A5C4-091242F7E5D1}.Database_Migration|Any CPU.Build.0 = Debug|Any CPU
 		{F9CDA439-A658-4699-A5C4-091242F7E5D1}.debug_azure|Any CPU.ActiveCfg = debug_azure|Any CPU
@@ -521,6 +582,8 @@ Global
 		{F9CDA439-A658-4699-A5C4-091242F7E5D1}.Debug-Local|Any CPU.Build.0 = Debug|Any CPU
 		{F9CDA439-A658-4699-A5C4-091242F7E5D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F9CDA439-A658-4699-A5C4-091242F7E5D1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B4CDE6F-6E9C-41C4-A4A3-B9FF7E0F38CE}.azure_release|Any CPU.ActiveCfg = azure_release|Any CPU
+		{0B4CDE6F-6E9C-41C4-A4A3-B9FF7E0F38CE}.azure_release|Any CPU.Build.0 = azure_release|Any CPU
 		{0B4CDE6F-6E9C-41C4-A4A3-B9FF7E0F38CE}.Database_Migration|Any CPU.ActiveCfg = Debug|Any CPU
 		{0B4CDE6F-6E9C-41C4-A4A3-B9FF7E0F38CE}.Database_Migration|Any CPU.Build.0 = Debug|Any CPU
 		{0B4CDE6F-6E9C-41C4-A4A3-B9FF7E0F38CE}.debug_azure|Any CPU.ActiveCfg = debug_azure|Any CPU
@@ -533,6 +596,8 @@ Global
 		{0B4CDE6F-6E9C-41C4-A4A3-B9FF7E0F38CE}.Debug-Local|Any CPU.Build.0 = Debug|Any CPU
 		{0B4CDE6F-6E9C-41C4-A4A3-B9FF7E0F38CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0B4CDE6F-6E9C-41C4-A4A3-B9FF7E0F38CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AED3DE38-FEE1-4DD5-B9D8-BC33C64CDA56}.azure_release|Any CPU.ActiveCfg = azure_release|Any CPU
+		{AED3DE38-FEE1-4DD5-B9D8-BC33C64CDA56}.azure_release|Any CPU.Build.0 = azure_release|Any CPU
 		{AED3DE38-FEE1-4DD5-B9D8-BC33C64CDA56}.Database_Migration|Any CPU.ActiveCfg = Debug|Any CPU
 		{AED3DE38-FEE1-4DD5-B9D8-BC33C64CDA56}.Database_Migration|Any CPU.Build.0 = Debug|Any CPU
 		{AED3DE38-FEE1-4DD5-B9D8-BC33C64CDA56}.debug_azure|Any CPU.ActiveCfg = debug_azure|Any CPU
@@ -545,6 +610,8 @@ Global
 		{AED3DE38-FEE1-4DD5-B9D8-BC33C64CDA56}.Debug-Local|Any CPU.Build.0 = Debug|Any CPU
 		{AED3DE38-FEE1-4DD5-B9D8-BC33C64CDA56}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AED3DE38-FEE1-4DD5-B9D8-BC33C64CDA56}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6EC46B4D-E269-4661-B11D-3D33F37A6D1E}.azure_release|Any CPU.ActiveCfg = azure_release|Any CPU
+		{6EC46B4D-E269-4661-B11D-3D33F37A6D1E}.azure_release|Any CPU.Build.0 = azure_release|Any CPU
 		{6EC46B4D-E269-4661-B11D-3D33F37A6D1E}.Database_Migration|Any CPU.ActiveCfg = Debug|Any CPU
 		{6EC46B4D-E269-4661-B11D-3D33F37A6D1E}.Database_Migration|Any CPU.Build.0 = Debug|Any CPU
 		{6EC46B4D-E269-4661-B11D-3D33F37A6D1E}.debug_azure|Any CPU.ActiveCfg = debug_azure|Any CPU
@@ -557,6 +624,8 @@ Global
 		{6EC46B4D-E269-4661-B11D-3D33F37A6D1E}.Debug-Local|Any CPU.Build.0 = Debug|Any CPU
 		{6EC46B4D-E269-4661-B11D-3D33F37A6D1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6EC46B4D-E269-4661-B11D-3D33F37A6D1E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C96815B2-8678-42F3-8AB0-6AA4784BE29C}.azure_release|Any CPU.ActiveCfg = azure_release|Any CPU
+		{C96815B2-8678-42F3-8AB0-6AA4784BE29C}.azure_release|Any CPU.Build.0 = azure_release|Any CPU
 		{C96815B2-8678-42F3-8AB0-6AA4784BE29C}.Database_Migration|Any CPU.ActiveCfg = Debug|Any CPU
 		{C96815B2-8678-42F3-8AB0-6AA4784BE29C}.Database_Migration|Any CPU.Build.0 = Debug|Any CPU
 		{C96815B2-8678-42F3-8AB0-6AA4784BE29C}.debug_azure|Any CPU.ActiveCfg = debug_azure|Any CPU
@@ -569,6 +638,8 @@ Global
 		{C96815B2-8678-42F3-8AB0-6AA4784BE29C}.Debug-Local|Any CPU.Build.0 = Debug|Any CPU
 		{C96815B2-8678-42F3-8AB0-6AA4784BE29C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C96815B2-8678-42F3-8AB0-6AA4784BE29C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{377F9985-85F8-4997-AB78-367EE1B9BB7E}.azure_release|Any CPU.ActiveCfg = azure_release|Any CPU
+		{377F9985-85F8-4997-AB78-367EE1B9BB7E}.azure_release|Any CPU.Build.0 = azure_release|Any CPU
 		{377F9985-85F8-4997-AB78-367EE1B9BB7E}.Database_Migration|Any CPU.ActiveCfg = Debug|Any CPU
 		{377F9985-85F8-4997-AB78-367EE1B9BB7E}.Database_Migration|Any CPU.Build.0 = Debug|Any CPU
 		{377F9985-85F8-4997-AB78-367EE1B9BB7E}.debug_azure|Any CPU.ActiveCfg = debug_azure|Any CPU
@@ -581,6 +652,8 @@ Global
 		{377F9985-85F8-4997-AB78-367EE1B9BB7E}.Debug-Local|Any CPU.Build.0 = Debug|Any CPU
 		{377F9985-85F8-4997-AB78-367EE1B9BB7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{377F9985-85F8-4997-AB78-367EE1B9BB7E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{044080E8-44D0-45A3-ADA6-BBBF1BC6CEA3}.azure_release|Any CPU.ActiveCfg = azure_release|Any CPU
+		{044080E8-44D0-45A3-ADA6-BBBF1BC6CEA3}.azure_release|Any CPU.Build.0 = azure_release|Any CPU
 		{044080E8-44D0-45A3-ADA6-BBBF1BC6CEA3}.Database_Migration|Any CPU.ActiveCfg = Debug|Any CPU
 		{044080E8-44D0-45A3-ADA6-BBBF1BC6CEA3}.Database_Migration|Any CPU.Build.0 = Debug|Any CPU
 		{044080E8-44D0-45A3-ADA6-BBBF1BC6CEA3}.debug_azure|Any CPU.ActiveCfg = debug_azure|Any CPU
@@ -593,6 +666,8 @@ Global
 		{044080E8-44D0-45A3-ADA6-BBBF1BC6CEA3}.Debug-Local|Any CPU.Build.0 = Debug|Any CPU
 		{044080E8-44D0-45A3-ADA6-BBBF1BC6CEA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{044080E8-44D0-45A3-ADA6-BBBF1BC6CEA3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{11D64C1C-9ED7-4247-B1F8-351637E89A44}.azure_release|Any CPU.ActiveCfg = azure_release|Any CPU
+		{11D64C1C-9ED7-4247-B1F8-351637E89A44}.azure_release|Any CPU.Build.0 = azure_release|Any CPU
 		{11D64C1C-9ED7-4247-B1F8-351637E89A44}.Database_Migration|Any CPU.ActiveCfg = Debug|Any CPU
 		{11D64C1C-9ED7-4247-B1F8-351637E89A44}.Database_Migration|Any CPU.Build.0 = Debug|Any CPU
 		{11D64C1C-9ED7-4247-B1F8-351637E89A44}.debug_azure|Any CPU.ActiveCfg = debug_azure|Any CPU
@@ -605,6 +680,8 @@ Global
 		{11D64C1C-9ED7-4247-B1F8-351637E89A44}.Debug-Local|Any CPU.Build.0 = Debug|Any CPU
 		{11D64C1C-9ED7-4247-B1F8-351637E89A44}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{11D64C1C-9ED7-4247-B1F8-351637E89A44}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D277804-735E-4DDE-89A9-75E36D62F2E3}.azure_release|Any CPU.ActiveCfg = azure_release|Any CPU
+		{6D277804-735E-4DDE-89A9-75E36D62F2E3}.azure_release|Any CPU.Build.0 = azure_release|Any CPU
 		{6D277804-735E-4DDE-89A9-75E36D62F2E3}.Database_Migration|Any CPU.ActiveCfg = Debug|Any CPU
 		{6D277804-735E-4DDE-89A9-75E36D62F2E3}.Database_Migration|Any CPU.Build.0 = Debug|Any CPU
 		{6D277804-735E-4DDE-89A9-75E36D62F2E3}.debug_azure|Any CPU.ActiveCfg = debug_azure|Any CPU
@@ -617,6 +694,8 @@ Global
 		{6D277804-735E-4DDE-89A9-75E36D62F2E3}.Debug-Local|Any CPU.Build.0 = Debug|Any CPU
 		{6D277804-735E-4DDE-89A9-75E36D62F2E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6D277804-735E-4DDE-89A9-75E36D62F2E3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A96A7B1F-6226-44B6-9C5F-C46457381A0F}.azure_release|Any CPU.ActiveCfg = azure_release|Any CPU
+		{A96A7B1F-6226-44B6-9C5F-C46457381A0F}.azure_release|Any CPU.Build.0 = azure_release|Any CPU
 		{A96A7B1F-6226-44B6-9C5F-C46457381A0F}.Database_Migration|Any CPU.ActiveCfg = Debug|Any CPU
 		{A96A7B1F-6226-44B6-9C5F-C46457381A0F}.Database_Migration|Any CPU.Build.0 = Debug|Any CPU
 		{A96A7B1F-6226-44B6-9C5F-C46457381A0F}.debug_azure|Any CPU.ActiveCfg = debug_azure|Any CPU
@@ -629,6 +708,8 @@ Global
 		{A96A7B1F-6226-44B6-9C5F-C46457381A0F}.Debug-Local|Any CPU.Build.0 = Debug|Any CPU
 		{A96A7B1F-6226-44B6-9C5F-C46457381A0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A96A7B1F-6226-44B6-9C5F-C46457381A0F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA12AA8E-8F35-4B40-A0BF-A68F7683E40D}.azure_release|Any CPU.ActiveCfg = azure_release|Any CPU
+		{EA12AA8E-8F35-4B40-A0BF-A68F7683E40D}.azure_release|Any CPU.Build.0 = azure_release|Any CPU
 		{EA12AA8E-8F35-4B40-A0BF-A68F7683E40D}.Database_Migration|Any CPU.ActiveCfg = Database_Migration|Any CPU
 		{EA12AA8E-8F35-4B40-A0BF-A68F7683E40D}.Database_Migration|Any CPU.Build.0 = Database_Migration|Any CPU
 		{EA12AA8E-8F35-4B40-A0BF-A68F7683E40D}.debug_azure|Any CPU.ActiveCfg = debug_azure|Any CPU
@@ -641,6 +722,8 @@ Global
 		{EA12AA8E-8F35-4B40-A0BF-A68F7683E40D}.Debug-Local|Any CPU.Build.0 = Debug_Local|Any CPU
 		{EA12AA8E-8F35-4B40-A0BF-A68F7683E40D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EA12AA8E-8F35-4B40-A0BF-A68F7683E40D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{460666FC-CFC6-4ACF-B4D6-76A31710EE41}.azure_release|Any CPU.ActiveCfg = azure_release|Any CPU
+		{460666FC-CFC6-4ACF-B4D6-76A31710EE41}.azure_release|Any CPU.Build.0 = azure_release|Any CPU
 		{460666FC-CFC6-4ACF-B4D6-76A31710EE41}.Database_Migration|Any CPU.ActiveCfg = Debug|Any CPU
 		{460666FC-CFC6-4ACF-B4D6-76A31710EE41}.Database_Migration|Any CPU.Build.0 = Debug|Any CPU
 		{460666FC-CFC6-4ACF-B4D6-76A31710EE41}.debug_azure|Any CPU.ActiveCfg = debug_azure|Any CPU
@@ -653,6 +736,8 @@ Global
 		{460666FC-CFC6-4ACF-B4D6-76A31710EE41}.Debug-Local|Any CPU.Build.0 = Debug|Any CPU
 		{460666FC-CFC6-4ACF-B4D6-76A31710EE41}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{460666FC-CFC6-4ACF-B4D6-76A31710EE41}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BEEA7FB2-4CE5-4AC9-85EC-D07B844EDACE}.azure_release|Any CPU.ActiveCfg = azure_release|Any CPU
+		{BEEA7FB2-4CE5-4AC9-85EC-D07B844EDACE}.azure_release|Any CPU.Build.0 = azure_release|Any CPU
 		{BEEA7FB2-4CE5-4AC9-85EC-D07B844EDACE}.Database_Migration|Any CPU.ActiveCfg = Debug|Any CPU
 		{BEEA7FB2-4CE5-4AC9-85EC-D07B844EDACE}.Database_Migration|Any CPU.Build.0 = Debug|Any CPU
 		{BEEA7FB2-4CE5-4AC9-85EC-D07B844EDACE}.debug_azure|Any CPU.ActiveCfg = debug_azure|Any CPU
@@ -665,6 +750,8 @@ Global
 		{BEEA7FB2-4CE5-4AC9-85EC-D07B844EDACE}.Debug-Local|Any CPU.Build.0 = Debug|Any CPU
 		{BEEA7FB2-4CE5-4AC9-85EC-D07B844EDACE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BEEA7FB2-4CE5-4AC9-85EC-D07B844EDACE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B7B86BA-0AFC-4071-8A5E-9A9BF2B4A0BE}.azure_release|Any CPU.ActiveCfg = azure_release|Any CPU
+		{7B7B86BA-0AFC-4071-8A5E-9A9BF2B4A0BE}.azure_release|Any CPU.Build.0 = azure_release|Any CPU
 		{7B7B86BA-0AFC-4071-8A5E-9A9BF2B4A0BE}.Database_Migration|Any CPU.ActiveCfg = Debug|Any CPU
 		{7B7B86BA-0AFC-4071-8A5E-9A9BF2B4A0BE}.Database_Migration|Any CPU.Build.0 = Debug|Any CPU
 		{7B7B86BA-0AFC-4071-8A5E-9A9BF2B4A0BE}.debug_azure|Any CPU.ActiveCfg = debug_azure|Any CPU
@@ -677,6 +764,8 @@ Global
 		{7B7B86BA-0AFC-4071-8A5E-9A9BF2B4A0BE}.Debug-Local|Any CPU.Build.0 = Debug|Any CPU
 		{7B7B86BA-0AFC-4071-8A5E-9A9BF2B4A0BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7B7B86BA-0AFC-4071-8A5E-9A9BF2B4A0BE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F5731FFE-35BF-438F-B6F9-5B75EACDEF0C}.azure_release|Any CPU.ActiveCfg = azure_release|Any CPU
+		{F5731FFE-35BF-438F-B6F9-5B75EACDEF0C}.azure_release|Any CPU.Build.0 = azure_release|Any CPU
 		{F5731FFE-35BF-438F-B6F9-5B75EACDEF0C}.Database_Migration|Any CPU.ActiveCfg = Debug|Any CPU
 		{F5731FFE-35BF-438F-B6F9-5B75EACDEF0C}.Database_Migration|Any CPU.Build.0 = Debug|Any CPU
 		{F5731FFE-35BF-438F-B6F9-5B75EACDEF0C}.debug_azure|Any CPU.ActiveCfg = debug_azure|Any CPU
@@ -689,6 +778,8 @@ Global
 		{F5731FFE-35BF-438F-B6F9-5B75EACDEF0C}.Debug-Local|Any CPU.Build.0 = Debug|Any CPU
 		{F5731FFE-35BF-438F-B6F9-5B75EACDEF0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F5731FFE-35BF-438F-B6F9-5B75EACDEF0C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D631C20D-CCF5-4048-BB9C-C2DC27BB1D4C}.azure_release|Any CPU.ActiveCfg = azure_release|Any CPU
+		{D631C20D-CCF5-4048-BB9C-C2DC27BB1D4C}.azure_release|Any CPU.Build.0 = azure_release|Any CPU
 		{D631C20D-CCF5-4048-BB9C-C2DC27BB1D4C}.Database_Migration|Any CPU.ActiveCfg = Debug|Any CPU
 		{D631C20D-CCF5-4048-BB9C-C2DC27BB1D4C}.Database_Migration|Any CPU.Build.0 = Debug|Any CPU
 		{D631C20D-CCF5-4048-BB9C-C2DC27BB1D4C}.debug_azure|Any CPU.ActiveCfg = debug_azure|Any CPU
@@ -701,6 +792,8 @@ Global
 		{D631C20D-CCF5-4048-BB9C-C2DC27BB1D4C}.Debug-Local|Any CPU.Build.0 = Debug|Any CPU
 		{D631C20D-CCF5-4048-BB9C-C2DC27BB1D4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D631C20D-CCF5-4048-BB9C-C2DC27BB1D4C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F3966BB-C566-46EE-AC82-4DD0008F40D8}.azure_release|Any CPU.ActiveCfg = azure_release|Any CPU
+		{7F3966BB-C566-46EE-AC82-4DD0008F40D8}.azure_release|Any CPU.Build.0 = azure_release|Any CPU
 		{7F3966BB-C566-46EE-AC82-4DD0008F40D8}.Database_Migration|Any CPU.ActiveCfg = Debug|Any CPU
 		{7F3966BB-C566-46EE-AC82-4DD0008F40D8}.Database_Migration|Any CPU.Build.0 = Debug|Any CPU
 		{7F3966BB-C566-46EE-AC82-4DD0008F40D8}.debug_azure|Any CPU.ActiveCfg = debug_azure|Any CPU
@@ -713,6 +806,8 @@ Global
 		{7F3966BB-C566-46EE-AC82-4DD0008F40D8}.Debug-Local|Any CPU.Build.0 = Debug|Any CPU
 		{7F3966BB-C566-46EE-AC82-4DD0008F40D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7F3966BB-C566-46EE-AC82-4DD0008F40D8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B2191DAE-0384-4A5B-9BE6-55419D5960F4}.azure_release|Any CPU.ActiveCfg = azure_release|Any CPU
+		{B2191DAE-0384-4A5B-9BE6-55419D5960F4}.azure_release|Any CPU.Build.0 = azure_release|Any CPU
 		{B2191DAE-0384-4A5B-9BE6-55419D5960F4}.Database_Migration|Any CPU.ActiveCfg = Debug|Any CPU
 		{B2191DAE-0384-4A5B-9BE6-55419D5960F4}.Database_Migration|Any CPU.Build.0 = Debug|Any CPU
 		{B2191DAE-0384-4A5B-9BE6-55419D5960F4}.debug_azure|Any CPU.ActiveCfg = debug_azure|Any CPU
@@ -725,6 +820,8 @@ Global
 		{B2191DAE-0384-4A5B-9BE6-55419D5960F4}.Debug-Local|Any CPU.Build.0 = Debug|Any CPU
 		{B2191DAE-0384-4A5B-9BE6-55419D5960F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B2191DAE-0384-4A5B-9BE6-55419D5960F4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D46A2067-40EB-4FD9-AE49-C2137D8B2A03}.azure_release|Any CPU.ActiveCfg = azure_release|Any CPU
+		{D46A2067-40EB-4FD9-AE49-C2137D8B2A03}.azure_release|Any CPU.Build.0 = azure_release|Any CPU
 		{D46A2067-40EB-4FD9-AE49-C2137D8B2A03}.Database_Migration|Any CPU.ActiveCfg = Debug|Any CPU
 		{D46A2067-40EB-4FD9-AE49-C2137D8B2A03}.Database_Migration|Any CPU.Build.0 = Debug|Any CPU
 		{D46A2067-40EB-4FD9-AE49-C2137D8B2A03}.debug_azure|Any CPU.ActiveCfg = debug_azure|Any CPU
@@ -737,6 +834,8 @@ Global
 		{D46A2067-40EB-4FD9-AE49-C2137D8B2A03}.Debug-Local|Any CPU.Build.0 = Debug|Any CPU
 		{D46A2067-40EB-4FD9-AE49-C2137D8B2A03}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D46A2067-40EB-4FD9-AE49-C2137D8B2A03}.Release|Any CPU.Build.0 = Release|Any CPU
+		{322101D1-5155-413E-94E4-248F058AD24B}.azure_release|Any CPU.ActiveCfg = azure_release|Any CPU
+		{322101D1-5155-413E-94E4-248F058AD24B}.azure_release|Any CPU.Build.0 = azure_release|Any CPU
 		{322101D1-5155-413E-94E4-248F058AD24B}.Database_Migration|Any CPU.ActiveCfg = Debug|Any CPU
 		{322101D1-5155-413E-94E4-248F058AD24B}.Database_Migration|Any CPU.Build.0 = Debug|Any CPU
 		{322101D1-5155-413E-94E4-248F058AD24B}.debug_azure|Any CPU.ActiveCfg = debug_azure|Any CPU
@@ -749,6 +848,8 @@ Global
 		{322101D1-5155-413E-94E4-248F058AD24B}.Debug-Local|Any CPU.Build.0 = Debug|Any CPU
 		{322101D1-5155-413E-94E4-248F058AD24B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{322101D1-5155-413E-94E4-248F058AD24B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{68D9861A-0C9E-4B28-961B-B0EEAFBF73B5}.azure_release|Any CPU.ActiveCfg = azure_release|Any CPU
+		{68D9861A-0C9E-4B28-961B-B0EEAFBF73B5}.azure_release|Any CPU.Build.0 = azure_release|Any CPU
 		{68D9861A-0C9E-4B28-961B-B0EEAFBF73B5}.Database_Migration|Any CPU.ActiveCfg = Debug|Any CPU
 		{68D9861A-0C9E-4B28-961B-B0EEAFBF73B5}.Database_Migration|Any CPU.Build.0 = Debug|Any CPU
 		{68D9861A-0C9E-4B28-961B-B0EEAFBF73B5}.debug_azure|Any CPU.ActiveCfg = debug_azure|Any CPU
@@ -761,6 +862,8 @@ Global
 		{68D9861A-0C9E-4B28-961B-B0EEAFBF73B5}.Debug-Local|Any CPU.Build.0 = Debug|Any CPU
 		{68D9861A-0C9E-4B28-961B-B0EEAFBF73B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{68D9861A-0C9E-4B28-961B-B0EEAFBF73B5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{59313ED7-C931-4C73-924C-F30721C42888}.azure_release|Any CPU.ActiveCfg = azure_release|Any CPU
+		{59313ED7-C931-4C73-924C-F30721C42888}.azure_release|Any CPU.Build.0 = azure_release|Any CPU
 		{59313ED7-C931-4C73-924C-F30721C42888}.Database_Migration|Any CPU.ActiveCfg = Debug|Any CPU
 		{59313ED7-C931-4C73-924C-F30721C42888}.Database_Migration|Any CPU.Build.0 = Debug|Any CPU
 		{59313ED7-C931-4C73-924C-F30721C42888}.debug_azure|Any CPU.ActiveCfg = debug_azure|Any CPU
@@ -773,6 +876,8 @@ Global
 		{59313ED7-C931-4C73-924C-F30721C42888}.Debug-Local|Any CPU.Build.0 = Debug|Any CPU
 		{59313ED7-C931-4C73-924C-F30721C42888}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{59313ED7-C931-4C73-924C-F30721C42888}.Release|Any CPU.Build.0 = Release|Any CPU
+		{79B1BEF9-95BE-48B6-B959-5CC0CE993D51}.azure_release|Any CPU.ActiveCfg = azure_release|Any CPU
+		{79B1BEF9-95BE-48B6-B959-5CC0CE993D51}.azure_release|Any CPU.Build.0 = azure_release|Any CPU
 		{79B1BEF9-95BE-48B6-B959-5CC0CE993D51}.Database_Migration|Any CPU.ActiveCfg = Debug|Any CPU
 		{79B1BEF9-95BE-48B6-B959-5CC0CE993D51}.Database_Migration|Any CPU.Build.0 = Debug|Any CPU
 		{79B1BEF9-95BE-48B6-B959-5CC0CE993D51}.debug_azure|Any CPU.ActiveCfg = debug_azure|Any CPU
@@ -785,6 +890,8 @@ Global
 		{79B1BEF9-95BE-48B6-B959-5CC0CE993D51}.Debug-Local|Any CPU.Build.0 = Debug|Any CPU
 		{79B1BEF9-95BE-48B6-B959-5CC0CE993D51}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{79B1BEF9-95BE-48B6-B959-5CC0CE993D51}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CCF35BC6-9F21-4775-AE5D-D689A04F3413}.azure_release|Any CPU.ActiveCfg = azure_release|Any CPU
+		{CCF35BC6-9F21-4775-AE5D-D689A04F3413}.azure_release|Any CPU.Build.0 = azure_release|Any CPU
 		{CCF35BC6-9F21-4775-AE5D-D689A04F3413}.Database_Migration|Any CPU.ActiveCfg = Debug|Any CPU
 		{CCF35BC6-9F21-4775-AE5D-D689A04F3413}.Database_Migration|Any CPU.Build.0 = Debug|Any CPU
 		{CCF35BC6-9F21-4775-AE5D-D689A04F3413}.debug_azure|Any CPU.ActiveCfg = debug_azure|Any CPU
@@ -797,6 +904,8 @@ Global
 		{CCF35BC6-9F21-4775-AE5D-D689A04F3413}.Debug-Local|Any CPU.Build.0 = Debug|Any CPU
 		{CCF35BC6-9F21-4775-AE5D-D689A04F3413}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CCF35BC6-9F21-4775-AE5D-D689A04F3413}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3C48424-50C2-482C-94B1-AB6FE885C40A}.azure_release|Any CPU.ActiveCfg = azure_release|Any CPU
+		{A3C48424-50C2-482C-94B1-AB6FE885C40A}.azure_release|Any CPU.Build.0 = azure_release|Any CPU
 		{A3C48424-50C2-482C-94B1-AB6FE885C40A}.Database_Migration|Any CPU.ActiveCfg = Database_Migration|Any CPU
 		{A3C48424-50C2-482C-94B1-AB6FE885C40A}.Database_Migration|Any CPU.Build.0 = Database_Migration|Any CPU
 		{A3C48424-50C2-482C-94B1-AB6FE885C40A}.debug_azure|Any CPU.ActiveCfg = debug_azure|Any CPU
@@ -809,6 +918,8 @@ Global
 		{A3C48424-50C2-482C-94B1-AB6FE885C40A}.Debug-Local|Any CPU.Build.0 = Debug-Local|Any CPU
 		{A3C48424-50C2-482C-94B1-AB6FE885C40A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A3C48424-50C2-482C-94B1-AB6FE885C40A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CD7B7D97-0CF0-4056-8951-3DA7A4F78DB2}.azure_release|Any CPU.ActiveCfg = azure_release|Any CPU
+		{CD7B7D97-0CF0-4056-8951-3DA7A4F78DB2}.azure_release|Any CPU.Build.0 = azure_release|Any CPU
 		{CD7B7D97-0CF0-4056-8951-3DA7A4F78DB2}.Database_Migration|Any CPU.ActiveCfg = Debug|Any CPU
 		{CD7B7D97-0CF0-4056-8951-3DA7A4F78DB2}.Database_Migration|Any CPU.Build.0 = Debug|Any CPU
 		{CD7B7D97-0CF0-4056-8951-3DA7A4F78DB2}.debug_azure|Any CPU.ActiveCfg = debug_azure|Any CPU
@@ -821,6 +932,8 @@ Global
 		{CD7B7D97-0CF0-4056-8951-3DA7A4F78DB2}.Debug-Local|Any CPU.Build.0 = Debug|Any CPU
 		{CD7B7D97-0CF0-4056-8951-3DA7A4F78DB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CD7B7D97-0CF0-4056-8951-3DA7A4F78DB2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E67EFED-9D58-4D5E-B908-2E05B742EF4C}.azure_release|Any CPU.ActiveCfg = azure_release|Any CPU
+		{3E67EFED-9D58-4D5E-B908-2E05B742EF4C}.azure_release|Any CPU.Build.0 = azure_release|Any CPU
 		{3E67EFED-9D58-4D5E-B908-2E05B742EF4C}.Database_Migration|Any CPU.ActiveCfg = Debug|Any CPU
 		{3E67EFED-9D58-4D5E-B908-2E05B742EF4C}.Database_Migration|Any CPU.Build.0 = Debug|Any CPU
 		{3E67EFED-9D58-4D5E-B908-2E05B742EF4C}.debug_azure|Any CPU.ActiveCfg = debug_azure|Any CPU
@@ -833,6 +946,8 @@ Global
 		{3E67EFED-9D58-4D5E-B908-2E05B742EF4C}.Debug-Local|Any CPU.Build.0 = Debug|Any CPU
 		{3E67EFED-9D58-4D5E-B908-2E05B742EF4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3E67EFED-9D58-4D5E-B908-2E05B742EF4C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8153E73B-9680-4A67-A10C-8FECF0703506}.azure_release|Any CPU.ActiveCfg = azure_release|Any CPU
+		{8153E73B-9680-4A67-A10C-8FECF0703506}.azure_release|Any CPU.Build.0 = azure_release|Any CPU
 		{8153E73B-9680-4A67-A10C-8FECF0703506}.Database_Migration|Any CPU.ActiveCfg = Debug|Any CPU
 		{8153E73B-9680-4A67-A10C-8FECF0703506}.Database_Migration|Any CPU.Build.0 = Debug|Any CPU
 		{8153E73B-9680-4A67-A10C-8FECF0703506}.debug_azure|Any CPU.ActiveCfg = debug_azure|Any CPU
@@ -845,6 +960,8 @@ Global
 		{8153E73B-9680-4A67-A10C-8FECF0703506}.Debug-Local|Any CPU.Build.0 = Debug|Any CPU
 		{8153E73B-9680-4A67-A10C-8FECF0703506}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8153E73B-9680-4A67-A10C-8FECF0703506}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C8F89F3C-BABE-44C5-8D41-CEEAE0665D96}.azure_release|Any CPU.ActiveCfg = azure_release|Any CPU
+		{C8F89F3C-BABE-44C5-8D41-CEEAE0665D96}.azure_release|Any CPU.Build.0 = azure_release|Any CPU
 		{C8F89F3C-BABE-44C5-8D41-CEEAE0665D96}.Database_Migration|Any CPU.ActiveCfg = Debug|Any CPU
 		{C8F89F3C-BABE-44C5-8D41-CEEAE0665D96}.Database_Migration|Any CPU.Build.0 = Debug|Any CPU
 		{C8F89F3C-BABE-44C5-8D41-CEEAE0665D96}.debug_azure|Any CPU.ActiveCfg = debug_azure|Any CPU
@@ -857,6 +974,8 @@ Global
 		{C8F89F3C-BABE-44C5-8D41-CEEAE0665D96}.Debug-Local|Any CPU.Build.0 = Debug|Any CPU
 		{C8F89F3C-BABE-44C5-8D41-CEEAE0665D96}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C8F89F3C-BABE-44C5-8D41-CEEAE0665D96}.Release|Any CPU.Build.0 = Release|Any CPU
+		{250FD331-75BD-4EF0-BD0E-3C7983FADD9A}.azure_release|Any CPU.ActiveCfg = azure_release|Any CPU
+		{250FD331-75BD-4EF0-BD0E-3C7983FADD9A}.azure_release|Any CPU.Build.0 = azure_release|Any CPU
 		{250FD331-75BD-4EF0-BD0E-3C7983FADD9A}.Database_Migration|Any CPU.ActiveCfg = Debug|Any CPU
 		{250FD331-75BD-4EF0-BD0E-3C7983FADD9A}.Database_Migration|Any CPU.Build.0 = Debug|Any CPU
 		{250FD331-75BD-4EF0-BD0E-3C7983FADD9A}.debug_azure|Any CPU.ActiveCfg = debug_azure|Any CPU
@@ -869,6 +988,8 @@ Global
 		{250FD331-75BD-4EF0-BD0E-3C7983FADD9A}.Debug-Local|Any CPU.Build.0 = Debug|Any CPU
 		{250FD331-75BD-4EF0-BD0E-3C7983FADD9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{250FD331-75BD-4EF0-BD0E-3C7983FADD9A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5738049B-735C-413F-9517-C609233306BF}.azure_release|Any CPU.ActiveCfg = azure_release|Any CPU
+		{5738049B-735C-413F-9517-C609233306BF}.azure_release|Any CPU.Build.0 = azure_release|Any CPU
 		{5738049B-735C-413F-9517-C609233306BF}.Database_Migration|Any CPU.ActiveCfg = Debug|Any CPU
 		{5738049B-735C-413F-9517-C609233306BF}.Database_Migration|Any CPU.Build.0 = Debug|Any CPU
 		{5738049B-735C-413F-9517-C609233306BF}.debug_azure|Any CPU.ActiveCfg = debug_azure|Any CPU
@@ -881,6 +1002,8 @@ Global
 		{5738049B-735C-413F-9517-C609233306BF}.Debug-Local|Any CPU.Build.0 = Debug|Any CPU
 		{5738049B-735C-413F-9517-C609233306BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5738049B-735C-413F-9517-C609233306BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3B951C1A-F52B-4716-ADD5-C117F611CC7F}.azure_release|Any CPU.ActiveCfg = azure_release|Any CPU
+		{3B951C1A-F52B-4716-ADD5-C117F611CC7F}.azure_release|Any CPU.Build.0 = azure_release|Any CPU
 		{3B951C1A-F52B-4716-ADD5-C117F611CC7F}.Database_Migration|Any CPU.ActiveCfg = Debug|Any CPU
 		{3B951C1A-F52B-4716-ADD5-C117F611CC7F}.Database_Migration|Any CPU.Build.0 = Debug|Any CPU
 		{3B951C1A-F52B-4716-ADD5-C117F611CC7F}.debug_azure|Any CPU.ActiveCfg = debug_azure|Any CPU

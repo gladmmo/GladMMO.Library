@@ -1,8 +1,8 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Configurations>Debug;Release;debug_azure</Configurations>
+    <Configurations>Debug;Release;debug_azure;azure_release</Configurations>
     <LangVersion>7.3</LangVersion>
   </PropertyGroup>
 

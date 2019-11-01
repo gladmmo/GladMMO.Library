@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
-    <Configurations>Debug;Release;Debug-Local;DEBUG_LOCAL;Database_Migration;debug_azure</Configurations>
+    <Configurations>Debug;Release;Debug-Local;DEBUG_LOCAL;Database_Migration;debug_azure;azure_release</Configurations>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug-Local|AnyCPU'">
