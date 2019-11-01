@@ -11,6 +11,19 @@ namespace GladMMO
 {
 	public static class IWebBuilderExtensions
 	{
+		public static IWebHostBuilder UseKestrelGuardiansConfigWithStandardEndpoints(this IWebHostBuilder builder, string[] args)
+		{
+			builder.UseSetting("https_port", "443")
+				.UseSetting("http_endpoint", "0.0.0.0")
+				.UseSetting("http_port", "80")
+				.UseSetting("https_endpoint", @"0.0.0.0")
+				.UseUrls(@"http://0.0.0.0:80", @"https://0.0.0.0:443");
+
+			builder.ConfigureKestrelHostWithCommandlinArgs(args, false);
+
+			return builder;
+		}
+
 		/// <summary>
 		/// Registers Kestrl using <see cref="WebHostBuilderKestrelExtensions"/>'s UseKestrl.
 		/// Optionally abstracts configuration for local vs deploy vs AWS registeration.
