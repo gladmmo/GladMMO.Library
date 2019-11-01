@@ -41,6 +41,10 @@ namespace GladMMO
 				//So don't remove this check
 				if(!feature.Controllers.Contains(typeof(HealthCheckController).GetTypeInfo()))
 					feature.Controllers.Add(typeof(HealthCheckController).GetTypeInfo());
+
+				//VersionController
+				if(!feature.Controllers.Contains(typeof(VersionController).GetTypeInfo()))
+					feature.Controllers.Add(typeof(VersionController).GetTypeInfo());
 			}
 		}
 	}
