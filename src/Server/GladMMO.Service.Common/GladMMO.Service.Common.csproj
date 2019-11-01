@@ -1,8 +1,9 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <Configurations>Debug;Release;Debug-Local;DEBUG_LOCAL;Database_Migration;debug_azure</Configurations>
+    
   </PropertyGroup>
 
   <ItemGroup>
@@ -20,6 +21,7 @@
 
   <PropertyGroup>
     <RuntimeIdentifiers>win</RuntimeIdentifiers>
+    <LangVersion>7.3</LangVersion>
   </PropertyGroup>
 
 </Project>
