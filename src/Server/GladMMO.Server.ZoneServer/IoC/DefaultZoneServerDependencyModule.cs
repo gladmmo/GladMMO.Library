@@ -108,7 +108,10 @@ namespace GladMMO
 				.AsSelf();
 
 			//Keep this one here, zoneserver needs it.
-			builder.Register<IServiceDiscoveryService>(context => RestService.For<IServiceDiscoveryService>(@"http://72.190.177.214:5000"));
+			builder.Register<IServiceDiscoveryService>(context => RestService.For<IServiceDiscoveryService>("https://test-guardians-servicediscovery.azurewebsites.net"))
+				.As<IServiceDiscoveryService>()
+				.SingleInstance();
+			//builder.Register<IServiceDiscoveryService>(context => RestService.For<IServiceDiscoveryService>(@"http://72.190.177.214:5000"));
 			builder.Register(context =>
 			{
 				IServiceDiscoveryService serviceDiscovery = context.Resolve<IServiceDiscoveryService>();

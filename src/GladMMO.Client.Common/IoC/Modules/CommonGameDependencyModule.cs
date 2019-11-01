@@ -77,10 +77,19 @@ namespace GladMMO
 			//builder.RegisterModule<EntityMappableRegisterationModule<NetworkEntityGuid>>();
 			RegisterEntityContainers(builder);
 
-			builder.Register<IServiceDiscoveryService>(context => RestService.For<IServiceDiscoveryService>(ServiceDiscoveryUrl))
+			builder.Register<IServiceDiscoveryService>(context => RestService.For<IServiceDiscoveryService>("https://test-guardians-servicediscovery.azurewebsites.net"))
 				.As<IServiceDiscoveryService>()
 				.SingleInstance();
 
+/*#if AZURE_RELEASE || AZURE_DEBUG
+			builder.Register<IServiceDiscoveryService>(context => RestService.For<IServiceDiscoveryService>("https://test-guardians-servicediscovery.azurewebsites.net"))
+				.As<IServiceDiscoveryService>()
+				.SingleInstance();
+#else
+			builder.Register<IServiceDiscoveryService>(context => RestService.For<IServiceDiscoveryService>(ServiceDiscoveryUrl))
+				.As<IServiceDiscoveryService>()
+				.SingleInstance();
+#endif*/
 
 			builder.Register<INameQueryService>(context =>
 			{
@@ -98,6 +107,8 @@ namespace GladMMO
 			builder.RegisterType<DefaultEntityExperienceLevelStrategy>()
 				.As<IEntityExperienceLevelStrategy>()
 				.SingleInstance();
+
+			RegisterEntityContainers(builder);
 		}
 
 		private static void RegisterEntityContainers(ContainerBuilder builder)
