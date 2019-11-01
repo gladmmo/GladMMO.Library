@@ -32,7 +32,12 @@ namespace GladMMO
 				.ConfigureServices(collection =>
 					{
 						//Added for things can address the current endpoint.
+#if AZURE_RELEASE || AZURE_DEBUG
+						collection.AddSingleton(new PreferredEndpoint("http://127.0.0.1", 80));
+#else
 						collection.AddSingleton(new PreferredEndpoint("https://127.0.0.1", 443));
+#endif
+
 					})
 				.UseStartup<Startup>()
 				.ConfigureAppConfiguration((context, builder) =>
