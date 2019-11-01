@@ -28,7 +28,7 @@ namespace GladMMO
 		[HttpGet]
 		public IActionResult GetVersion()
 		{
-			return Ok("0.0.1");
+			return Ok("0.0.2");
 		}
 	}
 }
