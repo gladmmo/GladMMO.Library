@@ -10,5 +10,10 @@ namespace GladMMO
 		/// The environment variable path for the auth database connection string.
 		/// </summary>
 		public const string AUTHENTICATION_DATABASE_CONNECTION_STRING_ENV_VAR_PATH = "AUTHENTICATION_DATABASE_CONNECTION_STRING";
+
+		/// <summary>
+		/// The environment variable path for the content database connection string.
+		/// </summary>
+		public const string CONTENT_DATABASE_CONNECTION_STRING_ENV_VAR_PATH = "CONTENT_DATABASE_CONNECTION_STRING";
 	}
 }
