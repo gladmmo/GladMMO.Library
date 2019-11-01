@@ -11,7 +11,7 @@ namespace GladMMO
 	[Route("api/[controller]")]
 	public class HelloController : Controller
 	{
-		[ResponseCache]
+		[ResponseCache(Duration = int.MaxValue)]
 		[HttpGet]
 		public Task<string> Hello()
 		{
