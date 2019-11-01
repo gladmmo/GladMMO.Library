@@ -42,6 +42,10 @@ Supporting:
 
 \* Not included
 
+# Builds
+
+**Services:** [![Build status](https://dev.azure.com/vrguardians/VRGuardians.Test/_apis/build/status/VRGuardians%20Test%20-%20CI)](https://dev.azure.com/vrguardians/VRGuardians.Test/_build/latest?definitionId=9)
+
 # Services
 
 All services are built with scale in mind. It's built upon the crossplatform technology ASP.NET Core. This allows GladMMO's services to be high performance and asynchronous stateless HTTP APIs which provide for high scalability.
