@@ -109,7 +109,20 @@ namespace GladMMO
 
 			services.AddDbContext<CharacterDatabaseContext>(o =>
 			{
+				//Fuck configuration, I'm sick of it and we can't check it into source control
+				//so we're using enviroment variables for sensitive deployment specific values.
+#if AZURE_RELEASE || AZURE_DEBUG
+				try
+				{
+					o.UseMySql(Environment.GetEnvironmentVariable(GladMMOServiceConstants.CHARACTER_DATABASE_CONNECTION_STRING_ENV_VAR_PATH));
+				}
+				catch(Exception e)
+				{
+					throw new InvalidOperationException($"Failed to register Authentication Database. Make sure Env Variable path: {GladMMOServiceConstants.AUTHENTICATION_DATABASE_CONNECTION_STRING_ENV_VAR_PATH} is correctly configured.", e);
+				}
+#else
 				o.UseMySql("Server=127.0.0.1;Database=guardians.gameserver;Uid=root;Pwd=test;");
+#endif
 			});
 
 			services.AddTransient<IZoneServerRepository, DatabaseBackedZoneServerRepository>();
@@ -122,7 +135,12 @@ namespace GladMMO
 		{
 			if (services == null) throw new ArgumentNullException(nameof(services));
 
+			//TODO: Support release/prod service query.
+#if AZURE_RELEASE || AZURE_DEBUG
+			services.AddSingleton<IServiceDiscoveryService>(provider => RestService.For<IServiceDiscoveryService>("https://test-guardians-servicediscovery.azurewebsites.net"));
+#else
 			services.AddSingleton<IServiceDiscoveryService>(provider => RestService.For<IServiceDiscoveryService>("http://72.190.177.214:5000"));
+#endif
 
 			services.AddSingleton<IWorldDataServiceClient>(provider =>
 			{
