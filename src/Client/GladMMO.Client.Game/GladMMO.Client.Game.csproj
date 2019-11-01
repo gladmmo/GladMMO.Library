@@ -5,6 +5,7 @@
     <RootNamespace>GladMMO</RootNamespace>
     <LangVersion>7.2</LangVersion>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Configurations>Debug;Release;debug_azure</Configurations>
   </PropertyGroup>
 
   <ItemGroup>

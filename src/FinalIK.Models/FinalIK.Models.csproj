@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>GladMMO.FinalIK</RootNamespace>
+    <Configurations>Debug;Release;debug_azure</Configurations>
   </PropertyGroup>
 
   <ItemGroup>
