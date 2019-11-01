@@ -34,6 +34,9 @@ namespace GladMMO
 
 			services.AddLogging();
 
+#if AZURE_RELEASE || AZURE_DEBUG
+			services.AddSingleton<IRegionbasedNameEndpointResolutionRepository, AzureStaticEndpointRepository>();
+#else
 			//We're using an inmemory store for now that we populate with the file stored data
 			//It needs to be singleton because we're doing it in memory and reloading per request would be bad
 			//services.AddDbContext<NamedEndpointDbContext>(options => options.UseInMemoryDatabase(), ServiceLifetime.Singleton);
@@ -45,21 +48,13 @@ namespace GladMMO
 
 			//TODO: We don't actually want to use config files for this. But we do for now.
 			//On local builds we want to use a different file
-#if !DEBUG_LOCAL && !RELEASE_LOCAL
+	#if !DEBUG_LOCAL && !RELEASE_LOCAL
 			services.AddSingleton<IRegionalServiceFilePathBuilder, DeployedRegionalServiceFilePathBuilder>();
-#else
+	#else
 			services.AddSingleton<IRegionalServiceFilePathBuilder, LocalRegionalServiceFilePathBuilder>();
+	#endif
+
 #endif
-
-			//We're using consul now
-			/*services.AddTransient<IRegionbasedNameEndpointResolutionRepository, ConsulRegionNamedEndpointStoreRepository>();
-
-			//TODO: Do config
-			services.AddTransient<IConsulClient<IConsulCatalogServiceHttpApiService>, ConsulDotNetHttpClient<IConsulCatalogServiceHttpApiService>>(p =>
-			{
-				//TODO: Add config loading for Consul
-				return new ConsulDotNetHttpClient<IConsulCatalogServiceHttpApiService>(@"http://localhost:8500");
-			});*/
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -70,7 +65,6 @@ namespace GladMMO
 
 			//This adds CloudWatch AWS logging to this app
 			loggerFactory.RegisterGuardiansLogging(Configuration);
-
 			loggerFactory.AddDebug();
 
 			app.UseMvcWithDefaultRoute();
