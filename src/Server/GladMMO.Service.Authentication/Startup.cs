@@ -169,7 +169,7 @@ namespace GladMMO
 #warning Do not deploy exceptions page into production
 			app.UseDeveloperExceptionPage();
 			app.UseHsts();
-			//app.UseHttpsRedirection(); //Fucking PlayFab queries this server like a mongoloid and doesn't respect HTTPS redirects
+			app.UseHttpsRedirection(); //Fucking PlayFab queries this server like a mongoloid and doesn't respect HTTPS redirects
 			app.UseAuthentication();
 			loggerFactory.RegisterGuardiansLogging(GeneralConfiguration);
 			loggerFactory.AddDebug();
