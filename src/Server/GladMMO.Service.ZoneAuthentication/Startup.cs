@@ -167,7 +167,7 @@ namespace GladMMO
 #warning Do not deploy exceptions page into production
 			app.UseDeveloperExceptionPage();
 			app.UseHsts();
-			app.UseHttpsRedirection(); //non-playfab compatible auth servers can redirect HTTPS
+			//app.UseHttpsRedirection(); //non-playfab compatible auth servers can redirect HTTPS
 			app.UseAuthentication();
 			loggerFactory.RegisterGuardiansLogging(GeneralConfiguration);
 			loggerFactory.AddDebug();
