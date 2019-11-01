@@ -17,7 +17,7 @@ namespace GladMMO
 					IServiceDiscoveryService serviceDiscovery = context.Resolve<IServiceDiscoveryService>();
 					IReadonlyAuthTokenRepository tokenRepository = context.Resolve<IReadonlyAuthTokenRepository>();
 
-					return new AsyncZoneAuthenticationServiceClient(QueryForRemoteServiceEndpoint(serviceDiscovery, "ZoneAuth"), new RefitSettings() {HttpMessageHandlerFactory = () => new AuthenticatedHttpClientHandler(tokenRepository)});
+					return new AsyncZoneAuthenticationServiceClient(QueryForRemoteServiceEndpoint(serviceDiscovery, "ZoneAuthentication"), new RefitSettings() {HttpMessageHandlerFactory = () => new AuthenticatedHttpClientHandler(tokenRepository)});
 				})
 				.SingleInstance();
 
