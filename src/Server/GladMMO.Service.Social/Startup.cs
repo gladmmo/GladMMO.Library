@@ -63,9 +63,10 @@ namespace GladMMO
 
 			ISignalRServerBuilder signalRBuilder = services.AddSignalR(options => { }).AddJsonProtocol();
 
+			//TODO: Handle failure.
 			//This adds the SignalR rerouting to the specified SignalR backplane.
 #if AZURE_RELEASE || AZURE_DEBUG
-			signalRBuilder.AddAzureSignalR(GladMMOServiceConstants.AZURE_SIGNALR_CONNECTION_STRING_ENV_VAR_PATH);
+			signalRBuilder.AddAzureSignalR(Environment.GetEnvironmentVariable(GladMMOServiceConstants.AZURE_SIGNALR_CONNECTION_STRING_ENV_VAR_PATH));
 #endif
 
 			services.AddSingleton<IUserIdProvider, SignalRPlayerCharacterUserIdProvider>();
