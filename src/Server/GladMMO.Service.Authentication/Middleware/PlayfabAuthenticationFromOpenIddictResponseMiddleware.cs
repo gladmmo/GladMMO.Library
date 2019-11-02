@@ -92,7 +92,7 @@ namespace GladMMO
 			try
 			{
 				//TODO: For GladMMO this needs to be made configurable.
-				/*PlayFabResultModel<GladMMOPlayFabLoginResult> result = await AuthenticationClient.LoginWithOpenId(new LoginWithOpenIdConnectRequest()
+				PlayFabResultModel<GladMMOPlayFabLoginResult> result = await AuthenticationClient.LoginWithOpenId(new LoginWithOpenIdConnectRequest()
 				{
 					ConnectionId = "VRGuardiansOAuth",
 					CreateAccount = true,
@@ -104,7 +104,7 @@ namespace GladMMO
 					throw new InvalidOperationException($"Refit returned invalid {nameof(LoginResult)} model. Was null.");
 
 				//TODO: Don't assume it's successful.
-				return result.Data;*/
+				return result.Data;
 				return new GladMMOPlayFabLoginResult("TODO-Reimplement-Playerfab-Ticket");
 			}
 			catch (ApiException e)
