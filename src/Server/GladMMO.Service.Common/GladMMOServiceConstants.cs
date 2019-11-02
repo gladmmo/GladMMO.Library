@@ -25,5 +25,7 @@ namespace GladMMO
 		/// The environment variable path for the Azure SignalR connection string.
 		/// </summary>
 		public const string AZURE_SIGNALR_CONNECTION_STRING_ENV_VAR_PATH = "AZURE_SIGNALR_CONNECTION_STRING";
+
+		public const string SERVICE_AUTHORIZATION_TOKEN_ENV_VAR_PATH = "SERVICE_AUTHORIZATION_TOKEN";
 	}
 }
