@@ -78,6 +78,8 @@ namespace GladMMO
 			services.AddSingleton<IServiceDiscoveryService>(provider => RestService.For<IServiceDiscoveryService>("http://72.190.177.214:5000"));
 #endif
 
+			services.AddSingleton<IReadonlyAuthTokenRepository, SocialServiceAuthTokenRepository>();
+
 			services.AddSingleton<IAuthenticationService, AsyncEndpointAuthenticationService>(provider =>
 			{
 				return new AsyncEndpointAuthenticationService(QueryForRemoteServiceEndpoint(provider.GetService<IServiceDiscoveryService>(), "Authentication"),
@@ -86,20 +88,26 @@ namespace GladMMO
 
 			services.AddSingleton<ISocialServiceToGameServiceClient, AsyncEndpointISocialServiceToGameServiceClient>(provider =>
 			{
+				IReadonlyAuthTokenRepository repository = provider.GetService<IReadonlyAuthTokenRepository>();
+
 				return new AsyncEndpointISocialServiceToGameServiceClient(QueryForRemoteServiceEndpoint(provider.GetService<IServiceDiscoveryService>(), "GameServer"),
-					new RefitSettings() { AuthorizationHeaderValueGetter = () => GetSocialServiceAuthorizationToken(provider.GetService<IAuthenticationService>()) });
+					new RefitSettings() { HttpMessageHandlerFactory = () => new AuthenticatedHttpClientHandler(repository) });
 			});
 
 			services.AddSingleton<INameQueryService>(provider =>
 			{
+				IReadonlyAuthTokenRepository repository = provider.GetService<IReadonlyAuthTokenRepository>();
+
 				return new AsyncEndpointNameQueryService(QueryForRemoteServiceEndpoint(provider.GetService<IServiceDiscoveryService>(), "NameQuery"),
-					new RefitSettings() { AuthorizationHeaderValueGetter = () => GetSocialServiceAuthorizationToken(provider.GetService<IAuthenticationService>()) });
+					new RefitSettings() { HttpMessageHandlerFactory = () => new AuthenticatedHttpClientHandler(repository) });
 			});
 
 			services.AddSingleton<ISocialService>(provider =>
 			{
+				IReadonlyAuthTokenRepository repository = provider.GetService<IReadonlyAuthTokenRepository>();
+
 				return new AsyncSocialServiceClient(QueryForRemoteServiceEndpoint(provider.GetService<IServiceDiscoveryService>(), GladMMONetworkConstants.SOCIAL_SERVICE_NAME),
-					new RefitSettings() { AuthorizationHeaderValueGetter = () => GetSocialServiceAuthorizationToken(provider.GetService<IAuthenticationService>()) });
+					new RefitSettings() { HttpMessageHandlerFactory = () => new AuthenticatedHttpClientHandler(repository) });
 			});
 
 			//This is for Hub connection event listeners
