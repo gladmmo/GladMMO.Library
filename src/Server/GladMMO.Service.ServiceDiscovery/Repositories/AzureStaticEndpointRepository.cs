@@ -19,6 +19,7 @@ namespace GladMMO
 #elif AZURE_RELEASE
 			string deploymentName = "prod";
 #else
+			string deploymentName = null;
 			throw new NotImplementedException($"Unsupported Build Configuration detected for {nameof(AzureStaticEndpointRepository)}");
 #endif
 
