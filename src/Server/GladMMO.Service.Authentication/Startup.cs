@@ -142,7 +142,12 @@ namespace GladMMO
 					throw new InvalidOperationException($"Failed to load cert at Path: {authOptions.Value.JwtSigningX509Certificate2Path} with Root: {Directory.GetCurrentDirectory()}. Error: {e.Message} \n\n Stack: {e.StackTrace}", e);
 				}
 
+				//TODO: Support release too.
+#if AZURE_RELEASE || AZURE_DEBUG
+				options.SetIssuer(new Uri(@"https://test-guardians-auth.azurewebsites.net"));
+#else
 				options.SetIssuer(new Uri(@"https://auth.vrguardians.net"));
+#endif
 				options.RequireClientIdentification();
 			});
 
