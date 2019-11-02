@@ -15,7 +15,6 @@ namespace GladMMO
 	public interface ISocialServiceToGameServiceClient
 	{
 		[RequiresAuthentication]
-		[Headers("Authorization: Bearer")] //see Refits example for tokenless auto-injection to the header.
 		[Get("/api/CharacterSession/account/{id}/data")]
 		Task<CharacterSessionDataResponse> GetCharacterSessionDataByAccount([AliasAs("id")] int accountId);
 	}
