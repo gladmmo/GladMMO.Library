@@ -108,6 +108,13 @@ Due to issues with Unity3D's netstandard2.0 compatibility with some assemblies i
 
 **AUTHENTICATION_DATABASE_CONNECTION_STRING:** Variable for authentication database connection string. It's used in cloud deployments in lieu of the connection configuration file.
 
+**CHARACTER_DATABASE_CONNECTION_STRING:** See *AUTHENTICATION_DATABASE_CONNECTION_STRING*.
+
+**CONTENT_DATABASE_CONNECTION_STRING:** See *AUTHENTICATION_DATABASE_CONNECTION_STRING*
+
+**AZURE_SIGNALR_CONNECTION_STRING:** When built for Azure the Social service will use Azure's SignalR backplane service so this is the connection string you'd use as a variable so it can redirect clients.
+
+
 TODO: AWS
 
 # License
