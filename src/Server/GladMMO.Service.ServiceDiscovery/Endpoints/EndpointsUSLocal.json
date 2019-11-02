@@ -17,11 +17,11 @@
       "endpointAddress": "http://72.190.177.214",
       "endpointPort": 5005
     },
-    "SocialService": {
+    "Social": {
       "endpointAddress": "http://72.190.177.214",
       "endpointPort": 5008
     },
-    "VivoxAuth": {
+    "Vivox": {
       "endpointAddress": "http://72.190.177.214",
       "endpointPort": 5010
     },
@@ -29,7 +29,7 @@
       "endpointAddress": "http://72.190.177.214",
       "endpointPort": 5011
     },
-    "ZoneAuth": {
+    "ZoneAuthentication": {
       "endpointAddress": "http://72.190.177.214",
       "endpointPort": 5009
     },

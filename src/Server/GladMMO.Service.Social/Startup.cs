@@ -97,7 +97,7 @@ namespace GladMMO
 
 			services.AddSingleton<ISocialService>(provider =>
 			{
-				return new AsyncSocialServiceClient(QueryForRemoteServiceEndpoint(provider.GetService<IServiceDiscoveryService>(), "SocialService"),
+				return new AsyncSocialServiceClient(QueryForRemoteServiceEndpoint(provider.GetService<IServiceDiscoveryService>(), GladMMONetworkConstants.SOCIAL_SERVICE_NAME),
 					new RefitSettings() { AuthorizationHeaderValueGetter = () => GetSocialServiceAuthorizationToken(provider.GetService<IAuthenticationService>()) });
 			});
 
@@ -152,7 +152,7 @@ namespace GladMMO
 			ProjectVersionStage.AssertBeta();
 
 			//TODO: Handle errors
-			return (await authService.TryAuthenticate(new AuthenticationRequestModel("SocialService", "Test69!"))).AccessToken;
+			return (await authService.TryAuthenticate(new AuthenticationRequestModel(GladMMONetworkConstants.SOCIAL_SERVICE_NAME, "Test69!"))).AccessToken;
 		}
 
 		private async Task<string> QueryForRemoteServiceEndpoint(IServiceDiscoveryService serviceDiscovery, string serviceType)

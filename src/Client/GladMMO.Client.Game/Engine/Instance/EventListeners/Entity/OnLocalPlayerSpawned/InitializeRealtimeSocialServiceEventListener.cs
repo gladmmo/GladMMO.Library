@@ -52,7 +52,7 @@ namespace GladMMO
 				try
 				{
 					//We need to connect the hub to the social backend
-					ResolveServiceEndpointResponse endpointResponse = await ServiceDiscoveryService.DiscoverService(new ResolveServiceEndpointRequest(ClientRegionLocale.US, "SocialService"))
+					ResolveServiceEndpointResponse endpointResponse = await ServiceDiscoveryService.DiscoverService(new ResolveServiceEndpointRequest(ClientRegionLocale.US, GladMMONetworkConstants.SOCIAL_SERVICE_NAME))
 						.ConfigureAwait(false);
 
 					if(!endpointResponse.isSuccessful)

@@ -16,7 +16,7 @@ namespace GladMMO
 				IServiceDiscoveryService serviceDiscovery = context.Resolve<IServiceDiscoveryService>();
 				IReadonlyAuthTokenRepository tokenRepository = context.Resolve<IReadonlyAuthTokenRepository>();
 
-				return new AsyncSocialServiceClient(QueryForRemoteServiceEndpoint(serviceDiscovery, "SocialService"), new RefitSettings() { HttpMessageHandlerFactory = () => new AuthenticatedHttpClientHandler(tokenRepository) });
+				return new AsyncSocialServiceClient(QueryForRemoteServiceEndpoint(serviceDiscovery, GladMMONetworkConstants.SOCIAL_SERVICE_NAME), new RefitSettings() { HttpMessageHandlerFactory = () => new AuthenticatedHttpClientHandler(tokenRepository) });
 			});
 
 			builder.RegisterType<DefaultRemoteSocialHubServer>()

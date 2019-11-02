@@ -16,7 +16,7 @@ namespace GladMMO
 				IServiceDiscoveryService serviceDiscovery = context.Resolve<IServiceDiscoveryService>();
 				IReadonlyAuthTokenRepository tokenRepository = context.Resolve<IReadonlyAuthTokenRepository>();
 
-				return new AsyncVivoxAuthorizationServiceClient(QueryForRemoteServiceEndpoint(serviceDiscovery, "VivoxAuth"), new RefitSettings() { HttpMessageHandlerFactory = () => new AuthenticatedHttpClientHandler(tokenRepository) });
+				return new AsyncVivoxAuthorizationServiceClient(QueryForRemoteServiceEndpoint(serviceDiscovery, GladMMONetworkConstants.VIVOX_AUTHENTICATION_SERVICE_NAME), new RefitSettings() { HttpMessageHandlerFactory = () => new AuthenticatedHttpClientHandler(tokenRepository) });
 			});
 		}
 	}
