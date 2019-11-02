@@ -20,5 +20,10 @@ namespace GladMMO
 		/// The environment variable path for the character database connection string.
 		/// </summary>
 		public const string CHARACTER_DATABASE_CONNECTION_STRING_ENV_VAR_PATH = "CHARACTER_DATABASE_CONNECTION_STRING";
+
+		/// <summary>
+		/// The environment variable path for the Azure SignalR connection string.
+		/// </summary>
+		public const string AZURE_SIGNALR_CONNECTION_STRING_ENV_VAR_PATH = " AZURE_SIGNALR_CONNECTION_STRING";
 	}
 }

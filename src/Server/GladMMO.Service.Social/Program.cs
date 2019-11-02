@@ -20,7 +20,11 @@ namespace GladMMO
 
 		public static IWebHost BuildWebHost(string[] args) =>
 			WebHost.CreateDefaultBuilder(args)
+#if AZURE_RELEASE || AZURE_DEBUG
+				.UseKestrelGuardiansConfigWithStandardEndpoints(args)
+#else
 				.UseKestrelGuardiansConfig(args)
+#endif
 				.ConfigureServices(services => services.AddAutofac()) //this enables AutoFac configuration support
 				//.UseKestrel()
 				.UseIISIntegration()
