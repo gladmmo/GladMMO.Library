@@ -27,6 +27,23 @@ namespace GladMMO
 			avatar.transform.localScale = Vector3.one;
 			avatar.layer = 5;
 
+			Animator animator = avatar.GetComponent<Animator>();
+
+			if (animator != null)
+				animator.runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>("IdleCharacterScreenAnimationController");
+			else
+			{
+				animator = avatar.GetComponentInChildren<Animator>();
+
+				if(animator != null)
+					animator.runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>("IdleCharacterScreenAnimationController");
+			}
+
+			//He'll drift across the screen if we don't do this.
+			//Slowly but surely.
+			if (animator != null)
+				animator.applyRootMotion = false;
+
 			OnContentPrefabRecieved += () =>
 			{
 				GameObject.Destroy(avatar);
