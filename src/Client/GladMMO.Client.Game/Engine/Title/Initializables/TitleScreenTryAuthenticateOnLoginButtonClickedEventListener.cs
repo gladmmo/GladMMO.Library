@@ -80,36 +80,31 @@ namespace GladMMO
 				}
 				catch (ApiException e)
 				{
-					PlayerAccountJWTModel = e.GetContentAs<PlayerAccountJWTModel>();
+					PlayerAccountJWTModel = await e.GetContentAsAsync<PlayerAccountJWTModel>();
 
-					if (Logger.IsErrorEnabled)
+					if(Logger.IsErrorEnabled)
 						Logger.Error($"Encountered Auth Error: {e.Message}");
+
+					//failed and null response.
+					//Non-null response but failed.
+					ErrorPublisher.PublishEvent(this, new GeneralErrorEncounteredEventArgs("Login Failed", $"Error Code {(int)e.StatusCode}. Reason: {e.ReasonPhrase}. {e.Message}", null));
 				}
 				catch (Exception e)
 				{
 					if (Logger.IsErrorEnabled)
 						Logger.Error($"Encountered Auth Error: {e.Message}\n\nStack: {e.StackTrace}");
+
+					//failed and null response.
+					//Non-null response but failed.
+					ErrorPublisher.PublishEvent(this, new GeneralErrorEncounteredEventArgs("Login Failed", $"Reason: Unknown Server Error", null));
 				}
 				finally
 				{
 					if(Logger.IsDebugEnabled)
 						Logger.Debug($"Auth Response for User: {UsernameText.Text} Result: {PlayerAccountJWTModel?.isTokenValid} OptionalError: {PlayerAccountJWTModel?.Error} OptionalErrorDescription: {PlayerAccountJWTModel?.ErrorDescription}");
 
-					//TODO: Rename event as authentication success.
-					if(PlayerAccountJWTModel != null && PlayerAccountJWTModel.isTokenValid)
-						//Even if it's null, we should broadcast the event.
-						OnAuthenticationResultRecieved?.Invoke(this, new AuthenticationResultEventArgs(PlayerAccountJWTModel));
-					else if (PlayerAccountJWTModel != null)
-					{
-						//Non-null response but failed.
-						ErrorPublisher.PublishEvent(this, new GeneralErrorEncounteredEventArgs("Login Failed", $"Reason: {PlayerAccountJWTModel.Error}. {PlayerAccountJWTModel.ErrorDescription}", null));
-					}
-					else
-					{
-						//failed and null response.
-						//Non-null response but failed.
-						ErrorPublisher.PublishEvent(this, new GeneralErrorEncounteredEventArgs("Login Failed", $"Reason: Unknown Server Error", null));
-					}
+					//Even if it's null, we should broadcast the event.
+					OnAuthenticationResultRecieved?.Invoke(this, new AuthenticationResultEventArgs(PlayerAccountJWTModel));
 				}
 			});
 		}
