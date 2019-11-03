@@ -2,7 +2,7 @@
   "Region": "US",
   "ServiceEndpoints": {
     "Authentication": {
-      "endpointAddress": "http://test-guardians-auth.azurewebsites.net/",
+      "endpointAddress": "http://test-guardians-auth.azurewebsites.net",
       "endpointPort": 80
     },
     "ServerSelection": {
