@@ -14,7 +14,6 @@ namespace GladMMO
 	public sealed class PositionChangeMovementData : IMovementData
 	{
 		//TODO: Add support for instant vs lerped
-
 		/// <inheritdoc />
 		[ProtoMember(1)]
 		public long TimeStamp { get; }
@@ -28,6 +27,9 @@ namespace GladMMO
 
 		[ProtoMember(4)]
 		public float Rotation { get; }
+
+		[ProtoIgnore]
+		public bool isUserCreated => true;
 
 		/// <inheritdoc />
 		public PositionChangeMovementData(long timeStamp, Vector3 initialPosition, Vector2 direction, float rotation)

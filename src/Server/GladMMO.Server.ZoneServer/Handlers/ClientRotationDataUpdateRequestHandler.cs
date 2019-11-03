@@ -44,12 +44,18 @@ namespace GladMMO
 			{
 				IMovementGenerator<GameObject> generator = MovementGenerator.RetrieveEntity(guid);
 				IMovementData movementData = MovementDataMap.RetrieveEntity(guid);
-				Vector3 initialPosition = generator.isRunning ? generator.CurrentPosition : movementData.InitialPosition;
 
 				//TODO: This is a temporary hack, we nee d abetter solluition
-				Vector2 direction = movementData is PositionChangeMovementData d ? d.Direction : Vector2.zero;
+				if (movementData is PositionChangeMovementData posChangeMoveDat)
+				{
+					Vector2 direction = posChangeMoveDat.Direction;
 
-				MovementDataMap.ReplaceObject(guid, new PositionChangeMovementData(TimeService.CurrentLocalTime, initialPosition, direction, payload.Rotation));
+					//TODO: Sanity check position sent.
+					//TODO: Sanity check timestamp
+					MovementDataMap.ReplaceObject(guid, new PositionChangeMovementData(payload.TimeStamp, payload.ClientCurrentPosition, direction, payload.Rotation));
+				}
+				else
+					throw new NotImplementedException($"TODO: Implement rotation when dealing with: {movementData.GetType().Name} type movement.");
 
 				OnPlayerRotationChanged?.Invoke(this, new PlayerRotiationChangeEventArgs(guid, payload.Rotation));
 			}

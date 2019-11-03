@@ -52,7 +52,7 @@ namespace GladMMO
 			float diff = DiffFromStartTime(currentTime);
 
 			if(diff < 0.0f)
-				throw new InvalidOperationException($"Movement diff time is less than 0.");
+				throw new InvalidOperationException($"Movement diff time is less than 0. Diff: {diff}");
 
 			//gravity
 			//Don't need to subtract the cached direction Y because it should be 0, or treated as 0.
@@ -68,7 +68,15 @@ namespace GladMMO
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		private float DiffFromStartTime(long currentTime)
 		{
-			return (float)(currentTime - LastMovementUpdateTime) / TimeSpan.TicksPerSecond;
+			float diff = (float)(currentTime - LastMovementUpdateTime) / TimeSpan.TicksPerSecond;
+
+			//Special case of rounding error can cause small negative diff from local
+			//Remote clients timestamps aren't adjusted by server so we get what they sent
+			//which if there is a drift or lack of syncronization it may end up negative.
+			if (diff < 0.0f)
+				return 0;
+
+			return diff;
 		}
 	}
 }

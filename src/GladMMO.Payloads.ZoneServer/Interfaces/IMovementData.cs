@@ -11,6 +11,9 @@ namespace GladMMO
 	[ProtoInclude(2, typeof(PathBasedMovementData))]
 	public interface IMovementData
 	{
+		[ProtoIgnore]
+		bool isUserCreated { get; }
+
 		/// <summary>
 		/// The timestamp that a particular movement data
 		/// was created at on the server.

@@ -14,6 +14,9 @@ namespace GladMMO
 	[ProtoContract]
 	public sealed class PathBasedMovementData : IMovementData
 	{
+		[ProtoIgnore]
+		public bool isUserCreated => false;
+
 		/// <inheritdoc />
 		[ProtoMember(1)]
 		public long TimeStamp { get; private set; }

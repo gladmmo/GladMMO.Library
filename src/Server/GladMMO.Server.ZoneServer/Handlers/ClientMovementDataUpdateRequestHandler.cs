@@ -63,12 +63,20 @@ namespace GladMMO
 
 		private CharacterControllerInputMovementGenerator BuildCharacterControllerMovementGenerator(NetworkEntityGuid guid, PositionChangeMovementData data, IMovementGenerator<GameObject> generator, IMovementData movementData)
 		{
-			return new CharacterControllerInputMovementGenerator(data, new Lazy<CharacterController>(() => this.CharacterControllerMappable.RetrieveEntity(guid)), generator.CurrentPosition);
+			//TODO: Sanity check timestamp and position.
+			//We used to use the last generators current position
+			//However we now use the hint position from the client.
+			//This NEEDS to be sanity checked before used.
+			//This semi-authorative approach is less secure but more responsive for the user.
+			return new CharacterControllerInputMovementGenerator(data, new Lazy<CharacterController>(() => this.CharacterControllerMappable.RetrieveEntity(guid)), data.InitialPosition);
 		}
 
 		private PositionChangeMovementData BuildPositionChangeMovementData(ClientMovementDataUpdateRequest payload, IMovementGenerator<GameObject> generator, IMovementData originalMovementData)
 		{
-			return new PositionChangeMovementData(TimeService.CurrentLocalTime, generator.isRunning ? generator.CurrentPosition : originalMovementData.InitialPosition, payload.MovementInput, originalMovementData.Rotation);
+			//TODO: Sanity check timestamp and position.
+			//So, originally we used authorative time and position but now we semi-trust the client.
+			//We need to verify the send timestamp is not too far off and also sanity check the position too.
+			return new PositionChangeMovementData(payload.Timestamp, payload.CurrentClientPosition, payload.MovementInput, originalMovementData.Rotation);
 		}
 	}
 }

@@ -38,7 +38,7 @@ namespace GladMMO
 		public void Tick()
 		{
 			//Don't pass in different remote time, large amounts of objects may get a millisecond or two more time drift from the start.
-			long currentRemoteTime = TimeService.CurrentRemoteTime + TimeService.CurrentLatency;
+			long currentRemoteTime = TimeService.CurrentRemoteTime;
 
 			foreach (var entry in MovementGenerators.EnumerateWithGuid(KnonwnEntities))
 			{

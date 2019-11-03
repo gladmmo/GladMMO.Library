@@ -21,19 +21,23 @@ namespace GladMMO
 
 		private IReadonlyKnownEntitySet KnownEntities { get; }
 
+		private ILocalPlayerDetails PlayerDetails { get; }
+
 		/// <inheritdoc />
 		public MovementUpdateMessageHandler(
 			ILog logger,
 			[NotNull] IFactoryCreatable<IMovementGenerator<GameObject>, EntityAssociatedData<IMovementData>> movementGeneratorFactory,
 			[NotNull] IEntityGuidMappable<IMovementGenerator<GameObject>> movementGeneratorMappable,
 			[NotNull] IEntityGuidMappable<IMovementData> movementDataMappable,
-			[NotNull] IKnownEntitySet knownEntities)
+			[NotNull] IKnownEntitySet knownEntities,
+			[NotNull] ILocalPlayerDetails playerDetails)
 			: base(logger)
 		{
 			MovementGeneratorFactory = movementGeneratorFactory ?? throw new ArgumentNullException(nameof(movementGeneratorFactory));
 			MovementGeneratorMappable = movementGeneratorMappable ?? throw new ArgumentNullException(nameof(movementGeneratorMappable));
 			MovementDataMappable = movementDataMappable ?? throw new ArgumentNullException(nameof(movementDataMappable));
 			KnownEntities = knownEntities ?? throw new ArgumentNullException(nameof(knownEntities));
+			PlayerDetails = playerDetails ?? throw new ArgumentNullException(nameof(playerDetails));
 		}
 
 		/// <inheritdoc />
@@ -55,7 +59,7 @@ namespace GladMMO
 			return Task.CompletedTask;
 		}
 
-		public void HandleMovementUpdate(EntityAssociatedData<IMovementData> movementUpdate)
+		public void HandleMovementUpdate(EntityAssociatedData<IMovementData> movementUpdate, bool forceHandleLocal = false)
 		{
 			if (!KnownEntities.isEntityKnown(movementUpdate.EntityGuid))
 			{
@@ -67,6 +71,14 @@ namespace GladMMO
 
 			try
 			{
+				if (!forceHandleLocal)
+				{
+					//Cheap check, and we're on another thread so performance doesn't really matter
+					if(movementUpdate.EntityGuid == PlayerDetails.LocalPlayerGuid)
+						if(movementUpdate.Data.isUserCreated)
+							return; //don't handle user created movement data about ourselves. It'll just make movement abit janky locally.
+				}
+
 				IMovementGenerator<GameObject> generator = MovementGeneratorFactory.Create(movementUpdate);
 
 				//We just initialize this casually, the next update tick in Unity3D will start the movement generator, the old generator actually might be running right now

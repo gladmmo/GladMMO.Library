@@ -19,12 +19,28 @@ namespace GladMMO
 		/// The movement data to update the server with.
 		/// </summary>
 		[ProtoMember(1)]
-		public Vector2 MovementInput { get; }
+		public Vector2 MovementInput { get; private set; }
 
-		/// <inheritdoc />
-		public ClientMovementDataUpdateRequest(Vector2 movementInput)
+		/// <summary>
+		/// The timestamp of the movement input.
+		/// </summary>
+		[ProtoMember(2)]
+		public long Timestamp { get; private set; }
+
+		/// <summary>
+		/// The current client's position as it views itself
+		/// in the movement simulation.
+		/// </summary>
+		[ProtoMember(3)]
+		public Vector3 CurrentClientPosition { get; private set; }
+
+		public ClientMovementDataUpdateRequest(Vector2 movementInput, long timestamp, Vector3 currentClientPosition)
 		{
+			if (timestamp <= 0) throw new ArgumentOutOfRangeException(nameof(timestamp));
+
 			MovementInput = movementInput;
+			Timestamp = timestamp;
+			CurrentClientPosition = currentClientPosition;
 		}
 
 		/// <summary>
