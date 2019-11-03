@@ -80,8 +80,9 @@ namespace GladMMO
 
 		public void InitializeTrackerGameObject(NetworkEntityGuid entityGuid)
 		{
+			//We now use head instead of camera because it doesn't make sense if they're 3rd person camera.
 			//Cache the gameobject that trackers voice.
-			TrackerObject = GameObjectDirectoryMappable.RetrieveEntity(entityGuid).GetGameObject(EntityGameObjectDirectory.Type.CameraRoot).transform;
+			TrackerObject = GameObjectDirectoryMappable.RetrieveEntity(entityGuid).GetGameObject(EntityGameObjectDirectory.Type.HeadRoot).transform;
 		}
 
 		public void Tick()
