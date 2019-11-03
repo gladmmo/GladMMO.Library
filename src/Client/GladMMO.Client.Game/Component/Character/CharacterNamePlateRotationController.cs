@@ -18,9 +18,6 @@ namespace GladMMO
 
 		void Start()
 		{
-			Debug.Assert(TextObjectTransform != null, nameof(TextObjectTransform) + " != null");
-			Debug.Assert(LookTransform != null, nameof(LookTransform) + " != null");
-
 			//TODO: Camera.main is SLOW.
 			ProjectVersionStage.AssertAlpha();
 			LookTransform = Camera.main.transform;
