@@ -14,7 +14,7 @@ namespace GladMMO
 	[SceneTypeCreateGladMMO(GameSceneType.TitleScreen)]
 	[SceneTypeCreateGladMMO(GameSceneType.PreZoneBurstingScreen)]
 	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
-	public sealed class GeneralErrorUIDispatchEventListener : BaseSingleEventListenerInitializable<IGeneralErrorEncounteredEventSubscribable, GeneralErrorEncounteredEventArgs>
+	public sealed class GeneralErrorUIDispatchEventListener : ThreadUnSafeBaseSingleEventListenerInitializable<IGeneralErrorEncounteredEventSubscribable, GeneralErrorEncounteredEventArgs>
 	{
 		public IUIText ErrorTitle { get; }
 
@@ -61,12 +61,12 @@ namespace GladMMO
 				ErrorDialogBox.SetElementActive(false);
 		}
 
-		protected override void OnEventFired(object source, GeneralErrorEncounteredEventArgs args)
+		protected override void OnThreadUnSafeEventFired(object source, GeneralErrorEncounteredEventArgs args)
 		{
 			ErrorArgsQueue.Enqueue(args);
 
 			//if the one we added is the only one we should set the values.
-			if (ErrorArgsQueue.Count == 1)
+			if(ErrorArgsQueue.Count == 1)
 				InitializeErrorMenu(args);
 		}
 
