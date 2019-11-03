@@ -41,7 +41,13 @@ namespace GladMMO
 			if (!isInitialized)
 			{
 				if (ExtractPotentialStateMessage(message, out var initMessage))
+				{
 					InitializeState(initMessage.State);
+
+					//Send successful initialization message to the entity, immediately.
+					//Some entities may not care.
+					TrySendMessage(new EntityActorInitializationSuccessMessage());
+				}
 				else
 				{
 					if(Logger.IsWarnEnabled)
