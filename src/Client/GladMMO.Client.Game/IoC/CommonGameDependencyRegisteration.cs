@@ -18,7 +18,24 @@ namespace GladMMO.Client
 		{
 			UnityAsyncHelper.UnityUIAsyncContinuationBehaviour = this.gameObject.AddComponent<UnityUIAsyncContinuationBehaviour>();
 
-			return new CommonGameDependencyModule(SceneType, "http://72.190.177.214:5000", this.GetType().Assembly, typeof(GladMMOClientCommonMetadataMarker).Assembly);
+			string serviceDiscoveryUrl = null;
+
+			switch (DeploymentModeConfiguration.Mode)
+			{
+				case DeploymentMode.Local:
+					serviceDiscoveryUrl = "http://72.190.177.214:5000";
+					break;
+				case DeploymentMode.AzureTest:
+					serviceDiscoveryUrl = "https://test-guardians-servicediscovery.azurewebsites.net";
+					break;
+				case DeploymentMode.AzureProduction:
+					serviceDiscoveryUrl = "https://prod-guardians-servicediscovery.azurewebsites.net";
+					break;
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
+
+			return new CommonGameDependencyModule(SceneType, serviceDiscoveryUrl, this.GetType().Assembly, typeof(GladMMOClientCommonMetadataMarker).Assembly);
 		}
 
 		public override void Register(ContainerBuilder register)
