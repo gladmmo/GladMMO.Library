@@ -38,19 +38,23 @@ namespace GladMMO
 		/// <inheritdoc />
 		public event EventHandler<AuthenticationResultEventArgs> OnAuthenticationResultRecieved;
 
+		private IGeneralErrorEncounteredEventPublisher ErrorPublisher { get; }
+
 		/// <inheritdoc />
 		public TitleScreenTryAuthenticateOnLoginButtonClickedEventListener(
 			[NotNull] ILoginButtonClickedEventSubscribable subscriptionService,
 			[NotNull] IAuthenticationService authService,
 			[NotNull] ILog logger,
 			[NotNull] [KeyFilter(UnityUIRegisterationKey.UsernameTextBox)] IUIText usernameText,
-			[NotNull] [KeyFilter(UnityUIRegisterationKey.PasswordTextBox)] IUIText passwordText)
+			[NotNull] [KeyFilter(UnityUIRegisterationKey.PasswordTextBox)] IUIText passwordText,
+			[NotNull] IGeneralErrorEncounteredEventPublisher errorPublisher)
 			: base(subscriptionService)
 		{
 			AuthService = authService ?? throw new ArgumentNullException(nameof(authService));
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
 			UsernameText = usernameText ?? throw new ArgumentNullException(nameof(usernameText));
 			PasswordText = passwordText ?? throw new ArgumentNullException(nameof(passwordText));
+			ErrorPublisher = errorPublisher ?? throw new ArgumentNullException(nameof(errorPublisher));
 		}
 
 		private AuthenticationRequestModel BuildAuthRequestModel()
@@ -91,8 +95,21 @@ namespace GladMMO
 					if(Logger.IsDebugEnabled)
 						Logger.Debug($"Auth Response for User: {UsernameText.Text} Result: {PlayerAccountJWTModel?.isTokenValid} OptionalError: {PlayerAccountJWTModel?.Error} OptionalErrorDescription: {PlayerAccountJWTModel?.ErrorDescription}");
 
-					//Even if it's null, we should broadcast the event.
-					OnAuthenticationResultRecieved?.Invoke(this, new AuthenticationResultEventArgs(PlayerAccountJWTModel));
+					//TODO: Rename event as authentication success.
+					if(PlayerAccountJWTModel != null && PlayerAccountJWTModel.isTokenValid)
+						//Even if it's null, we should broadcast the event.
+						OnAuthenticationResultRecieved?.Invoke(this, new AuthenticationResultEventArgs(PlayerAccountJWTModel));
+					else if (PlayerAccountJWTModel != null)
+					{
+						//Non-null response but failed.
+						ErrorPublisher.PublishEvent(this, new GeneralErrorEncounteredEventArgs("Login Failed", $"Reason: {PlayerAccountJWTModel.Error}. {PlayerAccountJWTModel.ErrorDescription}", null));
+					}
+					else
+					{
+						//failed and null response.
+						//Non-null response but failed.
+						ErrorPublisher.PublishEvent(this, new GeneralErrorEncounteredEventArgs("Login Failed", $"Reason: Unknown Server Error", null));
+					}
 				}
 			});
 		}
