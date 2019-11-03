@@ -25,14 +25,14 @@ namespace GladMMO
 
 		public void Initialize()
 		{
-			/*int avatarModelId = this.Data.GetFieldValue<int>(GameObjectField.RESERVED_DATA_1);
+			int avatarModelId = this.Data.GetFieldValue<int>(GameObjectField.RESERVED_DATA_1);
 
 			if(Logger.IsInfoEnabled)
 				Logger.Info($"Pedestal with ModelId: {avatarModelId} about to load model.");
 
 			//This just loads the avatar on top of the gameobject.
 			CustomModelLoaderCancelable loaderCancelable = AvatarLoaderFactory.Create(new CustomModelLoaderCreationContext(avatarModelId, TargetEntity, UserContentType.Avatar));
-			loaderCancelable.StartLoading();*/
+			loaderCancelable.StartLoading();
 		}
 	}
 }
