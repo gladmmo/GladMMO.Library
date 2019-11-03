@@ -54,10 +54,7 @@ namespace GladMMO
 
 			try
 			{
-				EntityActorMessage castedMessage = (EntityActorMessage)message;
-				EntityActorMessageContext context = new EntityActorMessageContext(Sender, Self);
-
-				if(!MessageRouter.RouteMessage(context, ActorState, castedMessage))
+				if(!TrySendMessage(message))
 					if(Logger.IsWarnEnabled)
 						Logger.Warn($"EntityActor encountered unhandled MessageType: {message.GetType().Name}");
 			}
@@ -67,6 +64,14 @@ namespace GladMMO
 					Logger.Error($"Actor: {ActorState.EntityGuid} failed to handle MessageType: {message.GetType().Name} without Exception: {e.Message}\n\nStack: {e.StackTrace}");
 				throw;
 			}
+		}
+
+		private bool TrySendMessage(object message)
+		{
+			EntityActorMessage castedMessage = (EntityActorMessage)message;
+			EntityActorMessageContext context = new EntityActorMessageContext(Sender, Self);
+
+			return MessageRouter.RouteMessage(context, ActorState, castedMessage);
 		}
 
 		protected virtual bool ExtractPotentialStateMessage(object message, out EntityActorStateInitializeMessage<TActorStateType> entityActorStateInitializeMessage)
