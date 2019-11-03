@@ -5,15 +5,15 @@ using UnityEngine;
 
 namespace GladMMO
 {
-	public sealed class DeploymentModeConfigurationComponent : MonoBehaviour
+	public sealed class DeploymentModeConfiguration : MonoBehaviour
 	{
-		private static DeploymentModeConfigurationComponent Instance;
+		private static DeploymentModeConfiguration Instance;
 
 		private static readonly Lazy<DeploymentMode> LazyInitializedMode;
 
-		static DeploymentModeConfigurationComponent()
+		static DeploymentModeConfiguration()
 		{
-			LazyInitializedMode = new Lazy<DeploymentMode>(() => DeploymentModeConfigurationComponent.Instance._Mode);
+			LazyInitializedMode = new Lazy<DeploymentMode>(() => DeploymentModeConfiguration.Instance._Mode);
 		}
 
 		public static DeploymentMode Mode => LazyInitializedMode.Value;
@@ -21,7 +21,7 @@ namespace GladMMO
 		[SerializeField]
 		private DeploymentMode _Mode;
 
-		public DeploymentModeConfigurationComponent()
+		public DeploymentModeConfiguration()
 		{
 			Instance = this;
 		}
