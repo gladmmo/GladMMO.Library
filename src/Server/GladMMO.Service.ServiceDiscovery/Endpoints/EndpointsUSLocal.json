@@ -3,7 +3,7 @@
   "ServiceEndpoints": {
     "Authentication": {
       "endpointAddress": "http://test-guardians-auth.azurewebsites.net/",
-      "endpointPort": 443
+      "endpointPort": 80
     },
     "ServerSelection": {
       "endpointAddress": "http://72.190.177.214",
