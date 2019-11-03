@@ -20,11 +20,11 @@ namespace GladMMO
 
 		public void Tick()
 		{
-			if (Input.GetKeyDown(KeyCode.H))
-				SendService.SendMessage(new PlayerModelChangeRequestPayload(6));
+			//if (Input.GetKeyDown(KeyCode.H))
+			//	SendService.SendMessage(new PlayerModelChangeRequestPayload(6));
 
-			if(Input.GetKeyDown(KeyCode.J))
-				SendService.SendMessage(new PlayerModelChangeRequestPayload(7));
+			//if(Input.GetKeyDown(KeyCode.J))
+			//	SendService.SendMessage(new PlayerModelChangeRequestPayload(7));
 		}
 	}
 }
