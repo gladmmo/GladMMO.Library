@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Common.Logging;
 using Glader.Essentials;
 using GladNet;
+using UnityEngine.SceneManagement;
 
 namespace GladMMO
 {
@@ -73,7 +74,7 @@ namespace GladMMO
 					Logger.Error($"Failed to initialize instance server connection. Reason: {e.Message}");
 
 				//We NEVER throw within an initializer
-				GeneralErrorPublisher.PublishEvent(this, new GeneralErrorEncounteredEventArgs("Network Error", "Failed to initialize instance server connection."));
+				GeneralErrorPublisher.PublishEvent(this, new GeneralErrorEncounteredEventArgs("Network Error", "Failed to initialize instance server connection.", () => SceneManager.LoadScene(GladMMOClientConstants.CHARACTER_SELECTION_SCENE_NAME)));
 			}
 		}
 	}

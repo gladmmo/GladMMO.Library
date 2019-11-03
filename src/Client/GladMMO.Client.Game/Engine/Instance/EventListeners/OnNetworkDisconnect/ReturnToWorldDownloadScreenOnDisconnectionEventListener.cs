@@ -20,7 +20,7 @@ namespace GladMMO
 
 		protected override void OnThreadUnSafeEventFired(object source, EventArgs args)
 		{
-			ErrorPublisher.PublishEvent(this, new GeneralErrorEncounteredEventArgs($"Disconnected", "Connection to the instance server was lost."));
+			ErrorPublisher.PublishEvent(this, new GeneralErrorEncounteredEventArgs($"Disconnected", "Connection to the instance server was lost.", () => SceneManager.LoadScene(GladMMOClientConstants.CHARACTER_SELECTION_SCENE_NAME)));
 		}
 	}
 }
