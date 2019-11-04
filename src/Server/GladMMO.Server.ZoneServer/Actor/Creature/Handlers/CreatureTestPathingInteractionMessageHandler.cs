@@ -10,7 +10,8 @@ using UnityEngine.AI;
 
 namespace GladMMO
 {
-	[EntityActorMessageHandler(typeof(DefaultCreatureEntityActor))]
+	//This was for debug testing creature paths.
+	//[EntityActorMessageHandler(typeof(DefaultCreatureEntityActor))]
 	public sealed class CreatureTestPathingInteractionMessageHandler : BaseEntityActorMessageHandler<DefaultEntityActorStateContainer, InteractWithEntityActorMessage>
 	{
 		private ILog Logger { get; }
