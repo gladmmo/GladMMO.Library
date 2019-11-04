@@ -33,8 +33,10 @@ namespace GladMMO
 		UNIT_FIELD_HEALTH = BaseObjectField.OBJECT_END + 1, // Size: 1, Type: INT, Flags: PUBLIC
 		UNIT_FIELD_MAXHEALTH = BaseObjectField.OBJECT_END + 2, // Size: 1, Type: INT, Flags: PUBLIC
 		UNIT_FIELD_TARGET = BaseObjectField.OBJECT_END + 3, // Size: 2, Type: LONG, Flags: PUBLIC
+		UNIT_FIELD_CASTING_SPELLID = BaseObjectField.OBJECT_END + 4,
+		UNIT_FIELD_CASTING_STARTTIME = BaseObjectField.OBJECT_END + 5, //8 byte long UTC time.
 
-		UNIT_END = UNIT_FIELD_TARGET + 1,
+		UNIT_END = UNIT_FIELD_CASTING_STARTTIME + 1, //UNIT_FIELD_CASTING_STARTTIME is 8 bytes
 	}
 
 	public enum PlayerObjectField
