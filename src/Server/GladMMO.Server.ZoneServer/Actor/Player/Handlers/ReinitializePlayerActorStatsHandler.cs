@@ -4,6 +4,8 @@ using System.Text;
 
 namespace GladMMO
 {
+	//TODO: Move the creature to different handling, they aren't or shouldn't be like players.
+	[EntityActorMessageHandler(typeof(DefaultCreatureEntityActor))]
 	[EntityActorMessageHandler(typeof(DefaultPlayerEntityActor))]
 	public sealed class ReinitializePlayerActorStatsHandler : BaseEntityActorMessageHandler<DefaultEntityActorStateContainer, ReinitializeEntityActorStatsMessage>
 	{
