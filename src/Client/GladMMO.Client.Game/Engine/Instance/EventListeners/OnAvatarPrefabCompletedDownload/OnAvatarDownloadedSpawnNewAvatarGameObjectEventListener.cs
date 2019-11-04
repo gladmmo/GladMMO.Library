@@ -50,9 +50,13 @@ namespace GladMMO
 				if (boneSdkData != null)
 				{
 					GameObject nameRoot = GameObjectDirectoryMappable.RetrieveEntity(args.EntityGuid).GetGameObject(EntityGameObjectDirectory.Type.NameRoot);
-					if (nameRoot != null)
+					nameRoot.transform.localPosition = new Vector3(nameRoot.transform.localPosition.x, boneSdkData.FloatingNameHeight, nameRoot.transform.localPosition.z);
+
+					//Don't use 0 or super small head heights. They're probably wrong, especially negative ones.
+					if (boneSdkData.HeadHeight > 0.1f)
 					{
-						nameRoot.transform.localPosition = new Vector3(nameRoot.transform.localPosition.x, boneSdkData.FloatingNameHeight, nameRoot.transform.localPosition.z);
+						GameObject headRoot = GameObjectDirectoryMappable.RetrieveEntity(args.EntityGuid).GetGameObject(EntityGameObjectDirectory.Type.HeadRoot);
+						headRoot.transform.localPosition = new Vector3(headRoot.transform.localPosition.x, boneSdkData.HeadHeight, headRoot.transform.localPosition.z);
 					}
 				}
 
