@@ -42,6 +42,9 @@ namespace GladMMO
 			CachedMovementDirection = new Vector3(MovementData.Direction.x, 0.0f, MovementData.Direction.y).normalized;
 			LastMovementUpdateTime = MovementData.TimeStamp;
 
+			//Directly set to the current position incase we're not there.
+			entity.transform.position = CurrentPosition;
+
 			return entity.transform.position;
 		}
 
