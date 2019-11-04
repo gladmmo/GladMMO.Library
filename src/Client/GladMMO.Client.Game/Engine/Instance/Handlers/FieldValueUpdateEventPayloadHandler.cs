@@ -33,6 +33,14 @@ namespace GladMMO
 				foreach(int setIndex in fieldsCollection.FieldValueUpdateMask.EnumerateSetBitsByIndex())
 				{
 					changeTrackable.SetFieldValue(setIndex, fieldsCollection.FieldValueUpdates.ElementAt(updateDiffIndex));
+
+					//Hey, so there was a bug for 8byte values that caused this to break.
+					//I know it's bad design but we all have deadlines here. We NEED this to FORCEIBLY
+					//make it appear as if it's changed even if it hasn't. Otherwise the change may not get dispatched.
+					//Trust me, these hacks will be hidden deep in networking engine code like this that runs on another thread
+					//that nobody understands. If you're here, then you understand. Tell them only that the Lich King is dead
+					//and that Bolvar Fordragon died with him.
+					changeTrackable.ChangeTrackingArray.Set(setIndex, true);
 					updateDiffIndex++;
 				}
 			}
