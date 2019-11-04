@@ -18,15 +18,23 @@ namespace GladMMO
 
 		private IReadonlyEntityGuidMappable<IEntityDataFieldContainer> EntityDataMappable { get; }
 
+		private IReadonlyEntityGuidMappable<CreatureInstanceModel> CreatureInstanceMappable { get; }
+
+		private IReadonlyEntityGuidMappable<CreatureTemplateModel> CreatureTemplateMappable { get; }
+
 		public WorldActorCreatureCreateEntityActorMessageHandler([NotNull] ILog logger,
 			[NotNull] IDependencyResolver resolver,
 			[NotNull] IEntityGuidMappable<IActorRef> actorRefMappable,
-			[NotNull] IReadonlyEntityGuidMappable<IEntityDataFieldContainer> entityDataMappable)
+			[NotNull] IReadonlyEntityGuidMappable<IEntityDataFieldContainer> entityDataMappable,
+			[NotNull] IReadonlyEntityGuidMappable<CreatureInstanceModel> creatureInstanceMappable,
+			[NotNull] IReadonlyEntityGuidMappable<CreatureTemplateModel> creatureTemplateMappable)
 		{
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
 			Resolver = resolver ?? throw new ArgumentNullException(nameof(resolver));
 			ActorRefMappable = actorRefMappable ?? throw new ArgumentNullException(nameof(actorRefMappable));
 			EntityDataMappable = entityDataMappable ?? throw new ArgumentNullException(nameof(entityDataMappable));
+			CreatureInstanceMappable = creatureInstanceMappable ?? throw new ArgumentNullException(nameof(creatureInstanceMappable));
+			CreatureTemplateMappable = creatureTemplateMappable ?? throw new ArgumentNullException(nameof(creatureTemplateMappable));
 		}
 
 		protected override void HandleMessage(EntityActorMessageContext messageContext, WorldActorState state, CreateCreatureEntityActorMessage message)
@@ -50,7 +58,11 @@ namespace GladMMO
 		{
 			//Create the actor and tell it to initialize.
 			IActorRef actorRef = state.WorldActorFactory.ActorOf(Resolver.Create<DefaultCreatureEntityActor>(), message.EntityGuid.RawGuidValue.ToString());
-			actorRef.Tell(new EntityActorStateInitializeMessage<DefaultEntityActorStateContainer>(new DefaultEntityActorStateContainer(EntityDataMappable.RetrieveEntity(message.EntityGuid), message.EntityGuid)));
+			CreatureInstanceModel instanceModel = CreatureInstanceMappable.RetrieveEntity(message.EntityGuid);
+			CreatureTemplateModel templateModel = CreatureTemplateMappable.RetrieveEntity(message.EntityGuid);
+			DefaultCreatureActorState actorState = new DefaultCreatureActorState(EntityDataMappable.RetrieveEntity(message.EntityGuid), message.EntityGuid, instanceModel, templateModel);
+
+			actorRef.Tell(new EntityActorStateInitializeMessage<DefaultCreatureActorState>(actorState));
 
 			ActorRefMappable.AddObject(message.EntityGuid, actorRef);
 
