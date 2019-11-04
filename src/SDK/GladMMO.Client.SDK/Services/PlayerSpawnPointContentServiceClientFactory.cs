@@ -9,7 +9,7 @@ namespace GladMMO.SDK
 	{
 		public IPlayerSpawnPointDataServiceClient Create(EmptyFactoryContext context)
 		{
-			return Refit.RestService.For<IPlayerSpawnPointDataServiceClient>("http://72.190.177.214:5005/", new RefitSettings() { HttpMessageHandlerFactory = () => new AuthenticatedHttpClientHandler(new ContentSDKAuthenticationTokenRepository()) });
+			return Refit.RestService.For<IPlayerSpawnPointDataServiceClient>("http://test-guardians-contentserver.azurewebsites.net/", new RefitSettings() { HttpMessageHandlerFactory = () => new AuthenticatedHttpClientHandler(new ContentSDKAuthenticationTokenRepository()) });
 		}
 	}
 }

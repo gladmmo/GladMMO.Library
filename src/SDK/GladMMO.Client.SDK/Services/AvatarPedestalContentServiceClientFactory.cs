@@ -10,7 +10,7 @@ namespace GladMMO.SDK
 		public override IGameObjectBehaviourDataServiceClient<AvatarPedestalInstanceModel> Create(EmptyFactoryContext context)
 		{
 			//api/AvatarPedestalData
-			return Refit.RestService.For<IGameObjectBehaviourDataServiceClient<AvatarPedestalInstanceModel>>("http://72.190.177.214:5005/api/AvatarPedestalData/", new RefitSettings() { HttpMessageHandlerFactory = () => new AuthenticatedHttpClientHandler(new ContentSDKAuthenticationTokenRepository()) });
+			return Refit.RestService.For<IGameObjectBehaviourDataServiceClient<AvatarPedestalInstanceModel>>("http://test-guardians-contentserver.azurewebsites.net/api/AvatarPedestalData/", new RefitSettings() { HttpMessageHandlerFactory = () => new AuthenticatedHttpClientHandler(new ContentSDKAuthenticationTokenRepository()) });
 		}
 	}
 }

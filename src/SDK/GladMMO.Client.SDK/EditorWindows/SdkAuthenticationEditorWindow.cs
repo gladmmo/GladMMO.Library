@@ -65,7 +65,7 @@ namespace GladMMO.SDK
 			ServicePointManager.CheckCertificateRevocationList = false;
 
 			//TODO: Service discovery
-			IAuthenticationService authService = Refit.RestService.For<IAuthenticationService>("https://auth.vrguardians.net");
+			IAuthenticationService authService = Refit.RestService.For<IAuthenticationService>("http://test-guardians-auth.azurewebsites.net");
 
 			//Authentication using provided credentials
 			PlayerAccountJWTModel result = authService.TryAuthenticate(new AuthenticationRequestModel(_AccountName, _Password)).Result;

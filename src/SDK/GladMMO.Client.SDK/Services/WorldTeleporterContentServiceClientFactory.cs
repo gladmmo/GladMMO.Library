@@ -10,7 +10,7 @@ namespace GladMMO.SDK
 		public override IGameObjectBehaviourDataServiceClient<WorldTeleporterInstanceModel> Create(EmptyFactoryContext context)
 		{
 			//api/WorldTeleporterData
-			return Refit.RestService.For<IGameObjectBehaviourDataServiceClient<WorldTeleporterInstanceModel>>("http://72.190.177.214:5005/api/WorldTeleporterData/", new RefitSettings() { HttpMessageHandlerFactory = () => new AuthenticatedHttpClientHandler(new ContentSDKAuthenticationTokenRepository()) });
+			return Refit.RestService.For<IGameObjectBehaviourDataServiceClient<WorldTeleporterInstanceModel>>("http://test-guardians-contentserver.azurewebsites.net/api/WorldTeleporterData/", new RefitSettings() { HttpMessageHandlerFactory = () => new AuthenticatedHttpClientHandler(new ContentSDKAuthenticationTokenRepository()) });
 		}
 	}
 }

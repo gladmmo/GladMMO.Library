@@ -9,7 +9,7 @@ namespace GladMMO
 	{
 		public IDownloadableContentServerServiceClient Create(EmptyFactoryContext context)
 		{
-			return Refit.RestService.For<IDownloadableContentServerServiceClient>("http://72.190.177.214:5005/", new RefitSettings() {HttpMessageHandlerFactory = () => new AuthenticatedHttpClientHandler(new ContentSDKAuthenticationTokenRepository())});
+			return Refit.RestService.For<IDownloadableContentServerServiceClient>("http://test-guardians-contentserver.azurewebsites.net/", new RefitSettings() {HttpMessageHandlerFactory = () => new AuthenticatedHttpClientHandler(new ContentSDKAuthenticationTokenRepository())});
 		}
 	}
 }
