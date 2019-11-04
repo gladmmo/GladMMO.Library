@@ -35,15 +35,24 @@ namespace GladMMO
 			if (!CallbackMap[entity].ContainsKey(dataField))
 			{
 				CallbackMap[entity].Add(dataField, dataChangeEvent);
+
+				if(IsRequestedTypeLong<TCallbackValueCastType>())
+					CallbackMap[entity].Add(dataField + 1, dataChangeEvent);
 			}
 			else
 			{
 				CallbackMap[entity][dataField] += dataChangeEvent;
+
+				if(IsRequestedTypeLong<TCallbackValueCastType>())
+					CallbackMap[entity][dataField + 1] += dataChangeEvent;
 			}
 
 			return new DefaultEntityDataEventUnregisterable(() =>
 			{
 				CallbackMap[entity][dataField] -= dataChangeEvent;
+
+				if(IsRequestedTypeLong<TCallbackValueCastType>())
+					CallbackMap[entity][dataField + 1] -= dataChangeEvent;
 			});
 		}
 
