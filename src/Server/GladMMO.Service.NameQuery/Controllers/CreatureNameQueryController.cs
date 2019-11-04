@@ -24,10 +24,10 @@ namespace GladMMO
 
 		protected override async Task<JsonResult> EntityNameQuery(NetworkEntityGuid entityGuid)
 		{
-			if(entityGuid.EntityId <= 0)
+			if(entityGuid.EntryId <= 0)
 				return BuildFailedResponseModel(NameQueryResponseCode.UnknownIdError);
 
-			bool knownId = await CreatureEntryRepository.ContainsAsync(entityGuid.EntityId);
+			bool knownId = await CreatureEntryRepository.ContainsAsync(entityGuid.EntryId);
 
 			//TODO: JSON Response
 			if(!knownId)
@@ -35,7 +35,7 @@ namespace GladMMO
 
 			//TODO: Make accessing template more efficient than loading ALL navaigation properties.
 			//Else if it is a known id we should grab the name of the character
-			CreatureEntryModel entryModel = await CreatureEntryRepository.RetrieveAsync(entityGuid.EntityId, true);
+			CreatureEntryModel entryModel = await CreatureEntryRepository.RetrieveAsync(entityGuid.EntryId, true);
 
 			return BuildSuccessfulResponseModel(new NameQueryResponse(entryModel.CreatureTemplate.CreatureName));
 		}
