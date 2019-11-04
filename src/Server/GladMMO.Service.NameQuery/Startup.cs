@@ -74,6 +74,7 @@ namespace GladMMO
 			});
 
 			services.AddTransient<ICharacterRepository, DatabaseBackedCharacterRepository>();
+			services.AddTransient<ICreatureEntryRepository, DatabaseBackedCreatureEntryRepository>();
 			services.AddTransient<IGuildEntryRepository, DatabaseBackedGuildEntryRepository>();
 		}
 
