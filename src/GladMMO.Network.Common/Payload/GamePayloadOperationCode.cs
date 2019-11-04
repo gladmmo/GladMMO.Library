@@ -38,6 +38,11 @@ namespace GladMMO
 
 		ClickToMove = 11,
 
-		GameObjectInteract = 12
+		GameObjectInteract = 12,
+
+		/// <summary>
+		/// Opcode for client requesting a spellcast.
+		/// </summary>
+		RequestSpellCast = 13,
 	}
 }
