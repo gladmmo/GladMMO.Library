@@ -35,7 +35,110 @@ namespace GladMMO.Tests.Collections
 			//assert
 			Assert.True(isSet, $"Set Value: {value} at Index: {index} did not set change tracked bit.");
 		}
-		
+
+		[Test]
+		public void Test_8byte_Index_Set_Causes_Dirty_Bit_Set([EntityDataCollectionTestRange] int index, [Values(1, 2, 3, 4, 5, 6, 7)] long value)
+		{
+			if(index == 7)
+				return;
+
+			//arrange
+			ChangeTrackingEntityFieldDataCollectionDecorator collection = new ChangeTrackingEntityFieldDataCollectionDecorator(base.CreateEntityDataCollection());
+
+			//act
+			collection.SetFieldValue<long>(index, value);
+			bool isSet = collection.ChangeTrackingArray.Get(index) && collection.ChangeTrackingArray.Get(index + 1);
+
+			//assert
+			Assert.True(isSet, $"Set Value: {value} at Index: {index} did not set change tracked bit.");
+		}
+
+		//This tests change tracking for when only 1 half of the long changes
+		[Test]
+		public void Test_8byte_Index_Set_Causes_Dirty_Bit_Set_After_Changing_Half_Chunk([EntityDataCollectionTestRange] int index, [Values(1, 2, 3, 4, 5, 6, 7)] long value)
+		{
+			if(index == 7)
+				return;
+
+			//arrange
+			ChangeTrackingEntityFieldDataCollectionDecorator collection = new ChangeTrackingEntityFieldDataCollectionDecorator(base.CreateEntityDataCollection());
+
+			//act
+			collection.SetFieldValue<long>(index, value);
+			collection.ClearTrackedChanges();
+			collection.SetFieldValue<long>(index, 50000000000000);
+			bool isSet = collection.ChangeTrackingArray.Get(index) && collection.ChangeTrackingArray.Get(index + 1);
+
+			//assert
+			Assert.True(isSet, $"Set Value: {value} at Index: {index} did not set change tracked bit.");
+		}
+
+		//This tests change tracking for when only 1 half of the long changes
+		[Test]
+		public void Test_NetworkEntityGuid_Index_Set_Causes_Dirty_Bit_Set_After_Changing([EntityDataCollectionTestRange] int index, [Values(1, 2, 3, 4, 5, 6, 7)] int value)
+		{
+			if(index == 7)
+				return;
+
+			//arrange
+			ChangeTrackingEntityFieldDataCollectionDecorator collection = new ChangeTrackingEntityFieldDataCollectionDecorator(base.CreateEntityDataCollection());
+
+			var guid = NetworkEntityGuidBuilder.New()
+				.WithType(EntityType.Creature)
+				.WithId((int) value)
+				.Build();
+
+			var guid2 = NetworkEntityGuidBuilder.New()
+				.WithType(EntityType.Player)
+				.WithId((int)value)
+				.Build();
+
+			var guid3 = NetworkEntityGuidBuilder.New()
+				.WithType(EntityType.Player)
+				.WithId((int)value + 1)
+				.Build();
+
+			var guid4 = NetworkEntityGuidBuilder.New()
+				.WithType(EntityType.Player)
+				.WithId((int)value)
+				.Build();
+
+			//act
+			collection.SetFieldValue(index, guid);
+			collection.ClearTrackedChanges();
+			collection.SetFieldValue(index, guid2);
+			bool isSet = collection.ChangeTrackingArray.Get(index) && collection.ChangeTrackingArray.Get(index + 1);
+			collection.ClearTrackedChanges();
+			collection.SetFieldValue(index, guid3);
+			isSet &= collection.ChangeTrackingArray.Get(index) && collection.ChangeTrackingArray.Get(index + 1);
+			collection.ClearTrackedChanges();
+			collection.SetFieldValue(index, guid4);
+			isSet &= collection.ChangeTrackingArray.Get(index) && collection.ChangeTrackingArray.Get(index + 1);
+
+			//assert
+			Assert.True(isSet, $"Set Value: {value} at Index: {index} did not set change tracked bit.");
+		}
+
+		//This tests change tracking for when only 1 half of the long changes
+		[Test]
+		public void Test_8byte_Index_Set_Causes_Dirty_Bit_Set_After_Changing_Half_Chunk2([EntityDataCollectionTestRange] int index, [Values(1, 2, 3, 4, 5, 6, 7)] long value)
+		{
+			if(index == 7)
+				return;
+
+			//arrange
+			ChangeTrackingEntityFieldDataCollectionDecorator collection = new ChangeTrackingEntityFieldDataCollectionDecorator(base.CreateEntityDataCollection());
+
+			//act
+			collection.SetFieldValue<long>(index, value);
+			collection.ClearTrackedChanges();
+			collection.SetFieldValue<long>(index, value + 1);
+			bool isSet = collection.ChangeTrackingArray.Get(index) && collection.ChangeTrackingArray.Get(index + 1);
+
+			//assert
+			Assert.True(isSet, $"Set Value: {value} at Index: {index} did not set change tracked bit.");
+		}
+
 		//TODO: Refactor set tests to be generic
 		[Test]
 		public void Test_PendingChanges_Not_True_When_EquivalentValues_Set([EntityDataCollectionTestRange] int index, [Values(1, 2, 3, 4, 5, 6, 7, 8)] int value)
