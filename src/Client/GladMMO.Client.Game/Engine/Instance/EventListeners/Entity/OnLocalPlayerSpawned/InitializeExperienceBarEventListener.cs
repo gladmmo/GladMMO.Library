@@ -26,19 +26,13 @@ namespace GladMMO
 
 		protected override void OnLocalPlayerSpawned(LocalPlayerSpawnedEventArgs args)
 		{
-			//Player spawns, we just want to rig up the experience bar callbacks
-			//so it can be filled as we get more. To know how much we need for our level
-			//though we actually have to compute it locally.
-			int currentLevel = PlayerDetails.EntityData.GetFieldValue<int>(BaseObjectField.UNIT_FIELD_LEVEL);
-			int currentExperience = PlayerDetails.EntityData.GetFieldValue<int>(PlayerObjectField.PLAYER_TOTAL_EXPERIENCE);
-
-			int experienceToLevel = LevelStrategy.TotalExperienceRequiredForLevel(currentLevel + 1) - LevelStrategy.TotalExperienceRequiredForLevel(currentLevel);
-			int experienceIntoCurrentLevel = currentExperience - LevelStrategy.TotalExperienceRequiredForLevel(currentLevel);
-
-			//Set initial
-			ExperienceBar.FillAmount = (float)experienceIntoCurrentLevel / experienceToLevel;
-
 			RegisterPlayerDataChangeCallback<int>(PlayerObjectField.PLAYER_TOTAL_EXPERIENCE, OnPlayerExperienceChanged);
+
+			if (PlayerDetails.EntityData.DataSetIndicationArray.Get((int) PlayerObjectField.PLAYER_TOTAL_EXPERIENCE))
+			{
+				int currentExperience = PlayerDetails.EntityData.GetFieldValue<int>(PlayerObjectField.PLAYER_TOTAL_EXPERIENCE);
+				OnPlayerExperienceChanged(args.EntityGuid, new EntityDataChangedArgs<int>(currentExperience, currentExperience));
+			}
 		}
 
 		private void OnPlayerExperienceChanged(NetworkEntityGuid entity, EntityDataChangedArgs<int> changeArgs)
