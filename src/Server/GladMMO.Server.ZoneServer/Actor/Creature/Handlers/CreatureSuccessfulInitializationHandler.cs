@@ -14,7 +14,12 @@ namespace GladMMO
 
 		//Random is not thread safe so it's critical we make it thread static.
 		[ThreadStatic]
-		private static readonly Random CreatureInitializationRandomGenerator = new Random();
+		private static readonly Random CreatureInitializationRandomGenerator;
+
+		static CreatureSuccessfulInitializationHandler()
+		{
+			CreatureInitializationRandomGenerator = new Random();
+		}
 
 		public CreatureSuccessfulInitializationHandler([NotNull] ILog logger)
 		{
