@@ -24,7 +24,7 @@ namespace GladMMO
 		protected override void HandleMessage(EntityActorMessageContext messageContext, DefaultCreatureActorState state, EntityActorInitializationSuccessMessage message)
 		{
 			//We need to initialize our replicateable state here.
-			int creatureLevel = CreatureInitializationRandomGenerator.Value.Next(state.TemplateModel.MinimumLevel, state.TemplateModel.MaximumLevel);
+			int creatureLevel = CreatureInitializationRandomGenerator.Value.Next(state.TemplateModel.MinimumLevel, state.TemplateModel.MaximumLevel + 1); //uppbound is exclusive
 
 			//We should send ourselves the level initialization message because it takes care of stats
 			messageContext.Entity.Tell(new SetEntityActorLevelMessage(creatureLevel));
