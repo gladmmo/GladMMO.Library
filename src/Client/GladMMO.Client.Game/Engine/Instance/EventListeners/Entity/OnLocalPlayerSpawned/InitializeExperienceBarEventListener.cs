@@ -26,19 +26,17 @@ namespace GladMMO
 
 		protected override void OnLocalPlayerSpawned(LocalPlayerSpawnedEventArgs args)
 		{
-			RegisterPlayerDataChangeCallback<int>(PlayerObjectField.PLAYER_TOTAL_EXPERIENCE, OnPlayerExperienceChanged);
+			//Even if we don't know the experience yet, we should initialize. It could end up as 0 but that's ok.
+			int currentExperience = PlayerDetails.EntityData.GetFieldValue<int>(PlayerObjectField.PLAYER_TOTAL_EXPERIENCE);
+			OnPlayerExperienceChanged(args.EntityGuid, new EntityDataChangedArgs<int>(currentExperience, currentExperience));
 
-			if (PlayerDetails.EntityData.DataSetIndicationArray.Get((int) PlayerObjectField.PLAYER_TOTAL_EXPERIENCE))
-			{
-				int currentExperience = PlayerDetails.EntityData.GetFieldValue<int>(PlayerObjectField.PLAYER_TOTAL_EXPERIENCE);
-				OnPlayerExperienceChanged(args.EntityGuid, new EntityDataChangedArgs<int>(currentExperience, currentExperience));
-			}
+			RegisterPlayerDataChangeCallback<int>(PlayerObjectField.PLAYER_TOTAL_EXPERIENCE, OnPlayerExperienceChanged);
 		}
 
 		private void OnPlayerExperienceChanged(NetworkEntityGuid entity, EntityDataChangedArgs<int> changeArgs)
 		{
 			//Just ignore the change args.
-			int currentLevel = PlayerDetails.EntityData.GetFieldValue<int>(BaseObjectField.UNIT_FIELD_LEVEL);
+			int currentLevel = LevelStrategy.ComputeLevelFromExperience(changeArgs.NewValue);
 			int currentExperience = changeArgs.NewValue;
 
 			int experienceToLevel = LevelStrategy.TotalExperienceRequiredForLevel(currentLevel + 1) - LevelStrategy.TotalExperienceRequiredForLevel(currentLevel);
