@@ -6,7 +6,7 @@ using ProtoBuf;
 namespace GladMMO
 {
 	/// <summary>
-	/// Payload for the client to request an interaction with a GameObject.
+	/// Payload for the client to request an to cast a spell.
 	/// </summary>
 	[ProtoContract]
 	[GamePayload(GamePayloadOperationCode.RequestSpellCast)]
