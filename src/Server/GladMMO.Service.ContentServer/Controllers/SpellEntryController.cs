@@ -24,7 +24,7 @@ namespace GladMMO
 		public async Task<IActionResult> GetDefaultSpellDataAsync([FromServices] ITypeConverterProvider<SpellEntryModel, SpellDefinitionDataModel> spellEntryConverter,
 			[FromServices] ITypeConverterProvider<SpellEffectEntryModel, SpellEffectDefinitionDataModel> spellEffectConverter)
 		{
-			SpellEntryModel[] entryModels = await SpellEntryRepository.RetrieveAllDefaultAsync();
+			SpellEntryModel[] entryModels = await SpellEntryRepository.RetrieveAllDefaultAsync(true);
 			SpellEffectEntryModel[] effectModels = entryModels.Select(s => s.SpellEffectOne)
 				.Distinct(new ContentIdentifiableEqualityComparer<SpellEffectEntryModel>())
 				.ToArray();
