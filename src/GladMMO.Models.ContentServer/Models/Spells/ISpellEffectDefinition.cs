@@ -12,12 +12,6 @@ namespace GladMMO
 		int SpellEffectId { get;}
 
 		/// <summary>
-		/// Indicates if the spell definition is a default game spell
-		/// or if it's a custom user spell.
-		/// </summary>
-		bool isDefault { get; }
-
-		/// <summary>
 		/// Indicates the type of the effect.
 		/// </summary>
 		SpellEffectType EffectType { get; }
