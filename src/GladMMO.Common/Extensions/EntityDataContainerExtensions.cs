@@ -97,5 +97,26 @@ namespace GladMMO
 
 			return GenericMath.Convert<int, TValueType>(container.GetFieldValue<int>((int)index));
 		}
+
+		public static NetworkEntityGuid GetEntityGuidValue(this IEntityDataFieldContainer container, GameObjectField index)
+		{
+			if(container == null) throw new ArgumentNullException(nameof(container));
+
+			return new NetworkEntityGuid(container.GetFieldValue<ulong>((int) index));
+		}
+
+		public static NetworkEntityGuid GetEntityGuidValue(this IEntityDataFieldContainer container, BaseObjectField index)
+		{
+			if(container == null) throw new ArgumentNullException(nameof(container));
+
+			return new NetworkEntityGuid(container.GetFieldValue<ulong>((int)index));
+		}
+
+		public static NetworkEntityGuid GetEntityGuidValue(this IEntityDataFieldContainer container, EntityObjectField index)
+		{
+			if(container == null) throw new ArgumentNullException(nameof(container));
+
+			return new NetworkEntityGuid(container.GetFieldValue<ulong>((int)index));
+		}
 	}
 }
