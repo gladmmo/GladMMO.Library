@@ -10,13 +10,22 @@ namespace GladMMO
 	{
 		private IReadonlyNetworkTimeService TimeService { get; }
 
-		public EntityTrySpellCastMessageHandler([NotNull] INetworkTimeService timeService)
+		private IEntityGuidMappable<PendingSpellCastData> PendingSpellCastMappable { get; }
+
+		public EntityTrySpellCastMessageHandler([NotNull] INetworkTimeService timeService,
+			[NotNull] IEntityGuidMappable<PendingSpellCastData> pendingSpellCastMappable)
 		{
 			TimeService = timeService ?? throw new ArgumentNullException(nameof(timeService));
+			PendingSpellCastMappable = pendingSpellCastMappable ?? throw new ArgumentNullException(nameof(pendingSpellCastMappable));
 		}
 
 		protected override void HandleMessage(EntityActorMessageContext messageContext, DefaultEntityActorStateContainer state, TryCastSpellMessage message)
 		{
+			if(PendingSpellCastMappable.ContainsKey(state.EntityGuid))
+				PendingSpellCastMappable.ReplaceObject(state.EntityGuid, new PendingSpellCastData(TimeService.CurrentLocalTime, message.SpellId));
+			else
+				PendingSpellCastMappable.AddObject(state.EntityGuid, new PendingSpellCastData(TimeService.CurrentLocalTime, message.SpellId));
+
 			//This is just a debug/testing implementation.
 			//TODO: Eventually we need a pending cast system.
 			//TODO: Check they are not casting or can cast the spell.
