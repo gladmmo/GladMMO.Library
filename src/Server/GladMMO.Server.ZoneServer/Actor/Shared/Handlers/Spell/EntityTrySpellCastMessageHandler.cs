@@ -35,6 +35,9 @@ namespace GladMMO
 				state.EntityData.SetFieldValue(EntityObjectField.UNIT_FIELD_CASTING_SPELLID, message.SpellId);
 				state.EntityData.SetFieldValue(EntityObjectField.UNIT_FIELD_CASTING_STARTTIME, TimeService.CurrentLocalTime);
 			}
+
+			//TODO: This is demo code, we need to handle TARGETING and CANCELable casts.
+			messageContext.ContinuationScheduler.ScheduleTellOnce(TimeSpan.FromSeconds(1), messageContext.Entity, new PendingSpellCastFinishedWaitingMessage(PendingSpellCastMappable.RetrieveEntity(state.EntityGuid)), messageContext.Entity);
 		}
 	}
 }
