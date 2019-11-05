@@ -8,7 +8,7 @@ using System.Text;
 namespace GladMMO
 {
 	[Table("spell_entry")]
-	public class SpellEntryModel : IContentIdentifiable
+	public class SpellEntryModel : ISpellDefinition, IContentIdentifiable
 	{
 		public int ContentId => SpellId;
 

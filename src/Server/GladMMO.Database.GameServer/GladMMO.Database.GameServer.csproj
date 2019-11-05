@@ -40,6 +40,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\GladMMO.Models.ContentServer\GladMMO.Models.ContentServer.csproj" />
     <ProjectReference Include="..\..\GladMMO.Models.GameServer\GladMMO.Models.GameServer.csproj" />
     <ProjectReference Include="..\..\GladMMO.Models.Server.ZoneServer\GladMMO.Models.Server.ZoneServer.csproj" />
     <ProjectReference Include="..\GladMMO.Database.Common\GladMMO.Database.Common.csproj" />
