@@ -73,6 +73,8 @@ namespace GladMMO
 
 		AddGuildMemberModalWindow = 30,
 
-		InvitedToGuildWindow = 31
+		InvitedToGuildWindow = 31,
+
+		LocalPlayerCastBar = 32
 	}
 }
