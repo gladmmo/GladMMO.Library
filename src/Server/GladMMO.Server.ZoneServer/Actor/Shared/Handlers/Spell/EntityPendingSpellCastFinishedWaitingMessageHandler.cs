@@ -27,8 +27,7 @@ namespace GladMMO
 			//This indicates that the spell cast has finished.
 			state.EntityData.SetFieldValue(EntityObjectField.UNIT_FIELD_CASTING_SPELLID, 0);
 
-			//TODO: This is demo code, we need to handle TARGETING and CANCELable casts.
-			messageContext.ContinuationScheduler.ScheduleTellOnce(TimeSpan.FromSeconds(1), messageContext.Entity, new PendingSpellCastFinishedWaitingMessage(PendingSpellCastMappable.RetrieveEntity(state.EntityGuid)), messageContext.Entity);
+			messageContext.Entity.Tell(new ImmediateCastSpellMessage(message.Pending.SpellId));
 		}
 	}
 }
