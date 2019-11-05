@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using Autofac.Features.AttributeFilters;
 using Glader.Essentials;
 using GladNet;
 using UnityEngine;
@@ -13,9 +14,18 @@ namespace GladMMO
 	{
 		private IPeerPayloadSendService<GameClientPacketPayload> SendService { get; }
 
-		public DebugTestModelChangeRequest([NotNull] IPeerPayloadSendService<GameClientPacketPayload> sendService)
+		private IUIButton TestButton { get; }
+
+		public DebugTestModelChangeRequest([NotNull] IPeerPayloadSendService<GameClientPacketPayload> sendService, 
+			[KeyFilter(UnityUIRegisterationKey.LocalPlayerCastBar)] IUIButton testButton)
 		{
 			SendService = sendService ?? throw new ArgumentNullException(nameof(sendService));
+			TestButton = testButton;
+
+			testButton.AddOnClickListener(() =>
+			{
+				SendService.SendMessage(new SpellCastRequestPayload(1));
+			});
 		}
 
 		public void Tick()
@@ -25,6 +35,11 @@ namespace GladMMO
 
 			//if(Input.GetKeyDown(KeyCode.J))
 			//	SendService.SendMessage(new PlayerModelChangeRequestPayload(7));
+
+			if (Input.GetKeyDown(KeyCode.L))
+			{
+				SendService.SendMessage(new SpellCastRequestPayload(1));
+			}
 		}
 	}
 }
