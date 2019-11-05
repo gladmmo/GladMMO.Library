@@ -7,7 +7,7 @@ using System.Text;
 namespace GladMMO
 {
 	[Table("spell_effect")]
-	public class SpellEffectModel : IContentIdentifiable
+	public class SpellEffectEntryModel : IContentIdentifiable
 	{
 		public int ContentId => SpellEffectId;
 
@@ -63,7 +63,7 @@ namespace GladMMO
 		[Required]
 		public SpellEffectTargetType AdditionalEffectTargetingType { get; private set; }
 
-		public SpellEffectModel(bool isDefault, SpellEffectType effectType, float basePointsAdditiveLevelModifier, int effectBasePoints, int effectPointsDiceRange, SpellEffectTargetType effectTargetingType)
+		public SpellEffectEntryModel(bool isDefault, SpellEffectType effectType, float basePointsAdditiveLevelModifier, int effectBasePoints, int effectPointsDiceRange, SpellEffectTargetType effectTargetingType)
 		{
 			this.isDefault = isDefault;
 			EffectType = effectType;
@@ -79,7 +79,7 @@ namespace GladMMO
 		/// <summary>
 		/// EF Ctor.
 		/// </summary>
-		private SpellEffectModel()
+		private SpellEffectEntryModel()
 		{
 			
 		}

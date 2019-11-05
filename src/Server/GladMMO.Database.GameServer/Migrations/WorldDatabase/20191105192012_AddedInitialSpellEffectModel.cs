@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace GladMMO.Database.GameServer.Migrations.WorldDatabase
 {
-    public partial class AddedInitialSpellEffectModel : Migration
+    public partial class AddedInitialSpellEffectEntryModel : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

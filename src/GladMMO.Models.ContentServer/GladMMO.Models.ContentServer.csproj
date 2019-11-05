@@ -19,4 +19,8 @@
     </Reference>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\Spells\" />
+  </ItemGroup>
+
 </Project>

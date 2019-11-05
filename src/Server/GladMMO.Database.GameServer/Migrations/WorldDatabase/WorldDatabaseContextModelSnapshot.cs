@@ -247,7 +247,7 @@ namespace GladMMO.Database.GameServer.Migrations.WorldDatabase
                     b.ToTable("spell_entry");
                 });
 
-            modelBuilder.Entity("GladMMO.SpellEffectModel", b =>
+            modelBuilder.Entity("GladMMO.SpellEffectEntryModel", b =>
                 {
                     b.Property<int>("SpellEffectId")
                         .ValueGeneratedOnAdd();
@@ -439,7 +439,7 @@ namespace GladMMO.Database.GameServer.Migrations.WorldDatabase
 
             modelBuilder.Entity("GladMMO.SpellEntryModel", b =>
                 {
-                    b.HasOne("GladMMO.SpellEffectModel", "SpellEffectOne")
+                    b.HasOne("GladMMO.SpellEffectEntryModel", "SpellEffectOne")
                         .WithMany()
                         .HasForeignKey("SpellEffectIdOne")
                         .OnDelete(DeleteBehavior.Cascade);

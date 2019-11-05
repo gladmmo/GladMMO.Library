@@ -31,7 +31,7 @@ namespace GladMMO
 
 		public DbSet<GameObjectAvatarPedestalEntryModel> AvatarPedestals { get; set; }
 
-		public DbSet<SpellEffectModel> SpellEffects { get; set; }
+		public DbSet<SpellEffectEntryModel> SpellEffects { get; set; }
 
 		public DbSet<SpellEntryModel> SpellEntries { get; set; }
 

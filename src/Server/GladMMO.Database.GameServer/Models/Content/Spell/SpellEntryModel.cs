@@ -51,7 +51,7 @@ namespace GladMMO
 		/// <summary>
 		/// The first spell effect navigation property.
 		/// </summary>
-		public virtual SpellEffectModel SpellEffectOne { get; private set; }
+		public virtual SpellEffectEntryModel SpellEffectOne { get; private set; }
 
 		public SpellEntryModel([JetBrains.Annotations.NotNull] string spellName, SpellClassType spellType, bool isDefault, int castTime, int spellEffectIdOne)
 		{

@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GladMMO.Database.GameServer.Migrations.WorldDatabase
 {
     [DbContext(typeof(ContentDatabaseContext))]
-    [Migration("20191105192012_AddedInitialSpellEffectModel")]
-    partial class AddedInitialSpellEffectModel
+    [Migration("20191105192012_AddedInitialSpellEffectEntryModel")]
+    partial class AddedInitialSpellEffectEntryModel
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -226,7 +226,7 @@ namespace GladMMO.Database.GameServer.Migrations.WorldDatabase
                     b.ToTable("player_spawnpoint");
                 });
 
-            modelBuilder.Entity("GladMMO.SpellEffectModel", b =>
+            modelBuilder.Entity("GladMMO.SpellEffectEntryModel", b =>
                 {
                     b.Property<int>("SpellEffectId")
                         .ValueGeneratedOnAdd();
