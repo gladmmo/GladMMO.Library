@@ -21,5 +21,12 @@ namespace GladMMO
 
 			SpellId = spellId;
 		}
+
+		public TryCastSpellMessage([NotNull] SpellCastRequestPayload clientRequest)
+		{
+			if(clientRequest == null) throw new ArgumentNullException(nameof(clientRequest));
+
+			SpellId = clientRequest.SpellId;
+		}
 	}
 }
