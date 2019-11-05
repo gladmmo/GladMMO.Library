@@ -8,6 +8,6 @@ namespace GladMMO
 {
 	public interface ISpellEntryRepository : IGenericRepositoryCrudable<int, SpellEntryModel>
 	{
-		Task<SpellEntryModel[]> RetrieveAllDefaultAsync(CancellationToken cancellationToken = default(CancellationToken));
+		Task<SpellEntryModel[]> RetrieveAllDefaultAsync(bool shouldLoadEffects = false, CancellationToken cancellationToken = default(CancellationToken));
 	}
 }

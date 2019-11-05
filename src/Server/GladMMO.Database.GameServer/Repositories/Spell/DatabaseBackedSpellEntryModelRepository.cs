@@ -16,12 +16,19 @@ namespace GladMMO
 
 		}
 
-		public Task<SpellEntryModel[]> RetrieveAllDefaultAsync(CancellationToken cancellationToken = default(CancellationToken))
+		public Task<SpellEntryModel[]> RetrieveAllDefaultAsync(bool shouldLoadEffects = false, CancellationToken cancellationToken = default(CancellationToken))
 		{
-			return Context
-				.SpellEntries
-				.Where(e => e.isDefault)
-				.ToArrayAsync(cancellationToken);
+			if(shouldLoadEffects)
+				return Context
+					.SpellEntries
+					.Include(spell => spell.SpellEffectOne)
+					.Where(e => e.isDefault)
+					.ToArrayAsync(cancellationToken);
+			else
+				return Context
+					.SpellEntries
+					.Where(e => e.isDefault)
+					.ToArrayAsync(cancellationToken);
 		}
 	}
 }
