@@ -8,7 +8,7 @@ using System.Text;
 namespace GladMMO
 {
 	[Table("spell_entry")]
-	public class SpellDefinitionModel
+	public class SpellEntryModel
 	{
 		[Key]
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -51,7 +51,7 @@ namespace GladMMO
 		/// </summary>
 		public virtual SpellEffectModel SpellEffectOne { get; private set; }
 
-		public SpellDefinitionModel([JetBrains.Annotations.NotNull] string spellName, SpellClassType spellType, bool isDefault, int castTime, int spellEffectIdOne)
+		public SpellEntryModel([JetBrains.Annotations.NotNull] string spellName, SpellClassType spellType, bool isDefault, int castTime, int spellEffectIdOne)
 		{
 			if (string.IsNullOrWhiteSpace(spellName)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(spellName));
 			if (spellEffectIdOne < 0) throw new ArgumentOutOfRangeException(nameof(spellEffectIdOne));
@@ -68,7 +68,7 @@ namespace GladMMO
 		/// <summary>
 		/// EF Ctor.
 		/// </summary>
-		private SpellDefinitionModel()
+		private SpellEntryModel()
 		{
 			
 		}

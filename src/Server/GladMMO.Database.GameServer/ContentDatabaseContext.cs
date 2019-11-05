@@ -33,7 +33,7 @@ namespace GladMMO
 
 		public DbSet<SpellEffectModel> SpellEffects { get; set; }
 
-		public DbSet<SpellDefinitionModel> SpellEntries { get; set; }
+		public DbSet<SpellEntryModel> SpellEntries { get; set; }
 
 		public ContentDatabaseContext(DbContextOptions<ContentDatabaseContext> options) 
 			: base(options)

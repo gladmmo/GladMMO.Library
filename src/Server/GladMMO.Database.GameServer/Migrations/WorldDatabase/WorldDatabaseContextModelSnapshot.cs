@@ -224,7 +224,7 @@ namespace GladMMO.Database.GameServer.Migrations.WorldDatabase
                     b.ToTable("player_spawnpoint");
                 });
 
-            modelBuilder.Entity("GladMMO.SpellDefinitionModel", b =>
+            modelBuilder.Entity("GladMMO.SpellEntryModel", b =>
                 {
                     b.Property<int>("SpellId")
                         .ValueGeneratedOnAdd();
@@ -437,7 +437,7 @@ namespace GladMMO.Database.GameServer.Migrations.WorldDatabase
                         });
                 });
 
-            modelBuilder.Entity("GladMMO.SpellDefinitionModel", b =>
+            modelBuilder.Entity("GladMMO.SpellEntryModel", b =>
                 {
                     b.HasOne("GladMMO.SpellEffectModel", "SpellEffectOne")
                         .WithMany()
