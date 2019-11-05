@@ -5,16 +5,16 @@ using System.Text;
 namespace GladMMO
 {
 	/// <summary>
-	/// Message that indicates the successful cast of a pending spell.
+	/// Message that indicates a pending spell finished waiting for cast time.
 	/// </summary>
-	public sealed class PendingSpellCastSuccessMessage : EntityActorMessage
+	public sealed class PendingSpellCastFinishedWaitingMessage : EntityActorMessage
 	{
 		/// <summary>
 		/// The pending spell cast data.
 		/// </summary>
 		public PendingSpellCastData Pending { get; private set; }
 
-		public PendingSpellCastSuccessMessage([NotNull] PendingSpellCastData pending)
+		public PendingSpellCastFinishedWaitingMessage([NotNull] PendingSpellCastData pending)
 		{
 			Pending = pending ?? throw new ArgumentNullException(nameof(pending));
 		}
