@@ -1,6 +1,6 @@
 # GladMMO.Library
 
-An in development MMORPG framework. Based on ASP Core, SignalR Core, Unity3D, GladNet3, Akka.NET and Protobuf-Net.
+An in development MMORPG framework. Based on ASP Core, SignalR Core, Unity3D, GladNet3, Akka.NET and Protobuf-Net. If you're interested in the development of a game that uses this framework, such as PSOBB2 or VRGuardians, then join this Discord: https://discordapp.com/invite/Qk8HpmG
 
 Supporting:
 
