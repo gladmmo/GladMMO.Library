@@ -7,8 +7,10 @@ using System.Text;
 namespace GladMMO
 {
 	[Table("spell_effect")]
-	public class SpellEffectModel
+	public class SpellEffectModel : IContentIdentifiable
 	{
+		public int ContentId => SpellEffectId;
+
 		/// <summary>
 		/// Primary spell effect key.
 		/// </summary>
