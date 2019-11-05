@@ -27,7 +27,7 @@ namespace GladMMO
 		protected override Task HandleMessage(IPeerSessionMessageContext<GameServerPacketPayload> context, SpellCastRequestPayload payload, NetworkEntityGuid guid)
 		{
 			IActorRef entityActor = ActorReferenceMappable.RetrieveEntity(guid);
-			entityActor.Tell(new TryCastSpellMessage(payload));
+			entityActor.TellSelf(new TryCastSpellMessage(payload));
 
 			return Task.CompletedTask;
 		}
