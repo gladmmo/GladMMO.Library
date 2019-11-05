@@ -75,7 +75,7 @@ namespace GladMMO
 		private bool TrySendMessage(object message)
 		{
 			EntityActorMessage castedMessage = (EntityActorMessage)message;
-			EntityActorMessageContext context = new EntityActorMessageContext(Sender, Self);
+			EntityActorMessageContext context = new EntityActorMessageContext(Sender, Self, Context.System.Scheduler);
 
 			return MessageRouter.RouteMessage(context, ActorState, castedMessage);
 		}

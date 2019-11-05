@@ -20,10 +20,13 @@ namespace GladMMO
 		/// </summary>
 		public IActorRef Entity { get; }
 
-		public EntityActorMessageContext(IActorRef sender, IActorRef entity)
+		public IScheduler ContinuationScheduler { get; }
+
+		public EntityActorMessageContext(IActorRef sender, IActorRef entity, IScheduler continuationScheduler)
 		{
 			Sender = sender ?? throw new ArgumentNullException(nameof(sender));
 			Entity = entity ?? throw new ArgumentNullException(nameof(entity));
+			ContinuationScheduler = continuationScheduler ?? throw new ArgumentNullException(nameof(continuationScheduler));
 		}
 	}
 }
