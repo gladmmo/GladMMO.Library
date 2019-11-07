@@ -25,7 +25,17 @@ namespace GladMMO
 
 		protected override void HandleMessage(EntityActorMessageContext messageContext, DefaultEntityActorStateContainer state, TryCastSpellMessage message)
 		{
-			//TODO: Handle "already casting" state.
+			if (PendingSpellCastMappable.ContainsKey(state.EntityGuid))
+			{
+				PendingSpellCastData pendingCast = PendingSpellCastMappable.RetrieveEntity(state.EntityGuid);
+
+				if (!pendingCast.isCompleted)
+				{
+					//TODO: Send packet spell response to client.
+					return;
+				}
+			}
+
 			PendingSpellCastData castData = PendingSpellFactory.Create(new PendingSpellCastCreationContext(message.SpellId));
 
 			if (PendingSpellCastMappable.ContainsKey(state.EntityGuid))
