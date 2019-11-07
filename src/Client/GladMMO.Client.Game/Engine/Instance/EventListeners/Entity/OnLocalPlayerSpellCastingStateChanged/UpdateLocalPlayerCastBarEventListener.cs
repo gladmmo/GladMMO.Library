@@ -43,9 +43,7 @@ namespace GladMMO
 	{
 		private ILog Logger { get; }
 
-		private IUIFillableImage CastingBarFillable { get; }
-
-		private IUIElement CastingBarRoot { get; }
+		private IUICastingBar CastingBar { get; }
 
 		private IReadonlyNetworkTimeService TimeService { get; }
 
@@ -56,16 +54,14 @@ namespace GladMMO
 		/// <inheritdoc />
 		public UpdateLocalPlayerCastBarEventListener(ILocalPlayerSpellCastingStateChangedEventSubscribable subscriptionService,
 			[NotNull] ILog logger,
-			[KeyFilter(UnityUIRegisterationKey.LocalPlayerCastBar)] [NotNull] IUIFillableImage castingBarFillable,
+			[KeyFilter(UnityUIRegisterationKey.LocalPlayerCastBar)] [NotNull] IUICastingBar castingBar,
 			[NotNull] IReadonlyNetworkTimeService timeService,
-			[KeyFilter(UnityUIRegisterationKey.LocalPlayerCastBar)] [NotNull] IUIElement castingBarRoot,
 			[NotNull] IReadonlySpellDataCollection spellDataCollection)
 			: base(subscriptionService)
 		{
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
-			CastingBarFillable = castingBarFillable ?? throw new ArgumentNullException(nameof(castingBarFillable));
+			CastingBar = castingBar ?? throw new ArgumentNullException(nameof(castingBar));
 			TimeService = timeService ?? throw new ArgumentNullException(nameof(timeService));
-			CastingBarRoot = castingBarRoot ?? throw new ArgumentNullException(nameof(castingBarRoot));
 			SpellDataCollection = spellDataCollection ?? throw new ArgumentNullException(nameof(spellDataCollection));
 		}
 
@@ -79,8 +75,7 @@ namespace GladMMO
 			//This is UTC tick time. We need to convert it to seconds.
 			TimeSpan span = new TimeSpan(Math.Max(0, currentRemoteTime - CastingState.StartTimeStamp)); //time sync may be abit off so clamp it
 
-			//TODO: Don't assume all cast times are 1 second.
-			CastingBarFillable.FillAmount = (float)(span.TotalMilliseconds / (float)CastingState.SpellDefinition.CastTime);
+			CastingBar.CastingBarFillable.FillAmount = (float)(span.TotalMilliseconds / (float)CastingState.SpellDefinition.CastTime);
 		}
 
 		protected override void OnEventFired(object source, SpellCastingStateChangedEventArgs args)
@@ -91,15 +86,15 @@ namespace GladMMO
 			//Spell casting stopped. Disable the bar.
 			if(!args.isCasting)
 			{
-				CastingBarRoot.SetElementActive(false);
-				CastingBarFillable.FillAmount = 0;
+				CastingBar.SetElementActive(false);
+				CastingBar.CastingBarFillable.FillAmount = 0;
 				CastingState = new BarCastingState(false);
 			}
 			else
 			{
 				SpellDefinitionDataModel spellDefinition = SpellDataCollection.GetSpellDefinition(args.CastingSpellId);
 				CastingState = new BarCastingState(true, spellDefinition, args.CastingStartTimeStamp);
-				CastingBarRoot.SetElementActive(true);
+				CastingBar.SetElementActive(true);
 			}
 		}
 	}
