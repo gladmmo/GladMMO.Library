@@ -28,7 +28,7 @@ namespace GladMMO
 				return false;
 
 			//TODO: We shouldn't assume they are enemies just because they aren't use. We need a system for hostility masking for entities
-			return guid != NetworkEntityGuid.Empty && guid != actorState.EntityGuid;
+			return guid != NetworkEntityGuid.Empty && guid.EntityType == EntityType.Creature && guid != actorState.EntityGuid;
 		}
 	}
 }
