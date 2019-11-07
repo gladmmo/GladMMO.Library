@@ -47,7 +47,7 @@ namespace GladMMO
 			SpellDefinitionDataModel definition = SpellDataCollection.GetSpellDefinition(context.SpellId);
 
 			//We need to compute a timespan for the pending cast from the definition casting time.
-			TimeSpan castTimeSpan = TimeSpan.FromMilliseconds(definition.CastTime);
+			TimeSpan castTimeSpan = definition.CastTime == 0 ? TimeSpan.Zero : TimeSpan.FromMilliseconds(definition.CastTime);
 
 			return new PendingSpellCastData(TimeService.CurrentLocalTime, context.SpellId, pendingSpellCastCancelable, castTimeSpan);
 		}
