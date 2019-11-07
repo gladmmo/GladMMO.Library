@@ -48,8 +48,10 @@ namespace GladMMO
 
 			//We need to compute a timespan for the pending cast from the definition casting time.
 			TimeSpan castTimeSpan = definition.CastTime == 0 ? TimeSpan.Zero : TimeSpan.FromMilliseconds(definition.CastTime);
+			long startCastTime = TimeService.CurrentLocalTime;
+			long expectedFinishTime = startCastTime + castTimeSpan.Ticks;
 
-			return new PendingSpellCastData(TimeService.CurrentLocalTime, context.SpellId, pendingSpellCastCancelable, castTimeSpan);
+			return new PendingSpellCastData(TimeService.CurrentLocalTime, expectedFinishTime, context.SpellId, pendingSpellCastCancelable, castTimeSpan);
 		}
 	}
 }
