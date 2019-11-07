@@ -98,6 +98,15 @@ namespace GladMMO
 				.As<IActorRefFactory>()
 				.SingleInstance();
 
+			builder.Register<IScheduler>(context =>
+				{
+					ActorSystem actorSystem = context.Resolve<ActorSystem>();
+
+					return actorSystem.Scheduler;
+				})
+				.As<IScheduler>()
+				.SingleInstance();
+
 			//Creates the autofac dependency resolver that can be used to actually resolve
 			//the Actor's dependencies.
 			builder.Register(context =>
