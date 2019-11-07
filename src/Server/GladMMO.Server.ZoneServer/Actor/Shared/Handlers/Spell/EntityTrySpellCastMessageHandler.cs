@@ -39,10 +39,7 @@ namespace GladMMO
 			PendingSpellCastData castData = PendingSpellFactory.Create(new PendingSpellCastCreationContext(message.SpellId));
 
 			if (PendingSpellCastMappable.ContainsKey(state.EntityGuid))
-			{
-				PendingSpellCastMappable[state.EntityGuid].PendingCancel.Cancel();
 				PendingSpellCastMappable.ReplaceObject(state.EntityGuid, castData);
-			}
 			else
 				PendingSpellCastMappable.AddObject(state.EntityGuid, castData);
 
