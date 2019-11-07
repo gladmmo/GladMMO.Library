@@ -9,11 +9,14 @@ namespace GladMMO
 	{
 		public int SpellId { get; }
 
-		public PendingSpellCastCreationContext(int spellId)
+		public NetworkEntityGuid CurrentTarget { get; }
+
+		public PendingSpellCastCreationContext(int spellId, [NotNull] NetworkEntityGuid currentTarget)
 		{
 			if (spellId < 0) throw new ArgumentOutOfRangeException(nameof(spellId));
 
 			SpellId = spellId;
+			CurrentTarget = currentTarget ?? throw new ArgumentNullException(nameof(currentTarget));
 		}
 	}
 
@@ -51,7 +54,7 @@ namespace GladMMO
 			long startCastTime = TimeService.CurrentLocalTime;
 			long expectedFinishTime = startCastTime + castTimeSpan.Ticks;
 
-			return new PendingSpellCastData(TimeService.CurrentLocalTime, expectedFinishTime, context.SpellId, pendingSpellCastCancelable, castTimeSpan);
+			return new PendingSpellCastData(TimeService.CurrentLocalTime, expectedFinishTime, context.SpellId, pendingSpellCastCancelable, castTimeSpan, context.CurrentTarget);
 		}
 	}
 }

@@ -22,17 +22,28 @@ namespace GladMMO
 		/// </summary>
 		public int SpellId { get; }
 
+		/// <summary>
+		/// Cancel token for the pending cast timer.
+		/// </summary>
 		internal ICancelable PendingCancel { get; }
 
-		public bool isCastCanceled => PendingCancel.IsCancellationRequested;
-
+		/// <summary>
+		/// The castime.
+		/// </summary>
 		public TimeSpan CastTime { get; }
+
+		/// <summary>
+		/// The in-time snapshot of the entity's current target.
+		/// </summary>
+		public NetworkEntityGuid SnapshotEntityTarget { get; }
+
+		public bool isCastCanceled => PendingCancel.IsCancellationRequested;
 
 		public bool isInstantCast => CastTime.Ticks == 0;
 
 		public bool isCompleted => isInstantCast || isCastCanceled || (StartTime + CastTime.Ticks) >= ExpectedCastTime;
 
-		public PendingSpellCastData(long startTime, long expectedCastTime, int spellId, [NotNull] ICancelable pendingCancel, TimeSpan castTime)
+		public PendingSpellCastData(long startTime, long expectedCastTime, int spellId, [NotNull] ICancelable pendingCancel, TimeSpan castTime, [NotNull] NetworkEntityGuid snapshotEntityTarget)
 		{
 			if (spellId <= 0) throw new ArgumentOutOfRangeException(nameof(spellId));
 			if (startTime <= 0) throw new ArgumentOutOfRangeException(nameof(startTime));
@@ -43,6 +54,7 @@ namespace GladMMO
 			SpellId = spellId;
 			PendingCancel = pendingCancel ?? throw new ArgumentNullException(nameof(pendingCancel));
 			CastTime = castTime;
+			SnapshotEntityTarget = snapshotEntityTarget ?? throw new ArgumentNullException(nameof(snapshotEntityTarget));
 		}
 	}
 }

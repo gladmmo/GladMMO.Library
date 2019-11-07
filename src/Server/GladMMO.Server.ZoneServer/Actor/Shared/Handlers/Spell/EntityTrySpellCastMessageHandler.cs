@@ -53,7 +53,7 @@ namespace GladMMO
 
 		private PendingSpellCastData CreatePendingSpellData(DefaultEntityActorStateContainer state, TryCastSpellMessage message)
 		{
-			PendingSpellCastData castData = PendingSpellFactory.Create(new PendingSpellCastCreationContext(message.SpellId));
+			PendingSpellCastData castData = PendingSpellFactory.Create(new PendingSpellCastCreationContext(message.SpellId, state.EntityData.GetEntityGuidValue(EntityObjectField.UNIT_FIELD_TARGET)));
 
 			if (PendingSpellCastMappable.ContainsKey(state.EntityGuid))
 				PendingSpellCastMappable.ReplaceObject(state.EntityGuid, castData);
