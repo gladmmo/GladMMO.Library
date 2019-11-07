@@ -15,11 +15,17 @@ namespace GladMMO
 		/// </summary>
 		public int SpellId { get; private set; }
 
-		public ImmediateCastSpellMessage(int spellId)
+		/// <summary>
+		/// The in-time snapshot of the entity's current target.
+		/// </summary>
+		public NetworkEntityGuid SnapshotEntityTarget { get; }
+
+		public ImmediateCastSpellMessage(int spellId, [NotNull] NetworkEntityGuid snapshotEntityTarget)
 		{
 			if(spellId <= 0) throw new ArgumentOutOfRangeException(nameof(spellId));
 
 			SpellId = spellId;
+			SnapshotEntityTarget = snapshotEntityTarget ?? throw new ArgumentNullException(nameof(snapshotEntityTarget));
 		}
 	}
 }
