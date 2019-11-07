@@ -5,11 +5,9 @@ using Glader.Essentials;
 
 namespace GladMMO
 {
-	public interface IUICastingBar
+	public interface IUICastingBar : IUIElement
 	{
 		IUIFillableImage CastingBarFillable { get; }
-
-		IUIElement CastingBarRoot { get; }
 
 		IUIText CastingBarSpellNameText { get; }
 	}
