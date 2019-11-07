@@ -12,6 +12,8 @@ namespace GladMMO
 
 		public SpellEffectTargetType AdditionalEffectTargetingType { get; private set; }
 
+		public long TargetTypeKey => ((long) EffectTargetingType << 32) + (long)AdditionalEffectTargetingType;
+
 		public SpellEffectTargetingStrategyAttribute(SpellEffectTargetType effectTargetingType, SpellEffectTargetType additionalEffectTargetingType)
 		{
 			if (!Enum.IsDefined(typeof(SpellEffectTargetType), effectTargetingType)) throw new InvalidEnumArgumentException(nameof(effectTargetingType), (int) effectTargetingType, typeof(SpellEffectTargetType));
