@@ -10,7 +10,7 @@
     <PackageReference Include="Autofac" Version="4.8.1" />
     <PackageReference Include="Common.Logging" Version="3.4.1" />
     <PackageReference Include="FluentValidation" Version="7.6.103" />
-    <PackageReference Include="Glader.Essentials.Common" Version="1.0.31" />
+    <PackageReference Include="Glader.Essentials.Common" Version="1.0.32" />
     <PackageReference Include="GladNet3.Client.DotNetTcpClient" Version="3.0.46" />
     <PackageReference Include="GladNet3.Handler.API" Version="3.0.46" />
     <PackageReference Include="Refit" Version="4.7.51" />

@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Glader.Essentials.Unity" Version="1.0.31" />
+    <PackageReference Include="Glader.Essentials.Unity" Version="1.0.32" />
   </ItemGroup>
 
   <ItemGroup>
