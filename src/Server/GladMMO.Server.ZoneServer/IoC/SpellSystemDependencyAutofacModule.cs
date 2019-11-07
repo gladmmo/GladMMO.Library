@@ -19,6 +19,11 @@ namespace GladMMO
 
 			RegisterSpellTargetValidators(actorAssemblyConfig, builder);
 			RegisterSpellTargetSelectors(actorAssemblyConfig, builder);
+
+			//EffectTargetSelectorRoutedSpellCastDispatcher
+			builder.RegisterType<EffectTargetSelectorRoutedSpellCastDispatcher>()
+				.As<ISpellCastDispatcher>()
+				.SingleInstance();
 		}
 
 		private void RegisterSpellTargetSelectors([NotNull] ActorAssemblyDefinitionConfiguration actorAssemblyConfig, [NotNull] ContainerBuilder builder)
