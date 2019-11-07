@@ -13,6 +13,7 @@ namespace GladMMO
 		/// Dispatches the provided prepared <see cref="pendingSpellCast"/> data.
 		/// </summary>
 		/// <param name="pendingSpellCast">The pending spell to cast.</param>
-		void DispatchSpellCast(IPendingSpellCastData pendingSpellCast);
+		/// <param name="casterData">Data container for the caster.</param>
+		void DispatchSpellCast(IPendingSpellCastData pendingSpellCast, DefaultEntityActorStateContainer casterData);
 	}
 }
