@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace GladMMO
@@ -12,7 +13,7 @@ namespace GladMMO
 
 		public SpellEffectTargetType AdditionalEffectTargetingType { get; private set; }
 
-		public long TargetTypeKey => ((long) EffectTargetingType << 32) + (long)AdditionalEffectTargetingType;
+		public long TargetTypeKey => ComputeKey(EffectTargetingType, AdditionalEffectTargetingType);
 
 		public SpellEffectTargetingStrategyAttribute(SpellEffectTargetType effectTargetingType, SpellEffectTargetType additionalEffectTargetingType)
 		{
@@ -21,6 +22,12 @@ namespace GladMMO
 
 			EffectTargetingType = effectTargetingType;
 			AdditionalEffectTargetingType = additionalEffectTargetingType;
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		internal static long ComputeKey(SpellEffectTargetType targetTypeOne, SpellEffectTargetType targetTypeTwo)
+		{
+			return ((long) targetTypeOne << 32) + (long) targetTypeTwo;
 		}
 	}
 }
