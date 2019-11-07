@@ -77,6 +77,11 @@ namespace GladMMO
 				.As<IClientGameObjectEntityBehaviourFactory>()
 				.SingleInstance();
 
+			//DefaultSpellDataCollection : ISpellDataCollection, IReadonlySpellDataCollection
+			builder.RegisterType<DefaultSpellDataCollection>()
+				.AsImplementedInterfaces()
+				.SingleInstance();
+
 			//Ok, now we actually register update block types manually
 			//because it's not worth it to do an assembly-wide search for them.
 			/*builder.RegisterType<DefaultObjectUpdateBlockDispatcher>()

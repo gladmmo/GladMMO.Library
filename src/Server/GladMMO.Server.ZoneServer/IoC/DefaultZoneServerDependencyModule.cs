@@ -187,6 +187,11 @@ namespace GladMMO
 			builder.RegisterType<RemoteGameObjectDataService>()
 				.As<IGameObjectDataService>()
 				.SingleInstance();
+
+			//DefaultSpellDataCollection : ISpellDataCollection, IReadonlySpellDataCollection
+			builder.RegisterType<DefaultSpellDataCollection>()
+				.AsImplementedInterfaces()
+				.SingleInstance();
 		}
 
 		private void HandleConfigurableDependencies(ContainerBuilder builder)
