@@ -32,7 +32,7 @@ namespace GladMMO
 			long startCastTime = TimeService.CurrentLocalTime;
 			long expectedFinishTime = startCastTime + castTimeSpan.Ticks;
 
-			return new PendingSpellCastData(TimeService.CurrentLocalTime, expectedFinishTime, context.SpellId, pendingSpellCastCancelable, castTimeSpan, context.CurrentTarget);
+			return new PendingSpellCastData(startCastTime, expectedFinishTime, context.SpellId, pendingSpellCastCancelable, castTimeSpan, context.CurrentTarget);
 		}
 	}
 }
