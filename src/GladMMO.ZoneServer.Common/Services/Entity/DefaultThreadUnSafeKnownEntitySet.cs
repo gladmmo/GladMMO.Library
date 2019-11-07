@@ -19,7 +19,7 @@ namespace GladMMO
 		public DefaultThreadUnSafeKnownEntitySet()
 		{
 			InternalKnownSet = new HashSet<NetworkEntityGuid>(NetworkGuidEqualityComparer<NetworkEntityGuid>.Instance);
-			LockObject = new ReaderWriterLockSlim();
+			LockObject = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
 		}
 
 		/// <inheritdoc />
