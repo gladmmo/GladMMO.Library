@@ -10,26 +10,15 @@ namespace GladMMO
 	[EntityActorMessageHandler(typeof(DefaultPlayerEntityActor))]
 	public sealed class EntityImmediateCastSpellMessageHandler : BaseEntityActorMessageHandler<DefaultEntityActorStateContainer, ImmediateCastSpellMessage>
 	{
-		private ISpellTargetValidator TargetValidator { get; }
-
 		private ISpellCastDispatcher SpellCastDispatcher { get; }
 
-		public EntityImmediateCastSpellMessageHandler([NotNull] ISpellTargetValidator targetValidator,
-			[NotNull] ISpellCastDispatcher spellCastDispatcher)
+		public EntityImmediateCastSpellMessageHandler([NotNull] ISpellCastDispatcher spellCastDispatcher)
 		{
-			TargetValidator = targetValidator ?? throw new ArgumentNullException(nameof(targetValidator));
 			SpellCastDispatcher = spellCastDispatcher ?? throw new ArgumentNullException(nameof(spellCastDispatcher));
 		}
 
 		protected override void HandleMessage(EntityActorMessageContext messageContext, DefaultEntityActorStateContainer state, ImmediateCastSpellMessage message)
 		{
-			//State could have changed since then.
-			if (!TargetValidator.isSpellTargetViable(message.PendingSpellData.SpellId, state))
-			{
-				//TODO: Send failed packet
-				return;
-			}
-
 			SpellCastDispatcher.DispatchSpellCast(message.PendingSpellData, state);
 		}
 	}
