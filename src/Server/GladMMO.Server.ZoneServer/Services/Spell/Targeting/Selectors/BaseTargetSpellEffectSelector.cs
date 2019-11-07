@@ -6,7 +6,7 @@ namespace GladMMO
 {
 	public abstract class BaseTargetSpellEffectSelector : ISpellEffectTargetSelector
 	{
-		public abstract SpellEffectTargetContext CalculateTargets(SpellDefinitionDataModel spellDefinition, SpellEffectDefinitionDataModel spellEffect, DefaultEntityActorStateContainer actorState, IPendingSpellCastData pendingSpellCast)
+		public abstract SpellEffectTargetContext CalculateTargets(SpellDefinitionDataModel spellDefinition, SpellEffectDefinitionDataModel spellEffect, DefaultEntityActorStateContainer actorState, IPendingSpellCastData pendingSpellCast);
 
 		protected NetworkEntityGuid GetEntityTarget([NotNull] DefaultEntityActorStateContainer state)
 		{

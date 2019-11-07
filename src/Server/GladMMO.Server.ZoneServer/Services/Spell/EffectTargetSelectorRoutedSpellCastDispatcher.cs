@@ -41,7 +41,7 @@ namespace GladMMO
 			//TODO: Handle MULTIPLE effects.
 			SpellEffectDefinitionDataModel effectDefinition = SpellDataCollection.GetSpellEffectDefinition(spellDefinition.SpellEffectIdOne);
 			ISpellEffectTargetSelector targetSelector = EffectSelectorFactory.Create(effectDefinition);
-			SpellEffectTargetContext targetContext = targetSelector.CalculateTargets(spellDefinition, effectDefinition, casterData);
+			SpellEffectTargetContext targetContext = targetSelector.CalculateTargets(spellDefinition, effectDefinition, casterData, pendingSpellCast);
 
 			foreach (var target in targetContext.SpellEffectTargets)
 			{
