@@ -64,8 +64,6 @@ namespace GladMMO
 
 		public bool isInstantCast => CastTime.Ticks == 0;
 
-		public bool isCompleted => isInstantCast || isCastCanceled || (StartTime + CastTime.Ticks) >= ExpectedCastTime;
-
 		public PendingSpellCastData(long startTime, long expectedCastTime, int spellId, [NotNull] ICancelable pendingCancel, TimeSpan castTime, [NotNull] NetworkEntityGuid snapshotEntityTarget)
 		{
 			if (spellId <= 0) throw new ArgumentOutOfRangeException(nameof(spellId));
@@ -78,6 +76,11 @@ namespace GladMMO
 			PendingCancel = pendingCancel ?? throw new ArgumentNullException(nameof(pendingCancel));
 			CastTime = castTime;
 			SnapshotEntityTarget = snapshotEntityTarget ?? throw new ArgumentNullException(nameof(snapshotEntityTarget));
+		}
+
+		public bool IsSpellcastFinished(long currentTimeInTicks)
+		{
+			return isInstantCast || isCastCanceled || currentTimeInTicks >= ExpectedCastTime;
 		}
 	}
 }

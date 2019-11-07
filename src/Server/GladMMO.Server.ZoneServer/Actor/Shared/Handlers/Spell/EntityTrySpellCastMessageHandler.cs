@@ -33,7 +33,7 @@ namespace GladMMO
 			{
 				PendingSpellCastData pendingCast = PendingSpellCastMappable.RetrieveEntity(state.EntityGuid);
 
-				if (!pendingCast.isCompleted)
+				if (!pendingCast.IsSpellcastFinished(TimeService.CurrentLocalTime))
 				{
 					//TODO: Send packet spell response to client.
 					return;
