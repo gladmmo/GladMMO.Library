@@ -21,11 +21,9 @@ namespace GladMMO
 		[SerializeField]
 		private Transform _CastingBarRoot;
 
-		private Lazy<IUIText> _castingBarSpellNameText { get; }
-
 		private Lazy<IUIFillableImage> _castingBarFillable { get; }
 
-		public IUIFillableImage CastingBarFillable { get; }
+		public IUIFillableImage CastingBarFillable => _castingBarFillable.Value;
 
 		//TODO: This is a hack
 		public IUIText CastingBarSpellNameText => (IUIText) _CastingBarSpellNameText;
