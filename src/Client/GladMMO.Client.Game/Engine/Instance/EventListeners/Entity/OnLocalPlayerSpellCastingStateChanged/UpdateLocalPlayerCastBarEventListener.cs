@@ -94,6 +94,7 @@ namespace GladMMO
 			{
 				SpellDefinitionDataModel spellDefinition = SpellDataCollection.GetSpellDefinition(args.CastingSpellId);
 				CastingState = new BarCastingState(true, spellDefinition, args.CastingStartTimeStamp);
+				CastingBar.CastingBarSpellNameText.Text = spellDefinition.SpellName;
 				CastingBar.SetElementActive(true);
 			}
 		}
