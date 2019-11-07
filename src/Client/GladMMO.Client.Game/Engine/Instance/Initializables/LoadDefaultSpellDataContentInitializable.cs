@@ -6,8 +6,8 @@ using Glader.Essentials;
 
 namespace GladMMO
 {
-	//TODO: Consolidate with clientside loader.
-	[ServerSceneTypeCreate(ServerSceneType.Default)]
+	//TODO: Consolidate with serverside loader.
+	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
 	public sealed class LoadDefaultSpellDataContentInitializable : IGameInitializable
 	{
 		private ISpellEntryDataServiceClient SpellDataService { get; }
@@ -24,10 +24,10 @@ namespace GladMMO
 		{
 			SpellDefinitionCollectionResponseModel model = await SpellDataService.GetDefaultSpellDataAsync();
 
-			foreach (var spell in model.SpellEntries)
+			foreach(var spell in model.SpellEntries)
 				SpellDataCollection.AddSpellDefinition(spell);
 
-			foreach (var spellEffect in model.SpellEffects)
+			foreach(var spellEffect in model.SpellEffects)
 				SpellDataCollection.AddSpellEffectDefinition(spellEffect);
 		}
 	}
