@@ -23,12 +23,16 @@ namespace GladMMO
 
 		public IEnumerable<SpellEffectDefinitionDataModel> GetEffectsForSpell(int spellId)
 		{
+			if (spellId <= 0) throw new ArgumentOutOfRangeException(nameof(spellId));
+
 			//TODO: Eventually we'll have more than 1 effect here.
 			yield return SpellEffectMap[SpellMap[spellId].SpellEffectIdOne];
 		}
 
 		public SpellEffectDefinitionDataModel GetEffectForSpellAtIndex(int spellId, SpellEffectIndex effectIndex)
 		{
+			if(spellId <= 0) throw new ArgumentOutOfRangeException(nameof(spellId));
+
 			if((int)effectIndex != 0)
 				throw new NotImplementedException($"TODO: Implement more index handling.");
 
@@ -37,16 +41,22 @@ namespace GladMMO
 
 		public bool ContainsSpellDefinition(int spellId)
 		{
+			if (spellId <= 0) throw new ArgumentOutOfRangeException(nameof(spellId));
+
 			return SpellMap.ContainsKey(spellId);
 		}
 
 		public bool ContainsSpellEffectDefinition(int spellEffectId)
 		{
+			if (spellEffectId < 0) throw new ArgumentOutOfRangeException(nameof(spellEffectId));
+
 			return SpellEffectMap.ContainsKey(spellEffectId);
 		}
 
-		public bool AddSpellDefinition(SpellDefinitionDataModel spellData)
+		public bool AddSpellDefinition([NotNull] SpellDefinitionDataModel spellData)
 		{
+			if (spellData == null) throw new ArgumentNullException(nameof(spellData));
+
 			if (ContainsSpellDefinition(spellData.SpellId))
 				return false;
 
@@ -54,8 +64,10 @@ namespace GladMMO
 			return true;
 		}
 
-		public bool AddSpellEffectDefinition(SpellEffectDefinitionDataModel spellEffectData)
+		public bool AddSpellEffectDefinition([NotNull] SpellEffectDefinitionDataModel spellEffectData)
 		{
+			if (spellEffectData == null) throw new ArgumentNullException(nameof(spellEffectData));
+
 			if(ContainsSpellEffectDefinition(spellEffectData.SpellEffectId))
 				return false;
 
