@@ -5,7 +5,30 @@ using Akka.Actor;
 
 namespace GladMMO
 {
-	public sealed class PendingSpellCastData
+	public interface IPendingSpellCastData
+	{
+		/// <summary>
+		/// The UTC tick time of the spell cast start.
+		/// </summary>
+		long StartTime { get; }
+
+		/// <summary>
+		/// The UTC tick time of the spell cast finish casting.
+		/// </summary>
+		long ExpectedCastTime { get; }
+
+		/// <summary>
+		/// The spell id of the pending cast.
+		/// </summary>
+		int SpellId { get; }
+
+		/// <summary>
+		/// The in-time snapshot of the entity's current target.
+		/// </summary>
+		NetworkEntityGuid SnapshotEntityTarget { get; }
+	}
+
+	public sealed class PendingSpellCastData : IPendingSpellCastData
 	{
 		/// <summary>
 		/// The UTC tick time of the spell cast start.
