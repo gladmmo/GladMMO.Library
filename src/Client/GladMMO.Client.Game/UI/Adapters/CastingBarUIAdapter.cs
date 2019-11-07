@@ -11,8 +11,9 @@ namespace GladMMO
 {
 	public sealed class CastingBarUIAdapter : BaseUnityUI<IUICastingBar>, IUICastingBar
 	{
+		//TODO: This is a hack
 		[SerializeField]
-		private Text _CastingBarSpellNameText;
+		private MonoBehaviour _CastingBarSpellNameText;
 
 		[SerializeField]
 		private Image _CastingBarFillable;
@@ -26,11 +27,11 @@ namespace GladMMO
 
 		public IUIFillableImage CastingBarFillable { get; }
 
-		public IUIText CastingBarSpellNameText { get; }
+		//TODO: This is a hack
+		public IUIText CastingBarSpellNameText => (IUIText) _CastingBarSpellNameText;
 
 		public CastingBarUIAdapter()
 		{
-			_castingBarSpellNameText = new Lazy<IUIText>(() => new UnityTextUITextAdapterImplementation(_CastingBarSpellNameText));
 			_castingBarFillable = new Lazy<IUIFillableImage>(() => new UnityImageUIFillableImageAdapterImplementation(_CastingBarFillable));
 		}
 
