@@ -29,6 +29,7 @@ namespace GladMMO
 			builder.RegisterModule<ContentServerDependencyAutofacModule>();
 			builder.RegisterModule<ZoneClientDependencyAutofacModule>();
 			builder.RegisterModule<ZoneAzureServiceQueueDependencyAutofacModule>();
+			builder.RegisterModule<SpellSystemDependencyAutofacModule>();
 		}
 	}
 }
