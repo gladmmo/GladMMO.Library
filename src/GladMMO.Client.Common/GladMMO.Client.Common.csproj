@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Client\GladMMO.Client.CharacterService\GladMMO.Client.CharacterService.csproj" />
+    <ProjectReference Include="..\Client\GladMMO.Client.ContentServer\GladMMO.Client.ContentServer.csproj" />
     <ProjectReference Include="..\Client\GladMMO.Client.NameQueryService\GladMMO.Client.NameQueryService.csproj" />
     <ProjectReference Include="..\Client\GladMMO.Client.ServiceDiscovery\GladMMO.Client.ServiceDiscovery.csproj" />
     <ProjectReference Include="..\Client\GladMMO.Client.ZoneService\GladMMO.Client.ZoneService.csproj" />
