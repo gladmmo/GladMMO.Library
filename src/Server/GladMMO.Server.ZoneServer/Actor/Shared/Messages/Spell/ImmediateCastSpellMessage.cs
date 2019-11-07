@@ -10,22 +10,11 @@ namespace GladMMO
 	/// </summary>
 	public sealed class ImmediateCastSpellMessage : EntityActorMessage
 	{
-		/// <summary>
-		/// The ID of the spell to cast.
-		/// </summary>
-		public int SpellId { get; private set; }
+		public IPendingSpellCastData PendingSpellData { get; }
 
-		/// <summary>
-		/// The in-time snapshot of the entity's current target.
-		/// </summary>
-		public NetworkEntityGuid SnapshotEntityTarget { get; }
-
-		public ImmediateCastSpellMessage(int spellId, [NotNull] NetworkEntityGuid snapshotEntityTarget)
+		public ImmediateCastSpellMessage([NotNull] IPendingSpellCastData pendingSpellData)
 		{
-			if(spellId <= 0) throw new ArgumentOutOfRangeException(nameof(spellId));
-
-			SpellId = spellId;
-			SnapshotEntityTarget = snapshotEntityTarget ?? throw new ArgumentNullException(nameof(snapshotEntityTarget));
+			PendingSpellData = pendingSpellData ?? throw new ArgumentNullException(nameof(pendingSpellData));
 		}
 	}
 }

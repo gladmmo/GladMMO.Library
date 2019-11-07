@@ -13,7 +13,7 @@ namespace GladMMO
 			//This indicates that the spell cast has finished.
 			state.EntityData.SetFieldValue(EntityObjectField.UNIT_FIELD_CASTING_SPELLID, 0);
 
-			messageContext.Entity.TellSelf(new ImmediateCastSpellMessage(message.Pending.SpellId, message.Pending.SnapshotEntityTarget));
+			messageContext.Entity.TellSelf(new ImmediateCastSpellMessage(message.Pending));
 		}
 	}
 }

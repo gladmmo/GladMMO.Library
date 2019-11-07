@@ -24,7 +24,7 @@ namespace GladMMO
 		protected override void HandleMessage(EntityActorMessageContext messageContext, DefaultEntityActorStateContainer state, ImmediateCastSpellMessage message)
 		{
 			//State could have changed since then.
-			if (!TargetValidator.isSpellTargetViable(message.SpellId, state))
+			if (!TargetValidator.isSpellTargetViable(message.PendingSpellData.SpellId, state))
 			{
 				//TODO: Send failed packet
 				return;
