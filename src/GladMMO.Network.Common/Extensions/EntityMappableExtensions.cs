@@ -104,12 +104,12 @@ namespace GladMMO
 			if (collection == null) throw new ArgumentNullException(nameof(collection));
 			if (entitySet == null) throw new ArgumentNullException(nameof(entitySet));
 
-			using(entitySet.LockObject.ReaderLock())
-				foreach(var element in entitySet)
-				{
-					if (collection.ContainsKey(element))
-						yield return collection.RetrieveEntity(element);
-				}
+			//Thread safe internally to iterate
+			foreach(var element in entitySet)
+			{
+				if (collection.ContainsKey(element))
+					yield return collection.RetrieveEntity(element);
+			}
 		}
 
 		//Never used this before, new C# feature. Named tuples. They seem like a bad idea, but I figured I should write one in my life.
@@ -118,16 +118,16 @@ namespace GladMMO
 			if(collection == null) throw new ArgumentNullException(nameof(collection));
 			if(entitySet == null) throw new ArgumentNullException(nameof(entitySet));
 
-			using(entitySet.LockObject.ReaderLock())
-				foreach(var element in entitySet)
-				{
-					if (exclusiveEntityType != EntityType.None)
-						if (element.EntityType != exclusiveEntityType)
-							continue;
+			//Thread safe internally to iterate
+			foreach(var element in entitySet)
+			{
+				if (exclusiveEntityType != EntityType.None)
+					if (element.EntityType != exclusiveEntityType)
+						continue;
 
-					if(collection.ContainsKey(element))
-						yield return (element, collection.RetrieveEntity(element));
-				}
+				if(collection.ContainsKey(element))
+					yield return (element, collection.RetrieveEntity(element));
+			}
 		}
 	}
 }

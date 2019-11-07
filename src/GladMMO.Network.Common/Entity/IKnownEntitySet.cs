@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using Nito.AsyncEx;
 
 namespace GladMMO
@@ -17,7 +18,7 @@ namespace GladMMO
 		/// <summary>
 		/// The synchronization object for the known entity set.
 		/// </summary>
-		AsyncReaderWriterLock LockObject { get; }
+		ReaderWriterLockSlim LockObject { get; }
 	}
 
 	public interface IKnownEntitySet : IReadonlyKnownEntitySet

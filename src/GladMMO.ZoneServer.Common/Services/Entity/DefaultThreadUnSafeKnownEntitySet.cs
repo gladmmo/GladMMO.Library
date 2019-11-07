@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Threading;
 using Nito.AsyncEx;
 
 namespace GladMMO
@@ -12,44 +13,77 @@ namespace GladMMO
 		private HashSet<NetworkEntityGuid> InternalKnownSet { get; }
 
 		/// <inheritdoc />
-		public AsyncReaderWriterLock LockObject { get; }
+		public ReaderWriterLockSlim LockObject { get; }
 
 		/// <inheritdoc />
 		public DefaultThreadUnSafeKnownEntitySet()
 		{
 			InternalKnownSet = new HashSet<NetworkEntityGuid>(NetworkGuidEqualityComparer<NetworkEntityGuid>.Instance);
-			LockObject = new AsyncReaderWriterLock();
+			LockObject = new ReaderWriterLockSlim();
 		}
 
 		/// <inheritdoc />
 		public void RemoveEntity(NetworkEntityGuid guid)
 		{
-			if(!isEntityKnown(guid))
-				throw new InvalidOperationException($"Cannot removed EntityGuid: {guid} because does not exists in Set: {nameof(DefaultThreadUnSafeKnownEntitySet)}.");
+			LockObject.EnterWriteLock();
+			try
+			{
+				if (!isEntityKnown(guid))
+					throw new InvalidOperationException($"Cannot removed EntityGuid: {guid} because does not exists in Set: {nameof(DefaultThreadUnSafeKnownEntitySet)}.");
 
-			InternalKnownSet.Remove(guid);
+				InternalKnownSet.Remove(guid);
+			}
+			finally
+			{
+				LockObject.ExitWriteLock();
+			}
 		}
 
 		/// <inheritdoc />
 		public void AddEntity(NetworkEntityGuid guid)
 		{
-			if(isEntityKnown(guid))
-				throw new InvalidOperationException($"Cannot add EntityGuid: {guid} because it already exists in Set: {nameof(DefaultThreadUnSafeKnownEntitySet)}.");
+			LockObject.EnterWriteLock();
+			try
+			{
+				if (isEntityKnown(guid))
+					throw new InvalidOperationException($"Cannot add EntityGuid: {guid} because it already exists in Set: {nameof(DefaultThreadUnSafeKnownEntitySet)}.");
 
-			InternalKnownSet.Add(guid);
+				InternalKnownSet.Add(guid);
+			}
+			finally
+			{
+				LockObject.ExitWriteLock();
+			}
 		}
 
 		/// <inheritdoc />
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public bool isEntityKnown(NetworkEntityGuid guid)
 		{
-			return InternalKnownSet.Contains(guid);
+			LockObject.EnterReadLock();
+			try
+			{
+				return InternalKnownSet.Contains(guid);
+			}
+			finally
+			{
+				LockObject.ExitReadLock();
+			}
 		}
 
 		/// <inheritdoc />
 		public IEnumerator<NetworkEntityGuid> GetEnumerator()
 		{
-			return InternalKnownSet.GetEnumerator();
+			LockObject.EnterReadLock();
+			try
+			{
+				foreach (var entry in InternalKnownSet)
+					yield return entry;
+			}
+			finally
+			{
+				LockObject.ExitReadLock();
+			}
 		}
 
 		/// <inheritdoc />

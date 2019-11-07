@@ -37,13 +37,12 @@ namespace GladMMO
 		{
 			try
 			{
-				using(KnownEntities.LockObject.ReaderLock())
-					if (!KnownEntities.isEntityKnown(args.EntityGuid))
-						if (Logger.IsWarnEnabled)
-						{
-							Logger.Warn($"Tried to cleanup unknown Entity: {args.EntityGuid}");
-							return;
-						}
+				if (!KnownEntities.isEntityKnown(args.EntityGuid))
+					if (Logger.IsWarnEnabled)
+					{
+						Logger.Warn($"Tried to cleanup unknown Entity: {args.EntityGuid}");
+						return;
+					}
 							
 
 				if(Logger.IsInfoEnabled)
@@ -52,9 +51,7 @@ namespace GladMMO
 				//It should be assumed none of the event listeners will be async
 				OnEntityDeconstructionStarting?.Invoke(this, new EntityDeconstructionStartingEventArgs(args.EntityGuid));
 
-				//For multithread syncronization we should lock the known entities list, since it is now known and will change the known entity collection.
-				using(KnownEntities.LockObject.WriterLock())
-					KnownEntities.RemoveEntity(args.EntityGuid);
+				KnownEntities.RemoveEntity(args.EntityGuid);
 
 				if(Logger.IsDebugEnabled)
 					Logger.Debug($"Entity: {args.EntityGuid.EntityType}:{args.EntityGuid.EntityId} is now forgotten.");
