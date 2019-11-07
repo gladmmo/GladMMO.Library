@@ -6,6 +6,6 @@ namespace GladMMO
 {
 	public interface ISpellEffectTargetSelector
 	{
-		SpellEffectTargetContext CalculateTargets(SpellDefinitionDataModel spellDefinition, SpellEffectDefinitionDataModel spellEffect, DefaultEntityActorStateContainer actorState);
+		SpellEffectTargetContext CalculateTargets(SpellDefinitionDataModel spellDefinition, SpellEffectDefinitionDataModel spellEffect, DefaultEntityActorStateContainer actorState, IPendingSpellCastData pendingSpellCast);
 	}
 }
