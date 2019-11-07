@@ -19,8 +19,9 @@ namespace GladMMO
 			SpellEntryRepository = spellEntryRepository ?? throw new ArgumentNullException(nameof(spellEntryRepository));
 		}
 
+		//TODO: Renable caching when we're done with development.
 		[HttpGet("default")]
-		[ResponseCache(Duration = 5000)]
+		//[ResponseCache(Duration = 5000)]
 		public async Task<IActionResult> GetDefaultSpellDataAsync([FromServices] ITypeConverterProvider<SpellEntryModel, SpellDefinitionDataModel> spellEntryConverter,
 			[FromServices] ITypeConverterProvider<SpellEffectEntryModel, SpellEffectDefinitionDataModel> spellEffectConverter)
 		{
