@@ -53,6 +53,20 @@ namespace GladMMO
 			return SpellEffectMap.ContainsKey(spellEffectId);
 		}
 
+		public SpellDefinitionDataModel GetSpellDefinition(int spellId)
+		{
+			if (spellId <= 0) throw new ArgumentOutOfRangeException(nameof(spellId));
+
+			return SpellMap[spellId];
+		}
+
+		public SpellEffectDefinitionDataModel GetSpellEffectDefinition(int spellEffectId)
+		{
+			if (spellEffectId < 0) throw new ArgumentOutOfRangeException(nameof(spellEffectId));
+
+			return SpellEffectMap[spellEffectId];
+		}
+
 		public bool AddSpellDefinition([NotNull] SpellDefinitionDataModel spellData)
 		{
 			if (spellData == null) throw new ArgumentNullException(nameof(spellData));

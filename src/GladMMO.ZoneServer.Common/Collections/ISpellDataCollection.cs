@@ -22,6 +22,10 @@ namespace GladMMO
 		bool ContainsSpellDefinition(int spellId);
 
 		bool ContainsSpellEffectDefinition(int spellEffectId);
+
+		SpellDefinitionDataModel GetSpellDefinition(int spellId);
+
+		SpellEffectDefinitionDataModel GetSpellEffectDefinition(int spellEffectId);
 	}
 
 	public interface ISpellDataCollection : IReadonlySpellDataCollection
