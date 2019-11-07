@@ -12,13 +12,24 @@ namespace GladMMO
 	{
 		private IReadonlyEntityGuidMappable<IActorRef> ActorReferenceMappable { get; }
 
-		public EntityImmediateCastSpellMessageHandler([NotNull] IReadonlyEntityGuidMappable<IActorRef> actorReferenceMappable)
+		private ISpellTargetValidator TargetValidator { get; }
+
+		public EntityImmediateCastSpellMessageHandler([NotNull] IReadonlyEntityGuidMappable<IActorRef> actorReferenceMappable,
+			[NotNull] ISpellTargetValidator targetValidator)
 		{
 			ActorReferenceMappable = actorReferenceMappable ?? throw new ArgumentNullException(nameof(actorReferenceMappable));
+			TargetValidator = targetValidator ?? throw new ArgumentNullException(nameof(targetValidator));
 		}
 
 		protected override void HandleMessage(EntityActorMessageContext messageContext, DefaultEntityActorStateContainer state, ImmediateCastSpellMessage message)
 		{
+			//State could have changed since then.
+			if (!TargetValidator.isSpellTargetViable(message.SpellId, state))
+			{
+				//TODO: Send failed packet
+				return;
+			}
+
 			//TODO: This is just demo code.
 			//TODO: Handle targeting at the spell level.
 			NetworkEntityGuid targetGuid = state.EntityData.GetEntityGuidValue(EntityObjectField.UNIT_FIELD_TARGET);
