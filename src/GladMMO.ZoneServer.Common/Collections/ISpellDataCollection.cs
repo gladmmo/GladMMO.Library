@@ -20,10 +20,14 @@ namespace GladMMO
 	public interface IReadonlySpellDataCollection : IEnumerable<SpellDefinitionDataModel>, IReadonlySpellEffectLookupable
 	{
 		bool ContainsSpellDefinition(int spellId);
+
+		bool ContainsSpellEffectDefinition(int spellEffectId);
 	}
 
 	public interface ISpellDataCollection : IReadonlySpellDataCollection
 	{
 		bool AddSpellDefinition(SpellDefinitionDataModel spellData);
+
+		bool AddSpellEffectDefinition(SpellEffectDefinitionDataModel spellEffectData);
 	}
 }

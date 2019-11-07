@@ -40,12 +40,26 @@ namespace GladMMO
 			return SpellMap.ContainsKey(spellId);
 		}
 
+		public bool ContainsSpellEffectDefinition(int spellEffectId)
+		{
+			return SpellEffectMap.ContainsKey(spellEffectId);
+		}
+
 		public bool AddSpellDefinition(SpellDefinitionDataModel spellData)
 		{
 			if (ContainsSpellDefinition(spellData.SpellId))
 				return false;
 
 			SpellMap.Add(spellData.SpellId, spellData);
+			return true;
+		}
+
+		public bool AddSpellEffectDefinition(SpellEffectDefinitionDataModel spellEffectData)
+		{
+			if(ContainsSpellEffectDefinition(spellEffectData.SpellEffectId))
+				return false;
+
+			SpellEffectMap.Add(spellEffectData.SpellEffectId, spellEffectData);
 			return true;
 		}
 	}
