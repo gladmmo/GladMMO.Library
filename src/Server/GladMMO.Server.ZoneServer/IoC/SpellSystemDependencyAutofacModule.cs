@@ -24,6 +24,11 @@ namespace GladMMO
 			builder.RegisterType<EffectTargetSelectorRoutedSpellCastDispatcher>()
 				.As<ISpellCastDispatcher>()
 				.SingleInstance();
+
+			//DefaultPendingSpellCastFactory : IPendingSpellCastFactory
+			builder.RegisterType<DefaultPendingSpellCastFactory>()
+				.As<IPendingSpellCastFactory>()
+				.SingleInstance();
 		}
 
 		private void RegisterSpellTargetSelectors([NotNull] ActorAssemblyDefinitionConfiguration actorAssemblyConfig, [NotNull] ContainerBuilder builder)
