@@ -25,6 +25,13 @@ namespace GladMMO
 		[JsonProperty]
 		public int SpellEffectIdOne { get; private set; }
 
+		//TODO: Enable these effects eventually.
+		[JsonIgnore]
+		private int SpellEffectIdTwo { get; set; }
+
+		[JsonIgnore]
+		private int SpellEffectIdThree { get; set; }
+
 		public SpellDefinitionDataModel(int spellId, string spellName, SpellClassType spellType, int castTime, int spellEffectIdOne)
 		{
 			if (spellId <= 0) throw new ArgumentOutOfRangeException(nameof(spellId));
