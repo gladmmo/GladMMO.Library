@@ -59,6 +59,18 @@ namespace GladMMO
 			}
 		}
 
+		public IEnumerable<SpellEffectIndex> EnumerateSpellEffects()
+		{
+			if (SpellEffectIdOne != 0)
+				yield return SpellEffectIndex.SpellEffectIndexOne;
+
+			if (SpellEffectIdTwo != 0)
+				yield return SpellEffectIndex.SpellEffectIndexTwo;
+
+			if (SpellEffectIdThree != 0)
+				yield return SpellEffectIndex.SpellEffectIndexThree;
+		}
+
 		/// <summary>
 		/// Serializer ctor.
 		/// </summary>
