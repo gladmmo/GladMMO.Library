@@ -59,5 +59,18 @@ namespace GladMMO
 
 			return RandomGenerator.Value.Next(effect.EffectBasePoints, effect.EffectBasePoints + 1 + effect.EffectPointsDiceRange); //+1 is due to exclusive.
 		}
+
+		/// <summary>
+		/// Computes the additive value of level scaling based on application target's level.
+		/// Determined by spell effect BasePointsAdditiveLevelModifier.
+		/// </summary>
+		/// <param name="context">The spell application context.</param>
+		/// <returns>The additive value of level scaling.</returns>
+		protected int ComputeAdditiveLevelScaling([NotNull] SpellEffectApplicationContext context)
+		{
+			if (context == null) throw new ArgumentNullException(nameof(context));
+
+			return (int)((float)context.ApplicationTargetEntityData.GetFieldValue<int>(BaseObjectField.UNIT_FIELD_LEVEL) * context.SpellEffectData.SpellEffect.BasePointsAdditiveLevelModifier);
+		}
 	}
 }
