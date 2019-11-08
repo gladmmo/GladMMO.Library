@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using Akka.Actor;
 
 namespace GladMMO
@@ -12,9 +13,12 @@ namespace GladMMO
 	{
 		protected IReadonlyEntityGuidMappable<IActorRef> ActorReferenceMappable { get; }
 
+		private ThreadLocal<Random> RandomGenerator { get; }
+
 		protected BaseSpellEffectHandler([NotNull] IReadonlyEntityGuidMappable<IActorRef> actorReferenceMappable)
 		{
 			ActorReferenceMappable = actorReferenceMappable ?? throw new ArgumentNullException(nameof(actorReferenceMappable));
+			RandomGenerator = new ThreadLocal<Random>();
 		}
 
 		public abstract void ApplySpellEffect(SpellEffectApplicationContext context);
@@ -40,6 +44,19 @@ namespace GladMMO
 				IActorRef sourceRef = ActorReferenceMappable.RetrieveEntity(damageSourceEntity);
 				actorRef.Tell(new DamageEntityActorCurrentHealthMessage(damageAmount), sourceRef);
 			}
+		}
+
+		/// <summary>
+		/// Generates a randomized value based on <see cref="effect"/> base value
+		/// and random component.
+		/// </summary>
+		/// <param name="effect">The spell effect.</param>
+		/// <returns>Random value depending on base points and dice roll.</returns>
+		protected int RollEffectValue([NotNull] SpellEffectDefinitionDataModel effect)
+		{
+			if (effect == null) throw new ArgumentNullException(nameof(effect));
+
+			return RandomGenerator.Value.Next(effect.EffectBasePoints, effect.EffectBasePoints + 1 + effect.EffectPointsDiceRange); //+1 is due to exclusive.
 		}
 	}
 }
