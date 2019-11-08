@@ -40,8 +40,8 @@ namespace GladMMO
 		private void RegisterSpellEffectHandlers(ActorAssemblyDefinitionConfiguration actorAssemblyConfig, ContainerBuilder builder)
 		{
 			//SingletonSpellEffectTargetSelectorFactory : ISpellEffectTargetSelectorFactory
-			builder.RegisterType<SingletonSpellEffectTargetSelectorFactory>()
-				.As<ISpellEffectTargetSelectorFactory>()
+			builder.RegisterType<SingletonSpellEffectHandlerFactory>()
+				.As<ISpellEffectHandlerFactory>()
 				.SingleInstance();
 
 			foreach(Assembly assemblyToParse in actorAssemblyConfig.AssemblyNames
