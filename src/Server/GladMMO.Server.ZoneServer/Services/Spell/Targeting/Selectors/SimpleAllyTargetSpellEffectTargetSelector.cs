@@ -5,6 +5,7 @@ using Akka.Actor;
 
 namespace GladMMO
 {
+	//TODO: Handle actual hostility calculations.
 	[SpellEffectTargetingStrategy(SpellEffectTargetType.TARGET_UNIT_TARGET_ALLY, SpellEffectTargetType.NO_TARGET)]
 	public sealed class SimpleAllyTargetSpellEffectTargetSelector : BaseTargetSpellEffectSelector
 	{
