@@ -56,7 +56,7 @@ namespace GladMMO
 		}
 
 		//TODO: Doc
-		public static TValueType GetFieldValue<TValueType>(this IEntityDataFieldContainer container, GameObjectField index)
+		public static TValueType GetFieldValue<TValueType>(this IReadonlyEntityDataFieldContainer container, GameObjectField index)
 			where TValueType : struct
 		{
 			if(container == null) throw new ArgumentNullException(nameof(container));
@@ -64,16 +64,7 @@ namespace GladMMO
 			return container.GetFieldValue<TValueType>((int)index);
 		}
 
-		public static TValueType GetFieldValue<TValueType>(this IEntityDataFieldContainer container, PlayerObjectField index)
-			where TValueType : struct
-		{
-			if(container == null) throw new ArgumentNullException(nameof(container));
-
-			return container.GetFieldValue<TValueType>((int)index);
-		}
-
-		//TODO: Doc
-		public static TValueType GetFieldValue<TValueType>(this IEntityDataFieldContainer container, EntityObjectField index)
+		public static TValueType GetFieldValue<TValueType>(this IReadonlyEntityDataFieldContainer container, PlayerObjectField index)
 			where TValueType : struct
 		{
 			if(container == null) throw new ArgumentNullException(nameof(container));
@@ -82,7 +73,7 @@ namespace GladMMO
 		}
 
 		//TODO: Doc
-		public static TValueType GetFieldValue<TValueType>(this IEntityDataFieldContainer container, BaseObjectField index)
+		public static TValueType GetFieldValue<TValueType>(this IReadonlyEntityDataFieldContainer container, EntityObjectField index)
 			where TValueType : struct
 		{
 			if(container == null) throw new ArgumentNullException(nameof(container));
@@ -90,7 +81,16 @@ namespace GladMMO
 			return container.GetFieldValue<TValueType>((int)index);
 		}
 
-		public static TValueType GetEnumFieldValue<TValueType>(this IEntityDataFieldContainer container, GameObjectField index)
+		//TODO: Doc
+		public static TValueType GetFieldValue<TValueType>(this IReadonlyEntityDataFieldContainer container, BaseObjectField index)
+			where TValueType : struct
+		{
+			if(container == null) throw new ArgumentNullException(nameof(container));
+
+			return container.GetFieldValue<TValueType>((int)index);
+		}
+
+		public static TValueType GetEnumFieldValue<TValueType>(this IReadonlyEntityDataFieldContainer container, GameObjectField index)
 			where TValueType : Enum
 		{
 			if(container == null) throw new ArgumentNullException(nameof(container));
@@ -98,21 +98,21 @@ namespace GladMMO
 			return GenericMath.Convert<int, TValueType>(container.GetFieldValue<int>((int)index));
 		}
 
-		public static NetworkEntityGuid GetEntityGuidValue(this IEntityDataFieldContainer container, GameObjectField index)
+		public static NetworkEntityGuid GetEntityGuidValue(this IReadonlyEntityDataFieldContainer container, GameObjectField index)
 		{
 			if(container == null) throw new ArgumentNullException(nameof(container));
 
 			return new NetworkEntityGuid(container.GetFieldValue<ulong>((int) index));
 		}
 
-		public static NetworkEntityGuid GetEntityGuidValue(this IEntityDataFieldContainer container, BaseObjectField index)
+		public static NetworkEntityGuid GetEntityGuidValue(this IReadonlyEntityDataFieldContainer container, BaseObjectField index)
 		{
 			if(container == null) throw new ArgumentNullException(nameof(container));
 
 			return new NetworkEntityGuid(container.GetFieldValue<ulong>((int)index));
 		}
 
-		public static NetworkEntityGuid GetEntityGuidValue(this IEntityDataFieldContainer container, EntityObjectField index)
+		public static NetworkEntityGuid GetEntityGuidValue(this IReadonlyEntityDataFieldContainer container, EntityObjectField index)
 		{
 			if(container == null) throw new ArgumentNullException(nameof(container));
 
