@@ -18,7 +18,7 @@ namespace GladMMO
 		protected BaseSpellEffectHandler([NotNull] IReadonlyEntityGuidMappable<IActorRef> actorReferenceMappable)
 		{
 			ActorReferenceMappable = actorReferenceMappable ?? throw new ArgumentNullException(nameof(actorReferenceMappable));
-			RandomGenerator = new ThreadLocal<Random>();
+			RandomGenerator = new ThreadLocal<Random>(() => new Random());
 		}
 
 		public abstract void ApplySpellEffect(SpellEffectApplicationContext context);
