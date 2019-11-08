@@ -39,6 +39,19 @@ namespace GladMMO
 			SpellEffectIdOne = spellEffectIdOne;
 		}
 
+		public int GetSpellEffectId(SpellEffectIndex effectIndex)
+		{
+			switch (effectIndex)
+			{
+				case SpellEffectIndex.SpellEffectIndexOne:
+					return SpellEffectIdOne;
+				case SpellEffectIndex.SpellEffectIndexTwo:
+				case SpellEffectIndex.SpellEffectIndexThree:
+				default:
+					throw new ArgumentOutOfRangeException(nameof(effectIndex), effectIndex, $"TODO: Implement additional spell effect index.");
+			}
+		}
+
 		/// <summary>
 		/// Serializer ctor.
 		/// </summary>
