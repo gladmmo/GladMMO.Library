@@ -10,7 +10,7 @@ namespace GladMMO
 
 		public DamageEntityActorCurrentHealthMessage(int damage)
 		{
-			if (damage <= 0) throw new ArgumentOutOfRangeException(nameof(damage));
+			if (damage < 0) throw new ArgumentOutOfRangeException(nameof(damage));
 
 			Damage = damage;
 		}
