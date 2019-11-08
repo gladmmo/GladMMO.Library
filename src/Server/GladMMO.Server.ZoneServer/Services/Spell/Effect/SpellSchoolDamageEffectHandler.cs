@@ -20,7 +20,7 @@ namespace GladMMO
 			if (context == null) throw new ArgumentNullException(nameof(context));
 
 			//TODO: Support spell schools AKA Frost damage, nature, physical and etc.
-			int damageValue = RollEffectValue(context.SpellEffectData.SpellEffect);
+			int damageValue = RollEffectValue(context.SpellEffectData.SpellEffect) + ComputeAdditiveLevelScaling(context);
 			ApplyDamage(context.ApplicationTarget, damageValue, context.SpellSource);
 		}
 	}
