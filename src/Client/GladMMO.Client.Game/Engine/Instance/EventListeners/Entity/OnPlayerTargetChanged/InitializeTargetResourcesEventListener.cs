@@ -14,6 +14,8 @@ namespace GladMMO
 
 		private IEntityDataChangeCallbackRegisterable EntityDataChangeCallbackService { get; }
 
+		private List<IEntityDataEventUnregisterable> Unregisterables { get; } = new List<IEntityDataEventUnregisterable>(2);
+
 		public InitializeTargetResourcesEventListener(ILocalPlayerTargetChangedEventListener subscriptionService,
 			ILog logger,
 			[KeyFilter(UnityUIRegisterationKey.TargetUnitFrame)] IUIUnitFrame targetUnitFrame,
@@ -29,9 +31,14 @@ namespace GladMMO
 		{
 			IEntityDataFieldContainer entityData = EntityDataMappable.RetrieveEntity(args.TargetedEntity);
 
+			foreach(var unreg in Unregisterables)
+				unreg.Unregister();
+
+			Unregisterables.Clear();
+
 			//Listen for both max and current health.
-			EntityDataChangeCallbackService.RegisterCallback<int>(args.TargetedEntity, (int)EntityObjectField.UNIT_FIELD_HEALTH, OnTargetEntityHealthChanged);
-			EntityDataChangeCallbackService.RegisterCallback<int>(args.TargetedEntity, (int)EntityObjectField.UNIT_FIELD_MAXHEALTH, OnTargetEntityHealthChanged);
+			Unregisterables.Add(EntityDataChangeCallbackService.RegisterCallback<int>(args.TargetedEntity, (int)EntityObjectField.UNIT_FIELD_HEALTH, OnTargetEntityHealthChanged));
+			Unregisterables.Add(EntityDataChangeCallbackService.RegisterCallback<int>(args.TargetedEntity, (int)EntityObjectField.UNIT_FIELD_MAXHEALTH, OnTargetEntityHealthChanged));
 
 			//Only initialize if we have their values
 			if (entityData.DataSetIndicationArray.Get((int) EntityObjectField.UNIT_FIELD_HEALTH))
