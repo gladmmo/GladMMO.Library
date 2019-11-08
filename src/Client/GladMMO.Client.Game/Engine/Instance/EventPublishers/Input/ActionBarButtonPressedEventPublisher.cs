@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using Glader.Essentials;
 
 namespace GladMMO
@@ -13,7 +14,7 @@ namespace GladMMO
 	[AdditionalRegisterationAs(typeof(IActionBarButtonPressedEventSubscribable))]
 	[AdditionalRegisterationAs(typeof(IActionBarButtonPressedEventPublisher))]
 	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
-	public sealed class ActionBarButtonPressedEventPublisher : IActionBarButtonPressedEventPublisher, IActionBarButtonPressedEventSubscribable
+	public sealed class ActionBarButtonPressedEventPublisher : IActionBarButtonPressedEventPublisher, IActionBarButtonPressedEventSubscribable, IGameInitializable
 	{
 		public event EventHandler<ActionBarButtonPressedEventArgs> OnActionBarButtonPressed;
 
@@ -21,6 +22,11 @@ namespace GladMMO
 		{
 			//Just forward event.
 			OnActionBarButtonPressed?.Invoke(sender, eventArgs);
+		}
+
+		public Task OnGameInitialized()
+		{
+			return Task.CompletedTask;
 		}
 	}
 }
