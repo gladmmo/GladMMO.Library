@@ -71,7 +71,6 @@
     <Folder Include="Engine\Tickable\Base\" />
     <Folder Include="Factory\Destructors\" />
     <Folder Include="Handlers\Subhandlers\" />
-    <Folder Include="Services\Spell\Effect\" />
   </ItemGroup>
 
 </Project>
