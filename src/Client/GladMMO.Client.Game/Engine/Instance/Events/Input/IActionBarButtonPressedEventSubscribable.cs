@@ -6,7 +6,7 @@ using Glader.Essentials;
 
 namespace GladMMO
 {
-	public interface IActionBarButtonPressedEventListener
+	public interface IActionBarButtonPressedEventSubscribable
 	{
 		event EventHandler<ActionBarButtonPressedEventArgs> OnActionBarButtonPressed;
 	}
