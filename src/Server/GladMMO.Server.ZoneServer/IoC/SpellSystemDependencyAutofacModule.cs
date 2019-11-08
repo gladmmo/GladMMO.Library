@@ -19,6 +19,7 @@ namespace GladMMO
 
 			RegisterSpellTargetValidators(actorAssemblyConfig, builder);
 			RegisterSpellTargetSelectors(actorAssemblyConfig, builder);
+			RegisterSpellEffectHandlers(actorAssemblyConfig, builder);
 
 			//EffectTargetSelectorRoutedSpellCastDispatcher
 			builder.RegisterType<EffectTargetSelectorRoutedSpellCastDispatcher>()
@@ -34,6 +35,30 @@ namespace GladMMO
 			builder.RegisterType<DefaultSpellEffectApplicationMessageFactory>()
 				.As<ISpellEffectApplicationMessageFactory>()
 				.SingleInstance();
+		}
+
+		private void RegisterSpellEffectHandlers(ActorAssemblyDefinitionConfiguration actorAssemblyConfig, ContainerBuilder builder)
+		{
+			//SingletonSpellEffectTargetSelectorFactory : ISpellEffectTargetSelectorFactory
+			builder.RegisterType<SingletonSpellEffectTargetSelectorFactory>()
+				.As<ISpellEffectTargetSelectorFactory>()
+				.SingleInstance();
+
+			foreach(Assembly assemblyToParse in actorAssemblyConfig.AssemblyNames
+				.Select(d => AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(a => d == a.GetName().Name.ToLower()))
+				.Where(a => a != null))
+			{
+				foreach(Type t in assemblyToParse.GetTypes())
+				{
+					//If they have the handler attribute, we should just register it.
+					if(typeof(ISpellEffectHandler).IsAssignableFrom(t) && t.GetCustomAttributes<SpellEffectHandlerAttribute>().Any() && !t.IsAbstract)
+					{
+						builder.RegisterType(t)
+							.As<ISpellEffectHandler>()
+							.SingleInstance();
+					}
+				}
+			}
 		}
 
 		private void RegisterSpellTargetSelectors([NotNull] ActorAssemblyDefinitionConfiguration actorAssemblyConfig, [NotNull] ContainerBuilder builder)
