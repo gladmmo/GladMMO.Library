@@ -28,8 +28,9 @@ namespace GladMMO
 		/// Applies damage to the <see cref="entity"/> associated with the provided guid.
 		/// Applies <see cref="damageAmount"/> of the damage.
 		/// </summary>
-		/// <param name="entity"></param>
-		/// <param name="damageAmount"></param>
+		/// <param name="entity">Entity to deal damage to.</param>
+		/// <param name="damageAmount">The amount of damage to deal.</param>
+		/// <param name="damageSourceEntity">The damage source entity.</param>
 		protected void ApplyDamage([NotNull] NetworkEntityGuid entity, int damageAmount, NetworkEntityGuid damageSourceEntity = null)
 		{
 			if (entity == null) throw new ArgumentNullException(nameof(entity));
@@ -37,7 +38,7 @@ namespace GladMMO
 
 			IActorRef actorRef = ActorReferenceMappable.RetrieveEntity(entity);
 
-			if(damageSourceEntity == null || damageSourceEntity != NetworkEntityGuid.Empty)
+			if(damageSourceEntity == null || damageSourceEntity == NetworkEntityGuid.Empty)
 				actorRef.Tell(new DamageEntityActorCurrentHealthMessage(damageAmount));
 			else
 			{
