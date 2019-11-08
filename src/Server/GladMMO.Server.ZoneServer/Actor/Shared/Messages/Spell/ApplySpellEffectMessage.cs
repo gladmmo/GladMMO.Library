@@ -4,7 +4,7 @@ using System.Text;
 
 namespace GladMMO
 {
-	public sealed class ApplySpellEffectMessage : EntityActorMessage
+	public sealed class ApplySpellEffectMessage : EntityActorMessage, ISpellEffectPairable
 	{
 		/// <summary>
 		/// The GUID of the casting source.
