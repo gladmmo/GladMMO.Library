@@ -47,6 +47,30 @@ namespace GladMMO
 			}
 		}
 
+		//TODO: Support spell school definition. For heals might be a Dark heal or Holy heal or Nature heal.
+		/// <summary>
+		/// Applies a heal to the <see cref="entity"/> associated with the provided guid.
+		/// Applies <see cref="healAmount"/> of the heal.
+		/// </summary>
+		/// <param name="entity">Entity to heal.</param>
+		/// <param name="healAmount">The amount to heal.</param>
+		/// <param name="healSourceEntity">The healing source entity.</param>
+		protected void ApplyHeal([NotNull] NetworkEntityGuid entity, int healAmount, NetworkEntityGuid healSourceEntity = null)
+		{
+			if(entity == null) throw new ArgumentNullException(nameof(entity));
+			if(healAmount < 0) throw new ArgumentOutOfRangeException(nameof(healAmount));
+
+			IActorRef actorRef = ActorReferenceMappable.RetrieveEntity(entity);
+
+			if(healSourceEntity == null || healSourceEntity == NetworkEntityGuid.Empty)
+				actorRef.Tell(new HealEntityActorCurrentHealthMessage(healAmount));
+			else
+			{
+				IActorRef sourceRef = ActorReferenceMappable.RetrieveEntity(healSourceEntity);
+				actorRef.Tell(new HealEntityActorCurrentHealthMessage(healAmount), sourceRef);
+			}
+		}
+
 		/// <summary>
 		/// Generates a randomized value based on <see cref="effect"/> base value
 		/// and random component.
