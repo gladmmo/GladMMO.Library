@@ -22,11 +22,20 @@ namespace GladMMO
 		/// </summary>
 		public ISpellEffectPairable SpellEffectData { get; }
 
-		public SpellEffectApplicationContext([NotNull] NetworkEntityGuid spellSource, [NotNull] NetworkEntityGuid applicationTarget, [NotNull] ISpellEffectPairable spellEffectData)
+		/// <summary>
+		/// The readonly entity data for the application target/handler.
+		/// </summary>
+		public IReadonlyEntityDataFieldContainer ApplicationTargetEntityData { get; }
+
+		public SpellEffectApplicationContext([NotNull] NetworkEntityGuid spellSource, 
+			[NotNull] NetworkEntityGuid applicationTarget, 
+			[NotNull] ISpellEffectPairable spellEffectData, 
+			[NotNull] IReadonlyEntityDataFieldContainer applicationTargetEntityData)
 		{
 			SpellSource = spellSource ?? throw new ArgumentNullException(nameof(spellSource));
 			ApplicationTarget = applicationTarget ?? throw new ArgumentNullException(nameof(applicationTarget));
 			SpellEffectData = spellEffectData ?? throw new ArgumentNullException(nameof(spellEffectData));
+			ApplicationTargetEntityData = applicationTargetEntityData ?? throw new ArgumentNullException(nameof(applicationTargetEntityData));
 		}
 	}
 }
