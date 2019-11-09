@@ -88,29 +88,39 @@ namespace GladMMO
 		{
 			//After ALL the queued interest changes have been serviced
 			//we can actually handle the changes and send them and such
-			
-			//We need to iterate the entire interest dictionary
-			//That means we need to check the new incoming and outgoing entities
-			//We do this because we need to build update packets for the players
-			//so that they can become aware of them AND we can start pushing
-			//events to them
-			foreach (var entity in ManagedInterestCollections.EnumerateWithGuid(KnownEntities))
+
+			KnownEntities.LockObject.EnterReadLock();
+			try
 			{
-				//We want to skip any collection that doesn't have any pending changes.
-				//No reason to send a message about it nor dequeue anything
-				if (!entity.ComponentValue.HasPendingChanges())
-					continue;
+				//We need to iterate the entire interest dictionary
+				//That means we need to check the new incoming and outgoing entities
+				//We do this because we need to build update packets for the players
+				//so that they can become aware of them AND we can start pushing
+				//events to them
+				foreach (var entity in KnownEntities)
+				{
+					InterestCollection interestCollection = ManagedInterestCollections.RetrieveEntity(entity);
 
-				//We should only build packets for players.
-				if (entity.EntityGuid.EntityType == EntityType.Player)
-					VisibilityMessageSender.Send(new EntityVisibilityChangeContext(entity.EntityGuid, entity.ComponentValue));
+					//We want to skip any collection that doesn't have any pending changes.
+					//No reason to send a message about it nor dequeue anything
+					if (!interestCollection.HasPendingChanges())
+						continue;
 
-				//No matter player or NPC we should dequeue the joining/leaving
-				//entites so that the state of the known entites reflects the diff packets sent
-				InterestDequeueSetCommand dequeueCommand = new InterestDequeueSetCommand(entity.ComponentValue);
+					//We should only build packets for players.
+					if (entity.EntityType == EntityType.Player)
+						VisibilityMessageSender.Send(new EntityVisibilityChangeContext(entity, interestCollection));
 
-				//TODO: Should we execute right away? Or after all packets are sent?
-				dequeueCommand.Execute();
+					//No matter player or NPC we should dequeue the joining/leaving
+					//entites so that the state of the known entites reflects the diff packets sent
+					InterestDequeueSetCommand dequeueCommand = new InterestDequeueSetCommand(interestCollection);
+
+					//TODO: Should we execute right away? Or after all packets are sent?
+					dequeueCommand.Execute();
+				}
+			}
+			finally
+			{
+				KnownEntities.LockObject.ExitReadLock();
 			}
 		}
 	}
