@@ -16,17 +16,11 @@ namespace GladMMO
 		/// <summary>
 		/// Factory for actor creation for the world.
 		/// </summary>
-		public IActorRefFactory WorldActorFactory { get; }
+		public IActorRefFactory WorldActorFactory { get; internal set; }
 
 		/// <summary>
 		/// The world death watch service.
 		/// </summary>
-		public ICanWatch DeathWatchService { get; }
-
-		public WorldActorState([NotNull] IActorRefFactory actorFactory, [NotNull] ICanWatch deathWatchService)
-		{
-			WorldActorFactory = actorFactory ?? throw new ArgumentNullException(nameof(actorFactory));
-			DeathWatchService = deathWatchService ?? throw new ArgumentNullException(nameof(deathWatchService));
-		}
+		public ICanWatch DeathWatchService { get; internal set; }
 	}
 }
