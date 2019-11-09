@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Akka.Actor;
 using Common.Logging;
 using Glader.Essentials;
 using GladMMO;
@@ -23,18 +24,22 @@ namespace GladMMO
 
 		private IReadonlyKnownEntitySet KnownEntities { get; }
 
+		private IReadonlyEntityGuidMappable<IActorRef> ActorReferenceMappable { get; }
+
 		/// <inheritdoc />
 		public InterestChangeEventHandlerTickable(
 			[NotNull] IEntityInterestChangeEventSubscribable subscriptionService,
 			[NotNull] ILog logger,
 			[NotNull] IReadonlyEntityGuidMappable<InterestCollection> managedInterestCollections,
 			[NotNull] INetworkMessageSender<EntityVisibilityChangeContext> visibilityMessageSender,
-			[NotNull] IReadonlyKnownEntitySet knownEntities)
+			[NotNull] IReadonlyKnownEntitySet knownEntities,
+			[NotNull] IReadonlyEntityGuidMappable<IActorRef> actorReferenceMappable)
 			: base(subscriptionService, true, logger)
 		{
 			ManagedInterestCollections = managedInterestCollections ?? throw new ArgumentNullException(nameof(managedInterestCollections));
 			VisibilityMessageSender = visibilityMessageSender ?? throw new ArgumentNullException(nameof(visibilityMessageSender));
 			KnownEntities = knownEntities ?? throw new ArgumentNullException(nameof(knownEntities));
+			ActorReferenceMappable = actorReferenceMappable ?? throw new ArgumentNullException(nameof(actorReferenceMappable));
 		}
 
 		private void ThrowIfNoEntityInterestManaged(NetworkEntityGuid entryContext, NetworkEntityGuid entityGuid)
@@ -58,8 +63,8 @@ namespace GladMMO
 				{
 					case EntityInterestChangeEventArgs.ChangeType.Enter:
 						//If the entity already knows the entity then we should not register it.
-						if (!ManagedInterestCollections.RetrieveEntity(args.EnterableEntity).Contains(args.EnteringEntity))
-							ManagedInterestCollections.RetrieveEntity(args.EnterableEntity).Register(args.EnteringEntity, args.EnteringEntity);
+						ManagedInterestCollections.RetrieveEntity(args.EnterableEntity).Register(args.EnteringEntity, args.EnteringEntity);
+						ActorReferenceMappable.RetrieveEntity(args.EnterableEntity).Tell(new EntityInterestGainedMessage(args.EnteringEntity), ActorReferenceMappable.RetrieveEntity(args.EnterableEntity));
 						break;
 					case EntityInterestChangeEventArgs.ChangeType.Exit:
 						//It's possible we'll want to be having an entity EXIT without being known.
@@ -68,6 +73,7 @@ namespace GladMMO
 						//that they also LEFT it. Therefore there could be an ENTER + EXIT in one go.
 						//Registering exits always will address this cleanup.
 						ManagedInterestCollections.RetrieveEntity(args.EnterableEntity).Unregister(args.EnteringEntity);
+						ActorReferenceMappable.RetrieveEntity(args.EnterableEntity).Tell(new EntityInterestRemoveMessage(args.EnteringEntity), ActorReferenceMappable.RetrieveEntity(args.EnterableEntity));
 						break;
 				}
 			}
@@ -106,7 +112,7 @@ namespace GladMMO
 
 					//No matter player or NPC we should dequeue the joining/leaving
 					//entites so that the state of the known entites reflects the diff packets sent
-					InterestDequeueSetCommand dequeueCommand = new InterestDequeueSetCommand(interestCollection, interestCollection);
+					InterestDequeueSetCommand dequeueCommand = new InterestDequeueSetCommand(interestCollection);
 
 					//TODO: Should we execute right away? Or after all packets are sent?
 					dequeueCommand.Execute();
