@@ -12,11 +12,15 @@ namespace GladMMO
 
 		private IReadonlyEntityGuidMappable<IEntityDataFieldContainer> EntityDataMappable { get; }
 
+		private IReadonlyEntityGuidMappable<InterestCollection> InterestMappable { get; }
+
 		public DefaultGameObjectEntityActorFactory([NotNull] IGameObjectDataService gameObjectDataContainer,
-			[NotNull] IReadonlyEntityGuidMappable<IEntityDataFieldContainer> entityDataMappable)
+			[NotNull] IReadonlyEntityGuidMappable<IEntityDataFieldContainer> entityDataMappable,
+			[NotNull] IReadonlyEntityGuidMappable<InterestCollection> interestMappable)
 		{
 			GameObjectDataContainer = gameObjectDataContainer ?? throw new ArgumentNullException(nameof(gameObjectDataContainer));
 			EntityDataMappable = entityDataMappable ?? throw new ArgumentNullException(nameof(entityDataMappable));
+			InterestMappable = interestMappable ?? throw new ArgumentNullException(nameof(interestMappable));
 		}
 
 		public EntityActorCreationResult Create([NotNull] NetworkEntityGuid context)
@@ -53,7 +57,7 @@ namespace GladMMO
 		{
 			GameObjectTemplateModel templateModel = GameObjectDataContainer.GameObjectTemplateMappable.RetrieveEntity(entityGuid);
 			GameObjectInstanceModel instanceModel = GameObjectDataContainer.GameObjectInstanceMappable.RetrieveEntity(entityGuid);
-			return new EntityActorStateInitializeMessage<DefaultGameObjectActorState>(new DefaultGameObjectActorState(EntityDataMappable.RetrieveEntity(entityGuid), entityGuid, instanceModel, templateModel));
+			return new EntityActorStateInitializeMessage<DefaultGameObjectActorState>(new DefaultGameObjectActorState(EntityDataMappable.RetrieveEntity(entityGuid), entityGuid, instanceModel, templateModel, InterestMappable.RetrieveEntity(entityGuid)));
 		}
 
 		private EntityActorStateInitializeMessage<BehaviourGameObjectState<TBehaviourType>> CreateState<TBehaviourType>(NetworkEntityGuid entityGuid) 
@@ -62,7 +66,7 @@ namespace GladMMO
 			GameObjectTemplateModel templateModel = GameObjectDataContainer.GameObjectTemplateMappable.RetrieveEntity(entityGuid);
 			GameObjectInstanceModel instanceModel = GameObjectDataContainer.GameObjectInstanceMappable.RetrieveEntity(entityGuid);
 
-			return new EntityActorStateInitializeMessage<BehaviourGameObjectState<TBehaviourType>>(new BehaviourGameObjectState<TBehaviourType>(EntityDataMappable.RetrieveEntity(entityGuid), entityGuid, instanceModel, templateModel, GameObjectDataContainer.GetBehaviourInstanceData<TBehaviourType>(entityGuid)));
+			return new EntityActorStateInitializeMessage<BehaviourGameObjectState<TBehaviourType>>(new BehaviourGameObjectState<TBehaviourType>(EntityDataMappable.RetrieveEntity(entityGuid), entityGuid, instanceModel, templateModel, GameObjectDataContainer.GetBehaviourInstanceData<TBehaviourType>(entityGuid), InterestMappable.RetrieveEntity(entityGuid)));
 		}
 
 		private Type ComputeExpectedActorType(GameObjectType templateModelObjectType)
