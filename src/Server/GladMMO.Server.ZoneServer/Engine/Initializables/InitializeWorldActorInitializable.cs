@@ -23,8 +23,7 @@ namespace GladMMO
 
 		public async Task OnGameInitialized()
 		{
-			//TODO: Eventually we should treat the world as a network object.
-			WorldReference.Tell(new EntityActorStateInitializeMessage<DefaultEntityActorStateContainer>(new DefaultEntityActorStateContainer(new EntityFieldDataCollection(8), NetworkEntityGuid.Empty)));
+			DefaultWorldActor.InitializeActor(WorldReference, new WorldActorState());
 		}
 	}
 }

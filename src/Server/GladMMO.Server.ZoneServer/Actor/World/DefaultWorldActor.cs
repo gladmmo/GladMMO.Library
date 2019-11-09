@@ -19,14 +19,10 @@ namespace GladMMO
 			bool result = base.ExtractPotentialStateMessage(message, out entityActorStateInitializeMessage);
 
 			if (result)
-				return result;
-			else
 			{
-				if (message is EntityActorStateInitializeMessage<DefaultEntityActorStateContainer> defaultStateMessage)
-				{
-					entityActorStateInitializeMessage = new EntityActorStateInitializeMessage<WorldActorState>(new WorldActorState(Context, Context));
-					return true;
-				}
+				entityActorStateInitializeMessage.State.WorldActorFactory = Context;
+				entityActorStateInitializeMessage.State.DeathWatchService = Context;
+				return result;
 			}
 
 			return false;
