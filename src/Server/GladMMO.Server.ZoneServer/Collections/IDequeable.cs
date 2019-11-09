@@ -16,5 +16,7 @@ namespace GladMMO
 		/// </summary>
 		/// <returns></returns>
 		T Dequeue();
+
+		void Clear();
 	}
 }
