@@ -36,8 +36,8 @@ namespace GladMMO
 			//Set the sync context
 			UnityAsyncHelper.InitializeSyncContext();
 
-			//TODO: We need to not have such a high rate of Update and need to add prediction.
-			Application.targetFrameRate = 60;
+			Application.targetFrameRate = 10;
+			QualitySettings.vSyncCount = 0;
 
 			HandleConfigurableDependencies(builder);
 
