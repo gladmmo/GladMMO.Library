@@ -31,6 +31,11 @@ namespace GladMMO
 			set => InternalActorRefDictionary[key] = value;
 		}
 
+		public bool TryGetValue(NetworkEntityGuid key, out IActorRef value)
+		{
+			return this.InternalActorRefDictionary.TryGetValue(key, out value);
+		}
+
 		public IEnumerator<IActorRef> GetEnumerator()
 		{
 			return InternalActorRefDictionary.GetEnumerator();

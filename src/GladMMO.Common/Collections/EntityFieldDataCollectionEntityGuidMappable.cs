@@ -39,6 +39,18 @@ namespace GladMMO
 			set => InternalMap[key] = value;
 		}
 
+		public bool TryGetValue(NetworkEntityGuid key, out IChangeTrackableEntityDataCollection value)
+		{
+			return InternalMap.TryGetValue(key, out value);
+		}
+
+		public bool TryGetValue(NetworkEntityGuid key, out IEntityDataFieldContainer value)
+		{
+			bool result = InternalMap.TryGetValue(key, out var value2);
+			value = value2;
+			return result;
+		}
+
 		IEnumerator<IEntityDataFieldContainer> IEnumerable<IEntityDataFieldContainer>.GetEnumerator()
 		{
 			return InternalMap.Values.GetEnumerator();

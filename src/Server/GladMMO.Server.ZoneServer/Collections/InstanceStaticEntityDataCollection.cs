@@ -41,6 +41,11 @@ namespace GladMMO
 			return InstanceLinkedDataMap.Remove(entityGuid.EntryId);
 		}
 
+		public bool TryGetValue(NetworkEntityGuid key, out TInstanceLinkedDataType value)
+		{
+			return this.InstanceLinkedDataMap.TryGetValue(key.EntryId, out value);
+		}
+
 		public IEnumerator<TInstanceLinkedDataType> GetEnumerator()
 		{
 			return InstanceLinkedDataMap.Values.GetEnumerator();

@@ -72,6 +72,11 @@ namespace GladMMO
 			return this.Remove(entityGuid);
 		}
 
+		public bool TryGetValue(NetworkEntityGuid key, out IMovementData value)
+		{
+			return this.InternallyManagedMovementDictionary.TryGetValue(key, out value);
+		}
+
 		public IEnumerator<IMovementData> GetEnumerator()
 		{
 			return this.InternallyManagedMovementDictionary.GetEnumerator();

@@ -70,6 +70,11 @@ namespace GladMMO
 				throw new InvalidOperationException($"Entity: {key} is not a creature.");
 		}
 
+		public bool TryGetValue(NetworkEntityGuid key, out TTemplateModelType value)
+		{
+			return this.CreatureTemplateDictionary.TryGetValue(key.EntryId, out value);
+		}
+
 		public IEnumerator<TTemplateModelType> GetEnumerator()
 		{
 			return CreatureTemplateDictionary.Values.GetEnumerator();
@@ -133,7 +138,12 @@ namespace GladMMO
 			return false;
 		}
 
-		public IEnumerator<TInstanceModelType> GetEnumerator()
+		public bool TryGetValue(NetworkEntityGuid key, out TInstanceModelType value)
+		{
+			return this.CreatureInstanceDictionary.TryGetValue(key.EntryId, out value);
+		}
+
+		IEnumerator<TInstanceModelType> IEnumerable<TInstanceModelType>.GetEnumerator()
 		{
 			return this.CreatureInstanceDictionary.Values.GetEnumerator();
 		}
