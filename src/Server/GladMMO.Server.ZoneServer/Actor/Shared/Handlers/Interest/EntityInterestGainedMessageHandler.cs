@@ -7,11 +7,11 @@ namespace GladMMO
 	[EntityActorMessageHandler(typeof(DefaultCreatureEntityActor))]
 	[EntityActorMessageHandler(typeof(DefaultPlayerEntityActor))]
 	[EntityActorMessageHandler(typeof(DefaultGameObjectEntityActor))]
-	public sealed class EntityInterestGainedMessageHandler : BaseEntityActorMessageHandler<DefaultEntityActorStateContainer, EntityInterestGainedMessage>
+	public sealed class EntityInterestGainedMessageHandler : BaseEntityActorMessageHandler<NetworkedObjectActorState, EntityInterestGainedMessage>
 	{
-		protected override void HandleMessage(EntityActorMessageContext messageContext, DefaultEntityActorStateContainer state, EntityInterestGainedMessage message)
+		protected override void HandleMessage(EntityActorMessageContext messageContext, NetworkedObjectActorState state, EntityInterestGainedMessage message)
 		{
-
+			state.Interest.Add(message.Entity);
 		}
 	}
 }
