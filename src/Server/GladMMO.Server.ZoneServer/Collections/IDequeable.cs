@@ -11,12 +11,6 @@ namespace GladMMO
 		/// </summary>
 		bool isEmpty { get; }
 
-		/// <summary>
-		/// Dequeues an instance.
-		/// </summary>
-		/// <returns></returns>
-		T Dequeue();
-
 		void Clear();
 	}
 }

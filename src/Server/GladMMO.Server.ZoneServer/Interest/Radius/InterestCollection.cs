@@ -57,7 +57,7 @@ namespace GladMMO
 			if(value == null) throw new ArgumentNullException(nameof(value));
 
 			//Both key and value are the same
-			_EnteringQueue.Enqueue(value);
+			_EnteringQueue.Add(value);
 		}
 
 		/// <inheritdoc />
@@ -82,7 +82,7 @@ namespace GladMMO
 		{
 			if(key == null) throw new ArgumentNullException(nameof(key));
 
-			_LeavingQueue.Enqueue(key);
+			_LeavingQueue.Add(key);
 			return true;
 		}
 

@@ -4,24 +4,13 @@ using System.Text;
 
 namespace GladMMO
 {
-	public sealed class NetworkEntityGuidQueue : Queue<NetworkEntityGuid>, IDequeable<NetworkEntityGuid>
+	public sealed class NetworkEntityGuidQueue : HashSet<NetworkEntityGuid>, IDequeable<NetworkEntityGuid>
 	{
 		/// <inheritdoc />
 		public bool isEmpty => Count == 0;
 
 		public NetworkEntityGuidQueue()
-		{
-
-		}
-
-		public NetworkEntityGuidQueue(IEnumerable<NetworkEntityGuid> collection) 
-			: base(collection)
-		{
-
-		}
-
-		public NetworkEntityGuidQueue(int capacity) 
-			: base(capacity)
+			: base(NetworkGuidEqualityComparer<NetworkEntityGuid>.Instance)
 		{
 
 		}

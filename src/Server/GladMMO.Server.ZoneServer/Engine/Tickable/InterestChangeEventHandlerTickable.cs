@@ -62,9 +62,13 @@ namespace GladMMO
 				switch (args.ChangingType)
 				{
 					case EntityInterestChangeEventArgs.ChangeType.Enter:
-						//If the entity already knows the entity then we should not register it.
-						ManagedInterestCollections.RetrieveEntity(args.EnterableEntity).Register(args.EnteringEntity, args.EnteringEntity);
-						ActorReferenceMappable.RetrieveEntity(args.EnterableEntity).Tell(new EntityInterestGainedMessage(args.EnteringEntity), ActorReferenceMappable.RetrieveEntity(args.EnterableEntity));
+						if(args.EnterableEntity != args.EnteringEntity)
+						//if (!ManagedInterestCollections.RetrieveEntity(args.EnterableEntity).Contains(args.EnteringEntity))
+						{
+							//If the entity already knows the entity then we should not register it.
+							ManagedInterestCollections.RetrieveEntity(args.EnterableEntity).Register(args.EnteringEntity, args.EnteringEntity);
+							ActorReferenceMappable.RetrieveEntity(args.EnterableEntity).Tell(new EntityInterestGainedMessage(args.EnteringEntity), ActorReferenceMappable.RetrieveEntity(args.EnterableEntity));
+						}
 						break;
 					case EntityInterestChangeEventArgs.ChangeType.Exit:
 						//It's possible we'll want to be having an entity EXIT without being known.
