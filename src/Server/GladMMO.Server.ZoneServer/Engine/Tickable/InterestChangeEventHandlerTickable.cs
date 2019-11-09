@@ -62,6 +62,9 @@ namespace GladMMO
 				switch (args.ChangingType)
 				{
 					case EntityInterestChangeEventArgs.ChangeType.Enter:
+						//HelloKitty: Yea, so if we actually register a change of ourselves it actually breaks the client for some reason
+						//right now but technically everything is fine even if we do. No exceptions on either the client or server. Very strange
+						//but limited time to investigate
 						if(args.EnterableEntity != args.EnteringEntity)
 						//if (!ManagedInterestCollections.RetrieveEntity(args.EnterableEntity).Contains(args.EnteringEntity))
 						{
