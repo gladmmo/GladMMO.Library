@@ -12,7 +12,7 @@ namespace GladMMO
 		/// <summary>
 		/// Entity's interest collection.
 		/// </summary>
-		private InterestCollection Interest { get; }
+		public InterestCollection Interest { get; }
 
 		public NetworkedObjectActorState(IEntityDataFieldContainer entityData, NetworkEntityGuid entityGuid, [NotNull] InterestCollection interest) 
 			: base(entityData, entityGuid)
