@@ -121,5 +121,13 @@ namespace GladMMO
 				return Directive.Stop;
 			});
 		}
+
+		public static void InitializeActor(IActorRef actorReference, TActorStateType state)
+		{
+			if (actorReference == null) throw new ArgumentNullException(nameof(actorReference));
+			if (state == null) throw new ArgumentNullException(nameof(state));
+
+			actorReference.Tell(new EntityActorStateInitializeMessage<TActorStateType>(state));
+		}
 	}
 }
