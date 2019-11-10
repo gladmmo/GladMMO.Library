@@ -33,7 +33,7 @@ namespace GladMMO.Component
 			{
 				OnMouseClicked?.Invoke(this, new MouseButtonClickEventArgs(MouseButtonClickEventArgs.MouseType.Left));
 			}
-			else if (Input.GetMouseButton(1))
+			else if (Input.GetMouseButtonDown(1))
 			{
 				OnMouseClicked?.Invoke(this, new MouseButtonClickEventArgs(MouseButtonClickEventArgs.MouseType.Right));
 			}
