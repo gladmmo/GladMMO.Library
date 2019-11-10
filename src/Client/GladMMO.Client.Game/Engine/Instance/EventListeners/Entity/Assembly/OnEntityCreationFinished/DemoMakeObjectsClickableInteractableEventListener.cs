@@ -37,7 +37,7 @@ namespace GladMMO
 			collider.isTrigger = true;
 			entity.AddComponent<OnMouseClickedComponent>().OnMouseClicked += (sender, eventArgs) =>
 			{
-				SendService.SendMessage(new ClientInteractGameObjectRequestPayload(args.EntityGuid));
+				SendService.SendMessage(new ClientInteractNetworkedObjectRequestPayload(args.EntityGuid));
 			};
 		}
 	}

@@ -61,7 +61,7 @@ namespace GladMMO
 
 			//We send an empty interaction packet to indicate our target should be cleared.
 			//Server doesn't actually know the entity we targeted went out of scope.
-			SendService.SendMessage(new ClientInteractGameObjectRequestPayload(NetworkEntityGuid.Empty));
+			SendService.SendMessage(new ClientInteractNetworkedObjectRequestPayload(NetworkEntityGuid.Empty));
 		}
 
 		protected override void OnLocalPlayerSpawned(LocalPlayerSpawnedEventArgs args)

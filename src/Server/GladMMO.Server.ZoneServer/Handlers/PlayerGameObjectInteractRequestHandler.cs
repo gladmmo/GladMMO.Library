@@ -9,7 +9,7 @@ using GladNet;
 namespace GladMMO
 {
 	[ServerSceneTypeCreate(ServerSceneType.Default)]
-	public sealed class PlayerGameObjectInteractRequestHandler : ControlledEntityRequestHandler<ClientInteractGameObjectRequestPayload>
+	public sealed class PlayerGameObjectInteractRequestHandler : ControlledEntityRequestHandler<ClientInteractNetworkedObjectRequestPayload>
 	{
 		private IReadonlyEntityGuidMappable<IActorRef> ActorReferenceMappable { get; }
 
@@ -25,7 +25,7 @@ namespace GladMMO
 		}
 
 		/// <inheritdoc />
-		protected override Task HandleMessage(IPeerSessionMessageContext<GameServerPacketPayload> context, ClientInteractGameObjectRequestPayload payload, NetworkEntityGuid guid)
+		protected override Task HandleMessage(IPeerSessionMessageContext<GameServerPacketPayload> context, ClientInteractNetworkedObjectRequestPayload payload, NetworkEntityGuid guid)
 		{
 			//Special case here that indicates the client wants to clear their target.
 			if (payload.TargetGameObjectGuid == NetworkEntityGuid.Empty)

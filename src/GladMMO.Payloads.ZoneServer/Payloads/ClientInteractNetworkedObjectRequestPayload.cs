@@ -6,16 +6,16 @@ using ProtoBuf;
 namespace GladMMO
 {
 	/// <summary>
-	/// Payload for the client to request an interaction with a GameObject.
+	/// Payload for the client to request an interaction with a networked object.
 	/// </summary>
 	[ProtoContract]
-	[GamePayload(GamePayloadOperationCode.GameObjectInteract)]
-	public sealed class ClientInteractGameObjectRequestPayload : GameClientPacketPayload
+	[GamePayload(GamePayloadOperationCode.NetworkedObjectInteract)]
+	public sealed class ClientInteractNetworkedObjectRequestPayload : GameClientPacketPayload
 	{
 		[ProtoMember(1)]
 		public NetworkEntityGuid TargetGameObjectGuid { get; private set; }
 
-		public ClientInteractGameObjectRequestPayload([NotNull] NetworkEntityGuid targetGameObjectGuid)
+		public ClientInteractNetworkedObjectRequestPayload([NotNull] NetworkEntityGuid targetGameObjectGuid)
 		{
 			TargetGameObjectGuid = targetGameObjectGuid ?? throw new ArgumentNullException(nameof(targetGameObjectGuid));
 		}
@@ -23,7 +23,7 @@ namespace GladMMO
 		/// <summary>
 		/// Serializer ctor.
 		/// </summary>
-		protected ClientInteractGameObjectRequestPayload()
+		protected ClientInteractNetworkedObjectRequestPayload()
 		{
 
 		}
