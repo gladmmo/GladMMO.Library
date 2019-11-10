@@ -24,6 +24,9 @@ namespace GladMMO
 			//TODO: Better handling of enum names for specialized gameobjects
 			//Basically this is how clients see the avatar id.
 			state.EntityData.SetFieldValue(GameObjectField.RESERVED_DATA_1, state.BehaviourData.AvatarModelId);
+
+			//avatar pedestal can be interacted with.
+			state.EntityData.AddBaseObjectFieldFlag(BaseObjectFieldFlags.UNIT_FLAG_INTERACTABLE);
 		}
 	}
 }
