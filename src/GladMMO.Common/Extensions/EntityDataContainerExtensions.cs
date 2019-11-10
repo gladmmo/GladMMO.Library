@@ -28,11 +28,9 @@ namespace GladMMO
 		/// <summary>
 		/// TODO: Doc
 		/// </summary>
-		/// <typeparam name="TValueType"></typeparam>
 		/// <param name="container"></param>
 		/// <param name="flag"></param>
-		public static void AddBaseObjectFieldFlag<TValueType>(this IEntityDataFieldContainer container, BaseObjectFieldFlags flag)
-			where TValueType : struct
+		public static void AddBaseObjectFieldFlag(this IEntityDataFieldContainer container, BaseObjectFieldFlags flag)
 		{
 			if(container == null) throw new ArgumentNullException(nameof(container));
 
@@ -42,11 +40,9 @@ namespace GladMMO
 		/// <summary>
 		/// TODO: Doc
 		/// </summary>
-		/// <typeparam name="TValueType"></typeparam>
 		/// <param name="container"></param>
 		/// <param name="flag"></param>
-		public static void RemoveBaseObjectFieldFlag<TValueType>(this IEntityDataFieldContainer container, BaseObjectFieldFlags flag)
-			where TValueType : struct
+		public static void RemoveBaseObjectFieldFlag(this IEntityDataFieldContainer container, BaseObjectFieldFlags flag)
 		{
 			if(container == null) throw new ArgumentNullException(nameof(container));
 
