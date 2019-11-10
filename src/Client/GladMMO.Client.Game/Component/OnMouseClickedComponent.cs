@@ -5,13 +5,38 @@ using UnityEngine;
 
 namespace GladMMO.Component
 {
+	public sealed class MouseButtonClickEventArgs : EventArgs
+	{
+		public enum MouseType
+		{
+			Unknown = 0,
+			Left = 1,
+			Right = 2
+		}
+
+		public MouseType Type { get; }
+
+		public MouseButtonClickEventArgs(MouseType type)
+		{
+			Type = type;
+		}
+	}
+
 	public sealed class OnMouseClickedComponent : MonoBehaviour
 	{
-		public event EventHandler OnMouseClicked;
+		public event EventHandler<MouseButtonClickEventArgs> OnMouseClicked;
 
-		private void OnMouseDown()
+		//Can't deal with right clicks on MouseClick callback
+		private void OnMouseOver()
 		{
-			OnMouseClicked?.Invoke(this, EventArgs.Empty);
+			if(Input.GetMouseButtonDown(0))
+			{
+				OnMouseClicked?.Invoke(this, new MouseButtonClickEventArgs(MouseButtonClickEventArgs.MouseType.Left));
+			}
+			else if (Input.GetMouseButton(1))
+			{
+				OnMouseClicked?.Invoke(this, new MouseButtonClickEventArgs(MouseButtonClickEventArgs.MouseType.Right));
+			}
 		}
 	}
 }
