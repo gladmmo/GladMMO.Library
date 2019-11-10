@@ -9,12 +9,12 @@ using GladNet;
 namespace GladMMO
 {
 	[ServerSceneTypeCreate(ServerSceneType.Default)]
-	public sealed class PlayernteractNetworkedObjectRequestHandler : ControlledEntityRequestHandler<ClientInteractNetworkedObjectRequestPayload>
+	public sealed class PlayerInteractNetworkedObjectRequestHandler : ControlledEntityRequestHandler<ClientInteractNetworkedObjectRequestPayload>
 	{
 		private IReadonlyEntityGuidMappable<IActorRef> ActorReferenceMappable { get; }
 
 		/// <inheritdoc />
-		public PlayernteractNetworkedObjectRequestHandler(
+		public PlayerInteractNetworkedObjectRequestHandler(
 			ILog logger,
 			IReadonlyConnectionEntityCollection connectionIdToEntityMap,
 			IContextualResourceLockingPolicy<NetworkEntityGuid> lockingPolicy,
@@ -53,8 +53,8 @@ namespace GladMMO
 						interactable.Tell(new InteractWithEntityActorMessage(guid), playerRef);
 						break;
 					case ClientInteractNetworkedObjectRequestPayload.InteractType.Selection:
-						//TODO: This is technically an exploit here. This could allow the player to target unselectable objects. But a very minor exploit.
-						playerRef.TellSelf(new SetEntityActorTargetMessage(guid));
+						//TODO: This can technically cause a race condition for target selection if client selects too fast.
+						interactable.Tell(new EntityActorSelectedMessage(guid), playerRef);
 						break;
 					default:
 						throw new ArgumentOutOfRangeException($"Client used unknown interaction Type: {(int)payload.InteractionType}");

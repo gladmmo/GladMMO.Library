@@ -28,7 +28,8 @@ namespace GladMMO
 			//Make sure the creature can be selected.
 			if (state.EntityData.HasBaseObjectFieldFlag(BaseObjectFieldFlags.UNIT_FLAG_NOT_SELECTABLE))
 			{
-				Logger.Debug($"Entity: {message.SelectorGuid} tried to select unselectable Creature: {state.EntityGuid}");
+				if(Logger.IsWarnEnabled)
+					Logger.Warn($"Entity: {message.SelectorGuid} tried to select unselectable Creature: {state.EntityGuid}");
 				return;
 			}
 
