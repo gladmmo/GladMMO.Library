@@ -42,6 +42,18 @@ namespace GladMMO
 		/// </summary>
 		/// <param name="container"></param>
 		/// <param name="flag"></param>
+		public static bool HasBaseObjectFieldFlag(this IEntityDataFieldContainer container, BaseObjectFieldFlags flag)
+		{
+			if(container == null) throw new ArgumentNullException(nameof(container));
+
+			return ((BaseObjectFieldFlags) container.GetFieldValue<int>(BaseObjectField.UNIT_FIELD_FLAGS) & flag) == flag;
+		}
+
+		/// <summary>
+		/// TODO: Doc
+		/// </summary>
+		/// <param name="container"></param>
+		/// <param name="flag"></param>
 		public static void RemoveBaseObjectFieldFlag(this IEntityDataFieldContainer container, BaseObjectFieldFlags flag)
 		{
 			if(container == null) throw new ArgumentNullException(nameof(container));
