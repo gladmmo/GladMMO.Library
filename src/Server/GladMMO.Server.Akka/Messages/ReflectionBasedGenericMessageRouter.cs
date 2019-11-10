@@ -10,7 +10,7 @@ namespace GladMMO
 	public sealed class ReflectionBasedGenericMessageRouter<TEntityActorType, TEntityActorStateType> : IEntityActorMessageRouteable<TEntityActorType, TEntityActorStateType> 
 		where TEntityActorStateType : IEntityActorStateContainable
 	{
-		private Dictionary<Type, IEntityActorMessageHandler<TEntityActorStateType, EntityActorMessage>> EntityHandlerMap { get; }
+		private Dictionary<Type, List<IEntityActorMessageHandler<TEntityActorStateType, EntityActorMessage>>> EntityHandlerMap { get; }
 
 		private ILog Logger { get; }
 
@@ -22,7 +22,7 @@ namespace GladMMO
 			if(Logger.IsInfoEnabled)
 				Logger.Info($"ReflectionBasedGenericMessageRouter<{typeof(TEntityActorType).Name}, {typeof(TEntityActorStateType)}> handler count: {messageHandlers.Count()}");
 
-			EntityHandlerMap = new Dictionary<Type, IEntityActorMessageHandler<TEntityActorStateType, EntityActorMessage>>(10);
+			EntityHandlerMap = new Dictionary<Type, List<IEntityActorMessageHandler<TEntityActorStateType, EntityActorMessage>>>(10);
 
 			foreach (var handler in messageHandlers)
 			{
@@ -33,7 +33,13 @@ namespace GladMMO
 						if(Logger.IsInfoEnabled)
 							Logger.Info($"Registering: {handler.GetType().Name} for Actor: {actorHandlerAttribute.TargetActorType}");
 
-						EntityHandlerMap[handler.MessageType] = handler;
+						if(EntityHandlerMap.ContainsKey(handler.MessageType))
+							EntityHandlerMap[handler.MessageType].Add(handler);
+						else
+						{
+							EntityHandlerMap[handler.MessageType] = new List<IEntityActorMessageHandler<TEntityActorStateType, EntityActorMessage>>(2);
+							EntityHandlerMap[handler.MessageType].Add(handler);
+						}
 						break;
 					}
 				}
@@ -48,7 +54,11 @@ namespace GladMMO
 
 			if (EntityHandlerMap.ContainsKey(message.GetType()))
 			{
-				EntityHandlerMap[message.GetType()].HandleMessage(messageContext, state, message);
+				foreach (var handler in EntityHandlerMap[message.GetType()])
+				{
+					handler.HandleMessage(messageContext, state, message);
+				}
+
 				return true;
 			}
 			else
