@@ -9,7 +9,7 @@ namespace GladMMO
 		UNIT_FIELD_DISPLAYID = 0, // Size: 1, Type: INT, Flags: PUBLIC
 		OBJECT_FIELD_SCALE_X = 1, // Size: 1, Type: FLOAT, Flags: PUBLIC
 		UNIT_FIELD_LEVEL = 2, // Size: 1, Type: INT, Flags: PUBLIC
-		RESERVED_1 = 3,
+		UNIT_FIELD_FLAGS = 3, //index for 4 byte flags for the object.
 		RESERVED_2 = 4,
 		RESERVED_3 = 5,
 		RESERVED_4 = 6,
