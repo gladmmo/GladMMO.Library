@@ -4,7 +4,7 @@ using System.Text;
 
 namespace GladMMO
 {
-	public sealed class EntityActorSelectedMessage
+	public sealed class EntityActorSelectedMessage : EntityActorMessage
 	{
 		/// <summary>
 		/// Guid of the entity attempting to select us.
