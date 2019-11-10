@@ -36,13 +36,17 @@ namespace GladMMO
 				if (!pendingCast.IsSpellcastFinished(TimeService.CurrentLocalTime))
 				{
 					//TODO: Send packet spell response to client.
+					messageContext.Entity.TellSelf(new SpellCastFailedMessage(SpellCastResult.SPELL_FAILED_SPELL_IN_PROGRESS, message.SpellId));
 					return;
 				}
 			}
 
 			//TODO: Send packet spell response.
 			if (!TargetValidator.isSpellTargetViable(message.SpellId, state))
+			{
+				messageContext.Entity.TellSelf(new SpellCastFailedMessage(SpellCastResult.SPELL_FAILED_BAD_TARGETS, message.SpellId));
 				return;
+			}
 
 			PendingSpellCastData castData = CreatePendingSpellData(state, message);
 
