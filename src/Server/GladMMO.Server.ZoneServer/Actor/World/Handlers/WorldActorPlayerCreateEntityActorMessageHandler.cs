@@ -5,6 +5,7 @@ using Akka.Actor;
 using Akka.Actor.Dsl;
 using Akka.DI.Core;
 using Common.Logging;
+using GladNet;
 
 namespace GladMMO
 {
@@ -21,17 +22,21 @@ namespace GladMMO
 
 		private IReadonlyEntityGuidMappable<InterestCollection> InterestMappable { get; }
 
+		private IReadonlyEntityGuidMappable<IPeerPayloadSendService<GameServerPacketPayload>> SendServiceMappable { get; }
+
 		public WorldActorPlayerCreateEntityActorMessageHandler([NotNull] ILog logger,
 			[NotNull] IDependencyResolver resolver,
 			[NotNull] IEntityGuidMappable<IActorRef> actorRefMappable,
 			[NotNull] IReadonlyEntityGuidMappable<IEntityDataFieldContainer> entityDataMappable,
-			[NotNull] IReadonlyEntityGuidMappable<InterestCollection> interestMappable)
+			[NotNull] IReadonlyEntityGuidMappable<InterestCollection> interestMappable,
+			[NotNull] IReadonlyEntityGuidMappable<IPeerPayloadSendService<GameServerPacketPayload>> sendServiceMappable)
 		{
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
 			Resolver = resolver ?? throw new ArgumentNullException(nameof(resolver));
 			ActorRefMappable = actorRefMappable ?? throw new ArgumentNullException(nameof(actorRefMappable));
 			EntityDataMappable = entityDataMappable ?? throw new ArgumentNullException(nameof(entityDataMappable));
 			InterestMappable = interestMappable ?? throw new ArgumentNullException(nameof(interestMappable));
+			SendServiceMappable = sendServiceMappable ?? throw new ArgumentNullException(nameof(sendServiceMappable));
 		}
 
 		protected override void HandleMessage(EntityActorMessageContext messageContext, WorldActorState state, CreatePlayerEntityActorMessage message)
@@ -58,7 +63,7 @@ namespace GladMMO
 		{
 			//Create the actor and tell it to initialize.
 			IActorRef actorRef = state.WorldActorFactory.ActorOf(Resolver.Create<DefaultPlayerEntityActor>(), message.EntityGuid.RawGuidValue.ToString());
-			DefaultPlayerEntityActor.InitializeActor(actorRef, new NetworkedObjectActorState(EntityDataMappable.RetrieveEntity(message.EntityGuid), message.EntityGuid, InterestMappable.RetrieveEntity(message.EntityGuid)));
+			DefaultPlayerEntityActor.InitializeActor(actorRef, new DefaultPlayerEntityActorState(EntityDataMappable.RetrieveEntity(message.EntityGuid), message.EntityGuid, InterestMappable.RetrieveEntity(message.EntityGuid), SendServiceMappable.RetrieveEntity(message.EntityGuid)));
 
 			//Actors aren't removed from this
 			//they are just replaced with nobody.
