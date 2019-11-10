@@ -9,12 +9,12 @@ using GladNet;
 namespace GladMMO
 {
 	[ServerSceneTypeCreate(ServerSceneType.Default)]
-	public sealed class PlayerGameObjectInteractRequestHandler : ControlledEntityRequestHandler<ClientInteractNetworkedObjectRequestPayload>
+	public sealed class PlayernteractNetworkedObjectRequestHandler : ControlledEntityRequestHandler<ClientInteractNetworkedObjectRequestPayload>
 	{
 		private IReadonlyEntityGuidMappable<IActorRef> ActorReferenceMappable { get; }
 
 		/// <inheritdoc />
-		public PlayerGameObjectInteractRequestHandler(
+		public PlayernteractNetworkedObjectRequestHandler(
 			ILog logger,
 			IReadonlyConnectionEntityCollection connectionIdToEntityMap,
 			IContextualResourceLockingPolicy<NetworkEntityGuid> lockingPolicy,
