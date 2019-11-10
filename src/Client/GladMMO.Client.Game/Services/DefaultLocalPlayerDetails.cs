@@ -22,12 +22,12 @@ namespace GladMMO
 		/// <summary>
 		/// Entity data map used to access the entity data through <see cref="EntityData"/>
 		/// </summary>
-		private IReadonlyEntityGuidMappable<IEntityDataFieldContainer> FieldDataMap { get; }
+		private IReadonlyEntityGuidMappable<IChangeTrackableEntityDataCollection> FieldDataMap { get; }
 
 		private ILocalCharacterDataRepository CharacterDataRepo { get; }
 
 		/// <inheritdoc />
-		public DefaultLocalPlayerDetails(IReadonlyEntityGuidMappable<IEntityDataFieldContainer> fieldDataMap, [NotNull] ILocalCharacterDataRepository characterDataRepo)
+		public DefaultLocalPlayerDetails(IReadonlyEntityGuidMappable<IChangeTrackableEntityDataCollection> fieldDataMap, [NotNull] ILocalCharacterDataRepository characterDataRepo)
 		{
 			FieldDataMap = fieldDataMap ?? throw new ArgumentNullException(nameof(fieldDataMap));
 			CharacterDataRepo = characterDataRepo ?? throw new ArgumentNullException(nameof(characterDataRepo));
