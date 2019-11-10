@@ -13,11 +13,11 @@ namespace GladMMO
 	public sealed class ClientInteractNetworkedObjectRequestPayload : GameClientPacketPayload
 	{
 		[ProtoMember(1)]
-		public NetworkEntityGuid TargetGameObjectGuid { get; private set; }
+		public NetworkEntityGuid TargetObjectGuid { get; private set; }
 
-		public ClientInteractNetworkedObjectRequestPayload([NotNull] NetworkEntityGuid targetGameObjectGuid)
+		public ClientInteractNetworkedObjectRequestPayload([NotNull] NetworkEntityGuid targetObjectGuid)
 		{
-			TargetGameObjectGuid = targetGameObjectGuid ?? throw new ArgumentNullException(nameof(targetGameObjectGuid));
+			TargetObjectGuid = targetObjectGuid ?? throw new ArgumentNullException(nameof(targetObjectGuid));
 		}
 
 		/// <summary>

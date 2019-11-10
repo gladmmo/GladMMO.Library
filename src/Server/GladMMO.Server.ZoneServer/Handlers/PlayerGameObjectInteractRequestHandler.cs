@@ -28,24 +28,24 @@ namespace GladMMO
 		protected override Task HandleMessage(IPeerSessionMessageContext<GameServerPacketPayload> context, ClientInteractNetworkedObjectRequestPayload payload, NetworkEntityGuid guid)
 		{
 			//Special case here that indicates the client wants to clear their target.
-			if (payload.TargetGameObjectGuid == NetworkEntityGuid.Empty)
+			if (payload.TargetObjectGuid == NetworkEntityGuid.Empty)
 			{
 				IActorRef playerRef = ActorReferenceMappable.RetrieveEntity(guid);
-				playerRef.Tell(new SetEntityActorTargetMessage(payload.TargetGameObjectGuid));
+				playerRef.Tell(new SetEntityActorTargetMessage(payload.TargetObjectGuid));
 				//Just send the empty set target to the player entity
 				return Task.CompletedTask;
 			}
 
-			if (!ActorReferenceMappable.ContainsKey(payload.TargetGameObjectGuid))
+			if (!ActorReferenceMappable.ContainsKey(payload.TargetObjectGuid))
 			{
 				if(Logger.IsWarnEnabled)
-					Logger.Warn($"Client: {guid} attempted to interact with unknown actor {payload.TargetGameObjectGuid}.");
+					Logger.Warn($"Client: {guid} attempted to interact with unknown actor {payload.TargetObjectGuid}.");
 			}
 			else
 			{
 				ProjectVersionStage.AssertBeta();
 				//TODO: Race condition where THIS CAN FAIL since IActorRefs are removed currently.
-				IActorRef interactable = ActorReferenceMappable.RetrieveEntity(payload.TargetGameObjectGuid);
+				IActorRef interactable = ActorReferenceMappable.RetrieveEntity(payload.TargetObjectGuid);
 				IActorRef playerRef = ActorReferenceMappable.RetrieveEntity(guid);
 
 				//Important to indicate that the player itself is sending it.
