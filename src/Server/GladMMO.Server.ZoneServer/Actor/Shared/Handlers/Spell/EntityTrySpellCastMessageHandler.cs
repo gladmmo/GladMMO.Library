@@ -47,6 +47,8 @@ namespace GladMMO
 				messageContext.Entity.TellSelf(new SpellCastFailedMessage(SpellCastResult.SPELL_FAILED_BAD_TARGETS, message.SpellId));
 				return;
 			}
+			else if(state.EntityGuid.EntityType == EntityType.Player) //only players should get successful callbacks
+				messageContext.Entity.TellSelf(new SpellCastFailedMessage(SpellCastResult.SPELL_FAILED_SUCCESS, message.SpellId));
 
 			PendingSpellCastData castData = CreatePendingSpellData(state, message);
 
