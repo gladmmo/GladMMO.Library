@@ -26,6 +26,34 @@ namespace GladMMO
 		}
 
 		/// <summary>
+		/// TODO: Doc
+		/// </summary>
+		/// <typeparam name="TValueType"></typeparam>
+		/// <param name="container"></param>
+		/// <param name="flag"></param>
+		public static void AddBaseObjectFieldFlag<TValueType>(this IEntityDataFieldContainer container, BaseObjectFieldFlags flag)
+			where TValueType : struct
+		{
+			if(container == null) throw new ArgumentNullException(nameof(container));
+
+			container.SetFieldValue(BaseObjectField.UNIT_FIELD_FLAGS, (int)((BaseObjectFieldFlags)container.GetFieldValue<int>(BaseObjectField.UNIT_FIELD_FLAGS) | flag));
+		}
+
+		/// <summary>
+		/// TODO: Doc
+		/// </summary>
+		/// <typeparam name="TValueType"></typeparam>
+		/// <param name="container"></param>
+		/// <param name="flag"></param>
+		public static void RemoveBaseObjectFieldFlag<TValueType>(this IEntityDataFieldContainer container, BaseObjectFieldFlags flag)
+			where TValueType : struct
+		{
+			if(container == null) throw new ArgumentNullException(nameof(container));
+
+			container.SetFieldValue(BaseObjectField.UNIT_FIELD_FLAGS, (int)((BaseObjectFieldFlags)container.GetFieldValue<int>(BaseObjectField.UNIT_FIELD_FLAGS) & ~flag));
+		}
+
+		/// <summary>
 		/// Helper extension for setting entity data in <see cref="IEntityDataFieldContainer"/>
 		/// based on the int value of a specified Enum value <see cref="index"/>.
 		/// </summary>
