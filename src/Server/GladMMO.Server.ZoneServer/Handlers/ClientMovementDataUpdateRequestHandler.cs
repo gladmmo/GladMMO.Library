@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using Akka.Actor;
 using Common.Logging;
 using GladNet;
 using JetBrains.Annotations;
@@ -20,6 +21,8 @@ namespace GladMMO
 
 		private IReadonlyNetworkTimeService TimeService { get; }
 
+		private IReadonlyEntityGuidMappable<IActorRef> ActorReferenceMappable { get; }
+
 		/// <inheritdoc />
 		public ClientMovementDataUpdateRequestHandler(
 			[NotNull] ILog logger, 
@@ -28,13 +31,15 @@ namespace GladMMO
 			IContextualResourceLockingPolicy<NetworkEntityGuid> lockingPolicy,
 			[NotNull] IEntityGuidMappable<IMovementGenerator<GameObject>> movementGenerator,
 			[NotNull] IReadonlyEntityGuidMappable<CharacterController> characterControllerMappable,
-			[NotNull] IReadonlyNetworkTimeService timeService) 
+			[NotNull] IReadonlyNetworkTimeService timeService,
+			[NotNull] IReadonlyEntityGuidMappable<IActorRef> actorReferenceMappable) 
 			: base(logger, connectionIdToEntityMap, lockingPolicy)
 		{
 			MovementDataMap = movementDataMap ?? throw new ArgumentNullException(nameof(movementDataMap));
 			MovementGenerator = movementGenerator ?? throw new ArgumentNullException(nameof(movementGenerator));
 			CharacterControllerMappable = characterControllerMappable ?? throw new ArgumentNullException(nameof(characterControllerMappable));
 			TimeService = timeService ?? throw new ArgumentNullException(nameof(timeService));
+			ActorReferenceMappable = actorReferenceMappable ?? throw new ArgumentNullException(nameof(actorReferenceMappable));
 		}
 
 		/// <inheritdoc />
@@ -46,6 +51,10 @@ namespace GladMMO
 				IMovementData movementData = MovementDataMap.RetrieveEntity(guid);
 				PositionChangeMovementData changeMovementData = BuildPositionChangeMovementData(payload, generator, movementData);
 				MovementDataMap.ReplaceObject(guid, changeMovementData);
+
+				IActorRef playerActorRef = ActorReferenceMappable.RetrieveEntity(guid);
+
+				playerActorRef.TellSelf(new PlayerMovementStateChangedMessage(changeMovementData.Direction));
 
 				//If the generator is running, we should use its initial position instead of the last movement data's position.
 				MovementGenerator.ReplaceObject(guid, BuildCharacterControllerMovementGenerator(guid, changeMovementData, generator, movementData));
