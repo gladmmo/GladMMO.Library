@@ -52,12 +52,15 @@ namespace GladMMO
 				messageContext.Entity.TellSelf(new SpellCastFailedMessage(SpellCastResult.SPELL_FAILED_BAD_TARGETS, message.SpellId));
 				return;
 			}
-			else if(state.EntityGuid.EntityType == EntityType.Player) //only players should get successful callbacks
-				messageContext.Entity.TellSelf(new SpellCastFailedMessage(SpellCastResult.SPELL_FAILED_SUCCESS, message.SpellId));
+			else if(!MovementGeneratorMappable.RetrieveEntity(state.EntityGuid).isFinished)
+			{
+				messageContext.Entity.TellSelf(new SpellCastFailedMessage(SpellCastResult.SPELL_FAILED_MOVING, message.SpellId));
+				return;
+			}
 
 			//We also need to check if we're moving. If the generator isn't finished then that means we're actually moving.
-			if (!MovementGeneratorMappable.RetrieveEntity(state.EntityGuid).isFinished)
-				messageContext.Entity.TellSelf(new SpellCastFailedMessage(SpellCastResult.SPELL_FAILED_MOVING, message.SpellId));
+			if(state.EntityGuid.EntityType == EntityType.Player) //only players should get successful callbacks
+				messageContext.Entity.TellSelf(new SpellCastFailedMessage(SpellCastResult.SPELL_FAILED_SUCCESS, message.SpellId));
 
 			PendingSpellCastData castData = CreatePendingSpellData(state, message);
 
