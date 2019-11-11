@@ -9,7 +9,7 @@ namespace GladMMO
 	{
 		public Vector2 Direction { get; }
 
-		public bool isMoving => Direction == Vector2.zero;
+		public bool isMoving => Direction != Vector2.zero;
 
 		public PlayerMovementStateChangedMessage(Vector2 direction)
 		{
