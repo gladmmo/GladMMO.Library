@@ -74,7 +74,7 @@ namespace GladMMO
 			if (castData.isInstantCast)
 				messageContext.Entity.TellSelf(new PendingSpellCastFinishedWaitingMessage(castData));
 			else
-				messageContext.ContinuationScheduler.ScheduleTellOnce(castData.CastTime, messageContext.Entity, new PendingSpellCastFinishedWaitingMessage(castData), messageContext.Entity);
+				messageContext.ContinuationScheduler.ScheduleTellOnce(castData.CastTime, messageContext.Entity, new PendingSpellCastFinishedWaitingMessage(castData), messageContext.Entity, castData.PendingCancel);
 		}
 
 		private void SetCastingEntityState(DefaultEntityActorStateContainer state, TryCastSpellMessage message)
