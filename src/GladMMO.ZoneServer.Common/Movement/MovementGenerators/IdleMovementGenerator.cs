@@ -20,6 +20,9 @@ namespace GladMMO
 
 		protected override Vector3 Start(GameObject entity, long currentTime)
 		{
+			//Immediately we're idle so let's stop the generator.
+			StopGenerator();
+
 			//Let's do nothing!
 			return InitialPosition;
 		}

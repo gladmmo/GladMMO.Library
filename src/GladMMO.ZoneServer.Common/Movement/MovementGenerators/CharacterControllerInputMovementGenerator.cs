@@ -45,6 +45,12 @@ namespace GladMMO
 			//Directly set to the current position incase we're not there.
 			entity.transform.position = CurrentPosition;
 
+			//If the direction is zero just stop the generator.
+			if (this.MovementData.Direction == Vector2.zero)
+			{
+				StopGenerator();
+			}
+
 			return entity.transform.position;
 		}
 

@@ -45,8 +45,6 @@ namespace GladMMO
 
 		private PathState State { get; set; }
 
-		private bool isPathingEnabled { get; set; } = true;
-
 		/// <inheritdoc />
 		public PathMovementGenerator(PathBasedMovementData movementData) 
 			: base(movementData)
@@ -65,7 +63,7 @@ namespace GladMMO
 			State = ComputeInitialPathState(currentTime);
 
 			//If pathing was disabled it means we're at the end when we start, we need to set to last point
-			if (!isPathingEnabled)
+			if (!isFinished)
 				return entity.transform.position = MovementData.MovementPath[MovementData.MovementPath.Count - 1];
 
 			//Just call update, which will set the position.
@@ -124,7 +122,7 @@ namespace GladMMO
 			}
 
 			//TODO: We're always assuming there are two points here.
-			isPathingEnabled = false;
+			StopGenerator();
 			if(MovementData.MovementPath.Count >= 2)
 				return new PathState(MovementData.MovementPath.Count - 1, currentTime, CalculateDistanceLengthInTicks(ComputeDistanceOffsetByMovementDataIndex(MovementData.MovementPath.Count - 2).magnitude, movementSpeedPerSecond));
 			else
@@ -148,10 +146,6 @@ namespace GladMMO
 		/// <inheritdoc />
 		protected override Vector3 InternalUpdate(GameObject entity, long currentTime)
 		{
-			//If we're done pathing we shouldn't do any computation
-			if (!isPathingEnabled)
-				return entity.transform.position;
-
 			ProjectVersionStage.AssertAlpha();
 			for(int i = 0; i < MovementData.MovementPath.Count - 1; i++)
 				Debug.DrawLine(MovementData.MovementPath[i], MovementData.MovementPath[i + 1], Color.red, 0.1f);
@@ -166,7 +160,7 @@ namespace GladMMO
 				if (State.PathIndex + 2 >= MovementData.MovementPath.Count)
 				{
 					State = new PathState(MovementData.MovementPath.Count - 1, currentTime, 0);
-					isPathingEnabled = false;
+					StopGenerator();
 				}
 				else
 					State = new PathState(State.PathIndex + 1, currentTime, CalculateDistanceLengthInTicks((MovementData.MovementPath[State.PathIndex + 2] - MovementData.MovementPath[State.PathIndex + 1]).magnitude, 1.0f));

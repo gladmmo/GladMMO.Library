@@ -36,6 +36,7 @@ namespace GladMMO
 
 		public bool isStarted { get; private set; } = false;
 
+		public bool isFinished { get; private set; } = false;
 
 		protected abstract Vector3 Start(GameObject entity, long currentTime);
 
@@ -52,6 +53,9 @@ namespace GladMMO
 		/// <inheritdoc />
 		public void Update(GameObject entity, long currentTime)
 		{
+			if (isFinished)
+				return;
+
 			if (!isStarted)
 			{
 				CurrentPosition = Start(entity, currentTime);
@@ -67,6 +71,11 @@ namespace GladMMO
 		/// <param name="entity"></param>
 		/// <param name="currentTime"></param>
 		protected abstract Vector3 InternalUpdate(GameObject entity, long currentTime);
+
+		protected void StopGenerator()
+		{
+			isFinished = true;
+		}
 	}
 
 	/// <summary>
