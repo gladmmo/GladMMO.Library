@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using UnityEngine;
 
 namespace GladMMO
 {
@@ -16,15 +17,19 @@ namespace GladMMO
 
 		private ISpellTargetValidator TargetValidator { get; }
 
+		private IReadonlyEntityGuidMappable<IMovementGenerator<GameObject>> MovementGeneratorMappable { get; }
+
 		public EntityTrySpellCastMessageHandler([NotNull] INetworkTimeService timeService,
 			[NotNull] IEntityGuidMappable<PendingSpellCastData> pendingSpellCastMappable,
 			[NotNull] IPendingSpellCastFactory pendingSpellFactory,
-			[NotNull] ISpellTargetValidator targetValidator)
+			[NotNull] ISpellTargetValidator targetValidator,
+			[NotNull] IReadonlyEntityGuidMappable<IMovementGenerator<GameObject>> movementGeneratorMappable)
 		{
 			TimeService = timeService ?? throw new ArgumentNullException(nameof(timeService));
 			PendingSpellCastMappable = pendingSpellCastMappable ?? throw new ArgumentNullException(nameof(pendingSpellCastMappable));
 			PendingSpellFactory = pendingSpellFactory ?? throw new ArgumentNullException(nameof(pendingSpellFactory));
 			TargetValidator = targetValidator ?? throw new ArgumentNullException(nameof(targetValidator));
+			MovementGeneratorMappable = movementGeneratorMappable ?? throw new ArgumentNullException(nameof(movementGeneratorMappable));
 		}
 
 		protected override void HandleMessage(EntityActorMessageContext messageContext, DefaultEntityActorStateContainer state, TryCastSpellMessage message)
@@ -49,6 +54,10 @@ namespace GladMMO
 			}
 			else if(state.EntityGuid.EntityType == EntityType.Player) //only players should get successful callbacks
 				messageContext.Entity.TellSelf(new SpellCastFailedMessage(SpellCastResult.SPELL_FAILED_SUCCESS, message.SpellId));
+
+			//We also need to check if we're moving. If the generator isn't finished then that means we're actually moving.
+			if (!MovementGeneratorMappable.RetrieveEntity(state.EntityGuid).isFinished)
+				messageContext.Entity.TellSelf(new SpellCastFailedMessage(SpellCastResult.SPELL_FAILED_MOVING, message.SpellId));
 
 			PendingSpellCastData castData = CreatePendingSpellData(state, message);
 
