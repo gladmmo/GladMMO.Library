@@ -34,7 +34,8 @@ namespace GladMMO
 	{
 		public Vector3 CurrentPosition { get; private set; }
 
-		public bool isRunning { get; private set; } = false;
+		public bool isStarted { get; private set; } = false;
+
 
 		protected abstract Vector3 Start(GameObject entity, long currentTime);
 
@@ -51,10 +52,10 @@ namespace GladMMO
 		/// <inheritdoc />
 		public void Update(GameObject entity, long currentTime)
 		{
-			if (!isRunning)
+			if (!isStarted)
 			{
 				CurrentPosition = Start(entity, currentTime);
-				isRunning = true;
+				isStarted = true;
 			}
 
 			CurrentPosition = InternalUpdate(entity, currentTime); //don't update if we called Start

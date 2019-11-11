@@ -24,6 +24,11 @@ namespace GladMMO
 		/// <summary>
 		/// Indicates if the movement generator is running.
 		/// </summary>
-		bool isRunning { get; }
+		bool isStarted { get; }
+
+		/// <summary>
+		/// Indicates if the generator is finished.
+		/// </summary>
+		bool isFinished { get; }
 	}
 }
