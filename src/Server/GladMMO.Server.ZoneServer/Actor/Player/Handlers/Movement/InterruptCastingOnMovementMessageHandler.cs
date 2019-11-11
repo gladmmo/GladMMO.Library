@@ -27,7 +27,7 @@ namespace GladMMO
 				{
 					PendingSpellCastData castData = PendingSpellCastMappable.RetrieveEntity(state.EntityGuid);
 
-					if (castData.isInstantCast || castData.IsSpellcastFinished(TimeService.CurrentLocalTime))
+					if (castData.isInstantCast || castData.isCastCanceled || castData.IsSpellcastFinished(TimeService.CurrentLocalTime))
 						return;
 
 					//Ok, so we're casting and moving. Let's cancel the cast.
