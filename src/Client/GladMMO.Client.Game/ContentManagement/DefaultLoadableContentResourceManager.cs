@@ -104,9 +104,19 @@ namespace GladMMO
 						return;
 					}
 
-					//otherwise, we still don't have it so we should initialize it.
-					this.ResourceHandleCache[contentId] = new ReferenceCountedPrefabContentResourceHandle(DownloadHandlerAssetBundle.GetContent(asyncOperation.webRequest));
-					completionSource.SetResult(TryLoadContentPrefab(contentId)); //we assume this will work now.
+					try
+					{
+						//otherwise, we still don't have it so we should initialize it.
+						this.ResourceHandleCache[contentId] = new ReferenceCountedPrefabContentResourceHandle(DownloadHandlerAssetBundle.GetContent(asyncOperation.webRequest));
+						completionSource.SetResult(TryLoadContentPrefab(contentId)); //we assume this will work now.
+					}
+					catch (Exception e)
+					{
+						if(Logger.IsErrorEnabled)
+							Logger.Error($"Failed to load AssetBundle for Content: {contentId}. Reason: {e.ToString()}");
+
+						//Don't rethrow, causing build breaking.
+					}
 				}
 			};
 
