@@ -9,12 +9,27 @@ using VivoxUnity;
 
 namespace GladMMO
 {
+	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
+	public sealed class InitializeVivoxOnStart : IGameStartable
+	{
+		private VivoxUnity.Client VoiceClient { get; }
+
+		public InitializeVivoxOnStart([NotNull] VivoxUnity.Client voiceClient)
+		{
+			VoiceClient = voiceClient ?? throw new ArgumentNullException(nameof(voiceClient));
+		}
+
+		public async Task OnGameStart()
+		{
+			await new UnityYieldAwaitable();
+			VoiceClient.Initialize();
+		}
+	}
+
 	[AdditionalRegisterationAs(typeof(IVoiceNetworkInitializedEventSubscribable))]
 	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
 	public sealed class OnLocalPlayerCreatedInitializeVoiceServiceClientEventListener : BaseSingleEventListenerInitializable<ILocalPlayerSpawnedEventSubscribable, LocalPlayerSpawnedEventArgs>, IVoiceNetworkInitializedEventSubscribable
 	{
-		private VivoxUnity.Client VoiceClient { get; }
-
 		private ILog Logger { get; }
 
 		public event EventHandler OnVoiceNetworkInitialized;
@@ -22,12 +37,10 @@ namespace GladMMO
 		private IChatTextMessageRecievedEventPublisher TextChatPublisher { get; }
 
 		public OnLocalPlayerCreatedInitializeVoiceServiceClientEventListener(ILocalPlayerSpawnedEventSubscribable subscriptionService,
-			[NotNull] VivoxUnity.Client voiceClient,
 			[NotNull] ILog logger,
 			[NotNull] IChatTextMessageRecievedEventPublisher textChatPublisher) 
 			: base(subscriptionService)
 		{
-			VoiceClient = voiceClient ?? throw new ArgumentNullException(nameof(voiceClient));
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
 			TextChatPublisher = textChatPublisher ?? throw new ArgumentNullException(nameof(textChatPublisher));
 		}
@@ -36,8 +49,6 @@ namespace GladMMO
 		{
 			try
 			{
-				//It may seem small and simple, or dumb to seperate all this stuff, but a lot of stuff is going to happen with voice related events.
-				VoiceClient.Initialize();
 				OnVoiceNetworkInitialized?.Invoke(this, EventArgs.Empty);
 			}
 			catch (Exception e)
