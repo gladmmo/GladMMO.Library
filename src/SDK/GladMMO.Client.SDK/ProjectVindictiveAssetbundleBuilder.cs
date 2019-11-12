@@ -63,7 +63,7 @@ namespace GladMMO.SDK
 				Debug.Log($"Temp Path At: {Path.Combine(projectPath, "AssetBundles")} exists");
 
 			//TODO: Is it ok to specify build target like this?
-			return BuildPipeline.BuildAssetBundles("AssetBundles/temp/", new AssetBundleBuild[1] { bundle }, BuildAssetBundleOptions.ChunkBasedCompression, BuildTarget.StandaloneWindows);
+			return BuildPipeline.BuildAssetBundles("AssetBundles/temp/", new AssetBundleBuild[1] { bundle }, BuildAssetBundleOptions.ChunkBasedCompression, EditorUserBuildSettings.activeBuildTarget);
 		}
 	}
 }
