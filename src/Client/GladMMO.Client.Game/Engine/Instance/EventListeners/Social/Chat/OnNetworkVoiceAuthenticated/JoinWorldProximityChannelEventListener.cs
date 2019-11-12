@@ -4,6 +4,7 @@ using System.Text;
 using Common.Logging;
 using Glader.Essentials;
 using Nito.AsyncEx;
+using UnityEngine;
 using VivoxUnity;
 
 namespace GladMMO
@@ -58,7 +59,8 @@ namespace GladMMO
 					//IChannelSession testChannel = args.Session.GetChannelSession(new ChannelId("vrguardian-vrg-dev", "lobby", "vdx5.vivox.com", ChannelType.Positional));
 					IChannelSession testChannel = args.Session.GetChannelSession(new ChannelId(channelJoinResponse.Result.ChannelURI));
 
-					await testChannel.ConnectionAsync(true, true, TransmitPolicy.Yes, channelJoinResponse.Result.AuthToken)
+					//Prevent mobile platform connecting to audio
+					await testChannel.ConnectionAsync(Application.isMobilePlatform ? false : true, true, TransmitPolicy.Yes, channelJoinResponse.Result.AuthToken)
 						.ConfigureAwait(true);
 
 					//Documentation says that it doesn't mean the channel has connected yet.
