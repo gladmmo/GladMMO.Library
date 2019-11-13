@@ -35,6 +35,8 @@ namespace GladMMO
 
 		public DbSet<SpellEntryModel> SpellEntries { get; set; }
 
+		public DbSet<SpellLevelLearned> LevelLearnedSpells { get; set; }
+
 		public ContentDatabaseContext(DbContextOptions<ContentDatabaseContext> options) 
 			: base(options)
 		{
