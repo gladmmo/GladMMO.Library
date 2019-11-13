@@ -38,5 +38,19 @@ namespace GladMMO
 
 			return Json(new SpellDefinitionCollectionResponseModel(transportableEntryModels, transportableEffectEntryModels));
 		}
+
+		//TODO: Renable caching when we're done with development.
+		[HttpGet("levellearned")]
+		//[ResponseCache(Duration = 5000)]
+		public async Task<IActionResult> GetLevelLearnedSpellsAsync([FromServices] ILevelLearnedSpellRepository levelLearnedSpellRepository, 
+			[FromServices] ITypeConverterProvider<SpellLevelLearned, SpellLevelLearnedDefinition> converter)
+		{
+			SpellLevelLearned[] levelLearneds = await levelLearnedSpellRepository.RetrieveAllAsync();
+			SpellLevelLearnedDefinition[] spellLevelLearnedDefinitions = levelLearneds
+				.Select(converter.Convert)
+				.ToArrayTryAvoidCopy();
+
+			return Json(new SpellLevelLearnedCollectionResponseModel(spellLevelLearnedDefinitions));
+		}
 	}
 }

@@ -17,6 +17,11 @@ namespace GladMMO
 		[JsonIgnore]
 		public IReadOnlyCollection<SpellLevelLearnedDefinition> LevelLearnedSpells => _LevelLearnedSpells;
 
+		public SpellLevelLearnedCollectionResponseModel([NotNull] SpellLevelLearnedDefinition[] levelLearnedSpells)
+		{
+			_LevelLearnedSpells = levelLearnedSpells ?? throw new ArgumentNullException(nameof(levelLearnedSpells));
+		}
+
 		/// <summary>
 		/// Serializer ctor.
 		/// </summary>
