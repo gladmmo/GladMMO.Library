@@ -89,6 +89,7 @@ namespace GladMMO
 
 			//Spells
 			services.AddTransient<ISpellEntryRepository, DatabaseBackedSpellEntryModelRepository>();
+			services.AddTransient<ILevelLearnedSpellRepository, DatabaseBackedLevelLearnedSpellRepository>();
 
 			//Player
 			//DatabaseBackedPlayerSpawnPointEntryRepository : IPlayerSpawnPointEntryRepository
