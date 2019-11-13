@@ -19,10 +19,13 @@ namespace GladMMO
 
 		public SpellCastResult ValidateSpellCast(DefaultEntityActorStateContainer state, SpellDefinitionDataModel spellDefinition)
 		{
-			PendingSpellCastData pendingCast = PendingSpellCastMappable.RetrieveEntity(state.EntityGuid);
+			if (PendingSpellCastMappable.ContainsKey(state.EntityGuid))
+			{
+				PendingSpellCastData pendingCast = PendingSpellCastMappable.RetrieveEntity(state.EntityGuid);
 
-			if(!pendingCast.IsSpellcastFinished(TimeService.CurrentLocalTime))
-				return SpellCastResult.SPELL_FAILED_SPELL_IN_PROGRESS;
+				if(!pendingCast.IsSpellcastFinished(TimeService.CurrentLocalTime))
+					return SpellCastResult.SPELL_FAILED_SPELL_IN_PROGRESS;
+			}
 
 			return SpellCastResult.SPELL_FAILED_SUCCESS;
 		}
