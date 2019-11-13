@@ -26,5 +26,20 @@ namespace GladMMO
 		{
 			return await (await GetService().ConfigureAwait(false)).GetDefaultSpellDataAsync().ConfigureAwait(false);
 		}
+
+		public async Task<SpellLevelLearnedCollectionResponseModel> GetLevelLearnedSpellsAsync()
+		{
+			return await (await GetService().ConfigureAwait(false)).GetLevelLearnedSpellsAsync().ConfigureAwait(false);
+		}
+
+		public async Task<SpellLevelLearnedCollectionResponseModel> GetLevelLearnedSpellsAsync(EntityPlayerClassType classType)
+		{
+			return await (await GetService().ConfigureAwait(false)).GetLevelLearnedSpellsAsync(classType).ConfigureAwait(false);
+		}
+
+		public async Task<SpellLevelLearnedCollectionResponseModel> GetLevelLearnedSpellsAsync(EntityPlayerClassType classType, int level)
+		{
+			return await (await GetService().ConfigureAwait(false)).GetLevelLearnedSpellsAsync(classType, level).ConfigureAwait(false);
+		}
 	}
 }
