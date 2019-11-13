@@ -63,6 +63,20 @@ namespace GladMMO
 			return Json(CreatedSpellLevelLearnedCollectionResponse(levelLearneds, converter));
 		}
 
+		[HttpGet("levellearned/{class}/{level}")]
+		//[ResponseCache(Duration = 5000)]
+		public async Task<IActionResult> GetLevelLearnedSpellsForClassAndLevelAsync([FromRoute(Name = "class")] EntityPlayerClassType classType, [FromRoute] int level, [FromServices] ILevelLearnedSpellRepository levelLearnedSpellRepository,
+			[FromServices] ITypeConverterProvider<SpellLevelLearned, SpellLevelLearnedDefinition> converter)
+		{
+			if(!Enum.IsDefined(typeof(EntityPlayerClassType), classType)) throw new InvalidEnumArgumentException(nameof(classType), (int)classType, typeof(EntityPlayerClassType));
+			if (level < 0)
+				return Json(new SpellLevelLearnedCollectionResponseModel(Array.Empty<SpellLevelLearnedDefinition>()));
+
+			SpellLevelLearned[] levelLearneds = await levelLearnedSpellRepository.RetrieveAllAsync(classType, level);
+
+			return Json(CreatedSpellLevelLearnedCollectionResponse(levelLearneds, converter));
+		}
+
 		private SpellLevelLearnedCollectionResponseModel CreatedSpellLevelLearnedCollectionResponse([NotNull] SpellLevelLearned[] learnedSpells, [FromServices] [NotNull] ITypeConverterProvider<SpellLevelLearned, SpellLevelLearnedDefinition> converter)
 		{
 			if (learnedSpells == null) throw new ArgumentNullException(nameof(learnedSpells));

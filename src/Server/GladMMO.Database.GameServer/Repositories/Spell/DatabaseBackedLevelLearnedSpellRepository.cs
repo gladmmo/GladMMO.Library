@@ -28,5 +28,12 @@ namespace GladMMO
 				.Where(lls => lls.CharacterClassType == classType)
 				.ToArrayAsync(cancellationToken);
 		}
+
+		public Task<SpellLevelLearned[]> RetrieveAllAsync(EntityPlayerClassType classType, int level, CancellationToken cancellationToken = default(CancellationToken))
+		{
+			return Context.LevelLearnedSpells
+				.Where(lls => lls.CharacterClassType == classType && lls.LevelLearned <= level)
+				.ToArrayAsync(cancellationToken);
+		}
 	}
 }
