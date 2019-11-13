@@ -15,5 +15,11 @@ namespace GladMMO
 		{
 
 		}
+
+		public Task<SpellLevelLearned[]> RetrieveAllAsync(CancellationToken cancellationToken = default(CancellationToken))
+		{
+			return Context.LevelLearnedSpells
+				.ToArrayAsync(cancellationToken);
+		}
 	}
 }
