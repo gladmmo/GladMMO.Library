@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -46,11 +47,32 @@ namespace GladMMO
 			[FromServices] ITypeConverterProvider<SpellLevelLearned, SpellLevelLearnedDefinition> converter)
 		{
 			SpellLevelLearned[] levelLearneds = await levelLearnedSpellRepository.RetrieveAllAsync();
-			SpellLevelLearnedDefinition[] spellLevelLearnedDefinitions = levelLearneds
+
+			return Json(CreatedSpellLevelLearnedCollectionResponse(levelLearneds, converter));
+		}
+
+		[HttpGet("levellearned/{class}")]
+		//[ResponseCache(Duration = 5000)]
+		public async Task<IActionResult> GetLevelLearnedSpellsForClassAsync([FromRoute(Name = "class")] EntityPlayerClassType classType, [FromServices] ILevelLearnedSpellRepository levelLearnedSpellRepository,
+			[FromServices] ITypeConverterProvider<SpellLevelLearned, SpellLevelLearnedDefinition> converter)
+		{
+			if (!Enum.IsDefined(typeof(EntityPlayerClassType), classType)) throw new InvalidEnumArgumentException(nameof(classType), (int) classType, typeof(EntityPlayerClassType));
+
+			SpellLevelLearned[] levelLearneds = await levelLearnedSpellRepository.RetrieveAllAsync(classType);
+
+			return Json(CreatedSpellLevelLearnedCollectionResponse(levelLearneds, converter));
+		}
+
+		private SpellLevelLearnedCollectionResponseModel CreatedSpellLevelLearnedCollectionResponse([NotNull] SpellLevelLearned[] learnedSpells, [FromServices] [NotNull] ITypeConverterProvider<SpellLevelLearned, SpellLevelLearnedDefinition> converter)
+		{
+			if (learnedSpells == null) throw new ArgumentNullException(nameof(learnedSpells));
+			if (converter == null) throw new ArgumentNullException(nameof(converter));
+
+			SpellLevelLearnedDefinition[] spellLevelLearnedDefinitions = learnedSpells
 				.Select(converter.Convert)
 				.ToArrayTryAvoidCopy();
 
-			return Json(new SpellLevelLearnedCollectionResponseModel(spellLevelLearnedDefinitions));
+			return new SpellLevelLearnedCollectionResponseModel(spellLevelLearnedDefinitions);
 		}
 	}
 }

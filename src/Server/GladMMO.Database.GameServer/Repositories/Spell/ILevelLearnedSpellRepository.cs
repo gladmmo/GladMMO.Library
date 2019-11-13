@@ -9,5 +9,7 @@ namespace GladMMO
 	public interface ILevelLearnedSpellRepository : IGenericRepositoryCrudable<int, SpellLevelLearned>
 	{
 		Task<SpellLevelLearned[]> RetrieveAllAsync(CancellationToken cancellationToken = default(CancellationToken));
+
+		Task<SpellLevelLearned[]> RetrieveAllAsync(EntityPlayerClassType classType, CancellationToken cancellationToken = default(CancellationToken));
 	}
 }
