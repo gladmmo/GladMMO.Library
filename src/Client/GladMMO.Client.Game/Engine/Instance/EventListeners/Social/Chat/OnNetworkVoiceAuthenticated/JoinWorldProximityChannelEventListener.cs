@@ -60,7 +60,7 @@ namespace GladMMO
 					IChannelSession testChannel = args.Session.GetChannelSession(new ChannelId(channelJoinResponse.Result.ChannelURI));
 
 					//Prevent mobile platform connecting to audio
-					await testChannel.ConnectionAsync(Application.isMobilePlatform ? false : true, true, TransmitPolicy.Yes, channelJoinResponse.Result.AuthToken)
+					await testChannel.ConnectionAsync(true, true, TransmitPolicy.Yes, channelJoinResponse.Result.AuthToken)
 						.ConfigureAwait(true);
 
 					//Documentation says that it doesn't mean the channel has connected yet.
