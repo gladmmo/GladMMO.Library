@@ -14,9 +14,9 @@ namespace GladMMO
 			TargetValidator = targetValidator ?? throw new ArgumentNullException(nameof(targetValidator));
 		}
 
-		public SpellCastResult ValidateSpellCast(DefaultEntityActorStateContainer actorState, SpellDefinitionDataModel spellDefinition)
+		public SpellCastResult ValidateSpellCast(DefaultEntityActorStateContainer actorState, int spellId)
 		{
-			if (!TargetValidator.isSpellTargetViable(spellDefinition.SpellId, actorState))
+			if (!TargetValidator.isSpellTargetViable(spellId, actorState))
 				return SpellCastResult.SPELL_FAILED_BAD_TARGETS;
 
 			return SpellCastResult.SPELL_FAILED_SUCCESS;

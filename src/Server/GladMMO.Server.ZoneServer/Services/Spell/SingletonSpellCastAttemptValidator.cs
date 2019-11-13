@@ -17,11 +17,11 @@ namespace GladMMO
 			Validators = validators.ToArray();
 		}
 
-		public SpellCastResult ValidateSpellCast(DefaultEntityActorStateContainer actorState, SpellDefinitionDataModel spellDefinition)
+		public SpellCastResult ValidateSpellCast(DefaultEntityActorStateContainer actorState, int spellId)
 		{
 			foreach (var validator in Validators)
 			{
-				SpellCastResult result = validator.ValidateSpellCast(actorState, spellDefinition);
+				SpellCastResult result = validator.ValidateSpellCast(actorState, spellId);
 
 				//If not successful we failed and no longer need to validate. We know something is wrong.
 				if (result != SpellCastResult.SPELL_FAILED_SUCCESS)

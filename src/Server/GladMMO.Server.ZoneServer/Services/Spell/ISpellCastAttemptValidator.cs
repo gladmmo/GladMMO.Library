@@ -11,8 +11,8 @@ namespace GladMMO
 		/// Any other result indicates failure.
 		/// </summary>
 		/// <param name="actorState">The actor's state.</param>
-		/// <param name="spellDefinition">The spell definition.</param>
+		/// <param name="spellId"></param>
 		/// <returns>The potential failure result of spell cast validation.</returns>
-		SpellCastResult ValidateSpellCast(DefaultEntityActorStateContainer actorState, SpellDefinitionDataModel spellDefinition);
+		SpellCastResult ValidateSpellCast(DefaultEntityActorStateContainer actorState, int spellId);
 	}
 }

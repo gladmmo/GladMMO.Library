@@ -15,46 +15,26 @@ namespace GladMMO
 
 		private IPendingSpellCastFactory PendingSpellFactory { get; }
 
-		private ISpellTargetValidator TargetValidator { get; }
-
-		private IReadonlyEntityGuidMappable<IMovementGenerator<GameObject>> MovementGeneratorMappable { get; }
+		private ISpellCastAttemptValidator SpellCastValidator { get; }
 
 		public EntityTrySpellCastMessageHandler([NotNull] INetworkTimeService timeService,
 			[NotNull] IEntityGuidMappable<PendingSpellCastData> pendingSpellCastMappable,
 			[NotNull] IPendingSpellCastFactory pendingSpellFactory,
-			[NotNull] ISpellTargetValidator targetValidator,
-			[NotNull] IReadonlyEntityGuidMappable<IMovementGenerator<GameObject>> movementGeneratorMappable)
+			[NotNull] ISpellCastAttemptValidator spellCastValidator)
 		{
 			TimeService = timeService ?? throw new ArgumentNullException(nameof(timeService));
 			PendingSpellCastMappable = pendingSpellCastMappable ?? throw new ArgumentNullException(nameof(pendingSpellCastMappable));
 			PendingSpellFactory = pendingSpellFactory ?? throw new ArgumentNullException(nameof(pendingSpellFactory));
-			TargetValidator = targetValidator ?? throw new ArgumentNullException(nameof(targetValidator));
-			MovementGeneratorMappable = movementGeneratorMappable ?? throw new ArgumentNullException(nameof(movementGeneratorMappable));
+			SpellCastValidator = spellCastValidator ?? throw new ArgumentNullException(nameof(spellCastValidator));
 		}
 
 		protected override void HandleMessage(EntityActorMessageContext messageContext, DefaultEntityActorStateContainer state, TryCastSpellMessage message)
 		{
-			if (PendingSpellCastMappable.ContainsKey(state.EntityGuid))
+			//Validate the cast before we starer it at all.
+			SpellCastResult spellCastAttemptValidationResult = SpellCastValidator.ValidateSpellCast(state, message.SpellId);
+			if (spellCastAttemptValidationResult != SpellCastResult.SPELL_FAILED_SUCCESS)
 			{
-				PendingSpellCastData pendingCast = PendingSpellCastMappable.RetrieveEntity(state.EntityGuid);
-
-				if (!pendingCast.IsSpellcastFinished(TimeService.CurrentLocalTime))
-				{
-					//TODO: Send packet spell response to client.
-					messageContext.Entity.TellSelf(new SpellCastFailedMessage(SpellCastResult.SPELL_FAILED_SPELL_IN_PROGRESS, message.SpellId));
-					return;
-				}
-			}
-
-			//TODO: Send packet spell response.
-			if (!TargetValidator.isSpellTargetViable(message.SpellId, state))
-			{
-				messageContext.Entity.TellSelf(new SpellCastFailedMessage(SpellCastResult.SPELL_FAILED_BAD_TARGETS, message.SpellId));
-				return;
-			}
-			else if(!MovementGeneratorMappable.RetrieveEntity(state.EntityGuid).isFinished)
-			{
-				messageContext.Entity.TellSelf(new SpellCastFailedMessage(SpellCastResult.SPELL_FAILED_MOVING, message.SpellId));
+				messageContext.Entity.TellSelf(new SpellCastFailedMessage(spellCastAttemptValidationResult, message.SpellId));
 				return;
 			}
 

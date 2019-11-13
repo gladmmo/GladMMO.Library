@@ -15,7 +15,7 @@ namespace GladMMO
 			MovementGeneratorMappable = movementGeneratorMappable ?? throw new ArgumentNullException(nameof(movementGeneratorMappable));
 		}
 
-		public SpellCastResult ValidateSpellCast(DefaultEntityActorStateContainer state, SpellDefinitionDataModel spellDefinition)
+		public SpellCastResult ValidateSpellCast(DefaultEntityActorStateContainer state, int spellId)
 		{
 			if (!MovementGeneratorMappable.RetrieveEntity(state.EntityGuid).isFinished)
 				return SpellCastResult.SPELL_FAILED_MOVING;

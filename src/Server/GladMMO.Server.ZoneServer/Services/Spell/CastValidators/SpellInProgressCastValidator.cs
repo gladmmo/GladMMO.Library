@@ -17,7 +17,7 @@ namespace GladMMO
 			TimeService = timeService ?? throw new ArgumentNullException(nameof(timeService));
 		}
 
-		public SpellCastResult ValidateSpellCast(DefaultEntityActorStateContainer state, SpellDefinitionDataModel spellDefinition)
+		public SpellCastResult ValidateSpellCast(DefaultEntityActorStateContainer state, int spellId)
 		{
 			if (PendingSpellCastMappable.ContainsKey(state.EntityGuid))
 			{
