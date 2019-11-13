@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
 namespace GladMMO
 {
-	public sealed class DefaultLearnedSpellsCollection : ILearnedSpellsCollection
+	public sealed class DefaultLearnedSpellsCollection : ILearnedSpellsCollection, IReadonlyLearnedSpellsCollection
 	{
 		private Dictionary<long, SpellLevelLearnedDefinition> LevelLearnedDefinitions { get; } = new Dictionary<long, SpellLevelLearnedDefinition>(100);
 
@@ -18,9 +19,27 @@ namespace GladMMO
 				return false; //not a level learned spell.
 		}
 
+		public void Add([NotNull] SpellLevelLearnedDefinition levelLearnedDefinition)
+		{
+			if (levelLearnedDefinition == null) throw new ArgumentNullException(nameof(levelLearnedDefinition));
+
+			long key = ComputeKey(levelLearnedDefinition.SpellId, levelLearnedDefinition.CharacterClassType);
+			LevelLearnedDefinitions.Add(key, levelLearnedDefinition);
+		}
+
 		private long ComputeKey(int spellId, EntityPlayerClassType classType)
 		{
 			return ((long) spellId << 32) + (long)classType;
+		}
+
+		public IEnumerator<SpellLevelLearnedDefinition> GetEnumerator()
+		{
+			return LevelLearnedDefinitions.Values.GetEnumerator();
+		}
+
+		IEnumerator IEnumerable.GetEnumerator()
+		{
+			return GetEnumerator();
 		}
 	}
 }

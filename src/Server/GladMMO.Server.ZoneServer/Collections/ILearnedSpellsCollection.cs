@@ -4,7 +4,7 @@ using System.Text;
 
 namespace GladMMO
 {
-	public interface ILearnedSpellsCollection
+	public interface IReadonlyLearnedSpellsCollection : IEnumerable<SpellLevelLearnedDefinition>
 	{
 		/// <summary>
 		/// Indicates if a spell <see cref="spellId"/> is known/learned give the input composite key
@@ -15,5 +15,14 @@ namespace GladMMO
 		/// <param name="level">The level to check for.</param>
 		/// <returns>True if the spell is learned/known.</returns>
 		bool IsSpellKnown(int spellId, EntityPlayerClassType classType, int level);
+	}
+
+	public interface ILearnedSpellsCollection : IReadonlyLearnedSpellsCollection
+	{
+		/// <summary>
+		/// Adds a new defined <see cref="levelLearnedDefinition"/>.
+		/// </summary>
+		/// <param name="levelLearnedDefinition">The level learned definition.</param>
+		void Add(SpellLevelLearnedDefinition levelLearnedDefinition);
 	}
 }
