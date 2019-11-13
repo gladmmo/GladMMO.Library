@@ -35,6 +35,12 @@ namespace GladMMO
 			builder.RegisterType<DefaultSpellEffectApplicationMessageFactory>()
 				.As<ISpellEffectApplicationMessageFactory>()
 				.SingleInstance();
+
+			//DefaultLearnedSpellsCollection : ILearnedSpellsCollection, IReadonlyLearnedSpellsCollection
+			builder.RegisterType<DefaultLearnedSpellsCollection>()
+				.As<ILearnedSpellsCollection>()
+				.As<IReadonlyLearnedSpellsCollection>()
+				.SingleInstance();
 		}
 
 		private void RegisterSpellEffectHandlers(ActorAssemblyDefinitionConfiguration actorAssemblyConfig, ContainerBuilder builder)
