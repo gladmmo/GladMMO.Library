@@ -4,7 +4,7 @@ using System.Text;
 
 namespace GladMMO
 {
-	public interface IMovementInputController : IAxisInputController
+	public interface ICameraInputController : IAxisInputController
 	{
 
 	}
