@@ -14,10 +14,13 @@ namespace GladMMO
 
 		public float CurrentVertical => InputDelta.y;
 
+		public TouchPhase CurrentTouchPhase = TouchPhase.Ended;
 		public void Tick()
 		{
 			Touch touch = Input.GetTouch(0);
 			
+			CurrentTouchPhase = touch.phase;
+
 			switch (touch.phase)
 			{
 				case TouchPhase.Began:
@@ -39,5 +42,7 @@ namespace GladMMO
 					throw new ArgumentOutOfRangeException();
 			}
 		}
+
+		public bool isCameraControllerRunning => CurrentTouchPhase == TouchPhase.Moved;
 	}
 }

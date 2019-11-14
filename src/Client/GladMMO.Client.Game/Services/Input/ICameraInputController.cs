@@ -6,6 +6,7 @@ namespace GladMMO
 {
 	public interface ICameraInputController : IAxisInputController
 	{
+		bool isCameraControllerRunning { get; }
 
 	}
 }

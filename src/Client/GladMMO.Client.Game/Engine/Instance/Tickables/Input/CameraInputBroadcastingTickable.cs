@@ -96,7 +96,7 @@ namespace GladMMO
 				return;
 
 			//If not right-clicking then we shouldn't rotate the camera.
-			if (!Input.GetMouseButton((int) MouseButton.RightMouse))
+			if (!CameraInputController.isCameraControllerRunning)
 				return;
 
 			//float mouseX = Input.GetAxis("Mouse X");
