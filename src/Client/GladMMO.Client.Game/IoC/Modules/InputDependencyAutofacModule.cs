@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Autofac;
+using Glader.Essentials;
 using GladMMO.Services.Input;
 using UnityEngine;
 
@@ -42,6 +43,12 @@ namespace GladMMO
 
 			builder.RegisterType<MobileInputMovementInputController>()
 				.As<IMovementInputController>()
+				.SingleInstance();
+
+			//Don't want one ticking per dependency, so singletone is a MUST here.
+			builder.RegisterType<MobileInputCameraInputController>()
+				.As<ICameraInputController>()
+				.As<IGameTickable>()
 				.SingleInstance();
 		}
 	}
