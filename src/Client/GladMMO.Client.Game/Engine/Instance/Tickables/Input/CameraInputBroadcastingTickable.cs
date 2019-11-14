@@ -65,13 +65,17 @@ namespace GladMMO
 
 		public event EventHandler<CameraInputChangedEventArgs> OnCameraInputChange;
 
+		private ICameraInputController CameraInputController { get; }
+
 		public CameraInputBroadcastingTickable(ILocalPlayerSpawnedEventSubscribable subscriptionService, 
 			[NotNull] ILog logger,
-			[NotNull] IFactoryCreatable<CameraInputData, EmptyFactoryContext> cameraInputDataFactory) 
+			[NotNull] IFactoryCreatable<CameraInputData, EmptyFactoryContext> cameraInputDataFactory,
+			[NotNull] ICameraInputController cameraInputController) 
 			: base(subscriptionService)
 		{
 			if (cameraInputDataFactory == null) throw new ArgumentNullException(nameof(cameraInputDataFactory));
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
+			CameraInputController = cameraInputController ?? throw new ArgumentNullException(nameof(cameraInputController));
 
 			Data = new Lazy<CameraInputData>(() => cameraInputDataFactory.Create(EmptyFactoryContext.Instance));
 		}
@@ -95,11 +99,14 @@ namespace GladMMO
 			if (!Input.GetMouseButton((int) MouseButton.RightMouse))
 				return;
 
-			float mouseX = Input.GetAxis("Mouse X");
-			float mouseY = Input.GetAxis("Mouse Y");
+			//float mouseX = Input.GetAxis("Mouse X");
+			//float mouseY = Input.GetAxis("Mouse Y");
+
+			float mouseX = CameraInputController.CurrentHorizontal;
+			float mouseY = CameraInputController.CurrentVertical;
 
 			//We can skip this if the inputs are 0.
-			if (mouseY == mouseX && mouseY == 0.0f)
+			if(mouseY == mouseX && mouseY == 0.0f)
 				return;
 
 			CameraInputData _cameraInputData = Data.Value;
