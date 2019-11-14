@@ -15,10 +15,12 @@ namespace GladMMO
 		public float CurrentVertical => InputDelta.y;
 
 		public TouchPhase CurrentTouchPhase = TouchPhase.Ended;
+
+		public float LookSpeed => 1;
+
 		public void Tick()
 		{
 			Touch touch = Input.GetTouch(0);
-			
 			CurrentTouchPhase = touch.phase;
 
 			switch (touch.phase)

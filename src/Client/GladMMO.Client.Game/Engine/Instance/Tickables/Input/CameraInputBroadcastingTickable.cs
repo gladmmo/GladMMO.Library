@@ -111,10 +111,10 @@ namespace GladMMO
 
 			CameraInputData _cameraInputData = Data.Value;
 
-			float rotationalMovement = mouseX * _cameraInputData.LookSpeed;
+			float rotationalMovement = mouseX * CameraInputController.LookSpeed;
 
 			//TODO: Kinda slow
-			_cameraInputData.CurrentRotation = new Vector3(Mathf.Clamp(-mouseY * _cameraInputData.LookSpeed + _cameraInputData.CurrentRotation.x, -_cameraInputData.MaxLookAngle.x, _cameraInputData.MaxLookAngle.x), 0, 0);
+			_cameraInputData.CurrentRotation = new Vector3(Mathf.Clamp(-mouseY * CameraInputController.LookSpeed + _cameraInputData.CurrentRotation.x, -_cameraInputData.MaxLookAngle.x, _cameraInputData.MaxLookAngle.x), 0, 0);
 
 			_cameraInputData.CameraGameObject.transform.localEulerAngles = _cameraInputData.CurrentRotation;
 			_cameraInputData.RootRotationalObject.transform.Rotate(Vector3.up, rotationalMovement);

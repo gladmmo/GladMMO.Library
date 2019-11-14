@@ -8,5 +8,6 @@ namespace GladMMO
 	{
 		bool isCameraControllerRunning { get; }
 
+		float LookSpeed { get; }
 	}
 }

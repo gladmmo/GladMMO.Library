@@ -13,5 +13,7 @@ namespace GladMMO
 		public float CurrentVertical => Input.GetAxis("Mouse Y");
 
 		public bool isCameraControllerRunning => Input.GetMouseButton((int) MouseButton.RightMouse);
+
+		public float LookSpeed { get; } = 3;
 	}
 }
