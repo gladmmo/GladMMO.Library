@@ -29,7 +29,7 @@ namespace GladMMO
 					InputDelta = Vector2.zero;
 					break;
 				case TouchPhase.Moved:
-					InputDelta = touch.deltaPosition;
+					InputDelta = 360 * touch.deltaPosition * (1 / (float)Screen.currentResolution.width);
 					break;
 				case TouchPhase.Stationary:
 					InputDelta = Vector2.zero;
