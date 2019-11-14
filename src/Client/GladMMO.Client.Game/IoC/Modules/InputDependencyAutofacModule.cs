@@ -25,6 +25,10 @@ namespace GladMMO
 			builder.RegisterType<DesktopInputMovementInputController>()
 				.As<IMovementInputController>()
 				.SingleInstance();
+
+			//DesktopInputCameraInputController : ICameraInputController
+			builder.RegisterType<DesktopInputCameraInputController>()
+				.As<ICameraInputController>();
 		}
 
 		private static void RegisterMobileInput([NotNull] ContainerBuilder builder)
