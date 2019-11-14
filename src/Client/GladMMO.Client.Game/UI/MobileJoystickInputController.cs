@@ -46,9 +46,6 @@ namespace GladMMO
 		}
 
 		[SerializeField] private Vector2 m_Axis;
-		/* REMOVE COMMENT TO MAKE FUNCTIONAL
-		[SerializeField] private AxisOption m_AxesToUse = AxisOption.Both; // The options for the axes that the still will use
-		*/
 
 		[SerializeField, Tooltip("How fast the joystick will go back to the center")]
 		private float m_Spring = 25f;
@@ -65,9 +62,6 @@ namespace GladMMO
 			get => this.m_DeadZone;
 			private set => this.m_DeadZone = value;
 		}
-
-		[Tooltip("Customize the output that is sent in OnValueChange")]
-		public AnimationCurve outputCurve = new AnimationCurve(new Keyframe(0, 0, 1, 1), new Keyframe(1, 1, 1, 1));
 
 		private bool m_IsDragging = false;
 
@@ -103,10 +97,6 @@ namespace GladMMO
 			get
 			{
 				Vector2 outputPoint = this.m_Axis.magnitude > this.m_DeadZone ? this.m_Axis : Vector2.zero;
-				float magnitude = outputPoint.magnitude;
-
-				outputPoint *= outputCurve.Evaluate(magnitude);
-
 				return outputPoint;
 			}
 			private set => this.SetAxis(value);
@@ -115,11 +105,6 @@ namespace GladMMO
 		public void SetAxis(Vector2 axis)
 		{
 			this.m_Axis = Vector2.ClampMagnitude(axis, 1);
-
-			Vector2 outputPoint = this.m_Axis.magnitude > this.m_DeadZone ? this.m_Axis : Vector2.zero;
-			float magnitude = outputPoint.magnitude;
-
-			outputPoint *= outputCurve.Evaluate(magnitude);
 
 			this.UpdateHandle();
 		}
