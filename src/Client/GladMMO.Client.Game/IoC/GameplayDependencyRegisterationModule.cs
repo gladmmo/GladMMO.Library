@@ -13,6 +13,7 @@ namespace GladMMO
 		{
 			base.Register(register);
 			register.RegisterModule<DynamicContentDownloadingAutofacModule>();
+			register.RegisterModule<InputDependencyAutofacModule>();
 		}
 	}
 }
