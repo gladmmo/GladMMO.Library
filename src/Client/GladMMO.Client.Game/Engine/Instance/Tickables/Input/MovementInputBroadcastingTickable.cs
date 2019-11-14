@@ -30,12 +30,16 @@ namespace GladMMO
 
 		public bool isBroadcastingHeartbeat { get; set; } = false;
 
+		private IMovementInputController InputController { get; }
+
 		/// <inheritdoc />
 		public MovementInputBroadcastingTickable(ILocalPlayerSpawnedEventSubscribable subscriptionService,
-			[NotNull] ILog logger)
+			[NotNull] ILog logger,
+			[NotNull] IMovementInputController inputController)
 			: base(subscriptionService)
 		{
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
+			InputController = inputController ?? throw new ArgumentNullException(nameof(inputController));
 		}
 
 		/// <inheritdoc />
@@ -46,7 +50,7 @@ namespace GladMMO
 
 			bool changed = false;
 
-			float horizontal = Input.GetAxisRaw("Horizontal");
+			float horizontal = InputController.CurrentHorizontal;
 
 			if(Math.Abs(LastHoritzontalInput - horizontal) > 0.005f)
 			{
@@ -54,7 +58,7 @@ namespace GladMMO
 				LastHoritzontalInput = horizontal;
 			}
 
-			float vertical = Input.GetAxisRaw("Vertical");
+			float vertical = InputController.CurrentVertical;
 
 			if(Math.Abs(LastVerticalInput - vertical) > 0.005f)
 			{
