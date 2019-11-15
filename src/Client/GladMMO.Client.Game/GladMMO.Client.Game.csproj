@@ -82,6 +82,7 @@
     <Folder Include="Engine\Shared\Handlers\" />
     <Folder Include="Engine\Shared\Tickables\" />
     <Folder Include="Engine\Title\Tickables\" />
+    <Folder Include="Input\" />
     <Folder Include="UI\CharacterSelection\" />
   </ItemGroup>
 
