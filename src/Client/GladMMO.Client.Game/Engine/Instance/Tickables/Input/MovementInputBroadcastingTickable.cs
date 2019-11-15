@@ -50,7 +50,7 @@ namespace GladMMO
 
 			bool changed = false;
 
-			float horizontal = InputController.CurrentHorizontal;
+			float horizontal = Math.Sign(InputController.CurrentHorizontal);
 
 			if(Math.Abs(LastHoritzontalInput - horizontal) > 0.005f)
 			{
@@ -58,7 +58,7 @@ namespace GladMMO
 				LastHoritzontalInput = horizontal;
 			}
 
-			float vertical = InputController.CurrentVertical;
+			float vertical = Math.Sign(InputController.CurrentVertical);
 
 			if(Math.Abs(LastVerticalInput - vertical) > 0.005f)
 			{
