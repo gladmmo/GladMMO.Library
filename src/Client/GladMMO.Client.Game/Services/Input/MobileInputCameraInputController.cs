@@ -12,7 +12,8 @@ namespace GladMMO
 
 		public float CurrentHorizontal => InputDelta.x;
 
-		public float CurrentVertical => InputDelta.y;
+		//Mobile shouldn't be able to rotate Vertical. Just side to side.
+		public float CurrentVertical => 0;
 
 		public TouchPhase CurrentTouchPhase = TouchPhase.Ended;
 
