@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
+using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using Common.Logging;
@@ -87,6 +89,28 @@ namespace GladMMO
 			if (services == null) throw new ArgumentNullException(nameof(services));
 
 			return services.AddSingleton<ILog, CommonLoggingASPCoreLoggingAdapter>();
+		}
+
+		public static IServiceCollection AddTypeConverters(this IServiceCollection services, Assembly fromAssembly)
+		{
+			//Register all the type converters in the assembly
+			foreach(Type t in GetAllTypesImplementingOpenGenericType(typeof(ITypeConverterProvider<,>), fromAssembly))
+			foreach(var tInterface in t.GetInterfaces())
+				services.AddSingleton(tInterface, t);
+
+			return services;
+		}
+
+		//For type converter discovery
+		internal static IEnumerable<Type> GetAllTypesImplementingOpenGenericType(Type openGenericType, Assembly assembly)
+		{
+			return assembly.GetTypes()
+				.Where(t =>
+				{
+					return t.GetInterfaces()
+						.Where(i => i.IsConstructedGenericType)
+						.Any(i => i.GetGenericTypeDefinition() == openGenericType);
+				});
 		}
 	}
 }

@@ -108,9 +108,7 @@ namespace GladMMO
 			services.AddTransient<IStorageUrlBuilder, AzureBlobStorageURLBuilder>();
 
 			//Register all the type converters in the assembly
-			foreach(Type t in GetAllTypesImplementingOpenGenericType(typeof(ITypeConverterProvider<,>), this.GetType().Assembly))
-				foreach (var tInterface in t.GetInterfaces())
-					services.AddSingleton(tInterface, t);
+			services.AddTypeConverters(GetType().Assembly);
 
 			//DefaultCreatureEntryModelFactory : IFactoryCreatable<CreatureEntryModel, WorldInstanceableEntryModelCreationContext>
 			services.AddTransient<IFactoryCreatable<CreatureEntryModel, WorldInstanceableEntryModelCreationContext>, DefaultCreatureEntryModelFactory>();
@@ -118,18 +116,6 @@ namespace GladMMO
 			services.AddTransient<IFactoryCreatable<GameObjectEntryModel, WorldInstanceableEntryModelCreationContext>, DefaultGameObjectEntryModelFactory>();
 			//DefaultPlayerSpawnPointEntryModelFactory : IFactoryCreatable<PlayerSpawnPointEntryModel, WorldInstanceableEntryModelCreationContext>
 			services.AddTransient<IFactoryCreatable<PlayerSpawnPointEntryModel, WorldInstanceableEntryModelCreationContext>, DefaultPlayerSpawnPointEntryModelFactory>();
-		}
-
-		//For type converter discovery
-		public static IEnumerable<Type> GetAllTypesImplementingOpenGenericType(Type openGenericType, Assembly assembly)
-		{
-			return assembly.GetTypes()
-				.Where(t =>
-				{
-					return t.GetInterfaces()
-						.Where(i => i.IsConstructedGenericType)
-						.Any(i => i.GetGenericTypeDefinition() == openGenericType);
-				});
 		}
 
 		private static void RegisterDatabaseServices(IServiceCollection services)
