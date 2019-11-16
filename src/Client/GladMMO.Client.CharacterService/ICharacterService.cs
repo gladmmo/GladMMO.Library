@@ -70,5 +70,10 @@ namespace GladMMO
 		[RequiresAuthentication]
 		[Get("/api/characters/{id}/data")]
 		Task<ResponseModel<CharacterDataInstance, CharacterDataQueryReponseCode>> GetCharacterData([AliasAs("id")] int characterId);
+
+		[Headers("Cache-Control: NoCache")]
+		[RequiresAuthentication]
+		[Get("/api/characters/{id}/actionbar")]
+		Task<CharacterActionBarInstanceModel[]> GetCharacterActionBarDataAsync([AliasAs("id")] int characterId);
 	}
 }
