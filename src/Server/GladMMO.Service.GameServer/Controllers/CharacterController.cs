@@ -183,5 +183,32 @@ namespace GladMMO
 			//TODO: Integrate Map Id design into Schema, and implement it here.
 			return Json(new ZoneServerCharacterLocationResponse(new Vector3(locationModel.XPosition, locationModel.YPosition, locationModel.ZPosition), 1));
 		}
+
+		//CharacterActionBarInstanceModel
+		[ProducesJson]
+		[HttpGet("{id}/actionbar")]
+		[NoResponseCache]
+		[AuthorizeJwt]
+		public async Task<IActionResult> GetCharacterActionBar([FromRoute(Name = "id")] int characterId, [FromServices] ICharacterActionBarRepository actionBarRepository,
+			[FromServices] ITypeConverterProvider<CharacterActionBarEntry, CharacterActionBarInstanceModel> converter)
+		{
+			ProjectVersionStage.AssertBeta();
+			//TODO: Check that they own the character.
+
+			if (await actionBarRepository.ContainsAsync(characterId))
+			{
+				CharacterActionBarEntry[] actionBarEntries = await actionBarRepository.RetrieveAllForCharacterAsync(characterId);
+				CharacterActionBarInstanceModel[] barInstanceModels = actionBarEntries.Select(converter.Convert)
+					.ToArrayTryAvoidCopy();
+
+				//Just send it as raw JSON.
+				return Json(barInstanceModels);
+			}
+			else
+			{
+				//TODO: Return default bars.
+				return Json(Array.Empty<CharacterActionBarInstanceModel>());
+			}
+		}
 	}
 }
