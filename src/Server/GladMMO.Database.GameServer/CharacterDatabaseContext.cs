@@ -47,6 +47,8 @@ namespace GladMMO
 
 		public DbSet<CharacterActionBarEntry> CharacterActionBars { get; set; }
 
+		public DbSet<CharacterDefaultActionBarEntry> DefaultCharacterActionBars { get; set; }
+
 		public CharacterDatabaseContext(DbContextOptions<CharacterDatabaseContext> options) 
 			: base(options)
 		{
@@ -170,6 +172,16 @@ namespace GladMMO
 			//Not unique but indexed.
 			actionBarEntity
 				.HasIndex(model => model.CharacterId);
+
+			//CharacterDefaultActionBarEntry
+			EntityTypeBuilder<CharacterDefaultActionBarEntry> defaultActionBarEntity = modelBuilder.Entity<CharacterDefaultActionBarEntry>();
+
+			defaultActionBarEntity
+				.HasKey(model => new { model.ClassType, model.BarIndex });
+
+			//Not unique but indexed.
+			defaultActionBarEntity
+				.HasIndex(model => model.ClassType);
 		}
 	}
 }
