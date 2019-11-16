@@ -8,7 +8,7 @@ using System.Text;
 namespace GladMMO
 {
 	[Table("character_actionbar")]
-	public class CharacterActionBarEntry
+	public class CharacterActionBarEntry : ICharacterActionBarEntry
 	{
 		//Not unique
 		/// <summary>
