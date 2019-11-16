@@ -36,11 +36,6 @@ namespace GladMMO.Database.GameServer.Migrations
 				name: "IX_character_actionbar_CharacterId",
 				table: "character_actionbar",
 				column: "CharacterId");
-
-			migrationBuilder.CreateIndex(
-				name: "IX_character_actionbar_LinkedSpellId",
-				table: "character_actionbar",
-				column: "LinkedSpellId");
 		}
 
 		protected override void Down(MigrationBuilder migrationBuilder)

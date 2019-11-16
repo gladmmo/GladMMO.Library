@@ -21,6 +21,12 @@
     <Compile Remove="Migrations\20191029101438_DisabledZoneIdAutoGenerationAttemptTwo.Designer.cs" />
     <Compile Remove="Migrations\20191029101555_DisabledZoneIdAutoGenerationAttemptTwo.cs" />
     <Compile Remove="Migrations\20191029101555_DisabledZoneIdAutoGenerationAttemptTwo.Designer.cs" />
+    <Compile Remove="Migrations\20191116005603_InitialCharacterActionBarEntry.cs" />
+    <Compile Remove="Migrations\20191116005603_InitialCharacterActionBarEntry.Designer.cs" />
+    <Compile Remove="Migrations\20191116010424_FixForeignKeyCharacterActionBarEntry.cs" />
+    <Compile Remove="Migrations\20191116010424_FixForeignKeyCharacterActionBarEntry.Designer.cs" />
+    <Compile Remove="Migrations\20191116010622_InitialCharacterActionBarEntry.cs" />
+    <Compile Remove="Migrations\20191116010622_InitialCharacterActionBarEntry.Designer.cs" />
     <Compile Remove="Migrations\WorldDatabase\20190926211932_AddedGameObjectModelTable.cs" />
     <Compile Remove="Migrations\WorldDatabase\20190926211932_AddedGameObjectModelTable.Designer.cs" />
   </ItemGroup>

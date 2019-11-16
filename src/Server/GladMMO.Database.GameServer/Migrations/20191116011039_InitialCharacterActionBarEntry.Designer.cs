@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GladMMO.Database.GameServer.Migrations
 {
     [DbContext(typeof(CharacterDatabaseContext))]
-    [Migration("20191116005603_InitialCharacterActionBarEntry")]
+    [Migration("20191116011039_InitialCharacterActionBarEntry")]
     partial class InitialCharacterActionBarEntry
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
