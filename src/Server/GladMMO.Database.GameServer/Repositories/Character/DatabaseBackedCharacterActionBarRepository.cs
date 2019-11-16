@@ -44,6 +44,13 @@ namespace GladMMO
 			await Context.SaveChangesAsync();
 		}
 
+		public Task<CharacterActionBarEntry[]> RetrieveAllForCharacterAsync(int characterId)
+		{
+			return Context.CharacterActionBars
+				.Where(cab => cab.CharacterId == characterId)
+				.ToArrayAsync();
+		}
+
 		public override async Task<bool> TryDeleteAsync(int key)
 		{
 			CharacterActionBarEntry[] actionBarEntries = await Context.CharacterActionBars
