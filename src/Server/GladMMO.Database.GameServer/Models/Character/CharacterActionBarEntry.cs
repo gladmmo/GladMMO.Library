@@ -44,6 +44,13 @@ namespace GladMMO
 		[CanBeNull]
 		public virtual SpellEntryModel LinkedSpell { get; private set; }
 
+		//TODO: Support items.
+		[NotMapped]
+		public ActionBarIndexType ActionType => LinkedSpellId.HasValue ? ActionBarIndexType.Spell : ActionBarIndexType.Empty;
+
+		[NotMapped]
+		public int ActionId => LinkedSpellId.HasValue ? LinkedSpellId.Value : 0;
+
 		public CharacterActionBarEntry(int characterId, ActionBarIndex barIndex, int linkedSpellId)
 		{
 			if (characterId <= 0) throw new ArgumentOutOfRangeException(nameof(characterId));
