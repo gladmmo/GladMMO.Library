@@ -12,5 +12,7 @@ namespace GladMMO
 		int? LinkedSpellId { get; }
 
 		ActionBarIndexType ActionType { get; }
+
+		int ActionId { get; }
 	}
 }
