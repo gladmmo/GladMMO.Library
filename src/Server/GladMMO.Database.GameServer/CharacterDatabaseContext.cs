@@ -45,6 +45,8 @@ namespace GladMMO
 
 		public DbSet<CharacterFriendModel> CharacterFriends { get; set; }
 
+		public DbSet<CharacterActionBarEntry> CharacterActionBars { get; set; }
+
 		public CharacterDatabaseContext(DbContextOptions<CharacterDatabaseContext> options) 
 			: base(options)
 		{
@@ -158,6 +160,15 @@ namespace GladMMO
 				.HasKey(model => new {model.CharacterId, model.FriendCharacterId});
 
 			characterFriendsEntity
+				.HasIndex(model => model.CharacterId);
+
+			EntityTypeBuilder<CharacterActionBarEntry> actionBarEntity = modelBuilder.Entity<CharacterActionBarEntry>();
+
+			actionBarEntity
+				.HasKey(model => new {model.CharacterId, model.BarIndex});
+
+			//Not unique but indexed.
+			actionBarEntity
 				.HasIndex(model => model.CharacterId);
 		}
 	}
