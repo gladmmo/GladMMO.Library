@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace GladMMO
 {
-	public sealed class CharacterActionBarDatabaseToTransportTypeConverter : ITypeConverterProvider<CharacterActionBarEntry, CharacterActionBarInstanceModel>
+	public sealed class CharacterActionBarDatabaseToTransportTypeConverter : ITypeConverterProvider<ICharacterActionBarEntry, CharacterActionBarInstanceModel>
 	{
-		public CharacterActionBarInstanceModel Convert([NotNull] CharacterActionBarEntry fromObject)
+		public CharacterActionBarInstanceModel Convert([NotNull] ICharacterActionBarEntry fromObject)
 		{
 			if (fromObject == null) throw new ArgumentNullException(nameof(fromObject));
 
