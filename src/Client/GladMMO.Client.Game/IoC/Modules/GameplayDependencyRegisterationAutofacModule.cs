@@ -16,6 +16,7 @@ namespace GladMMO
 		/// <inheritdoc />
 		protected override void Load(ContainerBuilder builder)
 		{
+			builder.RegisterModule<CharacterServiceDependencyAutofacModule>();
 			builder.RegisterModule<ZoneServerServiceDependencyAutofacModule>();
 			builder.RegisterModule<ContentServerDependencyAutofacModule>();
 			builder.RegisterModule<SocialServiceDependencyAutofacModule>();
