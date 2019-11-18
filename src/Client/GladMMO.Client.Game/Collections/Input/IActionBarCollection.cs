@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace GladMMO.Input
+namespace GladMMO
 {
 	public interface IReadonlyActionBarCollection : IReadOnlyCollection<CharacterActionBarInstanceModel>
 	{
