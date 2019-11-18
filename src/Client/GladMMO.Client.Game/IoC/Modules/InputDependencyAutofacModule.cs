@@ -17,6 +17,11 @@ namespace GladMMO
 				RegisterMobileInput(builder);
 			else
 				RegisterDesktopInput(builder);
+
+			//ThreadSafeActionBarCollection : IActionBarCollection
+			builder.RegisterType<ThreadSafeActionBarCollection>()
+				.AsImplementedInterfaces()
+				.SingleInstance();
 		}
 
 		private void RegisterDesktopInput([NotNull] ContainerBuilder builder)
