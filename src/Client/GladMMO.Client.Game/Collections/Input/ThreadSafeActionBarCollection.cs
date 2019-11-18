@@ -35,6 +35,8 @@ namespace GladMMO
 				return false;
 		}
 
+		public CharacterActionBarInstanceModel this[ActionBarIndex index] => IsSet(index) ? BackingCollection[index] : new CharacterActionBarInstanceModel(index, ActionBarIndexType.Empty, 0)
+
 		public void Add([NotNull] CharacterActionBarInstanceModel actionBarModel)
 		{
 			if (actionBarModel == null) throw new ArgumentNullException(nameof(actionBarModel));

@@ -13,6 +13,8 @@ namespace GladMMO
 		/// <param name="index">The actionbar index.</param>
 		/// <returns>True if the actionbar index is set.</returns>
 		bool IsSet(ActionBarIndex index);
+
+		CharacterActionBarInstanceModel this[ActionBarIndex index] { get; }
 	}
 
 	public interface IActionBarCollection : IReadonlyActionBarCollection
