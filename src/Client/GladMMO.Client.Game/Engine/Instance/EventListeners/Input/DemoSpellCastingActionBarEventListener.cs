@@ -10,47 +10,24 @@ namespace GladMMO
 	{
 		private IPeerPayloadSendService<GameClientPacketPayload> SendService { get; }
 
+		private IReadonlyActionBarCollection ActionBarCollection { get; }
+
 		public DemoSpellCastingActionBarEventListener(IActionBarButtonPressedEventSubscribable subscriptionService,
-			[NotNull] IPeerPayloadSendService<GameClientPacketPayload> sendService) 
+			[NotNull] IPeerPayloadSendService<GameClientPacketPayload> sendService,
+			[NotNull] IReadonlyActionBarCollection actionBarCollection) 
 			: base(subscriptionService)
 		{
 			SendService = sendService ?? throw new ArgumentNullException(nameof(sendService));
+			ActionBarCollection = actionBarCollection ?? throw new ArgumentNullException(nameof(actionBarCollection));
 		}
 
 		protected override void OnActionBarButtonPressed(ActionBarIndex index)
 		{
-			switch (index)
+			//If we have a set index then we can just send the request to interact/cast
+			if (ActionBarCollection.IsSet(index))
 			{
-				case ActionBarIndex.ActionBarIndex_01:
-					SendService.SendMessage(new SpellCastRequestPayload(1));
-					break;
-				case ActionBarIndex.ActionBarIndex_02:
-					SendService.SendMessage(new SpellCastRequestPayload(3));
-					break;
-				case ActionBarIndex.ActionBarIndex_03:
-					SendService.SendMessage(new SpellCastRequestPayload(4));
-					break;
-				case ActionBarIndex.ActionBarIndex_04:
-					SendService.SendMessage(new SpellCastRequestPayload(5));
-					break;
-				case ActionBarIndex.ActionBarIndex_05:
-					break;
-				case ActionBarIndex.ActionBarIndex_06:
-					break;
-				case ActionBarIndex.ActionBarIndex_07:
-					break;
-				case ActionBarIndex.ActionBarIndex_08:
-					break;
-				case ActionBarIndex.ActionBarIndex_09:
-					break;
-				case ActionBarIndex.ActionBarIndex_10:
-					break;
-				case ActionBarIndex.ActionBarIndex_11:
-					break;
-				case ActionBarIndex.ActionBarIndex_12:
-					break;
-				default:
-					throw new ArgumentOutOfRangeException(nameof(index), index, null);
+				if(ActionBarCollection[index].Type == ActionBarIndexType.Spell)
+					SendService.SendMessage(new SpellCastRequestPayload(ActionBarCollection[index].ActionId));
 			}
 		}
 	}
