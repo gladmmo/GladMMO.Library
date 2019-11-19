@@ -60,6 +60,7 @@ namespace GladMMO
 			services.AddJwtAuthorization(cert);
 
 			RegisterRefitInterfaces(services);
+			services.AddTypeConverters(GetType().Assembly);
 		}
 
 		private static void RegisterDatabaseServices(IServiceCollection services)
