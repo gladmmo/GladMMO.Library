@@ -7,6 +7,9 @@ using System.Text;
 
 namespace GladMMO
 {
+	/// <summary>
+	/// Database table for icon entries.
+	/// </summary>
 	[Table("clientcontent_icon")]
 	public class ContentIconEntryModel
 	{
@@ -24,6 +27,9 @@ namespace GladMMO
 		[Required]
 		public string IconPathName { get; private set; }
 
+		/// <summary>
+		/// Icon path without the extension.
+		/// </summary>
 		[NotMapped]
 		public string IconPathNameWithoutExtensions => Path.GetFileNameWithoutExtension(IconPathName);
 
