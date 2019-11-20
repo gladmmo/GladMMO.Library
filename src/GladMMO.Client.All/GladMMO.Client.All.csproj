@@ -18,6 +18,7 @@
     <ProjectReference Include="..\FinalIK\FinalIK.Custom\FinalIK.Custom.csproj" />
     <ProjectReference Include="..\FinalIK\FinalIK.Editor\FinalIK.Editor.csproj" />
     <ProjectReference Include="..\GladMMO.Client.Editor\GladMMO.Client.Editor.csproj" />
+    <ProjectReference Include="..\Integrations\GladMMO.Integrations.GaiaOnline.Client\GladMMO.Integrations.GaiaOnline.Client.csproj" />
   </ItemGroup>
 
 </Project>
