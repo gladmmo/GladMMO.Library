@@ -79,7 +79,7 @@ namespace GladMMO.GaiaOnline
 			//unity overloads == on some Types in UnityEngine namespace.
 			await new UnityYieldAwaitable();
 
-			if(this != null && gameObject == null)
+			if(this != null && gameObject != null)
 				SetAvatarForRenderers(imageAsync.Texture.Value);
 		}
 
