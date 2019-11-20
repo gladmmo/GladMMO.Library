@@ -155,6 +155,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Integrations", "Integration
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladMMO.Integrations.GaiaOnline.Client", "src\Integrations\GladMMO.Integrations.GaiaOnline.Client\GladMMO.Integrations.GaiaOnline.Client.csproj", "{8906469D-9E5A-42CC-B134-EAE549AC9D2E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladMMO.Integrations.Client.Common", "src\Integrations\GladMMO.Integrations.Client.Common\GladMMO.Integrations.Client.Common.csproj", "{8B0D3037-B171-4B25-B75F-B33601250F73}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		azure_release|Any CPU = azure_release|Any CPU
@@ -1034,6 +1036,20 @@ Global
 		{8906469D-9E5A-42CC-B134-EAE549AC9D2E}.Debug-Local|Any CPU.Build.0 = Debug|Any CPU
 		{8906469D-9E5A-42CC-B134-EAE549AC9D2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8906469D-9E5A-42CC-B134-EAE549AC9D2E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B0D3037-B171-4B25-B75F-B33601250F73}.azure_release|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B0D3037-B171-4B25-B75F-B33601250F73}.azure_release|Any CPU.Build.0 = Debug|Any CPU
+		{8B0D3037-B171-4B25-B75F-B33601250F73}.Database_Migration|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B0D3037-B171-4B25-B75F-B33601250F73}.Database_Migration|Any CPU.Build.0 = Debug|Any CPU
+		{8B0D3037-B171-4B25-B75F-B33601250F73}.debug_azure|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B0D3037-B171-4B25-B75F-B33601250F73}.debug_azure|Any CPU.Build.0 = Debug|Any CPU
+		{8B0D3037-B171-4B25-B75F-B33601250F73}.DEBUG_LOCAL|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B0D3037-B171-4B25-B75F-B33601250F73}.DEBUG_LOCAL|Any CPU.Build.0 = Debug|Any CPU
+		{8B0D3037-B171-4B25-B75F-B33601250F73}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B0D3037-B171-4B25-B75F-B33601250F73}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B0D3037-B171-4B25-B75F-B33601250F73}.Debug-Local|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B0D3037-B171-4B25-B75F-B33601250F73}.Debug-Local|Any CPU.Build.0 = Debug|Any CPU
+		{8B0D3037-B171-4B25-B75F-B33601250F73}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B0D3037-B171-4B25-B75F-B33601250F73}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1113,6 +1129,7 @@ Global
 		{3B951C1A-F52B-4716-ADD5-C117F611CC7F} = {98B85CCA-E727-485B-AD3C-68AC2A2B0364}
 		{F5BC181A-4CC6-43C6-83AF-08C25FC4A458} = {82223BC2-FD46-45B7-8714-A1BBB6FACC0E}
 		{8906469D-9E5A-42CC-B134-EAE549AC9D2E} = {F5BC181A-4CC6-43C6-83AF-08C25FC4A458}
+		{8B0D3037-B171-4B25-B75F-B33601250F73} = {F5BC181A-4CC6-43C6-83AF-08C25FC4A458}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {886DD3D7-35E3-42F0-8CE9-74FB5AD7BBD0}
