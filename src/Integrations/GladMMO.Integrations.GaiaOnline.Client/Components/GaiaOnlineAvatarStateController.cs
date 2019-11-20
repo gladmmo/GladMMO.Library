@@ -77,7 +77,12 @@ namespace GaiaOnline
 		void Update()
 		{
 			//Sets the facing of the avatar towards the camera.
-			transform.LookAt(cachedCameraReference.transform.position, transform.up);
+			//transform.LookAt(cachedCameraReference.transform.position);
+			//transform.rotation = Quaternion.AngleAxis(-transform.rotation.eulerAngles.y, Vector3.up);
+
+			transform.LookAt(transform.position + cachedCameraReference.transform.rotation * Vector3.forward,
+				cachedCameraReference.transform.rotation * Vector3.up);
+			transform.rotation = Quaternion.AngleAxis(transform.rotation.eulerAngles.y, Vector3.up);
 		}
 	}
 }
