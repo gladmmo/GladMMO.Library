@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\GladMMO.Models.Common\GladMMO.Models.Common.csproj" />
+    <ProjectReference Include="..\..\SDK\GladMMO.Common.SDK\GladMMO.Common.SDK.csproj" />
   </ItemGroup>
 
   <ItemGroup>
