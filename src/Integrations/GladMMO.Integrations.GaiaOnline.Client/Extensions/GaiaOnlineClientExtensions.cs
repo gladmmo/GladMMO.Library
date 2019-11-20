@@ -17,7 +17,7 @@ namespace GladMMO.GaiaOnline
 		{
 			if (client == null) throw new ArgumentNullException(nameof(client));
 
-			byte[] imageBytes = await client.GetAvatarImageBytesAsync(uniqueAvatarUrl);
+			byte[] imageBytes = await (await client.GetAvatarImageBytesAsync(uniqueAvatarUrl)).ReadAsByteArrayAsync();
 
 			return new Texture2DWrapper(imageBytes); 
 		}

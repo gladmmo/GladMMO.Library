@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Refit;
+using UnityEngine;
 
 namespace GladMMO.GaiaOnline
 {
@@ -22,7 +24,7 @@ namespace GladMMO.GaiaOnline
 		/// </summary>
 		/// <param name="uniqueAvatarUrl">The Avatar URL.</param>
 		/// <returns>A Unity3D <see cref="Texture2D"/> wrapper containing the avatar image.</returns>
-		[Get(@"/dress-up/avatar/{url}")] //last slash is important, do not remove
-		Task<byte[]> GetAvatarImageBytesAsync([AliasAs("url")] string uniqueAvatarUrl);
+		[Get(@"/dress-up/avatar/{**url}")] //last slash is important, do not remove
+		Task<HttpContent> GetAvatarImageBytesAsync([AliasAs("url")] string uniqueAvatarUrl);
 	}
 }
