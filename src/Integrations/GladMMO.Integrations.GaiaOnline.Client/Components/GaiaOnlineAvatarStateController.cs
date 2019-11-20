@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using GaiaOnline;
 using GladMMO;
+using GladMMO.GaiaOnline;
 using UnityEngine;
 
 namespace GaiaOnline
@@ -31,19 +32,15 @@ namespace GaiaOnline
 		private int MovementFrameOffset = -4; //default working value.
 
 		[SerializeField]
-		public bool SetFacingDependingOnDirection = false;
+		private GaiaOnlineLegsMotionAnimator LegAnimator;
 
-		private int CurrentFrameOffset => Facing == FacingState.Forward ? 4 : 5; 
-
-		/// <summary>
-		/// Indicates if the avatar is in motion.
-		/// (This controls which section of the animation strip is used)
-		/// </summary>
-		public bool isMoving { get; set; } = false; //don't make readonly, Unity delegates need setter
+		private int CurrentFrameOffset => Facing == FacingState.Forward ? 4 : 5;
 
 		private Camera cachedCameraReference;
 
 		private Vector3 lastPosition;
+
+		private bool isInMovementState = false;
 
 		private void Start()
 		{
@@ -53,19 +50,10 @@ namespace GaiaOnline
 			lastPosition = transform.position;
 		}
 
-		private void SetMaterialFacing()
+		private void SetMaterialFacing(bool isMoving)
 		{
 			//Apply the current frame offset calculated
 			GaiaAvatarRenderer.material.mainTextureOffset = new Vector2((isMoving ? ApplyMovementOffset(CurrentFrameOffset) : CurrentFrameOffset) / 10.0f, GaiaAvatarRenderer.material.mainTextureOffset.y);
-		}
-
-		private void SetFacingFromMovementDirection(Vector2 direction)
-		{
-			//If they're moving Y they are moving "backwards"
-			if (direction.y > 0)
-				SetFacingBackwards();
-			else if (Math.Abs(direction.y) > float.Epsilon) //ignore 0 to make sure it doesn't change from other inputs
-				SetFacingForwards();
 		}
 
 		private int ApplyMovementOffset(int frameOffset)
@@ -102,19 +90,34 @@ namespace GaiaOnline
 			else
 				SetFacingBackwards();
 
-			if(currentOffset != CurrentFrameOffset)
-				SetMaterialFacing();
-
 			var positionDelta = lastPosition - transform.position;
-			//positionDelta = Quaternion.AngleAxis(delta, Vector3.up) * positionDelta;
-			var direction = transform.InverseTransformDirection(positionDelta);
-			lastPosition = transform.position;
+			bool isMoving = positionDelta.sqrMagnitude > Vector3.kEpsilon;
 
-			//assume normalization, won't matter
-			if(direction.x > 0) //TODO: Is this the best way to determine facing?
-				gameObject.transform.localScale = new Vector3(Mathf.Abs(gameObject.transform.localScale.x) * -1.0f, gameObject.transform.localScale.y, gameObject.transform.localScale.z);
-			else if(Math.Abs(direction.x) > float.Epsilon) //ignore 0 to make sure it doesn't change from other inputs
-				gameObject.transform.localScale = new Vector3(Mathf.Abs(gameObject.transform.localScale.x), gameObject.transform.localScale.y, gameObject.transform.localScale.z);
+			if(currentOffset != CurrentFrameOffset || isInMovementState != isMoving)
+				SetMaterialFacing(isMoving);
+
+			if (isMoving)
+			{
+				LegAnimator.gameObject.SetActive(true);
+
+				//positionDelta = Quaternion.AngleAxis(delta, Vector3.up) * positionDelta;
+				var direction = transform.InverseTransformDirection(positionDelta);
+				lastPosition = transform.position;
+
+				//assume normalization, won't matter
+				if(direction.x > 0) //TODO: Is this the best way to determine facing?
+					gameObject.transform.localScale = new Vector3(Mathf.Abs(gameObject.transform.localScale.x) * -1.0f, gameObject.transform.localScale.y, gameObject.transform.localScale.z);
+				else if(Math.Abs(direction.x) > float.Epsilon) //ignore 0 to make sure it doesn't change from other inputs
+					gameObject.transform.localScale = new Vector3(Mathf.Abs(gameObject.transform.localScale.x), gameObject.transform.localScale.y, gameObject.transform.localScale.z);
+			}
+			else
+			{
+				//TODO: Is this more efficient?
+				if(LegAnimator.gameObject.activeSelf)
+					LegAnimator.gameObject.SetActive(false);
+			}
+
+			isInMovementState = isMoving;
 		}
 	}
 }
