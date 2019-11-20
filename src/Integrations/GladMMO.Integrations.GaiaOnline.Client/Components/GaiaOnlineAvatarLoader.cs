@@ -49,7 +49,18 @@ namespace GladMMO.GaiaOnline
 			//We can't really recover from this but we can log
 			try
 			{
-				UnityAsyncHelper.UnityMainThreadContext.PostAsync(async () => { await InitializeAvatarRenderers(); });
+				UnityAsyncHelper.UnityMainThreadContext.PostAsync(async () => 
+				{
+					try
+					{
+						await InitializeAvatarRenderers();
+					}
+					catch (Exception e)
+					{
+						Debug.LogError($"Failed to query GaiaOnline for avatar data. Reason: {e.ToString()}");
+						throw;
+					}
+				});
 			}
 			catch(Exception e)
 			{
