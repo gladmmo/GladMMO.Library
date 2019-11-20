@@ -5,11 +5,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Models\" />
+    <PackageReference Include="Refit" Version="4.7.51" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Refit" Version="4.7.51" />
+    <ProjectReference Include="..\..\GladMMO.Models.Common\GladMMO.Models.Common.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Extensions\" />
   </ItemGroup>
 
 </Project>
