@@ -5,6 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Glader.Essentials.Unity" Version="1.0.32" />
+    <PackageReference Include="Nito.AsyncEx" Version="5.0.0" />
     <PackageReference Include="Refit" Version="4.7.51" />
   </ItemGroup>
 
