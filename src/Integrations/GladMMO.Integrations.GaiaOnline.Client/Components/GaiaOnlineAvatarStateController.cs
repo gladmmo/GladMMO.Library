@@ -53,32 +53,6 @@ namespace GaiaOnline
 			lastPosition = transform.position;
 		}
 
-		//Called when the direction of the avatar has changed. Assuming it is properly subscribed in the editor.
-		public void OnDirectionChanged(Vector2 direction)
-		{
-			//TODO: Refactor when it's not 3:00am
-			if (Facing == FacingState.Backward)
-			{
-				//assume normalization, won't matter
-				if(direction.x > 0) //TODO: Is this the best way to determine facing?
-					gameObject.transform.localScale = new Vector3(Mathf.Abs(gameObject.transform.localScale.x) * -1.0f, gameObject.transform.localScale.y, gameObject.transform.localScale.z);
-				else if(Math.Abs(direction.x) > float.Epsilon) //ignore 0 to make sure it doesn't change from other inputs
-					gameObject.transform.localScale = new Vector3(Mathf.Abs(gameObject.transform.localScale.x), gameObject.transform.localScale.y, gameObject.transform.localScale.z);
-			} else if (Facing == FacingState.Forward)
-			{
-				//assume normalization, won't matter
-				if(direction.x > 0) //TODO: Is this the best way to determine facing?
-					gameObject.transform.localScale = new Vector3(Mathf.Abs(gameObject.transform.localScale.x), gameObject.transform.localScale.y, gameObject.transform.localScale.z);
-				else if(Math.Abs(direction.x) > float.Epsilon) //ignore 0 to make sure it doesn't change from other inputs
-					gameObject.transform.localScale = new Vector3(Mathf.Abs(gameObject.transform.localScale.x) * -1.0f, gameObject.transform.localScale.y, gameObject.transform.localScale.z);
-			}
-
-			if(SetFacingDependingOnDirection)
-				SetFacingFromMovementDirection(direction);
-
-			SetMaterialFacing();
-		}
-
 		private void SetMaterialFacing()
 		{
 			//Apply the current frame offset calculated
@@ -115,25 +89,14 @@ namespace GaiaOnline
 
 		void Update()
 		{
-			//Sets the facing of the avatar towards the camera.
-			//transform.LookAt(cachedCameraReference.transform.position);
-			//transform.rotation = Quaternion.AngleAxis(-transform.rotation.eulerAngles.y, Vector3.up);
 			transform.LookAt(transform.position + cachedCameraReference.transform.rotation * Vector3.forward,
 				cachedCameraReference.transform.rotation * Vector3.up);
-			transform.rotation = Quaternion.AngleAxis(transform.rotation.eulerAngles.y, Vector3.up);
+			transform.rotation = Quaternion.AngleAxis(transform.rotation.eulerAngles.y + 180, Vector3.up);
 
-			//Now we check rotation of the root object
-			//we can use this to determine which direction we should be facing.
-			//float yAxisRotation = transform.root.rotation.eulerAngles.y;
-			//float cameraYAxisRotation = cachedCameraReference.transform.root.rotation.eulerAngles.y;
-			//float delta = Math.Abs(yAxisRotation - cameraYAxisRotation);
-			float delta = Vector3.Angle(new Vector3(cachedCameraReference.transform.root.forward.x, 0.0f, cachedCameraReference.transform.root.forward.z), transform.root.forward);
-			//Debug.Log($"yAxisRotation: {yAxisRotation} cameraYAxisRotation: {cameraYAxisRotation} delta: {delta}");
+			Vector3 cameraForwardVector = new Vector3(cachedCameraReference.transform.root.forward.x, 0.0f, cachedCameraReference.transform.root.forward.z).normalized;
+			float delta = Vector3.Angle(cameraForwardVector, transform.root.forward);
 
-			//TODO: Cleanup
 			int currentOffset = CurrentFrameOffset;
-			//If the rotation is greater than 180 then the user is actually looking
-			//towards us
 			if(delta > 90.0f)
 				SetFacingForwards();
 			else
@@ -142,10 +105,16 @@ namespace GaiaOnline
 			if(currentOffset != CurrentFrameOffset)
 				SetMaterialFacing();
 
-			//target.position - player.position
-			Vector3 positionDelta = (transform.position - lastPosition);
-			OnDirectionChanged(new Vector2(positionDelta.x, positionDelta.z));
+			var positionDelta = lastPosition - transform.position;
+			//positionDelta = Quaternion.AngleAxis(delta, Vector3.up) * positionDelta;
+			var direction = transform.InverseTransformDirection(positionDelta);
 			lastPosition = transform.position;
+
+			//assume normalization, won't matter
+			if(direction.x > 0) //TODO: Is this the best way to determine facing?
+				gameObject.transform.localScale = new Vector3(Mathf.Abs(gameObject.transform.localScale.x) * -1.0f, gameObject.transform.localScale.y, gameObject.transform.localScale.z);
+			else if(Math.Abs(direction.x) > float.Epsilon) //ignore 0 to make sure it doesn't change from other inputs
+				gameObject.transform.localScale = new Vector3(Mathf.Abs(gameObject.transform.localScale.x), gameObject.transform.localScale.y, gameObject.transform.localScale.z);
 		}
 	}
 }
