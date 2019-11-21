@@ -83,7 +83,7 @@ namespace GladMMO
 			//Remote clients timestamps aren't adjusted by server so we get what they sent
 			//which if there is a drift or lack of syncronization it may end up negative.
 			if (diff < 0.0f)
-				return 0;
+				return 0.01f; //we do this so it moves a tiny bit at least. This is kind of a hack to prevent Moving movement generators from stationary time desync
 
 			return diff;
 		}
