@@ -76,7 +76,7 @@ namespace GladMMO
 			//If the input has changed we should dispatch to anyone interested.
 			if (changed || (int)HeartBeatCounter > HEARTBEAT_MILLISECOND_TIME)
 			{
-				MovementInputChangedEventArgs args = new MovementInputChangedEventArgs(vertical, horizontal);
+				MovementInputChangedEventArgs args = new MovementInputChangedEventArgs(vertical, horizontal, !changed && HeartBeatCounter > HEARTBEAT_MILLISECOND_TIME);
 				OnMovementInputDataChanged?.Invoke(this, args);
 
 				//Always reset heartbeat on send.

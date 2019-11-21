@@ -25,11 +25,14 @@ namespace GladMMO
 		/// </summary>
 		public bool isMoving => (Math.Abs(NewVerticalInput) > 0.005f) || (Math.Abs(NewHorizontalInput) > 0.005f);
 
+		public bool isHeartBeat { get; }
+
 		/// <inheritdoc />
-		public MovementInputChangedEventArgs(float newVerticalInput, float newHorizontalInput)
+		public MovementInputChangedEventArgs(float newVerticalInput, float newHorizontalInput, bool isHeartBeat)
 		{
 			NewVerticalInput = newVerticalInput;
 			NewHorizontalInput = newHorizontalInput;
+			this.isHeartBeat = isHeartBeat;
 		}
 
 		public static bool operator ==(MovementInputChangedEventArgs obj1, MovementInputChangedEventArgs obj2)

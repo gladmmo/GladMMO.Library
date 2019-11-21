@@ -37,6 +37,10 @@ namespace GladMMO
 
 		protected override void OnEventFired(object source, MovementInputChangedEventArgs args)
 		{
+			//Don't predict on heartbeat
+			if (args.isHeartBeat)
+				return;
+
 			Vector2 direction = new Vector2(args.NewHorizontalInput, args.NewVerticalInput);
 			WorldTransform worldTransform = TransformMap.RetrieveEntity(PlayerDetails.LocalPlayerGuid);
 			long predictedTime = TimeService.CurrentRemoteTime;
