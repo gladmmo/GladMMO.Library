@@ -77,6 +77,11 @@ namespace RootMotion.FinalIK
 		protected override void InitiateSolver()
 		{
 			if(references.isEmpty) AutoDetectReferences();
+
+			//HelloKitty: Custom change to prevent issues with non-IK avatars.
+			if (enabled == false)
+				return;
+
 			if(references.isFilled) solver.SetToReferences(references);
 
 			base.InitiateSolver();
