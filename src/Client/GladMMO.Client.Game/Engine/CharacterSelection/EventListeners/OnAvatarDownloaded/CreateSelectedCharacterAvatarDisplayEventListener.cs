@@ -11,10 +11,13 @@ namespace GladMMO
 	{
 		private Action OnContentPrefabRecieved;
 
-		public CreateSelectedCharacterAvatarDisplayEventListener(IContentPrefabCompletedDownloadEventSubscribable subscriptionService) 
+		private IEntityNameQueryable NameQueryable { get; }
+
+		public CreateSelectedCharacterAvatarDisplayEventListener(IContentPrefabCompletedDownloadEventSubscribable subscriptionService,
+			[NotNull] IEntityNameQueryable nameQueryable) 
 			: base(subscriptionService)
 		{
-
+			NameQueryable = nameQueryable ?? throw new ArgumentNullException(nameof(nameQueryable));
 		}
 
 		protected override void OnThreadUnSafeEventFired(object source, ContentPrefabCompletedDownloadEventArgs args)
@@ -43,6 +46,12 @@ namespace GladMMO
 			//Slowly but surely.
 			if (animator != null)
 				animator.applyRootMotion = false;
+
+			//This is for custom complex avatars that may need initialization after downloading.
+			IAvatarInitializable avatarInitializable = avatar.GetComponentInChildren<IAvatarInitializable>();
+
+			if(avatarInitializable != null)
+				avatarInitializable.InitializeAvatar(args.EntityGuid, NameQueryable.RetrieveAsync(args.EntityGuid));
 
 			OnContentPrefabRecieved += () =>
 			{
