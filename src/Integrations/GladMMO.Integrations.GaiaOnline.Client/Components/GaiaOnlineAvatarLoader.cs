@@ -11,15 +11,12 @@ using Unitysync.Async;
 
 namespace GladMMO.GaiaOnline
 {
-	public sealed class GaiaOnlineAvatarLoader : MonoBehaviour
+	public sealed class GaiaOnlineAvatarLoader : MonoBehaviour, IAvatarInitializable
 	{
 		//These should be the renderers to initialize the Avatar image to.
 		[SerializeField]
 		[Tooltip("List of renderers to set the loaded Avatar image to.")]
 		private Renderer[] AvatarRenderers = new Renderer[0];
-
-		[SerializeField]
-		private bool InitializeOnStart;
 
 		private void Start()
 		{
@@ -28,52 +25,12 @@ namespace GladMMO.GaiaOnline
 
 			if(!AvatarRenderers.Any())
 				throw new InvalidOperationException($"The {nameof(AvatarRenderers)} cannot be empty.");
-
-			if(InitializeOnStart)
-				Initialize();
 		}
 
-		/// <inheritdoc />
-		public void Initialize()
-		{
-			Reinitialize();
-		}
-
-		/// <inheritdoc />
-		public void Reinitialize()
-		{
-			//It's possible reinitialize was called while we were initializing the renderers
-			//So we should stop the routines
-			StopAllCoroutines();
-
-			//We can't really recover from this but we can log
-			try
-			{
-				UnityAsyncHelper.UnityMainThreadContext.PostAsync(async () => 
-				{
-					try
-					{
-						await InitializeAvatarRenderers();
-					}
-					catch (Exception e)
-					{
-						Debug.LogError($"Failed to query GaiaOnline for avatar data. Reason: {e.ToString()}");
-						throw;
-					}
-				});
-			}
-			catch(Exception e)
-			{
-				//TODO: Add username/id info
-				Debug.LogError($"Encountered error when attempting to load the avatar: {e.Message}");
-				throw;
-			}
-		}
-
-		private async Task InitializeAvatarRenderers()
+		private async Task InitializeAvatarRenderers(string avatarName)
 		{
 			//TODO: Replace hardcoded name that is for testing.
-			UserAvatarQueryResponse avatarQueryResponse = await GaiaOnlineIntegrationClientSingleton.QueryClient.GetAvatarFromUsernameAsync("HelloKittyGithub")
+			UserAvatarQueryResponse avatarQueryResponse = await GaiaOnlineIntegrationClientSingleton.QueryClient.GetAvatarFromUsernameAsync(avatarName)
 				.ConfigureAwait(false);
 
 			//TODO: Somehow get ref to avatar name for logging.
@@ -100,6 +57,39 @@ namespace GladMMO.GaiaOnline
 
 			foreach(Renderer r in AvatarRenderers)
 				r.material.mainTexture = texture;
+		}
+
+		public void InitializeAvatar([NotNull] NetworkEntityGuid entityGuidOwner, [NotNull] Task<string> entityName)
+		{
+			if (entityGuidOwner == null) throw new ArgumentNullException(nameof(entityGuidOwner));
+			if (entityName == null) throw new ArgumentNullException(nameof(entityName));
+
+			//We can't really recover from this but we can log
+			try
+			{
+				UnityAsyncHelper.UnityMainThreadContext.PostAsync(async () =>
+				{
+					try
+					{
+						string avatarName = await entityName
+							.ConfigureAwait(false);
+
+						await InitializeAvatarRenderers(avatarName)
+							.ConfigureAwait(false);
+					}
+					catch(Exception e)
+					{
+						Debug.LogError($"Failed to query GaiaOnline for avatar data. Reason: {e.ToString()}");
+						throw;
+					}
+				});
+			}
+			catch(Exception e)
+			{
+				//TODO: Add username/id info
+				Debug.LogError($"Encountered error when attempting to load the avatar: {e.Message}");
+				throw;
+			}
 		}
 	}
 }
