@@ -42,11 +42,14 @@ namespace GaiaOnline
 
 		private bool isInMovementState = false;
 
+		private Vector3 lastPosition;
+
 		private void Start()
 		{
 			//We should default to facing forward
 			SetFacingForwards();
 			cachedCameraReference = Camera.main;
+			lastPosition = transform.position;
 		}
 
 		private void SetMaterialFacing(bool isMoving)
@@ -89,10 +92,32 @@ namespace GaiaOnline
 			else
 				SetFacingBackwards();
 
+			var positionDelta = lastPosition - transform.position;
 			bool isMoving = CurrentMovementDirection.sqrMagnitude > 0.0f;
 
 			if(currentOffset != CurrentFrameOffset || isInMovementState != isMoving)
 				SetMaterialFacing(isMoving);
+
+			if(isMoving)
+			{
+				LegAnimator.gameObject.SetActive(true);
+
+				//positionDelta = Quaternion.AngleAxis(delta, Vector3.up) * positionDelta;
+				var direction = transform.InverseTransformDirection(positionDelta);
+				lastPosition = transform.position;
+
+				//assume normalization, won't matter
+				if(direction.x > Vector3.kEpsilon) //TODO: Is this the best way to determine facing?
+					gameObject.transform.localScale = new Vector3(Mathf.Abs(gameObject.transform.localScale.x) * -1.0f, gameObject.transform.localScale.y, gameObject.transform.localScale.z);
+				else if(Math.Abs(direction.x) > Vector3.kEpsilon) //ignore 0 to make sure it doesn't change from other inputs
+					gameObject.transform.localScale = new Vector3(Mathf.Abs(gameObject.transform.localScale.x), gameObject.transform.localScale.y, gameObject.transform.localScale.z);
+			}
+			else
+			{
+				//TODO: Is this more efficient?
+				if(LegAnimator.gameObject.activeSelf)
+					LegAnimator.gameObject.SetActive(false);
+			}
 
 			isInMovementState = isMoving;
 		}
