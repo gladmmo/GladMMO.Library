@@ -104,7 +104,6 @@ namespace GaiaOnline
 
 				//positionDelta = Quaternion.AngleAxis(delta, Vector3.up) * positionDelta;
 				var direction = transform.InverseTransformDirection(positionDelta);
-				lastPosition = transform.position;
 
 				//assume normalization, won't matter
 				if(direction.x > Vector3.kEpsilon) //TODO: Is this the best way to determine facing?
@@ -119,31 +118,13 @@ namespace GaiaOnline
 					LegAnimator.gameObject.SetActive(false);
 			}
 
+			lastPosition = transform.position;
 			isInMovementState = isMoving;
 		}
 
 		public void SetMovementDirection(Vector2 direction)
 		{
 			CurrentMovementDirection = direction;
-
-			if(CurrentMovementDirection.sqrMagnitude > 0.0f)
-			{
-				LegAnimator.gameObject.SetActive(true);
-
-				direction = transform.InverseTransformDirection(direction);
-
-				//assume normalization, won't matter
-				if(direction.x > Vector3.kEpsilon) //TODO: Is this the best way to determine facing?
-					gameObject.transform.localScale = new Vector3(Mathf.Abs(gameObject.transform.localScale.x) * -1.0f, gameObject.transform.localScale.y, gameObject.transform.localScale.z);
-				else if(Math.Abs(direction.x) > Vector3.kEpsilon) //ignore 0 to make sure it doesn't change from other inputs
-					gameObject.transform.localScale = new Vector3(Mathf.Abs(gameObject.transform.localScale.x), gameObject.transform.localScale.y, gameObject.transform.localScale.z);
-			}
-			else
-			{
-				//TODO: Is this more efficient?
-				if(LegAnimator.gameObject.activeSelf)
-					LegAnimator.gameObject.SetActive(false);
-			}
 		}
 	}
 }
