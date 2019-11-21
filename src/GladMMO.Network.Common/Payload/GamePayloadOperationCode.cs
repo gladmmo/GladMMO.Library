@@ -44,5 +44,7 @@ namespace GladMMO
 		/// Opcode for client requesting a spellcast.
 		/// </summary>
 		RequestSpellCast = 13,
+
+		Ping = 14,
 	}
 }
