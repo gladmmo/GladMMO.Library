@@ -101,10 +101,6 @@ namespace RootMotion.FinalIK
 			//that the avatar has been replaced, and we'll need to find the data component that can be used to retreieve it.
 			IAvatarIKReferenceContainer<CustomVRIKReferences> referenceContainer = this.GetComponentInChildren<IAvatarIKReferenceContainer<CustomVRIKReferences>>();
 
-			//We should do nothing if the references are empty.
-			if (referenceContainer.references.isEmpty)
-				return;
-
 			//If we contain no reference data
 			//then we should just autodetect and wish for the best
 			//though this could cost performance issues on failure maybe?
@@ -117,6 +113,10 @@ namespace RootMotion.FinalIK
 			{
 				//Set the references in the IK controller
 				this.references = referenceContainer.references;
+
+				//We should do nothing if the references are empty.
+				if(references.isEmpty)
+					return;
 
 				var oldSolver = solver;
 				solver = new IKSolverVR
