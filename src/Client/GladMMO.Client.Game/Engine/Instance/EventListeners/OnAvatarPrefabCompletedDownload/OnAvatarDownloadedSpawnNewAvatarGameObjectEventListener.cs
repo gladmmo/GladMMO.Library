@@ -70,11 +70,13 @@ namespace GladMMO
 
 				if (movementChangeListener != null)
 				{
-					if(MovementDirectionListenerMappable.ContainsKey(args.EntityGuid))
+					if (MovementDirectionListenerMappable.ContainsKey(args.EntityGuid))
 						MovementDirectionListenerMappable.ReplaceObject(args.EntityGuid, movementChangeListener);
 					else
 						MovementDirectionListenerMappable.AddObject(args.EntityGuid, movementChangeListener);
 				}
+				else
+					MovementDirectionListenerMappable.RemoveEntityEntry(args.EntityGuid); //if it's null jsut remove one if it exists.
 
 				//This will actually re-initialize the IK for the new avatar, since the old one is now gone.
 				ikRootGameObject.GetComponent<IIKReinitializable>().ReInitialize();
