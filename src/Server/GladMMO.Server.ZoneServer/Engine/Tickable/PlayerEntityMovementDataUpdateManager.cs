@@ -33,8 +33,7 @@ namespace GladMMO
 		public void Tick()
 		{
 			//TODO: Reduce lock contention.
-			MovementCollection.SyncObject.EnterReadLock();
-			try
+			lock (MovementCollection.SyncObject)
 			{
 				//For every player we need to do some processing so that we can send a movement update
 				//packet for them.
@@ -47,10 +46,6 @@ namespace GladMMO
 
 				//After all movement is done we need to clear all tracked/dirty changes in the movement collection
 				MovementCollection.ClearDirty();
-			}
-			finally
-			{
-				MovementCollection.SyncObject.ExitReadLock();
 			}
 		}
 	}

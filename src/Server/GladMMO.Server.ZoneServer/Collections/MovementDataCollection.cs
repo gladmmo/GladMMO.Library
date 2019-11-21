@@ -13,7 +13,7 @@ namespace GladMMO
 
 		private Dictionary<NetworkEntityGuid, bool> DirtyChangesTracker { get; }
 
-		public ReaderWriterLockSlim SyncObject { get; } = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
+		public object SyncObject { get; } = new object();
 
 		public MovementDataCollection()
 		{
@@ -24,44 +24,27 @@ namespace GladMMO
 		/// <inheritdoc />
 		public void Add(NetworkEntityGuid key, IMovementData value)
 		{
-			SyncObject.EnterWriteLock();
-			try
+			lock (SyncObject)
 			{
 				DirtyChangesTracker[key] = true;
 				InternallyManagedMovementDictionary.Add(key, value);
-			}
-			finally
-			{
-				SyncObject.ExitWriteLock();
 			}
 		}
 
 		/// <inheritdoc />
 		public bool Remove(NetworkEntityGuid key)
 		{
-			SyncObject.EnterWriteLock();
-			try
+			lock (SyncObject)
 			{
 				DirtyChangesTracker.Remove(key);
 				return InternallyManagedMovementDictionary.RemoveEntityEntry(key);
-			}
-			finally
-			{
-				SyncObject.ExitWriteLock();
 			}
 		}
 
 		public bool ContainsKey(NetworkEntityGuid key)
 		{
-			SyncObject.EnterReadLock();
-			try
-			{
+			lock(SyncObject)
 				return this.InternallyManagedMovementDictionary.ContainsKey(key);
-			}
-			finally
-			{
-				SyncObject.ExitReadLock();
-			}
 		}
 
 		/// <inheritdoc />
@@ -70,15 +53,10 @@ namespace GladMMO
 			get => InternallyManagedMovementDictionary[key];
 			set
 			{
-				SyncObject.EnterWriteLock();
-				try
+				lock (SyncObject)
 				{
 					DirtyChangesTracker[key] = true;
 					InternallyManagedMovementDictionary[key] = value;
-				}
-				finally
-				{
-					SyncObject.ExitWriteLock();
 				}
 			}
 		}
@@ -86,80 +64,47 @@ namespace GladMMO
 		/// <inheritdoc />
 		public bool isEntryDirty(NetworkEntityGuid key)
 		{
-			SyncObject.EnterReadLock();
-			try
-			{
+			lock(SyncObject)
 				return DirtyChangesTracker.ContainsKey(key) && DirtyChangesTracker[key];
-			}
-			finally
-			{
-				SyncObject.ExitReadLock();
-			}
 		}
 
 		/// <inheritdoc />
 		public void SetDirtyState(NetworkEntityGuid key, bool isDirty)
 		{
-			SyncObject.EnterWriteLock();
-			try
-			{
+			lock(SyncObject)
 				DirtyChangesTracker[key] = isDirty;
-			}
-			finally
-			{
-				SyncObject.ExitWriteLock();
-			}
 		}
 
 		/// <inheritdoc />
 		public void ClearDirty()
 		{
-			SyncObject.EnterWriteLock();
-			try
-			{
+			lock(SyncObject)
 				DirtyChangesTracker.Clear();
-			}
-			finally
-			{
-				SyncObject.ExitWriteLock();
-			}
 		}
 
 		/// <inheritdoc />
 		public bool RemoveEntityEntry(NetworkEntityGuid entityGuid)
 		{
-			SyncObject.EnterWriteLock();
-			try
-			{
+			lock(SyncObject)
 				return this.Remove(entityGuid);
-			}
-			finally
-			{
-				SyncObject.ExitWriteLock();
-			}
 		}
 
 		public bool TryGetValue(NetworkEntityGuid key, out IMovementData value)
 		{
-			SyncObject.EnterReadLock();
-			try
-			{
+			lock(SyncObject)
 				return this.InternallyManagedMovementDictionary.TryGetValue(key, out value);
-			}
-			finally
-			{
-				SyncObject.ExitReadLock();
-			}
 		}
 
 		public IEnumerator<IMovementData> GetEnumerator()
 		{
-			return this.InternallyManagedMovementDictionary.GetEnumerator();
+			lock(SyncObject)
+				return this.InternallyManagedMovementDictionary.GetEnumerator();
 		}
 
 		IEnumerator IEnumerable.GetEnumerator()
 		{
-			return GetEnumerator();
+			lock(SyncObject)
+				return GetEnumerator();
 		}
 	}
 }

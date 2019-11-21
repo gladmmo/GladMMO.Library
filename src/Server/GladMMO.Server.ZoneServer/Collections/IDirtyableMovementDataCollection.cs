@@ -8,6 +8,6 @@ namespace GladMMO
 {
 	public interface IDirtyableMovementDataCollection : ICollectionMapDirtyable<NetworkEntityGuid>, IReadonlyEntityGuidMappable<IMovementData>
 	{
-		ReaderWriterLockSlim SyncObject { get; }
+		object SyncObject { get; }
 	}
 }
