@@ -18,15 +18,19 @@ namespace GladMMO
 
 		private IEntityGuidMappable<IMovementDirectionChangedListener> MovementDirectionListenerMappable { get; }
 
+		private IEntityNameQueryable NameQueryable { get; }
+
 		public OnAvatarDownloadedSpawnNewAvatarGameObjectEventListener(IContentPrefabCompletedDownloadEventSubscribable subscriptionService,
 			[NotNull] ILog logger,
 			[NotNull] IReadonlyEntityGuidMappable<EntityGameObjectDirectory> gameObjectDirectoryMappable,
-			[NotNull] IEntityGuidMappable<IMovementDirectionChangedListener> movementDirectionListener) 
+			[NotNull] IEntityGuidMappable<IMovementDirectionChangedListener> movementDirectionListener,
+			[NotNull] IEntityNameQueryable nameQueryable) 
 			: base(subscriptionService)
 		{
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
 			GameObjectDirectoryMappable = gameObjectDirectoryMappable ?? throw new ArgumentNullException(nameof(gameObjectDirectoryMappable));
 			MovementDirectionListenerMappable = movementDirectionListener ?? throw new ArgumentNullException(nameof(movementDirectionListener));
+			NameQueryable = nameQueryable ?? throw new ArgumentNullException(nameof(nameQueryable));
 		}
 
 		protected override void OnEventFired(object source, ContentPrefabCompletedDownloadEventArgs args)
@@ -77,6 +81,12 @@ namespace GladMMO
 				}
 				else
 					MovementDirectionListenerMappable.RemoveEntityEntry(args.EntityGuid); //if it's null jsut remove one if it exists.
+
+				//This is for custom complex avatars that may need initialization after downloading.
+				IAvatarInitializable avatarInitializable = newlySpawnedAvatar.GetComponentInChildren<IAvatarInitializable>();
+
+				if (avatarInitializable != null)
+					avatarInitializable.InitializeAvatar(args.EntityGuid, NameQueryable.RetrieveAsync(args.EntityGuid));
 
 				//This will actually re-initialize the IK for the new avatar, since the old one is now gone.
 				ikRootGameObject.GetComponent<IIKReinitializable>().ReInitialize();
