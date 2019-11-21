@@ -55,7 +55,9 @@ namespace RootMotion.FinalIK
 		[ContextMenu("Auto-detect References")]
 		public void AutoDetectReferences()
 		{
-			CustomVRIKReferences.AutoDetectReferences(transform, out references);
+			if (!CustomVRIKReferences.AutoDetectReferences(transform, out references))
+				if(Application.isPlaying) //don't do it in the editor mode
+					enabled = false;
 		}
 
 		/// <summary>
