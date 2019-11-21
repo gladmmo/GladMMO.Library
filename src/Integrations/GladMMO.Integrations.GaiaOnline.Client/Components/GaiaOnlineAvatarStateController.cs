@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace GaiaOnline
 {
-	public sealed class GaiaOnlineAvatarStateController : MonoBehaviour
+	public sealed class GaiaOnlineAvatarStateController : MonoBehaviour, IMovementDirectionChangedListener
 	{
 		public enum FacingState
 		{
@@ -38,7 +38,7 @@ namespace GaiaOnline
 
 		private Camera cachedCameraReference;
 
-		private Vector3 lastPosition;
+		private Vector2 CurrentMovementDirection = Vector2.zero;
 
 		private bool isInMovementState = false;
 
@@ -47,7 +47,6 @@ namespace GaiaOnline
 			//We should default to facing forward
 			SetFacingForwards();
 			cachedCameraReference = Camera.main;
-			lastPosition = transform.position;
 		}
 
 		private void SetMaterialFacing(bool isMoving)
@@ -90,19 +89,23 @@ namespace GaiaOnline
 			else
 				SetFacingBackwards();
 
-			var positionDelta = lastPosition - transform.position;
-			bool isMoving = positionDelta.sqrMagnitude > Vector3.kEpsilon;
+			bool isMoving = CurrentMovementDirection.sqrMagnitude > 0.0f;
 
 			if(currentOffset != CurrentFrameOffset || isInMovementState != isMoving)
 				SetMaterialFacing(isMoving);
 
-			if (isMoving)
+			isInMovementState = isMoving;
+		}
+
+		public void SetMovementDirection(Vector2 direction)
+		{
+			CurrentMovementDirection = direction;
+
+			if(CurrentMovementDirection.sqrMagnitude > 0.0f)
 			{
 				LegAnimator.gameObject.SetActive(true);
 
-				//positionDelta = Quaternion.AngleAxis(delta, Vector3.up) * positionDelta;
-				var direction = transform.InverseTransformDirection(positionDelta);
-				lastPosition = transform.position;
+				direction = transform.InverseTransformDirection(direction);
 
 				//assume normalization, won't matter
 				if(direction.x > Vector3.kEpsilon) //TODO: Is this the best way to determine facing?
@@ -116,8 +119,6 @@ namespace GaiaOnline
 				if(LegAnimator.gameObject.activeSelf)
 					LegAnimator.gameObject.SetActive(false);
 			}
-
-			isInMovementState = isMoving;
 		}
 	}
 }

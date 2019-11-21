@@ -16,13 +16,17 @@ namespace GladMMO
 
 		private ILog Logger { get; }
 
+		private IEntityGuidMappable<IMovementDirectionChangedListener> MovementDirectionListenerMappable { get; }
+
 		public OnAvatarDownloadedSpawnNewAvatarGameObjectEventListener(IContentPrefabCompletedDownloadEventSubscribable subscriptionService,
 			[NotNull] ILog logger,
-			[NotNull] IReadonlyEntityGuidMappable<EntityGameObjectDirectory> gameObjectDirectoryMappable) 
+			[NotNull] IReadonlyEntityGuidMappable<EntityGameObjectDirectory> gameObjectDirectoryMappable,
+			[NotNull] IEntityGuidMappable<IMovementDirectionChangedListener> movementDirectionListener) 
 			: base(subscriptionService)
 		{
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
 			GameObjectDirectoryMappable = gameObjectDirectoryMappable ?? throw new ArgumentNullException(nameof(gameObjectDirectoryMappable));
+			MovementDirectionListenerMappable = movementDirectionListener ?? throw new ArgumentNullException(nameof(movementDirectionListener));
 		}
 
 		protected override void OnEventFired(object source, ContentPrefabCompletedDownloadEventArgs args)
@@ -61,6 +65,16 @@ namespace GladMMO
 				}
 
 				GameObject.DestroyImmediate(currentAvatarRootGameObject, false);
+
+				IMovementDirectionChangedListener movementChangeListener = newlySpawnedAvatar.GetComponentInChildren<IMovementDirectionChangedListener>();
+
+				if (movementChangeListener != null)
+				{
+					if(MovementDirectionListenerMappable.ContainsKey(args.EntityGuid))
+						MovementDirectionListenerMappable.ReplaceObject(args.EntityGuid, movementChangeListener);
+					else
+						MovementDirectionListenerMappable.AddObject(args.EntityGuid, movementChangeListener);
+				}
 
 				//This will actually re-initialize the IK for the new avatar, since the old one is now gone.
 				ikRootGameObject.GetComponent<IIKReinitializable>().ReInitialize();
