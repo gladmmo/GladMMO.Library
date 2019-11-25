@@ -13,7 +13,7 @@ namespace GladMMO
 		private Vector3 CachedMovementDirection;
 
 		//TODO: We shouldn't do this here
-		private float DefaultPlayerSpeed = 2.0f;
+		private float DefaultPlayerSpeed = 4.0f;
 
 		public const float CHARACTERCONTROLLER_GRAVITY_SPEED = -(9.8f * 9.8f);
 
