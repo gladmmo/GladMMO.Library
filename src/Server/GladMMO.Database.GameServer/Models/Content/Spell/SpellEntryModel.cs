@@ -40,6 +40,12 @@ namespace GladMMO
 		[Required]
 		public int CastTime { get; private set; }
 
+		[Required]
+		[ForeignKey(nameof(SpellIcon))]
+		public int SpellIconId { get; private set; }
+
+		public virtual ContentIconEntryModel SpellIcon { get; private set; }
+
 		/// <summary>
 		/// The ID of the first spell effect.
 		/// </summary>
@@ -53,18 +59,20 @@ namespace GladMMO
 		/// </summary>
 		public virtual SpellEffectEntryModel SpellEffectOne { get; private set; }
 
-		public SpellEntryModel([JetBrains.Annotations.NotNull] string spellName, SpellClassType spellType, bool isDefault, int castTime, int spellEffectIdOne)
+		public SpellEntryModel([JetBrains.Annotations.NotNull] string spellName, SpellClassType spellType, bool isDefault, int castTime, int spellEffectIdOne, int spellIconId)
 		{
 			if (string.IsNullOrWhiteSpace(spellName)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(spellName));
 			if (spellEffectIdOne < 0) throw new ArgumentOutOfRangeException(nameof(spellEffectIdOne));
 			if (castTime < 0) throw new ArgumentOutOfRangeException(nameof(castTime));
 			if (!Enum.IsDefined(typeof(SpellClassType), spellType)) throw new InvalidEnumArgumentException(nameof(spellType), (int) spellType, typeof(SpellClassType));
+			if (spellIconId <= 0) throw new ArgumentOutOfRangeException(nameof(spellIconId));
 
 			SpellName = spellName;
 			SpellType = spellType;
 			this.isDefault = isDefault;
 			CastTime = castTime;
 			SpellEffectIdOne = spellEffectIdOne;
+			SpellIconId = spellIconId;
 		}
 
 		/// <summary>
@@ -72,7 +80,7 @@ namespace GladMMO
 		/// </summary>
 		private SpellEntryModel()
 		{
-			
+
 		}
 	}
 }
