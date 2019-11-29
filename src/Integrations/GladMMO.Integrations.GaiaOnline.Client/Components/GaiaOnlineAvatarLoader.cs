@@ -18,8 +18,13 @@ namespace GladMMO.GaiaOnline
 		[Tooltip("List of renderers to set the loaded Avatar image to.")]
 		private Renderer[] AvatarRenderers = new Renderer[0];
 
+		public static Lazy<Shader> StandardShaderReference = new Lazy<Shader>(() => Shader.Find("Standard"));
+
 		private void Start()
 		{
+			if (StandardShaderReference.Value == null)
+				throw new InvalidOperationException($"The {nameof(StandardShaderReference)} cannot be null.");
+
 			if(AvatarRenderers == null)
 				throw new InvalidOperationException($"The {nameof(AvatarRenderers)} cannot be null.");
 
@@ -55,8 +60,24 @@ namespace GladMMO.GaiaOnline
 		{
 			if(texture == null) throw new ArgumentNullException(nameof(texture));
 
-			foreach(Renderer r in AvatarRenderers)
+			foreach (Renderer r in AvatarRenderers)
+			{
+				//For some reason we need to do this otherwise the actual
+				//avatars are faded for some reason. I explored other options
+				//but this seems the most viable option.
+				r.material.shader = StandardShaderReference.Value;
+
+				r.material.SetFloat("_Mode", 2);
+				r.material.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
+				r.material.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+				r.material.SetInt("_ZWrite", 0);
+				r.material.DisableKeyword("_ALPHATEST_ON");
+				r.material.EnableKeyword("_ALPHABLEND_ON");
+				r.material.DisableKeyword("_ALPHAPREMULTIPLY_ON");
+				r.material.renderQueue = 3000;
+
 				r.material.mainTexture = texture;
+			}
 		}
 
 		public void InitializeAvatar([NotNull] NetworkEntityGuid entityGuidOwner, [NotNull] Task<string> entityName)
