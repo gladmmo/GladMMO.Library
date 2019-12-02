@@ -3,12 +3,17 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using Glader.Essentials;
+using SceneJect.Common;
 using UnityEngine;
 
 namespace GladMMO
 {
+	[Injectee]
 	public sealed class ActionBarRowAdapter : BaseUnityUI<IUIActionBarRow>, IUIActionBarRow
 	{
+		[Inject]
+		private IActionBarButtonPressedEventPublisher PressPublisher;
+
 		//The buttons for the row.
 		[SerializeField]
 		private List<ActionBarButtonAdapter> ActionBarButtons;
@@ -33,8 +38,18 @@ namespace GladMMO
 			if ((int)_endIndex < (int)_startIndex)
 				throw new InvalidOperationException($"Cannot have {nameof(ActionBarIndex)} end lower than start.");
 
+			ActionBarIndex index = (ActionBarIndex)(StartIndex);
+
 			foreach (var barButton in ActionBarButtons)
-				ActionBarCollection.Add(StartIndex, barButton);
+			{
+				//For copying, static analysis warning.
+				var index1 = index;
+
+				barButton.ActionBarButton.AddOnClickListener(() => PressPublisher.PublishEvent(this, new ActionBarButtonPressedEventArgs(index1)));
+				ActionBarCollection.Add(index, barButton);
+
+				index += 1;
+			}
 		}
 
 		public IEnumerator<KeyValuePair<ActionBarIndex, IUIActionBarButton>> GetEnumerator()
