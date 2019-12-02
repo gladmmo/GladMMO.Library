@@ -5,7 +5,7 @@ using Glader.Essentials;
 
 namespace GladMMO
 {
-	public interface IUIActionBarButton
+	public interface IUIActionBarButton : IUIElement
 	{
 		IUIButton ActionBarButton { get; }
 

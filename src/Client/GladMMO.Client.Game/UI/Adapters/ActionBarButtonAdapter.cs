@@ -28,5 +28,13 @@ namespace GladMMO
 			_ActionBarButton = new Lazy<IUIButton>(() => new UnityButtonUIButtonAdapterImplementation(_ActionButton));
 			_ActionBarImageIcon = new Lazy<IUIImage>(() => new UnityImageUIFillableImageAdapterImplementation(_ActionBarIcon));
 		}
+
+		public void SetElementActive(bool state)
+		{
+			_ActionBarIcon.gameObject.SetActive(state);
+			_ActionButton.gameObject.SetActive(state);
+		}
+
+		public bool isActive => _ActionBarIcon.isActiveAndEnabled && _ActionButton.isActiveAndEnabled;
 	}
 }
