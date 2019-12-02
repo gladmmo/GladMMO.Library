@@ -16,7 +16,7 @@ namespace GladMMO
 
 		//The buttons for the row.
 		[SerializeField]
-		private List<ActionBarButtonAdapter> ActionBarButtons;
+		private List<ActionBarButtonAdapter> ActionBarButtons = new List<ActionBarButtonAdapter>(0);
 
 		[SerializeField]
 		private ActionBarIndex _startIndex;
