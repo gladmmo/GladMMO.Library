@@ -17,14 +17,18 @@ namespace GladMMO
 
 		private IContentIconDataCollection ContentIconCollection { get; }
 
+		private ISpellDataCollection SpellDataCollection { get; }
+
 		public ActionBarButtonImageChangeEventListener(IActionBarButtonStateChangedEventSubscribable subscriptionService,
 			[NotNull] ILog logger,
 			[KeyFilter(UnityUIRegisterationKey.ActionBarRow1)] [NotNull] IUIActionBarRow actionBarRow,
-			[NotNull] IContentIconDataCollection contentIconCollection) 
+			[NotNull] IContentIconDataCollection contentIconCollection,
+			[NotNull] ISpellDataCollection spellDataCollection) 
 			: base(subscriptionService, false, logger)
 		{
 			ActionBarRow = actionBarRow ?? throw new ArgumentNullException(nameof(actionBarRow));
 			ContentIconCollection = contentIconCollection ?? throw new ArgumentNullException(nameof(contentIconCollection));
+			SpellDataCollection = spellDataCollection ?? throw new ArgumentNullException(nameof(spellDataCollection));
 		}
 
 		protected override void HandleEvent(ActionBarButtonStateChangedEventArgs args)
@@ -42,14 +46,23 @@ namespace GladMMO
 				{
 					barButton.SetElementActive(true);
 
-					//TODO: Abstract the icon content loading
-					//TODO: Don't assume we have the content icon. Throw/log better exception
-					ContentIconInstanceModel icon = ContentIconCollection[args.ActionId];
+					//TODO: Refactor for spell/item
+					if (args.ActionType == ActionBarIndexType.Spell)
+					{
+						//TODO: Abstract the icon content loading
+						//TODO: Don't assume we have the content icon. Throw/log better exception
+						SpellDefinitionDataModel definition = SpellDataCollection.GetSpellDefinition(args.ActionId);
+						ContentIconInstanceModel icon = ContentIconCollection[definition.SpellIconId];
 
-					ProjectVersionStage.AssertAlpha();
-					//TODO: Load async
-					Texture2D iconTexture = Resources.Load<Texture2D>(Path.Combine("Icon", icon.IconPathName));
-					barButton.ActionBarImageIcon.SetSpriteTexture(iconTexture);
+						ProjectVersionStage.AssertAlpha();
+						//TODO: Load async
+						Texture2D iconTexture = Resources.Load<Texture2D>(Path.Combine("Icon", Path.GetFileNameWithoutExtension(icon.IconPathName)));
+						barButton.ActionBarImageIcon.SetSpriteTexture(iconTexture);
+					}
+					else
+					{
+						throw new InvalidOperationException($"TODO: Implement empty/item action bar support");
+					}
 				}
 			}
 		}
