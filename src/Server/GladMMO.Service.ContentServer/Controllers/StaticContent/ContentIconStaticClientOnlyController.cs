@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 namespace GladMMO
 {
 	[Route("api/ContentIcon")]
-	public sealed class ContentIconStaticClientOnlyController : StaticClientOnlyContentController<ContentIconEntryModel, IContentIconEntryModelRepository, ContentIconEntryModel>
+	public sealed class ContentIconStaticClientOnlyController : StaticClientOnlyContentController<ContentIconEntryModel, IContentIconEntryModelRepository, ContentIconInstanceModel>
 	{
 		public ContentIconStaticClientOnlyController(IClaimsPrincipalReader claimsReader, ILogger<AuthorizationReadyController> logger) 
 			: base(claimsReader, logger)
