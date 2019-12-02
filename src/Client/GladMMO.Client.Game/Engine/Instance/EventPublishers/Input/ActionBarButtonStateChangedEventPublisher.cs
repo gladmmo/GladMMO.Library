@@ -6,15 +6,15 @@ using Glader.Essentials;
 
 namespace GladMMO
 {
-	public interface IActionBarStateChangedEventPublisher : IEventPublisher<IActionBarButtonStateChangedEventSubscribable, ActionBarButtonStateChangedEventArgs>
+	public interface IActionBarButtonStateChangedEventPublisher : IEventPublisher<IActionBarButtonStateChangedEventSubscribable, ActionBarButtonStateChangedEventArgs>
 	{
 
 	}
 
 	[AdditionalRegisterationAs(typeof(IActionBarButtonStateChangedEventSubscribable))]
-	[AdditionalRegisterationAs(typeof(IActionBarStateChangedEventPublisher))]
+	[AdditionalRegisterationAs(typeof(IActionBarButtonStateChangedEventPublisher))]
 	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
-	public sealed class ActionBarButtonStateChangedEventPublisher : IActionBarStateChangedEventPublisher, IActionBarButtonStateChangedEventSubscribable, IGameInitializable
+	public sealed class ActionBarButtonStateChangedEventPublisher : IActionBarButtonStateChangedEventPublisher, IActionBarButtonStateChangedEventSubscribable, IGameInitializable
 	{
 		public event EventHandler<ActionBarButtonStateChangedEventArgs> OnActionBarButtonStateChanged;
 
