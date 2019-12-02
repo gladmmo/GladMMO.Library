@@ -25,8 +25,8 @@ namespace GladMMO
 
 		}
 
-		//TODO: Enable caching
-		[ResponseCache(Duration = 5000)]
+		//TODO: Enable caching outside of development
+		//[ResponseCache(Duration = 5000)]
 		[ProducesJson]
 		[HttpGet]
 		public async Task<IActionResult> GetClientStaticContent([FromServices] [NotNull] TContentRepositoryType repository, 
