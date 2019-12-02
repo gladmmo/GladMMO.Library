@@ -48,6 +48,7 @@ namespace GladMMO
 			SpellType = spellType;
 			CastTime = castTime;
 			SpellEffectIdOne = spellEffectIdOne;
+			SpellIconId = spellIconId;
 		}
 
 		public int GetSpellEffectId(SpellEffectIndex effectIndex)
