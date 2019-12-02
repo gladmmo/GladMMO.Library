@@ -11,7 +11,7 @@ namespace GladMMO
 	/// Database table for icon entries.
 	/// </summary>
 	[Table("clientcontent_icon")]
-	public class ContentIconEntryModel : IDatabaseModelKeyable
+	public class ContentIconEntryModel : IDatabaseModelKeyable, IContentIconEntry
 	{
 		[NotMapped]
 		public int EntryKey => IconId;
