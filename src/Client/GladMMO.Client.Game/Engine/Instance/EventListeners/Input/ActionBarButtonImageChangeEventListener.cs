@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using Autofac.Features.AttributeFilters;
 using Common.Logging;
 using Glader.Essentials;
+using UnityEngine;
 
 namespace GladMMO
 {
@@ -13,12 +15,16 @@ namespace GladMMO
 		//TODO: Support multiple actionbars.
 		private IUIActionBarRow ActionBarRow { get; }
 
+		private IContentIconDataCollection ContentIconCollection { get; }
+
 		public ActionBarButtonImageChangeEventListener(IActionBarButtonStateChangedEventSubscribable subscriptionService,
 			[NotNull] ILog logger,
-			[KeyFilter(UnityUIRegisterationKey.ActionBarRow1)] [NotNull] IUIActionBarRow actionBarRow) 
+			[KeyFilter(UnityUIRegisterationKey.ActionBarRow1)] [NotNull] IUIActionBarRow actionBarRow,
+			[NotNull] IContentIconDataCollection contentIconCollection) 
 			: base(subscriptionService, false, logger)
 		{
 			ActionBarRow = actionBarRow ?? throw new ArgumentNullException(nameof(actionBarRow));
+			ContentIconCollection = contentIconCollection ?? throw new ArgumentNullException(nameof(contentIconCollection));
 		}
 
 		protected override void HandleEvent(ActionBarButtonStateChangedEventArgs args)
@@ -36,9 +42,14 @@ namespace GladMMO
 				{
 					barButton.SetElementActive(true);
 
-					//TODO: Set the action bar icon image.
-					if(Logger.IsWarnEnabled)
-						Logger.Warn($"TODO: Icon handling for actionbar.");
+					//TODO: Abstract the icon content loading
+					//TODO: Don't assume we have the content icon. Throw/log better exception
+					ContentIconInstanceModel icon = ContentIconCollection[args.ActionId];
+
+					ProjectVersionStage.AssertAlpha();
+					//TODO: Load async
+					Texture2D iconTexture = Resources.Load<Texture2D>(Path.Combine("Icon", icon.IconPathName));
+					barButton.ActionBarImageIcon.SetSpriteTexture(iconTexture);
 				}
 			}
 		}
