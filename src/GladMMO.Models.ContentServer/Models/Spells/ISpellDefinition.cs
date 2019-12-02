@@ -26,5 +26,10 @@ namespace GladMMO
 		/// The ID of the first spell effect.
 		/// </summary>
 		int SpellEffectIdOne { get; }
+
+		/// <summary>
+		/// The id of content icon used for the spell on actionbars.
+		/// </summary>
+		int SpellIconId { get; }
 	}
 }

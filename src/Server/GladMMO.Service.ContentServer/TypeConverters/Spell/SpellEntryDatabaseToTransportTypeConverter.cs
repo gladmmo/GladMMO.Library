@@ -9,7 +9,7 @@ namespace GladMMO
 	{
 		public SpellDefinitionDataModel Convert(SpellEntryModel fromObject)
 		{
-			return new SpellDefinitionDataModel(fromObject.SpellId, fromObject.SpellName, fromObject.SpellType, fromObject.CastTime, fromObject.SpellEffectIdOne);
+			return new SpellDefinitionDataModel(fromObject.SpellId, fromObject.SpellName, fromObject.SpellType, fromObject.CastTime, fromObject.SpellEffectIdOne, fromObject.SpellIconId);
 		}
 	}
 }

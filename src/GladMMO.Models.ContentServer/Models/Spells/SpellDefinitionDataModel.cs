@@ -25,6 +25,9 @@ namespace GladMMO
 		[JsonProperty]
 		public int SpellEffectIdOne { get; private set; }
 
+		[JsonProperty]
+		public int SpellIconId { get; private set; }
+
 		//TODO: Enable these effects eventually.
 		[JsonIgnore]
 		private int SpellEffectIdTwo { get; set; }
@@ -32,12 +35,13 @@ namespace GladMMO
 		[JsonIgnore]
 		private int SpellEffectIdThree { get; set; }
 
-		public SpellDefinitionDataModel(int spellId, string spellName, SpellClassType spellType, int castTime, int spellEffectIdOne)
+		public SpellDefinitionDataModel(int spellId, string spellName, SpellClassType spellType, int castTime, int spellEffectIdOne, int spellIconId)
 		{
 			if (spellId <= 0) throw new ArgumentOutOfRangeException(nameof(spellId));
 			if (spellEffectIdOne < 0) throw new ArgumentOutOfRangeException(nameof(spellEffectIdOne));
 			if (castTime < 0) throw new ArgumentOutOfRangeException(nameof(castTime));
 			if (!Enum.IsDefined(typeof(SpellClassType), spellType)) throw new InvalidEnumArgumentException(nameof(spellType), (int) spellType, typeof(SpellClassType));
+			if (spellIconId <= 0) throw new ArgumentOutOfRangeException(nameof(spellIconId));
 
 			SpellId = spellId;
 			SpellName = spellName;
