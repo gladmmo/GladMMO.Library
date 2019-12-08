@@ -22,10 +22,10 @@ namespace GladMMO
 		/// <inheritdoc />
 		public override Task HandleMessage(IPeerMessageContext<GameClientPacketPayload> context, ServerPingPacketPayload payload)
 		{
-			//We send time sync first since we need to have a good grasp of the current network time before
-			//we even spawn into the world and start recieveing the world states.
-			context.PayloadSendService.SendMessageImmediately(new ServerTimeSyncronizationRequestPayload(DateTime.UtcNow.Ticks))
-				.ConfigureAwait(false);
+			//The issue with time sync every ping is that the remote packet queue could contain a bunch of inputs from rotation/movement
+			//which will skew the time sync result. Best to just go with the initial/original time syncronization.
+			//context.PayloadSendService.SendMessageImmediately(new ServerTimeSyncronizationRequestPayload(DateTime.UtcNow.Ticks))
+			//	.ConfigureAwait(false);
 
 			return Task.CompletedTask;
 		}
