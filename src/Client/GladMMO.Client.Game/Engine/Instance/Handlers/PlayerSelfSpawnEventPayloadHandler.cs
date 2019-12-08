@@ -29,10 +29,6 @@ namespace GladMMO
 			NetworkEntityNowVisibleEventArgs visibilityEvent = VisibileEventFactory.Create(payload.CreationData);
 
 			VisibilityEventPublisher.Publish(visibilityEvent);
-
-			//TODO: We need to make this the first packet, or couple of packets. We don't want to do this inbetween potentially slow operatons.
-			await context.PayloadSendService.SendMessageImmediately(new ServerTimeSyncronizationRequestPayload(DateTime.UtcNow.Ticks))
-				.ConfigureAwait(false);
 		}
 	}
 }

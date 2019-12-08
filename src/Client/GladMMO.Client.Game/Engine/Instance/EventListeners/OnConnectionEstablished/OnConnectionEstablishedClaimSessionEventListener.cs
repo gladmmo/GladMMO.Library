@@ -31,6 +31,11 @@ namespace GladMMO
 			//Once connection to the instance server is established
 			//we must attempt to claim out session on to actually fully enter.
 
+			//We send time sync first since we need to have a good grasp of the current network time before
+			//we even spawn into the world and start recieveing the world states.
+			SendService.SendMessageImmediately(new ServerTimeSyncronizationRequestPayload(DateTime.UtcNow.Ticks))
+				.ConfigureAwait(false);
+
 			//TODO: When it comes to community servers, we should not expose the sensitive JWT to them. We need a better way to deal with auth against untrusted instance servers
 			SendService.SendMessage(new ClientSessionClaimRequestPayload(AuthTokenRepository.RetrieveWithType(), CharacterDataRepository.CharacterId));
 		}
