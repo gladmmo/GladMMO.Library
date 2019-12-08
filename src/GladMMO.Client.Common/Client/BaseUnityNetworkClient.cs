@@ -68,6 +68,7 @@ namespace GladMMO
 				if (!client.isConnected && Logger.IsWarnEnabled)
 					Logger.Warn($"The client was not connected before dispatching started.");
 
+				//TODO: Read the next message before awaiting the result of the dispatch message handling.
 				while (client.isConnected && !CancelTokenSource.IsCancellationRequested) //if we exported we should reading messages
 				{
 					NetworkIncomingMessage<TIncomingPayloadType> message = await client.ReadMessageAsync(CancelTokenSource.Token)
