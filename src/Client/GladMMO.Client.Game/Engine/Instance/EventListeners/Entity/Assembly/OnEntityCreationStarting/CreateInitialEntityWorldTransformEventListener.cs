@@ -26,7 +26,7 @@ namespace GladMMO
 
 			//We just need to make the world transform match
 			//the initial movement data
-			TransformMap.AddObject(args.EntityGuid, new WorldTransform(movementData.InitialPosition, movementData.Rotation));
+			TransformMap.AddObject(args.EntityGuid, new WorldTransform(movementData.InitialPosition.x, movementData.InitialPosition.y, movementData.InitialPosition.z, movementData.Rotation));
 		}
 	}
 }

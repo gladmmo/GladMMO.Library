@@ -45,7 +45,7 @@ namespace GladMMO
 			//by having the client be semi-authorative about where it is.
 			WorldTransform entity = TransformMap.RetrieveEntity(PlayerDetails.LocalPlayerGuid);
 
-			SendService.SendMessage(new ClientMovementDataUpdateRequest(new Vector2(args.NewHorizontalInput, args.NewVerticalInput), timeStamp, entity.Position));
+			SendService.SendMessage(new ClientMovementDataUpdateRequest(new Vector2(args.NewHorizontalInput, args.NewVerticalInput), timeStamp, new Vector3(entity.PositionX, entity.PositionY, entity.PositionZ)));
 		}
 	}
 }

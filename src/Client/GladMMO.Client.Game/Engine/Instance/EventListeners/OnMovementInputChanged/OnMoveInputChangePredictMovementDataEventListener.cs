@@ -44,7 +44,7 @@ namespace GladMMO
 			Vector2 direction = new Vector2(args.NewHorizontalInput, args.NewVerticalInput);
 			WorldTransform worldTransform = TransformMap.RetrieveEntity(PlayerDetails.LocalPlayerGuid);
 			long predictedTime = TimeService.CurrentRemoteTime;
-			IMovementData data = new PositionChangeMovementData(predictedTime, worldTransform.Position, direction, worldTransform.YAxisRotation);
+			IMovementData data = new PositionChangeMovementData(predictedTime, new Vector3(worldTransform.PositionX, worldTransform.PositionY, worldTransform.PositionZ), direction, worldTransform.YAxisRotation);
 
 			MovementDataMappable.ReplaceObject(PlayerDetails.LocalPlayerGuid, data);
 			MovementUpdateHandler.HandleMovementUpdate(new EntityAssociatedData<IMovementData>(PlayerDetails.LocalPlayerGuid, data), true);

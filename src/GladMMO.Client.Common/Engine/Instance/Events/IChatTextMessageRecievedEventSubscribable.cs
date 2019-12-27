@@ -36,7 +36,7 @@ namespace GladMMO
 		/// <summary>
 		/// Indicates if the text event is formatted.
 		/// </summary>
-		internal bool isFormattedText { get; set; } = false;
+		public bool isFormattedText { get; set; } = false;
 
 		/// <inheritdoc />
 		public TextChatEventArgs([NotNull] string message, [NotNull] NetworkEntityGuid sender, ChatChannelType messageType)

@@ -44,7 +44,8 @@ namespace GladMMO
 			{
 				entry.ComponentValue.Update(WorldObjectMap.RetrieveEntity(entry.EntityGuid), currentRemoteTime);
 
-				TransformMap.ReplaceObject(entry.EntityGuid, new WorldTransform(entry.ComponentValue.CurrentPosition, TransformMap.RetrieveEntity(entry.EntityGuid).YAxisRotation));
+				Vector3 currentPosition = entry.ComponentValue.CurrentPosition;
+				TransformMap.ReplaceObject(entry.EntityGuid, new WorldTransform(currentPosition.x, currentPosition.y, currentPosition.z, TransformMap.RetrieveEntity(entry.EntityGuid).YAxisRotation));
 			}
 		}
 	}

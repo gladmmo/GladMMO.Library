@@ -25,7 +25,7 @@ namespace GladMMO
 		protected override void OnEventFired(object source, CameraInputChangedEventArgs args)
 		{
 			WorldTransform worldTransform = TransformMappable.RetrieveEntity(PlayerDetails.LocalPlayerGuid);
-			TransformMappable.ReplaceObject(PlayerDetails.LocalPlayerGuid, new WorldTransform(worldTransform.Position, args.Rotation));
+			TransformMappable.ReplaceObject(PlayerDetails.LocalPlayerGuid, new WorldTransform(worldTransform.PositionX, worldTransform.PositionY, worldTransform.PositionZ, args.Rotation));
 		}
 	}
 }

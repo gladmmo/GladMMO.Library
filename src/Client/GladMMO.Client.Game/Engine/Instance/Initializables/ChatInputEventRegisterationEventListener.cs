@@ -33,12 +33,15 @@ namespace GladMMO
 			ChatEnterButton = chatEnterButton ?? throw new ArgumentNullException(nameof(chatEnterButton));
 			ChatEnterText = chatEnterText ?? throw new ArgumentNullException(nameof(chatEnterText));
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
+
+			//TODO: We disabled waiting for channel auth specificially for PSOBB integration reasons. Not sure it's a good idea.
+			ChatEnterButton.AddOnClickListener(OnChatMessageEnterPressed);
 		}
 
 		//Once voice is authenticated we can start listening to and trying to send text messages.
 		protected override void OnEventFired(object source, VoiceSessionAuthenticatedEventArgs args)
 		{
-			ChatEnterButton.AddOnClickListener(OnChatMessageEnterPressed);
+			//ChatEnterButton.AddOnClickListener(OnChatMessageEnterPressed);
 		}
 
 		private void OnChatMessageEnterPressed()

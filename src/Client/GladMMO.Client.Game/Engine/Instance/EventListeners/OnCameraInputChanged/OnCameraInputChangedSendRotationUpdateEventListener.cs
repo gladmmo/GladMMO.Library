@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Glader.Essentials;
 using GladNet;
+using UnityEngine;
 
 namespace GladMMO
 {
@@ -34,7 +35,7 @@ namespace GladMMO
 		{
 			WorldTransform entity = TransformMappable.RetrieveEntity(PlayerDetails.LocalPlayerGuid);
 
-			SendService.SendMessage(new ClientRotationDataUpdateRequest(args.Rotation, TimeService.CurrentRemoteTime, entity.Position));
+			SendService.SendMessage(new ClientRotationDataUpdateRequest(args.Rotation, TimeService.CurrentRemoteTime, new Vector3(entity.PositionX, entity.PositionY, entity.PositionZ)));
 		}
 	}
 }
