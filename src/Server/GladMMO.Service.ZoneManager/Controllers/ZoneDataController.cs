@@ -45,6 +45,32 @@ namespace GladMMO
 			return BuildSuccessfulResponseModel(new ZoneWorldConfigurationResponse((int)entryModel.WorldId));
 		}
 
+		[HttpGet("default/endpoint")]
+		[ProducesJson]
+		[ResponseCache(Duration = 300)]
+		public async Task<IActionResult> GetDefaultServerEndpoint()
+		{
+			if(!ModelState.IsValid)
+				return BuildFailedResponseModel(ResolveServiceEndpointResponseCode.GeneralRequestError);
+
+			//Small interval for race condition. So we try catch.
+			try
+			{
+				ZoneInstanceEntryModel zone = await ZoneRepository.AnyAsync();
+
+				//Should be good, we just send them the endpoint
+				if(zone != null)
+					return BuildSuccessfulResponseModel(new ZoneConnectionEndpointResponse(zone.ZoneId, new ResolvedEndpoint(zone.ZoneServerAddress, zone.ZoneServerPort)));
+				else
+					return BuildFailedResponseModel(ResolveServiceEndpointResponseCode.ServiceUnavailable);
+			}
+			catch(Exception)
+			{
+				//TODO: Logging/event
+				return BuildFailedResponseModel(ResolveServiceEndpointResponseCode.GeneralRequestError);
+			}
+		}
+
 		//TODO: Don't use ResolveServiceEndpointResponse
 		//TODO: Add player authorization.
 		//TODO: We should verify that the requesting user has a reason to get the server endpoint.

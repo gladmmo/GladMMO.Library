@@ -22,5 +22,10 @@ namespace GladMMO
 		[Get("/api/ZoneData/{id}/endpoint")]
 		[Headers("Cache-Control: max-age=300")]
 		Task<ResolveServiceEndpointResponse> GetZoneConnectionEndpointAsync([AliasAs("id")] int zoneId);
+
+		//TODO: We should add authorization to this
+		[Get("/api/ZoneData/default/endpoint")]
+		[Headers("Cache-Control: max-age=300")]
+		Task<ResponseModel<ZoneConnectionEndpointResponse, ResolveServiceEndpointResponseCode>> GetAnyZoneConnectionEndpointAsync();
 	}
 }
