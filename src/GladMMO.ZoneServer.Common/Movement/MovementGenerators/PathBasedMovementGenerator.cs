@@ -63,7 +63,7 @@ namespace GladMMO
 			State = ComputeInitialPathState(currentTime);
 
 			//If pathing was disabled it means we're at the end when we start, we need to set to last point
-			if (!isFinished)
+			if (isFinished)
 				return entity.transform.position = MovementData.MovementPath[MovementData.MovementPath.Count - 1];
 
 			//Just call update, which will set the position.

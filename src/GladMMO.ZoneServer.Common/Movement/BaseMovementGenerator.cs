@@ -62,6 +62,11 @@ namespace GladMMO
 				isStarted = true;
 			}
 
+			//it's possible after starting that it has finally become finished.
+			//I encountered this with clientside pathing from Runescape emulation lol.
+			if (isFinished)
+				return;
+
 			CurrentPosition = InternalUpdate(entity, currentTime); //don't update if we called Start
 		}
 
