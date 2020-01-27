@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Autofac;
@@ -10,10 +11,9 @@ namespace GladMMO
 {
 	public sealed class AuthenticationDependencyAutofacModule : NetworkServiceDiscoveryableAutofaceModule
 	{
-		public AuthenticationDependencyAutofacModule()
-		{
-			
-		}
+		//A design smell, but we make this static so that this can be controlled by consumers of the
+		//GladMMO library without massively complicating the dependency graph of the root module registering.
+		public static Func<HttpClientHandler> HttpClientHandlerFactory { get; set; } = () => new FiddlerEnabledWebProxyHandler();
 
 		/// <inheritdoc />
 		protected override void Load(ContainerBuilder builder)
@@ -22,7 +22,7 @@ namespace GladMMO
 			{
 				IServiceDiscoveryService serviceDiscovery = context.Resolve<IServiceDiscoveryService>();
 
-				return new AsyncEndpointAuthenticationService(QueryForRemoteServiceEndpoint(serviceDiscovery, "Authentication"), new RefitSettings() { HttpMessageHandlerFactory = () => new FiddlerEnabledWebProxyHandler() });
+				return new AsyncEndpointAuthenticationService(QueryForRemoteServiceEndpoint(serviceDiscovery, "Authentication"), new RefitSettings() { HttpMessageHandlerFactory = HttpClientHandlerFactory });
 			});
 		}
 	}

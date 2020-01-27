@@ -77,17 +77,9 @@ namespace GladMMO
 			//builder.RegisterModule<EntityMappableRegisterationModule<NetworkEntityGuid>>();
 			RegisterEntityContainers(builder);
 
-			builder.Register<IServiceDiscoveryService>(context => RestService.For<IServiceDiscoveryService>(ServiceDiscoveryUrl))
-				.As<IServiceDiscoveryService>()
-				.SingleInstance();
+			builder.RegisterModule(new ServiceDiscoveryDependencyAutofacModule(ServiceDiscoveryUrl));
 
-			builder.Register<INameQueryService>(context =>
-			{
-				IServiceDiscoveryService serviceDiscovery = context.Resolve<IServiceDiscoveryService>();
-
-				//TODO: Eventually gameserver won't be endpoint for namequeries.
-				return new AsyncEndpointNameQueryService(QueryForRemoteServiceEndpoint(serviceDiscovery, "NameQuery"), new RefitSettings() { HttpMessageHandlerFactory = () => new FiddlerEnabledWebProxyHandler() });
-			});
+			builder.RegisterModule<NameQueryServiceDependencyAutofacModule>();
 
 			builder.RegisterType<CacheableEntityNameQueryable>()
 				.As<IEntityNameQueryable>()
