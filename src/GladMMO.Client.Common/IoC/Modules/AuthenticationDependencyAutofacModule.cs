@@ -15,6 +15,10 @@ namespace GladMMO
 		//GladMMO library without massively complicating the dependency graph of the root module registering.
 		public static Func<HttpClientHandler> HttpClientHandlerFactory { get; set; } = () => new FiddlerEnabledWebProxyHandler();
 
+		//We mostly expose this again for WebGL since calling sync tasks normally is a bad idea for WebGL in Unity3D.
+		[JetBrains.Annotations.CanBeNull]
+		public static string PrecomputedEndpoint { get; set; }
+
 		/// <inheritdoc />
 		protected override void Load(ContainerBuilder builder)
 		{
@@ -22,7 +26,10 @@ namespace GladMMO
 			{
 				IServiceDiscoveryService serviceDiscovery = context.Resolve<IServiceDiscoveryService>();
 
-				return new AsyncEndpointAuthenticationService(QueryForRemoteServiceEndpoint(serviceDiscovery, "Authentication"), new RefitSettings() { HttpMessageHandlerFactory = HttpClientHandlerFactory });
+				if (PrecomputedEndpoint != null)
+					return RestService.For<IAuthenticationService>(PrecomputedEndpoint, new RefitSettings() {HttpMessageHandlerFactory = HttpClientHandlerFactory});
+				else
+					return new AsyncEndpointAuthenticationService(QueryForRemoteServiceEndpoint(serviceDiscovery, "Authentication"), new RefitSettings() { HttpMessageHandlerFactory = HttpClientHandlerFactory });
 			});
 		}
 	}
