@@ -24,7 +24,7 @@ namespace GladMMO
 		/// <inheritdoc />
 		public async Task<bool> ContainsAsync(TKey key)
 		{
-			return await RetrieveAsync(key).ConfigureAwait(false) != null;
+			return await RetrieveAsync(key).ConfigureAwaitFalse() != null;
 		}
 
 		/// <inheritdoc />
@@ -33,12 +33,12 @@ namespace GladMMO
 			//TODO: Should we validate no key already exists?
 			ModelSet.Add(model);
 			return await SaveAndCheckResultsAsync()
-				.ConfigureAwait(false);
+				.ConfigureAwaitFalse();
 		}
 
 		private async Task<bool> SaveAndCheckResultsAsync()
 		{
-			return await Context.SaveChangesAsync().ConfigureAwait(false) != 0;
+			return await Context.SaveChangesAsync().ConfigureAwaitFalse() != 0;
 		}
 
 		/// <inheritdoc />
@@ -63,31 +63,31 @@ namespace GladMMO
 		public async Task<bool> TryDeleteAsync(TKey key)
 		{
 			//If it doesn't exist then this will just fail, so get out soon.
-			if(!await ContainsAsync(key).ConfigureAwait(false))
+			if(!await ContainsAsync(key).ConfigureAwaitFalse())
 				return false;
 
 			TModelType modelType = await RetrieveAsync(key)
-				.ConfigureAwait(false);
+				.ConfigureAwaitFalse();
 
 			ModelSet.Remove(modelType);
 
 			return await SaveAndCheckResultsAsync()
-				.ConfigureAwait(false);
+				.ConfigureAwaitFalse();
 		}
 
 		/// <inheritdoc />
 		public async Task UpdateAsync(TKey key, TModelType model)
 		{
-			if(!await ContainsAsync(key).ConfigureAwait(false))
+			if(!await ContainsAsync(key).ConfigureAwaitFalse())
 				throw new InvalidOperationException($"Cannot update model with Key: {key} as it does not exist.");
 
 			//TODO: is this slow? Is there a better way to deal with tracked entities?
-			Context.Entry(await RetrieveAsync(key).ConfigureAwait(false)).State = EntityState.Detached;
+			Context.Entry(await RetrieveAsync(key).ConfigureAwaitFalse()).State = EntityState.Detached;
 
 			ModelSet.Update(model);
 
 			await SaveAndCheckResultsAsync()
-				.ConfigureAwait(false);
+				.ConfigureAwaitFalse();
 		}
 	}
 }

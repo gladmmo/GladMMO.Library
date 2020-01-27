@@ -24,17 +24,17 @@ namespace GladMMO
 
 		public async Task SendProxiedPostAsync(string jsonBodyContent, string requestPath, string authorizationToken)
 		{
-			await (await GetService().ConfigureAwait(false)).SendProxiedPostAsync(jsonBodyContent, requestPath, authorizationToken).ConfigureAwait(false);
+			await (await GetService().ConfigureAwaitFalse()).SendProxiedPostAsync(jsonBodyContent, requestPath, authorizationToken).ConfigureAwaitFalseVoid();
 		}
 
 		public async Task SendProxiedPatchAsync(string jsonBodyContent, string requestPath, string authorizationToken)
 		{
-			await (await GetService().ConfigureAwait(false)).SendProxiedPatchAsync(jsonBodyContent, requestPath, authorizationToken).ConfigureAwait(false);
+			await (await GetService().ConfigureAwaitFalse()).SendProxiedPatchAsync(jsonBodyContent, requestPath, authorizationToken).ConfigureAwaitFalseVoid();
 		}
 
 		public async Task SendProxiedPutAsync(string jsonBodyContent, string requestPath, string authorizationToken)
 		{
-			await (await GetService().ConfigureAwait(false)).SendProxiedPutAsync(jsonBodyContent, requestPath, authorizationToken).ConfigureAwait(false);
+			await (await GetService().ConfigureAwaitFalse()).SendProxiedPutAsync(jsonBodyContent, requestPath, authorizationToken).ConfigureAwaitFalseVoid();
 		}
 	}
 }

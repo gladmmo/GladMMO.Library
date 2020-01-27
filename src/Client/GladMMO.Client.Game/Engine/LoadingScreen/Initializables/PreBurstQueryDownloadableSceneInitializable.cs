@@ -57,7 +57,7 @@ namespace GladMMO
 					//TODO: Handle throwing/error
 					//We need to know the world the zone is it, so we can request a download URL for it.
 					var worldConfig = await ZoneDataService.GetZoneWorldConfigurationAsync(args.ZoneIdentifier)
-						.ConfigureAwait(false);
+						.ConfigureAwaitFalse();
 
 					if (!worldConfig.isSuccessful)
 						throw new InvalidOperationException($"Failed to query World Configuration for ZoneId: {args.ZoneIdentifier}");
@@ -66,7 +66,7 @@ namespace GladMMO
 
 					//With the worldid we can get the download URL.
 					ContentDownloadURLResponse urlDownloadResponse = await ContentService.RequestWorldDownloadUrl(worldId)
-						.ConfigureAwait(false);
+						.ConfigureAwaitFalse();
 
 					if(Logger.IsInfoEnabled)
 						Logger.Info($"World Download Url: {urlDownloadResponse.DownloadURL}");

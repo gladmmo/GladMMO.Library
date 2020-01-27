@@ -104,12 +104,12 @@ namespace GladMMO
 
 			//If world was deleted then they won't have location.
 			//TODO: Is this the best way to deal with this?
-			if(await locationRepository.ContainsAsync(characterId).ConfigureAwait(false))
+			if(await locationRepository.ContainsAsync(characterId).ConfigureAwaitFalse())
 				await locationRepository.UpdateAsync(characterId, BuildCharacterLocationFromSave(characterId, saveRequest, zoneEntry.WorldId))
-					.ConfigureAwait(false);
+					.ConfigureAwaitFalseVoid();
 			else
 				await locationRepository.TryCreateAsync(BuildCharacterLocationFromSave(characterId, saveRequest, zoneEntry.WorldId))
-					.ConfigureAwait(false);
+					.ConfigureAwaitFalse();
 
 			return Ok();
 		}

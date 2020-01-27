@@ -24,33 +24,33 @@ namespace GladMMO
 
 		public async Task<ResponseModel<CreatureTemplateModel, SceneContentQueryResponseCode>> GetCreatureTemplate(int creatureTemplateId)
 		{
-			return await(await GetService().ConfigureAwait(false)).GetCreatureTemplate(creatureTemplateId).ConfigureAwait(false);
+			return await(await GetService().ConfigureAwaitFalse()).GetCreatureTemplate(creatureTemplateId).ConfigureAwaitFalse();
 		}
 
 		public async Task<ResponseModel<CreatureInstanceModel, SceneContentQueryResponseCode>> GetCreatureInstance(int creatureId)
 		{
-			return await(await GetService().ConfigureAwait(false)).GetCreatureInstance(creatureId).ConfigureAwait(false);
+			return await(await GetService().ConfigureAwaitFalse()).GetCreatureInstance(creatureId).ConfigureAwaitFalse();
 		}
 
 		public async Task<ResponseModel<CreatureInstanceModel, SceneContentQueryResponseCode>> CreateCreatureInstance(long worldId)
 		{
-			return await(await GetService().ConfigureAwait(false)).CreateCreatureInstance(worldId).ConfigureAwait(false);
+			return await(await GetService().ConfigureAwaitFalse()).CreateCreatureInstance(worldId).ConfigureAwaitFalse();
 
 		}
 
 		public async Task UpdateCreatureInstance(int creatureId, CreatureInstanceModel model)
 		{
-			await(await GetService().ConfigureAwait(false)).UpdateCreatureInstance(creatureId, model).ConfigureAwait(false);
+			await(await GetService().ConfigureAwaitFalse()).UpdateCreatureInstance(creatureId, model).ConfigureAwaitFalseVoid();
 		}
 
 		public async Task<ResponseModel<ObjectEntryCollectionModel<CreatureInstanceModel>, ContentEntryCollectionResponseCode>> GetCreatureEntriesByWorld(long worldId)
 		{
-			return await(await GetService().ConfigureAwait(false)).GetCreatureEntriesByWorld(worldId).ConfigureAwait(false);
+			return await(await GetService().ConfigureAwaitFalse()).GetCreatureEntriesByWorld(worldId).ConfigureAwaitFalse();
 		}
 
 		public async Task<ResponseModel<ObjectEntryCollectionModel<CreatureTemplateModel>, ContentEntryCollectionResponseCode>> GetCreatureTemplatesByWorld(long worldId)
 		{
-			return await(await GetService().ConfigureAwait(false)).GetCreatureTemplatesByWorld(worldId).ConfigureAwait(false);
+			return await(await GetService().ConfigureAwaitFalse()).GetCreatureTemplatesByWorld(worldId).ConfigureAwaitFalse();
 		}
 	}
 }

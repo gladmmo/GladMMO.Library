@@ -30,14 +30,14 @@ namespace GladMMO
 				return Ok(new ZoneServerWaypointQueryResponse(WaypointQueryResponseCode.GeneralServerError));
 
 			if(!await waypointsRepository.ContainsPathAsync(pathId)
-				.ConfigureAwait(false))
+				.ConfigureAwaitFalse())
 			{
 				Logger.LogWarning($"Requested PathId: {pathId} but was not found in {nameof(IWaypointsRepository)}");
 				return Ok(new ZoneServerWaypointQueryResponse(WaypointQueryResponseCode.EntryNotFound));
 			}
 
 			var result = await waypointsRepository.RetrievePointsFromPathAsync(pathId)
-				.ConfigureAwait(false);
+				.ConfigureAwaitFalse();
 
 			Vector3[] vectorArray = result
 				.OrderBy(model => model.PointId)

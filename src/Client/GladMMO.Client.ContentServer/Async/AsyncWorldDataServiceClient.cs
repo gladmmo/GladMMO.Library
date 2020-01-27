@@ -24,7 +24,7 @@ namespace GladMMO
 
 		public async Task<bool> CheckWorldExistsAsync(int worldId)
 		{
-			return await (await GetService().ConfigureAwait(false)).CheckWorldExistsAsync(worldId).ConfigureAwait(false);
+			return await (await GetService().ConfigureAwaitFalse()).CheckWorldExistsAsync(worldId).ConfigureAwaitFalse();
 		}
 	}
 }

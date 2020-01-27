@@ -24,22 +24,22 @@ namespace GladMMO
 
 		public async Task<SpellDefinitionCollectionResponseModel> GetDefaultSpellDataAsync()
 		{
-			return await (await GetService().ConfigureAwait(false)).GetDefaultSpellDataAsync().ConfigureAwait(false);
+			return await (await GetService().ConfigureAwaitFalse()).GetDefaultSpellDataAsync().ConfigureAwaitFalse();
 		}
 
 		public async Task<SpellLevelLearnedCollectionResponseModel> GetLevelLearnedSpellsAsync()
 		{
-			return await (await GetService().ConfigureAwait(false)).GetLevelLearnedSpellsAsync().ConfigureAwait(false);
+			return await (await GetService().ConfigureAwaitFalse()).GetLevelLearnedSpellsAsync().ConfigureAwaitFalse();
 		}
 
 		public async Task<SpellLevelLearnedCollectionResponseModel> GetLevelLearnedSpellsAsync(EntityPlayerClassType classType)
 		{
-			return await (await GetService().ConfigureAwait(false)).GetLevelLearnedSpellsAsync(classType).ConfigureAwait(false);
+			return await (await GetService().ConfigureAwaitFalse()).GetLevelLearnedSpellsAsync(classType).ConfigureAwaitFalse();
 		}
 
 		public async Task<SpellLevelLearnedCollectionResponseModel> GetLevelLearnedSpellsAsync(EntityPlayerClassType classType, int level)
 		{
-			return await (await GetService().ConfigureAwait(false)).GetLevelLearnedSpellsAsync(classType, level).ConfigureAwait(false);
+			return await (await GetService().ConfigureAwaitFalse()).GetLevelLearnedSpellsAsync(classType, level).ConfigureAwaitFalse();
 		}
 	}
 }

@@ -77,9 +77,9 @@ namespace GladMMO
 		/// <inheritdoc />
 		public override async Task ClearReadBuffers()
 		{
-			using(await readSynObj.LockAsync().ConfigureAwait(false))
+			using(await readSynObj.LockAsync().ConfigureAwait(!GladMMOAsyncSettings.ConfigureAwaitFalseSupported))
 				await DecoratedClient.ClearReadBuffers()
-					.ConfigureAwait(false);
+					.ConfigureAwaitFalseVoid();
 		}
 
 		/// <inheritdoc />
@@ -123,18 +123,18 @@ namespace GladMMO
 		private async Task CryptAndSend(byte[] payloadData, int offset, int payloadBytesCount)
 		{
 			//VERY critical we lock here otherwise we could write a header and then another unrelated body could be written inbetween
-			using(await writeSynObj.LockAsync().ConfigureAwait(false))
+			using(await writeSynObj.LockAsync().ConfigureAwait(!GladMMOAsyncSettings.ConfigureAwaitFalseSupported))
 			{
 				//TODO: Optimize the header size writing.
 				//We skip the first 2 bytes of the payload because it contains the opcode
 				//Which is suppose to be in the header. Therefore we don't wnat to write it twice
 				await DecoratedClient.WriteAsync(((short)payloadBytesCount).Reinterpret(), 0, 2)
-					.ConfigureAwait(false);
+					.ConfigureAwaitFalseVoid();
 
 				//We skip the first 2 bytes of the payload because it contains the opcode
 				//Which is suppose to be in the header. Therefore we don't wnat to write it twice
 				await DecoratedClient.WriteAsync(payloadData, offset, payloadBytesCount)
-					.ConfigureAwait(false);
+					.ConfigureAwaitFalseVoid();
 			}
 		}
 
@@ -146,14 +146,14 @@ namespace GladMMO
 
 		public virtual async Task<NetworkIncomingMessage<TReadPayloadBaseType>> ReadAsync(CancellationToken token)
 		{
-			using(await readSynObj.LockAsync(token).ConfigureAwait(false))
+			using(await readSynObj.LockAsync(token).ConfigureAwait(!GladMMOAsyncSettings.ConfigureAwaitFalseSupported))
 			{
 				//if was canceled the header reading probably returned null anyway
 				if(token.IsCancellationRequested)
 					return null;
 
 				await ReadAsync(PacketPayloadReadBuffer, 0, 2, token)
-					.ConfigureAwait(false);
+					.ConfigureAwaitFalse();
 
 				//We read from the payload buffer 2 bytes, it's the size.
 				int payloadSize = PacketPayloadReadBuffer.Reinterpret<short>(0);
@@ -164,7 +164,7 @@ namespace GladMMO
 
 				//We need to read enough bytes to deserialize the payload
 				await ReadAsync(PacketPayloadReadBuffer, 0, payloadSize, token)
-					.ConfigureAwait(false);//TODO: Should we timeout?
+					.ConfigureAwaitFalse();//TODO: Should we timeout?
 
 				//If the token was canceled then the buffer isn't filled and we can't make a message
 				if(token.IsCancellationRequested)

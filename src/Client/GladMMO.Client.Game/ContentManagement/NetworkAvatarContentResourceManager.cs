@@ -19,7 +19,7 @@ namespace GladMMO
 		protected override async Task<ContentDownloadURLResponse> RequestDownloadURL(long contentId)
 		{
 			return await ContentClient.RequestAvatarDownloadUrl(contentId)
-				.ConfigureAwait(false);
+				.ConfigureAwaitFalse();
 		}
 	}
 }

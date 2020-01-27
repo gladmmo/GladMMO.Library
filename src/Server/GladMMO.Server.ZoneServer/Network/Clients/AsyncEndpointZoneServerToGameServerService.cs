@@ -24,36 +24,36 @@ namespace GladMMO
 		/// <inheritdoc />
 		public async Task<ZoneServerCharacterLocationResponse> GetCharacterLocation(int characterId)
 		{
-			return await (await GetService().ConfigureAwait(false)).GetCharacterLocation(characterId).ConfigureAwait(false);
+			return await (await GetService().ConfigureAwaitFalse()).GetCharacterLocation(characterId).ConfigureAwaitFalse();
 		}
 
 		/// <inheritdoc />
 		public async Task<ZoneServerWaypointQueryResponse> GetPathWaypoints(int pathId)
 		{
-			return await (await GetService().ConfigureAwait(false)).GetPathWaypoints(pathId).ConfigureAwait(false);
+			return await (await GetService().ConfigureAwaitFalse()).GetPathWaypoints(pathId).ConfigureAwaitFalse();
 		}
 
 		/// <inheritdoc />
 		public async Task<ZoneServerTryClaimSessionResponse> TryClaimSession(ZoneServerTryClaimSessionRequest request)
 		{
-			return await (await GetService().ConfigureAwait(false)).TryClaimSession(request).ConfigureAwait(false);
+			return await (await GetService().ConfigureAwaitFalse()).TryClaimSession(request).ConfigureAwaitFalse();
 		}
 
 		//TODO: This should actually be in another service
 		/// <inheritdoc />
 		public async Task<int> GetAccountIdFromToken(string authToken)
 		{
-			return await (await GetService().ConfigureAwait(false)).GetAccountIdFromToken(authToken).ConfigureAwait(false);
+			return await (await GetService().ConfigureAwaitFalse()).GetAccountIdFromToken(authToken).ConfigureAwaitFalse();
 		}
 
 		public async Task TryWorldTeleportCharacter(ZoneServerWorldTeleportCharacterRequest request)
 		{
-			await (await GetService().ConfigureAwait(false)).TryWorldTeleportCharacter(request).ConfigureAwait(false);
+			await (await GetService().ConfigureAwaitFalse()).TryWorldTeleportCharacter(request).ConfigureAwaitFalseVoid();
 		}
 
 		public async Task<AvatarPedestalChangeResponse> UpdatePlayerAvatar(ZoneServerAvatarPedestalInteractionCharacterRequest request)
 		{
-			return await (await GetService().ConfigureAwait(false)).UpdatePlayerAvatar(request).ConfigureAwait(false);
+			return await (await GetService().ConfigureAwaitFalse()).UpdatePlayerAvatar(request).ConfigureAwaitFalse();
 		}
 	}
 }

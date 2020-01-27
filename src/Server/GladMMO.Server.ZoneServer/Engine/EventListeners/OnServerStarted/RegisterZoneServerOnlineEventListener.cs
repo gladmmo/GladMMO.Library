@@ -74,7 +74,7 @@ namespace GladMMO
 							//TODO: Make this a constant
 							//TODO: Don't do this every second.
 							await Task.Delay(5 * 60 * 1000)
-								.ConfigureAwait(false);
+								.ConfigureAwaitFalseVoid();
 
 							//Get back onto the main thread for the Application.isPlaying check.
 							await new UnityYieldAwaitable();

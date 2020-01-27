@@ -49,7 +49,7 @@ namespace GladMMO
 			//TODO: We should probably check the flags of content to see if it's private (IE hidden from user). Or if it's unlisted or removed.
 			//It's possible a user is requesting a content that doesn't exist
 			//Could be malicious or it could have been deleted for whatever reason
-			if(!await contentEntryRepository.ContainsAsync(contentId).ConfigureAwait(false))
+			if(!await contentEntryRepository.ContainsAsync(contentId).ConfigureAwaitFalse())
 				return Json(new ContentDownloadURLResponse(ContentDownloadURLResponseCode.NoContentId));
 
 			//TODO: Refactor this into a validation dependency
@@ -99,7 +99,7 @@ namespace GladMMO
 
 			//Unlike creation, we just load an existing one.
 			TContentType content = await contentEntryRepository.RetrieveAsync(contentId)
-				.ConfigureAwait(false);
+				.ConfigureAwaitFalse();
 
 			//WE MUST MAKE SURE THE AUTHORIZED USER OWNS THE CONTENT!!
 			if(ClaimsReader.GetAccountIdInt(User) != content.AccountId)
@@ -112,7 +112,7 @@ namespace GladMMO
 				//This is where we update the content versioning.
 				content.Version += 1;
 				await contentEntryRepository.UpdateAsync(content.ContentId, content)
-					.ConfigureAwait(false);
+					.ConfigureAwaitFalseVoid();
 
 				return response;
 			}

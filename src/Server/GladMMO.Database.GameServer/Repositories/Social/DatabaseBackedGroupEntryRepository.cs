@@ -60,12 +60,12 @@ namespace GladMMO
 		/// <inheritdoc />
 		public async Task<CharacterGroupEntryModel> RetrieveByLeader(int characterId)
 		{
-			if(!await ContainsGroupWithLeader(characterId).ConfigureAwait(false))
+			if(!await ContainsGroupWithLeader(characterId).ConfigureAwaitFalse())
 				throw new InvalidOperationException($"Tried to retrieve {nameof(CharacterGroupEntryModel)} of Leader: {characterId} but none exists.");
 
 			return await Context.Groups
 				.FirstAsync(g => g.LeaderCharacterId == characterId)
-				.ConfigureAwait(false);
+				.ConfigureAwaitFalse();
 		}
 	}
 }

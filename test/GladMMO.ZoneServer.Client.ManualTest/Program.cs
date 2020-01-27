@@ -40,7 +40,7 @@ namespace GladMMO
 				while(true)
 				{
 					NetworkIncomingMessage<GameServerPacketPayload> message = await client.ReadMessageAsync()
-						.ConfigureAwait(false);
+						.ConfigureAwaitFalse();
 
 					Console.WriteLine($"\n#{packetCount} - Recieved Message Type: {message.Payload.GetType().Name}");
 				}

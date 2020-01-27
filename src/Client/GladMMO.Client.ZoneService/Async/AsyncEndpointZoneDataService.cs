@@ -24,17 +24,17 @@ namespace GladMMO
 
 		public async Task<ResponseModel<ZoneWorldConfigurationResponse, ZoneWorldConfigurationResponseCode>> GetZoneWorldConfigurationAsync(int zoneId)
 		{
-			return await (await GetService().ConfigureAwait(false)).GetZoneWorldConfigurationAsync(zoneId).ConfigureAwait(false);
+			return await (await GetService().ConfigureAwaitFalse()).GetZoneWorldConfigurationAsync(zoneId).ConfigureAwaitFalse();
 		}
 
 		public async Task<ResolveServiceEndpointResponse> GetZoneConnectionEndpointAsync(int zoneId)
 		{
-			return await (await GetService().ConfigureAwait(false)).GetZoneConnectionEndpointAsync(zoneId).ConfigureAwait(false);
+			return await (await GetService().ConfigureAwaitFalse()).GetZoneConnectionEndpointAsync(zoneId).ConfigureAwaitFalse();
 		}
 
 		public async Task<ResponseModel<ZoneConnectionEndpointResponse, ResolveServiceEndpointResponseCode>> GetAnyZoneConnectionEndpointAsync()
 		{
-			return await (await GetService().ConfigureAwait(false)).GetAnyZoneConnectionEndpointAsync().ConfigureAwait(false);
+			return await (await GetService().ConfigureAwaitFalse()).GetAnyZoneConnectionEndpointAsync().ConfigureAwaitFalse();
 		}
 	}
 }

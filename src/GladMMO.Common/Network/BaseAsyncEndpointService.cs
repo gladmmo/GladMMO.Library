@@ -37,14 +37,14 @@ namespace GladMMO
 		{
 			if(futureEndpoint == null) throw new ArgumentNullException(nameof(futureEndpoint));
 
-			return RestService.For<TRestInterfaceType>(await futureEndpoint.ConfigureAwait(false));
+			return RestService.For<TRestInterfaceType>(await futureEndpoint.ConfigureAwaitFalse());
 		}
 
 		private async Task<TRestInterfaceType> BuildRestService(Task<string> futureEndpoint, RefitSettings settings)
 		{
 			if(futureEndpoint == null) throw new ArgumentNullException(nameof(futureEndpoint));
 
-			return RestService.For<TRestInterfaceType>(await futureEndpoint.ConfigureAwait(false), settings);
+			return RestService.For<TRestInterfaceType>(await futureEndpoint.ConfigureAwaitFalse(), settings);
 		}
 
 		/// <summary>

@@ -47,7 +47,7 @@ namespace GladMMO
 			try
 			{
 				CharacterListResponse listResponse = await CharacterServiceQueryable.GetCharacters()
-					.ConfigureAwait(false);
+					.ConfigureAwaitFalse();
 
 				//TODO: Handle errors
 				foreach(var character in listResponse.CharacterIds)
@@ -60,13 +60,13 @@ namespace GladMMO
 					//TODO: Optimize below awaits.
 					//Do a namequery so it's in the cache for when anything tries to get entities name.
 					await EntityNameQueryable.RetrieveAsync(entityGuid)
-						.ConfigureAwait(false);
+						.ConfigureAwaitFalse();
 
 					var appearanceResponse = await CharacterServiceQueryable.GetCharacterAppearance(entityGuid.EntityId)
-						.ConfigureAwait(false);
+						.ConfigureAwaitFalse();
 
 					var characterData = await CharacterServiceQueryable.GetCharacterData(entityGuid.EntityId)
-						.ConfigureAwait(false);
+						.ConfigureAwaitFalse();
 
 					//Don't throw, because we actually don't want to stop the
 					//character screen from working just because we can't visually display some stuff.

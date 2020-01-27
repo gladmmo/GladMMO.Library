@@ -25,7 +25,7 @@ namespace GladMMO
 			//TODO: Is ticks best? Or Unity3D deltatime since startup? Or Enviroment ticks?
 			//TODO: Do we need to store the time diff? To track latency serverside for some reason?
 			await context.PayloadSendService.SendMessage(new ServerTimeSyncronizationResponsePayload(payload.CurrentLocalTime, DateTime.UtcNow.Ticks))
-				.ConfigureAwait(false);
+				.ConfigureAwaitFalse();
 		}
 	}
 }

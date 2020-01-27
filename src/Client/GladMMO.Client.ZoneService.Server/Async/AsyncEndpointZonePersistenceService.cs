@@ -24,12 +24,12 @@ namespace GladMMO
 
 		public async Task SaveFullCharacterDataAsync(int characterId, FullCharacterDataSaveRequest saveRequest)
 		{
-			await (await GetService().ConfigureAwait(false)).SaveFullCharacterDataAsync(characterId, saveRequest).ConfigureAwait(false);
+			await (await GetService().ConfigureAwaitFalse()).SaveFullCharacterDataAsync(characterId, saveRequest).ConfigureAwaitFalseVoid();
 		}
 
 		public async Task SaveCharacterLocation(int characterId, ZoneServerCharacterLocationSaveRequest saveRequest)
 		{
-			await (await GetService().ConfigureAwait(false)).SaveCharacterLocation(characterId, saveRequest).ConfigureAwait(false);
+			await (await GetService().ConfigureAwaitFalse()).SaveCharacterLocation(characterId, saveRequest).ConfigureAwaitFalseVoid();
 		}
 	}
 }

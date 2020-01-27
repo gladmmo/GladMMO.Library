@@ -46,7 +46,7 @@ namespace GladMMO
 		public override async Task OnConnectedAsync()
 		{
 			await base.OnConnectedAsync()
-				.ConfigureAwait(false);
+				.ConfigureAwaitFalseVoid();
 
 			if(Logger.IsEnabled(LogLevel.Information))
 				Logger.LogInformation($"Account Connected: {ClaimsReader.GetAccountName(Context.User)}:{ClaimsReader.GetAccountId(Context.User)} with SignalR UserId: {Context.UserIdentifier}");
@@ -55,7 +55,7 @@ namespace GladMMO
 			{
 				foreach(var listener in OnConnectionHubListeners)
 				{
-					HubOnConnectionState connectionState = await listener.OnConnected(this).ConfigureAwait(false);
+					HubOnConnectionState connectionState = await listener.OnConnected(this).ConfigureAwaitFalse();
 
 					//if the listener indicated we need to abort for whatever reason we
 					//should believe it and just abort.

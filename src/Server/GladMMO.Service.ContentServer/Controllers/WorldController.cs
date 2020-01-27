@@ -43,14 +43,14 @@ namespace GladMMO
 			//we should also check that it's an asset bundle and gather some information from the header.
 
 			//First we verify a world exists with this id
-			if(!await worldEntryRepository.ContainsAsync(worldId).ConfigureAwait(false))
+			if(!await worldEntryRepository.ContainsAsync(worldId).ConfigureAwaitFalse())
 			{
 				//TODO: We should say something more specific
 				return BadRequest();
 			}
 
 			WorldEntryModel model = await worldEntryRepository.RetrieveAsync(worldId)
-				.ConfigureAwait(false);
+				.ConfigureAwaitFalse();
 
 			//Check the model is associated with this account. Only 1 account can own a world resource
 			if(model.AccountId != ClaimsReader.GetAccountIdInt(User))
@@ -60,7 +60,7 @@ namespace GladMMO
 			//we can now actually check that the resource exists on the storeage system
 			//TODO: This relies on some outdated API/deprecated stuff.
 			bool resourceExists = await contentResourceExistenceVerifier.VerifyResourceExists(UserContentType.World, model.StorageGuid)
-				.ConfigureAwait(false); //TODO: Don't hardcore bucket name
+				.ConfigureAwaitFalse(); //TODO: Don't hardcore bucket name
 
 			//TODO: Be more descriptive
 			if(!resourceExists)
@@ -76,7 +76,7 @@ namespace GladMMO
 
 			//For now, since it's unimplemented let's just set it validated
 			await worldEntryRepository.SetWorldValidated(model.WorldId)
-				.ConfigureAwait(false);
+				.ConfigureAwaitFalseVoid();
 
 			return Ok();
 		}

@@ -30,7 +30,7 @@ namespace GladMMO
 			if (guildCharacterMembershipRepository == null) throw new ArgumentNullException(nameof(guildCharacterMembershipRepository));
 
 			//If guild membership repo doesn't have the character id as an entry then it means there is no guild associated with them.
-			if (!(await guildCharacterMembershipRepository.ContainsAsync(characterId).ConfigureAwait(false)))
+			if (!(await guildCharacterMembershipRepository.ContainsAsync(characterId).ConfigureAwaitFalse()))
 				return BuildFailedResponseModel(CharacterGuildMembershipStatusResponseCode.NoGuild);
 
 			//TODO: There is technically a race condition here. They could have just been kicked from a guild but the cached model may say they are in a guild
@@ -40,7 +40,7 @@ namespace GladMMO
 			//Otherwise, they are in a guild
 			try
 			{
-				return BuildSuccessfulResponseModel(new CharacterGuildMembershipStatusResponse((await guildCharacterMembershipRepository.RetrieveAsync(characterId).ConfigureAwait(false)).GuildId));
+				return BuildSuccessfulResponseModel(new CharacterGuildMembershipStatusResponse((await guildCharacterMembershipRepository.RetrieveAsync(characterId).ConfigureAwaitFalse()).GuildId));
 			}
 			catch (Exception e)
 			{

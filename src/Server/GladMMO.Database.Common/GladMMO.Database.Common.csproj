@@ -9,4 +9,8 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\GladMMO.Common\GladMMO.Common.csproj" />
+  </ItemGroup>
+
 </Project>

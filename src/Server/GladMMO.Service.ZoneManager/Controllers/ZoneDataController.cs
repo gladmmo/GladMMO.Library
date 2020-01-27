@@ -30,7 +30,7 @@ namespace GladMMO
 		[ProducesJson]
 		public async Task<IActionResult> GetZoneWorldConfiguration([FromRoute(Name = "id")] int zoneId)
 		{
-			if(!await ZoneRepository.ContainsAsync(zoneId).ConfigureAwait(false))
+			if(!await ZoneRepository.ContainsAsync(zoneId).ConfigureAwaitFalse())
 			{
 				if(Logger.IsEnabled(LogLevel.Error))
 					Logger.LogError($"Failed to query for WorldId for Zone: {zoneId}");
@@ -39,7 +39,7 @@ namespace GladMMO
 			}
 
 			ZoneInstanceEntryModel entryModel = await ZoneRepository.RetrieveAsync(zoneId)
-				.ConfigureAwait(false);
+				.ConfigureAwaitFalse();
 
 			//We just return the world that this zone is for.
 			return BuildSuccessfulResponseModel(new ZoneWorldConfigurationResponse((int)entryModel.WorldId));

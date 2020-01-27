@@ -49,7 +49,7 @@ namespace GladMMO
 				completionSource.SetResult(null);
 
 				await ApplicationBase.BeginListening()
-					.ConfigureAwait(false);
+					.ConfigureAwaitFalseVoid();
 
 				if(ApplicationBase.Logger.IsWarnEnabled)
 					ApplicationBase.Logger.Warn($"Server is shutting down.");

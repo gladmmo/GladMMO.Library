@@ -36,7 +36,7 @@ namespace GladMMO
 		/// <inheritdoc />
 		public void Save(NetworkEntityGuid guid)
 		{
-			SaveAsync(guid).ConfigureAwait(false).GetAwaiter().GetResult();
+			SaveAsync(guid).ConfigureAwaitFalseVoid().GetAwaiter().GetResult();
 		}
 
 		/// <inheritdoc />

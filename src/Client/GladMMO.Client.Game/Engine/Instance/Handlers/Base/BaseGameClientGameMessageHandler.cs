@@ -36,7 +36,7 @@ namespace GladMMO
 				return false;
 
 			await HandleMessage(context, (TSpecificPayloadType)message.Payload)
-				.ConfigureAwait(false);
+				.ConfigureAwaitFalseVoid();
 
 			return true;
 		}

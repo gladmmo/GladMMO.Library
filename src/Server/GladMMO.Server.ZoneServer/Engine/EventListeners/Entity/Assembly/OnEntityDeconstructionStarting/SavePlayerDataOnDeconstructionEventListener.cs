@@ -35,7 +35,7 @@ namespace GladMMO
 				try
 				{
 					await EntityDataSaveable.SaveAsync(args.EntityGuid)
-						.ConfigureAwait(false);
+						.ConfigureAwaitFalseVoid();
 				}
 				catch (Exception e)
 				{

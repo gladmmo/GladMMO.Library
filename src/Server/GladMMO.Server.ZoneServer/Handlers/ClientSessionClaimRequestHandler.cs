@@ -49,7 +49,7 @@ namespace GladMMO
 			{
 				ProjectVersionStage.AssertAlpha();
 				zoneServerTryClaimSessionResponse = await GameServerClient.TryClaimSession(new ZoneServerTryClaimSessionRequest(await GameServerClient.GetAccountIdFromToken(payload.JWT), payload.CharacterId))
-					.ConfigureAwait(false);
+					.ConfigureAwaitFalse();
 			}
 			catch(Exception e) //we could get an unauthorized response
 			{
@@ -64,7 +64,7 @@ namespace GladMMO
 
 				//TODO: Better error code
 				await context.PayloadSendService.SendMessage(new ClientSessionClaimResponsePayload(ClientSessionClaimResponseCode.SessionUnavailable))
-					.ConfigureAwait(false);
+					.ConfigureAwaitFalse();
 
 				return;
 			}
@@ -76,7 +76,7 @@ namespace GladMMO
 
 			//TODO: We assume they are authenticated, we don't check at the moment but we WILL and SHOULD. Just load their location.
 			ZoneServerCharacterLocationResponse locationResponse = await GameServerClient.GetCharacterLocation(payload.CharacterId)
-				.ConfigureAwait(false);
+				.ConfigureAwaitFalse();
 
 			Vector3 position = locationResponse.isSuccessful ? locationResponse.Position : SpawnPointProvider.GetSpawnPoint().WorldPosition;
 
@@ -95,7 +95,7 @@ namespace GladMMO
 			OnSuccessfulSessionClaimed?.Invoke(this, new PlayerSessionClaimedEventArgs(entityGuid, pointData.WorldPosition, new PlayerEntitySessionContext(context.PayloadSendService, context.Details.ConnectionId, context.ConnectionService)));
 
 			await context.PayloadSendService.SendMessage(new ClientSessionClaimResponsePayload(ClientSessionClaimResponseCode.Success))
-				.ConfigureAwait(false);
+				.ConfigureAwaitFalse();
 		}
 	}
 }

@@ -35,7 +35,7 @@ namespace GladMMO
 			//so we can assume that and just try to request character session data
 			//for the account.
 			CharacterSessionDataResponse characterSessionDataResponse = await SocialToGameClient.GetCharacterSessionDataByAccount(ClaimsReader.GetAccountIdInt(hubConnectedTo.Context.User))
-				.ConfigureAwait(false);
+				.ConfigureAwaitFalse();
 
 			//TODO: To support website chat we shouldn't disconnect just because they don't have a zone session.
 			//If the session data request fails we should just abort
@@ -67,7 +67,7 @@ namespace GladMMO
 			//TODO: We should have group name builders. Not hardcoded
 			//Join the zoneserver's chat channel group
 			await hubConnectedTo.Groups.AddToGroupAsync(hubConnectedTo.Context.ConnectionId, $"zone:{characterSessionDataResponse.ZoneId}", hubConnectedTo.Context.ConnectionAborted)
-				.ConfigureAwait(false);
+				.ConfigureAwaitFalseVoid();
 
 			return HubOnConnectionState.Success;
 		}

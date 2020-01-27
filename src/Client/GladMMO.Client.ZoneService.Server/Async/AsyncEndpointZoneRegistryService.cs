@@ -24,12 +24,12 @@ namespace GladMMO
 
 		public async Task<ResponseModel<ZoneServerRegistrationResponse, ZoneServerRegistrationResponseCode>> TryRegisterZoneServerAsync(ZoneServerRegistrationRequest request)
 		{
-			return await (await GetService().ConfigureAwait(false)).TryRegisterZoneServerAsync(request).ConfigureAwait(false);
+			return await (await GetService().ConfigureAwaitFalse()).TryRegisterZoneServerAsync(request).ConfigureAwaitFalse();
 		}
 
 		public async Task ZoneServerCheckinAsync(ZoneServerCheckinRequestModel request)
 		{
-			await (await GetService().ConfigureAwait(false)).ZoneServerCheckinAsync(request).ConfigureAwait(false);
+			await (await GetService().ConfigureAwaitFalse()).ZoneServerCheckinAsync(request).ConfigureAwaitFalseVoid();
 		}
 	}
 }

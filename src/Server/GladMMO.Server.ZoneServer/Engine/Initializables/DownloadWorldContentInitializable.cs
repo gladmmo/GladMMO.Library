@@ -32,7 +32,7 @@ namespace GladMMO
 		{
 			//TODO: Handle throwing/error
 			ContentDownloadURLResponse downloadUrlResponse = await ContentService.RequestWorldDownloadUrl(WorldConfig.WorldId)
-				.ConfigureAwait(false);
+				.ConfigureAwaitFalse();
 
 			if(Logger.IsInfoEnabled)
 				Logger.Info($"World Download Url: {downloadUrlResponse.DownloadURL}");

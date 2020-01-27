@@ -87,7 +87,7 @@ namespace GladMMO
 		/// <inheritdoc />
 		public async Task<bool> CharacterHasActiveSession(int characterId)
 		{
-			return await Context.ClaimedSession.FindAsync(characterId).ConfigureAwait(false) != null;
+			return await Context.ClaimedSession.FindAsync(characterId).ConfigureAwaitFalse() != null;
 		}
 
 		/// <inheritdoc />
@@ -126,7 +126,7 @@ namespace GladMMO
 		{
 			return await new GeneralGenericCrudRepositoryProvider<int, ClaimedSessionsModel>(Context.ClaimedSession, Context)
 				.TryDeleteAsync(characterId)
-				.ConfigureAwait(false);
+				.ConfigureAwaitFalse();
 		}
 
 		/// <inheritdoc />

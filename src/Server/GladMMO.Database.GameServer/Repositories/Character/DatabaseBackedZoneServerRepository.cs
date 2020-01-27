@@ -22,7 +22,7 @@ namespace GladMMO
 		/// <inheritdoc />
 		public async Task<bool> ContainsAsync(int key)
 		{
-			return await Context.ZoneEntries.FindAsync(key).ConfigureAwait(false) != null;
+			return await Context.ZoneEntries.FindAsync(key).ConfigureAwaitFalse() != null;
 		}
 
 		/// <inheritdoc />

@@ -124,13 +124,13 @@ namespace GladMMO
 		{
 			//Since the generic crud provider will use Find we can't use it
 			//with are secondary name key. We have to implement this manually
-			if(!await Context.Characters.AnyAsync(c => c.CharacterName == key).ConfigureAwait(false))
+			if(!await Context.Characters.AnyAsync(c => c.CharacterName == key).ConfigureAwaitFalse())
 				throw new InvalidOperationException($"Cannot update model with Key: {key} as it does not exist.");
 
 			Context.Characters.Update(model);
 
 			await Context.SaveChangesAsync()
-				.ConfigureAwait(false);
+				.ConfigureAwaitFalse();
 		}
 	}
 }

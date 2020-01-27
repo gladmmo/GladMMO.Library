@@ -114,7 +114,7 @@ namespace GladMMO
 			//TODO: Do we want to expose this to non-controlers?
 			//First we should validate that the account that is authorized owns the character it is requesting session data from
 
-			return (await CharacterRepository.CharacterIdsForAccountId(accountId).ConfigureAwait(false))
+			return (await CharacterRepository.CharacterIdsForAccountId(accountId).ConfigureAwaitFalse())
 				.Contains(characterId);
 		}
 
@@ -128,12 +128,12 @@ namespace GladMMO
 			//TODO: Do we want to expose this to non-controlers?
 			//First we should validate that the account that is authorized owns the character it is requesting session data from
 			return await RetrieveSessionDataIfAvailable(characterId, accountId)
-				.ConfigureAwait(false);
+				.ConfigureAwaitFalse();
 		}
 
 		private async Task<CharacterSessionDataResponse> RetrieveSessionDataIfAvailable(int characterId, int accountId)
 		{
-			if(!(await CharacterRepository.CharacterIdsForAccountId(accountId).ConfigureAwait(false))
+			if(!(await CharacterRepository.CharacterIdsForAccountId(accountId).ConfigureAwaitFalse())
 							.Contains(characterId))
 			{
 				//Requesting session data about an unowned character.
@@ -141,10 +141,10 @@ namespace GladMMO
 			}
 
 			//Active sessions don't matter, we just want session data for this character.
-			if(await CharacterSessionRepository.ContainsAsync(characterId).ConfigureAwait(false))
+			if(await CharacterSessionRepository.ContainsAsync(characterId).ConfigureAwaitFalse())
 			{
 				//If there is a session, we should just send the zone. Maybe in the future we want to send more data but we only need the zone at the moment.
-				return new CharacterSessionDataResponse((await CharacterSessionRepository.RetrieveAsync(characterId).ConfigureAwait(false)).ZoneId, characterId);
+				return new CharacterSessionDataResponse((await CharacterSessionRepository.RetrieveAsync(characterId).ConfigureAwaitFalse()).ZoneId, characterId);
 			}
 			else
 				return new CharacterSessionDataResponse(CharacterSessionDataResponseCode.NoSessionAvailable);
@@ -157,7 +157,7 @@ namespace GladMMO
 		public async Task<IActionResult> GetCharacterSessionDataByAccount([FromRoute(Name = "id")] int accountId)
 		{
 			if(!await CharacterSessionRepository.AccountHasActiveSession(accountId)
-				.ConfigureAwait(false))
+				.ConfigureAwaitFalse())
 			{
 				return Ok(new CharacterSessionDataResponse(CharacterSessionDataResponseCode.NoSessionAvailable));
 			}
@@ -169,7 +169,7 @@ namespace GladMMO
 			try
 			{
 				ClaimedSessionsModel claimedSessionsModel = await CharacterSessionRepository.RetrieveClaimedSessionByAccountId(accountId)
-					.ConfigureAwait(false);
+					.ConfigureAwaitFalse();
 
 				return Ok(new CharacterSessionDataResponse(claimedSessionsModel.Session.ZoneId, claimedSessionsModel.CharacterId));
 			}

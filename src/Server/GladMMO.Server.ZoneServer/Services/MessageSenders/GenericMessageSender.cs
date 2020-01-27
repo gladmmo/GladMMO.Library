@@ -36,7 +36,7 @@ namespace GladMMO
 				//We MUST unwrap the task otherwise we will not get exceptions. Which is BAD.
 				//TODO: Develivery method?
 				SessionMappable.RetrieveEntity(context.EntityGuid).SendMessageImmediately(context.PayloadToSend)
-					.ConfigureAwait(false)
+					.ConfigureAwaitFalse()
 					.GetAwaiter()
 					.GetResult();
 			}
@@ -64,7 +64,7 @@ namespace GladMMO
 				//Should we configure await false?
 				//TODO: Develivery method?
 				await SessionMappable.RetrieveEntity(context.EntityGuid).SendMessage(context.PayloadToSend)
-					.ConfigureAwait(false);
+					.ConfigureAwaitFalse();
 			}
 		}
 	}

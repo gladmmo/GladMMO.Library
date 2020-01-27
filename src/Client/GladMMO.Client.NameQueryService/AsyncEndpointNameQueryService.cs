@@ -24,27 +24,27 @@ namespace GladMMO
 
 		public async Task<ResponseModel<NameQueryResponse, NameQueryResponseCode>> RetrievePlayerNameAsync(ulong rawGuidValue)
 		{
-			return await (await GetService().ConfigureAwait(false)).RetrievePlayerNameAsync(rawGuidValue).ConfigureAwait(false);
+			return await (await GetService().ConfigureAwaitFalse()).RetrievePlayerNameAsync(rawGuidValue).ConfigureAwaitFalse();
 		}
 
 		public async Task<ResponseModel<NetworkEntityGuid, NameQueryResponseCode>> RetrievePlayerGuidAsync(string characterName)
 		{
-			return await (await GetService().ConfigureAwait(false)).RetrievePlayerGuidAsync(characterName).ConfigureAwait(false);
+			return await (await GetService().ConfigureAwaitFalse()).RetrievePlayerGuidAsync(characterName).ConfigureAwaitFalse();
 		}
 
 		public async Task<ResponseModel<NameQueryResponse, NameQueryResponseCode>> RetrieveCreatureNameAsync(ulong rawGuidValue)
 		{
-			return await (await GetService().ConfigureAwait(false)).RetrieveCreatureNameAsync(rawGuidValue).ConfigureAwait(false);
+			return await (await GetService().ConfigureAwaitFalse()).RetrieveCreatureNameAsync(rawGuidValue).ConfigureAwaitFalse();
 		}
 
 		public async Task<ResponseModel<NameQueryResponse, NameQueryResponseCode>> RetrieveGameObjectNameAsync(ulong rawGuidValue)
 		{
-			return await (await GetService().ConfigureAwait(false)).RetrieveCreatureNameAsync(rawGuidValue).ConfigureAwait(false);
+			return await (await GetService().ConfigureAwaitFalse()).RetrieveCreatureNameAsync(rawGuidValue).ConfigureAwaitFalse();
 		}
 
 		public async Task<ResponseModel<NameQueryResponse, NameQueryResponseCode>> RetrieveGuildNameAsync(int guildId)
 		{
-			return await (await GetService().ConfigureAwait(false)).RetrieveGuildNameAsync(guildId).ConfigureAwait(false);
+			return await (await GetService().ConfigureAwaitFalse()).RetrieveGuildNameAsync(guildId).ConfigureAwaitFalse();
 		}
 	}
 }

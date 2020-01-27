@@ -39,7 +39,7 @@ namespace GladMMO
 			IPeerPayloadSendService<GameServerPacketPayload> sendService = RetrieveSendService(context.EntityGuid);
 
 			sendService.SendMessage(changeEventPayload, DeliveryMethod.ReliableOrdered)
-				.ConfigureAwait(false);
+				.ConfigureAwaitFalse();
 		}
 
 		/// <inheritdoc />
@@ -52,7 +52,7 @@ namespace GladMMO
 
 			//TODO: Should we await or return?
 			await sendService.SendMessage(changeEventPayload, DeliveryMethod.ReliableOrdered)
-				.ConfigureAwait(false);
+				.ConfigureAwaitFalse();
 		}
 
 		private IPeerPayloadSendService<GameServerPacketPayload> RetrieveSendService([NotNull] NetworkEntityGuid guid)

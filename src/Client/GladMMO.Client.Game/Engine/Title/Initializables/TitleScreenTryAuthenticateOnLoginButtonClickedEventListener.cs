@@ -76,7 +76,7 @@ namespace GladMMO
 				try
 				{
 					PlayerAccountJWTModel = await AuthService.TryAuthenticate(BuildAuthRequestModel())
-						.ConfigureAwait(false);
+						.ConfigureAwaitFalse();
 				}
 				catch (ApiException e)
 				{

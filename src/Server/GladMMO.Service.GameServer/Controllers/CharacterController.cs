@@ -167,18 +167,18 @@ namespace GladMMO
 			if(locationRepository == null) throw new ArgumentNullException(nameof(locationRepository));
 
 			if(characterId <= 0 || !await CharacterRepository.ContainsAsync(characterId)
-				.ConfigureAwait(false))
+				.ConfigureAwaitFalse())
 				return Json(new ZoneServerCharacterLocationResponse(ZoneServerCharacterLocationResponseCode.CharacterDoesntExist));
 
 			//So, the character exists and we now need to check if we can find a location for it. It may not have one, for whatever reason.
 			//so we need to handle the case where it has none (maybe new character, or was manaully wiped).
 
-			if(!await locationRepository.ContainsAsync(characterId).ConfigureAwait(false))
+			if(!await locationRepository.ContainsAsync(characterId).ConfigureAwaitFalse())
 				return Json(new ZoneServerCharacterLocationResponse(ZoneServerCharacterLocationResponseCode.NoLocationDefined));
 
 			//Otherwise, let's load and send the result
 			CharacterLocationModel locationModel = await locationRepository.RetrieveAsync(characterId)
-				.ConfigureAwait(false);
+				.ConfigureAwaitFalse();
 
 			//TODO: Integrate Map Id design into Schema, and implement it here.
 			return Json(new ZoneServerCharacterLocationResponse(new Vector3(locationModel.XPosition, locationModel.YPosition, locationModel.ZPosition), 1));

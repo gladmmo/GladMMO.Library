@@ -26,17 +26,17 @@ namespace GladMMO
 
 		public async Task<ResponseModel<TBehaviourType, SceneContentQueryResponseCode>> GetBehaviourInstance(int gameObjectId)
 		{
-			return await (await GetService().ConfigureAwait(false)).GetBehaviourInstance(gameObjectId).ConfigureAwait(false);
+			return await (await GetService().ConfigureAwaitFalse()).GetBehaviourInstance(gameObjectId).ConfigureAwaitFalse();
 		}
 
 		public async Task UpdateBehaviourInstance(int gameObjectId, TBehaviourType model)
 		{
-			await (await GetService().ConfigureAwait(false)).UpdateBehaviourInstance(gameObjectId, model).ConfigureAwait(false);
+			await (await GetService().ConfigureAwaitFalse()).UpdateBehaviourInstance(gameObjectId, model).ConfigureAwaitFalseVoid();
 		}
 
 		public async Task<ResponseModel<ObjectEntryCollectionModel<TBehaviourType>, ContentEntryCollectionResponseCode>> GetBehaviourEntriesByWorld(long worldId)
 		{
-			return await (await GetService().ConfigureAwait(false)).GetBehaviourEntriesByWorld(worldId).ConfigureAwait(false);
+			return await (await GetService().ConfigureAwaitFalse()).GetBehaviourEntriesByWorld(worldId).ConfigureAwaitFalse();
 		}
 	}
 }

@@ -39,12 +39,12 @@ namespace GladMMO
 				.Build();
 
 			HubOnConnectionState state = await TryRequestCharacterGuildStatus(guid, hubConnectedTo.Context.UserIdentifier)
-				.ConfigureAwait(false);
+				.ConfigureAwaitFalse();
 
 			if (state == HubOnConnectionState.Success)
 			{
 				await RegisterGuildOnExistingResponse(guid, hubConnectedTo.Groups, hubConnectedTo.Context.ConnectionId)
-					.ConfigureAwait(false);
+					.ConfigureAwaitFalseVoid();
 
 				return HubOnConnectionState.Success;
 			}
@@ -60,7 +60,7 @@ namespace GladMMO
 			try
 			{
 				response = await SocialService.GetCharacterMembershipGuildStatus(int.Parse(userIdentifier))
-					.ConfigureAwait(false);
+					.ConfigureAwaitFalse();
 			}
 			catch(Exception e)
 			{
@@ -86,7 +86,7 @@ namespace GladMMO
 
 			//TODO: don't hardcode
 			await groupManager.AddToGroupAsync(connectionId, $"guild:{GuildStatusMappable.RetrieveEntity(guid).GuildId}")
-				.ConfigureAwait(false);
+				.ConfigureAwaitFalseVoid();
 		}
 	}
 }

@@ -24,12 +24,12 @@ namespace GladMMO
 
 		public async Task<ZoneServerAccountRegistrationResponse> CreateZoneServerAccount(ZoneServerAccountRegistrationRequest request)
 		{
-			return await (await GetService().ConfigureAwait(false)).CreateZoneServerAccount(request).ConfigureAwait(false);
+			return await (await GetService().ConfigureAwaitFalse()).CreateZoneServerAccount(request).ConfigureAwaitFalse();
 		}
 
 		public async Task<JWTModel> TryAuthenticate(AuthenticationRequestModel request)
 		{
-			return await (await GetService().ConfigureAwait(false)).TryAuthenticate(request).ConfigureAwait(false);
+			return await (await GetService().ConfigureAwaitFalse()).TryAuthenticate(request).ConfigureAwaitFalse();
 		}
 	}
 }

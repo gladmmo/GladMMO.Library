@@ -60,7 +60,7 @@ namespace GladMMO
 				UnityAsyncHelper.UnityMainThreadContext.PostAsync(async () =>
 				{
 					string queryResponse = await NameQueryService.RetrieveAsync(guid)
-						.ConfigureAwait(false);
+						.ConfigureAwaitFalse();
 
 					PublishTextData(channelType, args, guid, queryResponse);
 				});

@@ -72,7 +72,7 @@ namespace GladMMO
 				while (client.isConnected && !CancelTokenSource.IsCancellationRequested) //if we exported we should reading messages
 				{
 					NetworkIncomingMessage<TIncomingPayloadType> message = await client.ReadMessageAsync(CancelTokenSource.Token)
-						.ConfigureAwait(false);
+						.ConfigureAwaitFalse();
 
 					//Supress and continue reading
 					try
@@ -80,7 +80,7 @@ namespace GladMMO
 						//We don't do anything with the result. We should hope someone registered
 						//a default handler to deal with this situation
 						bool result = await Handlers.TryHandleMessage(MessageContextFactory.Create(client, client, requestService), message)
-							.ConfigureAwait(false);
+							.ConfigureAwaitFalse();
 					}
 					catch (Exception e)
 					{
@@ -116,8 +116,8 @@ namespace GladMMO
 			isNetworkHandling = true;
 
 			//Don't await because we want start to end.
-			Task.Factory.StartNew(async () => await StartDispatchingAsync(client).ConfigureAwait(false), TaskCreationOptions.LongRunning)
-				.ConfigureAwait(false);
+			Task.Factory.StartNew(async () => await StartDispatchingAsync(client).ConfigureAwaitFalseVoid(), TaskCreationOptions.LongRunning)
+				.ConfigureAwaitFalse();
 
 			//We don't want to await it, it needs to run at the same time
 			return Task.CompletedTask;

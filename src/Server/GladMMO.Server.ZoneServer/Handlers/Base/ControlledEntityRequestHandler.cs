@@ -72,7 +72,7 @@ namespace GladMMO
 			//We actually would normally need to do double-check locking BUT the check below of the connection entity map
 			//will detect if it's been removed, thus everything will be ok.
 			using(var lockObj = await LockingPolicy.ReaderLockAsync(GenerateLockContext(context, payload), CancellationToken.None)
-				.ConfigureAwait(false))
+				.ConfigureAwait(!GladMMOAsyncSettings.ConfigureAwaitFalseSupported))
 			{
 				//We have to double check lock, could have been removed since the last check.
 				if(!ValidateConnectionOwnsEntity(context.Details.ConnectionId))
@@ -80,7 +80,7 @@ namespace GladMMO
 
 				//We just dispatch to child handler, who will use the payload, context and guid.
 				await HandleMessage(context, payload, ExtractEntityGuidFromContext(context))
-					.ConfigureAwait(false);
+					.ConfigureAwaitFalseVoid();
 			}
 		}
 

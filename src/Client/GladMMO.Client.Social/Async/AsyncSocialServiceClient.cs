@@ -24,22 +24,22 @@ namespace GladMMO
 
 		public async Task<CharacterFriendListResponseModel> GetCharacterListAsync()
 		{
-			return await (await GetService().ConfigureAwait(false)).GetCharacterListAsync().ConfigureAwait(false);
+			return await (await GetService().ConfigureAwaitFalse()).GetCharacterListAsync().ConfigureAwaitFalse();
 		}
 
 		public async Task<ResponseModel<CharacterFriendAddResponseModel, CharacterFriendAddResponseCode>> TryAddFriendAsync(string characterName)
 		{
-			return await (await GetService().ConfigureAwait(false)).TryAddFriendAsync(characterName).ConfigureAwait(false);
+			return await (await GetService().ConfigureAwaitFalse()).TryAddFriendAsync(characterName).ConfigureAwaitFalse();
 		}
 
 		public async Task<ResponseModel<CharacterGuildMembershipStatusResponse, CharacterGuildMembershipStatusResponseCode>> GetCharacterMembershipGuildStatus(int characterId)
 		{
-			return await (await GetService().ConfigureAwait(false)).GetCharacterMembershipGuildStatus(characterId).ConfigureAwait(false);
+			return await (await GetService().ConfigureAwaitFalse()).GetCharacterMembershipGuildStatus(characterId).ConfigureAwaitFalse();
 		}
 
 		public async Task<ResponseModel<CharacterGuildListResponseModel, CharacterGuildMembershipStatusResponseCode>> GetGuildListAsync()
 		{
-			return await (await GetService().ConfigureAwait(false)).GetGuildListAsync().ConfigureAwait(false);
+			return await (await GetService().ConfigureAwaitFalse()).GetGuildListAsync().ConfigureAwaitFalse();
 		}
 	}
 }

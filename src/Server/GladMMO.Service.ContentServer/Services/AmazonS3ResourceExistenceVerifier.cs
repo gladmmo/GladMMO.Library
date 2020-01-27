@@ -39,7 +39,7 @@ namespace GladMMO
 
 				// If the object doesn't exist then a "NotFound" will be thrown
 				await CloudClient.GetObjectMetadataAsync(request)
-					.ConfigureAwait(false);
+					.ConfigureAwaitFalse();
 
 				return true;
 			}

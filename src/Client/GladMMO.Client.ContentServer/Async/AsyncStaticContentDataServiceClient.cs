@@ -24,7 +24,7 @@ namespace GladMMO
 
 		public async Task<ContentIconInstanceModel[]> ContentIconsAsync()
 		{
-			return await (await GetService().ConfigureAwait(false)).ContentIconsAsync().ConfigureAwait(false);
+			return await (await GetService().ConfigureAwaitFalse()).ContentIconsAsync().ConfigureAwaitFalse();
 		}
 	}
 }

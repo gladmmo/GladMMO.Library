@@ -25,7 +25,7 @@ namespace GladMMO
 		/// <inheritdoc />
 		public async Task<CharacterSessionDataResponse> GetCharacterSessionDataByAccount(int accountId)
 		{
-			return await ((await GetService().ConfigureAwait(false)).GetCharacterSessionDataByAccount(accountId).ConfigureAwait(false));
+			return await ((await GetService().ConfigureAwaitFalse()).GetCharacterSessionDataByAccount(accountId).ConfigureAwaitFalse());
 		}
 	}
 }

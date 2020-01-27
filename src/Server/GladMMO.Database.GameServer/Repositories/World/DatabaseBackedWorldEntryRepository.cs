@@ -52,12 +52,12 @@ namespace GladMMO
 		public async Task SetWorldValidated(long worldId)
 		{
 			WorldEntryModel model = await this.DefaultRepository.RetrieveAsync(worldId)
-				.ConfigureAwait(false);
+				.ConfigureAwaitFalse();
 
 			model.IsValidated = true;
 
 			await DefaultRepository.UpdateAsync(worldId, model)
-				.ConfigureAwait(false);
+				.ConfigureAwaitFalseVoid();
 		}
 	}
 }

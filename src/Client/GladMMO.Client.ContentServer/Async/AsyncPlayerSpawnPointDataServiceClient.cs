@@ -24,22 +24,22 @@ namespace GladMMO
 
 		public async Task<ResponseModel<PlayerSpawnPointInstanceModel, SceneContentQueryResponseCode>> GetSpawnPointInstance(int spawnPointId)
 		{
-			return await (await GetService().ConfigureAwait(false)).GetSpawnPointInstance(spawnPointId).ConfigureAwait(false);
+			return await (await GetService().ConfigureAwaitFalse()).GetSpawnPointInstance(spawnPointId).ConfigureAwaitFalse();
 		}
 
 		public async Task<ResponseModel<PlayerSpawnPointInstanceModel, SceneContentQueryResponseCode>> CreateSpawnPointInstance(long worldId)
 		{
-			return await (await GetService().ConfigureAwait(false)).CreateSpawnPointInstance(worldId).ConfigureAwait(false);
+			return await (await GetService().ConfigureAwaitFalse()).CreateSpawnPointInstance(worldId).ConfigureAwaitFalse();
 		}
 
 		public async Task UpdateSpawnPointInstance(int spawnPointId, PlayerSpawnPointInstanceModel model)
 		{
-			await (await GetService().ConfigureAwait(false)).UpdateSpawnPointInstance(spawnPointId, model).ConfigureAwait(false);
+			await (await GetService().ConfigureAwaitFalse()).UpdateSpawnPointInstance(spawnPointId, model).ConfigureAwaitFalseVoid();
 		}
 
 		public async Task<ResponseModel<ObjectEntryCollectionModel<PlayerSpawnPointInstanceModel>, ContentEntryCollectionResponseCode>> GetSpawnPointEntriesByWorld(long worldId)
 		{
-			return await (await GetService().ConfigureAwait(false)).GetSpawnPointEntriesByWorld(worldId).ConfigureAwait(false);
+			return await (await GetService().ConfigureAwaitFalse()).GetSpawnPointEntriesByWorld(worldId).ConfigureAwaitFalse();
 		}
 	}
 }

@@ -27,16 +27,16 @@ namespace GladMMO
 		public async Task<PlayerAccountJWTModel> TryAuthenticate(AuthenticationRequestModel request)
 		{
 			IAuthenticationService service = await GetService()
-				.ConfigureAwait(false);
+				.ConfigureAwaitFalse();
 
 			return await service.TryAuthenticate(request)
-				.ConfigureAwait(false);
+				.ConfigureAwaitFalse();
 		}
 
 		/// <inheritdoc />
 		public async Task<string> TryRegister(string username, string password)
 		{
-			return await (await GetService().ConfigureAwait(false)).TryRegister(username, password).ConfigureAwait(false);
+			return await (await GetService().ConfigureAwaitFalse()).TryRegister(username, password).ConfigureAwaitFalse();
 		}
 	}
 }

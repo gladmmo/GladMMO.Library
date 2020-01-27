@@ -77,18 +77,18 @@ namespace GladMMO
 			IGenericRepositoryCrudable<TKeyType, TModelType> repository = BuildEmptyRepository();
 			TModelType model1 = BuildRandomModel(true);
 			await repository.TryCreateAsync(model1)
-				.ConfigureAwait(false);
+				.ConfigureAwaitFalse();
 
 			TModelType model2 = BuildRandomModel(false);
 
 			//act
 			await repository.UpdateAsync(this.ProduceKeyFromModel(model1), model2)
-				.ConfigureAwait(false);
+				.ConfigureAwaitFalseVoid();
 			bool containsModel1 = await repository.ContainsAsync(ProduceKeyFromModel(model1))
-				.ConfigureAwait(false);
+				.ConfigureAwaitFalse();
 
 			TModelType model3 = await repository.RetrieveAsync(ProduceKeyFromModel(model1))
-				.ConfigureAwait(false);
+				.ConfigureAwaitFalse();
 
 			//assert
 			//Model1 should still seem like its in the database, but it should be Model2.

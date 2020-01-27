@@ -41,7 +41,7 @@ namespace GladMMO
 			//To know what world we should load we should
 			//To know that we need information about the character session.
 			CharacterSessionEnterResponse characterSessionData = await CharacterService.TryEnterSession(LocalCharacterData.CharacterId)
-				.ConfigureAwait(false);
+				.ConfigureAwaitFalse();
 
 			if(!characterSessionData.isSuccessful)
 			{
@@ -55,10 +55,10 @@ namespace GladMMO
 					for (int i = 0; i < 5 && !characterSessionData.isSuccessful; i++)
 					{
 						characterSessionData = await CharacterService.TryEnterSession(LocalCharacterData.CharacterId)
-							.ConfigureAwait(false);
+							.ConfigureAwaitFalse();
 
 						await Task.Delay(1500)
-							.ConfigureAwait(false);
+							.ConfigureAwaitFalseVoid();
 					}
 
 					//If not succesful after the retry.

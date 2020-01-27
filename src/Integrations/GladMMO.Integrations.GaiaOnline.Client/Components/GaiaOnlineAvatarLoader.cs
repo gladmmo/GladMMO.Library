@@ -36,7 +36,7 @@ namespace GladMMO.GaiaOnline
 		{
 			//TODO: Replace hardcoded name that is for testing.
 			UserAvatarQueryResponse avatarQueryResponse = await GaiaOnlineIntegrationClientSingleton.QueryClient.GetAvatarFromUsernameAsync(avatarName)
-				.ConfigureAwait(false);
+				.ConfigureAwaitFalse();
 
 			//TODO: Somehow get ref to avatar name for logging.
 			if (!avatarQueryResponse.isSuccessful)
@@ -46,7 +46,7 @@ namespace GladMMO.GaiaOnline
 			string stripUrl = $"{avatarQueryResponse.AvatarRelativeUrlPath.Split('?').First().TrimEnd(".png".ToCharArray())}_strip.png";
 
 			Texture2DWrapper imageAsync = await GaiaOnlineIntegrationClientSingleton.ImageCDNClient.GetAvatarImageAsync(stripUrl)
-				.ConfigureAwait(false);
+				.ConfigureAwaitFalse();
 
 			//Just onto the main thread and check gameobject state before proceeding to initialize renderers
 			//unity overloads == on some Types in UnityEngine namespace.
@@ -93,10 +93,10 @@ namespace GladMMO.GaiaOnline
 					try
 					{
 						string avatarName = await entityName
-							.ConfigureAwait(false);
+							.ConfigureAwaitFalse();
 
 						await InitializeAvatarRenderers(avatarName)
-							.ConfigureAwait(false);
+							.ConfigureAwaitFalseVoid();
 					}
 					catch(Exception e)
 					{

@@ -121,7 +121,7 @@ namespace GladMMO
 			};
 
 			return await completionSource.Task
-				.ConfigureAwait(false);
+				.ConfigureAwaitFalse();
 		}
 
 		protected abstract Task<ContentDownloadURLResponse> RequestDownloadURL(long contentId);

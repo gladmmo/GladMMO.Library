@@ -53,7 +53,7 @@ namespace GladMMO
 				{
 					//We need to connect the hub to the social backend
 					ResolveServiceEndpointResponse endpointResponse = await ServiceDiscoveryService.DiscoverService(new ResolveServiceEndpointRequest(ClientRegionLocale.US, GladMMONetworkConstants.SOCIAL_SERVICE_NAME))
-						.ConfigureAwait(false);
+						.ConfigureAwaitFalse();
 
 					if(!endpointResponse.isSuccessful)
 						throw new InvalidOperationException($"Failed to query for SocialService. Reason: {endpointResponse.ResultCode}");
@@ -82,7 +82,7 @@ namespace GladMMO
 					//Just start the service when the game initializes
 					//This will make it so that the signalR clients will start to recieve messages.
 					await connection.StartAsync()
-						.ConfigureAwait(false);
+						.ConfigureAwaitFalseVoid();
 
 					if(Logger.IsInfoEnabled)
 						Logger.Info($"Connected to realtime Social Service.");
