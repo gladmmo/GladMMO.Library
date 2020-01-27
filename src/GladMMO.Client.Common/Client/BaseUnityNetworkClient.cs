@@ -108,9 +108,13 @@ namespace GladMMO
 
 		protected abstract void OnClientStoppedHandlingMessages();
 
+		public bool isNetworkHandling { get; private set; } = false;
+
 		/// <inheritdoc />
 		public Task StartHandlingNetworkClient(IManagedNetworkClient<TOutgoingPayloadType, TIncomingPayloadType> client)
 		{
+			isNetworkHandling = true;
+
 			//Don't await because we want start to end.
 			Task.Factory.StartNew(async () => await StartDispatchingAsync(client).ConfigureAwait(false), TaskCreationOptions.LongRunning)
 				.ConfigureAwait(false);
@@ -122,6 +126,8 @@ namespace GladMMO
 		/// <inheritdoc />
 		public Task StopHandlingNetworkClient()
 		{
+			isNetworkHandling = false;
+
 			CancelTokenSource.Cancel();
 			//TODO: Should we await for the dispatch thread to actually end??
 
