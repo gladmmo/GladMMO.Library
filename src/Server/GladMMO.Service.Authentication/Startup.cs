@@ -47,6 +47,8 @@ namespace GladMMO
 			ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 			ServicePointManager.CheckCertificateRevocationList = false;
 
+			services.AddGladMMOCORS();
+
 			services.Configure<IISOptions>(options =>
 			{
 				options.AutomaticAuthentication = false;
@@ -179,6 +181,8 @@ namespace GladMMO
 			loggerFactory.RegisterGuardiansLogging(GeneralConfiguration);
 			loggerFactory.AddDebug();
 			app.UseMiddleware<PlayfabAuthenticationFromOpenIddictResponseMiddleware>();
+
+			app.UseGladMMOCORSMiddleware();
 			app.UseMvcWithDefaultRoute();
 		}
 	}

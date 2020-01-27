@@ -28,6 +28,8 @@ namespace GladMMO
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
+			services.AddGladMMOCORS();
+
 			// Add framework services.
 			services.AddMvc()
 				.RegisterHealthCheckController();
@@ -66,6 +68,8 @@ namespace GladMMO
 			//This adds CloudWatch AWS logging to this app
 			loggerFactory.RegisterGuardiansLogging(Configuration);
 			loggerFactory.AddDebug();
+
+			app.UseGladMMOCORSMiddleware();
 
 			app.UseMvcWithDefaultRoute();
 		}
