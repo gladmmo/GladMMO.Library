@@ -33,7 +33,7 @@ namespace GladMMO
 			//This is so fucking dumb but it's the only way to currently signal to the network thread that the
 			//remote service disconnected us and that we should stop, which will then fire
 			//the disconnection event below.
-			if (!Client.isConnected)
+			if (!Client.isConnected && ClientManager.isNetworkHandling)
 				ClientManager.StopHandlingNetworkClient();
 		}
 
