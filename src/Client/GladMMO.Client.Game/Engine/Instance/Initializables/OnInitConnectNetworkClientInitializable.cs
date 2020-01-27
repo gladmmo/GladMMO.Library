@@ -15,7 +15,7 @@ namespace GladMMO
 		/// <summary>
 		/// The managed network client that the Unity3D client is implemented on-top of.
 		/// </summary>
-		private IManagedNetworkClient<GameClientPacketPayload, GameServerPacketPayload> Client { get; }
+		private IConnectionService Client { get; }
 
 		private IZoneDataService ZoneServiceClient { get; }
 
@@ -26,7 +26,7 @@ namespace GladMMO
 		private IGeneralErrorEncounteredEventPublisher GeneralErrorPublisher { get; }
 
 		public OnInitConnectNetworkClientInitializable(
-			[NotNull] IManagedNetworkClient<GameClientPacketPayload, GameServerPacketPayload> client,
+			[NotNull] IConnectionService client,
 			[NotNull] IZoneDataService zoneServiceClient,
 			[NotNull] IReadonlyZoneDataRepository zoneDataRepository,
 			[NotNull] ILog logger,
