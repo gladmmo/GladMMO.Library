@@ -15,6 +15,8 @@ namespace GladMMO
 		where TOutgoingPayloadType : class
 		where TIncomingPayloadType : class
 	{
+		bool isNetworkHandling { get; }
+
 		Task StartHandlingNetworkClient([NotNull] IManagedNetworkClient<TOutgoingPayloadType, TIncomingPayloadType> client);
 
 		Task StopHandlingNetworkClient();
