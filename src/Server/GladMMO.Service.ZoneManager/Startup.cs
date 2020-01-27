@@ -34,6 +34,8 @@ namespace GladMMO
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
+			services.AddGladMMOCORS();
+
 			services.AddMvc(options =>
 				{
 					//This prevents ASP Core from trying to validate Vector3's children, which contain Vector3 (because Unity3D thanks)
@@ -185,6 +187,7 @@ namespace GladMMO
 			loggerFactory.RegisterGuardiansLogging(Configuration);
 			loggerFactory.AddDebug();
 
+			app.UseGladMMOCORSMiddleware();
 			app.UseMvcWithDefaultRoute();
 		}
 	}
