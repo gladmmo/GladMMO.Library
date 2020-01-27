@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Text;
 using Newtonsoft.Json;
+using UnityEngine;
 
 namespace GladMMO
 {
@@ -52,7 +53,11 @@ namespace GladMMO
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		private int ConvertResponseCodeToInt()
 		{
-			return Generic.Math.GenericMath.Convert<TResponseCodeType, int>(ResultCode);
+			//TODO: Avoid doing this on other non-Unity3D platforms.
+			//We have to do this hacky workaround because of AOT issues
+			//that cannot be resolved with fake references.
+			return (int)(object)ResultCode;
+			//return Generic.Math.GenericMath.Convert<TResponseCodeType, int>(ResultCode);
 		}
 
 		[JsonConstructor]
