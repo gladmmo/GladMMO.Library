@@ -32,7 +32,6 @@
     <ProjectReference Include="..\GladMMO.Common\GladMMO.Common.csproj" />
     <ProjectReference Include="..\GladMMO.Models.Social\GladMMO.Models.Social.csproj" />
     <ProjectReference Include="..\GladMMO.Network.Common\GladMMO.Network.Common.csproj" />
-    <ProjectReference Include="..\GladMMO.Payloads.ZoneServer\GladMMO.Payloads.ZoneServer.csproj" />
   </ItemGroup>
 
 </Project>

@@ -30,7 +30,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\GladMMO.Common\GladMMO.Common.csproj" />
     <ProjectReference Include="..\..\src\GladMMO.Network.Common\GladMMO.Network.Common.csproj" />
-    <ProjectReference Include="..\..\src\GladMMO.Payloads.ZoneServer\GladMMO.Payloads.ZoneServer.csproj" />
     <ProjectReference Include="..\..\src\GladMMO.Unity.Common\GladMMO.Unity.Common.csproj" />
   </ItemGroup>
 
