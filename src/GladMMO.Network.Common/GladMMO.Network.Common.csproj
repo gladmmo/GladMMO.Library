@@ -13,10 +13,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Packet\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\GladMMO.Common\GladMMO.Common.csproj" />
   </ItemGroup>
 
