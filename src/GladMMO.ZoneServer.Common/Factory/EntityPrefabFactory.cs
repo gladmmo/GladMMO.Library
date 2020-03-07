@@ -29,11 +29,12 @@ namespace GladMMO
 					{
 						//TODO: We should handle prefabs better
 						return Resources.Load<GameObject>("Prefabs/LocalPlayer");
+						//return Resources.Load<GameObject>("Prefabs/LocalPlayer_vr");
 					}
 					else
 					{
 						//TODO: Renable VR builds someday
-						//return Resources.Load<GameObject>("Prefabs/LocalPlayerAvatar_vr");
+						//return Resources.Load<GameObject>("Prefabs/LocalPlayer_vr");
 						return Resources.Load<GameObject>("Prefabs/LocalPlayer");
 					}
 				case EntityPrefab.RemotePlayer:
