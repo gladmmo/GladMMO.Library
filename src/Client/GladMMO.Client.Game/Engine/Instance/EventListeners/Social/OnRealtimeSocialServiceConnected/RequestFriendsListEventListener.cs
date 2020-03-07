@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Text;
 using Autofac.Features.AttributeFilters;
@@ -31,8 +31,8 @@ namespace GladMMO
 
 				foreach(int characterId in friendsResponse.CharacterFriendsId)
 				{
-					NetworkEntityGuid entityGuid = NetworkEntityGuidBuilder.New()
-						.WithType(EntityType.Player)
+					ObjectGuid entityGuid = ObjectGuidBuilder.New()
+						.WithType(EntityTypeId.TYPEID_PLAYER)
 						.WithId(characterId)
 						.Build();
 

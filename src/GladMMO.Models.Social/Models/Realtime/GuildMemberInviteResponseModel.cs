@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
@@ -16,12 +16,12 @@ namespace GladMMO
 		public GuildMemberInviteResponseCode ResultCode { get; private set; }
 
 		[JsonProperty]
-		public NetworkEntityGuid InvitedEntityGuid { get; private set; }
+		public ObjectGuid InvitedEntityGuid { get; private set; }
 
 		[JsonIgnore]
 		public bool isSuccessful => ResultCode == GuildMemberInviteResponseCode.Success;
 
-		public GuildMemberInviteResponseModel(GuildMemberInviteResponseCode resultCode, NetworkEntityGuid invitedEntityGuid)
+		public GuildMemberInviteResponseModel(GuildMemberInviteResponseCode resultCode, ObjectGuid invitedEntityGuid)
 		{
 			if (!Enum.IsDefined(typeof(GuildMemberInviteResponseCode), resultCode)) throw new InvalidEnumArgumentException(nameof(resultCode), (int) resultCode, typeof(GuildMemberInviteResponseCode));
 

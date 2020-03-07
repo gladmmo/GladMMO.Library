@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,7 +14,7 @@ namespace GladMMO
 
 		private Quaternion CachedSpawnRotation;
 
-		public abstract EntityType EntitySpawnType { get; }
+		public abstract EntityTypeId EntitySpawnType { get; }
 
 		void Awake()
 		{

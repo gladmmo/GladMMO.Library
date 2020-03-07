@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Text;
 using Glader.Essentials;
@@ -13,7 +13,7 @@ namespace GladMMO
 		/// </summary>
 		/// <param name="entity">The entity guid.</param>
 		/// <returns>True if the entity guid has a unitframe associated with it.</returns>
-		bool Contains(NetworkEntityGuid entity);
+		bool Contains(ObjectGuid entity);
 
 		/// <summary>
 		/// Gets a <see cref="IUIUnitFrame"/>
@@ -21,6 +21,6 @@ namespace GladMMO
 		/// </summary>
 		/// <param name="entity">The entity guid.</param>
 		/// <returns></returns>
-		IUIUnitFrame this[NetworkEntityGuid entity] { get; }
+		IUIUnitFrame this[ObjectGuid entity] { get; }
 	}
 }

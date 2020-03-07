@@ -32,7 +32,7 @@ namespace GladMMO
 		/// <typeparam name="TBehaviourType"></typeparam>
 		/// <param name="entityGuid"></param>
 		/// <returns></returns>
-		TBehaviourType GetBehaviourInstanceData<TBehaviourType>(NetworkEntityGuid entityGuid)
+		TBehaviourType GetBehaviourInstanceData<TBehaviourType>(ObjectGuid entityGuid)
 			where TBehaviourType : IGameObjectLinkable;
 	}
 }

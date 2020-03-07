@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
@@ -16,9 +16,9 @@ namespace GladMMO
 
 		public GameObject DownloadedPrefabObject { get; }
 
-		public NetworkEntityGuid EntityGuid { get; }
+		public ObjectGuid EntityGuid { get; }
 
-		public ContentPrefabCompletedDownloadEventArgs([NotNull] IPrefabContentResourceHandle prefabHandle, [NotNull] GameObject downloadedPrefabObject, [NotNull] NetworkEntityGuid entityGuid)
+		public ContentPrefabCompletedDownloadEventArgs([NotNull] IPrefabContentResourceHandle prefabHandle, [NotNull] GameObject downloadedPrefabObject, [NotNull] ObjectGuid entityGuid)
 		{
 			PrefabHandle = prefabHandle ?? throw new ArgumentNullException(nameof(prefabHandle));
 			DownloadedPrefabObject = downloadedPrefabObject ?? throw new ArgumentNullException(nameof(downloadedPrefabObject));

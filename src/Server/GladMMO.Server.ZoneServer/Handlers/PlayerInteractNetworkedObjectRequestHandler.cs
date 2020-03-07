@@ -17,7 +17,7 @@ namespace GladMMO
 		public PlayerInteractNetworkedObjectRequestHandler(
 			ILog logger,
 			IReadonlyConnectionEntityCollection connectionIdToEntityMap,
-			IContextualResourceLockingPolicy<NetworkEntityGuid> lockingPolicy,
+			IContextualResourceLockingPolicy<ObjectGuid> lockingPolicy,
 			[NotNull] IReadonlyEntityGuidMappable<IActorRef> actorReferenceMappable)
 			: base(logger, connectionIdToEntityMap, lockingPolicy)
 		{
@@ -25,10 +25,10 @@ namespace GladMMO
 		}
 
 		/// <inheritdoc />
-		protected override Task HandleMessage(IPeerSessionMessageContext<GameServerPacketPayload> context, ClientInteractNetworkedObjectRequestPayload payload, NetworkEntityGuid guid)
+		protected override Task HandleMessage(IPeerSessionMessageContext<GameServerPacketPayload> context, ClientInteractNetworkedObjectRequestPayload payload, ObjectGuid guid)
 		{
 			//Special case here that indicates the client wants to clear their target.
-			if (payload.TargetObjectGuid == NetworkEntityGuid.Empty)
+			if (payload.TargetObjectGuid == ObjectGuid.Empty)
 			{
 				IActorRef playerRef = ActorReferenceMappable.RetrieveEntity(guid);
 				playerRef.Tell(new SetEntityActorTargetMessage(payload.TargetObjectGuid));

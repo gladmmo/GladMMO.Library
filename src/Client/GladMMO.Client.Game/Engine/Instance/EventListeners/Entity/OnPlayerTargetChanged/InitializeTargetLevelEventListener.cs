@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Text;
 using Autofac.Features.AttributeFilters;
@@ -36,7 +36,7 @@ namespace GladMMO
 				OnTargetEntityLevelChanged(args.TargetedEntity, new EntityDataChangedArgs<int>(0, entityData.GetFieldValue<int>(BaseObjectField.UNIT_FIELD_LEVEL)));
 		}
 
-		private void OnTargetEntityLevelChanged(NetworkEntityGuid entity, EntityDataChangedArgs<int> args)
+		private void OnTargetEntityLevelChanged(ObjectGuid entity, EntityDataChangedArgs<int> args)
 		{
 			TargetUnitFrame.UnitLevel.Text = args.NewValue.ToString();
 		}

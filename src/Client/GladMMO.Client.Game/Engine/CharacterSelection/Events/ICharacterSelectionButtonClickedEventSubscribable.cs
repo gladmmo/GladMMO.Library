@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Text;
 
@@ -11,12 +11,12 @@ namespace GladMMO
 
 	public sealed class CharacterButtonClickedEventArgs : EventArgs
 	{
-		public NetworkEntityGuid CharacterGuid { get; }
+		public ObjectGuid CharacterGuid { get; }
 
 		public int ButtonSlot { get; }
 
 		/// <inheritdoc />
-		public CharacterButtonClickedEventArgs([NotNull] NetworkEntityGuid characterGuid, int buttonSlot)
+		public CharacterButtonClickedEventArgs([NotNull] ObjectGuid characterGuid, int buttonSlot)
 		{
 			if(buttonSlot < 0) throw new ArgumentOutOfRangeException(nameof(buttonSlot));
 

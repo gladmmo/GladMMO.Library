@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Text;
 using Glader.Essentials;
@@ -26,7 +26,7 @@ namespace GladMMO
 		protected override void OnEventFired(object source, EntityWorldRepresentationDeconstructionFinishedEventArgs args)
 		{
 			//Zoneserver handles player differently, for peristence purposes.
-			if (!ShouldCleanupPlayerData && args.EntityGuid.EntityType == EntityType.Player)
+			if (!ShouldCleanupPlayerData && args.EntityGuid.TypeId == EntityTypeId.TYPEID_PLAYER)
 				return;
 
 			//When the entity deconstruction is finally finished, we're free to cleanup/freeup the entity

@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Text;
 
@@ -14,10 +14,10 @@ namespace GladMMO
 		/// <summary>
 		/// The entity guid of the deconstructing entity.
 		/// </summary>
-		public NetworkEntityGuid EntityGuid { get; }
+		public ObjectGuid EntityGuid { get; }
 
 		/// <inheritdoc />
-		public EntityDeconstructionFinishedEventArgs([NotNull] NetworkEntityGuid entityGuid)
+		public EntityDeconstructionFinishedEventArgs([NotNull] ObjectGuid entityGuid)
 		{
 			EntityGuid = entityGuid ?? throw new ArgumentNullException(nameof(entityGuid));
 		}

@@ -15,7 +15,7 @@ namespace GladMMO
 		{
 		}
 
-		protected override EntityPrefab ComputePrefabType([NotNull] NetworkEntityGuid entityGuid)
+		protected override EntityPrefab ComputePrefabType([NotNull] ObjectGuid entityGuid)
 		{
 			if (entityGuid == null) throw new ArgumentNullException(nameof(entityGuid));
 

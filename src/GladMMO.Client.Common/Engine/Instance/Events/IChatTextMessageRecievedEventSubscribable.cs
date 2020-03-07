@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
@@ -25,7 +25,7 @@ namespace GladMMO
 		/// The sender of the message.
 		/// Is empty if there is no sender.
 		/// </summary>
-		public NetworkEntityGuid Sender { get; }
+		public ObjectGuid Sender { get; }
 
 		/// <summary>
 		/// The type of the message.
@@ -39,7 +39,7 @@ namespace GladMMO
 		public bool isFormattedText { get; set; } = false;
 
 		/// <inheritdoc />
-		public TextChatEventArgs([NotNull] string message, [NotNull] NetworkEntityGuid sender, ChatChannelType messageType)
+		public TextChatEventArgs([NotNull] string message, [NotNull] ObjectGuid sender, ChatChannelType messageType)
 		{
 			if(!Enum.IsDefined(typeof(ChatChannelType), messageType)) throw new InvalidEnumArgumentException(nameof(messageType), (int)messageType, typeof(ChatChannelType));
 			Message = message ?? throw new ArgumentNullException(nameof(message));
@@ -53,7 +53,7 @@ namespace GladMMO
 			if(!Enum.IsDefined(typeof(ChatChannelType), messageType)) throw new InvalidEnumArgumentException(nameof(messageType), (int)messageType, typeof(ChatChannelType));
 			Message = message ?? throw new ArgumentNullException(nameof(message));
 			ChannelType = messageType;
-			Sender = NetworkEntityGuid.Empty;
+			Sender = ObjectGuid.Empty;
 		}
 	}
 }

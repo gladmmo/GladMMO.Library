@@ -14,7 +14,7 @@ namespace GladMMO
 
 		private IEntitySessionMessageSender EntityMessageSender { get; }
 
-		public PlayerNetworkTrackerChangeUpdateRequestHandler(ILog logger, IReadonlyConnectionEntityCollection connectionIdToEntityMap, IContextualResourceLockingPolicy<NetworkEntityGuid> lockingPolicy,
+		public PlayerNetworkTrackerChangeUpdateRequestHandler(ILog logger, IReadonlyConnectionEntityCollection connectionIdToEntityMap, IContextualResourceLockingPolicy<ObjectGuid> lockingPolicy,
 			[NotNull] IReadonlyEntityGuidMappable<InterestCollection> interestCollections, 
 			[NotNull] IEntitySessionMessageSender entityMessageSender) 
 			: base(logger, connectionIdToEntityMap, lockingPolicy)
@@ -23,14 +23,14 @@ namespace GladMMO
 			EntityMessageSender = entityMessageSender ?? throw new ArgumentNullException(nameof(entityMessageSender));
 		}
 
-		protected override Task HandleMessage(IPeerSessionMessageContext<GameServerPacketPayload> context, PlayerNetworkTrackerChangeUpdateRequest payload, NetworkEntityGuid guid)
+		protected override Task HandleMessage(IPeerSessionMessageContext<GameServerPacketPayload> context, PlayerNetworkTrackerChangeUpdateRequest payload, ObjectGuid guid)
 		{
 			//TODO: Do some validation here. Players could be sending empty ones, or invalid ones.
 			InterestCollection interestCollection = InterestCollections.RetrieveEntity(guid);
 			PlayerNetworkTrackerChangeUpdateEvent changeUpdateEvent = new PlayerNetworkTrackerChangeUpdateEvent(new EntityAssociatedData<PlayerNetworkTrackerChangeUpdateRequest>(guid, payload));
 
 			//Only send to players and not yourself.
-			foreach(NetworkEntityGuid entity in interestCollection.ContainedEntities)
+			foreach(ObjectGuid entity in interestCollection.ContainedEntities)
 				if (entity.EntityType == EntityType.Player && entity.EntityId != guid.EntityId)
 					EntityMessageSender.SendMessageAsync(entity, changeUpdateEvent);
 

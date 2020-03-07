@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Text;
 using Autofac.Features.AttributeFilters;
@@ -45,7 +45,7 @@ namespace GladMMO
 				OnTargetEntityHealthChanged(args.TargetedEntity, new EntityDataChangedArgs<int>(0, 0));
 		}
 
-		private void OnTargetEntityHealthChanged(NetworkEntityGuid entity, EntityDataChangedArgs<int> args)
+		private void OnTargetEntityHealthChanged(ObjectGuid entity, EntityDataChangedArgs<int> args)
 		{
 			IEntityDataFieldContainer entityData = EntityDataMappable.RetrieveEntity(entity);
 

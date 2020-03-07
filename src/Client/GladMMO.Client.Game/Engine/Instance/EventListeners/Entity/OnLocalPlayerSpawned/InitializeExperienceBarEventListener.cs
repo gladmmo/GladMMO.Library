@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Text;
 using Autofac.Features.AttributeFilters;
@@ -33,7 +33,7 @@ namespace GladMMO
 			RegisterPlayerDataChangeCallback<int>(PlayerObjectField.PLAYER_TOTAL_EXPERIENCE, OnPlayerExperienceChanged);
 		}
 
-		private void OnPlayerExperienceChanged(NetworkEntityGuid entity, EntityDataChangedArgs<int> changeArgs)
+		private void OnPlayerExperienceChanged(ObjectGuid entity, EntityDataChangedArgs<int> changeArgs)
 		{
 			//Just ignore the change args.
 			int currentLevel = LevelStrategy.ComputeLevelFromExperience(changeArgs.NewValue);

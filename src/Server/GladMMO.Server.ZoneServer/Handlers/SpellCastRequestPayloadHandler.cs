@@ -17,14 +17,14 @@ namespace GladMMO
 
 		public SpellCastRequestPayloadHandler(ILog logger, 
 			IReadonlyConnectionEntityCollection connectionIdToEntityMap, 
-			IContextualResourceLockingPolicy<NetworkEntityGuid> lockingPolicy,
+			IContextualResourceLockingPolicy<ObjectGuid> lockingPolicy,
 			[NotNull] IReadonlyEntityGuidMappable<IActorRef> actorReferenceMappable) 
 			: base(logger, connectionIdToEntityMap, lockingPolicy)
 		{
 			ActorReferenceMappable = actorReferenceMappable ?? throw new ArgumentNullException(nameof(actorReferenceMappable));
 		}
 
-		protected override Task HandleMessage(IPeerSessionMessageContext<GameServerPacketPayload> context, SpellCastRequestPayload payload, NetworkEntityGuid guid)
+		protected override Task HandleMessage(IPeerSessionMessageContext<GameServerPacketPayload> context, SpellCastRequestPayload payload, ObjectGuid guid)
 		{
 			IActorRef entityActor = ActorReferenceMappable.RetrieveEntity(guid);
 			entityActor.TellSelf(new TryCastSpellMessage(payload));

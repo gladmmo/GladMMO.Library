@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Text;
 
@@ -14,7 +14,7 @@ namespace GladMMO
 		/// <summary>
 		/// The GUID of the player joining the guild.
 		/// </summary>
-		public NetworkEntityGuid JoineeGuid { get; }
+		public ObjectGuid JoineeGuid { get; }
 
 		/// <summary>
 		/// Indicates if this join is hidden.
@@ -22,7 +22,7 @@ namespace GladMMO
 		/// </summary>
 		public bool isHiddenJoin { get; }
 
-		public CharacterJoinedGuildEventArgs([NotNull] NetworkEntityGuid joineeGuid, bool isHiddenJoin)
+		public CharacterJoinedGuildEventArgs([NotNull] ObjectGuid joineeGuid, bool isHiddenJoin)
 		{
 			JoineeGuid = joineeGuid ?? throw new ArgumentNullException(nameof(joineeGuid));
 			this.isHiddenJoin = isHiddenJoin;

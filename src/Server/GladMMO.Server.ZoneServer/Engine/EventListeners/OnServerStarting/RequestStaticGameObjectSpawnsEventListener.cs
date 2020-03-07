@@ -14,7 +14,7 @@ namespace GladMMO
 	{
 		private IEventPublisher<IEntityCreationRequestedEventSubscribable, EntityCreationRequestedEventArgs> EntityCreationRequester { get; }
 
-		private IFactoryCreatable<NetworkEntityGuid, GameObjectInstanceModel> GameObjectGuidFactory { get; }
+		private IFactoryCreatable<ObjectGuid, GameObjectInstanceModel> GameObjectGuidFactory { get; }
 
 		private ILog Logger { get; }
 
@@ -22,7 +22,7 @@ namespace GladMMO
 
 		public RequestStaticGameObjectSpawnsEventListener(IServerStartingEventSubscribable subscriptionService,
 			[NotNull] IEventPublisher<IEntityCreationRequestedEventSubscribable, EntityCreationRequestedEventArgs> entityCreationRequester,
-			[NotNull] IFactoryCreatable<NetworkEntityGuid, GameObjectInstanceModel> gameObjectGuidFactory,
+			[NotNull] IFactoryCreatable<ObjectGuid, GameObjectInstanceModel> gameObjectGuidFactory,
 			[NotNull] IGameObjectDataService gameObjectDataService,
 			[NotNull] ILog logger)
 			: base(subscriptionService)
@@ -61,7 +61,7 @@ namespace GladMMO
 
 			foreach (var entry in instanceEntries)
 			{
-				NetworkEntityGuid guid = GameObjectGuidFactory.Create(entry);
+				ObjectGuid guid = GameObjectGuidFactory.Create(entry);
 
 				if (Logger.IsInfoEnabled)
 					Logger.Info($"Creating GameObject: {guid}");

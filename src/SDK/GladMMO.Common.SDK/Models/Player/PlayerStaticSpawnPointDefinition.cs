@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
@@ -7,7 +7,7 @@ namespace GladMMO
 {
 	public sealed class PlayerStaticSpawnPointDefinition : StaticSpawnPointDefinition
 	{
-		public override EntityType EntitySpawnType => EntityType.Player;
+		public override EntityTypeId EntitySpawnType => EntityTypeId.TYPEID_PLAYER;
 
 		[HideInInspector]
 		[SerializeField]

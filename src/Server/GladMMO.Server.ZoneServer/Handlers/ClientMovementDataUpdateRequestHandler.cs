@@ -28,7 +28,7 @@ namespace GladMMO
 			[NotNull] ILog logger, 
 			[NotNull] IReadonlyConnectionEntityCollection connectionIdToEntityMap, 
 			[NotNull] IEntityGuidMappable<IMovementData> movementDataMap,
-			IContextualResourceLockingPolicy<NetworkEntityGuid> lockingPolicy,
+			IContextualResourceLockingPolicy<ObjectGuid> lockingPolicy,
 			[NotNull] IEntityGuidMappable<IMovementGenerator<GameObject>> movementGenerator,
 			[NotNull] IReadonlyEntityGuidMappable<CharacterController> characterControllerMappable,
 			[NotNull] IReadonlyNetworkTimeService timeService,
@@ -43,7 +43,7 @@ namespace GladMMO
 		}
 
 		/// <inheritdoc />
-		protected override Task HandleMessage(IPeerSessionMessageContext<GameServerPacketPayload> context, ClientMovementDataUpdateRequest payload, NetworkEntityGuid guid)
+		protected override Task HandleMessage(IPeerSessionMessageContext<GameServerPacketPayload> context, ClientMovementDataUpdateRequest payload, ObjectGuid guid)
 		{
 			try
 			{
@@ -70,7 +70,7 @@ namespace GladMMO
 			return Task.CompletedTask;
 		}
 
-		private CharacterControllerInputMovementGenerator BuildCharacterControllerMovementGenerator(NetworkEntityGuid guid, PositionChangeMovementData data, IMovementGenerator<GameObject> generator, IMovementData movementData)
+		private CharacterControllerInputMovementGenerator BuildCharacterControllerMovementGenerator(ObjectGuid guid, PositionChangeMovementData data, IMovementGenerator<GameObject> generator, IMovementData movementData)
 		{
 			//TODO: Sanity check timestamp and position.
 			//We used to use the last generators current position

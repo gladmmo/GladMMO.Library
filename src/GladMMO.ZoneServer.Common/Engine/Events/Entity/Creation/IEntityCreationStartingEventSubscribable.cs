@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Text;
 
@@ -19,10 +19,10 @@ namespace GladMMO
 		/// <summary>
 		/// The entity guid of the creating entity.
 		/// </summary>
-		public NetworkEntityGuid EntityGuid { get; }
+		public ObjectGuid EntityGuid { get; }
 
 		/// <inheritdoc />
-		public EntityCreationStartingEventArgs([NotNull] NetworkEntityGuid entityGuid)
+		public EntityCreationStartingEventArgs([NotNull] ObjectGuid entityGuid)
 		{
 			EntityGuid = entityGuid ?? throw new ArgumentNullException(nameof(entityGuid));
 		}

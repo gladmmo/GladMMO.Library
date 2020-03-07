@@ -290,7 +290,7 @@ namespace GladMMO
 				.AsSelf()
 				.SingleInstance();
 
-			//IncrementingCreatureGuidFactory : IFactoryCreatable<NetworkEntityGuid, CreatureInstanceModel>
+			//IncrementingCreatureGuidFactory : IFactoryCreatable<ObjectGuid, CreatureInstanceModel>
 			builder.RegisterType<IncrementingCreatureGuidFactory>()
 				.AsImplementedInterfaces()
 				.SingleInstance(); //important, otherwise colliding guids will be produced.

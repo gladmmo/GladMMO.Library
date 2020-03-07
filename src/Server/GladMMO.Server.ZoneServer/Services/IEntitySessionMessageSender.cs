@@ -14,7 +14,7 @@ namespace GladMMO
 		/// <param name="entityGuid"></param>
 		/// <param name="payload"></param>
 		/// <returns></returns>
-		Task<SendResult> SendMessageAsync(NetworkEntityGuid entityGuid, GameServerPacketPayload payload);
+		Task<SendResult> SendMessageAsync(ObjectGuid entityGuid, GameServerPacketPayload payload);
 	}
 
 	//TODO: Extract
@@ -27,7 +27,7 @@ namespace GladMMO
 			SessionMappable = sessionMappable ?? throw new ArgumentNullException(nameof(sessionMappable));
 		}
 
-		public Task<SendResult> SendMessageAsync(NetworkEntityGuid entityGuid, GameServerPacketPayload payload)
+		public Task<SendResult> SendMessageAsync(ObjectGuid entityGuid, GameServerPacketPayload payload)
 		{
 			//TODO: We need to make broadcasting more efficient.
 			//We can expect it to sometimes be null. If the client disconnected in the middle of sending it a message

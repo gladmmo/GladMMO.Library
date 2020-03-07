@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Text;
 using Fasterflect;
@@ -38,6 +38,6 @@ namespace GladMMO
 			OnEntityWorldRepresentationCreated?.Invoke(this, new EntityWorldRepresentationCreatedEventArgs(args.EntityGuid, entityGameObject));
 		}
 
-		protected abstract EntityPrefab ComputePrefabType(NetworkEntityGuid entityGuid);
+		protected abstract EntityPrefab ComputePrefabType(ObjectGuid entityGuid);
 	}
 }

@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -26,7 +26,7 @@ namespace GladMMO
 		/// </summary>
 		[Column(Order = 2)]
 		[Required]
-		public Vector3<float> SpawnPosition { get; set; }
+		public GladMMO.Database.Vector3<float> SpawnPosition { get; set; }
 
 		/// <summary>
 		/// The initial Y-axis orientation/rotation of the player when spawned.
@@ -57,7 +57,7 @@ namespace GladMMO
 		[Required]
 		public bool isReserved { get; private set; }
 
-		public PlayerSpawnPointEntryModel(Vector3<float> spawnPosition, float initialOrientation, long worldId, bool isReserved)
+		public PlayerSpawnPointEntryModel(GladMMO.Database.Vector3<float> spawnPosition, float initialOrientation, long worldId, bool isReserved)
 		{
 			if (worldId <= 0) throw new ArgumentOutOfRangeException(nameof(worldId));
 

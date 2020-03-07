@@ -6,7 +6,7 @@ using Nito.AsyncEx;
 
 namespace GladMMO
 {
-	public interface IDirtyableMovementDataCollection : ICollectionMapDirtyable<NetworkEntityGuid>, IReadonlyEntityGuidMappable<IMovementData>
+	public interface IDirtyableMovementDataCollection : ICollectionMapDirtyable<ObjectGuid>, IReadonlyEntityGuidMappable<IMovementData>
 	{
 		object SyncObject { get; }
 	}

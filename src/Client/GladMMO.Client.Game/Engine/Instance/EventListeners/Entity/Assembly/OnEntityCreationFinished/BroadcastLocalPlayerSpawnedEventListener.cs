@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Text;
 using Glader.Essentials;
@@ -35,11 +35,11 @@ namespace GladMMO
 		}
 
 		//This was brought over from the TrinityCore times, it used to be more complex to determine.
-		private bool IsSpawningEntityLocalPlayer([NotNull] NetworkEntityGuid guid)
+		private bool IsSpawningEntityLocalPlayer([NotNull] ObjectGuid guid)
 		{
 			if(guid == null) throw new ArgumentNullException(nameof(guid));
 
-			return guid.EntityType == EntityType.Player && CharacterDateRepository.CharacterId == guid.EntityId;
+			return guid.TypeId == EntityTypeId.TYPEID_PLAYER && CharacterDateRepository.CharacterId == guid.CurrentObjectGuid;
 		}
 	}
 }

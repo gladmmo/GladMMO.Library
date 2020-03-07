@@ -11,7 +11,7 @@ namespace GladMMO
 		public GameObjectTemplateModel TemplateModel { get; }
 
 		public DefaultGameObjectActorState([NotNull] IEntityDataFieldContainer entityData,
-			[NotNull] NetworkEntityGuid entityGuid,
+			[NotNull] ObjectGuid entityGuid,
 			[NotNull] GameObjectInstanceModel instanceModel,
 			[NotNull] GameObjectTemplateModel templateModel,
 			[NotNull] InterestCollection interest)

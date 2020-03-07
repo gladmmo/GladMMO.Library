@@ -10,7 +10,7 @@ namespace GladMMO
 	public sealed class PlayerEntityCreationContext : IEntityGuidContainer, IEntityCreationContext
 	{
 		/// <inheritdoc />
-		public NetworkEntityGuid EntityGuid { get; }
+		public ObjectGuid EntityGuid { get; }
 
 		public PlayerEntitySessionContext SessionContext { get; }
 
@@ -22,7 +22,7 @@ namespace GladMMO
 		public EntityPrefab PrefabType { get; }
 
 		/// <inheritdoc />
-		public PlayerEntityCreationContext([NotNull] NetworkEntityGuid entityGuid, 
+		public PlayerEntityCreationContext([NotNull] ObjectGuid entityGuid, 
 			[NotNull] PlayerEntitySessionContext sessionContext, 
 			EntityPrefab prefabType, 
 			Vector3 initialPosition, 

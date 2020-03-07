@@ -31,7 +31,7 @@ namespace GladMMO
 		public void Send(EntityMovementMessageContext context)
 		{
 			//When they call this, they intend to send a movement update to the connection associated
-			//with the NetworkEntityGuid provided so we lookup the session associated with it
+			//with the ObjectGuid provided so we lookup the session associated with it
 			//as well as the interest list and movement data for each individual entry int he internest
 			//collection to build the movement packet.
 			if(!SessionMappable.ContainsKey(context.EntityGuid))
@@ -53,7 +53,7 @@ namespace GladMMO
 		}
 
 		//TODO: We need to filter in ONLY dirty movement data. Right now it resends movement data every packet but we only want to update if the data has changed.
-		private EntityAssociatedData<IMovementData>[] BuildMovementBlocks(NetworkEntityGuid guid)
+		private EntityAssociatedData<IMovementData>[] BuildMovementBlocks(ObjectGuid guid)
 		{
 			return GuidToInterestCollectionMappable[guid]
 				.ContainedEntities

@@ -12,7 +12,7 @@ namespace GladMMO
 
 	public sealed class PlayerSessionClaimedEventArgs : EventArgs
 	{
-		public NetworkEntityGuid EntityGuid { get; }
+		public ObjectGuid EntityGuid { get; }
 
 		public Vector3 SpawnPosition { get; }
 
@@ -22,7 +22,7 @@ namespace GladMMO
 		public PlayerEntitySessionContext SessionContext { get; }
 
 		/// <inheritdoc />
-		public PlayerSessionClaimedEventArgs([NotNull] NetworkEntityGuid entityGuid, Vector3 spawnPosition, [NotNull] PlayerEntitySessionContext sessionContext)
+		public PlayerSessionClaimedEventArgs([NotNull] ObjectGuid entityGuid, Vector3 spawnPosition, [NotNull] PlayerEntitySessionContext sessionContext)
 		{
 			EntityGuid = entityGuid ?? throw new ArgumentNullException(nameof(entityGuid));
 			SpawnPosition = spawnPosition;

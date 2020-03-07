@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Text;
 
@@ -35,7 +35,7 @@ namespace GladMMO
 			}
 		}
 
-		private void CreateBehaviourComponent(NetworkEntityGuid entityGuid)
+		private void CreateBehaviourComponent(ObjectGuid entityGuid)
 		{
 			BaseEntityBehaviourComponent behaviourComponent = BehaviourFactory.Create(entityGuid);
 

@@ -11,11 +11,11 @@ namespace GladMMO
 
 	public sealed class PlayerRotiationChangeEventArgs : EventArgs
 	{
-		public NetworkEntityGuid EntityGuid { get; }
+		public ObjectGuid EntityGuid { get; }
 
 		public float Rotation { get; }
 
-		public PlayerRotiationChangeEventArgs([NotNull] NetworkEntityGuid entityGuid, float rotation)
+		public PlayerRotiationChangeEventArgs([NotNull] ObjectGuid entityGuid, float rotation)
 		{
 			EntityGuid = entityGuid ?? throw new ArgumentNullException(nameof(entityGuid));
 			Rotation = rotation;

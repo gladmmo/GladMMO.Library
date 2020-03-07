@@ -5,27 +5,27 @@ using System.Text;
 
 namespace GladMMO
 {
-	public interface IReadonlyConnectionEntityCollection : IReadOnlyDictionary<int, NetworkEntityGuid>
+	public interface IReadonlyConnectionEntityCollection : IReadOnlyDictionary<int, ObjectGuid>
 	{
 
 	}
 
-	public interface IConnectionEntityCollection : IDictionary<int, NetworkEntityGuid>
+	public interface IConnectionEntityCollection : IDictionary<int, ObjectGuid>
 	{
 
 	}
 
 	public sealed class ConnectionEntityMap : IReadonlyConnectionEntityCollection, IConnectionEntityCollection
 	{
-		private Dictionary<int, NetworkEntityGuid> InternallyManagedDictionary { get; }
+		private Dictionary<int, ObjectGuid> InternallyManagedDictionary { get; }
 
 		public ConnectionEntityMap()
 		{
-			InternallyManagedDictionary = new Dictionary<int, NetworkEntityGuid>();
+			InternallyManagedDictionary = new Dictionary<int, ObjectGuid>();
 		}
 
 		/// <inheritdoc />
-		public IEnumerator<KeyValuePair<int, NetworkEntityGuid>> GetEnumerator()
+		public IEnumerator<KeyValuePair<int, ObjectGuid>> GetEnumerator()
 		{
 			return InternallyManagedDictionary.GetEnumerator();
 		}
@@ -37,7 +37,7 @@ namespace GladMMO
 		}
 
 		/// <inheritdoc />
-		public void Add(KeyValuePair<int, NetworkEntityGuid> item)
+		public void Add(KeyValuePair<int, ObjectGuid> item)
 		{
 			InternallyManagedDictionary.Add(item.Key, item.Value);
 		}
@@ -49,40 +49,40 @@ namespace GladMMO
 		}
 
 		/// <inheritdoc />
-		public bool Contains(KeyValuePair<int, NetworkEntityGuid> item)
+		public bool Contains(KeyValuePair<int, ObjectGuid> item)
 		{
 			return InternallyManagedDictionary.ContainsKey(item.Key);
 		}
 
 		/// <inheritdoc />
-		public void CopyTo(KeyValuePair<int, NetworkEntityGuid>[] array, int arrayIndex)
+		public void CopyTo(KeyValuePair<int, ObjectGuid>[] array, int arrayIndex)
 		{
 			throw new NotImplementedException($"TODO: Implement copy.");
 		}
 
 		/// <inheritdoc />
-		public bool Remove(KeyValuePair<int, NetworkEntityGuid> item)
+		public bool Remove(KeyValuePair<int, ObjectGuid> item)
 		{
 			return InternallyManagedDictionary.Remove(item.Key);
 		}
 
 		/// <inheritdoc />
-		int ICollection<KeyValuePair<int, NetworkEntityGuid>>.Count => InternallyManagedDictionary.Count;
+		int ICollection<KeyValuePair<int, ObjectGuid>>.Count => InternallyManagedDictionary.Count;
 
 		/// <inheritdoc />
 		public bool IsReadOnly => false;
 
 		/// <inheritdoc />
-		int IReadOnlyCollection<KeyValuePair<int, NetworkEntityGuid>>.Count => InternallyManagedDictionary.Count;
+		int IReadOnlyCollection<KeyValuePair<int, ObjectGuid>>.Count => InternallyManagedDictionary.Count;
 
 		/// <inheritdoc />
-		public void Add(int key, NetworkEntityGuid value)
+		public void Add(int key, ObjectGuid value)
 		{
 			InternallyManagedDictionary.Add(key, value);
 		}
 
 		/// <inheritdoc />
-		bool IDictionary<int, NetworkEntityGuid>.ContainsKey(int key)
+		bool IDictionary<int, ObjectGuid>.ContainsKey(int key)
 		{
 			return InternallyManagedDictionary.ContainsKey(key);
 		}
@@ -94,40 +94,40 @@ namespace GladMMO
 		}
 
 		/// <inheritdoc />
-		bool IDictionary<int, NetworkEntityGuid>.TryGetValue(int key, out NetworkEntityGuid value)
+		bool IDictionary<int, ObjectGuid>.TryGetValue(int key, out ObjectGuid value)
 		{
 			return InternallyManagedDictionary.TryGetValue(key, out value);
 		}
 
 		/// <inheritdoc />
-		bool IReadOnlyDictionary<int, NetworkEntityGuid>.ContainsKey(int key)
+		bool IReadOnlyDictionary<int, ObjectGuid>.ContainsKey(int key)
 		{
 			return InternallyManagedDictionary.ContainsKey(key);
 		}
 
 		/// <inheritdoc />
-		bool IReadOnlyDictionary<int, NetworkEntityGuid>.TryGetValue(int key, out NetworkEntityGuid value)
+		bool IReadOnlyDictionary<int, ObjectGuid>.TryGetValue(int key, out ObjectGuid value)
 		{
 			return InternallyManagedDictionary.TryGetValue(key, out value);
 		}
 
 		/// <inheritdoc />
-		public NetworkEntityGuid this[int key]
+		public ObjectGuid this[int key]
 		{
 			get => InternallyManagedDictionary[key];
 			set => InternallyManagedDictionary[key] = value;
 		}
 
 		/// <inheritdoc />
-		IEnumerable<int> IReadOnlyDictionary<int, NetworkEntityGuid>.Keys => InternallyManagedDictionary.Keys;
+		IEnumerable<int> IReadOnlyDictionary<int, ObjectGuid>.Keys => InternallyManagedDictionary.Keys;
 
 		/// <inheritdoc />
-		ICollection<NetworkEntityGuid> IDictionary<int, NetworkEntityGuid>.Values => InternallyManagedDictionary.Values;
+		ICollection<ObjectGuid> IDictionary<int, ObjectGuid>.Values => InternallyManagedDictionary.Values;
 
 		/// <inheritdoc />
-		ICollection<int> IDictionary<int, NetworkEntityGuid>.Keys => InternallyManagedDictionary.Keys;
+		ICollection<int> IDictionary<int, ObjectGuid>.Keys => InternallyManagedDictionary.Keys;
 
 		/// <inheritdoc />
-		IEnumerable<NetworkEntityGuid> IReadOnlyDictionary<int, NetworkEntityGuid>.Values => InternallyManagedDictionary.Values;
+		IEnumerable<ObjectGuid> IReadOnlyDictionary<int, ObjectGuid>.Values => InternallyManagedDictionary.Values;
 	}
 }

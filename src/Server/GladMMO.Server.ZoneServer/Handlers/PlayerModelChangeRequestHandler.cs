@@ -17,7 +17,7 @@ namespace GladMMO
 		public PlayerModelChangeRequestHandler(
 			ILog logger,
 			IReadonlyConnectionEntityCollection connectionIdToEntityMap,
-			IContextualResourceLockingPolicy<NetworkEntityGuid> lockingPolicy,
+			IContextualResourceLockingPolicy<ObjectGuid> lockingPolicy,
 			[NotNull] IReadonlyEntityGuidMappable<IEntityDataFieldContainer> entityFieldMap)
 			: base(logger, connectionIdToEntityMap, lockingPolicy)
 		{
@@ -25,7 +25,7 @@ namespace GladMMO
 		}
 
 		/// <inheritdoc />
-		protected override Task HandleMessage(IPeerSessionMessageContext<GameServerPacketPayload> context, PlayerModelChangeRequestPayload payload, NetworkEntityGuid guid)
+		protected override Task HandleMessage(IPeerSessionMessageContext<GameServerPacketPayload> context, PlayerModelChangeRequestPayload payload, ObjectGuid guid)
 		{
 			//At this point, the player wants to change his model.
 			//However we really can't be sure it's a valid model

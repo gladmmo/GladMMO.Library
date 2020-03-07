@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -13,7 +13,7 @@ namespace GladMMO
 		public int ObjectInstanceId => TargetGameObjectId;
 
 		//TODO: This are UNSAFE!
-		public Vector3<float> SpawnPosition => TargetGameObject.SpawnPosition;
+		public GladMMO.Database.Vector3<float> SpawnPosition => TargetGameObject.SpawnPosition;
 
 		public float InitialOrientation => TargetGameObject.InitialOrientation;
 

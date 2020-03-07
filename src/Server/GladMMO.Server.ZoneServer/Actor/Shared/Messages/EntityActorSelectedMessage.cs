@@ -9,9 +9,9 @@ namespace GladMMO
 		/// <summary>
 		/// Guid of the entity attempting to select us.
 		/// </summary>
-		public NetworkEntityGuid SelectorGuid { get; }
+		public ObjectGuid SelectorGuid { get; }
 
-		public EntityActorSelectedMessage([NotNull] NetworkEntityGuid selectorGuid)
+		public EntityActorSelectedMessage([NotNull] ObjectGuid selectorGuid)
 		{
 			SelectorGuid = selectorGuid ?? throw new ArgumentNullException(nameof(selectorGuid));
 		}

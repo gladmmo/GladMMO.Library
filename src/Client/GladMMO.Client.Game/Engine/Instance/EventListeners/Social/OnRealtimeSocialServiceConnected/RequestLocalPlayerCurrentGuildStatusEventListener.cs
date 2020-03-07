@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Text;
 using Autofac.Features.AttributeFilters;
@@ -40,7 +40,7 @@ namespace GladMMO
 		{
 			UnityAsyncHelper.UnityMainThreadContext.PostAsync(async () =>
 			{
-				var guildStatus = await SocialService.GetCharacterMembershipGuildStatus(PlayerDetails.LocalPlayerGuid.EntityId);
+				var guildStatus = await SocialService.GetCharacterMembershipGuildStatus(PlayerDetails.LocalPlayerGuid.CurrentObjectGuid);
 
 				if (Logger.IsInfoEnabled)
 					Logger.Info($"Local Player GuildStatus: {guildStatus.ResultCode} Id: {guildStatus?.Result?.GuildId}");

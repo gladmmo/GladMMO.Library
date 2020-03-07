@@ -11,7 +11,7 @@ namespace GladMMO
 		public CreatureTemplateModel TemplateModel { get; }
 
 		public DefaultCreatureActorState([NotNull] IEntityDataFieldContainer entityData,
-			[NotNull] NetworkEntityGuid entityGuid,
+			[NotNull] ObjectGuid entityGuid,
 			[NotNull] CreatureInstanceModel instanceModel,
 			[NotNull] CreatureTemplateModel templateModel,
 			[NotNull] InterestCollection interest)

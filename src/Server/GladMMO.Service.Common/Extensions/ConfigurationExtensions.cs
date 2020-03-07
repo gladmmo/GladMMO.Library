@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;

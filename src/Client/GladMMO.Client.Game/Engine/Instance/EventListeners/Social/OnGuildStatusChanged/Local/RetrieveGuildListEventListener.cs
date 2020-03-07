@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Text;
 using Common.Logging;
@@ -48,8 +48,8 @@ namespace GladMMO
 				//Now we can publish the roster.
 				foreach (int rosterCharacterId in rosterResponseModel.Result.GuildedCharacterIds)
 				{
-					NetworkEntityGuid characterGuid = NetworkEntityGuidBuilder.New()
-						.WithType(EntityType.Player)
+					ObjectGuid characterGuid = ObjectGuidBuilder.New()
+						.WithType(EntityTypeId.TYPEID_PLAYER)
 						.WithId(rosterCharacterId)
 						.Build();
 

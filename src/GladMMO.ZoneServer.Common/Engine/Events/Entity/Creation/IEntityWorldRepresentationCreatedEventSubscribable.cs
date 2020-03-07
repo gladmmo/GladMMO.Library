@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
@@ -21,7 +21,7 @@ namespace GladMMO
 		/// <summary>
 		/// The entity guid of the creating entity.
 		/// </summary>
-		public NetworkEntityGuid EntityGuid { get; }
+		public ObjectGuid EntityGuid { get; }
 
 		/// <summary>
 		/// The world/gameobject representation of the entity.
@@ -29,7 +29,7 @@ namespace GladMMO
 		public GameObject EntityWorldRepresentation { get; }
 
 		/// <inheritdoc />
-		public EntityWorldRepresentationCreatedEventArgs([NotNull] NetworkEntityGuid entityGuid, GameObject entityWorldRepresentation)
+		public EntityWorldRepresentationCreatedEventArgs([NotNull] ObjectGuid entityGuid, GameObject entityWorldRepresentation)
 		{
 			EntityGuid = entityGuid ?? throw new ArgumentNullException(nameof(entityGuid));
 			EntityWorldRepresentation = entityWorldRepresentation; //don't check null, due to threading problems.

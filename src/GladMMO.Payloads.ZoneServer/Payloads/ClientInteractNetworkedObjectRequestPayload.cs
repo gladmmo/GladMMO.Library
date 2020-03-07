@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
@@ -24,7 +24,7 @@ namespace GladMMO
 		/// The guid of the object to request an interaction with.
 		/// </summary>
 		[ProtoMember(1)]
-		public NetworkEntityGuid TargetObjectGuid { get; private set; }
+		public ObjectGuid TargetObjectGuid { get; private set; }
 
 		/// <summary>
 		/// The interaction type.
@@ -32,7 +32,7 @@ namespace GladMMO
 		[ProtoMember(2)]
 		public InteractType InteractionType { get; private set; }
 
-		public ClientInteractNetworkedObjectRequestPayload([NotNull] NetworkEntityGuid targetObjectGuid, InteractType interactionType)
+		public ClientInteractNetworkedObjectRequestPayload([NotNull] ObjectGuid targetObjectGuid, InteractType interactionType)
 		{
 			if (!Enum.IsDefined(typeof(InteractType), interactionType)) throw new InvalidEnumArgumentException(nameof(interactionType), (int) interactionType, typeof(InteractType));
 

@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,7 +13,7 @@ namespace GladMMO
 		/// The spawn type of the strategy.
 		/// Could be player or creature.
 		/// </summary>
-		EntityType EntitySpawnType { get; }
+		EntityTypeId EntitySpawnType { get; }
 
 		/// <summary>
 		/// Generates a spawnpoint.

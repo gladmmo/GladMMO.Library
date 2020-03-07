@@ -15,23 +15,23 @@ namespace GladMMO
 			InternalActorRefDictionary = new EntityGuidDictionary<IActorRef>();
 		}
 
-		public bool ContainsKey(NetworkEntityGuid key)
+		public bool ContainsKey(ObjectGuid key)
 		{
 			return InternalActorRefDictionary.ContainsKey(key);
 		}
 
-		public void Add(NetworkEntityGuid key, IActorRef value)
+		public void Add(ObjectGuid key, IActorRef value)
 		{
 			InternalActorRefDictionary.Add(key, value);
 		}
 
-		public IActorRef this[NetworkEntityGuid key]
+		public IActorRef this[ObjectGuid key]
 		{
 			get => InternalActorRefDictionary[key];
 			set => InternalActorRefDictionary[key] = value;
 		}
 
-		public bool TryGetValue(NetworkEntityGuid key, out IActorRef value)
+		public bool TryGetValue(ObjectGuid key, out IActorRef value)
 		{
 			return this.InternalActorRefDictionary.TryGetValue(key, out value);
 		}
@@ -46,7 +46,7 @@ namespace GladMMO
 			return ((IEnumerable) InternalActorRefDictionary).GetEnumerator();
 		}
 
-		public bool RemoveEntityEntry(NetworkEntityGuid entityGuid)
+		public bool RemoveEntityEntry(ObjectGuid entityGuid)
 		{
 			//Never remove or cleanup.
 			return true;

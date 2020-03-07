@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Text;
 using Glader.Essentials;
@@ -19,7 +19,7 @@ namespace GladMMO
 
 		protected sealed override void OnEntityWorldRepresentationCreated(EntityWorldRepresentationCreatedEventArgs args)
 		{
-			if (args.EntityGuid.EntityType != EntityType.Player)
+			if (args.EntityGuid.TypeId != EntityTypeId.TYPEID_PLAYER)
 				return;
 
 			OnPlayerWorldRepresentationCreated(args);

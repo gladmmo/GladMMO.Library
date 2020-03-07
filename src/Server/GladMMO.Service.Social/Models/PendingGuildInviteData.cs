@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,11 +17,11 @@ namespace GladMMO
 		/// <summary>
 		/// The GUID of the entity inviting them to the guild.
 		/// </summary>
-		public NetworkEntityGuid InviterGuid { get; }
+		public ObjectGuid InviterGuid { get; }
 
 		public const int MAXIMUM_PENDING_GUILD_INVITE_TIME_SECONDS = 60;
 
-		public PendingGuildInviteData(int guildId, [JetBrains.Annotations.NotNull] NetworkEntityGuid inviterGuid)
+		public PendingGuildInviteData(int guildId, [JetBrains.Annotations.NotNull] ObjectGuid inviterGuid)
 		{
 			InvitedTimeStamp = DateTime.UtcNow;
 			GuildId = guildId;

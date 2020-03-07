@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -49,7 +49,7 @@ namespace GladMMO
 					//When successful, we must add them to the guild database
 					//and then alert the guild channel (everyone in the guild) that they joined
 					//AND let the client itself know that it joined a guild.
-					guildJoinResult = await characterGuildMembershipRepositoryContainer.Repository.TryCreateAsync(new CharacterGuildMemberRelationshipModel(context.CallerGuid.EntityId, inviteData.GuildId));
+					guildJoinResult = await characterGuildMembershipRepositoryContainer.Repository.TryCreateAsync(new CharacterGuildMemberRelationshipModel(context.CallerGuid.CurrentObjectGuid, inviteData.GuildId));
 				}
 
 				//This should never happen

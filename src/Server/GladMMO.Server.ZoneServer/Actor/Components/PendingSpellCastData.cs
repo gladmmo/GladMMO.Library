@@ -25,7 +25,7 @@ namespace GladMMO
 		/// <summary>
 		/// The in-time snapshot of the entity's current target.
 		/// </summary>
-		NetworkEntityGuid SnapshotEntityTarget { get; }
+		ObjectGuid SnapshotEntityTarget { get; }
 	}
 
 	public sealed class PendingSpellCastData : IPendingSpellCastData
@@ -58,13 +58,13 @@ namespace GladMMO
 		/// <summary>
 		/// The in-time snapshot of the entity's current target.
 		/// </summary>
-		public NetworkEntityGuid SnapshotEntityTarget { get; }
+		public ObjectGuid SnapshotEntityTarget { get; }
 
 		public bool isCastCanceled => PendingCancel.IsCancellationRequested;
 
 		public bool isInstantCast => CastTime.Ticks == 0;
 
-		public PendingSpellCastData(long startTime, long expectedCastTime, int spellId, [NotNull] ICancelable pendingCancel, TimeSpan castTime, [NotNull] NetworkEntityGuid snapshotEntityTarget)
+		public PendingSpellCastData(long startTime, long expectedCastTime, int spellId, [NotNull] ICancelable pendingCancel, TimeSpan castTime, [NotNull] ObjectGuid snapshotEntityTarget)
 		{
 			if (spellId <= 0) throw new ArgumentOutOfRangeException(nameof(spellId));
 			if (startTime <= 0) throw new ArgumentOutOfRangeException(nameof(startTime));

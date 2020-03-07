@@ -74,7 +74,7 @@ namespace GladMMO
 				dataEntityCollection.ClearTrackedChanges();
 		}
 
-		private void SendUpdate(NetworkEntityGuid guid, List<EntityAssociatedData<FieldValueUpdate>> updates)
+		private void SendUpdate(ObjectGuid guid, List<EntityAssociatedData<FieldValueUpdate>> updates)
 		{
 			try
 			{
@@ -86,7 +86,7 @@ namespace GladMMO
 			}
 		}
 
-		private bool ChangeTrackerHasChangesForEntity(NetworkEntityGuid interestingEntityGuid)
+		private bool ChangeTrackerHasChangesForEntity(ObjectGuid interestingEntityGuid)
 		{
 			try
 			{

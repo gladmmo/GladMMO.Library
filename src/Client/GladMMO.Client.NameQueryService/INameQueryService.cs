@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,7 +28,7 @@ namespace GladMMO
 		[Headers("Cache-Control: max-age=600")]
 		//[Get("/api/namequery/" + nameof(EntityType.Player) + "/{EntityGuid}/name")]
 		[Get("/api/namequery/Player/{name}/reverse")]
-		Task<ResponseModel<NetworkEntityGuid, NameQueryResponseCode>> RetrievePlayerGuidAsync([AliasAs("name")] string characterName);
+		Task<ResponseModel<ObjectGuid, NameQueryResponseCode>> RetrievePlayerGuidAsync([AliasAs("name")] string characterName);
 
 		/// <summary>
 		/// Retrieves the name of the creature entity

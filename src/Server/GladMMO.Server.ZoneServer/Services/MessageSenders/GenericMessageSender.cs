@@ -42,7 +42,7 @@ namespace GladMMO
 			}
 		}
 
-		private void LogNoSessionError([NotNull] NetworkEntityGuid guid)
+		private void LogNoSessionError([NotNull] ObjectGuid guid)
 		{
 			if(guid == null) throw new ArgumentNullException(nameof(guid));
 

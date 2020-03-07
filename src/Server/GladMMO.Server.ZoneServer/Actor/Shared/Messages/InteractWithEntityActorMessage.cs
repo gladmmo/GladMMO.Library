@@ -6,9 +6,9 @@ namespace GladMMO
 {
 	public sealed class InteractWithEntityActorMessage : EntityActorMessage
 	{
-		public NetworkEntityGuid EntityInteracting { get; }
+		public ObjectGuid EntityInteracting { get; }
 
-		public InteractWithEntityActorMessage([NotNull] NetworkEntityGuid entityInteracting)
+		public InteractWithEntityActorMessage([NotNull] ObjectGuid entityInteracting)
 		{
 			EntityInteracting = entityInteracting ?? throw new ArgumentNullException(nameof(entityInteracting));
 		}

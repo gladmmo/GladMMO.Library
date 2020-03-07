@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -34,7 +34,7 @@ namespace GladMMO
 
 			//First we need to check if they're in a guild.
 			//We don't really need to handle the response for this, since it should never really happen.
-			var guildStatus = await SocialService.GetCharacterMembershipGuildStatus(context.CallerGuid.EntityId);
+			var guildStatus = await SocialService.GetCharacterMembershipGuildStatus(context.CallerGuid.CurrentObjectGuid);
 
 			if (!guildStatus.isSuccessful)
 			{
@@ -51,7 +51,7 @@ namespace GladMMO
 			//If it's not successful, assume the user doesn't exist.
 			if (!nameQueryResponse.isSuccessful)
 			{
-				await SendGuildInviteResponse(context, GuildMemberInviteResponseCode.PlayerNotFound, NetworkEntityGuid.Empty);
+				await SendGuildInviteResponse(context, GuildMemberInviteResponseCode.PlayerNotFound, ObjectGuid.Empty);
 				return;
 			}
 
@@ -98,20 +98,20 @@ namespace GladMMO
 			await playerClient.ReceiveGuildInviteEventAsync(new GuildMemberInviteEventModel(guildStatus.Result.GuildId, context.CallerGuid));
 		}
 
-		private async Task<bool> CheckIfGuilded(NetworkEntityGuid guid)
+		private async Task<bool> CheckIfGuilded(ObjectGuid guid)
 		{
-			var guildStatus = await SocialService.GetCharacterMembershipGuildStatus(guid.EntityId);
+			var guildStatus = await SocialService.GetCharacterMembershipGuildStatus(guid.CurrentObjectGuid);
 
 			//If the query was successful then they ARE in a guild.
 			return guildStatus.ResultCode == CharacterGuildMembershipStatusResponseCode.Success;
 		}
 
-		private PendingGuildInviteData GeneratePendingInviteData(NetworkEntityGuid inviterGuid, int guildId)
+		private PendingGuildInviteData GeneratePendingInviteData(ObjectGuid inviterGuid, int guildId)
 		{
 			return new PendingGuildInviteData(guildId, inviterGuid);
 		}
 
-		private static async Task SendGuildInviteResponse(IHubConnectionMessageContext<IRemoteSocialHubClient> context, GuildMemberInviteResponseCode code, NetworkEntityGuid inviteeGuid)
+		private static async Task SendGuildInviteResponse(IHubConnectionMessageContext<IRemoteSocialHubClient> context, GuildMemberInviteResponseCode code, ObjectGuid inviteeGuid)
 		{
 			await context.Clients.Caller.ReceiveGuildInviteResponseAsync(new GuildMemberInviteResponseModel(code, inviteeGuid));
 		}

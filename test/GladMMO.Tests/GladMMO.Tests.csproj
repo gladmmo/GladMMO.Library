@@ -27,7 +27,6 @@
     <ProjectReference Include="..\..\src\GladMMO.Payloads.ZoneServer\GladMMO.Payloads.ZoneServer.csproj" />
     <ProjectReference Include="..\..\src\Server\GladMMO.Database.Common\GladMMO.Database.Common.csproj" />
     <ProjectReference Include="..\..\src\Server\GladMMO.Database.GameServer\GladMMO.Database.GameServer.csproj" />
-    <ProjectReference Include="..\..\src\Server\GladMMO.Server.ZoneServer\GladMMO.Server.ZoneServer.csproj" />
     <ProjectReference Include="..\..\src\Server\GladMMO.Service.GameServer\GladMMO.Service.GameServer.csproj" />
     <ProjectReference Include="..\..\src\Server\GladMMO.Service.ServiceDiscovery\GladMMO.Service.ServiceDiscovery.csproj" />
   </ItemGroup>

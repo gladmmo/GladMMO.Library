@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Text;
 using Common.Logging;
@@ -54,7 +54,7 @@ namespace GladMMO
 				KnownEntities.RemoveEntity(args.EntityGuid);
 
 				if(Logger.IsDebugEnabled)
-					Logger.Debug($"Entity: {args.EntityGuid.EntityType}:{args.EntityGuid.EntityId} is now forgotten.");
+					Logger.Debug($"Entity: {args.EntityGuid.TypeId}:{args.EntityGuid.CurrentObjectGuid} is now forgotten.");
 
 				OnEntityDeconstructionFinished?.Invoke(this, new EntityDeconstructionFinishedEventArgs(args.EntityGuid));
 			}

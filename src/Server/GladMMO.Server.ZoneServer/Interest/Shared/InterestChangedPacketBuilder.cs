@@ -28,7 +28,7 @@ namespace GladMMO
 			FieldUpdateFactory = fieldUpdateFactory ?? throw new ArgumentNullException(nameof(fieldUpdateFactory));
 		}
 
-		public NetworkObjectVisibilityChangeEventPayload Build([NotNull] IReadOnlyCollection<NetworkEntityGuid> joining, [NotNull] IReadOnlyCollection<NetworkEntityGuid> leaving)
+		public NetworkObjectVisibilityChangeEventPayload Build([NotNull] IReadOnlyCollection<ObjectGuid> joining, [NotNull] IReadOnlyCollection<ObjectGuid> leaving)
 		{
 			if(joining == null) throw new ArgumentNullException(nameof(joining));
 			if(leaving == null) throw new ArgumentNullException(nameof(leaving));
@@ -47,7 +47,7 @@ namespace GladMMO
 		}
 
 		//TODO: We should do some initial field data caching so we don't rebuild it multiple times per game tick
-		private FieldValueUpdate BuildInitialDataFieldValues(NetworkEntityGuid entityGuid)
+		private FieldValueUpdate BuildInitialDataFieldValues(ObjectGuid entityGuid)
 		{
 			return FieldUpdateFactory.Create(new EntityFieldUpdateCreationContext(EntityDataMapper[entityGuid], EntityDataMapper[entityGuid].DataSetIndicationArray));
 		}

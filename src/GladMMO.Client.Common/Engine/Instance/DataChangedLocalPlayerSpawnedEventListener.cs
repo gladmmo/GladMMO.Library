@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -27,7 +27,7 @@ namespace GladMMO
 			PlayerDetails = playerDetails ?? throw new ArgumentNullException(nameof(playerDetails));
 		}
 
-		protected void RegisterPlayerDataChangeCallback<TChangeType>(int field, [NotNull] Action<NetworkEntityGuid, EntityDataChangedArgs<TChangeType>> callback)
+		protected void RegisterPlayerDataChangeCallback<TChangeType>(int field, [NotNull] Action<ObjectGuid, EntityDataChangedArgs<TChangeType>> callback)
 			where TChangeType : struct
 		{
 			if(callback == null) throw new ArgumentNullException(nameof(callback));
@@ -35,7 +35,7 @@ namespace GladMMO
 			EntityDataCallbackRegister.RegisterCallback(PlayerDetails.LocalPlayerGuid, (int)field, callback);
 		}
 
-		protected void RegisterPlayerDataChangeCallback<TChangeType>(EntityObjectField field, [NotNull] Action<NetworkEntityGuid, EntityDataChangedArgs<TChangeType>> callback)
+		protected void RegisterPlayerDataChangeCallback<TChangeType>(EntityObjectField field, [NotNull] Action<ObjectGuid, EntityDataChangedArgs<TChangeType>> callback)
 			where TChangeType : struct
 		{
 			if(callback == null) throw new ArgumentNullException(nameof(callback));
@@ -43,7 +43,7 @@ namespace GladMMO
 			EntityDataCallbackRegister.RegisterCallback(PlayerDetails.LocalPlayerGuid, (int)field, callback);
 		}
 
-		protected void RegisterPlayerDataChangeCallback<TChangeType>(PlayerObjectField field, [NotNull] Action<NetworkEntityGuid, EntityDataChangedArgs<TChangeType>> callback)
+		protected void RegisterPlayerDataChangeCallback<TChangeType>(PlayerObjectField field, [NotNull] Action<ObjectGuid, EntityDataChangedArgs<TChangeType>> callback)
 			where TChangeType : struct
 		{
 			if(callback == null) throw new ArgumentNullException(nameof(callback));
@@ -51,7 +51,7 @@ namespace GladMMO
 			EntityDataCallbackRegister.RegisterCallback(PlayerDetails.LocalPlayerGuid, (int)field, callback);
 		}
 
-		protected void RegisterPlayerDataChangeCallback<TChangeType>(BaseObjectField field, [NotNull] Action<NetworkEntityGuid, EntityDataChangedArgs<TChangeType>> callback)
+		protected void RegisterPlayerDataChangeCallback<TChangeType>(BaseObjectField field, [NotNull] Action<ObjectGuid, EntityDataChangedArgs<TChangeType>> callback)
 			where TChangeType : struct
 		{
 			if(callback == null) throw new ArgumentNullException(nameof(callback));

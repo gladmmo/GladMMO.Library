@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
@@ -32,7 +32,7 @@ namespace GladMMO
 		{
 			if (!ContentResourceManagers.ContainsKey(context.ContentType))
 			{
-				throw new InvalidOperationException($"Cannot load content for EntityType: {context.EntityGuid.EntityType}");
+				throw new InvalidOperationException($"Cannot load content for EntityType: {context.EntityGuid.TypeId}");
 			}
 
 			ILoadableContentResourceManager contentResourceManager = ContentResourceManagers[context.ContentType];

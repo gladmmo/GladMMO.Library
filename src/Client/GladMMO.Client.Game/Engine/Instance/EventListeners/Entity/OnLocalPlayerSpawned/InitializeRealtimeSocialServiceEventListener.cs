@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
@@ -67,7 +67,7 @@ namespace GladMMO
 					HubConnection connection = new HubConnectionBuilder()
 						.WithUrl(hubConnectionString, options =>
 						{
-							options.Headers.Add(SocialNetworkConstants.CharacterIdRequestHeaderName, PlayerDetails.LocalPlayerGuid.EntityId.ToString());
+							options.Headers.Add(SocialNetworkConstants.CharacterIdRequestHeaderName, PlayerDetails.LocalPlayerGuid.CurrentObjectGuid.ToString());
 							options.AccessTokenProvider = () => Task.FromResult(AuthTokenProvider.Retrieve());
 						})
 						.AddJsonProtocol()

@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Text;
 
@@ -17,6 +17,6 @@ namespace GladMMO
 		/// <summary>
 		/// The Entity guid associated with the actor.
 		/// </summary>
-		NetworkEntityGuid EntityGuid { get; }
+		ObjectGuid EntityGuid { get; }
 	}
 }

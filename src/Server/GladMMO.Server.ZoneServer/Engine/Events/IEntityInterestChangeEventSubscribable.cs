@@ -25,12 +25,12 @@ namespace GladMMO
 		/// the interest of. <see cref="EnteringEntity"/> is JOINING <see cref="EnterableEntity"/>'s
 		/// interest collection.
 		/// </summary>
-		public NetworkEntityGuid EnterableEntity { get; }
+		public ObjectGuid EnterableEntity { get; }
 
 		/// <summary>
 		/// The entity entering <see cref="EnterableEntity"/>'s interest collection.
 		/// </summary>
-		public NetworkEntityGuid EnteringEntity { get; }
+		public ObjectGuid EnteringEntity { get; }
 
 		/// <summary>
 		/// Enumeration of the types of changes.
@@ -44,7 +44,7 @@ namespace GladMMO
 		public ChangeType ChangingType { get; }
 
 		/// <inheritdoc />
-		public EntityInterestChangeEventArgs([NotNull] NetworkEntityGuid enterableEntity, [NotNull] NetworkEntityGuid enteringEntity, ChangeType changingType)
+		public EntityInterestChangeEventArgs([NotNull] ObjectGuid enterableEntity, [NotNull] ObjectGuid enteringEntity, ChangeType changingType)
 		{
 			if(!Enum.IsDefined(typeof(ChangeType), changingType)) throw new InvalidEnumArgumentException(nameof(changingType), (int)changingType, typeof(ChangeType));
 

@@ -11,9 +11,9 @@ namespace GladMMO
 
 	public sealed class EntityDeconstructionRequestedEventArgs : EventArgs, IEntityGuidContainer
 	{
-		public NetworkEntityGuid EntityGuid { get; }
+		public ObjectGuid EntityGuid { get; }
 
-		public EntityDeconstructionRequestedEventArgs([NotNull] NetworkEntityGuid entityGuid)
+		public EntityDeconstructionRequestedEventArgs([NotNull] ObjectGuid entityGuid)
 		{
 			EntityGuid = entityGuid ?? throw new ArgumentNullException(nameof(entityGuid));
 		}

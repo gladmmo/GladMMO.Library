@@ -1,6 +1,6 @@
 ﻿namespace GladMMO
 {
-	public interface IEntityInterestQueueable : IRegisterable<NetworkEntityGuid, NetworkEntityGuid>
+	public interface IEntityInterestQueueable : IRegisterable<ObjectGuid, ObjectGuid>
 	{
 		
 	}

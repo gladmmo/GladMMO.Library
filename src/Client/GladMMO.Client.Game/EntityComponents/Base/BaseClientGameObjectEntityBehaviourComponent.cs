@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
@@ -12,7 +12,7 @@ namespace GladMMO
 		//TODO: We should move this to base class, server objects should have access to their data too.
 		protected IEntityDataFieldContainer Data { get; }
 
-		public BaseClientGameObjectEntityBehaviourComponent(NetworkEntityGuid targetEntity, 
+		public BaseClientGameObjectEntityBehaviourComponent(ObjectGuid targetEntity, 
 			[NotNull] GameObject rootSceneObject,
 			[NotNull] IEntityDataFieldContainer data) 
 			: base(targetEntity)

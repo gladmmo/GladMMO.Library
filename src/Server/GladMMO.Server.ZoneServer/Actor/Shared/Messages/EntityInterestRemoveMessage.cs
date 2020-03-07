@@ -12,9 +12,9 @@ namespace GladMMO
 		/// <summary>
 		/// The entity to remove interest for.
 		/// </summary>
-		public NetworkEntityGuid Entity { get; }
+		public ObjectGuid Entity { get; }
 
-		public EntityInterestRemoveMessage([NotNull] NetworkEntityGuid entity)
+		public EntityInterestRemoveMessage([NotNull] ObjectGuid entity)
 		{
 			Entity = entity ?? throw new ArgumentNullException(nameof(entity));
 		}

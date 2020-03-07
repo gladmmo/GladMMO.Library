@@ -10,12 +10,12 @@ namespace GladMMO
 		/// The source guid of the spell.
 		/// (Ex. the caster).
 		/// </summary>
-		public NetworkEntityGuid SpellSource { get; }
+		public ObjectGuid SpellSource { get; }
 
 		/// <summary>
 		/// The target guid of the spell.
 		/// </summary>
-		public NetworkEntityGuid ApplicationTarget { get; }
+		public ObjectGuid ApplicationTarget { get; }
 
 		/// <summary>
 		/// The spell data for the application.
@@ -27,8 +27,8 @@ namespace GladMMO
 		/// </summary>
 		public IReadonlyEntityDataFieldContainer ApplicationTargetEntityData { get; }
 
-		public SpellEffectApplicationContext([NotNull] NetworkEntityGuid spellSource, 
-			[NotNull] NetworkEntityGuid applicationTarget, 
+		public SpellEffectApplicationContext([NotNull] ObjectGuid spellSource, 
+			[NotNull] ObjectGuid applicationTarget, 
 			[NotNull] ISpellEffectPairable spellEffectData, 
 			[NotNull] IReadonlyEntityDataFieldContainer applicationTargetEntityData)
 		{

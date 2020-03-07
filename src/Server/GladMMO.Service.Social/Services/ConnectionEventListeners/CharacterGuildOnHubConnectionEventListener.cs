@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -33,9 +33,9 @@ namespace GladMMO
 			//TODO: Verify that the character they requested is owned by them.
 			ProjectVersionStage.AssertAlpha();
 
-			NetworkEntityGuid guid = new NetworkEntityGuidBuilder()
+			ObjectGuid guid = new ObjectGuidBuilder()
 				.WithId(int.Parse(hubConnectedTo.Context.UserIdentifier))
-				.WithType(EntityType.Player)
+				.WithType(EntityTypeId.TYPEID_PLAYER)
 				.Build();
 
 			HubOnConnectionState state = await TryRequestCharacterGuildStatus(guid, hubConnectedTo.Context.UserIdentifier)
@@ -53,7 +53,7 @@ namespace GladMMO
 			return HubOnConnectionState.Error;
 		}
 
-		private async Task<HubOnConnectionState> TryRequestCharacterGuildStatus(NetworkEntityGuid guid, string userIdentifier)
+		private async Task<HubOnConnectionState> TryRequestCharacterGuildStatus(ObjectGuid guid, string userIdentifier)
 		{
 			ResponseModel<CharacterGuildMembershipStatusResponse, CharacterGuildMembershipStatusResponseCode> response = null;
 
@@ -78,7 +78,7 @@ namespace GladMMO
 			return HubOnConnectionState.Success;
 		}
 
-		private async Task RegisterGuildOnExistingResponse(NetworkEntityGuid guid, IGroupManager groupManager, string connectionId)
+		private async Task RegisterGuildOnExistingResponse(ObjectGuid guid, IGroupManager groupManager, string connectionId)
 		{
 			//If no guild status exists we cannot register a guild channel.
 			if (!GuildStatusMappable.ContainsKey(guid))

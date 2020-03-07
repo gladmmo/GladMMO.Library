@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Text;
 
@@ -8,9 +8,9 @@ namespace GladMMO
 	{
 		public IEntityDataFieldContainer EntityData { get; }
 
-		public NetworkEntityGuid EntityGuid { get; }
+		public ObjectGuid EntityGuid { get; }
 
-		public DefaultEntityActorStateContainer(IEntityDataFieldContainer entityData, NetworkEntityGuid entityGuid)
+		public DefaultEntityActorStateContainer(IEntityDataFieldContainer entityData, ObjectGuid entityGuid)
 		{
 			EntityData = entityData ?? throw new ArgumentNullException(nameof(entityData));
 			EntityGuid = entityGuid ?? throw new ArgumentNullException(nameof(entityGuid));

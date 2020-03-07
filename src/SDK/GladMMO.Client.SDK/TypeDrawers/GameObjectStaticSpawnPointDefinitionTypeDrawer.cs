@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
@@ -124,7 +124,7 @@ namespace GladMMO.SDK
 					IGameObjectDataServiceClient client = new GameObjectContentServiceClientFactory().Create(EmptyFactoryContext.Instance);
 
 					//Just sent the updated model.
-					await client.UpdateGameObjectInstance(GetTarget().GameObjectInstanceId, new GameObjectInstanceModel(BuildNetworkEntityGuid(), GetTarget().GameObjectTemplateId, GetTarget().transform.position, GetTarget().transform.eulerAngles.y));
+					await client.UpdateGameObjectInstance(GetTarget().GameObjectInstanceId, new GameObjectInstanceModel(BuildObjectGuid(), GetTarget().GameObjectTemplateId, GetTarget().transform.position, GetTarget().transform.eulerAngles.y));
 
 					//Since the data about the creature displayed is probably now stale, we should update it after saving.
 					await RefreshGameObjectData(client);
@@ -156,7 +156,7 @@ namespace GladMMO.SDK
 					{
 						DisplayProgressBar("Creating GameObject", "Saving Instance (2/2)", 0.5f);
 
-						GetTarget().GameObjectInstanceId = result.Result.Guid.EntryId;
+						GetTarget().GameObjectInstanceId = result.Result.Guid.Entry;
 						EditorUtility.SetDirty(GetTarget());
 						EditorSceneManager.MarkSceneDirty(GetTarget().gameObject.scene);
 
@@ -231,11 +231,11 @@ namespace GladMMO.SDK
 			return queryResponseModel.Result;
 		}
 
-		private NetworkEntityGuid BuildNetworkEntityGuid()
+		private ObjectGuid BuildObjectGuid()
 		{
-			return new NetworkEntityGuidBuilder()
+			return new ObjectGuidBuilder()
 				.WithId(0) //0 means it's not an instance.
-				.WithType(EntityType.GameObject)
+				.WithType(EntityTypeId.TYPEID_GAMEOBJECT)
 				.WithEntryId(GetTarget().GameObjectInstanceId)
 				.Build();
 		}

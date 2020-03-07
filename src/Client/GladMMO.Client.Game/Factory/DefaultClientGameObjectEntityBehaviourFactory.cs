@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
@@ -24,7 +24,7 @@ namespace GladMMO
 			WorldObjectMappable = worldObjectMappable ?? throw new ArgumentNullException(nameof(worldObjectMappable));
 		}
 
-		public BaseEntityBehaviourComponent Create([NotNull] NetworkEntityGuid context)
+		public BaseEntityBehaviourComponent Create([NotNull] ObjectGuid context)
 		{
 			if (context == null) throw new ArgumentNullException(nameof(context));
 

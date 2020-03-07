@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Text;
 using Newtonsoft.Json;
@@ -10,12 +10,12 @@ namespace GladMMO
 	public sealed class ZoneServerAvatarPedestalInteractionCharacterRequest
 	{
 		[JsonProperty]
-		public NetworkEntityGuid CharacterGuid { get; private set; }
+		public ObjectGuid CharacterGuid { get; private set; }
 
 		[JsonProperty]
 		public int AvatarPedestalId { get; private set; }
 
-		public ZoneServerAvatarPedestalInteractionCharacterRequest([NotNull] NetworkEntityGuid characterGuid, int avatarPedestalId)
+		public ZoneServerAvatarPedestalInteractionCharacterRequest([NotNull] ObjectGuid characterGuid, int avatarPedestalId)
 		{
 			if (avatarPedestalId <= 0) throw new ArgumentOutOfRangeException(nameof(avatarPedestalId));
 

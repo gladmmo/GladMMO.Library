@@ -6,9 +6,9 @@ namespace GladMMO
 	{
 		public int SpellId { get; }
 
-		public NetworkEntityGuid CurrentTarget { get; }
+		public ObjectGuid CurrentTarget { get; }
 
-		public PendingSpellCastCreationContext(int spellId, [NotNull] NetworkEntityGuid currentTarget)
+		public PendingSpellCastCreationContext(int spellId, [NotNull] ObjectGuid currentTarget)
 		{
 			if (spellId < 0) throw new ArgumentOutOfRangeException(nameof(spellId));
 

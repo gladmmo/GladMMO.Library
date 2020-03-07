@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
@@ -18,7 +18,7 @@ namespace GladMMO
 		/// <param name="guid">The entity guid.</param>
 		/// <param name="obj">The object to add.</param>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static void ReplaceObject<TReturnType>([NotNull] this IEntityGuidMappable<NetworkEntityGuid, TReturnType> collection, [NotNull] NetworkEntityGuid guid, TReturnType obj)
+		public static void ReplaceObject<TReturnType>([NotNull] this IEntityGuidMappable<ObjectGuid, TReturnType> collection, [NotNull] ObjectGuid guid, TReturnType obj)
 		{
 			//No null checking because we hope to inline this.
 			try
@@ -44,7 +44,7 @@ namespace GladMMO
 		/// <param name="guid">The entity guid.</param>
 		/// <param name="obj">The object to add.</param>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static void AddObject<TReturnType>([NotNull] this IEntityGuidMappable<NetworkEntityGuid, TReturnType> collection, [NotNull] NetworkEntityGuid guid, TReturnType obj)
+		public static void AddObject<TReturnType>([NotNull] this IEntityGuidMappable<ObjectGuid, TReturnType> collection, [NotNull] ObjectGuid guid, TReturnType obj)
 		{
 			//No null checking because we hope to inline this.
 			try
@@ -57,14 +57,14 @@ namespace GladMMO
 			}
 		}
 
-		private static void CreateEntityDoesNotExistException<TReturnType>(NetworkEntityGuid guid)
+		private static void CreateEntityDoesNotExistException<TReturnType>(ObjectGuid guid)
 		{
 			if(guid == null) throw new ArgumentNullException(nameof(guid), $"Found that provided entity guid in {nameof(CreateEntityCollectionException)} was null.");
 
 			throw new InvalidOperationException($"Entity does not exist in Collection {typeof(TReturnType).Name} from Entity: {guid}.");
 		}
 
-		private static void CreateEntityCollectionException<TReturnType>(NetworkEntityGuid guid, Exception e)
+		private static void CreateEntityCollectionException<TReturnType>(ObjectGuid guid, Exception e)
 		{
 			if (guid == null) throw new ArgumentNullException(nameof(guid), $"Found that provided entity guid in {nameof(CreateEntityCollectionException)} was null.");
 			if (e == null) throw new ArgumentNullException(nameof(e), $"Found that provided inner exception in {nameof(CreateEntityCollectionException)} was null.");
@@ -82,7 +82,7 @@ namespace GladMMO
 		/// <exception cref="InvalidOperationException">Throws if the entity does not have data mapped to it.</exception>
 		/// <returns></returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static TReturnType RetrieveEntity<TReturnType>([NotNull] this IReadonlyEntityGuidMappable<NetworkEntityGuid, TReturnType> collection, [NotNull] NetworkEntityGuid guid)
+		public static TReturnType RetrieveEntity<TReturnType>([NotNull] this IReadonlyEntityGuidMappable<ObjectGuid, TReturnType> collection, [NotNull] ObjectGuid guid)
 		{
 			//No null checking because we hope to inline this
 			try
@@ -99,7 +99,7 @@ namespace GladMMO
 			return default(TReturnType);
 		}
 
-		public static IEnumerable<TReturnType> Enumerate<TReturnType>(this IReadonlyEntityGuidMappable<NetworkEntityGuid, TReturnType> collection, IReadonlyKnownEntitySet entitySet)
+		public static IEnumerable<TReturnType> Enumerate<TReturnType>(this IReadonlyEntityGuidMappable<ObjectGuid, TReturnType> collection, IReadonlyKnownEntitySet entitySet)
 		{
 			if (collection == null) throw new ArgumentNullException(nameof(collection));
 			if (entitySet == null) throw new ArgumentNullException(nameof(entitySet));
@@ -113,7 +113,7 @@ namespace GladMMO
 		}
 
 		//Never used this before, new C# feature. Named tuples. They seem like a bad idea, but I figured I should write one in my life.
-		public static IEnumerable<(NetworkEntityGuid EntityGuid, TReturnType ComponentValue)> EnumerateWithGuid<TReturnType>(this IReadonlyEntityGuidMappable<NetworkEntityGuid, TReturnType> collection, IReadonlyKnownEntitySet entitySet, EntityType exclusiveEntityType = EntityType.None)
+		public static IEnumerable<(ObjectGuid EntityGuid, TReturnType ComponentValue)> EnumerateWithGuid<TReturnType>(this IReadonlyEntityGuidMappable<ObjectGuid, TReturnType> collection, IReadonlyKnownEntitySet entitySet, EntityTypeId exclusiveEntityType = 0)
 		{
 			if(collection == null) throw new ArgumentNullException(nameof(collection));
 			if(entitySet == null) throw new ArgumentNullException(nameof(entitySet));
@@ -121,8 +121,8 @@ namespace GladMMO
 			//Thread safe internally to iterate
 			foreach(var element in entitySet)
 			{
-				if (exclusiveEntityType != EntityType.None)
-					if (element.EntityType != exclusiveEntityType)
+				if (exclusiveEntityType != 0)
+					if (element.TypeId != exclusiveEntityType)
 						continue;
 
 				if(collection.ContainsKey(element))

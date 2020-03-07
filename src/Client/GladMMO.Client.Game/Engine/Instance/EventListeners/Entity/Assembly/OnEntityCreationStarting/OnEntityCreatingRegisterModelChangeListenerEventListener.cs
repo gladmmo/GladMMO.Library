@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
@@ -39,7 +39,7 @@ namespace GladMMO
 			EntityDataCallbackRegister.RegisterCallback<int>(args.EntityGuid, (int)BaseObjectField.UNIT_FIELD_DISPLAYID, HandleModelChange);
 		}
 
-		private void HandleModelChange([NotNull] NetworkEntityGuid entityGuid, EntityDataChangedArgs<int> changedModelId)
+		private void HandleModelChange([NotNull] ObjectGuid entityGuid, EntityDataChangedArgs<int> changedModelId)
 		{
 			if (entityGuid == null) throw new ArgumentNullException(nameof(entityGuid));
 

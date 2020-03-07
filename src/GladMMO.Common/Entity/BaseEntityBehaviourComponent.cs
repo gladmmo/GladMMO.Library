@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Text;
 
@@ -6,9 +6,9 @@ namespace GladMMO
 {
 	public abstract class BaseEntityBehaviourComponent
 	{
-		protected NetworkEntityGuid TargetEntity { get; }
+		protected ObjectGuid TargetEntity { get; }
 
-		protected BaseEntityBehaviourComponent([NotNull] NetworkEntityGuid targetEntity)
+		protected BaseEntityBehaviourComponent([NotNull] ObjectGuid targetEntity)
 		{
 			TargetEntity = targetEntity ?? throw new ArgumentNullException(nameof(targetEntity));
 		}

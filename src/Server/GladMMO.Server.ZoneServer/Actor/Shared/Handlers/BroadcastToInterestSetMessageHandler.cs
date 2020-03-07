@@ -19,7 +19,7 @@ namespace GladMMO
 		{
 			IPeerPayloadSendService<GameServerPacketPayload> sender = null;
 
-			foreach (NetworkEntityGuid guid in state.Interest.ContainedEntities)
+			foreach (ObjectGuid guid in state.Interest.ContainedEntities)
 			{
 				//If it's not a player or the message specified that we shouldn't send to self and it's ourselves
 				if (guid.EntityType != EntityType.Player || !message.SendToSelf && guid == state.EntityGuid)

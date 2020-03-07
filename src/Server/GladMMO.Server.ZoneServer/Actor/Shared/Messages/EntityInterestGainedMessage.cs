@@ -12,9 +12,9 @@ namespace GladMMO
 		/// <summary>
 		/// The entity to gain interest for.
 		/// </summary>
-		public NetworkEntityGuid Entity { get; }
+		public ObjectGuid Entity { get; }
 
-		public EntityInterestGainedMessage([NotNull] NetworkEntityGuid entity)
+		public EntityInterestGainedMessage([NotNull] ObjectGuid entity)
 		{
 			Entity = entity ?? throw new ArgumentNullException(nameof(entity));
 		}

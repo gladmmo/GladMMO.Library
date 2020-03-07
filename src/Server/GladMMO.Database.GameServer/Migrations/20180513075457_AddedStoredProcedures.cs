@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
-using System;
+using System; using FreecraftCore;
 using System.Collections.Generic;
 
 namespace GladMMO.Database.GameServer.Migrations

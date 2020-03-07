@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reflection;
@@ -74,7 +74,7 @@ namespace GladMMO
 			foreach(var assembly in EngineInterfaceAssemblies)
 				builder.RegisterModule(new EngineInterfaceRegisterationModule((int)Scene, assembly));
 
-			//builder.RegisterModule<EntityMappableRegisterationModule<NetworkEntityGuid>>();
+			//builder.RegisterModule<EntityMappableRegisterationModule<ObjectGuid>>();
 			RegisterEntityContainers(builder);
 
 			builder.RegisterModule(new ServiceDiscoveryDependencyAutofacModule(ServiceDiscoveryUrl));

@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -45,7 +45,7 @@ namespace GladMMO
 		/// </summary>
 		[Column(Order = 3)]
 		[Required]
-		public Vector3<float> SpawnPosition { get; set; }
+		public GladMMO.Database.Vector3<float> SpawnPosition { get; set; }
 
 		/// <summary>
 		/// The initial Y-axis orientation/rotation of the GameObject when spawned.
@@ -71,7 +71,7 @@ namespace GladMMO
 		public virtual WorldEntryModel WorldEntry { get; private set; }
 
 		/// <inheritdoc />
-		public GameObjectEntryModel(int npcTemplateId, Vector3<float> spawnPosition, float initialOrientation, long worldId)
+		public GameObjectEntryModel(int npcTemplateId, GladMMO.Database.Vector3<float> spawnPosition, float initialOrientation, long worldId)
 		{
 			if(worldId <= 0) throw new ArgumentOutOfRangeException(nameof(worldId));
 			if(npcTemplateId <= 0) throw new ArgumentOutOfRangeException(nameof(npcTemplateId));

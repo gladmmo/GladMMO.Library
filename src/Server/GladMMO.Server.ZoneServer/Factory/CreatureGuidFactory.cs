@@ -5,19 +5,19 @@ using System.Threading;
 
 namespace GladMMO
 {
-	public sealed class IncrementingCreatureGuidFactory : IFactoryCreatable<NetworkEntityGuid, CreatureInstanceModel>
+	public sealed class IncrementingCreatureGuidFactory : IFactoryCreatable<ObjectGuid, CreatureInstanceModel>
 	{
 		/// <summary>
 		/// The atomically incremented (or should be) counter for unique creature guid issueing requests.
 		/// </summary>
 		private int CreatureCount = 0;
 
-		public NetworkEntityGuid Create(CreatureInstanceModel context)
+		public ObjectGuid Create(CreatureInstanceModel context)
 		{
 			if(!context.Guid.isTemplateGuid)
-				throw new InvalidOperationException($"Cannot create instance {nameof(NetworkEntityGuid)} from non-Template {nameof(NetworkEntityGuid)}.");
+				throw new InvalidOperationException($"Cannot create instance {nameof(ObjectGuid)} from non-Template {nameof(ObjectGuid)}.");
 
-			NetworkEntityGuidBuilder builder = new NetworkEntityGuidBuilder();
+			ObjectGuidBuilder builder = new ObjectGuidBuilder();
 
 			return builder.WithId(Interlocked.Increment(ref CreatureCount))
 				.WithType(EntityType.Creature)

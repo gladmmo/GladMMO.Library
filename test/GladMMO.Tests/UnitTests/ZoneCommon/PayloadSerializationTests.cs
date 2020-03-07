@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Text;
 using GladNet;
@@ -23,7 +23,7 @@ namespace GladMMO
 			//act
 			MovementDataUpdateEventPayload payload = new MovementDataUpdateEventPayload(new EntityAssociatedData<IMovementData>[]
 			{
-				new EntityAssociatedData<IMovementData>(new NetworkEntityGuid(55), new PathBasedMovementData(new Vector3[]
+				new EntityAssociatedData<IMovementData>(new ObjectGuid(55), new PathBasedMovementData(new Vector3[]
 				{
 					new Vector3(1,2,3),
 					new Vector3(2,3,4) 

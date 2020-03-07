@@ -25,7 +25,7 @@ namespace GladMMO
 			state.EntityData.SetFieldValue(EntityObjectField.UNIT_FIELD_MAXHEALTH, baseStats.BaseHealth);
 		}
 
-		private EntityBaseStatsModel GenerateEntityBaseStats([NotNull] NetworkEntityGuid entityGuid, [NotNull] IEntityDataFieldContainer data)
+		private EntityBaseStatsModel GenerateEntityBaseStats([NotNull] ObjectGuid entityGuid, [NotNull] IEntityDataFieldContainer data)
 		{
 			if (entityGuid == null) throw new ArgumentNullException(nameof(entityGuid));
 			if (data == null) throw new ArgumentNullException(nameof(data));

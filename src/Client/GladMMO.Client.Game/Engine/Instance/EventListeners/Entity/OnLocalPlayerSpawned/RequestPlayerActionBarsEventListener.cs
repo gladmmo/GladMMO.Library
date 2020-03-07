@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Text;
 using Glader.Essentials;
@@ -34,7 +34,7 @@ namespace GladMMO
 		{
 			UnityAsyncHelper.UnityMainThreadContext.PostAsync(async () =>
 			{
-				CharacterActionBarInstanceModel[] barInstanceModels = await CharacterService.GetCharacterActionBarDataAsync(PlayerDetails.LocalPlayerGuid.EntityId);
+				CharacterActionBarInstanceModel[] barInstanceModels = await CharacterService.GetCharacterActionBarDataAsync(PlayerDetails.LocalPlayerGuid.CurrentObjectGuid);
 
 				foreach (CharacterActionBarInstanceModel actionBarModel in barInstanceModels)
 				{

@@ -8,7 +8,7 @@ namespace GladMMO
 	//TODO: Verify against entity type.
 	/// <summary>
 	/// <see cref="IEntityGuidMappable{TValue}"/> implementation that shares static <typeparamref name="TInstanceLinkedDataType"/> component
-	/// data across all <see cref="NetworkEntityGuid"/> that share an entry.
+	/// data across all <see cref="ObjectGuid"/> that share an entry.
 	/// </summary>
 	/// <typeparam name="TInstanceLinkedDataType">The linked/shared component data type.</typeparam>
 	public sealed class InstanceStaticEntityDataCollection<TInstanceLinkedDataType> : IEntityGuidMappable<TInstanceLinkedDataType>
@@ -20,28 +20,28 @@ namespace GladMMO
 			InstanceLinkedDataMap = new Dictionary<int, TInstanceLinkedDataType>();
 		}
 
-		public bool ContainsKey(NetworkEntityGuid key)
+		public bool ContainsKey(ObjectGuid key)
 		{
 			return InstanceLinkedDataMap.ContainsKey(key.EntryId);
 		}
 
-		public void Add(NetworkEntityGuid key, TInstanceLinkedDataType value)
+		public void Add(ObjectGuid key, TInstanceLinkedDataType value)
 		{
 			InstanceLinkedDataMap.Add(key.EntryId, value);
 		}
 
-		public TInstanceLinkedDataType this[NetworkEntityGuid key]
+		public TInstanceLinkedDataType this[ObjectGuid key]
 		{
 			get => InstanceLinkedDataMap[key.EntryId];
 			set => InstanceLinkedDataMap[key.EntryId] = value;
 		}
 
-		public bool RemoveEntityEntry(NetworkEntityGuid entityGuid)
+		public bool RemoveEntityEntry(ObjectGuid entityGuid)
 		{
 			return InstanceLinkedDataMap.Remove(entityGuid.EntryId);
 		}
 
-		public bool TryGetValue(NetworkEntityGuid key, out TInstanceLinkedDataType value)
+		public bool TryGetValue(ObjectGuid key, out TInstanceLinkedDataType value)
 		{
 			return this.InstanceLinkedDataMap.TryGetValue(key.EntryId, out value);
 		}

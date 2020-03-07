@@ -27,7 +27,7 @@ namespace GladMMO
 		/// <returns></returns>
 		protected abstract bool ValidateTargeting(SpellDefinitionDataModel spellDefinition, SpellEffectDefinitionDataModel spellEffect, DefaultEntityActorStateContainer actorState);
 
-		protected NetworkEntityGuid GetEntityTarget([NotNull] DefaultEntityActorStateContainer state)
+		protected ObjectGuid GetEntityTarget([NotNull] DefaultEntityActorStateContainer state)
 		{
 			if (state == null) throw new ArgumentNullException(nameof(state));
 

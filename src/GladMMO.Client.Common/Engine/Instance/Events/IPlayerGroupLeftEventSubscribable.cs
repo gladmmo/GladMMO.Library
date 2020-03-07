@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Text;
 
@@ -11,10 +11,10 @@ namespace GladMMO
 
 	public sealed class PlayerLeftGroupEventArgs : EventArgs
 	{
-		public NetworkEntityGuid PlayerGuid { get; }
+		public ObjectGuid PlayerGuid { get; }
 
 		/// <inheritdoc />
-		public PlayerLeftGroupEventArgs([NotNull] NetworkEntityGuid playerGuid)
+		public PlayerLeftGroupEventArgs([NotNull] ObjectGuid playerGuid)
 		{
 			PlayerGuid = playerGuid ?? throw new ArgumentNullException(nameof(playerGuid));
 		}

@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Text;
 using Common.Logging;
@@ -47,7 +47,7 @@ namespace GladMMO
 				KnownEntities.AddEntity(args.EntityGuid);
 
 				if(Logger.IsDebugEnabled)
-					Logger.Debug($"Entity: {args.EntityGuid.EntityType}:{args.EntityGuid.EntityId} is now known.");
+					Logger.Debug($"Entity: {args.EntityGuid.TypeId}:{args.EntityGuid.CurrentObjectGuid} is now known.");
 
 				OnEntityCreationFinished?.Invoke(this, new EntityCreationFinishedEventArgs(args.EntityGuid));
 			}

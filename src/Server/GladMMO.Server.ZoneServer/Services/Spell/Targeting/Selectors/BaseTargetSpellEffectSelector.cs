@@ -8,7 +8,7 @@ namespace GladMMO
 	{
 		public abstract SpellEffectTargetContext CalculateTargets(SpellDefinitionDataModel spellDefinition, SpellEffectDefinitionDataModel spellEffect, DefaultEntityActorStateContainer actorState, IPendingSpellCastData pendingSpellCast);
 
-		protected NetworkEntityGuid GetEntityTarget([NotNull] DefaultEntityActorStateContainer state)
+		protected ObjectGuid GetEntityTarget([NotNull] DefaultEntityActorStateContainer state)
 		{
 			if(state == null) throw new ArgumentNullException(nameof(state));
 

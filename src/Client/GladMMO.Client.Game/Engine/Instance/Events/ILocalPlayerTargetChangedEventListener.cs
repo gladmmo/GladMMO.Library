@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Text;
 
@@ -11,9 +11,9 @@ namespace GladMMO
 
 	public class LocalPlayerTargetChangedEventArgs : EventArgs
 	{
-		public NetworkEntityGuid TargetedEntity { get; }
+		public ObjectGuid TargetedEntity { get; }
 
-		public LocalPlayerTargetChangedEventArgs([NotNull] NetworkEntityGuid targetedEntity)
+		public LocalPlayerTargetChangedEventArgs([NotNull] ObjectGuid targetedEntity)
 		{
 			TargetedEntity = targetedEntity ?? throw new ArgumentNullException(nameof(targetedEntity));
 		}

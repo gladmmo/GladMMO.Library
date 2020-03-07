@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,7 +24,7 @@ namespace GladMMO
 		/// <inheritdoc />
 		public event EventHandler<ServerRequestedSceneChangeEventArgs> OnServerRequestedSceneChange;
 
-		private NetworkEntityGuid SelectedCharacterGuid { get; set; }
+		private ObjectGuid SelectedCharacterGuid { get; set; }
 
 		private ICharacterService CharacterServiceQueryable { get; }
 
@@ -68,7 +68,7 @@ namespace GladMMO
 				//TODO: Don't hardcode this scene.
 				OnServerRequestedSceneChange?.Invoke(this, new ServerRequestedSceneChangeEventArgs((PlayableGameScene) 2));
 
-				CharacterSessionEnterResponse enterResponse = await CharacterServiceQueryable.TryEnterSession(SelectedCharacterGuid.EntityId);
+				CharacterSessionEnterResponse enterResponse = await CharacterServiceQueryable.TryEnterSession(SelectedCharacterGuid.CurrentObjectGuid);
 
 				if (Logger.IsDebugEnabled)
 					Logger.Debug($"Character Session Entry Response: {enterResponse.ResultCode}.");
@@ -78,7 +78,7 @@ namespace GladMMO
 						Logger.Error($"Failed to enter CharacterSession for Entity: {SelectedCharacterGuid} Reason: {enterResponse.ResultCode}");
 
 				//TODO: handle character session failure
-				CharacterData.UpdateCharacterId(SelectedCharacterGuid.EntityId);
+				CharacterData.UpdateCharacterId(SelectedCharacterGuid.CurrentObjectGuid);
 
 				//TODO: Use the scene manager service.
 				//TODO: Don't hardcode scene ids. Don't load scenes directly.

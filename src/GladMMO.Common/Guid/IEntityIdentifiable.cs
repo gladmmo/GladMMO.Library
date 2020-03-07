@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,7 +14,7 @@ namespace GladMMO
 		/// <summary>
 		/// Represents the type of the entity.
 		/// </summary>
-		EntityType EntityType { get; }
+		EntityTypeId EntityType { get; }
 
 		/// <summary>
 		/// Represents the unique entity integer indentifier.

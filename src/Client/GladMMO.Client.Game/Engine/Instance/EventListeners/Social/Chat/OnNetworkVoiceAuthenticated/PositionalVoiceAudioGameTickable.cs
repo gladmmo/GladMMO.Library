@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Text;
 using Glader.Essentials;
@@ -78,7 +78,7 @@ namespace GladMMO
 			GameObjectDirectoryMappable = gameObjectDirectoryMappable ?? throw new ArgumentNullException(nameof(gameObjectDirectoryMappable));
 		}
 
-		public void InitializeTrackerGameObject(NetworkEntityGuid entityGuid)
+		public void InitializeTrackerGameObject(ObjectGuid entityGuid)
 		{
 			//We now use head instead of camera because it doesn't make sense if they're 3rd person camera.
 			//Cache the gameobject that trackers voice.

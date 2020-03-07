@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Text;
 using Common.Logging;
@@ -42,7 +42,7 @@ namespace GladMMO
 				try
 				{
 					//TODO: Expose these vivox stuff as shared constants between client and server.
-					ILoginSession session = VoiceClient.GetLoginSession(new AccountId("vrguardian-vrg-dev", PlayerDetails.LocalPlayerGuid.EntityId.ToString(), "vdx5.vivox.com"));
+					ILoginSession session = VoiceClient.GetLoginSession(new AccountId("vrguardian-vrg-dev", PlayerDetails.LocalPlayerGuid.CurrentObjectGuid.ToString(), "vdx5.vivox.com"));
 					ResponseModel<string, VivoxLoginResponseCode> loginResult = await VivoxAutheAuthorizationService.LoginAsync();
 
 					//TODO: Better error and retry handling.

@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -9,42 +9,42 @@ namespace GladMMO
 {
 	public sealed class EntityFieldDataCollectionEntityGuidMappable : IEntityGuidMappable<IChangeTrackableEntityDataCollection>, IReadonlyEntityGuidMappable<IEntityDataFieldContainer>
 	{
-		private ConcurrentDictionary<NetworkEntityGuid, IChangeTrackableEntityDataCollection> InternalMap { get; }
+		private ConcurrentDictionary<ObjectGuid, IChangeTrackableEntityDataCollection> InternalMap { get; }
 
 		public EntityFieldDataCollectionEntityGuidMappable()
 		{
-			InternalMap = new ConcurrentDictionary<NetworkEntityGuid, IChangeTrackableEntityDataCollection>();
+			InternalMap = new ConcurrentDictionary<ObjectGuid, IChangeTrackableEntityDataCollection>();
 		}
 
-		bool IReadonlyEntityGuidMappable<NetworkEntityGuid, IChangeTrackableEntityDataCollection>.ContainsKey(NetworkEntityGuid key)
+		bool IReadonlyEntityGuidMappable<ObjectGuid, IChangeTrackableEntityDataCollection>.ContainsKey(ObjectGuid key)
 		{
 			return InternalMap.ContainsKey(key);
 		}
 
-		IEntityDataFieldContainer IReadonlyEntityGuidMappable<NetworkEntityGuid, IEntityDataFieldContainer>.this[NetworkEntityGuid key] => InternalMap[key];
+		IEntityDataFieldContainer IReadonlyEntityGuidMappable<ObjectGuid, IEntityDataFieldContainer>.this[ObjectGuid key] => InternalMap[key];
 
-		public void Add(NetworkEntityGuid key, IChangeTrackableEntityDataCollection value)
+		public void Add(ObjectGuid key, IChangeTrackableEntityDataCollection value)
 		{
 			InternalMap.TryAdd(key, value);
 		}
 
-		bool IReadonlyEntityGuidMappable<NetworkEntityGuid, IEntityDataFieldContainer>.ContainsKey(NetworkEntityGuid key)
+		bool IReadonlyEntityGuidMappable<ObjectGuid, IEntityDataFieldContainer>.ContainsKey(ObjectGuid key)
 		{
 			return InternalMap.ContainsKey(key);
 		}
 
-		public IChangeTrackableEntityDataCollection this[NetworkEntityGuid key]
+		public IChangeTrackableEntityDataCollection this[ObjectGuid key]
 		{
 			get => InternalMap[key];
 			set => InternalMap[key] = value;
 		}
 
-		public bool TryGetValue(NetworkEntityGuid key, out IChangeTrackableEntityDataCollection value)
+		public bool TryGetValue(ObjectGuid key, out IChangeTrackableEntityDataCollection value)
 		{
 			return InternalMap.TryGetValue(key, out value);
 		}
 
-		public bool TryGetValue(NetworkEntityGuid key, out IEntityDataFieldContainer value)
+		public bool TryGetValue(ObjectGuid key, out IEntityDataFieldContainer value)
 		{
 			bool result = InternalMap.TryGetValue(key, out var value2);
 			value = value2;
@@ -66,7 +66,7 @@ namespace GladMMO
 			return InternalMap.Values.GetEnumerator();
 		}
 
-		public bool RemoveEntityEntry(NetworkEntityGuid entityGuid)
+		public bool RemoveEntityEntry(ObjectGuid entityGuid)
 		{
 			return InternalMap.TryRemove(entityGuid, out var result);
 		}

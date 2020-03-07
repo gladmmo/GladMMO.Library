@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -98,7 +98,7 @@ namespace GladMMO
 			//assert
 			for(int i = 1; i < count + 1; i++)
 			{
-				NetworkEntityGuid guid = new NetworkEntityGuidBuilder()
+				ObjectGuid guid = new ObjectGuidBuilder()
 					.WithId(i)
 					.WithType(EntityType.Player)
 					.Build();

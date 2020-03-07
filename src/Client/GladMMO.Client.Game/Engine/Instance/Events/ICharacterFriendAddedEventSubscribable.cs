@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Text;
 
@@ -11,9 +11,9 @@ namespace GladMMO
 
 	public class CharacterFriendAddedEventArgs : EventArgs
 	{
-		public NetworkEntityGuid FriendGuid { get; }
+		public ObjectGuid FriendGuid { get; }
 
-		public CharacterFriendAddedEventArgs([NotNull] NetworkEntityGuid friendGuid)
+		public CharacterFriendAddedEventArgs([NotNull] ObjectGuid friendGuid)
 		{
 			FriendGuid = friendGuid ?? throw new ArgumentNullException(nameof(friendGuid));
 		}

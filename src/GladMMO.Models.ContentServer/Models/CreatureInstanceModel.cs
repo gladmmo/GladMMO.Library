@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Text;
 using JetBrains.Annotations;
@@ -16,7 +16,7 @@ namespace GladMMO
 		/// </summary>
 		[JsonRequired]
 		[JsonProperty]
-		public NetworkEntityGuid Guid { get; private set; }
+		public ObjectGuid Guid { get; private set; }
 
 		/// <summary>
 		/// The NPC template id of the entry.
@@ -41,7 +41,7 @@ namespace GladMMO
 		public float YAxisRotation { get; private set; }
 
 		/// <inheritdoc />
-		public CreatureInstanceModel([NotNull] NetworkEntityGuid guid, int templateId, Vector3 initialPosition, float yRotation)
+		public CreatureInstanceModel([NotNull] ObjectGuid guid, int templateId, Vector3 initialPosition, float yRotation)
 		{
 			if(templateId <= 0) throw new ArgumentOutOfRangeException(nameof(templateId));
 

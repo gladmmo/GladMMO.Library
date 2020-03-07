@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Text;
 
@@ -18,7 +18,7 @@ namespace GladMMO
 
 		protected sealed override void OnEventFired(object source, EntityCreationFinishedEventArgs args)
 		{
-			if (args.EntityGuid.EntityType != EntityType.Creature)
+			if (args.EntityGuid.TypeId != EntityTypeId.TYPEID_UNIT)
 				return;
 
 			OnEntityCreationFinished(args);

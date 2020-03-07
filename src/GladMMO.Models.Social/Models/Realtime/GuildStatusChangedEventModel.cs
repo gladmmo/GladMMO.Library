@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Text;
 using Newtonsoft.Json;
@@ -18,7 +18,7 @@ namespace GladMMO
 		/// The guid of the entity that has a changing guild status.
 		/// </summary>
 		[JsonProperty]
-		public NetworkEntityGuid EntityGuid { get; private set; }
+		public ObjectGuid EntityGuid { get; private set; }
 
 		/// <summary>
 		/// The current id of the guild.
@@ -26,7 +26,7 @@ namespace GladMMO
 		[JsonProperty]
 		public int GuildId { get; private set; }
 
-		public GuildStatusChangedEventModel([NotNull] NetworkEntityGuid entityGuid, int guildId)
+		public GuildStatusChangedEventModel([NotNull] ObjectGuid entityGuid, int guildId)
 		{
 			if(guildId < 0) throw new ArgumentOutOfRangeException(nameof(guildId));
 

@@ -30,7 +30,7 @@ namespace GladMMO
 		{
 			//At this point, the entity deconstruction is FINISHED so we can actually tell all known entites to forget it.
 			//Threadsafe internally to iterate
-			foreach(NetworkEntityGuid entity in KnownEntities)
+			foreach(ObjectGuid entity in KnownEntities)
 			{
 				InterestCollection ic = InterestCollections.RetrieveEntity(entity);
 

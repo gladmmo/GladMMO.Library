@@ -34,13 +34,13 @@ namespace GladMMO
 		}
 
 		/// <inheritdoc />
-		public void Save(NetworkEntityGuid guid)
+		public void Save(ObjectGuid guid)
 		{
 			SaveAsync(guid).ConfigureAwaitFalseVoid().GetAwaiter().GetResult();
 		}
 
 		/// <inheritdoc />
-		public async Task SaveAsync(NetworkEntityGuid guid)
+		public async Task SaveAsync(ObjectGuid guid)
 		{
 			//We can only handle players at the moment, not sure how NPC data would be saved.
 			if(guid.EntityType != EntityType.Player)
@@ -58,7 +58,7 @@ namespace GladMMO
 				ed.RemoveEntityEntry(guid);
 		}
 
-		private ZoneServerCharacterLocationSaveRequest CreatedLocationSaveData([NotNull] NetworkEntityGuid guid)
+		private ZoneServerCharacterLocationSaveRequest CreatedLocationSaveData([NotNull] ObjectGuid guid)
 		{
 			if (guid == null) throw new ArgumentNullException(nameof(guid));
 

@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Text;
 using Autofac.Core;
@@ -29,7 +29,7 @@ namespace GladMMO
 			RegisterPlayerDataChangeCallback<int>(EntityObjectField.UNIT_FIELD_CASTING_SPELLID, OnSpellCastingIdChanged);
 		}
 
-		private void OnSpellCastingIdChanged(NetworkEntityGuid entity, EntityDataChangedArgs<int> changeArgs)
+		private void OnSpellCastingIdChanged(ObjectGuid entity, EntityDataChangedArgs<int> changeArgs)
 		{
 			OnSpellCastingStateChanged?.Invoke(this, new SpellCastingStateChangedEventArgs(changeArgs.NewValue, PlayerDetails.EntityData.GetFieldValue<long>(EntityObjectField.UNIT_FIELD_CASTING_STARTTIME)));
 		}

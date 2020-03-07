@@ -14,12 +14,12 @@ namespace GladMMO
 		/// <summary>
 		/// Save the data.
 		/// </summary>
-		void Save(NetworkEntityGuid guid);
+		void Save(ObjectGuid guid);
 
 		/// <summary>
 		/// Async save the entity data.
 		/// </summary>
 		/// <returns></returns>
-		Task SaveAsync(NetworkEntityGuid guid);
+		Task SaveAsync(ObjectGuid guid);
 	}
 }

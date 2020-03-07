@@ -6,7 +6,7 @@ using JetBrains.Annotations;
 
 namespace GladMMO
 {
-	public interface IPlayerEntityGuidEnumerable : IEnumerable<NetworkEntityGuid>
+	public interface IPlayerEntityGuidEnumerable : IEnumerable<ObjectGuid>
 	{
 
 	}
@@ -21,7 +21,7 @@ namespace GladMMO
 		}
 
 		/// <inheritdoc />
-		public IEnumerator<NetworkEntityGuid> GetEnumerator()
+		public IEnumerator<ObjectGuid> GetEnumerator()
 		{
 			foreach(var entity in EntitySet)
 			{

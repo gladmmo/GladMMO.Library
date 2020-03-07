@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
@@ -19,7 +19,7 @@ namespace GladMMO
 		private readonly EntityCreationData[] _EntitiesToCreate;
 
 		[ProtoMember(2)]
-		private readonly NetworkEntityGuid[] _OutOfRangeEntities;
+		private readonly ObjectGuid[] _OutOfRangeEntities;
 
 		/// <summary>
 		/// List of now newly visible entites to create.
@@ -31,10 +31,10 @@ namespace GladMMO
 		/// List of now out-of-range entities.
 		/// </summary>
 		[ProtoIgnore]
-		public IReadOnlyCollection<NetworkEntityGuid> OutOfRangeEntities => _OutOfRangeEntities ?? Array.Empty<NetworkEntityGuid>();
+		public IReadOnlyCollection<ObjectGuid> OutOfRangeEntities => _OutOfRangeEntities ?? Array.Empty<ObjectGuid>();
 
 		/// <inheritdoc />
-		public NetworkObjectVisibilityChangeEventPayload([NotNull] EntityCreationData[] entitiesToCreate, [NotNull] NetworkEntityGuid[] outOfRangeEntities)
+		public NetworkObjectVisibilityChangeEventPayload([NotNull] EntityCreationData[] entitiesToCreate, [NotNull] ObjectGuid[] outOfRangeEntities)
 		{
 			_EntitiesToCreate = entitiesToCreate ?? throw new ArgumentNullException(nameof(entitiesToCreate));
 			_OutOfRangeEntities = outOfRangeEntities ?? throw new ArgumentNullException(nameof(outOfRangeEntities));

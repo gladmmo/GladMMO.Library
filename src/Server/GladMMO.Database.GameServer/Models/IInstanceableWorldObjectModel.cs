@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -17,7 +17,7 @@ namespace GladMMO
 		/// <summary>
 		/// The spawn position of the GameObject.
 		/// </summary>
-		Vector3<float> SpawnPosition { get; }
+		GladMMO.Database.Vector3<float> SpawnPosition { get; }
 
 		/// <summary>
 		/// The initial Y-axis orientation/rotation of the GameObject when spawned.

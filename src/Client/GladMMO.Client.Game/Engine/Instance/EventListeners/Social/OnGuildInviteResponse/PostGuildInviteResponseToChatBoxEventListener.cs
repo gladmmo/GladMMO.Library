@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Text;
 using Autofac.Features.AttributeFilters;
@@ -27,7 +27,7 @@ namespace GladMMO
 		{
 			UnityAsyncHelper.UnityMainThreadContext.PostAsync(async () =>
 			{
-				string inviterName = args.Data.InvitedEntityGuid == NetworkEntityGuid.Empty ? "" : await EntityNameQueryable.RetrieveAsync(args.Data.InvitedEntityGuid)
+				string inviterName = args.Data.InvitedEntityGuid == ObjectGuid.Empty ? "" : await EntityNameQueryable.RetrieveAsync(args.Data.InvitedEntityGuid)
 					.ConfigureAwait(true);
 
 				//Only certain response codes actually need to be logged.

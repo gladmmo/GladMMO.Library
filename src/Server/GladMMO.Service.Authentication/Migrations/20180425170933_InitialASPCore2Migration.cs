@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
-using System;
+using System; using FreecraftCore;
 using System.Collections.Generic;
 
 namespace GladMMO.Service.Authentication.Migrations

@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
@@ -7,7 +7,7 @@ namespace GladMMO
 {
 	public sealed class GameObjectStaticSpawnPointDefinition : StaticSpawnPointDefinition
 	{
-		public override EntityType EntitySpawnType => EntityType.GameObject;
+		public override EntityTypeId EntitySpawnType => EntityTypeId.TYPEID_GAMEOBJECT;
 
 		[HideInInspector]
 		[Tooltip("This should be the ID of the gameobject template that holds information about what gameobject is suppose to spawn.")]

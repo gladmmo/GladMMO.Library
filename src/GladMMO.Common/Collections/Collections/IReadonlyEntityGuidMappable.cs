@@ -1,11 +1,11 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Text;
 
 namespace GladMMO
 {
-	public interface IReadonlyEntityGuidMappable<TValue> : Glader.Essentials.IReadonlyEntityGuidMappable<NetworkEntityGuid, TValue>, IEnumerable<TValue>
+	public interface IReadonlyEntityGuidMappable<TValue> : Glader.Essentials.IReadonlyEntityGuidMappable<ObjectGuid, TValue>, IEnumerable<TValue>
 	{
-		bool TryGetValue(NetworkEntityGuid key, out TValue value);
+		bool TryGetValue(ObjectGuid key, out TValue value);
 	}
 }

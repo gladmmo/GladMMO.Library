@@ -16,7 +16,7 @@ namespace GladMMO
 
 		private IEventPublisher<IEntityCreationRequestedEventSubscribable, EntityCreationRequestedEventArgs> EntityCreationRequester { get; }
 
-		private IFactoryCreatable<NetworkEntityGuid, CreatureInstanceModel> CreatureGuidFactory { get; }
+		private IFactoryCreatable<ObjectGuid, CreatureInstanceModel> CreatureGuidFactory { get; }
 
 		private ILog Logger { get; }
 
@@ -29,7 +29,7 @@ namespace GladMMO
 		public RequestStaticCreatureSpawnsEventListener(IServerStartingEventSubscribable subscriptionService,
 			[NotNull] ICreatureDataServiceClient creatureContentDataClient,
 			[NotNull] IEventPublisher<IEntityCreationRequestedEventSubscribable, EntityCreationRequestedEventArgs> entityCreationRequester,
-			[NotNull] IFactoryCreatable<NetworkEntityGuid, CreatureInstanceModel> creatureGuidFactory,
+			[NotNull] IFactoryCreatable<ObjectGuid, CreatureInstanceModel> creatureGuidFactory,
 			[NotNull] ILog logger, [NotNull] IEntityGuidMappable<CreatureTemplateModel> creatureTemplateMappable,
 			[NotNull] IEntityGuidMappable<CreatureInstanceModel> creatureInstanceMappable, WorldConfiguration worldConfiguration)
 			: base(subscriptionService)
@@ -99,7 +99,7 @@ namespace GladMMO
 				if(Logger.IsInfoEnabled)
 					Logger.Info($"Processing Creature Template: {template.TemplateId} Name: {template.CreatureName}");
 
-				CreatureTemplateMappable.Add(NetworkEntityGuid.Empty, template);
+				CreatureTemplateMappable.Add(ObjectGuid.Empty, template);
 			}
 		}
 
@@ -109,7 +109,7 @@ namespace GladMMO
 
 			foreach (var entry in instanceEntries)
 			{
-				NetworkEntityGuid guid = CreatureGuidFactory.Create(entry);
+				ObjectGuid guid = CreatureGuidFactory.Create(entry);
 				EntityCreationRequester.PublishEvent(this, new EntityCreationRequestedEventArgs(guid));
 			}
 		}

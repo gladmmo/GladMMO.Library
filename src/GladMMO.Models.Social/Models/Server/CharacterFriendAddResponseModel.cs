@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Text;
 using Newtonsoft.Json;
@@ -12,9 +12,9 @@ namespace GladMMO
 		/// The GUID for the newly added player.
 		/// </summary>
 		[JsonProperty]
-		public NetworkEntityGuid NewFriendEntityGuid { get; private set; }
+		public ObjectGuid NewFriendEntityGuid { get; private set; }
 
-		public CharacterFriendAddResponseModel([JetBrains.Annotations.NotNull] NetworkEntityGuid newFriendEntityGuid)
+		public CharacterFriendAddResponseModel([JetBrains.Annotations.NotNull] ObjectGuid newFriendEntityGuid)
 		{
 			NewFriendEntityGuid = newFriendEntityGuid ?? throw new ArgumentNullException(nameof(newFriendEntityGuid));
 		}

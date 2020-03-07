@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Text;
 using Common.Logging;
@@ -36,7 +36,7 @@ namespace GladMMO
 		protected override void OnEventFired(object source, ContentPrefabCompletedDownloadEventArgs args)
 		{
 			//Only interested in players.
-			if (args.EntityGuid.EntityType != EntityType.Player)
+			if (args.EntityGuid.TypeId != EntityTypeId.TYPEID_PLAYER)
 				return;
 
 			if(Logger.IsInfoEnabled)

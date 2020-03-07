@@ -10,7 +10,7 @@ namespace GladMMO
 		/// The GUID of the casting source.
 		/// Could indicate self or could indicate an enemy player or creature.
 		/// </summary>
-		public NetworkEntityGuid SourceCaster { get; }
+		public ObjectGuid SourceCaster { get; }
 
 		/// <summary>
 		/// The actual spell that attached <see cref="SpellEffect"/> is attempting
@@ -23,7 +23,7 @@ namespace GladMMO
 		/// </summary>
 		public SpellEffectDefinitionDataModel SpellEffect { get; }
 
-		public ApplySpellEffectMessage([NotNull] NetworkEntityGuid sourceCaster, [NotNull] SpellDefinitionDataModel spell, [NotNull] SpellEffectDefinitionDataModel spellEffect)
+		public ApplySpellEffectMessage([NotNull] ObjectGuid sourceCaster, [NotNull] SpellDefinitionDataModel spell, [NotNull] SpellEffectDefinitionDataModel spellEffect)
 		{
 			SourceCaster = sourceCaster ?? throw new ArgumentNullException(nameof(sourceCaster));
 			Spell = spell ?? throw new ArgumentNullException(nameof(spell));

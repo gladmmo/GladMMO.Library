@@ -7,7 +7,7 @@ using UnityEngine;
 namespace GladMMO
 {
 	/// <summary>
-	/// Event subscriber that links the <see cref="GameObject"/> and <see cref="NetworkEntityGuid"/> of an Entity
+	/// Event subscriber that links the <see cref="GameObject"/> and <see cref="ObjectGuid"/> of an Entity
 	/// together in a two-way relationship.
 	/// </summary>
 	[ServerSceneTypeCreate(ServerSceneType.Default)]

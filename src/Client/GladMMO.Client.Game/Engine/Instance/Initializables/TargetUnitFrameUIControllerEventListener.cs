@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,7 +20,7 @@ namespace GladMMO
 		public event EventHandler<LocalPlayerTargetChangedEventArgs> OnPlayerTargetChanged;
 
 		//Initially Empty because we have no target.
-		public NetworkEntityGuid CurrentTarget { get; private set; } = NetworkEntityGuid.Empty;
+		public ObjectGuid CurrentTarget { get; private set; } = ObjectGuid.Empty;
 
 		private IPeerPayloadSendService<GameClientPacketPayload> SendService { get; }
 
@@ -57,11 +57,11 @@ namespace GladMMO
 
 			//Disable it and let everyone know.
 			TargetUnitFrame.SetElementActive(false);
-			CurrentTarget = NetworkEntityGuid.Empty;
+			CurrentTarget = ObjectGuid.Empty;
 
 			//We send an empty interaction packet to indicate our target should be cleared.
 			//Server doesn't actually know the entity we targeted went out of scope.
-			SendService.SendMessage(new ClientInteractNetworkedObjectRequestPayload(NetworkEntityGuid.Empty, ClientInteractNetworkedObjectRequestPayload.InteractType.Selection));
+			SendService.SendMessage(new ClientInteractNetworkedObjectRequestPayload(ObjectGuid.Empty, ClientInteractNetworkedObjectRequestPayload.InteractType.Selection));
 		}
 
 		protected override void OnLocalPlayerSpawned(LocalPlayerSpawnedEventArgs args)
@@ -69,16 +69,16 @@ namespace GladMMO
 			RegisterPlayerDataChangeCallback<ulong>(EntityObjectField.UNIT_FIELD_TARGET, OnPlayerTargetEntityDatChanged);
 		}
 
-		private void OnPlayerTargetEntityDatChanged(NetworkEntityGuid entity, EntityDataChangedArgs<ulong> changeArgs)
+		private void OnPlayerTargetEntityDatChanged(ObjectGuid entity, EntityDataChangedArgs<ulong> changeArgs)
 		{
-			NetworkEntityGuid guid = new NetworkEntityGuid(changeArgs.NewValue);
+			ObjectGuid guid = new ObjectGuid(changeArgs.NewValue);
 
 			if(Logger.IsDebugEnabled)
 				Logger.Debug($"Player Target Changed to: {guid}");
 
 			CurrentTarget = guid;
 
-			if (guid == NetworkEntityGuid.Empty)
+			if (guid == ObjectGuid.Empty)
 			{
 				//target was cleared.
 				if(Logger.IsDebugEnabled)

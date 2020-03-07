@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,7 +27,7 @@ namespace GladMMO
 			return await (await GetService().ConfigureAwaitFalse()).RetrievePlayerNameAsync(rawGuidValue).ConfigureAwaitFalse();
 		}
 
-		public async Task<ResponseModel<NetworkEntityGuid, NameQueryResponseCode>> RetrievePlayerGuidAsync(string characterName)
+		public async Task<ResponseModel<ObjectGuid, NameQueryResponseCode>> RetrievePlayerGuidAsync(string characterName)
 		{
 			return await (await GetService().ConfigureAwaitFalse()).RetrievePlayerGuidAsync(characterName).ConfigureAwaitFalse();
 		}

@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
@@ -7,7 +7,7 @@ namespace GladMMO
 {
 	public sealed class CreatureStaticSpawnPointDefinition : StaticSpawnPointDefinition
 	{
-		public override EntityType EntitySpawnType => EntityType.Creature;
+		public override EntityTypeId EntitySpawnType => EntityTypeId.TYPEID_UNIT;
 
 		[HideInInspector]
 		//[Tooltip("This should be the ID of the creature template that holds information about what creature is suppose to spawn.")]

@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Text;
 using Glader.Essentials;
@@ -25,7 +25,7 @@ namespace GladMMO
 
 		public void Tick()
 		{
-			foreach(var listener in MovementDirectionChangeListenerMappable.EnumerateWithGuid(KnownEntities, EntityType.Player))
+			foreach(var listener in MovementDirectionChangeListenerMappable.EnumerateWithGuid(KnownEntities, EntityTypeId.TYPEID_PLAYER))
 				if(MovementDataMappable[listener.EntityGuid] is PositionChangeMovementData posChangeData)
 					listener.ComponentValue.SetMovementDirection(posChangeData.Direction);
 		}

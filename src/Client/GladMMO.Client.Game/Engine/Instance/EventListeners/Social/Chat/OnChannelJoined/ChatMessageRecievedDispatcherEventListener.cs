@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
@@ -46,8 +46,8 @@ namespace GladMMO
 			int characterId = int.Parse(id.Name);
 
 			//TODO: We need to translate the guid to a name.
-			NetworkEntityGuid guid = NetworkEntityGuidBuilder.New()
-				.WithType(EntityType.Player)
+			ObjectGuid guid = ObjectGuidBuilder.New()
+				.WithType(EntityTypeId.TYPEID_PLAYER)
 				.WithId(characterId)
 				.Build();
 
@@ -67,7 +67,7 @@ namespace GladMMO
 			}
 		}
 
-		private void PublishTextData(ChatChannelType channelType, IChannelTextMessage args, NetworkEntityGuid guid, string name)
+		private void PublishTextData(ChatChannelType channelType, IChannelTextMessage args, ObjectGuid guid, string name)
 		{
 			TextChatEventArgs data = TextDataFactory.CreateChatData(new EntityAssociatedData<VivoxChannelTextMessageChatMessageAdapter>(guid, new VivoxChannelTextMessageChatMessageAdapter(args, channelType)), name);
 			MessageRecievedPublisher.PublishEvent(this, data);

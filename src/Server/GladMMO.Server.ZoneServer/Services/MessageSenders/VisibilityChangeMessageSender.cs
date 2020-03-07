@@ -55,7 +55,7 @@ namespace GladMMO
 				.ConfigureAwaitFalse();
 		}
 
-		private IPeerPayloadSendService<GameServerPacketPayload> RetrieveSendService([NotNull] NetworkEntityGuid guid)
+		private IPeerPayloadSendService<GameServerPacketPayload> RetrieveSendService([NotNull] ObjectGuid guid)
 		{
 			if(guid == null) throw new ArgumentNullException(nameof(guid));
 

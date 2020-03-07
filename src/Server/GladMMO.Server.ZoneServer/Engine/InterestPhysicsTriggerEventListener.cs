@@ -41,7 +41,7 @@ namespace GladMMO
 
 			GameObject rootObject = args.ColliderThatTriggered.GetRootGameObject();
 
-			NetworkEntityGuid me = ObjectToEntityMapper.ObjectToEntityMap[args.GameObjectTriggered.transform.GetRootGameObject()];
+			ObjectGuid me = ObjectToEntityMapper.ObjectToEntityMap[args.GameObjectTriggered.transform.GetRootGameObject()];
 
 			if(!ObjectToEntityMapper.ObjectToEntityMap.ContainsKey(rootObject))
 			{
@@ -67,7 +67,7 @@ namespace GladMMO
 			//Which means an entity is always interested in itself, unless manually removed
 			//because when it enters the world it will enter its own interest radius
 			//This behavior MAY change.
-			NetworkEntityGuid me = ObjectToEntityMapper.ObjectToEntityMap[args.GameObjectTriggered.transform.GetRootGameObject()];
+			ObjectGuid me = ObjectToEntityMapper.ObjectToEntityMap[args.GameObjectTriggered.transform.GetRootGameObject()];
 
 			if(!ObjectToEntityMapper.ObjectToEntityMap.ContainsKey(rootObject))
 			{

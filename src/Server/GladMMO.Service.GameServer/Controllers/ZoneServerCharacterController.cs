@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System;
+using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -35,7 +35,7 @@ namespace GladMMO
 			if (characterAppearanceRepository == null) throw new ArgumentNullException(nameof(characterAppearanceRepository));
 
 			//If this fails we have problems that can be mitigated.
-			CharacterAppearanceModel appearanceModel = await characterAppearanceRepository.RetrieveAsync(requestModel.CharacterGuid.EntityId);
+			CharacterAppearanceModel appearanceModel = await characterAppearanceRepository.RetrieveAsync(requestModel.CharacterGuid.CurrentObjectGuid);
 
 			try
 			{
@@ -45,7 +45,7 @@ namespace GladMMO
 				{
 					//we can properly change.
 					appearanceModel.AvatarModelId = behaviourInstanceResponse.Result.AvatarModelId;
-					await characterAppearanceRepository.UpdateAsync(requestModel.CharacterGuid.EntityId, appearanceModel);
+					await characterAppearanceRepository.UpdateAsync(requestModel.CharacterGuid.CurrentObjectGuid, appearanceModel);
 					//return BadRequest($"Cannot query data for Avatar Pedestal: {requestModel.AvatarPedestalId} Reason: {behaviourInstanceResponse.ResultCode.ToString()}");
 				}
 			}
@@ -88,8 +88,8 @@ namespace GladMMO
 			ResponseModel<PlayerSpawnPointInstanceModel, SceneContentQueryResponseCode> pointInstanceResponse = await playerSpawnDataClient.GetSpawnPointInstance(teleporterInstanceResponse.Result.RemoteSpawnPointId);
 
 			//Remove current location and update the new location.
-			await characterLocationRepository.TryDeleteAsync(requestModel.CharacterGuid.EntityId);
-			await characterLocationRepository.TryCreateAsync(new CharacterLocationModel(requestModel.CharacterGuid.EntityId,
+			await characterLocationRepository.TryDeleteAsync(requestModel.CharacterGuid.CurrentObjectGuid);
+			await characterLocationRepository.TryCreateAsync(new CharacterLocationModel(requestModel.CharacterGuid.CurrentObjectGuid,
 				pointInstanceResponse.Result.InitialPosition.x,
 				pointInstanceResponse.Result.InitialPosition.y,
 				pointInstanceResponse.Result.InitialPosition.z,

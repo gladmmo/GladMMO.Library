@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,7 +12,7 @@ namespace GladMMO
 		{
 			if (context == null) throw new ArgumentNullException(nameof(context));
 
-			return new PlayerSpawnPointEntryModel(new Vector3<float>(0, 0, 0), 0, context.WorldId, false);
+			return new PlayerSpawnPointEntryModel(new GladMMO.Database.Vector3<float>(0, 0, 0), 0, context.WorldId, false);
 		}
 	}
 }

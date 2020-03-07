@@ -10,7 +10,7 @@ namespace GladMMO
 		/// The source of the spell effect application.
 		/// Basically the casted of the linked spell.
 		/// </summary>
-		public NetworkEntityGuid ApplicationSource { get; }
+		public ObjectGuid ApplicationSource { get; }
 
 		/// <summary>
 		/// Spell id to cast.
@@ -22,7 +22,7 @@ namespace GladMMO
 		/// </summary>
 		public SpellEffectIndex EffectIndex { get; }
 
-		public SpellEffectApplicationMessageCreationContext([NotNull] NetworkEntityGuid applicationSource, int spellId, SpellEffectIndex effectIndex)
+		public SpellEffectApplicationMessageCreationContext([NotNull] ObjectGuid applicationSource, int spellId, SpellEffectIndex effectIndex)
 		{
 			if (spellId <= 0) throw new ArgumentOutOfRangeException(nameof(spellId));
 			ApplicationSource = applicationSource ?? throw new ArgumentNullException(nameof(applicationSource));

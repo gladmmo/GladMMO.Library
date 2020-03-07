@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,7 +16,7 @@ namespace GladMMO
 
 			//TODO: Kinda hacky, we don't have a valid world id.
 			//TODO: better handle position crap
-			return new PlayerSpawnPointEntryModel(new Vector3<float>(fromObject.InitialPosition.x, fromObject.InitialPosition.y, fromObject.InitialPosition.z), fromObject.YAxisRotation, fromObject.SpawnPointId, fromObject.isReserved);
+			return new PlayerSpawnPointEntryModel(new GladMMO.Database.Vector3<float>(fromObject.InitialPosition.x, fromObject.InitialPosition.y, fromObject.InitialPosition.z), fromObject.YAxisRotation, fromObject.SpawnPointId, fromObject.isReserved);
 		}
 	}
 }

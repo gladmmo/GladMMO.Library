@@ -11,10 +11,10 @@ namespace GladMMO
 		/// The entity guid of the connection a movement
 		/// message/update should be sent to.
 		/// </summary>
-		public NetworkEntityGuid EntityGuid { get; }
+		public ObjectGuid EntityGuid { get; }
 
 		/// <inheritdoc />
-		public EntityMovementMessageContext([NotNull] NetworkEntityGuid entityGuid)
+		public EntityMovementMessageContext([NotNull] ObjectGuid entityGuid)
 		{
 			EntityGuid = entityGuid ?? throw new ArgumentNullException(nameof(entityGuid));
 		}

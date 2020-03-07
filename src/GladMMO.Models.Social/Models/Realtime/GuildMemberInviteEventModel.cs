@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Text;
 using Newtonsoft.Json;
@@ -18,9 +18,9 @@ namespace GladMMO
 		/// The Entity Guid of whoever is inviting the player.
 		/// </summary>
 		[JsonProperty]
-		public NetworkEntityGuid InviterGuid { get; private set; }
+		public ObjectGuid InviterGuid { get; private set; }
 
-		public GuildMemberInviteEventModel(int guildId, [JetBrains.Annotations.NotNull] NetworkEntityGuid inviterGuid)
+		public GuildMemberInviteEventModel(int guildId, [JetBrains.Annotations.NotNull] ObjectGuid inviterGuid)
 		{
 			if (guildId <= 0) throw new ArgumentOutOfRangeException(nameof(guildId));
 

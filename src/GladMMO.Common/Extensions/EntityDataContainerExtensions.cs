@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Text;
 using Generic.Math;
@@ -69,7 +69,7 @@ namespace GladMMO
 		/// <param name="container"></param>
 		/// <param name="index"></param>
 		/// <param name="guid"></param>
-		public static void SetFieldValue<TEnumType>(this IEntityDataFieldContainer container, TEnumType index, NetworkEntityGuid guid)
+		public static void SetFieldValue<TEnumType>(this IEntityDataFieldContainer container, TEnumType index, ObjectGuid guid)
 			where TEnumType : Enum
 		{
 			if(container == null) throw new ArgumentNullException(nameof(container));
@@ -84,7 +84,7 @@ namespace GladMMO
 		/// <param name="container"></param>
 		/// <param name="index"></param>
 		/// <param name="guid"></param>
-		public static void SetFieldValue(this IEntityDataFieldContainer container, int index, NetworkEntityGuid guid)
+		public static void SetFieldValue(this IEntityDataFieldContainer container, int index, ObjectGuid guid)
 		{
 			if(container == null) throw new ArgumentNullException(nameof(container));
 
@@ -134,25 +134,25 @@ namespace GladMMO
 			return GenericMath.Convert<int, TValueType>(container.GetFieldValue<int>((int)index));
 		}
 
-		public static NetworkEntityGuid GetEntityGuidValue(this IReadonlyEntityDataFieldContainer container, GameObjectField index)
+		public static ObjectGuid GetEntityGuidValue(this IReadonlyEntityDataFieldContainer container, GameObjectField index)
 		{
 			if(container == null) throw new ArgumentNullException(nameof(container));
 
-			return new NetworkEntityGuid(container.GetFieldValue<ulong>((int) index));
+			return new ObjectGuid(container.GetFieldValue<ulong>((int) index));
 		}
 
-		public static NetworkEntityGuid GetEntityGuidValue(this IReadonlyEntityDataFieldContainer container, BaseObjectField index)
+		public static ObjectGuid GetEntityGuidValue(this IReadonlyEntityDataFieldContainer container, BaseObjectField index)
 		{
 			if(container == null) throw new ArgumentNullException(nameof(container));
 
-			return new NetworkEntityGuid(container.GetFieldValue<ulong>((int)index));
+			return new ObjectGuid(container.GetFieldValue<ulong>((int)index));
 		}
 
-		public static NetworkEntityGuid GetEntityGuidValue(this IReadonlyEntityDataFieldContainer container, EntityObjectField index)
+		public static ObjectGuid GetEntityGuidValue(this IReadonlyEntityDataFieldContainer container, EntityObjectField index)
 		{
 			if(container == null) throw new ArgumentNullException(nameof(container));
 
-			return new NetworkEntityGuid(container.GetFieldValue<ulong>((int)index));
+			return new ObjectGuid(container.GetFieldValue<ulong>((int)index));
 		}
 	}
 }

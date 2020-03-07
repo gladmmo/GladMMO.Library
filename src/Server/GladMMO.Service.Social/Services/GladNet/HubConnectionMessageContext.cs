@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,9 +14,9 @@ namespace GladMMO
 
 		//TODO: Initialize from creation or get from cache somehow
 		/// <inheritdoc />
-		public NetworkEntityGuid CallerGuid => new NetworkEntityGuidBuilder()
+		public ObjectGuid CallerGuid => new ObjectGuidBuilder()
 			.WithId(int.Parse(HubConntext.UserIdentifier))
-			.WithType(EntityType.Player)
+			.WithType(EntityTypeId.TYPEID_PLAYER)
 			.Build();
 
 		/// <inheritdoc />

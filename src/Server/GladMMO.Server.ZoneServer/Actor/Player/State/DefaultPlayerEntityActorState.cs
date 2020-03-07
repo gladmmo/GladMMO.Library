@@ -9,7 +9,7 @@ namespace GladMMO
 	{
 		public IPeerPayloadSendService<GameServerPacketPayload> SendService { get; }
 
-		public DefaultPlayerEntityActorState(IEntityDataFieldContainer entityData, NetworkEntityGuid entityGuid, InterestCollection interest, [NotNull] IPeerPayloadSendService<GameServerPacketPayload> sendService) 
+		public DefaultPlayerEntityActorState(IEntityDataFieldContainer entityData, ObjectGuid entityGuid, InterestCollection interest, [NotNull] IPeerPayloadSendService<GameServerPacketPayload> sendService) 
 			: base(entityData, entityGuid, interest)
 		{
 			SendService = sendService ?? throw new ArgumentNullException(nameof(sendService));

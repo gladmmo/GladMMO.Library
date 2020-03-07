@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -78,9 +78,9 @@ namespace GladMMO
 		/// <inheritdoc />
 		public override async Task OnDisconnectedAsync(Exception exception)
 		{
-			NetworkEntityGuid guid = new NetworkEntityGuidBuilder()
+			ObjectGuid guid = new ObjectGuidBuilder()
 				.WithId(int.Parse(Context.UserIdentifier))
-				.WithType(EntityType.Player)
+				.WithType(EntityTypeId.TYPEID_PLAYER)
 				.Build();
 
 			if(Logger.IsEnabled(LogLevel.Information))

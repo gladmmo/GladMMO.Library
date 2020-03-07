@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Text;
 using Glader.Essentials;
@@ -14,7 +14,7 @@ namespace GladMMO
 
 		protected sealed override void OnEventFired(object source, EntityCreationStartingEventArgs args)
 		{
-			if(args.EntityGuid.EntityType != EntityType.GameObject)
+			if(args.EntityGuid.TypeId != EntityTypeId.TYPEID_GAMEOBJECT)
 				return;
 
 			OnGameObjectEntityCreationStarting(args);

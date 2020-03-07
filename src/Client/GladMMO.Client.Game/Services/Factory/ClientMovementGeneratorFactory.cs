@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
@@ -20,16 +20,14 @@ namespace GladMMO
 
 		public IMovementGenerator<GameObject> Create(EntityAssociatedData<IMovementData> context)
 		{
-			switch (context.EntityGuid.EntityType)
+			switch (context.EntityGuid.TypeId)
 			{
-				case EntityType.None:
-					break;
-				case EntityType.Player:
+				case EntityTypeId.TYPEID_PLAYER:
 					return CreatePlayerMovementGenerator(context);
-				case EntityType.GameObject:
+				case EntityTypeId.TYPEID_GAMEOBJECT:
 					//TODO: Support non-static GameObjects.
 					return new IdleMovementGenerator(context.Data.InitialPosition);
-				case EntityType.Creature:
+				case EntityTypeId.TYPEID_UNIT:
 					//TODO: Support non-static NPCs.
 					return CreateCreatureMovementGenerator(context);
 				default:

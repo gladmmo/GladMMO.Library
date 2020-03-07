@@ -15,17 +15,17 @@ namespace GladMMO
 	/// works on locking over an entity globally (read) and grabs the context
 	/// </summary>
 	/// <typeparam name="TSpecificPayloadType"></typeparam>
-	public abstract class ControlledEntityRequestHandler<TSpecificPayloadType> : ControlledEntityRequestHandler<TSpecificPayloadType, IContextualResourceLockingPolicy<NetworkEntityGuid>, NetworkEntityGuid> where TSpecificPayloadType : GameClientPacketPayload
+	public abstract class ControlledEntityRequestHandler<TSpecificPayloadType> : ControlledEntityRequestHandler<TSpecificPayloadType, IContextualResourceLockingPolicy<ObjectGuid>, ObjectGuid> where TSpecificPayloadType : GameClientPacketPayload
 	{
 		/// <inheritdoc />
-		protected ControlledEntityRequestHandler(ILog logger, IReadonlyConnectionEntityCollection connectionIdToEntityMap, IContextualResourceLockingPolicy<NetworkEntityGuid> lockingPolicy) 
+		protected ControlledEntityRequestHandler(ILog logger, IReadonlyConnectionEntityCollection connectionIdToEntityMap, IContextualResourceLockingPolicy<ObjectGuid> lockingPolicy) 
 			: base(logger, connectionIdToEntityMap, lockingPolicy)
 		{
 
 		}
 
 		/// <inheritdoc />
-		protected sealed override NetworkEntityGuid GenerateLockContext(IPeerSessionMessageContext<GameServerPacketPayload> context, TSpecificPayloadType payload)
+		protected sealed override ObjectGuid GenerateLockContext(IPeerSessionMessageContext<GameServerPacketPayload> context, TSpecificPayloadType payload)
 		{
 			//We just grab the entity, and assume that they want this.
 			return ExtractEntityGuidFromContext(context);
@@ -34,7 +34,7 @@ namespace GladMMO
 
 	/// <summary>
 	/// Base <see cref="IPeerPayloadSpecificMessageHandler{TPayloadType,TOutgoingPayloadType}"/> handler for
-	/// messages that require a controlled/associated <see cref="NetworkEntityGuid"/> with the session to be handled.
+	/// messages that require a controlled/associated <see cref="ObjectGuid"/> with the session to be handled.
 	/// For example, movement. Can't handle movement packets if the session doesn't even have an associated entity.
 	/// </summary>
 	/// <typeparam name="TSpecificPayloadType"></typeparam>
@@ -103,13 +103,13 @@ namespace GladMMO
 		/// <returns>The context to use for locking.</returns>
 		protected abstract TLockingContextType GenerateLockContext(IPeerSessionMessageContext<GameServerPacketPayload> context, TSpecificPayloadType payload);
 
-		protected NetworkEntityGuid ExtractEntityGuidFromContext(IPeerSessionMessageContext<GameServerPacketPayload> context)
+		protected ObjectGuid ExtractEntityGuidFromContext(IPeerSessionMessageContext<GameServerPacketPayload> context)
 		{
 			return ConnectionIdToEntityMap[context.Details.ConnectionId];
 		}
 
 		//TODO: Should we create a new context instead?
-		protected abstract Task HandleMessage(IPeerSessionMessageContext<GameServerPacketPayload> context, TSpecificPayloadType payload, NetworkEntityGuid guid);
+		protected abstract Task HandleMessage(IPeerSessionMessageContext<GameServerPacketPayload> context, TSpecificPayloadType payload, ObjectGuid guid);
 
 		/// <summary>
 		/// Retrieves the mapped object of type TObjectType from the provided <see cref="map"/>.
@@ -132,7 +132,7 @@ namespace GladMMO
 		/// <returns></returns>
 		protected TObjectType GetEntityMappedObject<TObjectType>(IReadonlyEntityGuidMappable<TObjectType> map, int connectionId)
 		{
-			NetworkEntityGuid entityGuid = ConnectionIdToEntityMap[connectionId];
+			ObjectGuid entityGuid = ConnectionIdToEntityMap[connectionId];
 			if(!map.ContainsKey(entityGuid))
 			{
 				throw new InvalidOperationException($"Entity: {entityGuid} did not have a registered service for Type: {typeof(TObjectType).Name}");

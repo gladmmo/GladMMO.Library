@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Text;
 
@@ -18,10 +18,10 @@ namespace GladMMO
 		/// <summary>
 		/// The entity guid of the local player.
 		/// </summary>
-		public NetworkEntityGuid EntityGuid { get; }
+		public ObjectGuid EntityGuid { get; }
 
 		/// <inheritdoc />
-		public LocalPlayerSpawnedEventArgs([NotNull] NetworkEntityGuid entityGuid)
+		public LocalPlayerSpawnedEventArgs([NotNull] ObjectGuid entityGuid)
 		{
 			//TODO: Validate this.
 

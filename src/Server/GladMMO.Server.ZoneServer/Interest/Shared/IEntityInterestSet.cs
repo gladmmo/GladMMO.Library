@@ -11,7 +11,7 @@
 		/// </summary>
 		/// <param name="guid">The entity to add.</param>
 		/// <returns>True if the entity was added. False if it is already contained.</returns>
-		bool Add(NetworkEntityGuid guid);
+		bool Add(ObjectGuid guid);
 
 		/// <summary>
 		/// Tries to remove an entity in the interest set.
@@ -20,6 +20,6 @@
 		/// </summary>
 		/// <param name="guid">The entity to add.</param>
 		/// <returns>True if the entity was found and removed.</returns>
-		bool Remove(NetworkEntityGuid guid);
+		bool Remove(ObjectGuid guid);
 	}
 }

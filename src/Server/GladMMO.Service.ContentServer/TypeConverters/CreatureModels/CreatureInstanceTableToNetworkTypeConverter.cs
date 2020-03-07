@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,14 +12,14 @@ namespace GladMMO
 		{
 			if (fromObject == null) throw new ArgumentNullException(nameof(fromObject));
 
-			NetworkEntityGuid guid = new NetworkEntityGuidBuilder()
+			ObjectGuid guid = new ObjectGuidBuilder()
 				.WithId(0) //0 means that it's not an instance.
-				.WithType(EntityType.Creature)
+				.WithType(EntityTypeId.TYPEID_UNIT)
 				.WithEntryId(fromObject.CreatureEntryId)
 				.Build();
 
 			//TODO: better handle position crap
-			return new CreatureInstanceModel(guid, fromObject.CreatureTemplateId, new Vector3(fromObject.SpawnPosition.X, fromObject.SpawnPosition.Y, fromObject.SpawnPosition.Z), fromObject.InitialOrientation);
+			return new CreatureInstanceModel(guid, fromObject.CreatureTemplateId, new UnityEngine.Vector3(fromObject.SpawnPosition.X, fromObject.SpawnPosition.Y, fromObject.SpawnPosition.Z), fromObject.InitialOrientation);
 		}
 	}
 }

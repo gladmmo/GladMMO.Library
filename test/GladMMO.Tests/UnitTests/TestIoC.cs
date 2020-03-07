@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -97,7 +97,7 @@ namespace GladMMO
 				.As<ISceneManager>();
 
 			//Common thing used in temp registeration
-			builder.RegisterInstance(NetworkEntityGuid.Empty)
+			builder.RegisterInstance(ObjectGuid.Empty)
 				.AsSelf();
 
 			//We do this to override the UnityLogger which calls ECall Sec errors.

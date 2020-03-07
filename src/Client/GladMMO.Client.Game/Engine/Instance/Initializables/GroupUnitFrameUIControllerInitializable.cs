@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,7 +22,7 @@ namespace GladMMO
 
 		private Stack<IUIUnitFrame> AvailableUnitFrames { get; }
 
-		private Dictionary<NetworkEntityGuid, ClaimedGroupUnitFrame> OwnedGroupUnitFrames { get; }
+		private Dictionary<ObjectGuid, ClaimedGroupUnitFrame> OwnedGroupUnitFrames { get; }
 
 		private readonly object SyncObj = new object();
 
@@ -35,7 +35,7 @@ namespace GladMMO
 		{
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
 			EntityCallbackRegister = entityCallbackRegister ?? throw new ArgumentNullException(nameof(entityCallbackRegister));
-			OwnedGroupUnitFrames = new Dictionary<NetworkEntityGuid, ClaimedGroupUnitFrame>(NetworkGuidEqualityComparer<NetworkEntityGuid>.Instance);
+			OwnedGroupUnitFrames = new Dictionary<ObjectGuid, ClaimedGroupUnitFrame>(NetworkGuidEqualityComparer<ObjectGuid>.Instance);
 			AvailableUnitFrames = new Stack<IUIUnitFrame>(groupUnitFrames.Reverse());
 		}
 
@@ -50,9 +50,9 @@ namespace GladMMO
 		}
 
 		/// <inheritdoc />
-		public GroupUnitFrameIssueResult TryClaimUnitFrame(NetworkEntityGuid guid)
+		public GroupUnitFrameIssueResult TryClaimUnitFrame(ObjectGuid guid)
 		{
-			if(guid.EntityType != EntityType.Player)
+			if(guid.TypeId != EntityTypeId.TYPEID_PLAYER)
 				return GroupUnitFrameIssueResult.FailedNotAPlayer;
 
 			lock(SyncObj)
@@ -71,9 +71,9 @@ namespace GladMMO
 		}
 
 		/// <inheritdoc />
-		public GroupUnitFrameReleaseResult TryReleaseUnitFrame(NetworkEntityGuid guid)
+		public GroupUnitFrameReleaseResult TryReleaseUnitFrame(ObjectGuid guid)
 		{
-			if(guid.EntityType != EntityType.Player)
+			if(guid.TypeId != EntityTypeId.TYPEID_PLAYER)
 				return GroupUnitFrameReleaseResult.FailedNotAPlayer;
 
 			lock(SyncObj)
@@ -91,14 +91,14 @@ namespace GladMMO
 		}
 
 		/// <inheritdoc />
-		public bool Contains(NetworkEntityGuid entity)
+		public bool Contains(ObjectGuid entity)
 		{
 			lock(SyncObj)
 				return OwnedGroupUnitFrames.ContainsKey(entity);
 		}
 
 		/// <inheritdoc />
-		public IUIUnitFrame this[NetworkEntityGuid entity]
+		public IUIUnitFrame this[ObjectGuid entity]
 		{
 			get
 			{
@@ -113,7 +113,7 @@ namespace GladMMO
 		}
 
 		/// <inheritdoc />
-		public IEntityDataEventUnregisterable RegisterCallback<TCallbackValueCastType>(NetworkEntityGuid entity, int dataField, Action<NetworkEntityGuid, EntityDataChangedArgs<TCallbackValueCastType>> callback) 
+		public IEntityDataEventUnregisterable RegisterCallback<TCallbackValueCastType>(ObjectGuid entity, int dataField, Action<ObjectGuid, EntityDataChangedArgs<TCallbackValueCastType>> callback) 
 			where TCallbackValueCastType : struct
 		{
 			lock(SyncObj)

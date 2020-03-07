@@ -28,7 +28,7 @@ namespace GladMMO
 			[NotNull] ILog logger, 
 			[NotNull] IReadonlyConnectionEntityCollection connectionIdToEntityMap, 
 			[NotNull] IEntityGuidMappable<IMovementData> movementDataMap,
-			IContextualResourceLockingPolicy<NetworkEntityGuid> lockingPolicy,
+			IContextualResourceLockingPolicy<ObjectGuid> lockingPolicy,
 			[NotNull] IEntityGuidMappable<IMovementGenerator<GameObject>> movementGenerator,
 			[NotNull] IReadonlyNetworkTimeService timeService,
 			[NotNull] IReadonlyEntityGuidMappable<IActorRef> actorReferenceMappable,
@@ -43,7 +43,7 @@ namespace GladMMO
 		}
 
 		/// <inheritdoc />
-		protected override Task HandleMessage(IPeerSessionMessageContext<GameServerPacketPayload> context, ClientSetClickToMovePathRequestPayload payload, NetworkEntityGuid guid)
+		protected override Task HandleMessage(IPeerSessionMessageContext<GameServerPacketPayload> context, ClientSetClickToMovePathRequestPayload payload, ObjectGuid guid)
 		{
 			try
 			{
@@ -78,7 +78,7 @@ namespace GladMMO
 			return Task.CompletedTask;
 		}
 
-		private PathBasedMovementData BuildPathData(ClientSetClickToMovePathRequestPayload payload, IMovementGenerator<GameObject> generator, IMovementData originalMovementData, NetworkEntityGuid guid)
+		private PathBasedMovementData BuildPathData(ClientSetClickToMovePathRequestPayload payload, IMovementGenerator<GameObject> generator, IMovementData originalMovementData, ObjectGuid guid)
 		{
 			//TODO: Sanity check timestamp and position.
 			//So, originally we used authorative time and position but now we semi-trust the client.

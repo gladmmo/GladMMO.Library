@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -25,10 +25,10 @@ namespace GladMMO
 		public async Task<IActionResult> EntityNameQuery([FromRoute(Name = "id")] ulong id)
 		{
 			//Since this is a GET we can't send a JSON model. We have to use this process instead, sending the raw guid value.
-			NetworkEntityGuid entityGuid = new NetworkEntityGuid(id);
+			ObjectGuid entityGuid = new ObjectGuid(id);
 			return await EntityNameQuery(entityGuid);
 		}
 
-		protected abstract Task<JsonResult> EntityNameQuery(NetworkEntityGuid entityGuid);
+		protected abstract Task<JsonResult> EntityNameQuery(ObjectGuid entityGuid);
 	}
 }

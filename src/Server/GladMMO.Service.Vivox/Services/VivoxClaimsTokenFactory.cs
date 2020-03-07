@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -55,8 +55,8 @@ namespace GladMMO
 		//We don't currently use this. It was a good idea but may not be supported as usernames for vivox.
 		private unsafe string ComputeCharacterString(int contextCharacterId)
 		{
-			NetworkEntityGuid playerGuid = new NetworkEntityGuidBuilder()
-				.WithType(EntityType.Player)
+			ObjectGuid playerGuid = new ObjectGuidBuilder()
+				.WithType(EntityTypeId.TYPEID_PLAYER)
 				.WithId(contextCharacterId)
 				.Build();
 

@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,11 +6,11 @@ using System.Text;
 namespace GladMMO
 {
 	/// <summary>
-	/// Implements simple value-type style comparision semantics for the <see cref="NetworkEntityGuid"/>
+	/// Implements simple value-type style comparision semantics for the <see cref="ObjectGuid"/>
 	/// type.
 	/// </summary>
 	public class NetworkGuidEqualityComparer<TType> : EqualityComparer<TType>
-		where TType : NetworkEntityGuid
+		where TType : ObjectGuid
 	{
 		/// <summary>
 		/// Singleton instance of the <see cref="NetworkGuidEqualityComparer{TType}"/>.

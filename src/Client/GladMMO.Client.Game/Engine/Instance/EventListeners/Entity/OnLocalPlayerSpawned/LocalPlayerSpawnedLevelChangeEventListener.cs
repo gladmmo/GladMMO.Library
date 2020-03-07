@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Text;
 using Autofac.Core;
@@ -29,7 +29,7 @@ namespace GladMMO
 			RegisterPlayerDataChangeCallback<int>(BaseObjectField.UNIT_FIELD_LEVEL, OnLevelChanged);
 		}
 
-		private void OnLevelChanged(NetworkEntityGuid entity, EntityDataChangedArgs<int> changeArgs)
+		private void OnLevelChanged(ObjectGuid entity, EntityDataChangedArgs<int> changeArgs)
 		{
 			PlayerUnitFrame.UnitLevel.Text = changeArgs.NewValue.ToString();
 		}

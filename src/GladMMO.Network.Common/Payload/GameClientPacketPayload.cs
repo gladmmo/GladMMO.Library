@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using GladNet;
 using ProtoBuf;
 

@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,9 +12,9 @@ namespace GladMMO
 		{
 			if (fromObject == null) throw new ArgumentNullException(nameof(fromObject));
 
-			NetworkEntityGuid guid = new NetworkEntityGuidBuilder()
+			ObjectGuid guid = new ObjectGuidBuilder()
 				.WithId(0) //0 means that it's not an instance.
-				.WithType(EntityType.GameObject)
+				.WithType(EntityTypeId.TYPEID_GAMEOBJECT)
 				.WithEntryId(fromObject.GameObjectEntryId)
 				.Build();
 

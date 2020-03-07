@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -52,9 +52,9 @@ namespace GladMMO
 				//TODO: Handle errors
 				foreach(var character in listResponse.CharacterIds)
 				{
-					var entityGuid = new NetworkEntityGuidBuilder()
+					var entityGuid = new ObjectGuidBuilder()
 						.WithId(character)
-						.WithType(EntityType.Player)
+						.WithType(EntityTypeId.TYPEID_PLAYER)
 						.Build();
 
 					//TODO: Optimize below awaits.
@@ -62,16 +62,16 @@ namespace GladMMO
 					await EntityNameQueryable.RetrieveAsync(entityGuid)
 						.ConfigureAwaitFalse();
 
-					var appearanceResponse = await CharacterServiceQueryable.GetCharacterAppearance(entityGuid.EntityId)
+					var appearanceResponse = await CharacterServiceQueryable.GetCharacterAppearance(entityGuid.CurrentObjectGuid)
 						.ConfigureAwaitFalse();
 
-					var characterData = await CharacterServiceQueryable.GetCharacterData(entityGuid.EntityId)
+					var characterData = await CharacterServiceQueryable.GetCharacterData(entityGuid.CurrentObjectGuid)
 						.ConfigureAwaitFalse();
 
 					//Don't throw, because we actually don't want to stop the
 					//character screen from working just because we can't visually display some stuff.
 					if(!appearanceResponse.isSuccessful)
-						Logger.Error($"Failed to query for Character: {entityGuid.EntityId} appearance. Reason: {appearanceResponse.ResultCode}");
+						Logger.Error($"Failed to query for Character: {entityGuid.CurrentObjectGuid} appearance. Reason: {appearanceResponse.ResultCode}");
 
 					//TODO: Handle errors.
 					CharacterAppearanceMappable.AddObject(entityGuid, appearanceResponse.Result);

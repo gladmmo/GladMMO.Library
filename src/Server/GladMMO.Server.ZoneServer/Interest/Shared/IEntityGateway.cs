@@ -18,7 +18,7 @@ namespace GladMMO
 		/// <param name="entryContext">The entry context.</param>
 		/// <param name="entityGuid">The entity guid.</param>
 		/// <returns>True if the entity enters successfully.</returns>
-		bool TryEntityEnter(TEntryContext entryContext, NetworkEntityGuid entityGuid);
+		bool TryEntityEnter(TEntryContext entryContext, ObjectGuid entityGuid);
 
 		/// <summary>
 		/// Attempts to exit the entity through the gateway with the
@@ -28,6 +28,6 @@ namespace GladMMO
 		/// <param name="entryContext">The entry context.</param>
 		/// <param name="entityGuid">The entity guid.</param>
 		/// <returns>True if the entity exits successfully.</returns>
-		bool TryEntityLeave(TEntryContext entryContext, NetworkEntityGuid entityGuid);
+		bool TryEntityLeave(TEntryContext entryContext, ObjectGuid entityGuid);
 	}
 }

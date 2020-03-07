@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Text;
 using Common.Logging;
@@ -12,7 +12,7 @@ namespace GladMMO
 
 		private ILog Logger { get; }
 
-		public DefaultAvatarPedestalGameObjectBehaviour(NetworkEntityGuid targetEntity, 
+		public DefaultAvatarPedestalGameObjectBehaviour(ObjectGuid targetEntity, 
 			GameObject rootSceneObject, 
 			IEntityDataFieldContainer data,
 			[NotNull] IFactoryCreatable<CustomModelLoaderCancelable, CustomModelLoaderCreationContext> avatarLoaderFactory,

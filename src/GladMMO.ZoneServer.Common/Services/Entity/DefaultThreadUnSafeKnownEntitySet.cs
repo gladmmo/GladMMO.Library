@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -10,7 +10,7 @@ namespace GladMMO
 {
 	public sealed class DefaultThreadUnSafeKnownEntitySet : IKnownEntitySet, IReadonlyKnownEntitySet
 	{
-		private HashSet<NetworkEntityGuid> InternalKnownSet { get; }
+		private HashSet<ObjectGuid> InternalKnownSet { get; }
 
 		/// <inheritdoc />
 		public ReaderWriterLockSlim LockObject { get; }
@@ -18,12 +18,12 @@ namespace GladMMO
 		/// <inheritdoc />
 		public DefaultThreadUnSafeKnownEntitySet()
 		{
-			InternalKnownSet = new HashSet<NetworkEntityGuid>(NetworkGuidEqualityComparer<NetworkEntityGuid>.Instance);
+			InternalKnownSet = new HashSet<ObjectGuid>(NetworkGuidEqualityComparer<ObjectGuid>.Instance);
 			LockObject = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
 		}
 
 		/// <inheritdoc />
-		public void RemoveEntity(NetworkEntityGuid guid)
+		public void RemoveEntity(ObjectGuid guid)
 		{
 			LockObject.EnterWriteLock();
 			try
@@ -40,7 +40,7 @@ namespace GladMMO
 		}
 
 		/// <inheritdoc />
-		public void AddEntity(NetworkEntityGuid guid)
+		public void AddEntity(ObjectGuid guid)
 		{
 			LockObject.EnterWriteLock();
 			try
@@ -58,7 +58,7 @@ namespace GladMMO
 
 		/// <inheritdoc />
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public bool isEntityKnown(NetworkEntityGuid guid)
+		public bool isEntityKnown(ObjectGuid guid)
 		{
 			LockObject.EnterReadLock();
 			try
@@ -72,7 +72,7 @@ namespace GladMMO
 		}
 
 		/// <inheritdoc />
-		public IEnumerator<NetworkEntityGuid> GetEnumerator()
+		public IEnumerator<ObjectGuid> GetEnumerator()
 		{
 			LockObject.EnterReadLock();
 			try

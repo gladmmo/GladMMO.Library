@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,13 +8,13 @@ using Glader.Essentials;
 namespace GladMMO
 {
 	/// <summary>
-	/// Generic dictionary with <see cref="NetworkEntityGuid"/> key types.
+	/// Generic dictionary with <see cref="ObjectGuid"/> key types.
 	/// </summary>
 	/// <typeparam name="TValue">Value type.</typeparam>
-	public class EntityGuidDictionary<TValue> : Glader.Essentials.EntityGuidDictionary<NetworkEntityGuid, TValue>, IReadonlyEntityGuidMappable<TValue>, IEntityGuidMappable<TValue>, IEntityCollectionRemovable
+	public class EntityGuidDictionary<TValue> : Glader.Essentials.EntityGuidDictionary<ObjectGuid, TValue>, IReadonlyEntityGuidMappable<TValue>, IEntityGuidMappable<TValue>, IEntityCollectionRemovable
 	{
 		public EntityGuidDictionary()
-			: base(NetworkGuidEqualityComparer<NetworkEntityGuid>.Instance)
+			: base(NetworkGuidEqualityComparer<ObjectGuid>.Instance)
 		{
 
 		}

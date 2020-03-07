@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -24,7 +24,7 @@ namespace GladMMO
 		/// <inheritdoc />
 		public NetworkEntityNowVisibleEventArgs Create(EntityCreationData context)
 		{
-			NetworkEntityGuid guid = context.EntityGuid;
+			ObjectGuid guid = context.EntityGuid;
 
 			IEntityDataFieldContainer container = CreateInitialEntityFieldContainer(context.InitialFieldValues);
 			ChangeTrackingEntityFieldDataCollectionDecorator trackingEntityFieldDataCollectionDecorator = new ChangeTrackingEntityFieldDataCollectionDecorator(container, context.InitialFieldValues.FieldValueUpdateMask);

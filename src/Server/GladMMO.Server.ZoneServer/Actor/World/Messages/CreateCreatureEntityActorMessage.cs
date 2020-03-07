@@ -6,9 +6,9 @@ namespace GladMMO
 {
 	public class CreateCreatureEntityActorMessage : EntityActorMessage
 	{
-		public NetworkEntityGuid EntityGuid { get; }
+		public ObjectGuid EntityGuid { get; }
 
-		public CreateCreatureEntityActorMessage([NotNull] NetworkEntityGuid entityGuid)
+		public CreateCreatureEntityActorMessage([NotNull] ObjectGuid entityGuid)
 		{
 			EntityGuid = entityGuid ?? throw new ArgumentNullException(nameof(entityGuid));
 		}

@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -75,7 +75,7 @@ namespace GladMMO
 			});
 		}
 
-		private void InitializeCharacterLocation([NotNull] NetworkEntityGuid guid, [NotNull] IUICharacterSlot button)
+		private void InitializeCharacterLocation([NotNull] ObjectGuid guid, [NotNull] IUICharacterSlot button)
 		{
 			if (guid == null) throw new ArgumentNullException(nameof(guid));
 			if (button == null) throw new ArgumentNullException(nameof(button));
@@ -83,7 +83,7 @@ namespace GladMMO
 			button.LocationText.Text = "Unknown";
 		}
 
-		private void InitializeCharacterLevel([NotNull] NetworkEntityGuid guid, [NotNull] IUICharacterSlot button)
+		private void InitializeCharacterLevel([NotNull] ObjectGuid guid, [NotNull] IUICharacterSlot button)
 		{
 			if (guid == null) throw new ArgumentNullException(nameof(guid));
 			if (button == null) throw new ArgumentNullException(nameof(button));
@@ -92,7 +92,7 @@ namespace GladMMO
 			button.LevelText.Text = $"Level {LevelStrategy.ComputeLevelFromExperience(dataInstance.Experience).ToString()}";
 		}
 
-		private void InitializeCharacterName([NotNull] NetworkEntityGuid guid, [NotNull] IUICharacterSlot button)
+		private void InitializeCharacterName([NotNull] ObjectGuid guid, [NotNull] IUICharacterSlot button)
 		{
 			if(guid == null) throw new ArgumentNullException(nameof(guid));
 			if(button == null) throw new ArgumentNullException(nameof(button));

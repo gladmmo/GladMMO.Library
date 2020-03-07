@@ -42,7 +42,7 @@ namespace GladMMO
 			ActorReferenceMappable = actorReferenceMappable ?? throw new ArgumentNullException(nameof(actorReferenceMappable));
 		}
 
-		private void ThrowIfNoEntityInterestManaged(NetworkEntityGuid entryContext, NetworkEntityGuid entityGuid)
+		private void ThrowIfNoEntityInterestManaged(ObjectGuid entryContext, ObjectGuid entityGuid)
 		{
 			if(!ManagedInterestCollections.ContainsKey(entryContext))
 				throw new InvalidOperationException($"Guid: {entityGuid} tried to enter Entity: {entryContext} interest. But Entity does not maintain interest. Does not exist in interest collection.");

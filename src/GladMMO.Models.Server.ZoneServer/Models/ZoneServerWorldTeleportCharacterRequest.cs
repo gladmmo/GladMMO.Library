@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Text;
 using Newtonsoft.Json;
@@ -10,12 +10,12 @@ namespace GladMMO
 	public sealed class ZoneServerWorldTeleportCharacterRequest
 	{
 		[JsonProperty]
-		public NetworkEntityGuid CharacterGuid { get; private set; }
+		public ObjectGuid CharacterGuid { get; private set; }
 
 		[JsonProperty]
 		public int WorldTeleporterId { get; private set; }
 
-		public ZoneServerWorldTeleportCharacterRequest([NotNull] NetworkEntityGuid characterGuid, int worldTeleporterId)
+		public ZoneServerWorldTeleportCharacterRequest([NotNull] ObjectGuid characterGuid, int worldTeleporterId)
 		{
 			if (worldTeleporterId <= 0) throw new ArgumentOutOfRangeException(nameof(worldTeleporterId));
 

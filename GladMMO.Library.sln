@@ -89,8 +89,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GladMMO.Client.CharacterSer
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GladMMO.Client.NameQueryService", "src\Client\GladMMO.Client.NameQueryService\GladMMO.Client.NameQueryService.csproj", "{0B4CDE6F-6E9C-41C4-A4A3-B9FF7E0F38CE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GladMMO.Server.ZoneServer", "src\Server\GladMMO.Server.ZoneServer\GladMMO.Server.ZoneServer.csproj", "{AED3DE38-FEE1-4DD5-B9D8-BC33C64CDA56}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GladMMO.Payloads.ZoneServer", "src\GladMMO.Payloads.ZoneServer\GladMMO.Payloads.ZoneServer.csproj", "{6EC46B4D-E269-4661-B11D-3D33F37A6D1E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GladMMO.Server.PlayFab", "src\Server\GladMMO.Server.PlayFab\GladMMO.Server.PlayFab.csproj", "{C96815B2-8678-42F3-8AB0-6AA4784BE29C}"
@@ -153,9 +151,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GladMMO.Server.AzureService
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Integrations", "Integrations", "{F5BC181A-4CC6-43C6-83AF-08C25FC4A458}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladMMO.Integrations.GaiaOnline.Client", "src\Integrations\GladMMO.Integrations.GaiaOnline.Client\GladMMO.Integrations.GaiaOnline.Client.csproj", "{8906469D-9E5A-42CC-B134-EAE549AC9D2E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GladMMO.Integrations.GaiaOnline.Client", "src\Integrations\GladMMO.Integrations.GaiaOnline.Client\GladMMO.Integrations.GaiaOnline.Client.csproj", "{8906469D-9E5A-42CC-B134-EAE549AC9D2E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladMMO.Integrations.Client.Common", "src\Integrations\GladMMO.Integrations.Client.Common\GladMMO.Integrations.Client.Common.csproj", "{8B0D3037-B171-4B25-B75F-B33601250F73}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GladMMO.Integrations.Client.Common", "src\Integrations\GladMMO.Integrations.Client.Common\GladMMO.Integrations.Client.Common.csproj", "{8B0D3037-B171-4B25-B75F-B33601250F73}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -602,20 +600,6 @@ Global
 		{0B4CDE6F-6E9C-41C4-A4A3-B9FF7E0F38CE}.Debug-Local|Any CPU.Build.0 = Debug|Any CPU
 		{0B4CDE6F-6E9C-41C4-A4A3-B9FF7E0F38CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0B4CDE6F-6E9C-41C4-A4A3-B9FF7E0F38CE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AED3DE38-FEE1-4DD5-B9D8-BC33C64CDA56}.azure_release|Any CPU.ActiveCfg = azure_release|Any CPU
-		{AED3DE38-FEE1-4DD5-B9D8-BC33C64CDA56}.azure_release|Any CPU.Build.0 = azure_release|Any CPU
-		{AED3DE38-FEE1-4DD5-B9D8-BC33C64CDA56}.Database_Migration|Any CPU.ActiveCfg = Debug|Any CPU
-		{AED3DE38-FEE1-4DD5-B9D8-BC33C64CDA56}.Database_Migration|Any CPU.Build.0 = Debug|Any CPU
-		{AED3DE38-FEE1-4DD5-B9D8-BC33C64CDA56}.debug_azure|Any CPU.ActiveCfg = debug_azure|Any CPU
-		{AED3DE38-FEE1-4DD5-B9D8-BC33C64CDA56}.debug_azure|Any CPU.Build.0 = debug_azure|Any CPU
-		{AED3DE38-FEE1-4DD5-B9D8-BC33C64CDA56}.DEBUG_LOCAL|Any CPU.ActiveCfg = Debug|Any CPU
-		{AED3DE38-FEE1-4DD5-B9D8-BC33C64CDA56}.DEBUG_LOCAL|Any CPU.Build.0 = Debug|Any CPU
-		{AED3DE38-FEE1-4DD5-B9D8-BC33C64CDA56}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AED3DE38-FEE1-4DD5-B9D8-BC33C64CDA56}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AED3DE38-FEE1-4DD5-B9D8-BC33C64CDA56}.Debug-Local|Any CPU.ActiveCfg = Debug|Any CPU
-		{AED3DE38-FEE1-4DD5-B9D8-BC33C64CDA56}.Debug-Local|Any CPU.Build.0 = Debug|Any CPU
-		{AED3DE38-FEE1-4DD5-B9D8-BC33C64CDA56}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AED3DE38-FEE1-4DD5-B9D8-BC33C64CDA56}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6EC46B4D-E269-4661-B11D-3D33F37A6D1E}.azure_release|Any CPU.ActiveCfg = azure_release|Any CPU
 		{6EC46B4D-E269-4661-B11D-3D33F37A6D1E}.azure_release|Any CPU.Build.0 = azure_release|Any CPU
 		{6EC46B4D-E269-4661-B11D-3D33F37A6D1E}.Database_Migration|Any CPU.ActiveCfg = Debug|Any CPU
@@ -1096,7 +1080,6 @@ Global
 		{054BC8CE-5703-445A-BD6E-B438791739A3} = {0B0A091D-D140-4504-8D1F-5FBEA303F37E}
 		{F9CDA439-A658-4699-A5C4-091242F7E5D1} = {8C598CE2-9578-41F6-A195-24678617AE6F}
 		{0B4CDE6F-6E9C-41C4-A4A3-B9FF7E0F38CE} = {8C598CE2-9578-41F6-A195-24678617AE6F}
-		{AED3DE38-FEE1-4DD5-B9D8-BC33C64CDA56} = {98B85CCA-E727-485B-AD3C-68AC2A2B0364}
 		{6EC46B4D-E269-4661-B11D-3D33F37A6D1E} = {572E4B21-970E-4889-9B0D-357816B1307C}
 		{C96815B2-8678-42F3-8AB0-6AA4784BE29C} = {98B85CCA-E727-485B-AD3C-68AC2A2B0364}
 		{377F9985-85F8-4997-AB78-367EE1B9BB7E} = {FCFAE99C-C28A-44B7-A7BE-F9D5481C35B9}

@@ -69,7 +69,7 @@ namespace GladMMO
 				return;
 			}
 
-			NetworkEntityGuid entityGuid = new NetworkEntityGuidBuilder()
+			ObjectGuid entityGuid = new ObjectGuidBuilder()
 				.WithId(payload.CharacterId)
 				.WithType(EntityType.Player)
 				.Build();

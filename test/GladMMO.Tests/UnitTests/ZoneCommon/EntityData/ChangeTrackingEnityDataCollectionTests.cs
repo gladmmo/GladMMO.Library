@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Text;
 using NUnit.Framework;
@@ -75,7 +75,7 @@ namespace GladMMO.Tests.Collections
 
 		//This tests change tracking for when only 1 half of the long changes
 		[Test]
-		public void Test_NetworkEntityGuid_Index_Set_Causes_Dirty_Bit_Set_After_Changing([EntityDataCollectionTestRange] int index, [Values(1, 2, 3, 4, 5, 6, 7)] int value)
+		public void Test_ObjectGuid_Index_Set_Causes_Dirty_Bit_Set_After_Changing([EntityDataCollectionTestRange] int index, [Values(1, 2, 3, 4, 5, 6, 7)] int value)
 		{
 			if(index == 7)
 				return;
@@ -83,23 +83,23 @@ namespace GladMMO.Tests.Collections
 			//arrange
 			ChangeTrackingEntityFieldDataCollectionDecorator collection = new ChangeTrackingEntityFieldDataCollectionDecorator(base.CreateEntityDataCollection());
 
-			var guid = NetworkEntityGuidBuilder.New()
-				.WithType(EntityType.Creature)
+			var guid = ObjectGuidBuilder.New()
+				.WithType(EntityTypeId.TYPEID_UNIT)
 				.WithId((int) value)
 				.Build();
 
-			var guid2 = NetworkEntityGuidBuilder.New()
-				.WithType(EntityType.Player)
+			var guid2 = ObjectGuidBuilder.New()
+				.WithType(EntityTypeId.TYPEID_PLAYER)
 				.WithId((int)value)
 				.Build();
 
-			var guid3 = NetworkEntityGuidBuilder.New()
-				.WithType(EntityType.Player)
+			var guid3 = ObjectGuidBuilder.New()
+				.WithType(EntityTypeId.TYPEID_PLAYER)
 				.WithId((int)value + 1)
 				.Build();
 
-			var guid4 = NetworkEntityGuidBuilder.New()
-				.WithType(EntityType.Player)
+			var guid4 = ObjectGuidBuilder.New()
+				.WithType(EntityTypeId.TYPEID_PLAYER)
 				.WithId((int)value)
 				.Build();
 

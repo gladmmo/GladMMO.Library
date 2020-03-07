@@ -14,7 +14,7 @@ namespace GladMMO
 		/// </summary>
 		public InterestCollection Interest { get; }
 
-		public NetworkedObjectActorState(IEntityDataFieldContainer entityData, NetworkEntityGuid entityGuid, [NotNull] InterestCollection interest) 
+		public NetworkedObjectActorState(IEntityDataFieldContainer entityData, ObjectGuid entityGuid, [NotNull] InterestCollection interest) 
 			: base(entityData, entityGuid)
 		{
 			Interest = interest ?? throw new ArgumentNullException(nameof(interest));

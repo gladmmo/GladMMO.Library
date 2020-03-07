@@ -51,7 +51,7 @@ namespace GladMMO
 			BehaviourInstanceDataMappable = new Dictionary<Type, IEntityGuidMappable<object>>(5);
 		}
 
-		public TBehaviourType GetBehaviourInstanceData<TBehaviourType>([NotNull] NetworkEntityGuid entityGuid)
+		public TBehaviourType GetBehaviourInstanceData<TBehaviourType>([NotNull] ObjectGuid entityGuid)
 			where TBehaviourType : IGameObjectLinkable
 		{
 			if (entityGuid == null) throw new ArgumentNullException(nameof(entityGuid));
@@ -100,7 +100,7 @@ namespace GladMMO
 				if(Logger.IsInfoEnabled)
 					Logger.Info($"Processing {typeof(TInstanceModelType).Name} Data Instance: {instance.LinkedGameObjectId}");
 
-				NetworkEntityGuid guid = new NetworkEntityGuidBuilder()
+				ObjectGuid guid = new ObjectGuidBuilder()
 					.WithEntryId(instance.LinkedGameObjectId)
 					.WithType(EntityType.GameObject)
 					.Build();
@@ -131,7 +131,7 @@ namespace GladMMO
 				if(Logger.IsInfoEnabled)
 					Logger.Info($"Processing GameObject Template: {template.TemplateId} Name: {template.GameObjectName}");
 
-				_GameObjectTemplateMappable.Add(NetworkEntityGuid.Empty, template);
+				_GameObjectTemplateMappable.Add(ObjectGuid.Empty, template);
 			}
 		}
 	}

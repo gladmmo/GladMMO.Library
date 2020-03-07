@@ -35,7 +35,7 @@ namespace GladMMO
 
 		protected override void OnEventFired(object source, EntityCreationRequestedEventArgs args)
 		{
-			NetworkEntityGuid guid = args.EntityGuid;
+			ObjectGuid guid = args.EntityGuid;
 
 			//TODO: handle non-players
 			//TODO: Fix the issue with having to hardcore the field count.
@@ -47,7 +47,7 @@ namespace GladMMO
 			EntityDataContainer.AddObject(guid, ChangeTrackableCollection.RetrieveEntity(guid));
 		}
 
-		private int ComputeEntityDataFieldLength([NotNull] NetworkEntityGuid guid)
+		private int ComputeEntityDataFieldLength([NotNull] ObjectGuid guid)
 		{
 			if (guid == null) throw new ArgumentNullException(nameof(guid));
 

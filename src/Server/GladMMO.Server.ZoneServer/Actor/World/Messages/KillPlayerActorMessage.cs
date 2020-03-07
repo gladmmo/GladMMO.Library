@@ -10,9 +10,9 @@ namespace GladMMO
 	/// </summary>
 	public sealed class KillPlayerActorMessage : EntityActorMessage
 	{
-		public NetworkEntityGuid EntityGuid { get; }
+		public ObjectGuid EntityGuid { get; }
 
-		public KillPlayerActorMessage([NotNull] NetworkEntityGuid entityGuid)
+		public KillPlayerActorMessage([NotNull] ObjectGuid entityGuid)
 		{
 			EntityGuid = entityGuid ?? throw new ArgumentNullException(nameof(entityGuid));
 		}

@@ -1,25 +1,25 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 
 namespace GladMMO
 {
-	public interface IReadonlyGameObjectToEntityMappable : IEnumerable<NetworkEntityGuid>
+	public interface IReadonlyGameObjectToEntityMappable : IEnumerable<ObjectGuid>
 	{
 		/// <summary>
 		/// Dictionary that maps <see cref="GameObject"/> to their owned entit's
-		/// <see cref="NetworkEntityGuid"/>
+		/// <see cref="ObjectGuid"/>
 		/// </summary>
-		IReadOnlyDictionary<GameObject, NetworkEntityGuid> ObjectToEntityMap { get; }
+		IReadOnlyDictionary<GameObject, ObjectGuid> ObjectToEntityMap { get; }
 	}
 
-	public interface IGameObjectToEntityMappable : IEnumerable<NetworkEntityGuid>
+	public interface IGameObjectToEntityMappable : IEnumerable<ObjectGuid>
 	{
 		/// <summary>
 		/// Dictionary that maps <see cref="GameObject"/> to their owned entit's
-		/// <see cref="NetworkEntityGuid"/>
+		/// <see cref="ObjectGuid"/>
 		/// </summary>
-		IDictionary<GameObject, NetworkEntityGuid> ObjectToEntityMap { get; }
+		IDictionary<GameObject, ObjectGuid> ObjectToEntityMap { get; }
 	}
 }

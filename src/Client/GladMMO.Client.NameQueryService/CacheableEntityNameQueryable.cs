@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
@@ -9,7 +9,7 @@ namespace GladMMO
 {
 	public sealed class CacheableEntityNameQueryable : IEntityNameQueryable
 	{
-		private Dictionary<NetworkEntityGuid, string> LocalNameMap { get; } = new Dictionary<NetworkEntityGuid, string>(NetworkGuidEqualityComparer<NetworkEntityGuid>.Instance);
+		private Dictionary<ObjectGuid, string> LocalNameMap { get; } = new Dictionary<ObjectGuid, string>(NetworkGuidEqualityComparer<ObjectGuid>.Instance);
 
 		private INameQueryService NameServiceQueryable { get; }
 
@@ -22,7 +22,7 @@ namespace GladMMO
 		}
 
 		/// <inheritdoc />
-		public void EnsureExists([NotNull] NetworkEntityGuid entity)
+		public void EnsureExists([NotNull] ObjectGuid entity)
 		{
 			if(entity == null) throw new ArgumentNullException(nameof(entity));
 
@@ -32,7 +32,7 @@ namespace GladMMO
 		}
 
 		/// <inheritdoc />
-		public string Retrieve([NotNull] NetworkEntityGuid entity)
+		public string Retrieve([NotNull] ObjectGuid entity)
 		{
 			if(entity == null) throw new ArgumentNullException(nameof(entity));
 
@@ -42,7 +42,7 @@ namespace GladMMO
 			}
 		}
 
-		public bool Exists(NetworkEntityGuid entity)
+		public bool Exists(ObjectGuid entity)
 		{
 			using (SyncObj.ReaderLock())
 			{
@@ -51,7 +51,7 @@ namespace GladMMO
 		}
 
 		/// <inheritdoc />
-		public async Task<string> RetrieveAsync(NetworkEntityGuid entity)
+		public async Task<string> RetrieveAsync(ObjectGuid entity)
 		{
 			using(await SyncObj.ReaderLockAsync())
 			{
@@ -77,15 +77,15 @@ namespace GladMMO
 			}
 		}
 
-		private async Task<ResponseModel<NameQueryResponse, NameQueryResponseCode>> QueryRemoteNameService(NetworkEntityGuid entity)
+		private async Task<ResponseModel<NameQueryResponse, NameQueryResponseCode>> QueryRemoteNameService(ObjectGuid entity)
 		{
-			switch (entity.EntityType)
+			switch (entity.TypeId)
 			{
-				case EntityType.Player:
+				case EntityTypeId.TYPEID_PLAYER:
 					return await NameServiceQueryable.RetrievePlayerNameAsync(entity.RawGuidValue);
-				case EntityType.GameObject:
+				case EntityTypeId.TYPEID_GAMEOBJECT:
 					return await NameServiceQueryable.RetrieveGameObjectNameAsync(entity.RawGuidValue);
-				case EntityType.Creature:
+				case EntityTypeId.TYPEID_UNIT:
 					return await NameServiceQueryable.RetrieveCreatureNameAsync(entity.RawGuidValue);
 				default:
 					throw new ArgumentOutOfRangeException();

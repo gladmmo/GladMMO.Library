@@ -9,7 +9,7 @@ namespace GladMMO
 	{
 		public TBehaviourType BehaviourData { get; }
 
-		public BehaviourGameObjectState(IEntityDataFieldContainer entityData, NetworkEntityGuid entityGuid, GameObjectInstanceModel instanceModel, GameObjectTemplateModel templateModel,
+		public BehaviourGameObjectState(IEntityDataFieldContainer entityData, ObjectGuid entityGuid, GameObjectInstanceModel instanceModel, GameObjectTemplateModel templateModel,
 			[NotNull] TBehaviourType behaviourData, [NotNull] InterestCollection interest) 
 			: base(entityData, entityGuid, instanceModel, templateModel, interest)
 		{

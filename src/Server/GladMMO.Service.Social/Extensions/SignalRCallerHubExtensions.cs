@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,9 +15,9 @@ namespace GladMMO
 		/// <param name="clientGroup">The client group.</param>
 		/// <param name="clientGuid">The entity.</param>
 		/// <returns>The remote client RPC interface.</returns>
-		public static TRemoteClientHubInterfaceType RetrievePlayerClient<TRemoteClientHubInterfaceType>(this IHubCallerClients<TRemoteClientHubInterfaceType> clientGroup, NetworkEntityGuid clientGuid)
+		public static TRemoteClientHubInterfaceType RetrievePlayerClient<TRemoteClientHubInterfaceType>(this IHubCallerClients<TRemoteClientHubInterfaceType> clientGroup, ObjectGuid clientGuid)
 		{
-			return clientGroup.User(clientGuid.EntityId.ToString());
+			return clientGroup.User(clientGuid.CurrentObjectGuid.ToString());
 		}
 	}
 }

@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -24,6 +24,6 @@ namespace GladMMO
 		/// <summary>
 		/// The entity guid of the caller.
 		/// </summary>
-		NetworkEntityGuid CallerGuid { get; }
+		ObjectGuid CallerGuid { get; }
 	}
 }

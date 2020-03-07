@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
@@ -35,7 +35,7 @@ namespace GladMMO
 		{
 			//We just iterate known entites, this prevents some race conditions when we're adding in new entities data into collections
 			//but they aren't ready.
-			foreach(NetworkEntityGuid entity in KnownEntites)
+			foreach(ObjectGuid entity in KnownEntites)
 			{
 				var changeTrackable = ChangeTrackableMap.RetrieveEntity(entity);
 
@@ -53,7 +53,7 @@ namespace GladMMO
 						foreach(int changedIndex in changeTrackable.ChangeTrackingArray.EnumerateSetBitsByIndex())
 						{
 							if(Logger.IsDebugEnabled)
-								Logger.Debug($"Entity: {entity.EntityType}:{entity.EntityId} ChangedData: {changedIndex}:{changeTrackable.GetFieldValue<int>((int)changedIndex)}");
+								Logger.Debug($"Entity: {entity.TypeId}:{entity.CurrentObjectGuid} ChangedData: {changedIndex}:{changeTrackable.GetFieldValue<int>((int)changedIndex)}");
 
 							//TODO: We don't REALLY want to lock on the dispatching. This could be a REAL bottleneck in the future. We need to redesign this abit
 							//TODO: Might be a better way to handle this API, and provide the value instead of the collection.

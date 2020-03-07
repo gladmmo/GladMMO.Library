@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -30,10 +30,10 @@ namespace GladMMO
 		/// The actual point.
 		/// </summary>
 		[Required]
-		public Vector3<float> Point { get; private set; }
+		public GladMMO.Database.Vector3<float> Point { get; private set; }
 
 		/// <inheritdoc />
-		public PathWaypointModel(int pathId, int pointId, Vector3<float> point)
+		public PathWaypointModel(int pathId, int pointId, GladMMO.Database.Vector3<float> point)
 		{
 			if(pathId < 0) throw new ArgumentOutOfRangeException(nameof(pathId));
 			if(pointId < 0) throw new ArgumentOutOfRangeException(nameof(pointId));

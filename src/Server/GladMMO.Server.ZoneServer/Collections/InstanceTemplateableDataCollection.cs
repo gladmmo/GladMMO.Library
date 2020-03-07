@@ -21,17 +21,17 @@ namespace GladMMO
 			CreatureInstanceDictionary = new Dictionary<int, TInstanceModelType>();
 		}
 
-		public abstract void Add(NetworkEntityGuid key, TTemplateModelType value);
+		public abstract void Add(ObjectGuid key, TTemplateModelType value);
 
-		TTemplateModelType IEntityGuidMappable<NetworkEntityGuid, TTemplateModelType>.this[NetworkEntityGuid key]
+		TTemplateModelType IEntityGuidMappable<ObjectGuid, TTemplateModelType>.this[ObjectGuid key]
 		{
 			get => GetCreatureTemplate(key);
 			set => Add(key, value);
 		}
 
-		TTemplateModelType IReadonlyEntityGuidMappable<NetworkEntityGuid, TTemplateModelType>.this[NetworkEntityGuid key] => GetCreatureTemplate(key);
+		TTemplateModelType IReadonlyEntityGuidMappable<ObjectGuid, TTemplateModelType>.this[ObjectGuid key] => GetCreatureTemplate(key);
 
-		bool IReadonlyEntityGuidMappable<NetworkEntityGuid, TTemplateModelType>.ContainsKey(NetworkEntityGuid key)
+		bool IReadonlyEntityGuidMappable<ObjectGuid, TTemplateModelType>.ContainsKey(ObjectGuid key)
 		{
 			AssertEntityGuidIsCreate(key);
 
@@ -44,7 +44,7 @@ namespace GladMMO
 			return false;
 		}
 
-		protected TTemplateModelType GetCreatureTemplate([NotNull] NetworkEntityGuid key)
+		protected TTemplateModelType GetCreatureTemplate([NotNull] ObjectGuid key)
 		{
 			if(key == null) throw new ArgumentNullException(nameof(key));
 
@@ -53,16 +53,16 @@ namespace GladMMO
 			return CreatureTemplateDictionary[instanceModel.TemplateId];
 		}
 
-		protected TInstanceModelType GetCreatureInstance([NotNull] NetworkEntityGuid key)
+		protected TInstanceModelType GetCreatureInstance([NotNull] ObjectGuid key)
 		{
 			if(key == null) throw new ArgumentNullException(nameof(key));
 
 			return CreatureInstanceDictionary[key.EntryId];
 		}
 
-		public abstract bool RemoveEntityEntry(NetworkEntityGuid entityGuid);
+		public abstract bool RemoveEntityEntry(ObjectGuid entityGuid);
 
-		protected void AssertEntityGuidIsCreate([NotNull] NetworkEntityGuid key)
+		protected void AssertEntityGuidIsCreate([NotNull] ObjectGuid key)
 		{
 			if(key == null) throw new ArgumentNullException(nameof(key));
 
@@ -70,7 +70,7 @@ namespace GladMMO
 				throw new InvalidOperationException($"Entity: {key} is not a creature.");
 		}
 
-		public bool TryGetValue(NetworkEntityGuid key, out TTemplateModelType value)
+		public bool TryGetValue(ObjectGuid key, out TTemplateModelType value)
 		{
 			return this.CreatureTemplateDictionary.TryGetValue(key.EntryId, out value);
 		}
@@ -90,7 +90,7 @@ namespace GladMMO
 	/// <summary>
 	/// Specialized <see cref="IEntityGuidMappable{TValue}"/> for creature templates
 	/// and creature instances.
-	/// It works by using the encoded entry data in the provided <see cref="NetworkEntityGuid"/>s
+	/// It works by using the encoded entry data in the provided <see cref="ObjectGuid"/>s
 	/// of actual real spawned entities. Meaning that entities can share this data.
 	/// </summary>
 	public sealed class InstanceTemplateableDataCollection<TInstanceModelType, TTemplateModelType> : EntityGuidMappableTemplateHackForSharedGeneric<TInstanceModelType, TTemplateModelType>, IEntityGuidMappable<TInstanceModelType>
@@ -102,21 +102,21 @@ namespace GladMMO
 			
 		}
 
-		TInstanceModelType IEntityGuidMappable<NetworkEntityGuid, TInstanceModelType>.this[NetworkEntityGuid key]
+		TInstanceModelType IEntityGuidMappable<ObjectGuid, TInstanceModelType>.this[ObjectGuid key]
 		{
 			get => GetCreatureInstance(key);
 			set => Add(key, value);
 		}
 
-		TInstanceModelType IReadonlyEntityGuidMappable<NetworkEntityGuid, TInstanceModelType>.this[NetworkEntityGuid key] => GetCreatureInstance(key);
+		TInstanceModelType IReadonlyEntityGuidMappable<ObjectGuid, TInstanceModelType>.this[ObjectGuid key] => GetCreatureInstance(key);
 
-		bool IReadonlyEntityGuidMappable<NetworkEntityGuid, TInstanceModelType>.ContainsKey(NetworkEntityGuid key)
+		bool IReadonlyEntityGuidMappable<ObjectGuid, TInstanceModelType>.ContainsKey(ObjectGuid key)
 		{
 			AssertEntityGuidIsCreate(key);
 			return CreatureInstanceDictionary.ContainsKey(key.EntryId);
 		}
 
-		public override void Add([NotNull] NetworkEntityGuid key, [NotNull] TTemplateModelType value)
+		public override void Add([NotNull] ObjectGuid key, [NotNull] TTemplateModelType value)
 		{
 			if (key == null) throw new ArgumentNullException(nameof(key));
 			if (value == null) throw new ArgumentNullException(nameof(value));
@@ -124,7 +124,7 @@ namespace GladMMO
 			CreatureTemplateDictionary.Add(value.TemplateId, value);
 		}
 
-		public void Add([NotNull] NetworkEntityGuid key, [NotNull] TInstanceModelType value)
+		public void Add([NotNull] ObjectGuid key, [NotNull] TInstanceModelType value)
 		{
 			if (key == null) throw new ArgumentNullException(nameof(key));
 			if (value == null) throw new ArgumentNullException(nameof(value));
@@ -132,13 +132,13 @@ namespace GladMMO
 			CreatureInstanceDictionary.Add(key.EntryId, value);
 		}
 
-		public override bool RemoveEntityEntry(NetworkEntityGuid entityGuid)
+		public override bool RemoveEntityEntry(ObjectGuid entityGuid)
 		{
 			//Do nothing, we should not remove anything.
 			return false;
 		}
 
-		public bool TryGetValue(NetworkEntityGuid key, out TInstanceModelType value)
+		public bool TryGetValue(ObjectGuid key, out TInstanceModelType value)
 		{
 			return this.CreatureInstanceDictionary.TryGetValue(key.EntryId, out value);
 		}

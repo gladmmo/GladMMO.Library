@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Text;
 
@@ -13,6 +13,6 @@ namespace GladMMO
 		/// <param name="entity"></param>
 		/// <param name="fieldContainer"></param>
 		/// <param name="field"></param>
-		void InvokeChangeEvents(NetworkEntityGuid entity, IEntityDataFieldContainer fieldContainer, int field);
+		void InvokeChangeEvents(ObjectGuid entity, IEntityDataFieldContainer fieldContainer, int field);
 	}
 }

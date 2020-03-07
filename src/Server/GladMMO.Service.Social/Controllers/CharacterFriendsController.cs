@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -68,17 +68,17 @@ namespace GladMMO
 			}
 
 			//If the player is trying to add himself, just say not found
-			if(nameReverseQueryResponse.Result.EntityId == response.CharacterId)
+			if(nameReverseQueryResponse.Result.CurrentObjectGuid == response.CharacterId)
 				return BuildFailedResponseModel(CharacterFriendAddResponseCode.CharacterNotFound);
 
 			//Ok, reverse namequery is a success
 			//now we must check some stuff
 
 			//Already friends check
-			if (await friendsRepository.IsFriendshipPresentAsync(response.CharacterId, nameReverseQueryResponse.Result.EntityId))
+			if (await friendsRepository.IsFriendshipPresentAsync(response.CharacterId, nameReverseQueryResponse.Result.CurrentObjectGuid))
 				return BuildFailedResponseModel(CharacterFriendAddResponseCode.AlreadyFriends);
 
-			if (await friendsRepository.TryCreateAsync(new CharacterFriendModel(response.CharacterId, nameReverseQueryResponse.Result.EntityId)))
+			if (await friendsRepository.TryCreateAsync(new CharacterFriendModel(response.CharacterId, nameReverseQueryResponse.Result.CurrentObjectGuid)))
 			{
 				//This is a success, let's tell them about who they added.
 				return BuildSuccessfulResponseModel(new CharacterFriendAddResponseModel(nameReverseQueryResponse.Result));

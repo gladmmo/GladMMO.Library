@@ -27,7 +27,7 @@ namespace GladMMO
 			[NotNull] ILog logger, 
 			[NotNull] IReadonlyConnectionEntityCollection connectionIdToEntityMap, 
 			[NotNull] IEntityGuidMappable<IMovementData> movementDataMap,
-			IContextualResourceLockingPolicy<NetworkEntityGuid> lockingPolicy,
+			IContextualResourceLockingPolicy<ObjectGuid> lockingPolicy,
 			[NotNull] IEntityGuidMappable<IMovementGenerator<GameObject>> movementGenerator,
 			[NotNull] IReadonlyNetworkTimeService timeService)
 			: base(logger, connectionIdToEntityMap, lockingPolicy)
@@ -38,7 +38,7 @@ namespace GladMMO
 		}
 
 		/// <inheritdoc />
-		protected override Task HandleMessage(IPeerSessionMessageContext<GameServerPacketPayload> context, ClientRotationDataUpdateRequest payload, NetworkEntityGuid guid)
+		protected override Task HandleMessage(IPeerSessionMessageContext<GameServerPacketPayload> context, ClientRotationDataUpdateRequest payload, ObjectGuid guid)
 		{
 			try
 			{

@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -80,7 +80,7 @@ namespace GladMMO.GaiaOnline
 			}
 		}
 
-		public void InitializeAvatar([NotNull] NetworkEntityGuid entityGuidOwner, [NotNull] Task<string> entityName)
+		public void InitializeAvatar([NotNull] ObjectGuid entityGuidOwner, [NotNull] Task<string> entityName)
 		{
 			if (entityGuidOwner == null) throw new ArgumentNullException(nameof(entityGuidOwner));
 			if (entityName == null) throw new ArgumentNullException(nameof(entityName));

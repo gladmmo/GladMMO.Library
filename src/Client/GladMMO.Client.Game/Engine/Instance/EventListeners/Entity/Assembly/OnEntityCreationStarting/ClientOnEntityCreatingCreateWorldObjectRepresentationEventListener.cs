@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Text;
 using Fasterflect;
@@ -22,19 +22,19 @@ namespace GladMMO
 			CharacterDataRepository = characterDataRepository;
 		}
 
-		protected override EntityPrefab ComputePrefabType(NetworkEntityGuid entityGuid)
+		protected override EntityPrefab ComputePrefabType(ObjectGuid entityGuid)
 		{
-			switch(entityGuid.EntityType)
+			switch(entityGuid.TypeId)
 			{
-				case EntityType.Player:
+				case EntityTypeId.TYPEID_PLAYER:
 					//It could be remote player or local player.
-					if(entityGuid.EntityId == CharacterDataRepository.CharacterId)
+					if(entityGuid.CurrentObjectGuid == CharacterDataRepository.CharacterId)
 						return EntityPrefab.LocalPlayer;
 					else
 						return EntityPrefab.RemotePlayer;
-				case EntityType.Creature:
+				case EntityTypeId.TYPEID_UNIT:
 					return EntityPrefab.NetworkNpc;
-				case EntityType.GameObject:
+				case EntityTypeId.TYPEID_GAMEOBJECT:
 					return EntityPrefab.NetworkGameObject;
 			}
 

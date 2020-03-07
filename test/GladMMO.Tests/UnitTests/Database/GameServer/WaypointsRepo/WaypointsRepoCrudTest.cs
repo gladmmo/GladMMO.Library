@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
@@ -28,7 +28,7 @@ namespace GladMMO
 			int pointId = Interlocked.Increment(ref PointIdIncrementable);
 
 			Random random = new Random();
-			return new PathWaypointModel(generateKey ? pathId : 0, generateKey ? pointId : 0, new Vector3<float>((float)random.NextDouble(), (float)random.NextDouble(), (float)random.NextDouble()));
+			return new PathWaypointModel(generateKey ? pathId : 0, generateKey ? pointId : 0, new GladMMO.Database.Vector3<float>((float)random.NextDouble(), (float)random.NextDouble(), (float)random.NextDouble()));
 		}
 
 		/// <inheritdoc />

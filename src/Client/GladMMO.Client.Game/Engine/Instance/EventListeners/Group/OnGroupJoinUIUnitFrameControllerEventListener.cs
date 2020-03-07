@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -57,17 +57,17 @@ namespace GladMMO
 			}
 		}
 
-		private void OnCurrentLevelChanged(NetworkEntityGuid entity, EntityDataChangedArgs<int> eventArgs)
+		private void OnCurrentLevelChanged(ObjectGuid entity, EntityDataChangedArgs<int> eventArgs)
 		{
 			RecaculateLevelUI(entity, eventArgs.NewValue);
 		}
 
-		private void RecaculateLevelUI(NetworkEntityGuid player, int currentLevel)
+		private void RecaculateLevelUI(ObjectGuid player, int currentLevel)
 		{
 			GroupUnitframeManager[player].UnitLevel.Text = currentLevel.ToString();
 		}
 
-		private void RecalulateHealthUI(NetworkEntityGuid player, int currentHealth)
+		private void RecalulateHealthUI(ObjectGuid player, int currentHealth)
 		{
 			float healthPercentage = (float)currentHealth / EntityDataMappable[player].GetFieldValue<int>((int)EntityObjectField.UNIT_FIELD_MAXHEALTH);
 
@@ -77,7 +77,7 @@ namespace GladMMO
 			GroupUnitframeManager[player].HealthBar.BarText.Text = $"{currentHealth} / {EntityDataMappable.RetrieveEntity(player).GetFieldValue<int>((int)EntityObjectField.UNIT_FIELD_MAXHEALTH)}";
 		}
 
-		private void OnCurrentHealthChangedValue(NetworkEntityGuid source, EntityDataChangedArgs<int> changeArgs)
+		private void OnCurrentHealthChangedValue(ObjectGuid source, EntityDataChangedArgs<int> changeArgs)
 		{
 			RecalulateHealthUI(source, changeArgs.NewValue);
 		}

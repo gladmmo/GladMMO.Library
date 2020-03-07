@@ -11,18 +11,18 @@ namespace GladMMO
 	{
 		private IEntityGuidMappable<IMovementData> InternallyManagedMovementDictionary { get; }
 
-		private Dictionary<NetworkEntityGuid, bool> DirtyChangesTracker { get; }
+		private Dictionary<ObjectGuid, bool> DirtyChangesTracker { get; }
 
 		public object SyncObject { get; } = new object();
 
 		public MovementDataCollection()
 		{
 			InternallyManagedMovementDictionary = new EntityGuidDictionary<IMovementData>();
-			DirtyChangesTracker = new Dictionary<NetworkEntityGuid, bool>();
+			DirtyChangesTracker = new Dictionary<ObjectGuid, bool>();
 		}
 
 		/// <inheritdoc />
-		public void Add(NetworkEntityGuid key, IMovementData value)
+		public void Add(ObjectGuid key, IMovementData value)
 		{
 			lock (SyncObject)
 			{
@@ -32,7 +32,7 @@ namespace GladMMO
 		}
 
 		/// <inheritdoc />
-		public bool Remove(NetworkEntityGuid key)
+		public bool Remove(ObjectGuid key)
 		{
 			lock (SyncObject)
 			{
@@ -41,14 +41,14 @@ namespace GladMMO
 			}
 		}
 
-		public bool ContainsKey(NetworkEntityGuid key)
+		public bool ContainsKey(ObjectGuid key)
 		{
 			lock(SyncObject)
 				return this.InternallyManagedMovementDictionary.ContainsKey(key);
 		}
 
 		/// <inheritdoc />
-		public IMovementData this[NetworkEntityGuid key]
+		public IMovementData this[ObjectGuid key]
 		{
 			get => InternallyManagedMovementDictionary[key];
 			set
@@ -62,14 +62,14 @@ namespace GladMMO
 		}
 
 		/// <inheritdoc />
-		public bool isEntryDirty(NetworkEntityGuid key)
+		public bool isEntryDirty(ObjectGuid key)
 		{
 			lock(SyncObject)
 				return DirtyChangesTracker.ContainsKey(key) && DirtyChangesTracker[key];
 		}
 
 		/// <inheritdoc />
-		public void SetDirtyState(NetworkEntityGuid key, bool isDirty)
+		public void SetDirtyState(ObjectGuid key, bool isDirty)
 		{
 			lock(SyncObject)
 				DirtyChangesTracker[key] = isDirty;
@@ -83,13 +83,13 @@ namespace GladMMO
 		}
 
 		/// <inheritdoc />
-		public bool RemoveEntityEntry(NetworkEntityGuid entityGuid)
+		public bool RemoveEntityEntry(ObjectGuid entityGuid)
 		{
 			lock(SyncObject)
 				return this.Remove(entityGuid);
 		}
 
-		public bool TryGetValue(NetworkEntityGuid key, out IMovementData value)
+		public bool TryGetValue(ObjectGuid key, out IMovementData value)
 		{
 			lock(SyncObject)
 				return this.InternallyManagedMovementDictionary.TryGetValue(key, out value);

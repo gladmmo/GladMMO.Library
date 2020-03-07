@@ -11,7 +11,7 @@ namespace GladMMO
 		public IEntityDataFieldContainer EntityData { get; } = new EntityFieldDataCollection(8);
 
 		//TODO: Eventually we should create a world entity guid.
-		public NetworkEntityGuid EntityGuid { get; } = NetworkEntityGuid.Empty;
+		public ObjectGuid EntityGuid { get; } = ObjectGuid.Empty;
 
 		/// <summary>
 		/// Factory for actor creation for the world.

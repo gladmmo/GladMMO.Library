@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,16 +8,16 @@ namespace GladMMO
 	/// <summary>
 	/// Simple container for building GUIDs.
 	/// </summary>
-	public class NetworkEntityGuidBuilder
+	public class ObjectGuidBuilder
 	{
 		/// <summary>
-		/// Creates a new <see cref="NetworkEntityGuidBuilder"/> object that allows
+		/// Creates a new <see cref="ObjectGuidBuilder"/> object that allows
 		/// for a more fluent building.
 		/// </summary>
 		/// <returns></returns>
-		public static NetworkEntityGuidBuilder New()
+		public static ObjectGuidBuilder New()
 		{
-			return new NetworkEntityGuidBuilder();
+			return new ObjectGuidBuilder();
 		}
 
 		/// <summary>
@@ -26,11 +26,11 @@ namespace GladMMO
 		public ulong RawGuid { get; set; }
 
 		/// <summary>
-		/// Sets the <see cref="NetworkEntityGuid.EntityId"/> to the provided <paramref name="id"/>.
+		/// Sets the <see cref="ObjectGuid.EntityId"/> to the provided <paramref name="id"/>.
 		/// </summary>
 		/// <param name="id">The ID for the entity.</param>
 		/// <returns></returns>
-		public NetworkEntityGuidBuilder WithId(int id)
+		public ObjectGuidBuilder WithId(int id)
 		{
 			RawGuid = 0xFFFFFFFF00000000 & RawGuid; //remove current ID
 
@@ -39,7 +39,7 @@ namespace GladMMO
 			return this;
 		}
 
-		public NetworkEntityGuidBuilder WithType(EntityType type)
+		public ObjectGuidBuilder WithType(EntityTypeId type)
 		{
 			RawGuid = 0x00FFFFFFFFFFFFFF & RawGuid; //remove current entity type.
 
@@ -48,7 +48,7 @@ namespace GladMMO
 			return this;
 		}
 
-		public NetworkEntityGuidBuilder WithEntryId(int entryId)
+		public ObjectGuidBuilder WithEntryId(int entryId)
 		{
 			RawGuid = 0xFF000000FFFFFFFF & RawGuid;
 
@@ -58,12 +58,12 @@ namespace GladMMO
 		}
 
 		/// <summary>
-		/// Generates the <see cref="NetworkEntityGuid"/> object.
+		/// Generates the <see cref="ObjectGuid"/> object.
 		/// </summary>
-		/// <returns>A non-null <see cref="NetworkEntityGuid"/> with the <see cref="RawGuid"/>.</returns>
-		public NetworkEntityGuid Build()
+		/// <returns>A non-null <see cref="ObjectGuid"/> with the <see cref="RawGuid"/>.</returns>
+		public ObjectGuid Build()
 		{
-			return new NetworkEntityGuid(RawGuid);
+			return new ObjectGuid(RawGuid);
 		}
 	}
 }

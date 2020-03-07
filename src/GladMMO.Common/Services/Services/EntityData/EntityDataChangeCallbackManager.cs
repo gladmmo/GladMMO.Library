@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -8,15 +8,15 @@ namespace GladMMO
 	//TODO: We need some handling for callback cleanup, especially when an entity disappears.
 	public sealed class EntityDataChangeCallbackManager : IEntityDataChangeCallbackRegisterable, IEntityDataChangeCallbackService, IEntityCollectionRemovable
 	{
-		private Dictionary<NetworkEntityGuid, Dictionary<int, Action<IEntityDataFieldContainer>>> CallbackMap { get; }
+		private Dictionary<ObjectGuid, Dictionary<int, Action<IEntityDataFieldContainer>>> CallbackMap { get; }
 
 		public EntityDataChangeCallbackManager()
 		{
-			CallbackMap = new Dictionary<NetworkEntityGuid, Dictionary<int, Action<IEntityDataFieldContainer>>>(NetworkGuidEqualityComparer<NetworkEntityGuid>.Instance);
+			CallbackMap = new Dictionary<ObjectGuid, Dictionary<int, Action<IEntityDataFieldContainer>>>(NetworkGuidEqualityComparer<ObjectGuid>.Instance);
 		}
 
 		/// <inheritdoc />
-		public IEntityDataEventUnregisterable RegisterCallback<TCallbackValueCastType>(NetworkEntityGuid entity, int dataField, Action<NetworkEntityGuid, EntityDataChangedArgs<TCallbackValueCastType>> callback) 
+		public IEntityDataEventUnregisterable RegisterCallback<TCallbackValueCastType>(ObjectGuid entity, int dataField, Action<ObjectGuid, EntityDataChangedArgs<TCallbackValueCastType>> callback) 
 			where TCallbackValueCastType : struct
 		{
 			//TODO: Anyway we can avoid this for registering callbacks, wasted cycles kinda
@@ -53,7 +53,7 @@ namespace GladMMO
 		}
 
 		/// <inheritdoc />
-		public void InvokeChangeEvents(NetworkEntityGuid entity, IEntityDataFieldContainer fieldContainer, int field)
+		public void InvokeChangeEvents(ObjectGuid entity, IEntityDataFieldContainer fieldContainer, int field)
 		{
 			//We aren't watching ANY data changes for this particular entity.
 			if(!CallbackMap.ContainsKey(entity))
@@ -64,7 +64,7 @@ namespace GladMMO
 				CallbackMap[entity][field]?.Invoke(fieldContainer);
 		}
 
-		public bool RemoveEntityEntry(NetworkEntityGuid entityGuid)
+		public bool RemoveEntityEntry(ObjectGuid entityGuid)
 		{
 			return CallbackMap.Remove(entityGuid);
 		}

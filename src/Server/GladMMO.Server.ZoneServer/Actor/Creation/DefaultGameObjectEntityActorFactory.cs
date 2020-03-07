@@ -23,7 +23,7 @@ namespace GladMMO
 			InterestMappable = interestMappable ?? throw new ArgumentNullException(nameof(interestMappable));
 		}
 
-		public EntityActorCreationResult Create([NotNull] NetworkEntityGuid context)
+		public EntityActorCreationResult Create([NotNull] ObjectGuid context)
 		{
 			if (context == null) throw new ArgumentNullException(nameof(context));
 
@@ -34,7 +34,7 @@ namespace GladMMO
 			return new EntityActorCreationResult(behaviourType, CreateInitialState(context, templateModel.ObjectType));
 		}
 
-		private IEntityActorStateInitializeMessage<DefaultGameObjectActorState> CreateInitialState([NotNull] NetworkEntityGuid entityGuid, GameObjectType objectType)
+		private IEntityActorStateInitializeMessage<DefaultGameObjectActorState> CreateInitialState([NotNull] ObjectGuid entityGuid, GameObjectType objectType)
 		{
 			if (entityGuid == null) throw new ArgumentNullException(nameof(entityGuid));
 			if (!Enum.IsDefined(typeof(GameObjectType), objectType)) throw new InvalidEnumArgumentException(nameof(objectType), (int) objectType, typeof(GameObjectType));
@@ -53,14 +53,14 @@ namespace GladMMO
 			}
 		}
 
-		private IEntityActorStateInitializeMessage<DefaultGameObjectActorState> CreateDefaultInitializationState(NetworkEntityGuid entityGuid)
+		private IEntityActorStateInitializeMessage<DefaultGameObjectActorState> CreateDefaultInitializationState(ObjectGuid entityGuid)
 		{
 			GameObjectTemplateModel templateModel = GameObjectDataContainer.GameObjectTemplateMappable.RetrieveEntity(entityGuid);
 			GameObjectInstanceModel instanceModel = GameObjectDataContainer.GameObjectInstanceMappable.RetrieveEntity(entityGuid);
 			return new EntityActorStateInitializeMessage<DefaultGameObjectActorState>(new DefaultGameObjectActorState(EntityDataMappable.RetrieveEntity(entityGuid), entityGuid, instanceModel, templateModel, InterestMappable.RetrieveEntity(entityGuid)));
 		}
 
-		private EntityActorStateInitializeMessage<BehaviourGameObjectState<TBehaviourType>> CreateState<TBehaviourType>(NetworkEntityGuid entityGuid) 
+		private EntityActorStateInitializeMessage<BehaviourGameObjectState<TBehaviourType>> CreateState<TBehaviourType>(ObjectGuid entityGuid) 
 			where TBehaviourType : class, IGameObjectLinkable
 		{
 			GameObjectTemplateModel templateModel = GameObjectDataContainer.GameObjectTemplateMappable.RetrieveEntity(entityGuid);

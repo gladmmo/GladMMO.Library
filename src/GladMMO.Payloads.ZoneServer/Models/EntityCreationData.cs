@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Text;
 using JetBrains.Annotations;
@@ -13,7 +13,7 @@ namespace GladMMO
 		/// The GUID of the entity.
 		/// </summary>
 		[ProtoMember(1, IsRequired = true)]
-		public NetworkEntityGuid EntityGuid { get; }
+		public ObjectGuid EntityGuid { get; }
 
 		/// <summary>
 		/// The initial movement data to use to
@@ -31,7 +31,7 @@ namespace GladMMO
 		public FieldValueUpdate InitialFieldValues { get; }
 
 		/// <inheritdoc />
-		public EntityCreationData([NotNull] NetworkEntityGuid entityGuid, [NotNull] IMovementData initialMovementData, [NotNull] FieldValueUpdate initialFieldValues)
+		public EntityCreationData([NotNull] ObjectGuid entityGuid, [NotNull] IMovementData initialMovementData, [NotNull] FieldValueUpdate initialFieldValues)
 		{
 			EntityGuid = entityGuid ?? throw new ArgumentNullException(nameof(entityGuid));
 			InitialMovementData = initialMovementData ?? throw new ArgumentNullException(nameof(initialMovementData));

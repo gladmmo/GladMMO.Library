@@ -4,7 +4,7 @@ using System.Text;
 
 namespace GladMMO
 {
-	public interface IGameObjectEntityActorFactory : IFactoryCreatable<EntityActorCreationResult, NetworkEntityGuid>
+	public interface IGameObjectEntityActorFactory : IFactoryCreatable<EntityActorCreationResult, ObjectGuid>
 	{
 
 	}

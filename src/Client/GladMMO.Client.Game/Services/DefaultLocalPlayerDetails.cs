@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Text;
 
@@ -6,10 +6,10 @@ namespace GladMMO
 {
 	public sealed class DefaultLocalPlayerDetails : ILocalPlayerDetails, IReadonlyLocalPlayerDetails
 	{
-		private Lazy<NetworkEntityGuid> _localPlayerGuid;
+		private Lazy<ObjectGuid> _localPlayerGuid;
 
 		/// <inheritdoc />
-		public NetworkEntityGuid LocalPlayerGuid
+		public ObjectGuid LocalPlayerGuid
 		{
 			get => _localPlayerGuid.Value;
 			set => throw new NotSupportedException();
@@ -32,11 +32,11 @@ namespace GladMMO
 			FieldDataMap = fieldDataMap ?? throw new ArgumentNullException(nameof(fieldDataMap));
 			CharacterDataRepo = characterDataRepo ?? throw new ArgumentNullException(nameof(characterDataRepo));
 
-			_localPlayerGuid = new Lazy<NetworkEntityGuid>(() =>
+			_localPlayerGuid = new Lazy<ObjectGuid>(() =>
 			{
-				return new NetworkEntityGuidBuilder()
+				return new ObjectGuidBuilder()
 					.WithId(characterDataRepo.CharacterId)
-					.WithType(EntityType.Player)
+					.WithType(EntityTypeId.TYPEID_PLAYER)
 					.Build();
 			});
 		}
