@@ -12,7 +12,7 @@ namespace GladMMO
 
 		public EntityDataChangeCallbackManager()
 		{
-			CallbackMap = new Dictionary<ObjectGuid, Dictionary<int, Action<IEntityDataFieldContainer>>>(NetworkGuidEqualityComparer<ObjectGuid>.Instance);
+			CallbackMap = new Dictionary<ObjectGuid, Dictionary<int, Action<IEntityDataFieldContainer>>>(ObjectGuidEqualityComparer<ObjectGuid>.Instance);
 		}
 
 		/// <inheritdoc />

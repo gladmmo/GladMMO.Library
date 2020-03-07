@@ -9,7 +9,7 @@ namespace GladMMO
 {
 	public sealed class CacheableEntityNameQueryable : IEntityNameQueryable
 	{
-		private Dictionary<ObjectGuid, string> LocalNameMap { get; } = new Dictionary<ObjectGuid, string>(NetworkGuidEqualityComparer<ObjectGuid>.Instance);
+		private Dictionary<ObjectGuid, string> LocalNameMap { get; } = new Dictionary<ObjectGuid, string>(ObjectGuidEqualityComparer<ObjectGuid>.Instance);
 
 		private INameQueryService NameServiceQueryable { get; }
 

@@ -14,7 +14,7 @@ namespace GladMMO
 	public class EntityGuidDictionary<TValue> : Glader.Essentials.EntityGuidDictionary<ObjectGuid, TValue>, IReadonlyEntityGuidMappable<TValue>, IEntityGuidMappable<TValue>, IEntityCollectionRemovable
 	{
 		public EntityGuidDictionary()
-			: base(NetworkGuidEqualityComparer<ObjectGuid>.Instance)
+			: base(ObjectGuidEqualityComparer<ObjectGuid>.Instance)
 		{
 
 		}
