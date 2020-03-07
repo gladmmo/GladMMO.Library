@@ -56,7 +56,7 @@ namespace GladMMO
 				.SingleInstance();
 
 			builder.RegisterType<NetworkVisibilityCreationBlockToVisibilityEventFactory>()
-				.As<IFactoryCreatable<NetworkEntityNowVisibleEventArgs, EntityCreationData>>()
+				.As<IFactoryCreatable<NetworkEntityNowVisibleEventArgs, ObjectCreationData>>()
 				.SingleInstance();
 
 			//DefaultEntityVisibilityEventPublisher : INetworkEntityVisibilityEventPublisher, INetworkEntityVisibleEventSubscribable
@@ -65,9 +65,9 @@ namespace GladMMO
 				.AsImplementedInterfaces()
 				.SingleInstance();
 
-			//DefaultMovementGeneratorFactory : IFactoryCreatable<IMovementGenerator<GameObject>, EntityAssociatedData<IMovementData>>
+			//DefaultMovementGeneratorFactory : IFactoryCreatable<IMovementGenerator<GameObject>, EntityAssociatedData<MovementBlockData>>
 			builder.RegisterType<ClientMovementGeneratorFactory>()
-				.As<IFactoryCreatable<IMovementGenerator<GameObject>, EntityAssociatedData<IMovementData>>>()
+				.As<IFactoryCreatable<IMovementGenerator<GameObject>, EntityAssociatedData<MovementBlockData>>>()
 				.SingleInstance();
 
 			//NetworkedTrackerChangePacketFactory : IFactoryCreatable<PlayerNetworkTrackerChangeUpdateRequest, NetworkMovementTrackerTypeFlags>

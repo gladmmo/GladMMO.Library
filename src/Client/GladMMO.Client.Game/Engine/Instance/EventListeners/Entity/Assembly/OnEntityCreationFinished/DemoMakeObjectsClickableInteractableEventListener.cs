@@ -12,7 +12,7 @@ namespace GladMMO
 	{
 		private IReadonlyEntityGuidMappable<GameObject> GameObjectMappable { get; }
 
-		private IPeerPayloadSendService<GameClientPacketPayload> SendService { get; }
+		private IPeerPayloadSendService<GamePacketPayload> SendService { get; }
 
 		private IReadonlyLocalPlayerDetails LocalPlayerDetails { get; }
 
@@ -20,7 +20,7 @@ namespace GladMMO
 
 		public DemoMakeObjectsClickableInteractableEventListener(IEntityCreationFinishedEventSubscribable subscriptionService,
 			[NotNull] IReadonlyEntityGuidMappable<GameObject> gameObjectMappable,
-			[NotNull] IPeerPayloadSendService<GameClientPacketPayload> sendService,
+			[NotNull] IPeerPayloadSendService<GamePacketPayload> sendService,
 			[NotNull] IReadonlyLocalPlayerDetails localPlayerDetails,
 			[NotNull] IReadonlyEntityGuidMappable<IEntityDataFieldContainer> entityDataFieldMappable) 
 			: base(subscriptionService)
@@ -50,7 +50,7 @@ namespace GladMMO
 					//Check if they are selectable
 					if (!EntityDataFieldMappable.RetrieveEntity(args.EntityGuid).HasBaseObjectFieldFlag(UnitFlags.UNIT_FLAG_NOT_SELECTABLE))
 					{
-						SendService.SendMessage(new ClientInteractNetworkedObjectRequestPayload(args.EntityGuid, ClientInteractNetworkedObjectRequestPayload.InteractType.Selection));
+						//SendService.SendMessage(new ClientInteractNetworkedObjectRequestPayload(args.EntityGuid, ClientInteractNetworkedObjectRequestPayload.InteractType.Selection));
 
 						//Client side prediction of player target
 						LocalPlayerDetails.EntityData.SetFieldValue(EUnitFields.UNIT_FIELD_TARGET, args.EntityGuid);

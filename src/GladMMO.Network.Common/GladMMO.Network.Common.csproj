@@ -16,4 +16,8 @@
     <ProjectReference Include="..\GladMMO.Common\GladMMO.Common.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Attributes\" />
+  </ItemGroup>
+
 </Project>

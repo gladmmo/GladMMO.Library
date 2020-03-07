@@ -8,7 +8,7 @@ using GladNet;
 
 namespace GladMMO
 {
-	[AdditionalRegisterationAs(typeof(IPlayerTrackerTransformChangedEventSubscribable))]
+	/*[AdditionalRegisterationAs(typeof(IPlayerTrackerTransformChangedEventSubscribable))]
 	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
 	public sealed class PlayerNetworkTrackerChangeUpdateEventHandler : BaseGameClientGameMessageHandler<PlayerNetworkTrackerChangeUpdateEvent>, IPlayerTrackerTransformChangedEventSubscribable
 	{
@@ -20,11 +20,11 @@ namespace GladMMO
 
 		}
 
-		public override Task HandleMessage(IPeerMessageContext<GameClientPacketPayload> context, PlayerNetworkTrackerChangeUpdateEvent payload)
+		public override Task HandleMessage(IPeerMessageContext<GamePacketPayload> context, PlayerNetworkTrackerChangeUpdateEvent payload)
 		{
 			//TODO: Do some validation here.
 			OnTrackerTransformChanged?.Invoke(this, new PlayerTrackerTransformChangedEventArgs(payload.PlayerTrackerUpdate));
 			return Task.CompletedTask;
 		}
-	}
+	}*/
 }

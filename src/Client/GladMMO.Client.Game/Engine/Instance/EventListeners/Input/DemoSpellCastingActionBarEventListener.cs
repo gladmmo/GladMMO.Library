@@ -9,14 +9,14 @@ namespace GladMMO
 	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
 	public sealed class DemoSpellCastingActionBarEventListener : BaseActionBarButtonPressedEventListener
 	{
-		private IPeerPayloadSendService<GameClientPacketPayload> SendService { get; }
+		private IPeerPayloadSendService<GamePacketPayload> SendService { get; }
 
 		private IReadonlyActionBarCollection ActionBarCollection { get; }
 
 		private ILog Logger { get; }
 
 		public DemoSpellCastingActionBarEventListener(IActionBarButtonPressedEventSubscribable subscriptionService,
-			[NotNull] IPeerPayloadSendService<GameClientPacketPayload> sendService,
+			[NotNull] IPeerPayloadSendService<GamePacketPayload> sendService,
 			[NotNull] IReadonlyActionBarCollection actionBarCollection,
 			[NotNull] ILog logger) 
 			: base(subscriptionService)

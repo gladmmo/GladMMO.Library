@@ -22,7 +22,7 @@ namespace GladMMO
 		//Initially Empty because we have no target.
 		public ObjectGuid CurrentTarget { get; private set; } = ObjectGuid.Empty;
 
-		private IPeerPayloadSendService<GameClientPacketPayload> SendService { get; }
+		private IPeerPayloadSendService<GamePacketPayload> SendService { get; }
 
 		public TargetUnitFrameUIControllerEventListener(ILocalPlayerSpawnedEventSubscribable subscriptionService, 
 			IEntityDataChangeCallbackRegisterable entityDataCallbackRegister, 
@@ -30,7 +30,7 @@ namespace GladMMO
 			[NotNull] [KeyFilter(UnityUIRegisterationKey.TargetUnitFrame)] IUIUnitFrame targetUnitFrame,
 			[NotNull] ILog logger,
 			INetworkEntityVisibilityLostEventSubscribable networkVisibilityLostSubscriptionService,
-			[NotNull] IPeerPayloadSendService<GameClientPacketPayload> sendService)
+			[NotNull] IPeerPayloadSendService<GamePacketPayload> sendService)
 			: base(subscriptionService, entityDataCallbackRegister, playerDetails)
 		{
 			TargetUnitFrame = targetUnitFrame ?? throw new ArgumentNullException(nameof(targetUnitFrame));

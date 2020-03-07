@@ -9,15 +9,16 @@ using UnityEngine;
 
 namespace GladMMO
 {
-	[AdditionalRegisterationAs(typeof(MovementUpdateMessageHandler))]
+	//TODO: Reimplement movement handling
+	/*[AdditionalRegisterationAs(typeof(MovementUpdateMessageHandler))]
 	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
 	public sealed class MovementUpdateMessageHandler : BaseGameClientGameMessageHandler<MovementDataUpdateEventPayload>
 	{
-		private IFactoryCreatable<IMovementGenerator<GameObject>, EntityAssociatedData<IMovementData>> MovementGeneratorFactory { get; }
+		private IFactoryCreatable<IMovementGenerator<GameObject>, EntityAssociatedData<MovementBlockData>> MovementGeneratorFactory { get; }
 
 		private IEntityGuidMappable<IMovementGenerator<GameObject>> MovementGeneratorMappable { get; }
 
-		private IEntityGuidMappable<IMovementData> MovementDataMappable { get; }
+		private IEntityGuidMappable<MovementBlockData> MovementDataMappable { get; }
 
 		private IReadonlyKnownEntitySet KnownEntities { get; }
 
@@ -26,9 +27,9 @@ namespace GladMMO
 		/// <inheritdoc />
 		public MovementUpdateMessageHandler(
 			ILog logger,
-			[NotNull] IFactoryCreatable<IMovementGenerator<GameObject>, EntityAssociatedData<IMovementData>> movementGeneratorFactory,
+			[NotNull] IFactoryCreatable<IMovementGenerator<GameObject>, EntityAssociatedData<MovementBlockData>> movementGeneratorFactory,
 			[NotNull] IEntityGuidMappable<IMovementGenerator<GameObject>> movementGeneratorMappable,
-			[NotNull] IEntityGuidMappable<IMovementData> movementDataMappable,
+			[NotNull] IEntityGuidMappable<MovementBlockData> movementDataMappable,
 			[NotNull] IKnownEntitySet knownEntities,
 			[NotNull] ILocalPlayerDetails playerDetails)
 			: base(logger)
@@ -41,7 +42,7 @@ namespace GladMMO
 		}
 
 		/// <inheritdoc />
-		public override Task HandleMessage(IPeerMessageContext<GameClientPacketPayload> context, MovementDataUpdateEventPayload payload)
+		public override Task HandleMessage(IPeerMessageContext<GamePacketPayload> context, MovementDataUpdateEventPayload payload)
 		{
 			if(!payload.HasMovementData)
 			{
@@ -59,7 +60,7 @@ namespace GladMMO
 			return Task.CompletedTask;
 		}
 
-		public void HandleMovementUpdate(EntityAssociatedData<IMovementData> movementUpdate, bool forceHandleLocal = false)
+		public void HandleMovementUpdate(EntityAssociatedData<MovementBlockData> movementUpdate, bool forceHandleLocal = false)
 		{
 			if (!KnownEntities.isEntityKnown(movementUpdate.EntityGuid))
 			{
@@ -96,5 +97,5 @@ namespace GladMMO
 				throw new InvalidOperationException(error, e);
 			}
 		}
-	}
+	}*/
 }

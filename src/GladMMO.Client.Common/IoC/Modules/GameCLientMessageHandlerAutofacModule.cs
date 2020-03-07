@@ -26,7 +26,7 @@ namespace GladMMO
 		}
 
 		/// <inheritdoc />
-		public GameClientMessageHandlerAutofacModule(GameSceneType sceneType, [JetBrains.Annotations.NotNull] Assembly assemblyToSearch)
+		public GameClientMessageHandlerAutofacModule(GameSceneType sceneType, Assembly assemblyToSearch)
 			: this()
 		{
 			if(!Enum.IsDefined(typeof(GameSceneType), sceneType)) throw new InvalidEnumArgumentException(nameof(sceneType), (int)sceneType, typeof(GameSceneType));
@@ -53,13 +53,13 @@ namespace GladMMO
 				.AsSelf()
 				.SingleInstance();*/
 
-			builder.RegisterType<MessageHandlerService<GameServerPacketPayload, GameClientPacketPayload>>()
-				.As<MessageHandlerService<GameServerPacketPayload, GameClientPacketPayload>>()
-				.UsingConstructor(typeof(IEnumerable<IPeerMessageHandler<GameServerPacketPayload, GameClientPacketPayload>>), typeof(IPeerPayloadSpecificMessageHandler<GameServerPacketPayload, GameClientPacketPayload>))
+			builder.RegisterType<MessageHandlerService<GamePacketPayload, GamePacketPayload>>()
+				.As<MessageHandlerService<GamePacketPayload, GamePacketPayload>>()
+				.UsingConstructor(typeof(IEnumerable<IPeerMessageHandler<GamePacketPayload, GamePacketPayload>>), typeof(IPeerPayloadSpecificMessageHandler<GamePacketPayload, GamePacketPayload>))
 				.InstancePerLifetimeScope();
 
 			//HelloKitty: We just pass 1 since we don't really use the concept of scenes, so it can kinda be ignored.
-			builder.RegisterModule(new BaseHandlerRegisterationModule<IPeerMessageHandler<GameServerPacketPayload, GameClientPacketPayload>>((int)SceneType, AssemblyToSearch));
+			builder.RegisterModule(new BaseHandlerRegisterationModule<IPeerMessageHandler<GamePacketPayload, GamePacketPayload>>((int)SceneType, AssemblyToSearch));
 		}
 	}
 }

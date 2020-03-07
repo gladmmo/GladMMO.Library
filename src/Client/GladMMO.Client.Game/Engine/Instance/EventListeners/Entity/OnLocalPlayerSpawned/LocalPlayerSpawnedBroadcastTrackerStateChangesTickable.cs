@@ -16,12 +16,12 @@ namespace GladMMO
 
 		private IFactoryCreatable<PlayerNetworkTrackerChangeUpdateRequest, NetworkMovementTrackerTypeFlags> NetworkTrackerUpdateFactory { get; }
 
-		private IPeerPayloadSendService<GameClientPacketPayload> SendService { get; }
+		private IPeerPayloadSendService<GamePacketPayload> SendService { get; }
 
 		public LocalPlayerSpawnedBroadcastTrackerStateChangesTickable(ILocalPlayerSpawnedEventSubscribable subscriptionService, 
 			[NotNull] ICameraInputChangedEventSubscribable cameraInputSubscriptionService,
 			[NotNull] IFactoryCreatable<PlayerNetworkTrackerChangeUpdateRequest, NetworkMovementTrackerTypeFlags> networkTrackerUpdateFactory,
-			[NotNull] IPeerPayloadSendService<GameClientPacketPayload> sendService) 
+			[NotNull] IPeerPayloadSendService<GamePacketPayload> sendService) 
 			: base(subscriptionService)
 		{
 			if (cameraInputSubscriptionService == null) throw new ArgumentNullException(nameof(cameraInputSubscriptionService));
@@ -59,7 +59,7 @@ namespace GladMMO
 
 			PlayerNetworkTrackerChangeUpdateRequest changeUpdateRequest = NetworkTrackerUpdateFactory.Create(ChangedTrackers);
 
-			SendService.SendMessage(changeUpdateRequest);
+			//SendService.SendMessage(changeUpdateRequest);
 
 			ChangedTrackers = NetworkMovementTrackerTypeFlags.None;
 		}

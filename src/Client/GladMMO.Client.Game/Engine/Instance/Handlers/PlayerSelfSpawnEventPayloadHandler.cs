@@ -8,15 +8,15 @@ using GladNet;
 
 namespace GladMMO
 {
-	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
+	/*[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
 	public sealed class PlayerSelfSpawnEventPayloadHandler : BaseGameClientGameMessageHandler<PlayerSelfSpawnEventPayload>
 	{
 		private INetworkEntityVisibilityEventPublisher VisibilityEventPublisher { get; }
 
-		private IFactoryCreatable<NetworkEntityNowVisibleEventArgs, EntityCreationData> VisibileEventFactory { get; }
+		private IFactoryCreatable<NetworkEntityNowVisibleEventArgs, ObjectCreationData> VisibileEventFactory { get; }
 
 		public PlayerSelfSpawnEventPayloadHandler(ILog logger, 
-			[NotNull] IFactoryCreatable<NetworkEntityNowVisibleEventArgs, EntityCreationData> visibileEventFactory
+			[NotNull] IFactoryCreatable<NetworkEntityNowVisibleEventArgs, ObjectCreationData> visibileEventFactory
 			, [NotNull] INetworkEntityVisibilityEventPublisher visibilityEventPublisher) 
 			: base(logger)
 		{
@@ -24,11 +24,11 @@ namespace GladMMO
 			VisibilityEventPublisher = visibilityEventPublisher ?? throw new ArgumentNullException(nameof(visibilityEventPublisher));
 		}
 
-		public override async Task HandleMessage(IPeerMessageContext<GameClientPacketPayload> context, PlayerSelfSpawnEventPayload payload)
+		public override async Task HandleMessage(IPeerMessageContext<GamePacketPayload> context, PlayerSelfSpawnEventPayload payload)
 		{
 			NetworkEntityNowVisibleEventArgs visibilityEvent = VisibileEventFactory.Create(payload.CreationData);
 
 			VisibilityEventPublisher.Publish(visibilityEvent);
 		}
-	}
+	}*/
 }

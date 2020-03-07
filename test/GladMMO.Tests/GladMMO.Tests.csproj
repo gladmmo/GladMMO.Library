@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Castle.Core" Version="4.1.0" />
+    <PackageReference Include="Castle.Core" Version="4.3.1" />
     <PackageReference Include="Generic.Math" Version="1.0.2" />
     <PackageReference Include="JetBrains.Annotations" Version="2018.2.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.1" />

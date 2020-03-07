@@ -15,7 +15,7 @@ namespace GladMMO
 
 		public ClientOnEntityCreatingCreateWorldObjectRepresentationEventListener(IEntityCreationStartingEventSubscribable subscriptionService, 
 			IFactoryCreatable<GameObject, EntityPrefab> prefabFactory, 
-			IReadonlyEntityGuidMappable<IMovementData> movementDataMappable, 
+			IReadonlyEntityGuidMappable<MovementBlockData> movementDataMappable, 
 			ILocalCharacterDataRepository characterDataRepository) 
 			: base(subscriptionService, prefabFactory, movementDataMappable)
 		{

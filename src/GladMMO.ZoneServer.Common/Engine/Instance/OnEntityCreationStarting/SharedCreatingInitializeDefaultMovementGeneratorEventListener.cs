@@ -12,16 +12,16 @@ namespace GladMMO
 	/// </summary>
 	public class SharedCreatingInitializeDefaultMovementGeneratorEventListener : BaseSingleEventListenerInitializable<IEntityCreationFinishedEventSubscribable, EntityCreationFinishedEventArgs>
 	{
-		private IFactoryCreatable<IMovementGenerator<GameObject>, EntityAssociatedData<IMovementData>> MovementGeneratorFactory { get; }
+		private IFactoryCreatable<IMovementGenerator<GameObject>, EntityAssociatedData<MovementBlockData>> MovementGeneratorFactory { get; }
 
 		private IEntityGuidMappable<IMovementGenerator<GameObject>> MovementGeneratorMappable { get; }
 
-		private IReadonlyEntityGuidMappable<IMovementData> MovementDataMappable { get; }
+		private IReadonlyEntityGuidMappable<MovementBlockData> MovementDataMappable { get; }
 
 		public SharedCreatingInitializeDefaultMovementGeneratorEventListener(IEntityCreationFinishedEventSubscribable subscriptionService,
 			[NotNull] IEntityGuidMappable<IMovementGenerator<GameObject>> movementGeneratorMappable,
-			[NotNull] IFactoryCreatable<IMovementGenerator<GameObject>, EntityAssociatedData<IMovementData>> movementGeneratorFactory,
-			[NotNull] IReadonlyEntityGuidMappable<IMovementData> movementDataMappable) 
+			[NotNull] IFactoryCreatable<IMovementGenerator<GameObject>, EntityAssociatedData<MovementBlockData>> movementGeneratorFactory,
+			[NotNull] IReadonlyEntityGuidMappable<MovementBlockData> movementDataMappable) 
 			: base(subscriptionService)
 		{
 			MovementGeneratorMappable = movementGeneratorMappable ?? throw new ArgumentNullException(nameof(movementGeneratorMappable));
@@ -31,9 +31,9 @@ namespace GladMMO
 
 		protected override void OnEventFired(object source, EntityCreationFinishedEventArgs args)
 		{
-			IMovementData movementData = MovementDataMappable.RetrieveEntity(args.EntityGuid);
+			MovementBlockData movementData = MovementDataMappable.RetrieveEntity(args.EntityGuid);
 
-			IMovementGenerator<GameObject> generator = MovementGeneratorFactory.Create(new EntityAssociatedData<IMovementData>(args.EntityGuid, movementData));
+			IMovementGenerator<GameObject> generator = MovementGeneratorFactory.Create(new EntityAssociatedData<MovementBlockData>(args.EntityGuid, movementData));
 			MovementGeneratorMappable.AddObject(args.EntityGuid, generator);
 		}
 	}

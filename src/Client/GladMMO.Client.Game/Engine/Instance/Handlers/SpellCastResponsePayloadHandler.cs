@@ -11,7 +11,7 @@ using UnityEngine;
 
 namespace GladMMO
 {
-	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
+	/*[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
 	public sealed class SpellCastResponsePayloadHandler : BaseGameClientGameMessageHandler<SpellCastResponsePayload>
 	{
 		private IReadonlyNetworkTimeService TimeService { get; }
@@ -26,7 +26,7 @@ namespace GladMMO
 		}
 
 		/// <inheritdoc />
-		public override Task HandleMessage(IPeerMessageContext<GameClientPacketPayload> context, SpellCastResponsePayload payload)
+		public override Task HandleMessage(IPeerMessageContext<GamePacketPayload> context, SpellCastResponsePayload payload)
 		{
 			if (!payload.isSuccessful)
 			{
@@ -50,5 +50,5 @@ namespace GladMMO
 
 			return Task.CompletedTask;
 		}
-	}
+	}*/
 }

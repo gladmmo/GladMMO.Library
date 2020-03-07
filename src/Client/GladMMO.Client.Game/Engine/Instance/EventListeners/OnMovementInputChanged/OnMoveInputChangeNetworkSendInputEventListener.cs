@@ -10,7 +10,7 @@ namespace GladMMO
 	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
 	public sealed class OnMoveInputChangeNetworkSendInputEventListener : BaseSingleEventListenerInitializable<IMovementInputChangedEventSubscribable, MovementInputChangedEventArgs>
 	{
-		private IPeerPayloadSendService<GameClientPacketPayload> SendService { get; }
+		private IPeerPayloadSendService<GamePacketPayload> SendService { get; }
 
 		private IReadonlyNetworkTimeService TimeService { get; }
 
@@ -19,7 +19,7 @@ namespace GladMMO
 		private ILocalPlayerDetails PlayerDetails { get; }
 
 		public OnMoveInputChangeNetworkSendInputEventListener(IMovementInputChangedEventSubscribable subscriptionService,
-			[NotNull] IPeerPayloadSendService<GameClientPacketPayload> sendService,
+			[NotNull] IPeerPayloadSendService<GamePacketPayload> sendService,
 			[NotNull] IReadonlyNetworkTimeService timeService,
 			[NotNull] IReadonlyEntityGuidMappable<WorldTransform> transformMap,
 			[NotNull] ILocalPlayerDetails playerDetails) 

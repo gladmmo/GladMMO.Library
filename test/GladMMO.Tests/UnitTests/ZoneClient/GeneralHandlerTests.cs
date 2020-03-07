@@ -25,12 +25,12 @@ namespace GladMMO
 
 			IContainer resolver = builder.Build();
 
-			MessageHandlerService<GameServerPacketPayload, GameClientPacketPayload> handler = null;
+			MessageHandlerService<GamePacketPayload, GamePacketPayload> handler = null;
 
 			//act
 			try
 			{
-				handler = resolver.Resolve<MessageHandlerService<GameServerPacketPayload, GameClientPacketPayload>>();
+				handler = resolver.Resolve<MessageHandlerService<GamePacketPayload, GamePacketPayload>>();
 			}
 			catch(DependencyResolutionException e)
 			{

@@ -6,7 +6,7 @@ using GladNet;
 
 namespace GladMMO
 {
-	public interface INetworkClientManager : INetworkClientManager<GameServerPacketPayload, GameClientPacketPayload>
+	public interface INetworkClientManager : INetworkClientManager<GamePacketPayload, GamePacketPayload>
 	{
 
 	}

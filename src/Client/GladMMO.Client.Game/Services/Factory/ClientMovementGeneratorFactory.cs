@@ -6,7 +6,7 @@ using UnityEngine;
 namespace GladMMO
 {
 	//TODO: This is a WIP. It does not support movement generator creation will. It does not really support anything but players.
-	public sealed class ClientMovementGeneratorFactory : IFactoryCreatable<IMovementGenerator<GameObject>, EntityAssociatedData<IMovementData>>
+	public sealed class ClientMovementGeneratorFactory : IFactoryCreatable<IMovementGenerator<GameObject>, EntityAssociatedData<MovementBlockData>>
 	{
 		private IReadonlyEntityGuidMappable<CharacterController> ControllerMappable { get; }
 
@@ -18,7 +18,7 @@ namespace GladMMO
 			LocalPlayerDetails = localPlayerDetails ?? throw new ArgumentNullException(nameof(localPlayerDetails));
 		}
 
-		public IMovementGenerator<GameObject> Create(EntityAssociatedData<IMovementData> context)
+		public IMovementGenerator<GameObject> Create(EntityAssociatedData<MovementBlockData> context)
 		{
 			switch (context.EntityGuid.TypeId)
 			{
@@ -37,7 +37,7 @@ namespace GladMMO
 			throw new NotSupportedException($"TODO: Encountered unsupported movement data: {context.Data.GetType().Name}");
 		}
 
-		private static IMovementGenerator<GameObject> CreateCreatureMovementGenerator(EntityAssociatedData<IMovementData> context)
+		private static IMovementGenerator<GameObject> CreateCreatureMovementGenerator(EntityAssociatedData<MovementBlockData> context)
 		{
 			if (context.Data is PositionChangeMovementData pcmd)
 			{
@@ -54,7 +54,7 @@ namespace GladMMO
 			throw new InvalidOperationException($"Recieved unhandled Movement Type: {context.Data.GetType().Name} for Creature: {context.EntityGuid}.");
 		}
 
-		private IMovementGenerator<GameObject> CreatePlayerMovementGenerator(EntityAssociatedData<IMovementData> context)
+		private IMovementGenerator<GameObject> CreatePlayerMovementGenerator(EntityAssociatedData<MovementBlockData> context)
 		{
 			//TODO: redo all this of this garbage
 			if (context.Data is PositionChangeMovementData pcmd)
@@ -77,7 +77,7 @@ namespace GladMMO
 			throw new NotSupportedException($"TODO: Encountered unsupported movement data: {context.Data.GetType().Name}");
 		}
 
-		private Lazy<CharacterController> BuildLazyControllerFactory(EntityAssociatedData<IMovementData> context)
+		private Lazy<CharacterController> BuildLazyControllerFactory(EntityAssociatedData<MovementBlockData> context)
 		{
 			return new Lazy<CharacterController>(() => ControllerMappable.RetrieveEntity(context.EntityGuid));
 		}

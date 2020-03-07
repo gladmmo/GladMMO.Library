@@ -29,6 +29,7 @@
     <PackageReference Include="GladNet3.Client.API" Version="3.0.48" />
     <PackageReference Include="GladNet3.Client.DotNetTcpClient" Version="3.0.48" />
     <PackageReference Include="GladNet3.Handler.API" Version="3.0.48" />
+    <PackageReference Include="GladNet3.Serializer.FreecraftCore" Version="3.0.48" />
     <PackageReference Include="GladNet3.Serializer.ProtobufNet" Version="3.0.48" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Client.Core" Version="1.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="1.1.0" />

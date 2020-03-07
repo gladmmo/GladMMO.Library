@@ -11,28 +11,28 @@ using Reinterpret.Net;
 namespace GladMMO
 {
 	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
-	public sealed class FieldValueUpdateEventPayloadHandler : BaseGameClientGameMessageHandler<FieldValueUpdateEvent>
+	public sealed class ObjectUpdateValuesObjectBlockHandler : BaseObjectUpdateBlockHandler<ObjectUpdateValuesObjectBlock>
 	{
 		public IEntityGuidMappable<IChangeTrackableEntityDataCollection> ChangeTrackableCollection { get; }
 
 		/// <inheritdoc />
-		public FieldValueUpdateEventPayloadHandler(ILog logger,
+		public ObjectUpdateValuesObjectBlockHandler(ILog logger,
 			[NotNull] IEntityGuidMappable<IChangeTrackableEntityDataCollection> changeTrackableCollection)
-			: base(logger)
+			: base(ObjectUpdateType.UPDATETYPE_VALUES, logger)
 		{
 			ChangeTrackableCollection = changeTrackableCollection ?? throw new ArgumentNullException(nameof(changeTrackableCollection));
 		}
 
-		public void GenerateFieldUpdateDiff(FieldValueUpdate fieldsCollection, [NotNull] IChangeTrackableEntityDataCollection changeTrackable)
+		public void GenerateFieldUpdateDiff(UpdateFieldValueCollection fieldsCollection, [NotNull] IChangeTrackableEntityDataCollection changeTrackable)
 		{
 			if(changeTrackable == null) throw new ArgumentNullException(nameof(changeTrackable));
 
 			lock(changeTrackable.SyncObj)
 			{
 				int updateDiffIndex = 0;
-				foreach(int setIndex in fieldsCollection.FieldValueUpdateMask.EnumerateSetBitsByIndex())
+				foreach(int setIndex in fieldsCollection.UpdateMask.EnumerateSetBitsByIndex())
 				{
-					changeTrackable.SetFieldValue(setIndex, fieldsCollection.FieldValueUpdates.ElementAt(updateDiffIndex));
+					changeTrackable.SetFieldValue(setIndex, fieldsCollection.UpdateDiffValues.ElementAt(updateDiffIndex));
 
 					//Hey, so there was a bug for 8byte values that caused this to break.
 					//I know it's bad design but we all have deadlines here. We NEED this to FORCEIBLY
@@ -46,14 +46,12 @@ namespace GladMMO
 			}
 		}
 
-		public override Task HandleMessage(IPeerMessageContext<GameClientPacketPayload> context, FieldValueUpdateEvent payload)
+		/// <inheritdoc />
+		public override void HandleUpdateBlock(ObjectUpdateValuesObjectBlock updateBlock)
 		{
-			foreach (var entry in payload.FieldValueUpdates)
-			{
-				GenerateFieldUpdateDiff(entry.Data, ChangeTrackableCollection.RetrieveEntity(entry.EntityGuid));
-			}
-
-			return Task.CompletedTask;
+			//TODO: We should assume we know this
+			if(ChangeTrackableCollection.ContainsKey(new ObjectGuid(updateBlock.ObjectToUpdate.RawGuidValue)))
+				GenerateFieldUpdateDiff(updateBlock.UpdateValuesCollection, ChangeTrackableCollection[new ObjectGuid(updateBlock.ObjectToUpdate.RawGuidValue)]);
 		}
 	}
 }

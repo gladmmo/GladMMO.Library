@@ -9,14 +9,14 @@ namespace GladMMO
 	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
 	public sealed class OnConnectionEstablishedClaimSessionEventListener : BaseSingleEventListenerInitializable<INetworkConnectionEstablishedEventSubscribable>
 	{
-		private IPeerPayloadSendService<GameClientPacketPayload> SendService { get; }
+		private IPeerPayloadSendService<GamePacketPayload> SendService { get; }
 
 		private IReadonlyAuthTokenRepository AuthTokenRepository { get; }
 
 		private ILocalCharacterDataRepository CharacterDataRepository { get; }
 
 		public OnConnectionEstablishedClaimSessionEventListener(INetworkConnectionEstablishedEventSubscribable subscriptionService,
-			[NotNull] IPeerPayloadSendService<GameClientPacketPayload> sendService,
+			[NotNull] IPeerPayloadSendService<GamePacketPayload> sendService,
 			[NotNull] IReadonlyAuthTokenRepository authTokenRepository,
 			[NotNull] ILocalCharacterDataRepository characterDataRepository) 
 			: base(subscriptionService)

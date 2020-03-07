@@ -10,11 +10,11 @@ namespace GladMMO
 	{
 		private IEntityGuidMappable<WorldTransform> TransformMap { get; }
 
-		private IReadonlyEntityGuidMappable<IMovementData> MovementDataMappable { get; }
+		private IReadonlyEntityGuidMappable<MovementBlockData> MovementDataMappable { get; }
 
 		public CreateInitialEntityWorldTransformEventListener(IEntityCreationStartingEventSubscribable subscriptionService,
 			[NotNull] IEntityGuidMappable<WorldTransform> transformMap,
-			[NotNull] IReadonlyEntityGuidMappable<IMovementData> movementDataMappable) : base(subscriptionService)
+			[NotNull] IReadonlyEntityGuidMappable<MovementBlockData> movementDataMappable) : base(subscriptionService)
 		{
 			TransformMap = transformMap ?? throw new ArgumentNullException(nameof(transformMap));
 			MovementDataMappable = movementDataMappable ?? throw new ArgumentNullException(nameof(movementDataMappable));
@@ -22,7 +22,7 @@ namespace GladMMO
 
 		protected override void OnEventFired(object source, EntityCreationStartingEventArgs args)
 		{
-			IMovementData movementData = MovementDataMappable.RetrieveEntity(args.EntityGuid);
+			MovementBlockData movementData = MovementDataMappable.RetrieveEntity(args.EntityGuid);
 
 			//We just need to make the world transform match
 			//the initial movement data

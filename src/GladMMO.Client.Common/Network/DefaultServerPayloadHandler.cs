@@ -7,17 +7,17 @@ using GladNet;
 
 namespace GladMMO
 {
-	public sealed class DefaultServerPayloadHandler : IPeerPayloadSpecificMessageHandler<GameServerPacketPayload, GameClientPacketPayload>
+	public sealed class DefaultServerPayloadHandler : IPeerPayloadSpecificMessageHandler<GamePacketPayload, GamePacketPayload>
 	{
 		private ILog Logger { get; }
 
-		public DefaultServerPayloadHandler([JetBrains.Annotations.NotNull] ILog logger)
+		public DefaultServerPayloadHandler(ILog logger)
 		{
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
 		/// <inheritdoc />
-		public async Task HandleMessage(IPeerMessageContext<GameClientPacketPayload> context, GameServerPacketPayload payload)
+		public async Task HandleMessage(IPeerMessageContext<GamePacketPayload> context, GamePacketPayload payload)
 		{
 			if(Logger.IsWarnEnabled)
 				Logger.Warn($"Recieved unhandled Packet: {payload.GetType().Name}");

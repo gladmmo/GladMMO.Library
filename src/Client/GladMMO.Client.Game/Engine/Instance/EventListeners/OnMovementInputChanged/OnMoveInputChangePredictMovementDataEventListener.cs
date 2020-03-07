@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace GladMMO
 {
-	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
+	/*[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
 	public sealed class OnMoveInputChangePredictMovementDataEventListener : BaseSingleEventListenerInitializable<IMovementInputChangedEventSubscribable, MovementInputChangedEventArgs>
 	{
 		private MovementUpdateMessageHandler MovementUpdateHandler { get; }
@@ -18,14 +18,14 @@ namespace GladMMO
 
 		private IReadonlyEntityGuidMappable<WorldTransform> TransformMap { get; }
 
-		private IEntityGuidMappable<IMovementData> MovementDataMappable { get; }
+		private IEntityGuidMappable<MovementBlockData> MovementDataMappable { get; }
 
 		public OnMoveInputChangePredictMovementDataEventListener(IMovementInputChangedEventSubscribable subscriptionService,
 			[NotNull] ILocalPlayerDetails playerDetails,
 			[NotNull] INetworkTimeService timeService,
 			[NotNull] IReadonlyEntityGuidMappable<WorldTransform> transformMap,
 			[NotNull] MovementUpdateMessageHandler movementUpdateHandler,
-			[NotNull] IEntityGuidMappable<IMovementData> movementDataMappable)
+			[NotNull] IEntityGuidMappable<MovementBlockData> movementDataMappable)
 			: base(subscriptionService)
 		{
 			PlayerDetails = playerDetails ?? throw new ArgumentNullException(nameof(playerDetails));
@@ -44,10 +44,10 @@ namespace GladMMO
 			Vector2 direction = new Vector2(args.NewHorizontalInput, args.NewVerticalInput);
 			WorldTransform worldTransform = TransformMap.RetrieveEntity(PlayerDetails.LocalPlayerGuid);
 			long predictedTime = TimeService.CurrentRemoteTime;
-			IMovementData data = new PositionChangeMovementData(predictedTime, new Vector3(worldTransform.PositionX, worldTransform.PositionY, worldTransform.PositionZ), direction, worldTransform.YAxisRotation);
+			MovementBlockData data = new PositionChangeMovementData(predictedTime, new Vector3(worldTransform.PositionX, worldTransform.PositionY, worldTransform.PositionZ), direction, worldTransform.YAxisRotation);
 
 			MovementDataMappable.ReplaceObject(PlayerDetails.LocalPlayerGuid, data);
-			MovementUpdateHandler.HandleMovementUpdate(new EntityAssociatedData<IMovementData>(PlayerDetails.LocalPlayerGuid, data), true);
+			MovementUpdateHandler.HandleMovementUpdate(new EntityAssociatedData<MovementBlockData>(PlayerDetails.LocalPlayerGuid, data), true);
 		}
-	}
+	}*/
 }

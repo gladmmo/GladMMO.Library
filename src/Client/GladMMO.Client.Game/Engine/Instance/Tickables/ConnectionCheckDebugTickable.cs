@@ -11,14 +11,14 @@ namespace GladMMO
 	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
 	public class ConnectionCheckDebugTickable : BaseSingleEventListenerInitializable<INetworkClientDisconnectedEventSubscribable>, IGameTickable
 	{
-		private IManagedNetworkClient<GameClientPacketPayload, GameServerPacketPayload> Client { get; }
+		private IManagedNetworkClient<GamePacketPayload, GamePacketPayload> Client { get; }
 
 		private INetworkClientManager ClientManager { get; }
 
 		private ILog Logger { get; }
 
 		public ConnectionCheckDebugTickable(INetworkClientDisconnectedEventSubscribable subService, 
-			[NotNull] IManagedNetworkClient<GameClientPacketPayload, GameServerPacketPayload> client, 
+			[NotNull] IManagedNetworkClient<GamePacketPayload, GamePacketPayload> client, 
 			[NotNull] ILog logger,
 			[NotNull] INetworkClientManager clientManager)
 			: base(subService)

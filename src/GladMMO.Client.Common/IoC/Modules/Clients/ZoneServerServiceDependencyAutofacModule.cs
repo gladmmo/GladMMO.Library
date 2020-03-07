@@ -14,7 +14,6 @@ namespace GladMMO
 		public static Func<HttpClientHandler> HttpClientHandlerFactory { get; set; } = () => new FiddlerEnabledWebProxyHandler();
 
 		//We mostly expose this again for WebGL since calling sync tasks normally is a bad idea for WebGL in Unity3D.
-		[JetBrains.Annotations.CanBeNull]
 		public static string PrecomputedEndpoint { get; set; }
 
 		/// <inheritdoc />

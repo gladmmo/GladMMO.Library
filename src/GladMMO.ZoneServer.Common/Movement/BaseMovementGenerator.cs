@@ -6,8 +6,9 @@ using UnityEngine;
 
 namespace GladMMO
 {
+	//TODO: Readd movement data constraints.
 	public abstract class LateInitializationBaseMovementGenerator<TDataInputType> : MoveGenerator
-		where TDataInputType : class, IMovementData
+		where TDataInputType : class
 	{
 		/// <summary>
 		/// The movement data used by this generator.
@@ -88,7 +89,7 @@ namespace GladMMO
 	/// </summary>
 	/// <typeparam name="TDataInputType">The data input type.</typeparam>
 	public abstract class BaseMovementGenerator<TDataInputType> : MoveGenerator
-		where TDataInputType : class, IMovementData
+		where TDataInputType : class
 	{
 		/// <summary>
 		/// The movement data used by this generator.

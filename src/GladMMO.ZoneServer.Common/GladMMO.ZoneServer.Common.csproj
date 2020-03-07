@@ -14,6 +14,7 @@
   <ItemGroup>
     <ProjectReference Include="..\GladMMO.Models.ContentServer\GladMMO.Models.ContentServer.csproj" />
     <ProjectReference Include="..\GladMMO.Network.Common\GladMMO.Network.Common.csproj" />
+    <ProjectReference Include="..\GladMMO.Unity.Common\GladMMO.Unity.Common.csproj" />
   </ItemGroup>
 
   <ItemGroup>

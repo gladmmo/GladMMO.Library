@@ -16,10 +16,10 @@ namespace GladMMO
 
 	public sealed class SelfPlayerSpawnEventArgs : EventArgs
 	{
-		//public EntityCreationData CreationData { get; }
+		//public ObjectCreationData CreationData { get; }
 
 		/// <inheritdoc />
-		public SelfPlayerSpawnEventArgs(/*[NotNull] EntityCreationData creationData*/)
+		public SelfPlayerSpawnEventArgs(/*[NotNull] ObjectCreationData creationData*/)
 		{
 			//CreationData = creationData ?? throw new ArgumentNullException(nameof(creationData));
 		}

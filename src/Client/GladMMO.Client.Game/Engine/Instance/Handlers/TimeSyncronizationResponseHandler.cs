@@ -9,7 +9,7 @@ using GladNet;
 
 namespace GladMMO
 {
-	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
+	/*[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
 	public sealed class TimeSyncronizationResponseHandler : BaseGameClientGameMessageHandler<ServerTimeSyncronizationResponsePayload>
 	{
 		private INetworkTimeService TimeService { get; }
@@ -23,7 +23,7 @@ namespace GladMMO
 
 		//TODO: This is a work in progress, we need a time service.
 		/// <inheritdoc />
-		public override Task HandleMessage(IPeerMessageContext<GameClientPacketPayload> context, ServerTimeSyncronizationResponsePayload payload)
+		public override Task HandleMessage(IPeerMessageContext<GamePacketPayload> context, ServerTimeSyncronizationResponsePayload payload)
 		{
 			TimeService.SetTimeSyncronization(payload.SentLocalTime, payload.ServerTime);
 
@@ -32,5 +32,5 @@ namespace GladMMO
 
 			return Task.CompletedTask;
 		}
-	}
+	}*/
 }

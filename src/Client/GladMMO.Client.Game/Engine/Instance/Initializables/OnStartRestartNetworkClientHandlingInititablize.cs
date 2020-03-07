@@ -19,7 +19,7 @@ namespace GladMMO
 		/// <summary>
 		/// The managed network client that the Unity3D client is implemented on-top of.
 		/// </summary>
-		private IManagedNetworkClient<GameClientPacketPayload, GameServerPacketPayload> Client { get; }
+		private IManagedNetworkClient<GamePacketPayload, GamePacketPayload> Client { get; }
 
 		private INetworkClientManager ClientManager { get; }
 
@@ -30,7 +30,7 @@ namespace GladMMO
 
 		/// <inheritdoc />
 		public OnStartRestartNetworkClientHandlingInititablize(
-			[NotNull] IManagedNetworkClient<GameClientPacketPayload, GameServerPacketPayload> client, 
+			[NotNull] IManagedNetworkClient<GamePacketPayload, GamePacketPayload> client, 
 			[NotNull] INetworkClientManager clientManager,
 			[NotNull] ILog logger)
 		{

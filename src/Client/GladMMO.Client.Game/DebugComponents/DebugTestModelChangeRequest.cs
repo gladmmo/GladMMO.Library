@@ -12,9 +12,9 @@ namespace GladMMO
 	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
 	public sealed class DebugTestModelChangeRequest : IGameTickable
 	{
-		private IPeerPayloadSendService<GameClientPacketPayload> SendService { get; }
+		private IPeerPayloadSendService<GamePacketPayload> SendService { get; }
 
-		public DebugTestModelChangeRequest([NotNull] IPeerPayloadSendService<GameClientPacketPayload> sendService)
+		public DebugTestModelChangeRequest([NotNull] IPeerPayloadSendService<GamePacketPayload> sendService)
 		{
 			SendService = sendService ?? throw new ArgumentNullException(nameof(sendService));
 		}

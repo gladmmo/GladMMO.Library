@@ -9,7 +9,7 @@ using GladNet;
 
 namespace GladMMO
 {
-	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
+	/*[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
 	public sealed class ServerPingPacketPayloadHandler : BaseGameClientGameMessageHandler<ServerPingPacketPayload>
 	{
 		public ServerPingPacketPayloadHandler(ILog logger)
@@ -20,7 +20,7 @@ namespace GladMMO
 
 		//TODO: This is a work in progress, we need a time service.
 		/// <inheritdoc />
-		public override Task HandleMessage(IPeerMessageContext<GameClientPacketPayload> context, ServerPingPacketPayload payload)
+		public override Task HandleMessage(IPeerMessageContext<GamePacketPayload> context, ServerPingPacketPayload payload)
 		{
 			//The issue with time sync every ping is that the remote packet queue could contain a bunch of inputs from rotation/movement
 			//which will skew the time sync result. Best to just go with the initial/original time syncronization.
@@ -29,5 +29,5 @@ namespace GladMMO
 
 			return Task.CompletedTask;
 		}
-	}
+	}*/
 }

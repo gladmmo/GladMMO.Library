@@ -11,8 +11,8 @@ namespace GladMMO
 	/// Base handler for all game handlers.
 	/// </summary>
 	/// <typeparam name="TSpecificPayloadType"></typeparam>
-	public abstract class BaseGameClientGameMessageHandler<TSpecificPayloadType> : IPeerMessageHandler<GameServerPacketPayload, GameClientPacketPayload>
-		where TSpecificPayloadType : GameServerPacketPayload
+	public abstract class BaseGameClientGameMessageHandler<TSpecificPayloadType> : IPeerMessageHandler<GamePacketPayload, GamePacketPayload>
+		where TSpecificPayloadType : GamePacketPayload
 	{
 		protected ILog Logger { get; }
 
@@ -23,14 +23,14 @@ namespace GladMMO
 		}
 
 		//TODO: Add exception logging support
-		public abstract Task HandleMessage(IPeerMessageContext<GameClientPacketPayload> context, TSpecificPayloadType payload);
+		public abstract Task HandleMessage(IPeerMessageContext<GamePacketPayload> context, TSpecificPayloadType payload);
 
-		public bool CanHandle(NetworkIncomingMessage<GameServerPacketPayload> message)
+		public bool CanHandle(NetworkIncomingMessage<GamePacketPayload> message)
 		{
 			return message.Payload is TSpecificPayloadType;
 		}
 
-		public async Task<bool> TryHandleMessage(IPeerMessageContext<GameClientPacketPayload> context, NetworkIncomingMessage<GameServerPacketPayload> message)
+		public async Task<bool> TryHandleMessage(IPeerMessageContext<GamePacketPayload> context, NetworkIncomingMessage<GamePacketPayload> message)
 		{
 			if (!CanHandle(message))
 				return false;

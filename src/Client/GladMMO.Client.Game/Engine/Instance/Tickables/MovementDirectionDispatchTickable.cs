@@ -10,12 +10,12 @@ namespace GladMMO
 	{
 		private IReadonlyEntityGuidMappable<IMovementDirectionChangedListener> MovementDirectionChangeListenerMappable { get; }
 
-		private IReadonlyEntityGuidMappable<IMovementData> MovementDataMappable { get; }
+		private IReadonlyEntityGuidMappable<MovementBlockData> MovementDataMappable { get; }
 
 		private IReadonlyKnownEntitySet KnownEntities { get; }
 
 		public MovementDirectionDispatchTickable([NotNull] IReadonlyEntityGuidMappable<IMovementDirectionChangedListener> movementDirectionChangeListenerMappable,
-			[NotNull] IReadonlyEntityGuidMappable<IMovementData> movementDataMappable,
+			[NotNull] IReadonlyEntityGuidMappable<MovementBlockData> movementDataMappable,
 			[NotNull] IReadonlyKnownEntitySet knownEntities)
 		{
 			MovementDirectionChangeListenerMappable = movementDirectionChangeListenerMappable ?? throw new ArgumentNullException(nameof(movementDirectionChangeListenerMappable));

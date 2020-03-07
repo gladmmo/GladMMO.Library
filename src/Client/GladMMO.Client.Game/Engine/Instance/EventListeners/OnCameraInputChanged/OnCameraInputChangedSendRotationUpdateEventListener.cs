@@ -10,7 +10,7 @@ namespace GladMMO
 	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
 	public sealed class OnCameraInputChangedSendRotationUpdateEventListener : BaseSingleEventListenerInitializable<ICameraInputChangedEventSubscribable, CameraInputChangedEventArgs>
 	{
-		private IPeerPayloadSendService<GameClientPacketPayload> SendService { get; }
+		private IPeerPayloadSendService<GamePacketPayload> SendService { get; }
 
 		private IReadonlyNetworkTimeService TimeService { get; }
 
@@ -19,7 +19,7 @@ namespace GladMMO
 		private IReadonlyLocalPlayerDetails PlayerDetails { get; }
 
 		public OnCameraInputChangedSendRotationUpdateEventListener(ICameraInputChangedEventSubscribable subscriptionService,
-			[NotNull] IPeerPayloadSendService<GameClientPacketPayload> sendService,
+			[NotNull] IPeerPayloadSendService<GamePacketPayload> sendService,
 			[NotNull] IReadonlyNetworkTimeService timeService,
 			[NotNull] IReadonlyEntityGuidMappable<WorldTransform> transformMappable,
 			[NotNull] IReadonlyLocalPlayerDetails playerDetails) 

@@ -8,7 +8,7 @@ using UnityEngine;
 namespace GladMMO
 {
 	//TODO: Refactor with server-side input generator
-	public class CharacterControllerInputMovementGenerator : BaseMovementGenerator<PositionChangeMovementData>
+	public class CharacterControllerInputMovementGenerator : BaseMovementGenerator<MovementBlockData>
 	{
 		private Vector3 CachedMovementDirection;
 
@@ -21,13 +21,13 @@ namespace GladMMO
 
 		protected Lazy<CharacterController> Controller { get; }
 
-		public CharacterControllerInputMovementGenerator(PositionChangeMovementData movementData, [NotNull] Lazy<CharacterController> controller) 
+		public CharacterControllerInputMovementGenerator(MovementBlockData movementData, [NotNull] Lazy<CharacterController> controller) 
 			: base(movementData)
 		{
 			Controller = controller ?? throw new ArgumentNullException(nameof(controller));
 		}
 
-		public CharacterControllerInputMovementGenerator(PositionChangeMovementData movementData, [NotNull] Lazy<CharacterController> controller, Vector3 initialPosition)
+		public CharacterControllerInputMovementGenerator(MovementBlockData movementData, [NotNull] Lazy<CharacterController> controller, Vector3 initialPosition)
 			: base(movementData, initialPosition)
 		{
 			Controller = controller ?? throw new ArgumentNullException(nameof(controller));
@@ -38,15 +38,17 @@ namespace GladMMO
 			if (entity == null) throw new ArgumentNullException(nameof(entity));
 			if (Controller == null) throw new ArgumentNullException(nameof(Controller));
 
+			Debug.LogError($"TODO REIMPLEMENT MOVEMENT DIRECTION HANDLING");
 			//Now, we should also create the movement direction
-			CachedMovementDirection = new Vector3(MovementData.Direction.x, 0.0f, MovementData.Direction.y).normalized;
-			LastMovementUpdateTime = MovementData.TimeStamp;
+			//CachedMovementDirection = new Vector3(MovementData.MoveInfo.MoveFlags .x, 0.0f, MovementData.Direction.y).normalized;
+			LastMovementUpdateTime = MovementData.MoveInfo.TimeStamp;
 
 			//Directly set to the current position incase we're not there.
 			entity.transform.position = CurrentPosition;
 
+			Debug.LogError($"TODO REIMPLEMENT MOVEMENT DIRECTION HANDLING");
 			//If the direction is zero just stop the generator.
-			if (this.MovementData.Direction == Vector2.zero)
+			if (this.MovementData.MoveInfo.MoveFlags == 0)
 			{
 				StopGenerator();
 			}
