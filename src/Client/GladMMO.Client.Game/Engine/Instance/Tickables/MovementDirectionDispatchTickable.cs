@@ -25,9 +25,10 @@ namespace GladMMO
 
 		public void Tick()
 		{
-			foreach(var listener in MovementDirectionChangeListenerMappable.EnumerateWithGuid(KnownEntities, EntityTypeId.TYPEID_PLAYER))
-				if(MovementDataMappable[listener.EntityGuid] is PositionChangeMovementData posChangeData)
-					listener.ComponentValue.SetMovementDirection(posChangeData.Direction);
+			//TODO: Renable movement change listener handling.
+			//foreach(var listener in MovementDirectionChangeListenerMappable.EnumerateWithGuid(KnownEntities, EntityTypeId.TYPEID_PLAYER))
+			//	if(MovementDataMappable[listener.EntityGuid] is MovementBlockData posChangeData)
+			//		listener.ComponentValue.SetMovementDirection(posChangeData.Direction);
 		}
 	}
 }

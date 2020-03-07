@@ -34,8 +34,9 @@ namespace GladMMO
 				if(Logger.IsDebugEnabled)
 					Logger.Debug($"Action bar Index: {index} pressed.");
 
-				if(ActionBarCollection[index].Type == ActionBarIndexType.Spell)
-					SendService.SendMessage(new SpellCastRequestPayload(ActionBarCollection[index].ActionId));
+				Logger.Error($"TODO REIMPLEMENT SPELL CASTING");
+				//if(ActionBarCollection[index].Type == ActionBarIndexType.Spell)
+				//	SendService.SendMessage(new SpellCastRequestPayload(ActionBarCollection[index].ActionId));
 			}
 			else
 			{

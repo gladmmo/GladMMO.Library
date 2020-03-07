@@ -35,7 +35,9 @@ namespace GladMMO
 		{
 			WorldTransform entity = TransformMappable.RetrieveEntity(PlayerDetails.LocalPlayerGuid);
 
-			SendService.SendMessage(new ClientRotationDataUpdateRequest(args.Rotation, TimeService.CurrentRemoteTime, new Vector3(entity.PositionX, entity.PositionY, entity.PositionZ)));
+			Debug.LogError($"TODO REIMPLEMENT MOUSE TURNING.");
+			//SendService.SendMessage(new MSG_MOVE_SET_FACING_Payload(PackedGuid.Empty, new MovementInfo(MovementFlag.MOVEMENTFLAG_NONE, MovementFlagExtra.None, 0, )))
+			//SendService.SendMessage(new ClientRotationDataUpdateRequest(args.Rotation, TimeService.CurrentRemoteTime, new Vector3(entity.PositionX, entity.PositionY, entity.PositionZ)));
 		}
 	}
 }

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 using Glader.Essentials;
 using GladNet;
+using Nito.AsyncEx;
+using Reinterpret.Net;
 
 namespace GladMMO
 {
@@ -11,33 +13,25 @@ namespace GladMMO
 	{
 		private IPeerPayloadSendService<GamePacketPayload> SendService { get; }
 
-		private IReadonlyAuthTokenRepository AuthTokenRepository { get; }
-
-		private ILocalCharacterDataRepository CharacterDataRepository { get; }
 
 		public OnConnectionEstablishedClaimSessionEventListener(INetworkConnectionEstablishedEventSubscribable subscriptionService,
-			[NotNull] IPeerPayloadSendService<GamePacketPayload> sendService,
-			[NotNull] IReadonlyAuthTokenRepository authTokenRepository,
-			[NotNull] ILocalCharacterDataRepository characterDataRepository) 
+			[NotNull] IPeerPayloadSendService<GamePacketPayload> sendService)
 			: base(subscriptionService)
 		{
 			SendService = sendService ?? throw new ArgumentNullException(nameof(sendService));
-			AuthTokenRepository = authTokenRepository ?? throw new ArgumentNullException(nameof(authTokenRepository));
-			CharacterDataRepository = characterDataRepository ?? throw new ArgumentNullException(nameof(characterDataRepository));
 		}
 
 		protected override void OnEventFired(object source, EventArgs args)
 		{
-			//Once connection to the instance server is established
-			//we must attempt to claim out session on to actually fully enter.
+			//HelloKitty: So, auth challenge data is useless unless you wanna reconnect/redirect
+			//so we should just sent the auth session request
+			//TODO: We have a hack here to use realmID as the account id. We really need to move eventually to reading the auth token on TC.
+			SendService.SendMessage(new SessionAuthProofRequest(ClientBuild.Wotlk_3_2_2a, "ADMIN", ((int)0).Reinterpret(), new RealmIdentification(1), new byte[20], new AddonChecksumInfo[0]));
 
-			//We send time sync first since we need to have a good grasp of the current network time before
-			//we even spawn into the world and start recieveing the world states.
-			SendService.SendMessageImmediately(new ServerTimeSyncronizationRequestPayload(DateTime.UtcNow.Ticks))
-				.ConfigureAwaitFalse();
-
-			//TODO: When it comes to community servers, we should not expose the sensitive JWT to them. We need a better way to deal with auth against untrusted instance servers
-			SendService.SendMessage(new ClientSessionClaimRequestPayload(AuthTokenRepository.RetrieveWithType(), CharacterDataRepository.CharacterId));
+			//Idea here is that TC won't let a character login to the game unless they've gotten the character list first.
+			//So to deal with this, on connection to the game we'll request the character list
+			//and then in the character list handler or something we'll send a request to login as a character.
+			SendService.SendMessage(new CharacterListRequest());
 		}
 	}
 }
