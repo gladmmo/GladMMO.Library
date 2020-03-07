@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace GladMMO.Database.TrinityCore.Auth.Models
+namespace GladMMO
 {
     public partial class wotlk_authContext : DbContext
     {
