@@ -48,21 +48,21 @@ namespace GladMMO
 				if (eventArgs.Type == MouseButtonClickEventArgs.MouseType.Left)
 				{
 					//Check if they are selectable
-					if (!EntityDataFieldMappable.RetrieveEntity(args.EntityGuid).HasBaseObjectFieldFlag(BaseObjectFieldFlags.UNIT_FLAG_NOT_SELECTABLE))
+					if (!EntityDataFieldMappable.RetrieveEntity(args.EntityGuid).HasBaseObjectFieldFlag(UnitFlags.UNIT_FLAG_NOT_SELECTABLE))
 					{
 						SendService.SendMessage(new ClientInteractNetworkedObjectRequestPayload(args.EntityGuid, ClientInteractNetworkedObjectRequestPayload.InteractType.Selection));
 
 						//Client side prediction of player target
-						LocalPlayerDetails.EntityData.SetFieldValue(EntityObjectField.UNIT_FIELD_TARGET, args.EntityGuid);
+						LocalPlayerDetails.EntityData.SetFieldValue(EUnitFields.UNIT_FIELD_TARGET, args.EntityGuid);
 					}
 				}
 				else
 				{
 					//Check if the entity is interactable before sending a packet.
-					if (EntityDataFieldMappable.RetrieveEntity(args.EntityGuid).HasBaseObjectFieldFlag(BaseObjectFieldFlags.UNIT_FLAG_INTERACTABLE))
+					/*if (EntityDataFieldMappable.RetrieveEntity(args.EntityGuid).HasBaseObjectFieldFlag(UnitFlags.UNIT_FLAG_INTERACTABLE))
 					{
 						SendService.SendMessage(new ClientInteractNetworkedObjectRequestPayload(args.EntityGuid, ClientInteractNetworkedObjectRequestPayload.InteractType.Interaction));
-					}
+					}*/
 				}
 			};
 		}

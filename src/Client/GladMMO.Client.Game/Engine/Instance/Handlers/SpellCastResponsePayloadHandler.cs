@@ -7,6 +7,7 @@ using Common.Logging;
 using Glader.Essentials;
 using GladMMO;
 using GladNet;
+using UnityEngine;
 
 namespace GladMMO
 {
@@ -42,8 +43,9 @@ namespace GladMMO
 			//These must be set atomically.
 			lock (PlayerDetails.EntityData.SyncObj)
 			{
-				PlayerDetails.EntityData.SetFieldValue(EntityObjectField.UNIT_FIELD_CASTING_SPELLID, spellId);
-				PlayerDetails.EntityData.SetFieldValue(EntityObjectField.UNIT_FIELD_CASTING_STARTTIME, predictedStartTime);
+				Debug.LogError($"CASTING BAR NOT REIMPLEMENTED DUE TO UNIT_FIELD_CASTING_SPELLID and UNIT_FIELD_CASTING_STARTTIME non-existent in WOW");
+				//PlayerDetails.EntityData.SetFieldValue(EUnitFields.UNIT_FIELD_CASTING_SPELLID, spellId);
+				//PlayerDetails.EntityData.SetFieldValue(EUnitFields.UNIT_FIELD_CASTING_STARTTIME, predictedStartTime);
 			}
 
 			return Task.CompletedTask;

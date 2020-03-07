@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Autofac.Features.AttributeFilters;
 using Glader.Essentials;
+using UnityEngine;
 
 namespace GladMMO
 {
@@ -26,11 +27,13 @@ namespace GladMMO
 
 		protected override void OnLocalPlayerSpawned(LocalPlayerSpawnedEventArgs args)
 		{
+			Debug.LogError($"EXPERIENCE BAR IS NOT REIMPLEMENTED YET DUE TO PLAYER_TOTAL_EXPERIENCE MISSING");
+
 			//Even if we don't know the experience yet, we should initialize. It could end up as 0 but that's ok.
-			int currentExperience = PlayerDetails.EntityData.GetFieldValue<int>(PlayerObjectField.PLAYER_TOTAL_EXPERIENCE);
+			/*int currentExperience = PlayerDetails.EntityData.GetFieldValue<int>(EPlayerFields.PLAYER_TOTAL_EXPERIENCE);
 			OnPlayerExperienceChanged(args.EntityGuid, new EntityDataChangedArgs<int>(currentExperience, currentExperience));
 
-			RegisterPlayerDataChangeCallback<int>(PlayerObjectField.PLAYER_TOTAL_EXPERIENCE, OnPlayerExperienceChanged);
+			RegisterPlayerDataChangeCallback<int>(EPlayerFields.PLAYER_TOTAL_EXPERIENCE, OnPlayerExperienceChanged);*/
 		}
 
 		private void OnPlayerExperienceChanged(ObjectGuid entity, EntityDataChangedArgs<int> changeArgs)

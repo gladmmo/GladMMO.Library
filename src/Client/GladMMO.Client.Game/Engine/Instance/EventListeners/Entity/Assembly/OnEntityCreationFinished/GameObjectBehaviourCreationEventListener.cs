@@ -24,7 +24,8 @@ namespace GladMMO
 		{
 			IEntityDataFieldContainer dataContainer = EntityDataMappable.RetrieveEntity(args.EntityGuid);
 
-			switch (dataContainer.GetEnumFieldValue<GameObjectType>(GameObjectField.GAMEOBJECT_TYPE_ID))
+			throw new NotImplementedException($"TODO: Maybe rehandle gameobject local scripts");
+			/*switch (dataContainer.GetEnumFieldValue<GameObjectType>(EGameObjectFields.GAMEOBJECT_TYPE_ID))
 			{
 				//Visual doesn't have behaviours
 				case GameObjectType.Visual:
@@ -32,7 +33,7 @@ namespace GladMMO
 				default:
 					CreateBehaviourComponent(args.EntityGuid);
 					break;
-			}
+			}*/
 		}
 
 		private void CreateBehaviourComponent(ObjectGuid entityGuid)

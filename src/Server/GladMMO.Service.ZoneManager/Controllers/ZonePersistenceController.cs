@@ -44,9 +44,10 @@ namespace GladMMO
 			if(request.isPositionSaved)
 				await UpdateCharacterLocation(characterId, request.CharacterLocationData, locationRepository, zoneRepository);
 
+			throw new NotImplementedException($"TODO: Old pre-TrinityCore logic used PLAYER_TOTAL_EXPERIENCE but TrinityCore does not actually have a player field for this.");
 			//TODO: Probably need to handle this abit better and more data than just experience.
 			//Entity data can now be saved.
-			await UpdatePlayerData(characterId, new CharacterDataInstance(request.PlayerDataSnapshot.GetFieldValue<int>(PlayerObjectField.PLAYER_TOTAL_EXPERIENCE)), characterDataRepository);
+			//await UpdatePlayerData(characterId, new CharacterDataInstance(request.PlayerDataSnapshot.GetFieldValue<int>(EPlayerFields.PLAYER_TOTAL_EXPERIENCE)), characterDataRepository);
 
 			if (request.ShouldReleaseCharacterSession)
 				await CharacterSessionRepository.TryDeleteClaimedSession(characterId);

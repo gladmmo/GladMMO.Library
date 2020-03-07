@@ -31,7 +31,10 @@ namespace GladMMO
 			IEntityDataFieldContainer dataFieldContainer = EntityDataMappable.RetrieveEntity(context);
 			GameObject worldObject = WorldObjectMappable.RetrieveEntity(context);
 
-			Type behaviourType = ComputeExpectedBehaviourType(dataFieldContainer.GetEnumFieldValue<GameObjectType>(GameObjectField.GAMEOBJECT_TYPE_ID));
+			Debug.LogError($"ENTITY LOCAL BEHAVIOR HANDLING IS NOT REIMPLEMENTED");
+
+			return null;
+			/*Type behaviourType = ComputeExpectedBehaviourType(dataFieldContainer.GetEnumFieldValue<GameObjectType>(EGameObjectFields.GAMEOBJECT_TYPE_ID));
 
 			using(var scope = ReflectionContainer.BeginLifetimeScope(cb =>
 			{
@@ -50,7 +53,7 @@ namespace GladMMO
 			}))
 			{
 				return (BaseEntityBehaviourComponent)scope.Resolve(behaviourType);
-			}
+			}*/
 		}
 
 		//TODO: Find a way to do this via reflection.

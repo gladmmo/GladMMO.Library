@@ -37,11 +37,11 @@ namespace GladMMO
 			Unregisterables.Clear();
 
 			//Listen for both max and current health.
-			Unregisterables.Add(EntityDataChangeCallbackService.RegisterCallback<int>(args.TargetedEntity, (int)EntityObjectField.UNIT_FIELD_HEALTH, OnTargetEntityHealthChanged));
-			Unregisterables.Add(EntityDataChangeCallbackService.RegisterCallback<int>(args.TargetedEntity, (int)EntityObjectField.UNIT_FIELD_MAXHEALTH, OnTargetEntityHealthChanged));
+			Unregisterables.Add(EntityDataChangeCallbackService.RegisterCallback<int>(args.TargetedEntity, (int)EUnitFields.UNIT_FIELD_HEALTH, OnTargetEntityHealthChanged));
+			Unregisterables.Add(EntityDataChangeCallbackService.RegisterCallback<int>(args.TargetedEntity, (int)EUnitFields.UNIT_FIELD_MAXHEALTH, OnTargetEntityHealthChanged));
 
 			//Only initialize if we have their values
-			if (entityData.DataSetIndicationArray.Get((int) EntityObjectField.UNIT_FIELD_HEALTH))
+			if (entityData.DataSetIndicationArray.Get((int) EUnitFields.UNIT_FIELD_HEALTH))
 				OnTargetEntityHealthChanged(args.TargetedEntity, new EntityDataChangedArgs<int>(0, 0));
 		}
 
@@ -50,8 +50,8 @@ namespace GladMMO
 			IEntityDataFieldContainer entityData = EntityDataMappable.RetrieveEntity(entity);
 
 			//Ignore the changed value.
-			int health = entityData.GetFieldValue<int>(EntityObjectField.UNIT_FIELD_HEALTH);
-			int maxHealth = entityData.GetFieldValue<int>(EntityObjectField.UNIT_FIELD_MAXHEALTH);
+			int health = entityData.GetFieldValue<int>(EUnitFields.UNIT_FIELD_HEALTH);
+			int maxHealth = entityData.GetFieldValue<int>(EUnitFields.UNIT_FIELD_MAXHEALTH);
 
 			TargetUnitFrame.HealthBar.BarText.Text = $"{health} / {maxHealth}";
 			TargetUnitFrame.HealthBar.BarFillable.FillAmount = (float)health / maxHealth;

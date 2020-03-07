@@ -5,6 +5,7 @@ using Autofac.Core;
 using Autofac.Features.AttributeFilters;
 using Common.Logging;
 using Glader.Essentials;
+using UnityEngine;
 
 namespace GladMMO
 {
@@ -26,12 +27,13 @@ namespace GladMMO
 		/// <inheritdoc />
 		protected override void OnLocalPlayerSpawned(LocalPlayerSpawnedEventArgs args)
 		{
-			RegisterPlayerDataChangeCallback<int>(EntityObjectField.UNIT_FIELD_CASTING_SPELLID, OnSpellCastingIdChanged);
+			Debug.LogError($"CASTBAR IS NOT REIMPLEMENTED DUE TO WOW NOT HAVING UNIT_FIELD_CASTING_SPELLID");
+			//RegisterPlayerDataChangeCallback<int>(EUnitFields.UNIT_FIELD_CASTING_SPELLID, OnSpellCastingIdChanged);
 		}
 
 		private void OnSpellCastingIdChanged(ObjectGuid entity, EntityDataChangedArgs<int> changeArgs)
 		{
-			OnSpellCastingStateChanged?.Invoke(this, new SpellCastingStateChangedEventArgs(changeArgs.NewValue, PlayerDetails.EntityData.GetFieldValue<long>(EntityObjectField.UNIT_FIELD_CASTING_STARTTIME)));
+			//OnSpellCastingStateChanged?.Invoke(this, new SpellCastingStateChangedEventArgs(changeArgs.NewValue, PlayerDetails.EntityData.GetFieldValue<long>(EUnitFields.UNIT_FIELD_CASTING_STARTTIME)));
 		}
 	}
 }

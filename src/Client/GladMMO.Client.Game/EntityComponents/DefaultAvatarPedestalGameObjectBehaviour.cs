@@ -25,7 +25,7 @@ namespace GladMMO
 
 		public void Initialize()
 		{
-			int avatarModelId = this.Data.GetFieldValue<int>(GameObjectField.RESERVED_DATA_1);
+			int avatarModelId = this.Data.GetFieldValue<int>(EGameObjectFields.GAMEOBJECT_DISPLAYID);
 
 			if(Logger.IsInfoEnabled)
 				Logger.Info($"Pedestal with ModelId: {avatarModelId} about to load model.");

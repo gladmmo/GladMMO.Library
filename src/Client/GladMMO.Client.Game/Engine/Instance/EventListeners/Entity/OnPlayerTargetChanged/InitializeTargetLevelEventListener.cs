@@ -29,11 +29,11 @@ namespace GladMMO
 		{
 			IEntityDataFieldContainer entityData = EntityDataMappable.RetrieveEntity(args.TargetedEntity);
 
-			EntityDataChangeCallbackService.RegisterCallback<int>(args.TargetedEntity, (int)BaseObjectField.UNIT_FIELD_LEVEL, OnTargetEntityLevelChanged);
+			EntityDataChangeCallbackService.RegisterCallback<int>(args.TargetedEntity, (int)EUnitFields.UNIT_FIELD_LEVEL, OnTargetEntityLevelChanged);
 
 			//Only initialize if we have their values
-			if (entityData.DataSetIndicationArray.Get((int)BaseObjectField.UNIT_FIELD_LEVEL))
-				OnTargetEntityLevelChanged(args.TargetedEntity, new EntityDataChangedArgs<int>(0, entityData.GetFieldValue<int>(BaseObjectField.UNIT_FIELD_LEVEL)));
+			if (entityData.DataSetIndicationArray.Get((int)EUnitFields.UNIT_FIELD_LEVEL))
+				OnTargetEntityLevelChanged(args.TargetedEntity, new EntityDataChangedArgs<int>(0, entityData.GetFieldValue<int>(EUnitFields.UNIT_FIELD_LEVEL)));
 		}
 
 		private void OnTargetEntityLevelChanged(ObjectGuid entity, EntityDataChangedArgs<int> args)
