@@ -99,7 +99,7 @@ namespace GladMMO
 #else
 				options.UseMySql(authOptions.Value.AuthenticationDatabaseString);
 #endif
-				options.UseOpenIddict<int>();
+				options.UseOpenIddict();
 			});
 
 			//Below is the OpenIddict registration
@@ -160,7 +160,8 @@ namespace GladMMO
 					// Register the ASP.NET Core host and configure the ASP.NET Core-specific options.
 					options.UseAspNetCore()
 						.EnableStatusCodePagesIntegration()
-						   .DisableTransportSecurityRequirement(); // During development, you can disable the HTTPS requirement.
+						.EnableTokenEndpointPassthrough()
+						.DisableTransportSecurityRequirement(); // During development, you can disable the HTTPS requirement.
 
 					// Note: if you don't want to specify a client_id when sending
 					// a token or revocation request, uncomment the following line:

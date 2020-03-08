@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Security.Claims;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Authentication;
@@ -27,24 +30,11 @@ namespace GladMMO
 	{
 		internal const string AUTHENTICATION_ROUTE_VALUE = "api/auth";
 
-		private readonly OpenIddictApplicationManager<OpenIddictApplication> _applicationManager;
-		private readonly OpenIddictAuthorizationManager<OpenIddictAuthorization> _authorizationManager;
-		private readonly OpenIddictScopeManager<OpenIddictScope> _scopeManager;
-		private readonly SignInManager<GuardiansApplicationUser> _signInManager;
-		private readonly UserManager<GuardiansApplicationUser> _userManager;
+		public wotlk_authContext TrinityCoreAuthenticationDbContext { get; }
 
-		public AuthenticationController(
-			OpenIddictApplicationManager<OpenIddictApplication> applicationManager,
-			OpenIddictAuthorizationManager<OpenIddictAuthorization> authorizationManager,
-			OpenIddictScopeManager<OpenIddictScope> scopeManager,
-			SignInManager<GuardiansApplicationUser> signInManager,
-			UserManager<GuardiansApplicationUser> userManager)
+		public AuthenticationController([JetBrains.Annotations.NotNull] wotlk_authContext trinityCoreAuthenticationDbContext)
 		{
-			_applicationManager = applicationManager;
-			_authorizationManager = authorizationManager;
-			_scopeManager = scopeManager;
-			_signInManager = signInManager;
-			_userManager = userManager;
+			TrinityCoreAuthenticationDbContext = trinityCoreAuthenticationDbContext ?? throw new ArgumentNullException(nameof(trinityCoreAuthenticationDbContext));
 		}
 
 		[HttpPost, Produces("application/json")]
@@ -55,8 +45,7 @@ namespace GladMMO
 
 			if(request.IsPasswordGrantType())
 			{
-				var user = await _userManager.FindByNameAsync(request.Username);
-				if(user == null)
+				if(!await TrinityCoreAuthenticationDbContext.Account.AnyAsync(a => a.Username == request.Username.ToUpper()))
 				{
 					return Forbid(
 						authenticationSchemes: OpenIddictServerAspNetCoreDefaults.AuthenticationScheme,
@@ -66,10 +55,11 @@ namespace GladMMO
 							[OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = "The username/password couple is invalid."
 						}));
 				}
+
+				Account account = await TrinityCoreAuthenticationDbContext.Account.FirstAsync(a => a.Username == request.Username.ToUpper());
 
 				// Validate the username/password parameters and ensure the account is not locked out.
-				var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, lockoutOnFailure: true);
-				if(!result.Succeeded)
+				if(account.ShaPassHash != CreateHash(request.Username.ToUpper(), request.Password.ToUpper()))
 				{
 					return Forbid(
 						authenticationSchemes: OpenIddictServerAspNetCoreDefaults.AuthenticationScheme,
@@ -80,55 +70,13 @@ namespace GladMMO
 						}));
 				}
 
-				var principal = await _signInManager.CreateUserPrincipalAsync(user);
+				ClaimsIdentity identity = await GenerateClaimsAsync(account);
+				ClaimsPrincipal principal = new ClaimsPrincipal(identity);
 
 				// Note: in this sample, the granted scopes match the requested scope
 				// but you may want to allow the user to uncheck specific scopes.
 				// For that, simply restrict the list of scopes before calling SetScopes.
 				principal.SetScopes(request.GetScopes());
-				principal.SetResources(await _scopeManager.ListResourcesAsync(principal.GetScopes()).ToListAsync());
-
-				foreach(var claim in principal.Claims)
-				{
-					claim.SetDestinations(GetDestinations(claim, principal));
-				}
-
-				// Returning a SignInResult will ask OpenIddict to issue the appropriate access/identity tokens.
-				return SignIn(principal, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
-			}
-
-			else if(request.IsAuthorizationCodeGrantType() || request.IsDeviceCodeGrantType() || request.IsRefreshTokenGrantType())
-			{
-				// Retrieve the claims principal stored in the authorization code/device code/refresh token.
-				var principal = (await HttpContext.AuthenticateAsync(OpenIddictServerAspNetCoreDefaults.AuthenticationScheme)).Principal;
-
-				// Retrieve the user profile corresponding to the authorization code/refresh token.
-				// Note: if you want to automatically invalidate the authorization code/refresh token
-				// when the user password/roles change, use the following line instead:
-				// var user = _signInManager.ValidateSecurityStampAsync(info.Principal);
-				var user = await _userManager.GetUserAsync(principal);
-				if(user == null)
-				{
-					return Forbid(
-						authenticationSchemes: OpenIddictServerAspNetCoreDefaults.AuthenticationScheme,
-						properties: new AuthenticationProperties(new Dictionary<string, string>
-						{
-							[OpenIddictServerAspNetCoreConstants.Properties.Error] = Errors.InvalidGrant,
-							[OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = "The token is no longer valid."
-						}));
-				}
-
-				// Ensure the user is still allowed to sign in.
-				if(!await _signInManager.CanSignInAsync(user))
-				{
-					return Forbid(
-						authenticationSchemes: OpenIddictServerAspNetCoreDefaults.AuthenticationScheme,
-						properties: new AuthenticationProperties(new Dictionary<string, string>
-						{
-							[OpenIddictServerAspNetCoreConstants.Properties.Error] = Errors.InvalidGrant,
-							[OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = "The user is no longer allowed to sign in."
-						}));
-				}
 
 				foreach(var claim in principal.Claims)
 				{
@@ -140,6 +88,20 @@ namespace GladMMO
 			}
 
 			throw new InvalidOperationException("The specified grant type is not supported.");
+		}
+
+		protected virtual async Task<ClaimsIdentity> GenerateClaimsAsync(Account user)
+		{
+			string userId = user.Id.ToString();
+			string userName = user.Username;
+
+			ClaimsIdentity id = new ClaimsIdentity("Identity.Application", // REVIEW: Used to match Application scheme
+				"name",
+				"role");
+			id.AddClaim(new Claim("sub", userId));
+			id.AddClaim(new Claim("name", userName));
+
+			return id;
 		}
 
 		private IEnumerable<string> GetDestinations(Claim claim, ClaimsPrincipal principal)
@@ -181,6 +143,58 @@ namespace GladMMO
 					yield return Destinations.AccessToken;
 					yield break;
 			}
+		}
+
+		public string CreateHash(string username, string password)
+		{
+			if(username == null) throw new ArgumentNullException(nameof(username));
+			if(password == null) throw new ArgumentNullException(nameof(password));
+
+
+			//Insecure, but it's what World of Warcraft uses.
+			using(SHA1 sha = new SHA1CryptoServiceProvider())
+			{
+				string hashInput = $"{username.ToUpper()}:{password.ToUpper()}";
+				byte[] hash = sha.ComputeHash(Encoding.ASCII.GetBytes(hashInput));
+
+				return ByteArrayToHexViaLookup32Unsafe(hash);
+			}
+		}
+
+		//See: https://stackoverflow.com/questions/311165/how-do-you-convert-a-byte-array-to-a-hexadecimal-string-and-vice-versa/24343727#24343727
+		private static readonly uint[] _lookup32Unsafe = CreateLookup32Unsafe();
+		private static readonly unsafe uint* _lookup32UnsafeP = (uint*)GCHandle.Alloc(_lookup32Unsafe, GCHandleType.Pinned).AddrOfPinnedObject();
+
+		private static uint[] CreateLookup32Unsafe()
+		{
+			var result = new uint[256];
+			for(int i = 0; i < 256; i++)
+			{
+				string s = i.ToString("X2");
+				if(BitConverter.IsLittleEndian)
+					result[i] = ((uint)s[0]) + ((uint)s[1] << 16);
+				else
+					result[i] = ((uint)s[1]) + ((uint)s[0] << 16);
+			}
+
+			return result;
+		}
+
+		public static unsafe string ByteArrayToHexViaLookup32Unsafe(byte[] bytes)
+		{
+			var lookupP = _lookup32UnsafeP;
+			var result = new char[bytes.Length * 2];
+			fixed(byte* bytesP = bytes)
+			fixed(char* resultP = result)
+			{
+				uint* resultP2 = (uint*)resultP;
+				for(int i = 0; i < bytes.Length; i++)
+				{
+					resultP2[i] = lookupP[bytesP[i]];
+				}
+			}
+
+			return new string(result);
 		}
 	}
 }

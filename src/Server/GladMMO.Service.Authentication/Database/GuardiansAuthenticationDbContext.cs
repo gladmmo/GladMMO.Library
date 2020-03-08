@@ -12,7 +12,7 @@ namespace GladMMO
 	/// <summary>
 	/// See Documentation for details: https://github.com/openiddict/openiddict-core
 	/// </summary>
-	public class GuardiansAuthenticationDbContext : IdentityDbContext<GuardiansApplicationUser, GuardiansApplicationRole, int>
+	public class GuardiansAuthenticationDbContext : IdentityDbContext<GuardiansApplicationUser, GuardiansApplicationRole, string>
 	{
 		public GuardiansAuthenticationDbContext(DbContextOptions<GuardiansAuthenticationDbContext> options)
 			: base(options)
