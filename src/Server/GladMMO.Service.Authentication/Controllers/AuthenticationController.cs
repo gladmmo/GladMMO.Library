@@ -1,25 +1,24 @@
-﻿using System;
+﻿using System; using FreecraftCore;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Security.Claims;
-using System.Security.Cryptography;
-using System.Text;
 using System.Threading.Tasks;
+using AspNet.Security.OpenIdConnect.Extensions;
 using AspNet.Security.OpenIdConnect.Primitives;
 using AspNet.Security.OpenIdConnect.Server;
-using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Http.Authentication;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using OpenIddict.Abstractions;
-using OpenIddict.Server.AspNetCore;
+using OpenIddict.Core;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
 
 namespace GladMMO
 {
+
 	//From an old OpenIddict OAuth sample and a slightly modified version that I personally use
 	//in https://github.com/GladLive/GladLive.Authentication/blob/master/src/GladLive.Authentication.OAuth/Controllers/AuthorizationController.cs
 	[Route(AUTHENTICATION_ROUTE_VALUE)]
@@ -29,19 +28,22 @@ namespace GladMMO
 
 		private IOptions<IdentityOptions> IdentityOptions { get; }
 
+		private SignInManager<GuardiansApplicationUser> SignInManager { get; }
+
+		private UserManager<GuardiansApplicationUser> UserManager { get; }
+
 		private ILogger<AuthenticationController> Logger { get; }
 
-		private wotlk_authContext TrinityCoreDatabaseContext { get; }
-
 		public AuthenticationController(
-			ILogger<AuthenticationController> logger, 
-			wotlk_authContext trinityCoreDatabaseContext,
-			IOptions<IdentityOptions> identityOptions)
+			IOptions<IdentityOptions> identityOptions,
+			SignInManager<GuardiansApplicationUser> signInManager,
+			UserManager<GuardiansApplicationUser> userManager, 
+			ILogger<AuthenticationController> logger)
 		{
-			//IdentityOptions = identityOptions;
-			Logger = logger;
-			TrinityCoreDatabaseContext = trinityCoreDatabaseContext;
 			IdentityOptions = identityOptions;
+			SignInManager = signInManager;
+			UserManager = userManager;
+			Logger = logger;
 		}
 
 		internal async Task<IActionResult> Authenticate([JetBrains.Annotations.NotNull] string username,
@@ -58,9 +60,8 @@ namespace GladMMO
 			if(Logger.IsEnabled(LogLevel.Information))
 				Logger.LogInformation($"Auth Request: {username} {HttpContext.Connection.RemoteIpAddress}:{HttpContext.Connection.RemotePort}");
 
-			bool isAnyAccountExist = await TrinityCoreDatabaseContext.Account.AnyAsync(a => a.Username == username.ToUpper());
-			//Like Identity we check if the user exists.
-			if(!isAnyAccountExist)
+			var user = await UserManager.FindByNameAsync(username);
+			if(user == null)
 			{
 				return BadRequest(new OpenIdConnectResponse
 				{
@@ -69,23 +70,44 @@ namespace GladMMO
 				});
 			}
 
-			//This checks to see if they're banned.
-			Account account = await TrinityCoreDatabaseContext
-				.Account
-				.FirstAsync(a => a.Username == username.ToUpper());
-
-			if(await TrinityCoreDatabaseContext.AccountBanned.AnyAsync(ab => ab.Id == account.Id && ab.Active > 0))
+			// Ensure the user is allowed to sign in.
+			if(!await SignInManager.CanSignInAsync(user))
 			{
 				return BadRequest(new OpenIdConnectResponse
 				{
 					Error = OpenIdConnectConstants.Errors.InvalidGrant,
-					ErrorDescription = "The user couple is banned."
+					ErrorDescription = "The specified user is not allowed to sign in."
+				});
+			}
+
+			// Reject the token request if two-factor authentication has been enabled by the user.
+			if(UserManager.SupportsUserTwoFactor && await UserManager.GetTwoFactorEnabledAsync(user))
+			{
+				return BadRequest(new OpenIdConnectResponse
+				{
+					Error = OpenIdConnectConstants.Errors.InvalidGrant,
+					ErrorDescription = "The specified user is not allowed to sign in."
+				});
+			}
+
+			// Ensure the user is not already locked out.
+			if(UserManager.SupportsUserLockout && await UserManager.IsLockedOutAsync(user))
+			{
+				return BadRequest(new OpenIdConnectResponse
+				{
+					Error = OpenIdConnectConstants.Errors.InvalidGrant,
+					ErrorDescription = "The username/password couple is invalid."
 				});
 			}
 
 			// Ensure the password is valid.
-			if(account.ShaPassHash != CreateHash(username, password))
+			if(!await UserManager.CheckPasswordAsync(user, password))
 			{
+				if(UserManager.SupportsUserLockout)
+				{
+					await UserManager.AccessFailedAsync(user);
+				}
+
 				return BadRequest(new OpenIdConnectResponse
 				{
 					Error = OpenIdConnectConstants.Errors.InvalidGrant,
@@ -93,39 +115,57 @@ namespace GladMMO
 				});
 			}
 
+			if(UserManager.SupportsUserLockout)
+			{
+				await UserManager.ResetAccessFailedCountAsync(user);
+			}
+
 			// Create a new authentication ticket.
-			AuthenticationTicket ticket = await CreateTicketAsync(scopes, account);
+			var ticket = await CreateTicketAsync(scopes, user);
 
 			return SignIn(ticket.Principal, ticket.Properties, ticket.AuthenticationScheme);
 		}
 
 		[HttpPost]
 		[Produces("application/json")]
-		public async Task<IActionResult> Exchange(OpenIddictRequest request)
+		public async Task<IActionResult> Exchange(OpenIdConnectRequest request)
 		{
-			return await Authenticate(request.Username, request.Password, request.GetScopes());
-		}
+			Debug.Assert(request.IsTokenRequest(),
+				"The OpenIddict binder for ASP.NET Core MVC is not registered. " +
+				"Make sure services.AddOpenIddict().AddMvcBinders() is correctly called.");
 
-		private async Task<AuthenticationTicket> CreateTicketAsync(IEnumerable<string> scopes, Account user)
+			if (request.IsPasswordGrantType())
+			{
+				return await Authenticate(request.Username, request.Password, request.GetScopes());
+			}
+
+			return BadRequest(new OpenIdConnectResponse
+			{
+				Error = OpenIdConnectConstants.Errors.UnsupportedGrantType,
+				ErrorDescription = "The specified grant type is not supported."
+			});
+		}
+		
+		private async Task<AuthenticationTicket> CreateTicketAsync(IEnumerable<string> scopes, GuardiansApplicationUser user)
 		{
 			// Create a new ClaimsPrincipal containing the claims that
 			// will be used to create an id_token, a token or a code.
-			ClaimsIdentity identity = await GenerateClaimsAsync(user);
+			var principal = await SignInManager.CreateUserPrincipalAsync(user);
 
 			// Create a new authentication ticket holding the user identity.
-			var ticket = new AuthenticationTicket(new ClaimsPrincipal(identity),
+			var ticket = new AuthenticationTicket(principal,
 				new Microsoft.AspNetCore.Authentication.AuthenticationProperties(),
-				OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
-			
+				OpenIdConnectServerDefaults.AuthenticationScheme);
+
 			// Set the list of scopes granted to the client application.
-			ticket.Principal.SetScopes(new[]
+			ticket.SetScopes(new[]
 			{
 				OpenIdConnectConstants.Scopes.OpenId,
 				OpenIdConnectConstants.Scopes.Profile,
 				OpenIddictConstants.Scopes.Roles
 			}.Intersect(scopes.Concat(new string[1] { OpenIdConnectConstants.Scopes.OpenId }))); //HelloKitty: Always include the OpenId, it's required for the Playfab authentication
 
-			ticket.Principal.SetResources("auth-server");
+			ticket.SetResources("auth-server");
 
 			// Note: by default, claims are NOT automatically included in the access and identity tokens.
 			// To allow OpenIddict to serialize them, you must attach them a destination, that specifies
@@ -145,9 +185,9 @@ namespace GladMMO
 
 				// Only add the iterated claim to the id_token if the corresponding scope was granted to the client application.
 				// The other claims will only be added to the access_token, which is encrypted when using the default format.
-				if ((claim.Type == OpenIdConnectConstants.Claims.Name && ticket.Principal.HasScope(OpenIdConnectConstants.Scopes.Profile)) ||
-					(claim.Type == OpenIdConnectConstants.Claims.Email && ticket.Principal.HasScope(OpenIdConnectConstants.Scopes.Email)) ||
-					(claim.Type == OpenIdConnectConstants.Claims.Role && ticket.Principal.HasScope(OpenIddictConstants.Claims.Role)))
+				if ((claim.Type == OpenIdConnectConstants.Claims.Name && ticket.HasScope(OpenIdConnectConstants.Scopes.Profile)) ||
+					(claim.Type == OpenIdConnectConstants.Claims.Email && ticket.HasScope(OpenIdConnectConstants.Scopes.Email)) ||
+					(claim.Type == OpenIdConnectConstants.Claims.Role && ticket.HasScope(OpenIddictConstants.Claims.Roles)))
 				{
 					destinations.Add(OpenIdConnectConstants.Destinations.IdentityToken);
 				}
@@ -156,72 +196,6 @@ namespace GladMMO
 			}
 
 			return ticket;
-		}
-
-		protected virtual async Task<ClaimsIdentity> GenerateClaimsAsync(Account user)
-		{
-			string userId = user.Id.ToString();
-			string userName = user.Username;
-
-			ClaimsIdentity id = new ClaimsIdentity("Identity.Application", // REVIEW: Used to match Application scheme
-				IdentityOptions.Value.ClaimsIdentity.UserNameClaimType,
-				IdentityOptions.Value.ClaimsIdentity.RoleClaimType);
-			id.AddClaim(new Claim(IdentityOptions.Value.ClaimsIdentity.UserIdClaimType, userId));
-			id.AddClaim(new Claim(IdentityOptions.Value.ClaimsIdentity.UserNameClaimType, userName));
-
-			return id;
-		}
-
-		public string CreateHash(string username, string password)
-		{
-			if(username == null) throw new ArgumentNullException(nameof(username));
-			if(password == null) throw new ArgumentNullException(nameof(password));
-
-
-			//Insecure, but it's what World of Warcraft uses.
-			using(SHA1 sha = new SHA1CryptoServiceProvider())
-			{
-				string hashInput = $"{username.ToUpper()}:{password.ToUpper()}";
-				byte[] hash = sha.ComputeHash(Encoding.ASCII.GetBytes(hashInput));
-
-				return ByteArrayToHexViaLookup32Unsafe(hash);
-			}
-		}
-
-		//See: https://stackoverflow.com/questions/311165/how-do-you-convert-a-byte-array-to-a-hexadecimal-string-and-vice-versa/24343727#24343727
-		private static readonly uint[] _lookup32Unsafe = CreateLookup32Unsafe();
-		private static readonly unsafe uint* _lookup32UnsafeP = (uint*)GCHandle.Alloc(_lookup32Unsafe, GCHandleType.Pinned).AddrOfPinnedObject();
-
-		private static uint[] CreateLookup32Unsafe()
-		{
-			var result = new uint[256];
-			for(int i = 0; i < 256; i++)
-			{
-				string s = i.ToString("X2");
-				if(BitConverter.IsLittleEndian)
-					result[i] = ((uint)s[0]) + ((uint)s[1] << 16);
-				else
-					result[i] = ((uint)s[1]) + ((uint)s[0] << 16);
-			}
-
-			return result;
-		}
-
-		public static unsafe string ByteArrayToHexViaLookup32Unsafe(byte[] bytes)
-		{
-			var lookupP = _lookup32UnsafeP;
-			var result = new char[bytes.Length * 2];
-			fixed(byte* bytesP = bytes)
-			fixed(char* resultP = result)
-			{
-				uint* resultP2 = (uint*)resultP;
-				for(int i = 0; i < bytes.Length; i++)
-				{
-					resultP2[i] = lookupP[bytesP[i]];
-				}
-			}
-
-			return new string(result);
 		}
 	}
 }
