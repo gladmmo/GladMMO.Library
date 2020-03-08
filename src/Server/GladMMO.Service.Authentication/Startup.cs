@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Security.Claims;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using AspNet.Security.OpenIdConnect.Primitives;
 using Microsoft.AspNetCore.Builder;
@@ -73,11 +74,7 @@ namespace GladMMO
 			IOptions<AuthenticationServerConfigurationModel> authOptions = services.BuildServiceProvider()
 				.GetService<IOptions<AuthenticationServerConfigurationModel>>();
 
-			services.AddAuthentication(options =>
-				{
-					options.DefaultAuthenticateScheme = OpenIddictServerAspNetCoreDefaults.AuthenticationScheme;
-				})
-				.AddJwtBearer(OpenIddictServerAspNetCoreDefaults.AuthenticationScheme, options => { });
+			services.AddAuthentication();
 
 			services.AddSingleton<IAuthenticationService>(provider =>
 			{
@@ -122,24 +119,29 @@ namespace GladMMO
 				.AddDefaultTokenProviders();
 
 			services.AddOpenIddict()
-				.AddCore(builder =>
+				.AddCore(options =>
 				{
 					// Configure OpenIddict to use the Entity Framework Core stores and entities.
-					builder.UseEntityFrameworkCore()
+					options.UseEntityFrameworkCore()
 						.UseDbContext<GuardiansAuthenticationDbContext>();
 				})
 				.AddServer(options =>
 				{
-					//This controller endpoint/action was specified in the HaloLive documentation: https://github.com/HaloLive/Documentation
-					options.SetTokenEndpointUris(authOptions.Value.AuthenticationControllerEndpoint); // Enable the token endpoint (required to use the password flow).
-					options.AllowPasswordFlow(); // Allow client applications to use the grant_type=password flow.
-					options.AllowRefreshTokenFlow();
+					// Enable the authorization, logout, token and userinfo endpoints.
+					options.SetTokenEndpointUris(authOptions.Value.AuthenticationControllerEndpoint);
+
+					// Note: the Mvc.Client sample only uses the code flow and the password flow, but you
+					// can enable the other flows if you need to support implicit or client credentials.
+					options.AllowPasswordFlow()
+						   .AllowRefreshTokenFlow();
 
 #warning Don't deploy this into production; we should use HTTPS. Even if it is behind IIS or HAProxy etc.
 					try
 					{
 						//Loads the cert from the specified path
-						options.AddSigningCertificate(X509Certificate2Loader.Create(Path.Combine(Directory.GetCurrentDirectory(), authOptions.Value.JwtSigningX509Certificate2Path)).Load());
+						X509Certificate2 certificate = X509Certificate2Loader.Create(Path.Combine(Directory.GetCurrentDirectory(), authOptions.Value.JwtSigningX509Certificate2Path)).Load();
+						options.AddSigningCertificate(certificate);
+						options.AddEncryptionCertificate(certificate);
 					}
 					catch(Exception e)
 					{
@@ -153,6 +155,49 @@ namespace GladMMO
 					options.SetIssuer(new Uri(@"https://auth.vrguardians.net"));
 #endif
 					options.AcceptAnonymousClients();
+					options.DisableAccessTokenEncryption();
+
+					// Register the ASP.NET Core host and configure the ASP.NET Core-specific options.
+					options.UseAspNetCore()
+						.EnableStatusCodePagesIntegration()
+						   .DisableTransportSecurityRequirement(); // During development, you can disable the HTTPS requirement.
+
+					// Note: if you don't want to specify a client_id when sending
+					// a token or revocation request, uncomment the following line:
+					//
+					// options.AcceptAnonymousClients();
+
+					// Note: if you want to process authorization and token requests
+					// that specify non-registered scopes, uncomment the following line:
+					//
+					// options.DisableScopeValidation();
+
+					// Note: if you don't want to use permissions, you can disable
+					// permission enforcement by uncommenting the following lines:
+					//
+					// options.IgnoreEndpointPermissions()
+					//        .IgnoreGrantTypePermissions()
+					//        .IgnoreScopePermissions();
+
+					// Note: when issuing access tokens used by third-party APIs
+					// you don't own, you can disable access token encryption:
+					//
+					// options.DisableAccessTokenEncryption();
+				})
+
+				// Register the OpenIddict validation components.
+				.AddValidation(options =>
+				{
+					// Configure the audience accepted by this resource server.
+					// The value MUST match the audience associated with the
+					// "demo_api" scope, which is used by ResourceController.
+					options.AddAudiences("auth_server");
+
+					// Import the configuration from the local OpenIddict server instance.
+					options.UseLocalServer();
+
+					// Register the ASP.NET Core host.
+					options.UseAspNetCore();
 				});
 
 #warning This is just for the test build, we don't actually want to do this
