@@ -21,8 +21,7 @@ namespace GladMMO
 						builder
 							.AllowAnyOrigin()
 							.AllowAnyMethod()
-							.AllowAnyHeader()
-							.AllowCredentials();
+							.AllowAnyHeader();
 					});
 			});
 

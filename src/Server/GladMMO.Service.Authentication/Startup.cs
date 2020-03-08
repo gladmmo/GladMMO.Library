@@ -7,10 +7,8 @@ using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using AspNet.Security.OpenIdConnect.Primitives;
-using Consul.Net;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Hosting.Internal;
 using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
@@ -20,10 +18,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Protocols;
-using Microsoft.IdentityModel.Tokens;
-using OpenIddict.Core;
 using Refit;
+using OpenIddict.Abstractions;
+using OpenIddict.Core;
+using OpenIddict.EntityFrameworkCore.Models;
+using OpenIddict.Server.AspNetCore;
+using static OpenIddict.Abstractions.OpenIddictConstants;
 
 namespace GladMMO
 {
@@ -61,7 +61,8 @@ namespace GladMMO
 			});
 
 			// Add framework services.
-			services.AddMvc()
+			services.AddMvc(options => options.EnableEndpointRouting = false)
+				.AddNewtonsoftJson()
 				.RegisterHealthCheckController();
 
 			services.AddLogging();
@@ -72,7 +73,11 @@ namespace GladMMO
 			IOptions<AuthenticationServerConfigurationModel> authOptions = services.BuildServiceProvider()
 				.GetService<IOptions<AuthenticationServerConfigurationModel>>();
 
-			services.AddAuthentication();
+			services.AddAuthentication(options =>
+				{
+					options.DefaultAuthenticateScheme = OpenIddictServerAspNetCoreDefaults.AuthenticationScheme;
+				})
+				.AddJwtBearer(OpenIddictServerAspNetCoreDefaults.AuthenticationScheme, options => { });
 
 			services.AddSingleton<IAuthenticationService>(provider =>
 			{
@@ -116,42 +121,39 @@ namespace GladMMO
 				.AddEntityFrameworkStores<GuardiansAuthenticationDbContext>()
 				.AddDefaultTokenProviders();
 
-			services.AddOpenIddict<int>(options =>
-			{
-				// Register the Entity Framework stores.
-				options.AddEntityFrameworkCoreStores<GuardiansAuthenticationDbContext>();
-
-				// Register the ASP.NET Core MVC binder used by OpenIddict.
-				// Note: if you don't call this method, you won't be able to
-				// bind OpenIdConnectRequest or OpenIdConnectResponse parameters.
-				options.AddMvcBinders();
-
-				//This controller endpoint/action was specified in the HaloLive documentation: https://github.com/HaloLive/Documentation
-				options.EnableTokenEndpoint(authOptions.Value.AuthenticationControllerEndpoint); // Enable the token endpoint (required to use the password flow).
-				options.AllowPasswordFlow(); // Allow client applications to use the grant_type=password flow.
-				options.AllowRefreshTokenFlow();
-				options.UseJsonWebTokens();
+			services.AddOpenIddict()
+				.AddCore(builder =>
+				{
+					// Configure OpenIddict to use the Entity Framework Core stores and entities.
+					builder.UseEntityFrameworkCore()
+						.UseDbContext<GuardiansAuthenticationDbContext>();
+				})
+				.AddServer(options =>
+				{
+					//This controller endpoint/action was specified in the HaloLive documentation: https://github.com/HaloLive/Documentation
+					options.SetTokenEndpointUris(authOptions.Value.AuthenticationControllerEndpoint); // Enable the token endpoint (required to use the password flow).
+					options.AllowPasswordFlow(); // Allow client applications to use the grant_type=password flow.
+					options.AllowRefreshTokenFlow();
 
 #warning Don't deploy this into production; we should use HTTPS. Even if it is behind IIS or HAProxy etc.
-				options.DisableHttpsRequirement();
-				try
-				{
-					//Loads the cert from the specified path
-					options.AddSigningCertificate(X509Certificate2Loader.Create(Path.Combine(Directory.GetCurrentDirectory(), authOptions.Value.JwtSigningX509Certificate2Path)).Load());
-				}
-				catch(Exception e)
-				{
-					throw new InvalidOperationException($"Failed to load cert at Path: {authOptions.Value.JwtSigningX509Certificate2Path} with Root: {Directory.GetCurrentDirectory()}. Error: {e.Message} \n\n Stack: {e.StackTrace}", e);
-				}
+					try
+					{
+						//Loads the cert from the specified path
+						options.AddSigningCertificate(X509Certificate2Loader.Create(Path.Combine(Directory.GetCurrentDirectory(), authOptions.Value.JwtSigningX509Certificate2Path)).Load());
+					}
+					catch(Exception e)
+					{
+						throw new InvalidOperationException($"Failed to load cert at Path: {authOptions.Value.JwtSigningX509Certificate2Path} with Root: {Directory.GetCurrentDirectory()}. Error: {e.Message} \n\n Stack: {e.StackTrace}", e);
+					}
 
-				//TODO: Support release too.
+					//TODO: Support release too.
 #if AZURE_RELEASE || AZURE_DEBUG
-				options.SetIssuer(new Uri(@"https://test-guardians-auth.azurewebsites.net"));
+					options.SetIssuer(new Uri(@"https://test-guardians-auth.azurewebsites.net"));
 #else
-				options.SetIssuer(new Uri(@"https://auth.vrguardians.net"));
+					options.SetIssuer(new Uri(@"https://auth.vrguardians.net"));
 #endif
-				options.RequireClientIdentification();
-			});
+					options.AcceptAnonymousClients();
+				});
 
 #warning This is just for the test build, we don't actually want to do this
 			services.Configure<IdentityOptions>(options =>
@@ -168,6 +170,13 @@ namespace GladMMO
 					//TODO: make Playfab endpoint configurable.
 					return RestService.For<IPlayfabAuthenticationClient>($@"https://{63815}.playfabapi.com:443");
 				});
+
+			//"server=127.0.0.1;port=3307;user=root;password=test;database=proudmoore_world Timeout=9000"
+			services.AddDbContext<wotlk_authContext>(builder =>
+				{
+					builder.UseMySql("server=127.0.0.1;port=3307;user=root;password=test;database=wotlk_auth");
+				})
+				.AddEntityFrameworkMySql();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -178,9 +187,9 @@ namespace GladMMO
 			app.UseHsts();
 			//app.UseHttpsRedirection(); //Fucking PlayFab queries this server like a mongoloid and doesn't respect HTTPS redirects
 			app.UseAuthentication();
-			loggerFactory.RegisterGuardiansLogging(GeneralConfiguration);
-			loggerFactory.AddDebug();
-			app.UseMiddleware<PlayfabAuthenticationFromOpenIddictResponseMiddleware>();
+			//loggerFactory.RegisterGuardiansLogging(GeneralConfiguration);
+
+			//app.UseMiddleware<PlayfabAuthenticationFromOpenIddictResponseMiddleware>();
 
 			app.UseGladMMOCORSMiddleware();
 			app.UseMvcWithDefaultRoute();
