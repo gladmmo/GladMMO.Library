@@ -18,7 +18,7 @@ namespace GladMMO
 #else
 			loggerFactory.AddConsole(configuration.GetSection("Logging"));
 #endif*/
-			return loggerFactory.AddConsole(configuration.GetSection("Logging"));
+			//return loggerFactory.AddConsole(configuration.GetSection("Logging"));
 
 			return loggerFactory;
 		}
