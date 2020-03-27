@@ -1,7 +1,6 @@
 cd build\auth
-dotnet GladMMO.Service.Authentication.dll --usehttps Certs/TLSCert.pfx
+start "auth" dotnet GladMMO.Service.Authentication.dll --usehttps Certs/TLSCert.pfx
 cd ..
-PAUSE
 
 cd servdisc
 start "servdisc" dotnet GladMMO.Service.ServiceDiscovery.dll --url=http://192.168.0.12:5000
