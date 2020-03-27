@@ -102,6 +102,7 @@ namespace GladMMO
 				.AddEntityFrameworkStores<GuardiansZoneAuthenticationDbContext>()
 				.AddDefaultTokenProviders();
 
+			//TODO: This won't work anymore with TrinityCore3. We changed the key type.
 			services.AddOpenIddict<int>(options =>
 			{
 				// Register the Entity Framework stores.

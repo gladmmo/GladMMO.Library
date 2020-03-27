@@ -1,10 +1,9 @@
-﻿using System; using FreecraftCore;
+﻿using System; 
+using FreecraftCore;
 using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
-using Amazon.CloudWatchLogs.Model;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -36,7 +35,9 @@ namespace GladMMO
 					//This prevents ASP Core from trying to validate Vector3's children, which contain Vector3 (because Unity3D thanks)
 					//so it will cause stack overflows. This will avoid it.
 					options.ModelMetadataDetailsProviders.Add(new SuppressChildValidationMetadataProvider(typeof(Vector3)));
+					options.EnableEndpointRouting = false;
 				})
+				.AddNewtonsoftJson()
 				.RegisterHealthCheckController();
 
 			RegisterDatabaseServices(services);
@@ -83,6 +84,8 @@ namespace GladMMO
 #endif
 			});
 
+			RegisterTrinityCoreDatabase(services);
+
 			services.AddTransient<ICharacterRepository, DatabaseBackedCharacterRepository>();
 			services.AddTransient<ICharacterLocationRepository, DatabaseBackedCharacterLocationRepository>();
 			services.AddTransient<ICharacterSessionRepository, DatabaseBackedCharacterSessionRepository>();
@@ -95,8 +98,17 @@ namespace GladMMO
 			services.AddTransient<ICharacterDefaultActionBarRepository, DatabaseBackedDefaultActionBarRepository>();
 		}
 
+		private static void RegisterTrinityCoreDatabase(IServiceCollection services)
+		{
+			//"server=127.0.0.1;port=3307;user=root;password=test;database=proudmoore_world Timeout=9000"
+			services.AddDbContext<wotlk_charactersContext>(builder => { builder.UseMySql("server=127.0.0.1;port=3307;user=root;password=test;database=wotlk_characters"); })
+				.AddEntityFrameworkMySql();
+
+			services.AddTransient<ITrinityCharacterRepository, TrinityCoreCharacterRepository>();
+		}
+
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-		public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+		public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
 		{
 #warning Do not deploy exceptions page into production
 			app.UseDeveloperExceptionPage();
@@ -104,8 +116,7 @@ namespace GladMMO
 			app.UseResponseCaching();
 			app.UseAuthentication();
 
-			loggerFactory.RegisterGuardiansLogging(Configuration);
-			loggerFactory.AddDebug();
+			//loggerFactory.RegisterGuardiansLogging(Configuration);
 
 			app.UseMvcWithDefaultRoute();
 		}

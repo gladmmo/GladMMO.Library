@@ -14,6 +14,40 @@ namespace GladMMO
 	[Route("api/characters")]
 	public class CharacterController : AuthorizationReadyController
 	{
+		private ITrinityCharacterRepository CharacterRepository { get; }
+
+		/// <inheritdoc />
+		public CharacterController(IClaimsPrincipalReader claimsReader, ILogger<AuthorizationReadyController> logger,
+			ITrinityCharacterRepository characterRepository)
+			: base(claimsReader, logger)
+		{
+			CharacterRepository = characterRepository ?? throw new ArgumentNullException(nameof(characterRepository));
+		}
+
+		[HttpGet]
+		[AuthorizeJwt]
+		[ProducesJson]
+		public async Task<CharacterListResponse> GetCharacters()
+		{
+			int accountId = ClaimsReader.GetAccountIdInt(User);
+
+			//So to check characters we just need to query for the
+			//characters with this account id
+			int[] characterIds = await CharacterRepository.CharacterIdsForAccountId(accountId);
+
+			if(characterIds.Length == 0)
+				return new CharacterListResponse(CharacterListResponseCode.NoCharactersFoundError);
+
+			//The reason we only provide the IDs is all other character data can be looked up
+			//by the client when it needs it. Like name query, visible/character details/look stuff.
+			//No reason to send all this data when they may only need names. Which can be queried through the known API
+			return new CharacterListResponse(characterIds);
+		}
+	}
+
+	/*[Route("api/characters")]
+	public class CharacterController : AuthorizationReadyController
+	{
 		//TODO: Check and enforce character limit
 		//TODO: Add logging to these controllers
 		private ICharacterRepository CharacterRepository { get; }
@@ -150,7 +184,7 @@ namespace GladMMO
 
 			if(characterIds.Length == 0)
 				return new CharacterListResponse(CharacterListResponseCode.NoCharactersFoundError);
-			
+
 			//The reason we only provide the IDs is all other character data can be looked up
 			//by the client when it needs it. Like name query, visible/character details/look stuff.
 			//No reason to send all this data when they may only need names. Which can be queried through the known API
@@ -217,5 +251,5 @@ namespace GladMMO
 				return Json(barInstanceModels);
 			}
 		}
+	}*/
 	}
-}

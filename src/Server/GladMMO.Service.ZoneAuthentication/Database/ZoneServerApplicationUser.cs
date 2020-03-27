@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace GladMMO
 {
-	public class ZoneServerApplicationUser : IdentityUser<int>
+	public class ZoneServerApplicationUser : IdentityUser<string>
 	{
 		//Unlike normal guardians users we DO have additional data.
 		[Required]

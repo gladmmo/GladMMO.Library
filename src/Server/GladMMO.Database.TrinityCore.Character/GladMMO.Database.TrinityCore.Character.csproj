@@ -21,4 +21,9 @@
     <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.1.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\GladMMO.Database.Common\GladMMO.Database.Common.csproj" />
+    <ProjectReference Include="..\GladMMO.Database.GameServer\GladMMO.Database.GameServer.csproj" />
+  </ItemGroup>
+
 </Project>

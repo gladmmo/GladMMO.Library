@@ -148,11 +148,12 @@ namespace GladMMO
 			CharacterController controller = serviceProvider.GetService<CharacterController>();
 
 			//act
-			CharacterNameValidationResponse result = ControllerTestsHelpers.GetActionResultObject<CharacterNameValidationResponse>(await controller.ValidateCharacterName(name));
+			Assert.Fail("TODO: Renable");
+			//CharacterNameValidationResponse result = ControllerTestsHelpers.GetActionResultObject<CharacterNameValidationResponse>(await controller.ValidateCharacterName(name));
 
 			//assert
-			Assert.True(result.isSuccessful);
-			Assert.True(result.ResultCode == CharacterNameValidationResponseCode.Success);
+			//Assert.True(result.isSuccessful);
+			//Assert.True(result.ResultCode == CharacterNameValidationResponseCode.Success);
 		}
 
 		[Test]
@@ -167,12 +168,13 @@ namespace GladMMO
 			CharacterController controller = serviceProvider.GetService<CharacterController>();
 
 			//act
+			Assert.Fail("TODO: Renable");
 			await serviceProvider.GetService<ICharacterRepository>().TryCreateAsync(new CharacterEntryModel(1, name));
-			CharacterNameValidationResponse result = ControllerTestsHelpers.GetActionResultObject<CharacterNameValidationResponse>(await controller.ValidateCharacterName(name));
+			//CharacterNameValidationResponse result = ControllerTestsHelpers.GetActionResultObject<CharacterNameValidationResponse>(await controller.ValidateCharacterName(name));
 
 			//assert
-			Assert.False(result.isSuccessful, $"Response for name validation should be false when the name is taken.");
-			Assert.True(result.ResultCode == CharacterNameValidationResponseCode.NameIsUnavailable);
+			//Assert.False(result.isSuccessful, $"Response for name validation should be false when the name is taken.");
+			//Assert.True(result.ResultCode == CharacterNameValidationResponseCode.NameIsUnavailable);
 		}
 
 		[Test]
@@ -187,12 +189,13 @@ namespace GladMMO
 			CharacterController controller = serviceProvider.GetService<CharacterController>();
 
 			//act
+			Assert.Fail("TODO: Renable");
 			await serviceProvider.GetService<ICharacterRepository>().TryCreateAsync(new CharacterEntryModel(1, $"{name}Z"));
-			CharacterNameValidationResponse result = ControllerTestsHelpers.GetActionResultObject<CharacterNameValidationResponse>(await controller.ValidateCharacterName(name));
+			//CharacterNameValidationResponse result = ControllerTestsHelpers.GetActionResultObject<CharacterNameValidationResponse>(await controller.ValidateCharacterName(name));
 
 			//assert
-			Assert.True(result.isSuccessful);
-			Assert.True(result.ResultCode == CharacterNameValidationResponseCode.Success);
+			//Assert.True(result.isSuccessful);
+			//Assert.True(result.ResultCode == CharacterNameValidationResponseCode.Success);
 		}
 
 		[Test]
@@ -210,11 +213,12 @@ namespace GladMMO
 			CharacterController controller = serviceProvider.GetService<CharacterController>();
 
 			//act
-			CharacterCreationResponse result = ControllerTestsHelpers.GetActionResultObject<CharacterCreationResponse>(await controller.CreateCharacter(name, playfabCharacterClientMock.Object, appearanceRepository.Object, dataRepository.Object));
+			//CharacterCreationResponse result = ControllerTestsHelpers.GetActionResultObject<CharacterCreationResponse>(await controller.CreateCharacter(name, playfabCharacterClientMock.Object, appearanceRepository.Object, dataRepository.Object));
 
 			//assert
-			Assert.True(result.isSuccessful);
-			Assert.True(result.ResultCode == CharacterCreationResponseCode.Success);
+			Assert.Fail("TODO: Renable");
+			//Assert.True(result.isSuccessful);
+			//Assert.True(result.ResultCode == CharacterCreationResponseCode.Success);
 		}
 
 		private static Mock<IPlayfabCharacterClient> CreatePlayFabCharacterClientMock()
@@ -244,12 +248,13 @@ namespace GladMMO
 			Mock<ICharacterDataRepository> dataRepository = new Mock<ICharacterDataRepository>();
 
 			//act
-			await controller.CreateCharacter(name, playfabCharacterClientMock.Object, appearanceRepository.Object, dataRepository.Object);
-			CharacterCreationResponse result = ControllerTestsHelpers.GetActionResultObject<CharacterCreationResponse>(await controller.CreateCharacter(name, playfabCharacterClientMock.Object, appearanceRepository.Object, dataRepository.Object));
+			Assert.Fail("TODO: Renable");
+			//await controller.CreateCharacter(name, playfabCharacterClientMock.Object, appearanceRepository.Object, dataRepository.Object);
+			//CharacterCreationResponse result = ControllerTestsHelpers.GetActionResultObject<CharacterCreationResponse>(await controller.CreateCharacter(name, playfabCharacterClientMock.Object, appearanceRepository.Object, dataRepository.Object));
 
 			//assert
-			Assert.False(result.isSuccessful);
-			Assert.AreEqual(CharacterCreationResponseCode.NameUnavailableError, result.ResultCode);
+			//Assert.False(result.isSuccessful);
+			//Assert.AreEqual(CharacterCreationResponseCode.NameUnavailableError, result.ResultCode);
 		}
 
 		private static async Task<List<string>> AddTestValuesToRepository(int count, IServiceProvider serviceProvider, int accountId = 1)
