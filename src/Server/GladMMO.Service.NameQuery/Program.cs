@@ -30,7 +30,6 @@ namespace GladMMO
 				//TODO: remove this logging when we finally deploy properly
 				.UseSetting("detailedErrors", "true")
 				.CaptureStartupErrors(true)
-				.UseApplicationInsights()
 				.Build();
 	}
 }

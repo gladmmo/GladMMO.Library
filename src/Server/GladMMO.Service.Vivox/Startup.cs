@@ -90,7 +90,6 @@ namespace GladMMO
 			app.UseAuthentication();
 
 			loggerFactory.RegisterGuardiansLogging(Configuration);
-			loggerFactory.AddDebug();
 
 			app.UseMvcWithDefaultRoute();
 		}

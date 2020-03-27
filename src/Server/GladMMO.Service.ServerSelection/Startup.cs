@@ -51,7 +51,6 @@ namespace GladMMO
 			app.UseResponseCaching();
 
 			loggerFactory.RegisterGuardiansLogging(Configuration);
-			loggerFactory.AddDebug();
 
 			app.UseMvc();
 		}

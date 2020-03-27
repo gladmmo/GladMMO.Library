@@ -171,7 +171,6 @@ namespace GladMMO
 			//app.UseHttpsRedirection(); //non-playfab compatible auth servers can redirect HTTPS
 			app.UseAuthentication();
 			loggerFactory.RegisterGuardiansLogging(GeneralConfiguration);
-			loggerFactory.AddDebug();
 			app.UseMvcWithDefaultRoute();
 		}
 	}

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace GladMMO
 {
@@ -36,20 +35,20 @@ namespace GladMMO
 		}
 
 		/// <inheritdoc />
-		public Task<bool> HasDataForRegionAsync(ClientRegionLocale locale)
+		public async Task<bool> HasDataForRegionAsync(ClientRegionLocale locale)
 		{
 			if (!Enum.IsDefined(typeof(ClientRegionLocale), locale)) throw new ArgumentOutOfRangeException(nameof(locale), "Value should be defined in the ClientRegionLocale enum.");
 
-			return EndpointsContext.Endpoints.AnyAsync(e => e.Region == locale);
+			return await EndpointsContext.Endpoints.AnyAsync(e => e.Region == locale);
 		}
 
 		/// <inheritdoc />
-		public Task<bool> HasEntryAsync(ClientRegionLocale locale, string serviceType)
+		public async Task<bool> HasEntryAsync(ClientRegionLocale locale, string serviceType)
 		{
 			if (!Enum.IsDefined(typeof(ClientRegionLocale), locale)) throw new ArgumentOutOfRangeException(nameof(locale), "Value should be defined in the ClientRegionLocale enum.");
 			if (string.IsNullOrWhiteSpace(serviceType)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(serviceType));
 
-			return EndpointsContext.Endpoints.AnyAsync(e => e.Region == locale && e.Service == serviceType);
+			return await EndpointsContext.Endpoints.AnyAsync(e => e.Region == locale && e.Service == serviceType);
 		}
 	}
 }

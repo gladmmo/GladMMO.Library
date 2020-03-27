@@ -67,7 +67,6 @@ namespace GladMMO
 
 			//This adds CloudWatch AWS logging to this app
 			loggerFactory.RegisterGuardiansLogging(Configuration);
-			loggerFactory.AddDebug();
 
 			app.UseGladMMOCORSMiddleware();
 
