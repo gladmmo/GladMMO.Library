@@ -57,10 +57,20 @@ namespace GladMMO
 						.WithType(EntityTypeId.TYPEID_PLAYER)
 						.Build();
 
-					//TODO: Optimize below awaits.
-					//Do a namequery so it's in the cache for when anything tries to get entities name.
-					await EntityNameQueryable.RetrieveAsync(entityGuid)
-						.ConfigureAwaitFalse();
+					try
+					{
+						//TODO: Optimize below awaits.
+						//Do a namequery so it's in the cache for when anything tries to get entities name.
+						await EntityNameQueryable.RetrieveAsync(entityGuid)
+							.ConfigureAwaitFalse();
+					}
+					catch (Exception e)
+					{
+						if(Logger.IsErrorEnabled)
+							Logger.Error($"Failed to query for Character: {entityGuid.CurrentObjectGuid} name. Reason: {e}");
+
+						throw;
+					}
 
 					var appearanceResponse = await CharacterServiceQueryable.GetCharacterAppearance(entityGuid.CurrentObjectGuid)
 						.ConfigureAwaitFalse();
