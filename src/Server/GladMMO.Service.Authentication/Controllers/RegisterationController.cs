@@ -53,8 +53,9 @@ namespace GladMMO
 
 			if (identityResult.Succeeded)
 			{
-				PlayerAccountJWTModel PlayerAccountJWTModel = await AuthenticationServiceClient.TryAuthenticate(new AuthenticationRequestModel(username, password));
-				await UserManager.AddClaimAsync(user, new Claim(GladMMOPlayfabConstants.PLAYFAB_JWT_CLAIM_TYPE, PlayerAccountJWTModel.PlayfabId));
+				//TODO: Renable PlayFab
+				//JWTModel PlayerAccountJWTModel = await AuthenticationServiceClient.TryAuthenticate(new AuthenticationRequestModel(username, password));
+				//await UserManager.AddClaimAsync(user, new Claim(GladMMOPlayfabConstants.PLAYFAB_JWT_CLAIM_TYPE, PlayerAccountJWTModel.PlayfabId));
 
 				//At this point, the account has the PlayFab id claim so it's ready for use.
 				return Ok();

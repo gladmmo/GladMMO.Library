@@ -69,7 +69,7 @@ namespace GladMMO
 			//We should not do async OnEventFired because we will get silent failures.
 			UnityAsyncHelper.UnityMainThreadContext.PostAsync(async () =>
 			{
-				PlayerAccountJWTModel PlayerAccountJWTModel = null;
+				JWTModel PlayerAccountJWTModel = null;
 
 				//TODO: Validate username and password
 				//We can't do error code supression with refit anymore, so we have to do this crap.
@@ -104,7 +104,7 @@ namespace GladMMO
 						Logger.Debug($"Auth Response for User: {UsernameText.Text} Result: {PlayerAccountJWTModel?.isTokenValid} OptionalError: {PlayerAccountJWTModel?.Error} OptionalErrorDescription: {PlayerAccountJWTModel?.ErrorDescription}");
 
 					//Even if it's null, we should broadcast the event.
-					OnAuthenticationResultRecieved?.Invoke(this, new AuthenticationResultEventArgs(PlayerAccountJWTModel));
+					OnAuthenticationResultRecieved?.Invoke(this, new AuthenticationResultEventArgs(new PlayerAccountJWTModel(PlayerAccountJWTModel.AccessToken)));
 				}
 			});
 		}

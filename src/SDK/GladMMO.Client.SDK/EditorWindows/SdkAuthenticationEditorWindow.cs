@@ -68,7 +68,7 @@ namespace GladMMO.SDK
 			IAuthenticationService authService = Refit.RestService.For<IAuthenticationService>("http://test-guardians-auth.azurewebsites.net");
 
 			//Authentication using provided credentials
-			PlayerAccountJWTModel result = authService.TryAuthenticate(new AuthenticationRequestModel(_AccountName, _Password)).Result;
+			JWTModel result = authService.TryAuthenticate(new AuthenticationRequestModel(_AccountName, _Password)).Result;
 
 			Debug.Log($"Auth Result: {result.isTokenValid} Token: {result.AccessToken} Error: {result.Error} ErrorDescription: {result.ErrorDescription}.");
 

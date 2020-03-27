@@ -24,7 +24,7 @@ namespace GladMMO
 		}
 
 		/// <inheritdoc />
-		public async Task<PlayerAccountJWTModel> TryAuthenticate(AuthenticationRequestModel request)
+		public async Task<JWTModel> TryAuthenticate(AuthenticationRequestModel request)
 		{
 			IAuthenticationService service = await GetService()
 				.ConfigureAwaitFalse();
