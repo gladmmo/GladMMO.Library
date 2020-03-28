@@ -113,7 +113,7 @@ namespace GladMMO
 					catch (Exception e)
 					{
 						if(Logger.IsErrorEnabled)
-							Logger.Error($"Failed to load AssetBundle for Content: {contentId}. Reason: {e.ToString()}");
+							Logger.Error($"Failed to load AssetBundle for Content: {contentId}. Url: {downloadUrlResponse.DownloadURL} Reason: {e.ToString()}");
 
 						//Don't rethrow, causing build breaking.
 					}
