@@ -17,12 +17,12 @@ namespace GladMMO
 		}
 
 		/// <inheritdoc />
-		public override Task<PathWaypointModel> RetrieveAsync(PathWaypointKey key, bool includeNavigationProperties = false)
+		public override async Task<PathWaypointModel> RetrieveAsync(PathWaypointKey key, bool includeNavigationProperties = false)
 		{
 			if(includeNavigationProperties)
 				throw new NotImplementedException($"TODO: Add support for nav properties for {nameof(PathWaypointModel)}");
 
-			return ModelSet.FindAsync(key.PathId, key.PointId);
+			return await ModelSet.FindAsync(key.PathId, key.PointId);
 		}
 	}
 }

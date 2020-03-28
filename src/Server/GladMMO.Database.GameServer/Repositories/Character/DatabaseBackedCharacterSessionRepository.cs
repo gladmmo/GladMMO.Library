@@ -87,7 +87,7 @@ namespace GladMMO
 		/// <inheritdoc />
 		public async Task<bool> CharacterHasActiveSession(int characterId)
 		{
-			return await Context.ClaimedSession.FindAsync(characterId).ConfigureAwaitFalse() != null;
+			return await Context.ClaimedSession.FindAsync(characterId) != null;
 		}
 
 		/// <inheritdoc />

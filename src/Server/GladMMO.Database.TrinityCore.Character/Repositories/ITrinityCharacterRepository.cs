@@ -9,7 +9,7 @@ namespace GladMMO
 	/// TrinityCore version of <see cref="ICharacterRepository"/>.
 	/// </summary>
 	public interface ITrinityCharacterRepository : 
-		IGenericRepositoryCrudable<int, Characters>, INameQueryableRepository<int>
+		IGenericRepositoryCrudable<uint, Characters>, INameQueryableRepository<uint>
 	{
 		//TODO: Doc
 		Task<Characters> RetrieveAsync(string characterName);

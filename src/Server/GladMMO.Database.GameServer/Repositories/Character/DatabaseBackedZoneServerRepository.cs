@@ -22,7 +22,7 @@ namespace GladMMO
 		/// <inheritdoc />
 		public async Task<bool> ContainsAsync(int key)
 		{
-			return await Context.ZoneEntries.FindAsync(key).ConfigureAwaitFalse() != null;
+			return await Context.ZoneEntries.FindAsync(key) != null;
 		}
 
 		/// <inheritdoc />
@@ -38,12 +38,12 @@ namespace GladMMO
 		}
 
 		/// <inheritdoc />
-		public Task<ZoneInstanceEntryModel> RetrieveAsync(int key, bool includeNavigationProperties = false)
+		public async Task<ZoneInstanceEntryModel> RetrieveAsync(int key, bool includeNavigationProperties = false)
 		{
 			if(includeNavigationProperties)
 				throw new NotImplementedException($"TODO: Add nav property support for {nameof(ZoneInstanceEntryModel)}");
 
-			return Context
+			return await Context
 				.ZoneEntries
 				.FindAsync(key);
 		}

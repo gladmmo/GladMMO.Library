@@ -72,10 +72,10 @@ namespace GladMMO
 						throw;
 					}
 
-					var appearanceResponse = await CharacterServiceQueryable.GetCharacterAppearance(entityGuid.CurrentObjectGuid)
+					ResponseModel<CharacterAppearanceResponse, CharacterDataQueryReponseCode> appearanceResponse = await CharacterServiceQueryable.GetCharacterAppearance(entityGuid.CurrentObjectGuid)
 						.ConfigureAwaitFalse();
 
-					var characterData = await CharacterServiceQueryable.GetCharacterData(entityGuid.CurrentObjectGuid)
+					ResponseModel<CharacterDataInstance, CharacterDataQueryReponseCode> characterData = await CharacterServiceQueryable.GetCharacterData(entityGuid.CurrentObjectGuid)
 						.ConfigureAwaitFalse();
 
 					//Don't throw, because we actually don't want to stop the

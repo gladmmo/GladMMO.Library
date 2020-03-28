@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GladMMO
 {
-	public sealed class TrinityCoreCharacterRepository : BaseGenericBackedDatabaseRepository<wotlk_charactersContext, int, Characters>, ITrinityCharacterRepository
+	public sealed class TrinityCoreCharacterRepository : BaseGenericBackedDatabaseRepository<wotlk_charactersContext, uint, Characters>, ITrinityCharacterRepository
 	{
 		public TrinityCoreCharacterRepository(wotlk_charactersContext context) 
 			: base(context)
@@ -15,7 +15,7 @@ namespace GladMMO
 
 		}
 
-		public async Task<string> RetrieveNameAsync(int key)
+		public async Task<string> RetrieveNameAsync(uint key)
 		{
 			Characters character = await Context
 				.Characters

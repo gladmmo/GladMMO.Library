@@ -43,6 +43,37 @@ namespace GladMMO
 			//No reason to send all this data when they may only need names. Which can be queried through the known API
 			return new CharacterListResponse(characterIds);
 		}
+
+		[HttpGet("{id}/appearance")]
+		[AuthorizeJwt]
+		[ProducesJson]
+		public async Task<IActionResult> GetCharacterAppearance([FromRoute(Name = "id")] uint characterId)
+		{
+			if(!await CharacterRepository.ContainsAsync(characterId))
+				return BuildFailedResponseModel(CharacterDataQueryReponseCode.CharacterNotFound);
+
+			Characters character = await CharacterRepository.RetrieveAsync(characterId);
+
+			//TODO: Handle actual apperance stuff.
+			return BuildSuccessfulResponseModel(new CharacterAppearanceResponse(1));
+		}
+
+		[NoResponseCache]
+		[HttpGet("{id}/data")]
+		[AuthorizeJwt]
+		[ProducesJson]
+		public async Task<IActionResult> GetCharacterData([FromRoute(Name = "id")] uint characterId)
+		{
+			//TODO: We should only let the user themselves get their own character's data OR zoneservers who have a claimed session.
+			ProjectVersionStage.AssertBeta();
+
+			if(!await CharacterRepository.ContainsAsync(characterId))
+				return BuildFailedResponseModel(CharacterDataQueryReponseCode.CharacterNotFound);
+
+			Characters character = await CharacterRepository.RetrieveAsync(characterId);
+
+			return BuildSuccessfulResponseModel(new CharacterDataInstance((int)character.Xp, character.Level));
+		}
 	}
 
 	/*[Route("api/characters")]

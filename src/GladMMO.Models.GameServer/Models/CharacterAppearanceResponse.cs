@@ -14,7 +14,7 @@ namespace GladMMO
 
 		public CharacterAppearanceResponse(int avatarModelId)
 		{
-			if (avatarModelId <= 0) throw new ArgumentOutOfRangeException(nameof(avatarModelId));
+			if (avatarModelId < 0) throw new ArgumentOutOfRangeException(nameof(avatarModelId));
 
 			AvatarModelId = avatarModelId;
 		}

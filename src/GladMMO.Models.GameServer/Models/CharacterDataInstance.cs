@@ -12,11 +12,19 @@ namespace GladMMO
 		[JsonProperty]
 		public int Experience { get; private set; }
 
-		public CharacterDataInstance(int experience)
+		/// <summary>
+		/// The current level of the character.
+		/// </summary>
+		[JsonProperty]
+		public int Level { get; private set; }
+
+		public CharacterDataInstance(int experience, int level)
 		{
 			if (experience < 0) throw new ArgumentOutOfRangeException(nameof(experience));
+			if (level < 0) throw new ArgumentOutOfRangeException(nameof(level));
 
 			Experience = experience;
+			Level = level;
 		}
 
 		//Serializer ctor
