@@ -42,8 +42,8 @@ namespace GladMMO
 		public ObjectGuidBuilder WithType(EntityTypeId type)
 		{
 			RawGuid = 0x00FFFFFFFFFFFFFF & RawGuid; //remove current entity type.
-
-			RawGuid |= (((ulong)(byte)type) << 56);
+			
+			RawGuid |= (((ulong)(byte)BaseGuid.TypeIdToMask(type)) << 56);
 
 			return this;
 		}
