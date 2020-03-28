@@ -55,7 +55,7 @@ namespace GladMMO
 			Characters character = await CharacterRepository.RetrieveAsync(characterId);
 
 			//TODO: Handle actual apperance stuff.
-			return BuildSuccessfulResponseModel(new CharacterAppearanceResponse(1));
+			return BuildSuccessfulResponseModel(new CharacterAppearanceResponse(9));
 		}
 
 		[NoResponseCache]
