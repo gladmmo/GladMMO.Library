@@ -12,11 +12,11 @@ namespace GladMMO
 	[Route("api/namequery/player")]
 	public class PlayerNameQueryController : BaseNameQueryController
 	{
-		private ICharacterRepository CharacterRepository { get; }
+		private ITrinityCharacterRepository CharacterRepository { get; }
 
 		/// <inheritdoc />
-		public PlayerNameQueryController(IClaimsPrincipalReader claimsReader, ILogger<AuthorizationReadyController> logger, 
-			ICharacterRepository characterRepository) 
+		public PlayerNameQueryController(IClaimsPrincipalReader claimsReader, ILogger<AuthorizationReadyController> logger,
+			ITrinityCharacterRepository characterRepository) 
 			: base(claimsReader, logger)
 		{
 			CharacterRepository = characterRepository ?? throw new ArgumentNullException(nameof(characterRepository));
@@ -27,14 +27,14 @@ namespace GladMMO
 			if(entityGuid.TypeId <= 0)
 				return BuildFailedResponseModel(NameQueryResponseCode.UnknownIdError);
 
-			bool knownId = await CharacterRepository.ContainsAsync(entityGuid.CurrentObjectGuid);
+			bool knownId = await CharacterRepository.ContainsAsync((uint)entityGuid.CurrentObjectGuid);
 
 			//TODO: JSON Response
 			if(!knownId)
 				return BuildFailedResponseModel(NameQueryResponseCode.UnknownIdError);
 
 			//Else if it is a known id we should grab the name of the character
-			string name = await CharacterRepository.RetrieveNameAsync(entityGuid.CurrentObjectGuid);
+			string name = await CharacterRepository.RetrieveNameAsync((uint)entityGuid.CurrentObjectGuid);
 
 			return BuildSuccessfulResponseModel(new NameQueryResponse(name));
 		}
@@ -56,9 +56,9 @@ namespace GladMMO
 				return BuildFailedResponseModel(NameQueryResponseCode.UnknownIdError);
 
 			//Else if it is a known id we should grab the name of the character
-			CharacterEntryModel characterModel = await CharacterRepository.RetrieveAsync(characterPlayerName);
+			Characters characterModel = await CharacterRepository.RetrieveAsync(characterPlayerName);
 
-			return BuildSuccessfulResponseModel(ObjectGuidBuilder.New().WithType(EntityTypeId.TYPEID_PLAYER).WithId(characterModel.CharacterId).Build());
+			return BuildSuccessfulResponseModel(ObjectGuidBuilder.New().WithType(EntityTypeId.TYPEID_PLAYER).WithId((int)characterModel.Guid).Build());
 		}
 	}
 }
