@@ -89,7 +89,7 @@ namespace GladMMO
 			if (button == null) throw new ArgumentNullException(nameof(button));
 
 			CharacterDataInstance dataInstance = InitialCharacterDataMappable.RetrieveEntity(guid);
-			button.LevelText.Text = $"Level {LevelStrategy.ComputeLevelFromExperience(dataInstance.Experience).ToString()}";
+			button.LevelText.Text = $"Level {dataInstance.Level}";
 		}
 
 		private void InitializeCharacterName([NotNull] ObjectGuid guid, [NotNull] IUICharacterSlot button)
