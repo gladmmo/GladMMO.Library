@@ -22,7 +22,7 @@ namespace GladMMO.Engine
 
 		public async Task OnGameInitialized()
 		{
-			return;
+			await DataContainer.DataLoadingTask;
 		}
 	}
 }
