@@ -72,7 +72,7 @@ namespace GladMMO
 
 			Characters character = await CharacterRepository.RetrieveAsync(characterId);
 
-			return BuildSuccessfulResponseModel(new CharacterDataInstance((int)character.Xp, character.Level));
+			return BuildSuccessfulResponseModel(new CharacterDataInstance((int)character.Xp, character.Level, character.Map));
 		}
 	}
 
