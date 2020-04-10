@@ -26,6 +26,25 @@ namespace GladMMO
 
 				return CachedClientDataCollection;
 			});
+
+			//Don't need serializer for reading/writing if it's not null
+			//Otherwise the issue
+			if (CachedClientDataCollection == null)
+			{
+				builder.RegisterType<SerializerService>()
+					.AsSelf()
+					.As<ISerializerService>()
+					.OnActivated(args =>
+					{
+						args.Instance.RegisterType<DBCHeader>();
+						args.Instance.RegisterType<StringDBCReference>();
+
+						//TODO: Autodiscover DBC types.
+						args.Instance.RegisterType<MapEntry<StringDBCReference<MapEntry<string>>>>();
+
+						args.Instance.Compile();
+					});
+			}
 		}
 
 		private IClientDataCollectionContainer BuildClientDataCollection([NotNull] ISerializerService serializer)

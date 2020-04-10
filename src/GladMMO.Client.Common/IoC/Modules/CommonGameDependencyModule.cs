@@ -80,6 +80,7 @@ namespace GladMMO
 			builder.RegisterModule(new ServiceDiscoveryDependencyAutofacModule(ServiceDiscoveryUrl));
 
 			builder.RegisterModule<NameQueryServiceDependencyAutofacModule>();
+			builder.RegisterModule<ClientStaticDataDependencyAutofacModule>();
 
 			builder.RegisterType<CacheableEntityNameQueryable>()
 				.As<IEntityNameQueryable>()
