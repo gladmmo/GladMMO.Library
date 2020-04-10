@@ -7,6 +7,7 @@ using Autofac.Features.AttributeFilters;
 using Common.Logging;
 using Glader.Essentials;
 using Nito.AsyncEx;
+using Reinterpret.Net;
 
 namespace GladMMO
 {
@@ -26,7 +27,7 @@ namespace GladMMO
 
 		private IReadonlyEntityGuidMappable<CharacterDataInstance> InitialCharacterDataMappable { get; }
 
-		private IEntityExperienceLevelStrategy LevelStrategy { get; }
+		private IClientDataCollectionContainer ClientData { get; }
 
 		/// <inheritdoc />
 		public CharacterSelectionCharacterButtonDataInitOnEntryChangedEventListener(ILog logger,
@@ -34,13 +35,13 @@ namespace GladMMO
 			[KeyFilter(UnityUIRegisterationKey.CharacterSelection)] [NotNull] IReadOnlyCollection<IUICharacterSlot> characterButtons,
 			[NotNull] IEntityNameQueryable nameQueryable,
 			[NotNull] IReadonlyEntityGuidMappable<CharacterDataInstance> initialCharacterDataMappable,
-			[NotNull] IEntityExperienceLevelStrategy levelStrategy)
+			[NotNull] IClientDataCollectionContainer clientData)
 			: base(subscriptionService, false, logger)
 		{
 			CharacterButtons = characterButtons ?? throw new ArgumentNullException(nameof(characterButtons));
 			NameQueryable = nameQueryable ?? throw new ArgumentNullException(nameof(nameQueryable));
 			InitialCharacterDataMappable = initialCharacterDataMappable ?? throw new ArgumentNullException(nameof(initialCharacterDataMappable));
-			LevelStrategy = levelStrategy ?? throw new ArgumentNullException(nameof(levelStrategy));
+			ClientData = clientData ?? throw new ArgumentNullException(nameof(clientData));
 		}
 
 		/// <inheritdoc />
@@ -80,7 +81,8 @@ namespace GladMMO
 			if (guid == null) throw new ArgumentNullException(nameof(guid));
 			if (button == null) throw new ArgumentNullException(nameof(button));
 
-			button.LocationText.Text = "Unknown";
+			CharacterDataInstance dataInstance = InitialCharacterDataMappable[guid];
+			button.LocationText.Text = ClientData.MapEntry[dataInstance.MapId].MapName.enUS.GetString();
 		}
 
 		private void InitializeCharacterLevel([NotNull] ObjectGuid guid, [NotNull] IUICharacterSlot button)
