@@ -38,6 +38,7 @@ namespace GladMMO
 					{
 						args.Instance.RegisterType<DBCHeader>();
 						args.Instance.RegisterType<StringDBCReference>();
+						args.Instance.RegisterType<StringDBC>();
 
 						//TODO: Autodiscover DBC types.
 						args.Instance.RegisterType<MapEntry<StringDBCReference<MapEntry<string>>>>();
@@ -53,7 +54,7 @@ namespace GladMMO
 
 			//TODO: Multithreaded loading
 			var collectionContainer = new DefaultClientDataCollectionContainer(serializer);
-			collectionContainer.LoadDataAsync().Wait();
+			collectionContainer.StartLoadingAsync();
 
 			return collectionContainer;
 		}
