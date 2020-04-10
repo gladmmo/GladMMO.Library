@@ -42,6 +42,15 @@ namespace GladMMO
 				DBCEntryReader<T> reader = new DBCEntryReader<T>(stream, Serializer);
 				ParsedDBCFile<T> file = await reader.Parse();
 
+				//Only generic types support strings
+				if (typeof(T).IsGenericType)
+				{
+					stream.Position = 0;
+
+					DbcStringReader stringReader = new DbcStringReader(stream, Serializer);
+					ClientDataCollectionExtensions.InternalStringReferenceMap.Add(typeof(T).GenericTypeArguments[0].GenericTypeArguments[0], await stringReader.ParseOnlyStrings());
+				}
+
 				return file.RecordDatabase;
 			}
 		}
