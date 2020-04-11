@@ -8,7 +8,9 @@ namespace GladMMO
 	public sealed class CrossSceneLivingObject : MonoBehaviour
 	{
 		[SerializeField]
-		private CrossSceneObjectType Type = CrossSceneObjectType.Unknown;
+		private CrossSceneObjectType _Type = CrossSceneObjectType.Unknown;
+
+		public CrossSceneObjectType Type => _Type;
 
 		private void Awake()
 		{
