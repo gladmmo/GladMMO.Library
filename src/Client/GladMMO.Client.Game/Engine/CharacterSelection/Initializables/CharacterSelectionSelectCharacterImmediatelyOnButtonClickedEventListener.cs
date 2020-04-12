@@ -22,7 +22,7 @@ namespace GladMMO
 		private ILog Logger { get; }
 
 		/// <inheritdoc />
-		public event EventHandler<RequestedSceneChangeEventArgs> OnServerRequestedSceneChange;
+		public event EventHandler<RequestedSceneChangeEventArgs> OnRequestedSceneChange;
 
 		private ObjectGuid SelectedCharacterGuid { get; set; }
 
@@ -62,7 +62,7 @@ namespace GladMMO
 				//We do this before sending the player login BECAUSE of a race condition that can be caused
 				//since I actually KNOW this event should disable networking. We should not handle messages in this scene after this point basically.
 				//TODO: Don't hardcode this scene.
-				OnServerRequestedSceneChange?.Invoke(this, new RequestedSceneChangeEventArgs((PlayableGameScene) 2));
+				OnRequestedSceneChange?.Invoke(this, new RequestedSceneChangeEventArgs((PlayableGameScene) 2));
 
 				/*CharacterSessionEnterResponse enterResponse = await CharacterServiceQueryable.TryEnterSession(SelectedCharacterGuid.CurrentObjectGuid);
 

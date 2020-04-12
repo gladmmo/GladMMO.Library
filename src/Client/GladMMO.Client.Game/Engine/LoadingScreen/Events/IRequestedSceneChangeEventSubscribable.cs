@@ -7,7 +7,7 @@ namespace GladMMO
 {
 	public interface IRequestedSceneChangeEventSubscribable
 	{
-		event EventHandler<RequestedSceneChangeEventArgs> OnServerRequestedSceneChange;
+		event EventHandler<RequestedSceneChangeEventArgs> OnRequestedSceneChange;
 	}
 
 	public sealed class RequestedSceneChangeEventArgs : EventArgs
