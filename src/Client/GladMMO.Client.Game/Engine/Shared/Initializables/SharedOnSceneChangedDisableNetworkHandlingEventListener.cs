@@ -7,19 +7,19 @@ namespace GladMMO
 {
 	//[SceneTypeCreateGladMMO(GameSceneType.CharacterSelection)]
 	//[SceneTypeCreateGladMMO(GameSceneType.PreZoneBurstingScreen)]
-	public sealed class SharedOnSceneChangedDisableNetworkHandlingEventListener : BaseSingleEventListenerInitializable<IServerRequestedSceneChangeEventSubscribable, ServerRequestedSceneChangeEventArgs>
+	public sealed class SharedOnSceneChangedDisableNetworkHandlingEventListener : BaseSingleEventListenerInitializable<IRequestedSceneChangeEventSubscribable, RequestedSceneChangeEventArgs>
 	{
 		private INetworkClientManager ClientManager { get; }
 
 		/// <inheritdoc />
-		public SharedOnSceneChangedDisableNetworkHandlingEventListener(IServerRequestedSceneChangeEventSubscribable subscriptionService, [NotNull] INetworkClientManager clientManager) 
+		public SharedOnSceneChangedDisableNetworkHandlingEventListener(IRequestedSceneChangeEventSubscribable subscriptionService, [NotNull] INetworkClientManager clientManager) 
 			: base(subscriptionService)
 		{
 			ClientManager = clientManager ?? throw new ArgumentNullException(nameof(clientManager));
 		}
 
 		/// <inheritdoc />
-		protected override void OnEventFired(object source, ServerRequestedSceneChangeEventArgs args)
+		protected override void OnEventFired(object source, RequestedSceneChangeEventArgs args)
 		{
 			//When a scene change is sent by the server, we are DEFINITELY going to change the scene.
 			//When we do, we need to export/disconnect the client from it's handling

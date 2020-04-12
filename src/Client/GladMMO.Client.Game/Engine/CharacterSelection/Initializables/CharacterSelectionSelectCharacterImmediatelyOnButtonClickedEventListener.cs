@@ -13,40 +13,36 @@ using UnityEngine.SceneManagement;
 namespace GladMMO
 {
 	//This just selects the character as soon as one is clicked.
-	[AdditionalRegisterationAs(typeof(IServerRequestedSceneChangeEventSubscribable))]
+	[AdditionalRegisterationAs(typeof(IRequestedSceneChangeEventSubscribable))]
 	[SceneTypeCreateGladMMO(GameSceneType.CharacterSelection)]
-	public sealed class CharacterSelectionSelectCharacterImmediatelyOnButtonClickedEventListener : ButtonClickedEventListener<IEnterWorldButtonClickedEventSubscribable>, IServerRequestedSceneChangeEventSubscribable
+	public sealed class CharacterSelectionSelectCharacterImmediatelyOnButtonClickedEventListener : ButtonClickedEventListener<IEnterWorldButtonClickedEventSubscribable>, IRequestedSceneChangeEventSubscribable
 	{
 		private ILocalCharacterDataRepository CharacterData { get; }
 
 		private ILog Logger { get; }
 
 		/// <inheritdoc />
-		public event EventHandler<ServerRequestedSceneChangeEventArgs> OnServerRequestedSceneChange;
+		public event EventHandler<RequestedSceneChangeEventArgs> OnServerRequestedSceneChange;
 
 		private ObjectGuid SelectedCharacterGuid { get; set; }
-
-		private ICharacterService CharacterServiceQueryable { get; }
 
 		/// <inheritdoc />
 		public CharacterSelectionSelectCharacterImmediatelyOnButtonClickedEventListener(
 			IEnterWorldButtonClickedEventSubscribable enterWorldButtonClickableEventSubscribable,
 			[NotNull] ICharacterSelectionButtonClickedEventSubscribable subscriptionService, 
 			[NotNull] ILocalCharacterDataRepository characterData, 
-			[NotNull] ILog logger,
-			[NotNull] ICharacterService characterServiceQueryable)
+			[NotNull] ILog logger)
 			: base(enterWorldButtonClickableEventSubscribable)
 		{
 			CharacterData = characterData ?? throw new ArgumentNullException(nameof(characterData));
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
-			CharacterServiceQueryable = characterServiceQueryable ?? throw new ArgumentNullException(nameof(characterServiceQueryable));
 
 			//Manually rig up.
 			subscriptionService.OnCharacterButtonClicked += OnCharacterButtonClicked;
 		}
 
 		/// <inheritdoc />
-		protected void OnCharacterButtonClicked(object source, CharacterButtonClickedEventArgs args)
+		private void OnCharacterButtonClicked(object source, CharacterButtonClickedEventArgs args)
 		{
 			SelectedCharacterGuid = args.CharacterGuid;
 		}
@@ -66,16 +62,16 @@ namespace GladMMO
 				//We do this before sending the player login BECAUSE of a race condition that can be caused
 				//since I actually KNOW this event should disable networking. We should not handle messages in this scene after this point basically.
 				//TODO: Don't hardcode this scene.
-				OnServerRequestedSceneChange?.Invoke(this, new ServerRequestedSceneChangeEventArgs((PlayableGameScene) 2));
+				OnServerRequestedSceneChange?.Invoke(this, new RequestedSceneChangeEventArgs((PlayableGameScene) 2));
 
-				CharacterSessionEnterResponse enterResponse = await CharacterServiceQueryable.TryEnterSession(SelectedCharacterGuid.CurrentObjectGuid);
+				/*CharacterSessionEnterResponse enterResponse = await CharacterServiceQueryable.TryEnterSession(SelectedCharacterGuid.CurrentObjectGuid);
 
 				if (Logger.IsDebugEnabled)
 					Logger.Debug($"Character Session Entry Response: {enterResponse.ResultCode}.");
 
 				if (!enterResponse.isSuccessful)
 					if (Logger.IsErrorEnabled)
-						Logger.Error($"Failed to enter CharacterSession for Entity: {SelectedCharacterGuid} Reason: {enterResponse.ResultCode}");
+						Logger.Error($"Failed to enter CharacterSession for Entity: {SelectedCharacterGuid} Reason: {enterResponse.ResultCode}");*/
 
 				//TODO: handle character session failure
 				CharacterData.UpdateCharacterId(SelectedCharacterGuid.CurrentObjectGuid);
