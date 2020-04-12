@@ -16,6 +16,8 @@ namespace GladMMO
 
 		public IKeyedClientDataCollection<MapEntry<StringDBCReference<MapEntry<string>>>> MapEntry { get; private set; }
 
+		public IKeyedClientDataCollection<LoadingScreensEntry<StringDBCReference<LoadingScreensEntry<string>>>> LoadingScreens { get; private set; }
+
 		public DefaultClientDataCollectionContainer([NotNull] ISerializerService serializer)
 		{
 			Serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
@@ -33,6 +35,7 @@ namespace GladMMO
 		private async Task CreateDataLoadingTask()
 		{
 			MapEntry = await CreateClientDataCollection<MapEntry<StringDBCReference<MapEntry<string>>>>();
+			LoadingScreens = await CreateClientDataCollection<LoadingScreensEntry<StringDBCReference<LoadingScreensEntry<string>>>>();
 		}
 
 		private async Task<DefaultKeyedClientDataCollection<T>> CreateClientDataCollection<T>() 

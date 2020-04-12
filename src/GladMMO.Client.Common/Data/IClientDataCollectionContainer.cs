@@ -14,5 +14,7 @@ namespace GladMMO
 		Task DataLoadingTask { get; }
 
 		IKeyedClientDataCollection<MapEntry<StringDBCReference<MapEntry<string>>>> MapEntry { get; }
+
+		IKeyedClientDataCollection<LoadingScreensEntry<StringDBCReference<LoadingScreensEntry<string>>>> LoadingScreens { get; }
 	}
 }
