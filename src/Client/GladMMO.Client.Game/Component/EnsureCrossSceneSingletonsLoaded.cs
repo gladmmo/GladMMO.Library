@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace GladMMO
 {
@@ -10,10 +11,18 @@ namespace GladMMO
 		public static HashSet<CrossSceneObjectType> LoadedTypes { get; } = new HashSet<CrossSceneObjectType>();
 
 		[SerializeField]
-		private  GameObject[] CrossScenePrefabs = new GameObject[0];
+		private GameObject[] CrossScenePrefabs = new GameObject[0];
 
 		private void Awake()
 		{
+			//Loaded shared scene if doesn't exist right now.
+			Scene scene = SceneManager.GetSceneByName(GladMMOClientConstants.SHARED_SCENE_NAME);
+			if (!scene.isLoaded)
+			{
+				SceneManager.LoadScene(GladMMOClientConstants.SHARED_SCENE_NAME, LoadSceneMode.Additive);
+				scene = SceneManager.GetSceneByName(GladMMOClientConstants.SHARED_SCENE_NAME);
+			}
+
 			foreach (var prefab in CrossScenePrefabs)
 			{
 				CrossSceneLivingObject crossSceneDefinition = prefab.GetComponent<CrossSceneLivingObject>();
@@ -25,8 +34,11 @@ namespace GladMMO
 				if (LoadedTypes.Contains(crossSceneDefinition.Type))
 					continue;
 
-				Instantiate(prefab);
 				LoadedTypes.Add(crossSceneDefinition.Type);
+				GameObject root = Instantiate(prefab);
+
+				//Move to shared.
+				SceneManager.MoveGameObjectToScene(root, scene);
 			}
 		}
 	}

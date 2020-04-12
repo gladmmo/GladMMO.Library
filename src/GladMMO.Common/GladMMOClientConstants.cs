@@ -15,5 +15,7 @@ namespace GladMMO
 		public const string CHARACTER_CREATION_SCENE_NAME = "CharacterCreation_v2";
 
 		public const string TITLE_SCREEN_NAME = "MainTitleScreen_v5";
+
+		public const string SHARED_SCENE_NAME = "SharedScene";
 	}
 }

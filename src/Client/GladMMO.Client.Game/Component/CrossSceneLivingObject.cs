@@ -14,7 +14,7 @@ namespace GladMMO
 
 		private void Awake()
 		{
-			DontDestroyOnLoad(gameObject);
+
 		}
 	}
 }

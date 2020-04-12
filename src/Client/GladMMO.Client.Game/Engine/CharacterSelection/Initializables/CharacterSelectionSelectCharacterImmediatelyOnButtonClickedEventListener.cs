@@ -78,7 +78,7 @@ namespace GladMMO
 
 				//TODO: Use the scene manager service.
 				//TODO: Don't hardcode scene ids. Don't load scenes directly.
-				SceneManager.LoadSceneAsync(GladMMOClientConstants.WORLD_DOWNLOAD_SCENE_NAME).allowSceneActivation = true;
+				//SceneManager.LoadSceneAsync(GladMMOClientConstants.WORLD_DOWNLOAD_SCENE_NAME).allowSceneActivation = true;
 			});
 		}
 	}
