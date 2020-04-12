@@ -6,13 +6,11 @@ namespace GladMMO
 {
 	public sealed class DefaultLocalPlayerDetails : ILocalPlayerDetails, IReadonlyLocalPlayerDetails
 	{
-		private Lazy<ObjectGuid> _localPlayerGuid;
-
 		/// <inheritdoc />
 		public ObjectGuid LocalPlayerGuid
 		{
-			get => _localPlayerGuid.Value;
-			set => throw new NotSupportedException();
+			get => CharacterDataRepo.LocalCharacterGuid;
+			set => CharacterDataRepo.UpdateCharacterId(value);
 		}
 
 		//TODO: Come up with a better way of storing entity data, without downcasting.
@@ -31,14 +29,6 @@ namespace GladMMO
 		{
 			FieldDataMap = fieldDataMap ?? throw new ArgumentNullException(nameof(fieldDataMap));
 			CharacterDataRepo = characterDataRepo ?? throw new ArgumentNullException(nameof(characterDataRepo));
-
-			_localPlayerGuid = new Lazy<ObjectGuid>(() =>
-			{
-				return new ObjectGuidBuilder()
-					.WithId(characterDataRepo.CharacterId)
-					.WithType(EntityTypeId.TYPEID_PLAYER)
-					.Build();
-			});
 		}
 	}
 }

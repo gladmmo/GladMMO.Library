@@ -28,7 +28,7 @@ namespace GladMMO
 			{
 				case EntityTypeId.TYPEID_PLAYER:
 					//It could be remote player or local player.
-					if(entityGuid.CurrentObjectGuid == CharacterDataRepository.CharacterId)
+					if(entityGuid == CharacterDataRepository.LocalCharacterGuid)
 						return EntityPrefab.LocalPlayer;
 					else
 						return EntityPrefab.RemotePlayer;

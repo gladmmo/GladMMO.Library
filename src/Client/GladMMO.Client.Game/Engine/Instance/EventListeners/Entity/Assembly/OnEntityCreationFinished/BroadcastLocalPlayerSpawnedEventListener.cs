@@ -39,7 +39,7 @@ namespace GladMMO
 		{
 			if(guid == null) throw new ArgumentNullException(nameof(guid));
 
-			return guid.TypeId == EntityTypeId.TYPEID_PLAYER && CharacterDateRepository.CharacterId == guid.CurrentObjectGuid;
+			return guid.TypeId == EntityTypeId.TYPEID_PLAYER && CharacterDateRepository.LocalCharacterGuid == guid;
 		}
 	}
 }

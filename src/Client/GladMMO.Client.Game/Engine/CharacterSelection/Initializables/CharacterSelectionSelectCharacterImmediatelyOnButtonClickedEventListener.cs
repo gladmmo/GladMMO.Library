@@ -74,7 +74,7 @@ namespace GladMMO
 						Logger.Error($"Failed to enter CharacterSession for Entity: {SelectedCharacterGuid} Reason: {enterResponse.ResultCode}");*/
 
 				//TODO: handle character session failure
-				CharacterData.UpdateCharacterId(SelectedCharacterGuid.CurrentObjectGuid);
+				CharacterData.UpdateCharacterId(SelectedCharacterGuid);
 
 				//TODO: Use the scene manager service.
 				//TODO: Don't hardcode scene ids. Don't load scenes directly.
