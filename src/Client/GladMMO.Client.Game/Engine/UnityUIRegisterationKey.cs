@@ -78,5 +78,9 @@ namespace GladMMO
 		LocalPlayerCastBar = 32,
 
 		ActionBarRow1 = 33,
+
+		LoadingScreen = 34,
+
+		LoadingScreenBar = 35
 	}
 }
