@@ -26,16 +26,20 @@ namespace GladMMO
 
 		private ObjectGuid SelectedCharacterGuid { get; set; }
 
+		private IReadonlyEntityGuidMappable<CharacterDataInstance> CharacterDataInstance { get; }
+
 		/// <inheritdoc />
 		public CharacterSelectionSelectCharacterImmediatelyOnButtonClickedEventListener(
 			IEnterWorldButtonClickedEventSubscribable enterWorldButtonClickableEventSubscribable,
 			[NotNull] ICharacterSelectionButtonClickedEventSubscribable subscriptionService, 
 			[NotNull] ILocalCharacterDataRepository characterData, 
-			[NotNull] ILog logger)
+			[NotNull] ILog logger,
+			[NotNull] IReadonlyEntityGuidMappable<CharacterDataInstance> characterDataInstance)
 			: base(enterWorldButtonClickableEventSubscribable)
 		{
 			CharacterData = characterData ?? throw new ArgumentNullException(nameof(characterData));
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
+			CharacterDataInstance = characterDataInstance ?? throw new ArgumentNullException(nameof(characterDataInstance));
 
 			//Manually rig up.
 			subscriptionService.OnCharacterButtonClicked += OnCharacterButtonClicked;
@@ -59,10 +63,12 @@ namespace GladMMO
 					return;
 				}
 
+				CharacterDataInstance dataInstance = CharacterDataInstance[SelectedCharacterGuid];
+
 				//We do this before sending the player login BECAUSE of a race condition that can be caused
 				//since I actually KNOW this event should disable networking. We should not handle messages in this scene after this point basically.
 				//TODO: Don't hardcode this scene.
-				OnRequestedSceneChange?.Invoke(this, new RequestedSceneChangeEventArgs((PlayableGameScene) 2));
+				OnRequestedSceneChange?.Invoke(this, new RequestedSceneChangeEventArgs((PlayableGameScene) 2, dataInstance.MapId));
 
 				/*CharacterSessionEnterResponse enterResponse = await CharacterServiceQueryable.TryEnterSession(SelectedCharacterGuid.CurrentObjectGuid);
 
