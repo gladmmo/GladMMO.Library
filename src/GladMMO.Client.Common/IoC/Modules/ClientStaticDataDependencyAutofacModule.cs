@@ -42,6 +42,7 @@ namespace GladMMO
 
 						//TODO: Autodiscover DBC types.
 						args.Instance.RegisterType<MapEntry<StringDBCReference<MapEntry<string>>>>();
+						args.Instance.RegisterType<LoadingScreensEntry<StringDBCReference<LoadingScreensEntry<string>>>>();
 
 						args.Instance.Compile();
 					});
