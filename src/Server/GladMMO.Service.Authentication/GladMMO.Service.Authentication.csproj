@@ -43,15 +43,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="AspNet.Security.OpenIdConnect.Primitives">
-      <HintPath>..\..\..\..\..\..\.nuget\packages\aspnet.security.openidconnect.primitives\2.0.0-rc2-final\lib\netstandard2.0\AspNet.Security.OpenIdConnect.Primitives.dll</HintPath>
-    </Reference>
-    <Reference Include="AspNet.Security.OpenIdConnect.Server">
-      <HintPath>..\..\..\..\..\..\.nuget\packages\aspnet.security.openidconnect.server\2.0.0-rc2-final\lib\netcoreapp2.0\AspNet.Security.OpenIdConnect.Server.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
-  <ItemGroup>
     <Content Update="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

@@ -7,7 +7,6 @@ using System.Net;
 using System.Security.Claims;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
-using AspNet.Security.OpenIdConnect.Primitives;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Hosting.Server.Features;
@@ -111,9 +110,9 @@ namespace GladMMO
 
 					//For some reason I can't figure out how to get the JWT middleware to spit out sub claims
 					//so we need to map the Identity to expect nameidentifier
-					options.ClaimsIdentity.UserIdClaimType = OpenIdConnectConstants.Claims.Subject;
-					options.ClaimsIdentity.RoleClaimType = OpenIdConnectConstants.Claims.Role;
-					options.ClaimsIdentity.UserNameClaimType = OpenIdConnectConstants.Claims.Name;
+					options.ClaimsIdentity.UserIdClaimType = OpenIddictConstants.Claims.Subject;
+					options.ClaimsIdentity.RoleClaimType = OpenIddictConstants.Claims.Role;
+					options.ClaimsIdentity.UserNameClaimType = OpenIddictConstants.Claims.Name;
 				})
 				.AddEntityFrameworkStores<GuardiansAuthenticationDbContext>()
 				.AddDefaultTokenProviders();
