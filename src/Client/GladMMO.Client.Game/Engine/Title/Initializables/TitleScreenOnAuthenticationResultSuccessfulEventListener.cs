@@ -49,15 +49,7 @@ namespace GladMMO
 				//requests later at all
 				TokenRepository.Update(args.TokenResult.AccessToken);
 
-				AsyncOperation unloadActiveSceneAsync = SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene());
-				unloadActiveSceneAsync.allowSceneActivation = false;
-
-				//TODO: Use the scene manager service.
-				AsyncOperation loadSceneAsync = SceneManager.LoadSceneAsync(GladMMOClientConstants.CHARACTER_SELECTION_SCENE_NAME, LoadSceneMode.Additive);
-				loadSceneAsync.allowSceneActivation = false;
-
-				unloadActiveSceneAsync.completed += operation => loadSceneAsync.allowSceneActivation = true;
-				unloadActiveSceneAsync.allowSceneActivation = true;
+				GladMMOSceneManager.LoadSceneAsync(GladMMOClientConstants.CHARACTER_SELECTION_SCENE_NAME);
 			});
 		}
 	}

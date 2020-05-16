@@ -31,7 +31,8 @@ namespace GladMMO
 			//We must load it additively so it combines with the asset bundle loaded scene.
 			//SceneController.LoadLevel((int)GameInitializableSceneSpecificationAttribute.SceneType.ZoneGameScene, LoadSceneMode.Additive);
 			//We can't use the scene service dependency since this must survive between scenes.
-			SceneManager.LoadSceneAsync((int)GameSceneType.InstanceServerScene, LoadSceneMode.Additive).allowSceneActivation = true;
+			//SceneManager.LoadSceneAsync((int)GameSceneType.InstanceServerScene, LoadSceneMode.Additive).allowSceneActivation = true;
+			throw new NotImplementedException($"TODO: Reimplement.");
 			Destroy(this);
 		}
 	}

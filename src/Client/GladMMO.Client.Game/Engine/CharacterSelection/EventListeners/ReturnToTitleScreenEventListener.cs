@@ -22,7 +22,8 @@ namespace GladMMO
 		protected override void OnEventFired(object source, ButtonClickedEventArgs args)
 		{
 			args.Button.IsInteractable = false;
-			SceneManager.LoadSceneAsync(GladMMOClientConstants.TITLE_SCREEN_NAME).allowSceneActivation = true;
+
+			GladMMOSceneManager.LoadSceneAsync(GladMMOClientConstants.TITLE_SCREEN_NAME);
 		}
 	}
 }

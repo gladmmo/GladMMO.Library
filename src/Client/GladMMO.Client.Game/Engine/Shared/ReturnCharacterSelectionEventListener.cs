@@ -35,10 +35,7 @@ namespace GladMMO
 			{
 				AutofacScope.Dispose();
 
-				//TODO: Vivox is causing crashes again if another gametick happens so we do a blocking call here.
-				AsyncOperation sceneAsync = SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene());
-				sceneAsync.completed += o => SceneManager.LoadScene(GladMMOClientConstants.CHARACTER_SELECTION_SCENE_NAME, LoadSceneMode.Additive);
-				sceneAsync.allowSceneActivation = true;
+				GladMMOSceneManager.LoadSceneAsync(GladMMOClientConstants.CHARACTER_SELECTION_SCENE_NAME);
 			});
 		}
 	}

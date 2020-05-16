@@ -87,7 +87,7 @@ namespace GladMMO
 
 			//TODO: Broadcast failure, don't hackily just load scene again.
 			//TODO: Don't hackily hardcode the scene number.
-			SceneManager.LoadSceneAsync(GladMMOClientConstants.CHARACTER_SELECTION_SCENE_NAME).allowSceneActivation = true;
+			GladMMOSceneManager.LoadSceneAsync(GladMMOClientConstants.CHARACTER_SELECTION_SCENE_NAME);
 		}
 	}
 }

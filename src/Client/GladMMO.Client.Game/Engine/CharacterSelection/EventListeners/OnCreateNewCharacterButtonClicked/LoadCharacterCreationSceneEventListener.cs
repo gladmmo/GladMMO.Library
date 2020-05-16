@@ -22,7 +22,7 @@ namespace GladMMO
 
 			//Don't load it async, because then they may click on Enter World or some wacky
 			//stuff and who knows what will happen.
-			SceneManager.LoadScene(GladMMOClientConstants.CHARACTER_CREATION_SCENE_NAME);
+			GladMMOSceneManager.LoadSceneAsync(GladMMOClientConstants.CHARACTER_CREATION_SCENE_NAME);
 		}
 	}
 }
