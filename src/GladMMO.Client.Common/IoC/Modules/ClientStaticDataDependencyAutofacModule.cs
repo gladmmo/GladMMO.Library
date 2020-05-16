@@ -36,13 +36,11 @@ namespace GladMMO
 					.As<ISerializerService>()
 					.OnActivated(args =>
 					{
-						args.Instance.RegisterType<DBCHeader>();
-						args.Instance.RegisterType<StringDBCReference>();
-						args.Instance.RegisterType<StringDBC>();
+						foreach (Type dbcType in DefaultClientDataCollectionContainer.DBCTypes)
+							args.Instance.RegisterType(dbcType);
 
-						//TODO: Autodiscover DBC types.
-						args.Instance.RegisterType<MapEntry<StringDBCReference<MapEntry<string>>>>();
-						args.Instance.RegisterType<LoadingScreensEntry<StringDBCReference<LoadingScreensEntry<string>>>>();
+						foreach (Type collectionType in DefaultClientDataCollectionContainer.DBCCollectionTypes)
+							args.Instance.RegisterType(collectionType);
 
 						args.Instance.Compile();
 					});

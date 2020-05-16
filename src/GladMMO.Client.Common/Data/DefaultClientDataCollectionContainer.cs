@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using FreecraftCore;
@@ -8,15 +9,36 @@ using FreecraftCore.Serializer;
 
 namespace GladMMO
 {
+	internal static class GDBCCollectionExtensions
+	{
+		public static async Task AddToDictionary<T>(this Task<GDBCCollection<T>> collection, IDictionary<Type, object> map)
+			where T : IDBCEntryIdentifiable
+		{
+			map.Add(typeof(T), await collection);
+		}
+	}
+
 	public sealed class DefaultClientDataCollectionContainer : IClientDataCollectionContainer
 	{
+		internal static Type[] DBCTypes = new[]
+		{
+			typeof(MapEntry<string>),
+			typeof(LoadingScreensEntry<string>)
+		};
+
+		internal static Type[] DBCCollectionTypes = new[]
+		{
+			typeof(GDBCCollection<MapEntry<string>>),
+			typeof(GDBCCollection<LoadingScreensEntry<string>>)
+		};
+
 		private ISerializerService Serializer { get; }
 
 		public Task DataLoadingTask { get; private set; }
 
-		public IKeyedClientDataCollection<MapEntry<StringDBCReference<MapEntry<string>>>> MapEntry { get; private set; }
-
-		public IKeyedClientDataCollection<LoadingScreensEntry<StringDBCReference<LoadingScreensEntry<string>>>> LoadingScreens { get; private set; }
+		//This is a TOTAL hack. It's upcasting GDBC collections to object so we can store and map them
+		//for pseudo-generic access.
+		private Dictionary<Type, object> GDBCCollectionMap { get; } = new Dictionary<Type, object>();
 
 		public DefaultClientDataCollectionContainer([NotNull] ISerializerService serializer)
 		{
@@ -26,7 +48,7 @@ namespace GladMMO
 		public void StartLoadingAsync()
 		{
 			//Only ever load once, even if it didn't fully finish loading.
-			if (MapEntry != null && DataLoadingTask == null)
+			if (GDBCCollectionMap.Count > 1)
 				return;
 
 			DataLoadingTask = CreateDataLoadingTask();
@@ -34,70 +56,42 @@ namespace GladMMO
 
 		private async Task CreateDataLoadingTask()
 		{
-			MapEntry = await CreateClientDataCollection<MapEntry<StringDBCReference<MapEntry<string>>>>();
-			LoadingScreens = await CreateClientDataCollection<LoadingScreensEntry<StringDBCReference<LoadingScreensEntry<string>>>>();
+			await LoadFileAsync<MapEntry<string>>().AddToDictionary(GDBCCollectionMap);
+			await LoadFileAsync<LoadingScreensEntry<string>>().AddToDictionary(GDBCCollectionMap);
 		}
 
-		private async Task<DefaultKeyedClientDataCollection<T>> CreateClientDataCollection<T>() 
-			where T : IDBCEntryIdentifiable
+		public IGDBCCollection<TEntryType> DataType<TEntryType>()
+			where TEntryType : IDBCEntryIdentifiable
 		{
-			return new DefaultKeyedClientDataCollection<T>(await LoadFileAsync<T>());
+			if(!GDBCCollectionMap.ContainsKey(typeof(TEntryType)))
+				throw new InvalidOperationException($"Tried to load DBC: {typeof(TEntryType).Name} but DBC is not loaded. Add to DBC Array: {nameof(DBCTypes)}.");
+
+			return (IGDBCCollection<TEntryType>)GDBCCollectionMap[typeof(TEntryType)];
 		}
 
-		private async Task<IReadOnlyDictionary<int, T>> LoadFileAsync<T>() 
+		private async Task<GDBCCollection<T>> LoadFileAsync<T>() 
 			where T : IDBCEntryIdentifiable
 		{
+			if (!DBCTypes.Contains(typeof(T)))
+				throw new InvalidOperationException($"Tried to load DBC: {typeof(T).Name} but DBC is not specified in Known DBC Array: {nameof(DBCTypes)}");
 
 			string dbcName = typeof(T).GetGenericTypeDefinition().Name.Substring(0, typeof(T).GetGenericTypeDefinition().Name.LastIndexOf("Entry"));
-			string path = $"DBC/{dbcName}.dbc";
+			string path = $"GDBC/{dbcName}.gdbc";
 
 			try
 			{
 				using(FileStream stream = new FileStream(path, FileMode.Open, FileAccess.Read))
+				using(MemoryStream ms = new MemoryStream())
 				{
-					DBCEntryReader<T> reader = new DBCEntryReader<T>(stream, Serializer);
-					ParsedDBCFile<T> file = await reader.Parse();
-
-					//Only generic types support strings
-					if(typeof(T).IsGenericType)
-					{
-						stream.Position = 0;
-
-						DbcStringReader stringReader = new DbcStringReader(stream, Serializer);
-						ClientDataCollectionExtensions.InternalStringReferenceMap.Add(typeof(T).GenericTypeArguments[0].GenericTypeArguments[0], await stringReader.ParseOnlyStrings());
-					}
-
-					return file.RecordDatabase;
+					await stream.CopyToAsync(ms);
+					ms.Position = 0;
+					return Serializer.Deserialize<GDBCCollection<T>>(new DefaultStreamReaderStrategy(ms.ToArray()));
 				}
 			}
 			catch (Exception e)
 			{
 				throw new InvalidOperationException($"Failed to load Client Data. Path: {path} Reason: {e.Message}", e);
 			}
-		}
-
-		//TODO: move to static class
-		public static string GetFriendlyName(Type type)
-		{
-			string friendlyName = type.Name;
-			if(type.IsGenericType)
-			{
-				int iBacktick = friendlyName.IndexOf('`');
-				if(iBacktick > 0)
-				{
-					friendlyName = friendlyName.Remove(iBacktick);
-				}
-				friendlyName += "<";
-				Type[] typeParameters = type.GetGenericArguments();
-				for(int i = 0; i < typeParameters.Length; ++i)
-				{
-					string typeParamName = GetFriendlyName(typeParameters[i]);
-					friendlyName += (i == 0 ? typeParamName : "," + typeParamName);
-				}
-				friendlyName += ">";
-			}
-
-			return friendlyName;
 		}
 	}
 }

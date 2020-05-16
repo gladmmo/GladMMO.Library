@@ -13,8 +13,7 @@ namespace GladMMO
 		/// </summary>
 		Task DataLoadingTask { get; }
 
-		IKeyedClientDataCollection<MapEntry<StringDBCReference<MapEntry<string>>>> MapEntry { get; }
-
-		IKeyedClientDataCollection<LoadingScreensEntry<StringDBCReference<LoadingScreensEntry<string>>>> LoadingScreens { get; }
+		IGDBCCollection<TEntryType> DataType<TEntryType>()
+			where TEntryType : IDBCEntryIdentifiable;
 	}
 }
