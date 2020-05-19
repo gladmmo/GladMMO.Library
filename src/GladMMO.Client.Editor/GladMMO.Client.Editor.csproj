@@ -20,6 +20,9 @@
     <Reference Include="UnityEngine">
       <HintPath>..\..\lib\Unity\UnityEngine.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>..\..\lib\Unity\UnityEngine.UI.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>
