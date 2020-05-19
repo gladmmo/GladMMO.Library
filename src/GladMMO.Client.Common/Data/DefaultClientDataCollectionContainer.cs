@@ -26,11 +26,14 @@ namespace GladMMO
 			typeof(LoadingScreensEntry<string>)
 		};
 
-		internal static Type[] DBCCollectionTypes = new[]
+		internal static IEnumerable<Type> DBCCollectionTypes
 		{
-			typeof(GDBCCollection<MapEntry<string>>),
-			typeof(GDBCCollection<LoadingScreensEntry<string>>)
-		};
+			get
+			{
+				foreach (Type t in DBCTypes)
+					yield return typeof(GDBCCollection<>).MakeGenericType(t);
+			}
+		}
 
 		private ISerializerService Serializer { get; }
 
