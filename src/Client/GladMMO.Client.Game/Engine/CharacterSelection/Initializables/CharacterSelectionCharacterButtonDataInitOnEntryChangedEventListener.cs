@@ -82,7 +82,7 @@ namespace GladMMO
 			if (button == null) throw new ArgumentNullException(nameof(button));
 
 			CharacterDataInstance dataInstance = InitialCharacterDataMappable[guid];
-			button.LocationText.Text = ClientData.DataType<MapEntry<string>>()[dataInstance.MapId].MapName.enUS;
+			button.LocationText.Text = ClientData.GetEntry<MapEntry<string>>(dataInstance.MapId).MapName.enUS;
 		}
 
 		private void InitializeCharacterLevel([NotNull] ObjectGuid guid, [NotNull] IUICharacterSlot button)

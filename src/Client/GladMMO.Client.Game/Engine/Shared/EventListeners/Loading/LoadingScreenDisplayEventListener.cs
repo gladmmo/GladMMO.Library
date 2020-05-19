@@ -10,6 +10,7 @@ using UnityEngine;
 namespace GladMMO
 {
 	[SceneTypeCreateGladMMO(GameSceneType.CharacterSelection)]
+	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
 	public sealed class LoadingScreenDisplayEventListener : BaseSingleEventListenerInitializable<IRequestedSceneChangeEventSubscribable, RequestedSceneChangeEventArgs>
 	{
 		public IUIElement LoadingScreenRoot { get; }
@@ -33,11 +34,11 @@ namespace GladMMO
 		{
 			if (args.isLoadingSpecificMap)
 			{
-				var mapEntry = ClientData.DataType<MapEntry<string>>()[args.MapId];
-				if (ClientData.DataType<LoadingScreensEntry<string>>().ContainsKey(mapEntry.LoadingScreenId))
+				var mapEntry = ClientData.GetEntry<MapEntry<string>>(args.MapId);
+				if (ClientData.HasEntry<LoadingScreensEntry<string>>(mapEntry.LoadingScreenId))
 				{
 					//TODO: Handle widescreen
-					var loadingScreen = ClientData.DataType<LoadingScreensEntry<string>>()[mapEntry.LoadingScreenId];
+					var loadingScreen = ClientData.GetEntry<LoadingScreensEntry<string>>(mapEntry.LoadingScreenId);
 
 					//Note: Extensions must be omitted. https://docs.unity3d.com/ScriptReference/Resources.Load.html
 					string imagePath = Path.ChangeExtension(loadingScreen.FilePath, null);
