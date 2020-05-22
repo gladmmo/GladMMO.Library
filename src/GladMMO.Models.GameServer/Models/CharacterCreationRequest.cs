@@ -29,12 +29,15 @@ namespace GladMMO
 		[JsonProperty]
 		public string RequestedName { get; private set; }
 
-		public CharacterCreationRequest(CharacterRace requestedRace, CharacterClass requestedClass)
+		public CharacterCreationRequest(CharacterRace requestedRace, CharacterClass requestedClass, [JetBrains.Annotations.NotNull] string requestedName)
 		{
 			if (!Enum.IsDefined(typeof(CharacterRace), requestedRace)) throw new InvalidEnumArgumentException(nameof(requestedRace), (int) requestedRace, typeof(CharacterRace));
 			if (!Enum.IsDefined(typeof(CharacterClass), requestedClass)) throw new InvalidEnumArgumentException(nameof(requestedClass), (int) requestedClass, typeof(CharacterClass));
+			if (string.IsNullOrWhiteSpace(requestedName)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(requestedName));
+
 			RequestedRace = requestedRace;
 			RequestedClass = requestedClass;
+			RequestedName = requestedName;
 		}
 
 		/// <summary>
@@ -46,8 +49,10 @@ namespace GladMMO
 			
 		}
 
-		public bool isValidCombination(IEnumerable<CharBaseInfoEntry> baseInfoEntries)
+		public bool isValidCombination([JetBrains.Annotations.NotNull] IEnumerable<CharBaseInfoEntry> baseInfoEntries)
 		{
+			if (baseInfoEntries == null) throw new ArgumentNullException(nameof(baseInfoEntries));
+
 			//Check if we're a known combo base on CharBaseInfo DBC data.
 			return baseInfoEntries.Any(e => e.ClassId == (int) RequestedClass && e.RaceId == (int) RequestedRace);
 		}
