@@ -74,6 +74,83 @@ namespace GladMMO
 
 			return BuildSuccessfulResponseModel(new CharacterDataInstance((int)character.Xp, character.Level, character.Map));
 		}
+
+		[ProducesJson]
+		[ResponseCache(Duration = 10)] //Jagex crumbled for a day due to name checks. So, we should cache for 10 seconds. Probably won't change much.
+		[AllowAnonymous]
+		[HttpGet("name/{name}/validate")]
+		public async Task<IActionResult> ValidateCharacterName([FromRoute] string name)
+		{
+			if(string.IsNullOrWhiteSpace(name)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(name));
+
+			//Only letters in WoW.
+			if (!name.All(char.IsLetter))
+				return Ok(new CharacterNameValidationResponse(CharacterNameValidationResponseCode.NameLengthIsInvalid));
+
+			//TODO: Finer grain picking apart. We want to indicate the failure reason.
+			bool nameIsAvailable = await ValidateNameAvailability(name);
+
+			return Ok(new CharacterNameValidationResponse(nameIsAvailable ? CharacterNameValidationResponseCode.Success : CharacterNameValidationResponseCode.NameIsUnavailable));
+		}
+
+		private async Task<bool> ValidateNameAvailability(string name)
+		{
+			//TODO: Add a dependency that can filter and check the validate the name's format/characters/length
+
+			//Now we have to check if a character exists with this name
+			return !await CharacterRepository.ContainsAsync(name);
+		}
+
+		[ProducesJson]
+		[AuthorizeJwt] //is it IMPORTANT that this method authorize the user. Don't know the accountid otherwise even, would be impossible.
+		[HttpPost("create")]
+		[NoResponseCache]
+		public async Task<IActionResult> CreateCharacter([FromBody] [NotNull] CharacterCreationRequest request)
+		{
+			if (request == null) throw new ArgumentNullException(nameof(request));
+
+			int accountId = ClaimsReader.GetAccountIdInt(User);
+
+			bool nameIsAvailable = await ValidateNameAvailability(request.RequestedName);
+
+			if (!nameIsAvailable)
+				return BadRequest(new CharacterCreationResponse(CharacterCreationResponseCode.NameUnavailableError));
+
+			//TODO: We need a transition around the creation of the below entries.
+			ProjectVersionStage.AssertBeta();
+			//TODO: Don't expose the database table model
+			//Otherwise we should try to create. There is a race condition here that can cause it to still fail
+			//since others could create a character with this name before we finish after checking
+			bool result = await CharacterRepository.TryCreateAsync(CreateNewTestCharacter(accountId, request.RequestedName));
+
+			return Json(new CharacterCreationResponse(CharacterCreationResponseCode.Success));
+		}
+
+		private static Characters CreateNewTestCharacter(int accountId, string requestedName)
+		{
+			return new Characters()
+			{
+				Account = (uint)accountId,
+				Level = 1,
+				Name = requestedName,
+				RestState = 1,
+				Cinematic = 1,
+				AtLogin = 32, //use login flags enum
+				Health = 500000000,
+				TalentGroupsCount = 1,
+
+				Race = (byte)FreecraftCore.CharacterRace.HUMAN,
+				Class = (byte)FreecraftCore.CharacterClass.Warrior,
+
+				TaxiPath = "",
+				Taximask = "",
+				EquipmentCache = "",
+				ExploredZones = "",
+				KnownTitles = ""
+			};
+		}
+
+		//CharacterCreationRequest
 	}
 
 	/*[Route("api/characters")]
@@ -283,4 +360,4 @@ namespace GladMMO
 			}
 		}
 	}*/
-	}
+}
