@@ -19,15 +19,25 @@ namespace GladMMO
 			//Case where our active scene is an addressable scene.
 			if (AddressableSceneMap.ContainsKey(SceneManager.GetActiveScene().name))
 			{
-				AsyncOperationHandle<SceneInstance> sceneHandle = AddressableSceneMap[SceneManager.GetActiveScene().name];
-				AddressableSceneMap.TryRemove(SceneManager.GetActiveScene().name, out var _);
+				AddressableSceneMap.TryRemove(SceneManager.GetActiveScene().name, out var sceneHandle);
+
+				if(!sceneHandle.IsValid())
+					throw new InvalidOperationException($"Failed to access loaded Addressable Scene for unloading: {SceneManager.GetActiveScene().name}");
+
 				AsyncOperationHandle<SceneInstance> unloadOperationHandle = UnityEngine.AddressableAssets.Addressables.UnloadSceneAsync(sceneHandle);
 
 				AsyncOperationHandle<SceneInstance> sceneLoadHandle = UnityEngine.AddressableAssets.Addressables.LoadSceneAsync(sceneName, UnityEngine.SceneManagement.LoadSceneMode.Additive, false);
+
+				if (!sceneLoadHandle.IsValid())
+					throw new InvalidOperationException($"Failed to load Addressable Scene: {sceneName}");
+
 				AddressableSceneMap[sceneName] = sceneLoadHandle;
 
 				unloadOperationHandle.Completed += op =>
 				{
+					if(!sceneLoadHandle.IsValid())
+						throw new InvalidOperationException($"Failed to setup callback for Addressable Scene: {sceneName}");
+
 					sceneLoadHandle.Completed += loadOperation => ActivateScene(sceneLoadHandle);
 				};
 
@@ -39,6 +49,10 @@ namespace GladMMO
 				unloadOperationHandle.allowSceneActivation = false;
 
 				AsyncOperationHandle<SceneInstance> sceneLoadHandle = UnityEngine.AddressableAssets.Addressables.LoadSceneAsync(sceneName, LoadSceneMode.Additive, false);
+
+				if(!sceneLoadHandle.IsValid())
+					throw new InvalidOperationException($"Failed to load Addressable Scene: {sceneName}");
+
 				AddressableSceneMap[sceneName] = sceneLoadHandle;
 
 				unloadOperationHandle.completed += op =>
@@ -53,15 +67,8 @@ namespace GladMMO
 
 		private static void ActivateScene(AsyncOperationHandle<SceneInstance> sceneLoadHandle)
 		{
-			sceneLoadHandle.Result.Activate();
-			SceneManager.sceneLoaded += OnSceneLoaded;
-		}
-
-		//We have to set this here because when Activate is called the scene is not instantly loaded.
-		private static void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-		{
-			SceneManager.sceneLoaded -= OnSceneLoaded;
-			SceneManager.SetActiveScene(SceneManager.GetSceneByName(scene.name));
+			AsyncOperation sceneActivation = sceneLoadHandle.Result.ActivateAsync();
+			sceneActivation.completed += o => SceneManager.SetActiveScene(SceneManager.GetSceneByName(sceneLoadHandle.Result.Scene.name));
 		}
 	}
 }
