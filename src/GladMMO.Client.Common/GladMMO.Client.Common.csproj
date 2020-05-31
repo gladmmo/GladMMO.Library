@@ -31,8 +31,8 @@
     <ProjectReference Include="..\GladMMO.Common\GladMMO.Common.csproj" />
     <ProjectReference Include="..\GladMMO.Models.Social\GladMMO.Models.Social.csproj" />
     <ProjectReference Include="..\GladMMO.Network.Common\GladMMO.Network.Common.csproj" />
-    <ProjectReference Include="..\Packages\Unity.Addressables\Unity.Addressables.csproj" />
-    <ProjectReference Include="..\Packages\Unity.ResourceManager\Unity.ResourceManager.csproj" />
+    <ProjectReference Include="..\UnityPackages\Unity.Addressables\Unity.Addressables.csproj" />
+    <ProjectReference Include="..\UnityPackages\Unity.ResourceManager\Unity.ResourceManager.csproj" />
   </ItemGroup>
 
   <ItemGroup>
