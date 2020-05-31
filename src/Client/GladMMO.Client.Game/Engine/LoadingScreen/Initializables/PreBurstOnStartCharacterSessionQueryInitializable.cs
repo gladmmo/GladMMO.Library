@@ -40,45 +40,47 @@ namespace GladMMO
 			//When we start the loading screen for the game
 			//To know what world we should load we should
 			//To know that we need information about the character session.
-			CharacterSessionEnterResponse characterSessionData = await CharacterService.TryEnterSession(LocalCharacterData.LocalCharacterGuid.CurrentObjectGuid)
+			CharacterSessionDataResponse characterSessionData = await CharacterService.GetCharacterSessionData(LocalCharacterData.LocalCharacterGuid.CurrentObjectGuid)
 				.ConfigureAwaitFalse();
 
-			if(!characterSessionData.isSuccessful)
+			if(characterSessionData.ResultCode != CharacterSessionDataResponseCode.NoSessionAvailable) //if it has a claimed character session, we have a problem.
 			{
 				if(Logger.IsErrorEnabled)
 					Logger.Error($"Failed to query Character Session Data: {characterSessionData.ResultCode}:{(int)characterSessionData.ResultCode}");
 
-				//If we already have a claim we should repeat.
-				if (characterSessionData.ResultCode == CharacterSessionEnterResponseCode.AccountAlreadyHasCharacterSession)
+				//Retry 5 times while not successful.
+				for(int i = 0; i < 5 && !characterSessionData.isSuccessful; i++)
 				{
-					//Retry 5 times while not successful.
-					for (int i = 0; i < 5 && !characterSessionData.isSuccessful; i++)
-					{
-						characterSessionData = await CharacterService.TryEnterSession(LocalCharacterData.LocalCharacterGuid.CurrentObjectGuid)
-							.ConfigureAwaitFalse();
+					characterSessionData = await CharacterService.GetCharacterSessionData(LocalCharacterData.LocalCharacterGuid.CurrentObjectGuid)
+						.ConfigureAwaitFalse();
 
-						await Task.Delay(1500)
-							.ConfigureAwaitFalseVoid();
-					}
-
-					//If not succesful after the retry.
-					if (!characterSessionData.isSuccessful)
-					{
-						await LoadCharacterSelection();
-						return;
-					}
+					await Task.Delay(1500)
+						.ConfigureAwaitFalseVoid();
 				}
-				else
+
+				//If not succesful after the retry.
+				//TrinityCore update: It's confusing but actually we WANT there to be no session. If there IS a session then
+				//it means the account is logged in on a character already.
+				if(characterSessionData.ResultCode != CharacterSessionDataResponseCode.NoSessionAvailable)
 				{
 					await LoadCharacterSelection();
+					return;
 				}
-					
 			}
 
-			if(Logger.IsInfoEnabled)
-				Logger.Info($"About to broadcasting {nameof(OnCharacterSessionDataChanged)} with Zone: {characterSessionData.ZoneId}");
+			await BroadcastSessionInfo();
+		}
 
-			OnCharacterSessionDataChanged?.Invoke(this, new CharacterSessionDataChangedEventArgs(characterSessionData.ZoneId));
+		private async Task BroadcastSessionInfo()
+		{
+			//Ok, so the account doesn't have a session. We'll attempt to login but we need information
+			//about what map we should load.
+			var characterData = await CharacterService.GetCharacterData(LocalCharacterData.LocalCharacterGuid.CurrentObjectGuid);
+
+			if (Logger.IsInfoEnabled)
+				Logger.Info($"About to broadcasting {nameof(OnCharacterSessionDataChanged)} with Zone: {characterData.Result.MapId}");
+
+			OnCharacterSessionDataChanged?.Invoke(this, new CharacterSessionDataChangedEventArgs(characterData.Result.MapId));
 		}
 
 		private static async Task LoadCharacterSelection()

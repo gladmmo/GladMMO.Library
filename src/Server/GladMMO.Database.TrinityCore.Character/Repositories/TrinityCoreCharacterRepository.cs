@@ -50,5 +50,23 @@ namespace GladMMO
 				.Cast<int>()
 				.ToArrayAsync();
 		}
+
+		public async Task<bool> AccountHasActiveSession(int accountId)
+		{
+			uint castedAccountId = (uint)accountId;
+
+			return await Context
+				.Characters
+				.AnyAsync(c => c.Account == castedAccountId && c.Online > 0);
+		}
+
+		public async Task<Characters> RetrieveClaimedSessionByAccountId(int accountId)
+		{
+			uint castedAccountId = (uint)accountId;
+
+			return await Context
+				.Characters
+				.FirstOrDefaultAsync(c => c.Account == castedAccountId && c.Online > 0);
+		}
 	}
 }

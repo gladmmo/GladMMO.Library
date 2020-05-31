@@ -15,7 +15,8 @@ namespace GladMMO
 
 		public CharacterSessionDataChangedEventArgs(int zoneIdentifier)
 		{
-			if (zoneIdentifier <= 0) throw new ArgumentOutOfRangeException(nameof(zoneIdentifier));
+			//So dumb, but it in 3.3.5 TrinityCore it's possible to have map 0. So DUMB
+			if (zoneIdentifier < 0) throw new ArgumentOutOfRangeException(nameof(zoneIdentifier));
 
 			ZoneIdentifier = zoneIdentifier;
 		}

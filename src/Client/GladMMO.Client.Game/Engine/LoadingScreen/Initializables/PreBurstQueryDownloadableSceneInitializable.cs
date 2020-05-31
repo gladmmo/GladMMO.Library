@@ -80,7 +80,6 @@ namespace GladMMO
 					{
 						OnWorldDownloadBegins?.Invoke(this, new WorldDownloadBeginEventArgs(o));
 					});
-
 				}
 				catch (Exception e)
 				{

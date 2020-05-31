@@ -29,21 +29,9 @@ namespace GladMMO
 		}
 
 		/// <inheritdoc />
-		public async Task<CharacterSessionEnterResponse> TryEnterSession(int characterId)
-		{
-			return await (await GetService().ConfigureAwaitFalse()).TryEnterSession(characterId).ConfigureAwaitFalse();
-		}
-
-		/// <inheritdoc />
 		public async Task<CharacterSessionDataResponse> GetCharacterSessionData(int characterId)
 		{
 			return await (await GetService().ConfigureAwaitFalse()).GetCharacterSessionData(characterId).ConfigureAwaitFalse();
-		}
-
-		/// <inheritdoc />
-		public async Task<CharacterSessionEnterResponse> SetCharacterSessionData(int characterId, int zoneId)
-		{
-			return await (await GetService().ConfigureAwaitFalse()).SetCharacterSessionData(characterId, zoneId).ConfigureAwaitFalse();
 		}
 
 		public async Task<CharacterNameValidationResponse> ValidateName(string name)

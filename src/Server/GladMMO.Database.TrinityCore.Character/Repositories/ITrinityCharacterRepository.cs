@@ -28,5 +28,20 @@ namespace GladMMO
 		/// <param name="accountId">The account id to check.</param>
 		/// <returns></returns>
 		Task<int[]> CharacterIdsForAccountId(int accountId);
+
+		/// <summary>
+		/// Indicates if the account (not a character or characterid)
+		/// has an active on-going session.
+		/// </summary>
+		/// <param name="accountId">The account id to check.</param>
+		/// <returns>True if an active session exists for the account id.</returns>
+		Task<bool> AccountHasActiveSession(int accountId);
+
+		/// <summary>
+		/// TODO: Doc
+		/// </summary>
+		/// <param name="accountId"></param>
+		/// <returns></returns>
+		Task<Characters> RetrieveClaimedSessionByAccountId(int accountId);
 	}
 }

@@ -70,21 +70,10 @@ namespace GladMMO
 				//TODO: Don't hardcode this scene.
 				OnRequestedSceneChange?.Invoke(this, new RequestedSceneChangeEventArgs((PlayableGameScene) 2, dataInstance.MapId));
 
-				/*CharacterSessionEnterResponse enterResponse = await CharacterServiceQueryable.TryEnterSession(SelectedCharacterGuid.CurrentObjectGuid);
-
-				if (Logger.IsDebugEnabled)
-					Logger.Debug($"Character Session Entry Response: {enterResponse.ResultCode}.");
-
-				if (!enterResponse.isSuccessful)
-					if (Logger.IsErrorEnabled)
-						Logger.Error($"Failed to enter CharacterSession for Entity: {SelectedCharacterGuid} Reason: {enterResponse.ResultCode}");*/
-
 				//TODO: handle character session failure
 				CharacterData.UpdateCharacterId(SelectedCharacterGuid);
 
-				//TODO: Use the scene manager service.
-				//TODO: Don't hardcode scene ids. Don't load scenes directly.
-				//SceneManager.LoadSceneAsync(GladMMOClientConstants.WORLD_DOWNLOAD_SCENE_NAME).allowSceneActivation = true;
+				GladMMOSceneManager.LoadSceneAsync(GladMMOClientConstants.WORLD_DOWNLOAD_SCENE_NAME);
 			});
 		}
 	}

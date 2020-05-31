@@ -13,92 +13,14 @@ namespace GladMMO
 	[Route("api/[controller]")]
 	public sealed class CharacterSessionController : AuthorizationReadyController
 	{
-		private ICharacterRepository CharacterRepository { get; }
-
-		private ICharacterSessionRepository CharacterSessionRepository { get; }
+		private ITrinityCharacterRepository CharacterRepository { get; }
 
 		/// <inheritdoc />
-		public CharacterSessionController(IClaimsPrincipalReader claimsReader, ILogger<AuthorizationReadyController> logger, [FromServices] ICharacterRepository characterRepository, [FromServices] ICharacterSessionRepository characterSessionRepository) 
+		public CharacterSessionController(IClaimsPrincipalReader claimsReader, ILogger<AuthorizationReadyController> logger, 
+			[FromServices] ITrinityCharacterRepository characterRepository) 
 			: base(claimsReader, logger)
 		{
 			CharacterRepository = characterRepository ?? throw new ArgumentNullException(nameof(characterRepository));
-			CharacterSessionRepository = characterSessionRepository ?? throw new ArgumentNullException(nameof(characterSessionRepository));
-		}
-
-		//TODO: This can't be unit tested because all the logic is written in an SQL stored procedure.
-		/// <summary>
-		/// Endpoint that the ZoneServers should query for attempted session claiming.
-		/// ONLY zoneserver roles should be able to call this. NEVER allow clients to call this endpoint.
-		/// </summary>
-		/// <returns></returns>
-		//[AuthorizeJwt(GuardianApplicationRole.ZoneServer)]
-		[AllowAnonymous]
-		[HttpPost("claim")]
-		public async Task<IActionResult> TryClaimSession([FromBody] ZoneServerTryClaimSessionRequest request)
-		{
-			//TODO: Renable auth for session claiming
-			ProjectVersionStage.AssertAlpha();
-
-			if(!this.ModelState.IsValid)
-				return BadRequest(); //TODO: Send JSON back too.
-
-			//TODO: We should validate a lot things. One, that the character has a session on this zoneserver.
-			//We should also validate that the account owns the character. We need a new auth process for entering users.
-			//We have to do this validation, somehow. Or malicious players could spoof this.
-			ProjectVersionStage.AssertAlpha();
-
-			//TODO: Verify that the zone id is correct. Right now we aren't providing it and the query doesn't enforce it.
-			//We don't validate characterid/accountid association manually. It is implemented in the tryclaim SQL instead.
-			//It additionally also checks the zone relation for the session so it will fail if it's invalid for the provided zone.
-			//Therefore we don't need to make 3/4 database calls/queries to claim a session. Just one stored procedure call.
-			//This is preferable. A result code will be used to indicate the exact error in the future. For now it just fails if it fails.
-			bool sessionClaimed = await CharacterSessionRepository.TryClaimUnclaimedSession(request.PlayerAccountId, request.CharacterId);
-
-			return Ok(new ZoneServerTryClaimSessionResponse(sessionClaimed ? ZoneServerTryClaimSessionResponseCode.Success : ZoneServerTryClaimSessionResponseCode.GeneralServerError)); //TODO
-		}
-
-		//This method name is abit misleading, it's more like "Create a new session data with the clients recommendation"
-		//the client may want to go to a new world and zone, so they indicate what/where they want to do.
-		//it's possible they aren't allowed to go there, and we should validate that and reject them.
-		[HttpPost("{charid}/data")]
-		[AuthorizeJwt]
-		[NoResponseCache]
-		public async Task<CharacterSessionEnterResponse> SetCharacterSessionData([FromRoute(Name = "charid")] int characterId, [FromBody] int zoneId)
-		{
-			if(!await VerifyCharacterOwnedByAccount(characterId))
-			{
-				//TODO: Return not authed in JSON
-				return new CharacterSessionEnterResponse(CharacterSessionEnterResponseCode.InvalidCharacterIdError);
-			}
-
-			//This case is actually pretty likely, they will likely be trying to move to another server
-			//before their active session is cleaned up. Retry logic will be required to get past this.
-			if(await CharacterSessionRepository.AccountHasActiveSession(ClaimsReader.GetAccountIdInt(User)))
-			{
-				//TODO: Return JSON that says active session
-				return new CharacterSessionEnterResponse(CharacterSessionEnterResponseCode.AccountAlreadyHasCharacterSession);
-			}
-
-			//We can't check if it contains and then update, because that will there is a data race with
-			//zoneserver deregisteration and cascading delteing.
-			//So we only check for removal, and then remove and create
-
-			//Don't try to delete the claimed session, we should try to delete the current session data. Since they want to change zones
-			//and we consider that a new session
-			if(!await CharacterSessionRepository.TryDeleteAsync(characterId))
-			{
-				//TODO: This could fail, potentially removed during race. But it's ok. It's ok that it's gone but may want to log it
-			}
-
-			//TODO: Refactor
-			if(!await CharacterSessionRepository.TryCreateAsync(new CharacterSessionModel(characterId, zoneId)))
-			{
-				//Not sure what it wrong, no way to know really.
-				return new CharacterSessionEnterResponse(CharacterSessionEnterResponseCode.GeneralServerError);
-			}
-				
-			//It passed, they're allowed to join this zone.
-			return new CharacterSessionEnterResponse(zoneId);
 		}
 
 		/// <summary>
@@ -141,10 +63,11 @@ namespace GladMMO
 			}
 
 			//Active sessions don't matter, we just want session data for this character.
-			if(await CharacterSessionRepository.ContainsAsync(characterId).ConfigureAwaitFalse())
+			//TrinityCore: Above statement out of date, active sessions are ALL that matter now.
+			if(await CharacterRepository.AccountHasActiveSession(accountId).ConfigureAwaitFalse())
 			{
 				//If there is a session, we should just send the zone. Maybe in the future we want to send more data but we only need the zone at the moment.
-				return new CharacterSessionDataResponse((await CharacterSessionRepository.RetrieveAsync(characterId).ConfigureAwaitFalse()).ZoneId, characterId);
+				return new CharacterSessionDataResponse((await CharacterRepository.RetrieveClaimedSessionByAccountId(accountId).ConfigureAwaitFalse()).Map, characterId);
 			}
 			else
 				return new CharacterSessionDataResponse(CharacterSessionDataResponseCode.NoSessionAvailable);
@@ -156,7 +79,7 @@ namespace GladMMO
 		[NoResponseCache]
 		public async Task<IActionResult> GetCharacterSessionDataByAccount([FromRoute(Name = "id")] int accountId)
 		{
-			if(!await CharacterSessionRepository.AccountHasActiveSession(accountId)
+			if(!await CharacterRepository.AccountHasActiveSession(accountId)
 				.ConfigureAwaitFalse())
 			{
 				return Ok(new CharacterSessionDataResponse(CharacterSessionDataResponseCode.NoSessionAvailable));
@@ -168,10 +91,10 @@ namespace GladMMO
 
 			try
 			{
-				ClaimedSessionsModel claimedSessionsModel = await CharacterSessionRepository.RetrieveClaimedSessionByAccountId(accountId)
+				Characters sessionCharacter = await CharacterRepository.RetrieveClaimedSessionByAccountId(accountId)
 					.ConfigureAwaitFalse();
 
-				return Ok(new CharacterSessionDataResponse(claimedSessionsModel.Session.ZoneId, claimedSessionsModel.CharacterId));
+				return Ok(new CharacterSessionDataResponse(sessionCharacter.Map, (int)sessionCharacter.Guid));
 			}
 			catch(Exception e)
 			{
@@ -179,155 +102,6 @@ namespace GladMMO
 					Logger.LogError($"Failed to query for character session data for active character session on AccountId: {accountId} Exception: {e.GetType().Name} - {e.Message}");
 
 				return Ok(new CharacterSessionDataResponse(CharacterSessionDataResponseCode.GeneralServerError));
-			}
-		}
-
-
-		/// <summary>
-		/// Should be called by zone servers to release the active session on a character.
-		/// When the active session exists the character cannot log into ANY other zone instance. They are stuck.
-		/// So it is CRITICAL that the zoneserver does this.
-		/// </summary>
-		/// <param name="characterId">The ID of the character to free the session for.</param>
-		/// <returns>OK if successful. Errors if not.</returns>
-		[HttpDelete("{id}")]
-		[NoResponseCache]
-		//[AuthorizeJwt(GuardianApplicationRole.ZoneServer)] //only zone servers should EVER be able to release the active session. They should also likely only be able to release an active session if it's on them.
-		public async Task<IActionResult> ReleaseActiveSession([FromRoute(Name = "id")] int characterId)
-		{
-			//We NEED to AUTH for zoneserver JWT.
-			ProjectVersionStage.AssertAlpha();
-
-			//If an active session does NOT exist we have a BIG problem.
-			if(!await CharacterSessionRepository.CharacterHasActiveSession(characterId))
-			{
-				if(Logger.IsEnabled(LogLevel.Error))
-					Logger.LogError($"ZoneServer requested ActiveSession for Player: {characterId} be removed. Session DOES NOT EXIST. This should NOT HAPPEN.");
-
-				return NotFound();
-			}
-
-			//We should try to remove the active sesison.
-			//One this active session is revoked the character/account is free to claim any existing session
-			//including the same one that was just freed.
-			if(!await CharacterSessionRepository.TryDeleteClaimedSession(characterId))
-			{
-				if(Logger.IsEnabled(LogLevel.Error))
-					Logger.LogError($"ZoneServer requested ActiveSession for Player: {characterId} be removed. Session DOES NOT EXIST. This should NOT HAPPEN.");
-
-				return BadRequest();
-			}
-			else
-			{
-				if(Logger.IsEnabled(LogLevel.Information))
-					Logger.LogInformation($"Removed ActiveSession for Player: {characterId}");
-
-				return Ok();
-			}
-		}
-
-		[HttpPost("enter/{id}")]
-		[NoResponseCache]
-		[AuthorizeJwt]
-		public async Task<CharacterSessionEnterResponse> EnterSession([FromRoute(Name = "id")] int characterId,
-			[FromServices] ICharacterLocationRepository characterLocationRepository,
-			[FromServices] IZoneServerRepository zoneServerRepository)
-		{
-			if(!await IsCharacterIdValidForUser(characterId, CharacterRepository))
-				return new CharacterSessionEnterResponse(CharacterSessionEnterResponseCode.InvalidCharacterIdError);
-
-			int accountId = ClaimsReader.GetAccountIdInt(User);
-
-			//This checks to see if the account, not just the character, has an active session.
-			//We do this before we check anything to reject quick even though the query behind this
-			//may be abit more expensive
-			//As a note, this checks (or should) CLAIMED SESSIONS. So, it won't prevent multiple session entries for an account
-			//This is good because we actually use the left over session data to re-enter the instances on disconnect.
-			if(await CharacterSessionRepository.AccountHasActiveSession(accountId))
-				return new CharacterSessionEnterResponse(CharacterSessionEnterResponseCode.AccountAlreadyHasCharacterSession);
-
-			//They may have a session entry already, which is ok. So long as they don't have an active claimed session
-			//which the above query checks for.
-			bool hasSession = await CharacterSessionRepository.ContainsAsync(characterId);
-
-			//We need to check active or not
-			if (hasSession)
-			{
-				//It's possible that the session no longer matches the character's
-				//persisted location. We should check their location and put them in the correct zone.
-
-				//If it's active we can just retrieve the data and send them off on their way
-				CharacterSessionModel sessionModel = await CharacterSessionRepository.RetrieveAsync(characterId, true);
-
-				if (await characterLocationRepository.ContainsAsync(characterId))
-				{
-					CharacterLocationModel locationModel = await characterLocationRepository.RetrieveAsync(characterId);
-					//They have a location, verify it matches the session
-					if (locationModel.WorldId != sessionModel.ZoneEntry.WorldId)
-					{
-						//The location world and the session's world do not match, so remove the session.
-						await CharacterSessionRepository.TryDeleteAsync(sessionModel.CharacterId);
-					}
-					else
-						return new CharacterSessionEnterResponse(sessionModel.ZoneId);
-				}
-				else
-					//TODO: Handle case when we have an inactive session that can be claimed
-					return new CharacterSessionEnterResponse(sessionModel.ZoneId);
-			}
-
-			//If we didn't return above then we should be in a state where the below can handle this now.
-
-			try
-			{
-				int targetSessionZoneId = 0;
-
-				//TO know what zone we should connect to we need to check potential
-				//character location.
-				if (await characterLocationRepository.ContainsAsync(characterId))
-				{
-					CharacterLocationModel locationModel = await characterLocationRepository.RetrieveAsync(characterId);
-
-					//We have no session so we need to find a zone that matches this server.
-					ZoneInstanceEntryModel firstWithWorldId = await zoneServerRepository.FindFirstWithWorldId(locationModel.WorldId);
-
-					//TODO: Should we request one be created for the user??
-					//There is NO instance available for this world.
-					if (firstWithWorldId == null)
-					{
-						//Location is basically invalid since there is no running world
-						await characterLocationRepository.TryDeleteAsync(locationModel.CharacterId);
-					}
-					else
-					{
-						targetSessionZoneId = firstWithWorldId.ZoneId;
-					}
-				}
-
-				//Try to get into any zone
-				if (targetSessionZoneId == 0)
-				{
-					ZoneInstanceEntryModel entryModel = await zoneServerRepository.AnyAsync();
-
-					if (entryModel != null)
-						targetSessionZoneId = entryModel.ZoneId;
-				}
-
-				//Still zero means literally no zone servers are available.
-				if(targetSessionZoneId == 0)
-					return new CharacterSessionEnterResponse(CharacterSessionEnterResponseCode.GeneralServerError);
-
-				if(await CharacterSessionRepository.TryCreateAsync(new CharacterSessionModel(characterId, targetSessionZoneId)))
-					return new CharacterSessionEnterResponse(targetSessionZoneId);
-				else
-					return new CharacterSessionEnterResponse(CharacterSessionEnterResponseCode.GeneralServerError);
-
-			}
-			catch (Exception e)
-			{
-				if(Logger.IsEnabled(LogLevel.Error))
-					Logger.LogError($"Character with ID: {characterId} failed to create session. Potentially no default world assigned or World with session was deleted and orphaned. Reason: {e.Message}");
-				throw;
 			}
 		}
 
