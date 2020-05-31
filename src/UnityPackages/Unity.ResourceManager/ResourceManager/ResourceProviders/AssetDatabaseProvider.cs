@@ -1,6 +1,8 @@
 #if UNITY_EDITOR
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Net.Mail;
 using UnityEditor;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.ResourceManagement.ResourceLocations;
@@ -11,6 +13,7 @@ namespace UnityEngine.ResourceManagement.ResourceProviders
     /// <summary>
     /// Provides assets loaded via the AssetDatabase API.  This provider is only available in the editor and is used for fast iteration or to simulate asset bundles when in play mode.
     /// </summary>
+    [DisplayName("Assets from AssetDatabase Provider")]
     public class AssetDatabaseProvider : ResourceProviderBase
     {
         float m_LoadDelay = .1f;
@@ -43,37 +46,29 @@ namespace UnityEngine.ResourceManagement.ResourceProviders
             
             void LoadImmediate()
             { 
-                string assetPath = m_ProvideHandle.Location == null ? string.Empty : m_ProvideHandle.Location.InternalId;
-                
+                string assetPath = m_ProvideHandle.ResourceManager.TransformInternalId(m_ProvideHandle.Location);
                 object result = null;
                 if (m_ProvideHandle.Type.IsArray)
-                    result = ResourceManagerConfig.CreateArrayResult(m_ProvideHandle.Type, AssetDatabase.LoadAllAssetRepresentationsAtPath(assetPath));
+                {
+                    result = ResourceManagerConfig.CreateArrayResult(m_ProvideHandle.Type, AssetDatabase.LoadAllAssetsAtPath(assetPath));
+                }
                 else if (m_ProvideHandle.Type.IsGenericType && typeof(IList<>) == m_ProvideHandle.Type.GetGenericTypeDefinition())
-                    result = ResourceManagerConfig.CreateListResult(m_ProvideHandle.Type, AssetDatabase.LoadAllAssetRepresentationsAtPath(assetPath));
+                {
+                    result = ResourceManagerConfig.CreateListResult(m_ProvideHandle.Type, AssetDatabase.LoadAllAssetsAtPath(assetPath));
+                }
                 else
                 {
-                    var i = assetPath.LastIndexOf('[');
-                    if (i > 0)
+                    if(ResourceManagerConfig.ExtractKeyAndSubKey(assetPath, out string mainPath, out string subKey))
                     {
-                        var i2 = assetPath.LastIndexOf(']');
-                        if (i2 < i)
+                        var objs = AssetDatabase.LoadAllAssetRepresentationsAtPath(mainPath);
+                        foreach (var o in objs)
                         {
-                            m_ProvideHandle.Complete(result, false, new Exception(string.Format("Invalid index format in internal id {0}", assetPath)));
-                        }
-                        else
-                        {
-                            var subObjectName = assetPath.Substring(i + 1, i2 - (i + 1));
-                            assetPath = assetPath.Substring(0, i);
-                            var objs = AssetDatabase.LoadAllAssetRepresentationsAtPath(assetPath);
-                            foreach (var o in objs)
+                            if (o.name == subKey)
                             {
-                                if (o.name == subObjectName)
+                                if (m_ProvideHandle.Type.IsAssignableFrom(o.GetType()))
                                 {
-                                    if (m_ProvideHandle.Type.IsAssignableFrom(o.GetType()))
-                                    {
-                                        result = o;
-                                        break;
-                                    }
+                                    result = o;
+                                    break;
                                 }
                             }
                         }
@@ -84,7 +79,7 @@ namespace UnityEngine.ResourceManagement.ResourceProviders
                         result = obj != null && m_ProvideHandle.Type.IsAssignableFrom(obj.GetType()) ? obj : null;
                     }
                 }
-                m_ProvideHandle.Complete(result, result != null, null);
+                m_ProvideHandle.Complete(result, result != null, result == null ? new Exception($"Unable to load asset of type {m_ProvideHandle.Type} from location {m_ProvideHandle.Location}.") : null);
             }
         }
 

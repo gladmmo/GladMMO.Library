@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine.Assertions.Must;
 using UnityEngine.ResourceManagement;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.ResourceManagement.ResourceLocations;
@@ -43,7 +44,7 @@ namespace UnityEngine.ResourceManagement.ResourceProviders
                 if (m_DepOp.IsValid())
                     deps.Add(m_DepOp);
             }
-            protected override string DebugName { get { return string.Format("Scene({0})", m_Location == null ? "Invalid" : ShortenPath(m_Location.InternalId, false)); } }
+            protected override string DebugName { get { return string.Format("Scene({0})", m_Location == null ? "Invalid" : ShortenPath(m_ResourceManager.TransformInternalId(m_Location), false)); } }
 
             protected override void Execute()
             {
@@ -63,7 +64,8 @@ namespace UnityEngine.ResourceManagement.ResourceProviders
 
             internal SceneInstance InternalLoadScene(IResourceLocation location, bool loadingFromBundle, LoadSceneMode loadMode, bool activateOnLoad, int priority)
             {
-                var op = InternalLoad(location.InternalId, loadingFromBundle, loadMode);
+                var internalId = m_ResourceManager.TransformInternalId(location);
+                var op = InternalLoad(internalId, loadingFromBundle, loadMode);
                 op.allowSceneActivation = activateOnLoad;
                 op.priority = priority;
                 return new SceneInstance() { m_Operation = op, Scene = SceneManager.GetSceneAt(SceneManager.sceneCount - 1) };
@@ -78,7 +80,7 @@ namespace UnityEngine.ResourceManagement.ResourceProviders
                     return SceneManager.LoadSceneAsync(path, new LoadSceneParameters() { loadSceneMode = mode });
                 else
                 {
-                    if (path.ToLower().LastIndexOf("assets/") == -1)
+                    if (!path.ToLower().StartsWith("assets/"))
                         path = "Assets/" + path;
                     if (path.LastIndexOf(".unity") == -1)
                         path += ".unity";
@@ -100,7 +102,20 @@ namespace UnityEngine.ResourceManagement.ResourceProviders
             {
                 get
                 {
-                    return (m_Inst.m_Operation.progress + m_DepOp.PercentComplete) / 2;
+                    float depOpWeight = 0.9f;
+                    float loadOpWeight = 0.1f;
+                    float progress = 0f;
+
+                    //We will always have an instance operation but this will be null until the dependant operation is completed.
+                    if (m_Inst.m_Operation != null)
+                        progress += m_Inst.m_Operation.progress * loadOpWeight;
+
+                    if (!m_DepOp.IsDone)
+                        progress += m_DepOp.PercentComplete * depOpWeight;
+                    else
+                        progress += depOpWeight;
+
+                    return progress;
                 }
             }
 
@@ -110,7 +125,7 @@ namespace UnityEngine.ResourceManagement.ResourceProviders
                     Complete(m_Inst, true, null);
             }
         }
-        
+
         class UnloadSceneOp : AsyncOperationBase<SceneInstance>
         {
             SceneInstance m_Instance;
@@ -125,16 +140,16 @@ namespace UnityEngine.ResourceManagement.ResourceProviders
             }
             protected override void Execute()
             {
-                if (m_sceneLoadHandle.IsValid())
+                if (m_sceneLoadHandle.IsValid() && m_Instance.Scene.isLoaded)
                 {
-                    var unloadOp = SceneManager.UnloadSceneAsync(m_sceneLoadHandle.Result.Scene);
+                    var unloadOp = SceneManager.UnloadSceneAsync(m_Instance.Scene);
                     if (unloadOp == null)
                         UnloadSceneCompleted(null);
                     else
                         unloadOp.completed += UnloadSceneCompleted;
                 }
                 else
-                    Complete(m_Instance, true, "");
+                    UnloadSceneCompleted(null);
             }
 
             private void UnloadSceneCompleted(AsyncOperation obj)

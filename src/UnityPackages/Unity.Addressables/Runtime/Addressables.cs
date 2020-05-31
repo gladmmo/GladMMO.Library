@@ -10,8 +10,14 @@ using UnityEngine.ResourceManagement.ResourceLocations;
 using UnityEngine.ResourceManagement.ResourceProviders;
 using UnityEngine.ResourceManagement.Util;
 using UnityEngine.SceneManagement;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 [assembly: InternalsVisibleTo("Unity.Addressables.Tests")]
+#if UNITY_EDITOR
+[assembly: InternalsVisibleTo("Unity.Addressables.Editor")]
+#endif
 
 namespace UnityEngine.AddressableAssets
 {
@@ -24,13 +30,27 @@ namespace UnityEngine.AddressableAssets
         /// The key used to generate the exception.
         /// </summary>
         public object Key { get; private set; }
+
+        /// <summary>
+        /// The type of the key used to generate the exception.
+        /// </summary>
+        public Type Type { get; private set; }
+
         /// <summary>
         /// Construct a new InvalidKeyException.
         /// </summary>
         /// <param name="key">The key that caused the exception.</param>
-        public InvalidKeyException(object key)
+        public InvalidKeyException(object key) : this(key, typeof(object)) { }
+
+        /// <summary>
+        /// Construct a new InvalidKeyException.
+        /// </summary>
+        /// <param name="key">The key that caused the exception.</param>
+        /// <param name="type">The type of the key that caused the exception.</param>
+        public InvalidKeyException(object key, Type type)
         {
             Key = key;
+            Type = type;
         }
 
         ///<inheritdoc/>
@@ -46,7 +66,7 @@ namespace UnityEngine.AddressableAssets
         {
             get
             {
-                return base.Message + ", Key=" + Key;
+                return base.Message + $", Key={Key}, Type={Type}";
             }
         }
     }
@@ -56,10 +76,44 @@ namespace UnityEngine.AddressableAssets
     /// </summary>
     public static class Addressables
     {
-        static AddressablesImpl m_Addressables = new AddressablesImpl(new LRUCacheAllocationStrategy(1000, 1000, 100, 10));
-        internal static IInstanceProvider InstanceProvider;
+        internal static bool reinitializeAddressables = true;
+        internal static AddressablesImpl m_AddressablesInstance = new AddressablesImpl(new LRUCacheAllocationStrategy(1000, 1000, 100, 10));
+        static AddressablesImpl m_Addressables
+        {
+            get
+            {
+#if UNITY_EDITOR && UNITY_2019_3_OR_NEWER
+                if (EditorSettings.enterPlayModeOptionsEnabled && reinitializeAddressables)
+                {
+                    reinitializeAddressables = false;
+                    m_AddressablesInstance.ReleaseSceneManagerOperation();
+                    m_AddressablesInstance = new AddressablesImpl(new LRUCacheAllocationStrategy(1000, 1000, 100, 10));
+                }
+#endif
+                return m_AddressablesInstance;
+            }
+        }
         public static ResourceManager ResourceManager { get { return m_Addressables.ResourceManager; } }
         internal static AddressablesImpl Instance { get { return m_Addressables; } }
+
+#if UNITY_EDITOR && UNITY_2019_3_OR_NEWER
+        [InitializeOnLoadMethod]
+        static void RegisterPlayModeStateChange()
+        {
+            EditorApplication.playModeStateChanged += SetAddressablesReInitFlagOnExitPlayMode;
+        }
+
+        static void SetAddressablesReInitFlagOnExitPlayMode(PlayModeStateChange change)
+        {
+            if (change == PlayModeStateChange.ExitingPlayMode)
+                reinitializeAddressables = true;
+        }
+#endif
+
+        /// <summary>
+        /// The Instance Provider used by the Addressables System.
+        /// </summary>
+        public static IInstanceProvider InstanceProvider { get { return m_Addressables.InstanceProvider; } }
 
         /// <summary>
         /// Used to resolve a string using addressables config values
@@ -67,6 +121,15 @@ namespace UnityEngine.AddressableAssets
         public static string ResolveInternalId(string id)
         {
             return m_Addressables.ResolveInternalId(id);
+        }
+
+         /// <summary>
+        /// Functor to transform internal ids before being used by the providers.
+        /// </summary>
+        static public Func<IResourceLocation, string> InternalIdTransformFunc
+        {
+            get { return m_Addressables.InternalIdTransformFunc; }
+            set { m_Addressables.InternalIdTransformFunc = value; }
         }
 
         /// <summary>
@@ -115,10 +178,10 @@ namespace UnityEngine.AddressableAssets
 
 
         /// <summary>
-        /// Gets the list of configured <see cref="IResourceLocator"/> objects. Resource Locators are used to find <see cref="IResourceLocation"/> objects from user-defined typed keys.
+        /// Gets the collection of configured <see cref="IResourceLocator"/> objects. Resource Locators are used to find <see cref="IResourceLocation"/> objects from user-defined typed keys.
         /// </summary>
-        /// <value>The resource locators list.</value>
-        public static IList<IResourceLocator> ResourceLocators { get { return m_Addressables.ResourceLocators; } }
+        /// <value>The resource locators collection.</value>
+        public static IEnumerable<IResourceLocator> ResourceLocators { get { return m_Addressables.ResourceLocators; } }
 
         /// <summary>
         /// Debug.Log wrapper method that is contional on the ADDRESSABLES_LOG_ALL symbol definition.  This can be set in the Player preferences in the 'Scripting Define Symbols'.
@@ -197,7 +260,7 @@ namespace UnityEngine.AddressableAssets
         {
             return InitializeAsync();
         }
-        
+
         /// <summary>
         /// Initialize Addressables system.  Addressables will be initialized on the first API call if this is not called explicitly.
         /// </summary>
@@ -206,7 +269,7 @@ namespace UnityEngine.AddressableAssets
         {
             return m_Addressables.InitializeAsync();
         }
-        
+
         /// <summary>
         /// Additively load catalogs from runtime data.  The settings are not used.
         /// </summary>
@@ -219,28 +282,39 @@ namespace UnityEngine.AddressableAssets
         {
             return LoadContentCatalogAsync(catalogPath, providerSuffix);
         }
-        
+
         /// <summary>
-        /// Additively load catalogs from runtime data.  The settings are not used.
+        /// Additively load catalogs from runtime data.  In order for content catalog caching to work properly the catalog json file
+        /// should have a .hash file associated with the catalog.  This hash file will be used to determine if the catalog
+        /// needs to be updated or not.  If no .hash file is provided, the catalog will be loaded from the specified path every time.
         /// </summary>
         /// <param name="catalogPath">The path to the runtime data.</param>
         /// <param name="providerSuffix">This value, if not null or empty, will be appended to all provider ids loaded from this data.</param>
         /// <returns>The operation handle for the request.</returns>
         public static AsyncOperationHandle<IResourceLocator> LoadContentCatalogAsync(string catalogPath, string providerSuffix = null)
         {
-            return m_Addressables.LoadContentCatalogAsync(catalogPath, providerSuffix);
+            return m_Addressables.LoadContentCatalogAsync(catalogPath, false, providerSuffix);
+        }
+
+        /// <summary>
+        /// Additively load catalogs from runtime data.  In order for content catalog caching to work properly the catalog json file
+        /// should have a .hash file associated with the catalog.  This hash file will be used to determine if the catalog
+        /// needs to be updated or not.  If no .hash file is provided, the catalog will be loaded from the specified path every time.
+        /// </summary>
+        /// <param name="catalogPath">The path to the runtime data.</param>
+        /// <param name="autoReleaseHandle">If true, the async operation handle will be automatically released on completion.</param>
+        /// <param name="providerSuffix">This value, if not null or empty, will be appended to all provider ids loaded from this data.</param>
+        /// <returns>The operation handle for the request.</returns>
+        public static AsyncOperationHandle<IResourceLocator> LoadContentCatalogAsync(string catalogPath, bool autoReleaseHandle, string providerSuffix = null)
+        {
+            return m_Addressables.LoadContentCatalogAsync(catalogPath, autoReleaseHandle, providerSuffix);
         }
 
         /// <summary>
         /// Initialization operation.  You can register a callback with this if you need to run code after Addressables is ready.  Any requests made before this operaton completes will automatically cahin to its result.
         /// </summary>
-        public static AsyncOperationHandle<IResourceLocator> InitializationOperation
-        {
-            get
-            {
-                return m_Addressables.InitializationOperation;
-            }
-        }
+        [Obsolete]
+        public static AsyncOperationHandle<IResourceLocator> InitializationOperation => default;
 
         /// <summary>
         /// Load a single asset
@@ -263,8 +337,7 @@ namespace UnityEngine.AddressableAssets
         {
             return LoadAssetAsync<TObject>(key);
         }
-        
-        
+
         /// <summary>
         /// Load a single asset
         /// </summary>
@@ -289,6 +362,7 @@ namespace UnityEngine.AddressableAssets
         /// </summary>
         /// <param name="keys">The set of keys to use.</param>
         /// <param name="mode">The mode for merging the results of the found locations.</param>
+        /// <param name="type">A type restriction for the lookup.  Only locations of the provided type (or derived type) will be returned.</param>
         /// <returns>The operation handle for the request.</returns>
         //[Obsolete("We have added Async to the name of all asycn methods (UnityUpgradable) -> LoadResourceLocationsAsync(*)", true)]
         [Obsolete]
@@ -296,13 +370,14 @@ namespace UnityEngine.AddressableAssets
         {
             return LoadResourceLocationsAsync(keys, mode, type);
         }
- 
+
         /// <summary>
         /// Loads the resource locations specified by the keys.
         /// The method will always return success, with a valid IList of results. If nothing matches keys, IList will be empty
         /// </summary>
         /// <param name="keys">The set of keys to use.</param>
         /// <param name="mode">The mode for merging the results of the found locations.</param>
+        /// <param name="type">A type restriction for the lookup.  Only locations of the provided type (or derived type) will be returned.</param>
         /// <returns>The operation handle for the request.</returns>
         public static AsyncOperationHandle<IList<IResourceLocation>> LoadResourceLocationsAsync(IList<object> keys, MergeMode mode, Type type = null)
         {
@@ -314,6 +389,7 @@ namespace UnityEngine.AddressableAssets
         /// The method will always return success, with a valid IList of results. If nothing matches key, IList will be empty
         /// </summary>
         /// <param name="key">The key for the locations.</param>
+        /// <param name="type">A type restriction for the lookup.  Only locations of the provided type (or derived type) will be returned.</param>
         /// <returns>The operation handle for the request.</returns>
         //[Obsolete("We have added Async to the name of all asycn methods (UnityUpgradable) -> LoadResourceLocationsAsync(*)", true)]
         [Obsolete]
@@ -327,6 +403,7 @@ namespace UnityEngine.AddressableAssets
         /// The method will always return success, with a valid IList of results. If nothing matches key, IList will be empty
         /// </summary>
         /// <param name="key">The key for the locations.</param>
+        /// <param name="type">A type restriction for the lookup.  Only locations of the provided type (or derived type) will be returned.</param>
         /// <returns>The operation handle for the request.</returns>
         public static AsyncOperationHandle<IList<IResourceLocation>> LoadResourceLocationsAsync(object key, Type type = null)
         {
@@ -495,6 +572,18 @@ namespace UnityEngine.AddressableAssets
         }
 
         /// <summary>
+        /// Determines the required download size, dependencies included, for the specified <paramref name="keys"/>.
+        /// Cached assets require no download and thus their download size will be 0.  The Result of the operation
+        /// is the download size in bytes.
+        /// </summary>
+        /// <returns>The operation handle for the request.</returns>
+        /// <param name="keys">The keys of the asset(s) to get the download size of.</param>
+        public static AsyncOperationHandle<long> GetDownloadSizeAsync(IList<object> keys)
+        {
+            return m_Addressables.GetDownloadSizeAsync(keys);
+        }
+
+        /// <summary>
         /// Downloads dependencies of assets marked with the specified label or address.  
         /// </summary>
         /// <param name="key">The key of the asset(s) to load dependencies for.</param>
@@ -510,20 +599,22 @@ namespace UnityEngine.AddressableAssets
         /// Downloads dependencies of assets marked with the specified label or address.  
         /// </summary>
         /// <param name="key">The key of the asset(s) to load dependencies for.</param>
+        /// <param name="autoReleaseHandle">Automatically releases the handle on completion</param>
         /// <returns>The AsyncOperationHandle for the dependency load.</returns>
-        public static AsyncOperationHandle DownloadDependenciesAsync(object key)
+        public static AsyncOperationHandle DownloadDependenciesAsync(object key, bool autoReleaseHandle = false)
         {
-            return m_Addressables.DownloadDependenciesAsync(key);
+            return m_Addressables.DownloadDependenciesAsync(key, autoReleaseHandle);
         }
 
         /// <summary>
         /// Downloads dependencies of assets at given locations.  
         /// </summary>
         /// <param name="locations">The locations of the assets.</param>
+        /// <param name="autoReleaseHandle">Automatically releases the handle on completion</param>
         /// <returns>The AsyncOperationHandle for the dependency load.</returns>
-        public static AsyncOperationHandle DownloadDependenciesAsync(IList<IResourceLocation> locations)
+        public static AsyncOperationHandle DownloadDependenciesAsync(IList<IResourceLocation> locations, bool autoReleaseHandle = false)
         {
-            return m_Addressables.DownloadDependenciesAsync(locations);
+            return m_Addressables.DownloadDependenciesAsync(locations, autoReleaseHandle);
         }
 
         /// <summary>
@@ -531,10 +622,41 @@ namespace UnityEngine.AddressableAssets
         /// </summary>
         /// <param name="keys">List of keys for the locations.</param>
         /// <param name="mode">Method for merging the results of key matches.  See <see cref="MergeMode"/> for specifics</param>
+        /// <param name="autoReleaseHandle">Automatically releases the handle on completion</param>
         /// <returns>The AsyncOperationHandle for the dependency load.</returns>
-        public static AsyncOperationHandle DownloadDependenciesAsync(IList<object> keys, MergeMode mode)
+        public static AsyncOperationHandle DownloadDependenciesAsync(IList<object> keys, MergeMode mode, bool autoReleaseHandle = false)
         {
-            return m_Addressables.DownloadDependenciesAsync(keys, mode);
+            return m_Addressables.DownloadDependenciesAsync(keys, mode, autoReleaseHandle);
+        }
+
+        /// <summary>
+        /// Clear the cached AssetBundles for a given key.  Operation may be performed async if Addressables
+        /// is initializing or updating.
+        /// </summary>
+        /// <param name="key">The key to clear the cache for.</param>
+        public static void ClearDependencyCacheAsync(object key)
+        {
+            m_Addressables.ClearDependencyCacheAsync(key);
+        }
+
+        /// <summary>
+        /// Clear the cached AssetBundles for a list of Addressable locations.  Operation may be performed async if Addressables
+        /// is initializing or updating.
+        /// </summary>
+        /// <param name="locations">The locations to clear the cache for.</param>
+        public static void ClearDependencyCacheAsync(IList<IResourceLocation> locations)
+        {
+            m_Addressables.ClearDependencyCacheAsync(locations);
+        }
+
+        /// <summary>
+        /// Clear the cached AssetBundles for a list of Addressable keys.  Operation may be performed async if Addressables
+        /// is initializing or updating.
+        /// </summary>
+        /// <param name="keys">The keys to clear the cache for.</param>
+        public static void ClearDependencyCacheAsync(IList<object> keys)
+        {
+            m_Addressables.ClearDependencyCacheAsync(keys);
         }
 
         /// <summary>
@@ -627,7 +749,7 @@ namespace UnityEngine.AddressableAssets
         {
             return InstantiateAsync(location, instantiateParameters, trackHandle);
         }
-        
+
         /// <summary>
         /// Instantiate a single object. Note that the dependency loading is done asynchronously, but generally the actual instantiate is synchronous.  
         /// </summary>
@@ -802,7 +924,7 @@ namespace UnityEngine.AddressableAssets
         {
             return UnloadSceneAsync(handle, autoReleaseHandle);
         }
-        
+
         /// <summary>
         /// Release scene
         /// </summary>
@@ -835,7 +957,57 @@ namespace UnityEngine.AddressableAssets
         {
             return m_Addressables.UnloadSceneAsync(handle, autoReleaseHandle);
         }
-     }
+
+        /// <summary>
+        /// Checks all updatable content catalogs for a new version.
+        /// </summary>
+        /// <param name="autoReleaseHandle">If true, the handle will automatically be released when the operation completes.</param>
+        /// <returns>The operation containing the list of catalog ids that have an available update.  This can be used to filter which catalogs to update with the UpdateContent.</returns>
+        public static AsyncOperationHandle<List<string>> CheckForCatalogUpdates(bool autoReleaseHandle = true)
+        {
+            return m_Addressables.CheckForCatalogUpdates(autoReleaseHandle);
+        }
+
+        /// <summary>
+        /// Update the specified catalogs.
+        /// </summary>
+        /// <param name="catalogs">The set of catalogs to update.  If null, all catalogs that have an available update will be updated.</param>
+        /// <param name="autoReleaseHandle">If true, the handle will automatically be released when the operation completes.</param>
+        /// <returns>The operation with the list of updated content catalog data.</returns>
+        public static AsyncOperationHandle<List<IResourceLocator>> UpdateCatalogs(IEnumerable<string> catalogs = null, bool autoReleaseHandle = true)
+        {
+            return m_Addressables.UpdateCatalogs(catalogs, autoReleaseHandle);
+        }
+
+        /// <summary>
+        /// Add a resource locator.
+        /// </summary>
+        /// <param name="locator">The locator object.</param>
+        /// <param name="localCatalogHash">The hash of the local catalog. This can be null if the catalog cannot be updated.</param>
+        /// <param name="remoteCatalogLocation">The location of the remote catalog. This can be null if the catalog cannot be updated.</param>
+        public static void AddResourceLocator(IResourceLocator locator, string localCatalogHash = null, IResourceLocation remoteCatalogLocation = null)
+        {
+            m_Addressables.AddResourceLocator(locator, localCatalogHash, remoteCatalogLocation);
+        }
+
+        /// <summary>
+        /// Remove a locator;
+        /// </summary>
+        /// <param name="locator">The locator to remove.</param>
+        public static void RemoveResourceLocator(IResourceLocator locator)
+        {
+            m_Addressables.RemoveResourceLocator(locator);
+        }
+
+        /// <summary>
+        /// Remove all locators.
+        /// </summary>
+        public static void ClearResourceLocators()
+        {
+            m_Addressables.ClearResourceLocators();
+        }
+
+    }
 
 }
 

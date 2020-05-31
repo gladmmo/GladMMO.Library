@@ -63,6 +63,28 @@ namespace UnityEngine.AddressableAssets.Initialization
         /// </summary>
         public List<ObjectInitializationData> InitializationObjects { get { return m_ExtraInitializationData; } }
 
+        [SerializeField] private bool m_DisableCatalogUpdateOnStart = false;
+
+        /// <summary>
+        /// Determine if we should check for Remote Catalogs on during initialization.
+        /// </summary>
+        public bool DisableCatalogUpdateOnStartup
+        {
+            get { return m_DisableCatalogUpdateOnStart; }
+            set { m_DisableCatalogUpdateOnStart = value; }
+        }
+
+        [SerializeField] private bool m_IsLocalCatalogInBundle = false;
+
+        /// <summary>
+        /// Whether the local catalog has been serialized in an asset bundle or as json
+        /// </summary>
+        public bool IsLocalCatalogInBundle
+        {
+            get { return m_IsLocalCatalogInBundle; }
+            set { m_IsLocalCatalogInBundle = value; }
+        }
+
         [SerializeField]
         SerializedType m_CertificateHandlerType;
 

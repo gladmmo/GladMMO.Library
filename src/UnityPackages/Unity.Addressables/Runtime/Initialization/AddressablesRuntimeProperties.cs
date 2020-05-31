@@ -24,6 +24,11 @@ namespace UnityEngine.AddressableAssets.Initialization
 
         static Dictionary<string, string> s_CachedValues = new Dictionary<string, string>();
 
+        internal static int GetCachedValueCount()
+        {
+            return s_CachedValues.Count;
+        }
+
         /// <summary>
         /// Predefine a runtime property.
         /// </summary>
@@ -31,7 +36,16 @@ namespace UnityEngine.AddressableAssets.Initialization
         /// <param name="val">The property value.</param>
         public static void SetPropertyValue(string name, string val)
         {
-            s_CachedValues.Add(name, val);
+            s_CachedValues[name] = val;
+        }
+
+        /// <summary>
+        /// This will clear all PropertyValues that have been cached.  This includes all values set by
+        /// <see cref="SetPropertyValue"/> as well as any reflection-evaluated properties.  
+        /// </summary>
+        public static void ClearCachedPropertyValues()
+        {
+            s_CachedValues.Clear();
         }
 
         /// <summary>
@@ -120,7 +134,7 @@ namespace UnityEngine.AddressableAssets.Initialization
                 int i = inputString.IndexOf(startDelimiter);
                 if (i < 0)
                     return inputString;
-                int e = inputString.IndexOf(endDelimiter, i);
+                int e = inputString.IndexOf(endDelimiter, i+1);
                 if (e < i)
                     return inputString;
                 var token = inputString.Substring(i + 1, e - i - 1);

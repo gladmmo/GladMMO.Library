@@ -1,8 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Reflection;
+using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.Serialization;
 
 namespace UnityEngine.ResourceManagement.Util
@@ -19,6 +21,16 @@ namespace UnityEngine.ResourceManagement.Util
         /// <param name="data">Serialized data for the object.</param>
         /// <returns>The result of the initialization.</returns>
         bool Initialize(string id, string data);
+
+        /// <summary>
+        /// Async operation for initializing a constructed object.
+        /// </summary>
+        /// <param name="rm">The current instance of Resource Manager.</param>
+        /// <param name="id">The id of the object.</param>
+        /// <param name="data">Serialized data for the object.</param>
+        /// <returns>Async operation</returns>
+        AsyncOperationHandle<bool> InitializeAsync(ResourceManager rm, string id, string data);
+        
     }
 
 
@@ -289,6 +301,11 @@ namespace UnityEngine.ResourceManagement.Util
                 }
             }
         }
+
+        /// <summary>
+        /// Used for multi-object editing. Indicates whether or not property value was changed.
+        /// </summary>
+        public bool ValueChanged { get; set; }
     }
 
     /// <summary>
@@ -357,6 +374,32 @@ namespace UnityEngine.ResourceManagement.Util
             }
         }
 
+        /// <summary>
+        /// Create an instance of the defined object.  This will get the AsyncOperationHandle for the async Initialization operation if the object implements the IInitializableObject interface.
+        /// </summary>
+        /// <param name="rm">The current instance of Resource Manager</param>
+        /// <param name="idOverride">Optional id to assign to the created object.  This only applies to objects that inherit from IInitializableObject.</param>
+        /// <returns>AsyncOperationHandle for the async initialization operation if the defined type implements IInitializableObject, otherwise returns a default AsyncOperationHandle.</returns>
+        public AsyncOperationHandle GetAsyncInitHandle(ResourceManager rm, string idOverride = null)
+        {
+            try
+            {
+                var objType = m_ObjectType.Value;
+                if (objType == null)
+                    return default(AsyncOperationHandle);
+                var obj = Activator.CreateInstance(objType, true);
+                var serObj = obj as IInitializableObject;
+                if (serObj != null)
+                    return serObj.InitializeAsync(rm, idOverride == null ? m_Id : idOverride, m_Data);
+                return default(AsyncOperationHandle);
+            }
+            catch (Exception ex)
+            {
+                Debug.LogException(ex);
+                return default(AsyncOperationHandle);
+            }
+        }
+
 #if UNITY_EDITOR
         Type[] m_RuntimeTypes;
         /// <summary>
@@ -400,18 +443,66 @@ namespace UnityEngine.ResourceManagement.Util
 #endif
     }
 
-    static class ResourceManagerConfig
+    /// <summary>
+    /// Resource Manager Config utility class.
+    /// </summary>
+    public static class ResourceManagerConfig
     {
-        internal static bool IsPathRemote(string path)
+        /// <summary>
+        /// Extracts main and subobject keys if properly formatted
+        /// </summary>
+        /// <param name="keyObj">The key as an object.</param>
+        /// <param name="mainKey">The key of the main asset.  This will be set to null if a sub key is not found.</param>
+        /// <param name="subKey">The key of the sub object.  This will be set to null if not found.</param>
+        /// <returns></returns>
+        internal static bool ExtractKeyAndSubKey(object keyObj, out string mainKey, out string subKey)
+        {
+            var key = keyObj as string;
+            if (key != null)
+            {
+                var i = key.IndexOf('[');
+                if (i > 0)
+                {
+                    var j = key.LastIndexOf(']');
+                    if (j > i)
+                    {
+                        mainKey = key.Substring(0, i);
+                        subKey = key.Substring(i + 1, j - (i + 1));
+                        return true;
+                    }
+                }
+            }
+            mainKey = null;
+            subKey = null;
+            return false;
+        }
+
+        /// <summary>
+        /// Check to see if a path is remote or not.
+        /// </summary>
+        /// <param name="path">The path to check.</param>
+        /// <returns>Returns true if path is remote.</returns>
+        public static bool IsPathRemote(string path)
         {
             return path != null && path.StartsWith("http");
         }
 
-        internal static bool ShouldPathUseWebRequest(string path)
+        /// <summary>
+        /// Check if path should use WebRequest.  A path should use WebRequest for remote paths and platforms that require WebRequest to load locally.
+        /// </summary>
+        /// <param name="path">The path to check.</param>
+        /// <returns>Returns true if path should use WebRequest.</returns>
+        public static bool ShouldPathUseWebRequest(string path)
         {
             return path != null && path.Contains("://");
         }
 
+        /// <summary>
+        /// Used to create an operation result that has multiple items.
+        /// </summary>
+        /// <param name="type">The type of the result.</param>
+        /// <param name="allAssets">The result objects.</param>
+        /// <returns>Returns Array object with result items.</returns>
         public static Array CreateArrayResult(Type type, Object[] allAssets)
         {
             var elementType = type.GetElementType();
@@ -435,11 +526,23 @@ namespace UnityEngine.ResourceManagement.Util
             return array;
         }
 
+        /// <summary>
+        /// Used to create an operation result that has multiple items.
+        /// </summary>
+        /// <typeparam name="TObject">The type of the result.</typeparam>
+        /// <param name="allAssets">The result objects.</param>
+        /// <returns>Returns result Array as TObject.</returns>
         public static TObject CreateArrayResult<TObject>(Object[] allAssets) where TObject : class
         {
             return CreateArrayResult(typeof(TObject), allAssets) as TObject;
         }
 
+        /// <summary>
+        /// Used to create an operation result that has multiple items.
+        /// </summary>
+        /// <param name="type">The type of the result objects.</param>
+        /// <param name="allAssets">The result objects.</param>
+        /// <returns>An IList of the resulting objects.</returns>
         public static IList CreateListResult(Type type, Object[] allAssets)
         {
             var genArgs = type.GetGenericArguments();
@@ -456,11 +559,23 @@ namespace UnityEngine.ResourceManagement.Util
             return list;
         }
 
+        /// <summary>
+        /// Used to create an operation result that has multiple items.
+        /// </summary>
+        /// <typeparam name="TObject">The type of the result.</typeparam>
+        /// <param name="allAssets">The result objects.</param>
+        /// <returns>An IList of the resulting objects converted to TObject.</returns>
         public static TObject CreateListResult<TObject>(Object[] allAssets)
         {
             return (TObject)CreateListResult(typeof(TObject), allAssets);
         }
 
+        /// <summary>
+        /// Check if one type is an instance of another type.
+        /// </summary>
+        /// <typeparam name="T1">Expected base type.</typeparam>
+        /// <typeparam name="T2">Expected child type.</typeparam>
+        /// <returns>Returns true if T2 is a base type of T1.</returns>
         public static bool IsInstance<T1, T2>()
         {
             var tA = typeof(T1);

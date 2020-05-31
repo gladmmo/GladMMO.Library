@@ -364,7 +364,7 @@ namespace UnityEngine.ResourceManagement.ResourceProviders.Simulation
         /// <typeparam name="TObject"></typeparam>
         /// <param name="location"></param>
         /// <returns></returns>
-        internal VBAsyncOperation<object> LoadAssetAsync(Type type, IResourceLocation location)
+        internal VBAsyncOperation<object> LoadAssetAsync(ProvideHandle provideHandle, IResourceLocation location)
         {
             if (location == null)
                 throw new ArgumentException("IResourceLocation location cannot be null.");
@@ -373,12 +373,16 @@ namespace UnityEngine.ResourceManagement.ResourceProviders.Simulation
 
             if (!m_BundleLoadOperation.IsDone)
                 return new VBAsyncOperation<object>().StartCompleted(location, location, null, new ResourceManagerException("LoadAssetAsync called on loading bundle " + m_Name));
-
             VirtualAssetBundleEntry assetInfo;
-            if (!m_AssetMap.TryGetValue(location.InternalId, out assetInfo))
+            var assetPath = location.InternalId;
+            if (ResourceManagerConfig.ExtractKeyAndSubKey(assetPath, out string mainPath, out string subKey))
+                assetPath = mainPath;
+
+            //this needs to use the non translated internal id since that was how the table was built.
+            if (!m_AssetMap.TryGetValue(assetPath, out assetInfo))
                 return new VBAsyncOperation<object>().StartCompleted(location, location, null, new ResourceManagerException(string.Format("Unable to load asset {0} from simulated bundle {1}.", location.InternalId, Name)));
 
-            var op = new LoadAssetOp(location, assetInfo, type);
+            var op = new LoadAssetOp(location, assetInfo, provideHandle);
             m_AssetLoadOperations.Add(op);
             return op;
         }
@@ -408,10 +412,10 @@ namespace UnityEngine.ResourceManagement.ResourceProviders.Simulation
             long m_BytesLoaded;
             float m_LastUpdateTime;
             VirtualAssetBundleEntry m_AssetInfo;
-            Type provHandleType;
-            public LoadAssetOp(IResourceLocation location, VirtualAssetBundleEntry assetInfo, Type t)
+            ProvideHandle m_provideHandle;
+            public LoadAssetOp(IResourceLocation location, VirtualAssetBundleEntry assetInfo, ProvideHandle ph)
             {
-                provHandleType = t;
+                m_provideHandle = ph;
                 Context = location;
                 m_AssetInfo = assetInfo;
                 m_LastUpdateTime = Time.realtimeSinceStartup;
@@ -430,39 +434,27 @@ namespace UnityEngine.ResourceManagement.ResourceProviders.Simulation
                 if (!(Context is IResourceLocation))
                     return false;
                 var location = Context as IResourceLocation;
-                var assetPath = location.InternalId;
+                var assetPath = m_provideHandle.ResourceManager.TransformInternalId(location);
                 object result = null;
 
-
-                if (provHandleType.IsArray)
-                    result = ResourceManagerConfig.CreateArrayResult(provHandleType, AssetDatabase.LoadAllAssetRepresentationsAtPath(assetPath));
-                else if (provHandleType.IsGenericType && typeof(IList<>) == provHandleType.GetGenericTypeDefinition())
-                    result = ResourceManagerConfig.CreateListResult(provHandleType, AssetDatabase.LoadAllAssetRepresentationsAtPath(assetPath));
+                var pt = m_provideHandle.Type;
+                if (pt.IsArray)
+                    result = ResourceManagerConfig.CreateArrayResult(pt, AssetDatabase.LoadAllAssetRepresentationsAtPath(assetPath));
+                else if (pt.IsGenericType && typeof(IList<>) == pt.GetGenericTypeDefinition())
+                    result = ResourceManagerConfig.CreateListResult(pt, AssetDatabase.LoadAllAssetRepresentationsAtPath(assetPath));
                 else
                 {
-                    var i = assetPath.LastIndexOf('[');
-                    if (i > 0)
+                    if (ResourceManagerConfig.ExtractKeyAndSubKey(assetPath, out string mainPath, out string subKey))
                     {
-                        var i2 = assetPath.LastIndexOf(']');
-                        if (i2 < i)
+                        var objs = AssetDatabase.LoadAllAssetRepresentationsAtPath(mainPath);
+                        foreach (var o in objs)
                         {
-                            Debug.LogErrorFormat("Invalid index format in internal id {0}", assetPath);
-                        }
-                        else
-                        {
-
-                            var subObjectName = assetPath.Substring(i + 1, i2 - (i + 1));
-                            assetPath = assetPath.Substring(0, i);
-                            var objs = AssetDatabase.LoadAllAssetRepresentationsAtPath(assetPath);
-                            foreach (var o in objs)
+                            if (o.name == subKey)
                             {
-                                if (o.name == subObjectName)
+                                if (pt.IsAssignableFrom(o.GetType()))
                                 {
-                                    if (provHandleType.IsAssignableFrom(o.GetType()))
-                                    {
-                                        result = o;
-                                        break;
-                                    }
+                                    result = o;
+                                    break;
                                 }
                             }
                         }
@@ -470,7 +462,7 @@ namespace UnityEngine.ResourceManagement.ResourceProviders.Simulation
                     else
                     {
                         var obj = AssetDatabase.LoadAssetAtPath(assetPath, location.ResourceType);
-                        result = obj != null && provHandleType.IsAssignableFrom(obj.GetType()) ? obj : null;
+                        result = obj != null && pt.IsAssignableFrom(obj.GetType()) ? obj : null;
                     }
                 }
                 SetResult(result);

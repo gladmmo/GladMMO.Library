@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using UnityEngine.AddressableAssets.Utility;
 using UnityEngine.ResourceManagement;
@@ -75,6 +76,19 @@ namespace UnityEngine.AddressableAssets.ResourceLocators
     [Serializable]
     public class ContentCatalogData
     {
+        [NonSerialized]
+        internal string localHash;
+        [NonSerialized]
+        internal IResourceLocation location;
+        [SerializeField]
+        internal string m_LocatorId;
+
+        public string ProviderId
+        {
+            get { return m_LocatorId; }
+            internal set { m_LocatorId = value; }
+        }
+
         [SerializeField]
         ObjectInitializationData m_InstanceProviderData;
         /// <summary>
@@ -108,40 +122,60 @@ namespace UnityEngine.AddressableAssets.ResourceLocators
             }
         }
         [SerializeField]
-        List<ObjectInitializationData> m_ResourceProviderData = new List<ObjectInitializationData>();
+        internal List<ObjectInitializationData> m_ResourceProviderData = new List<ObjectInitializationData>();
         /// <summary>
         /// The list of resource provider data.  Each entry will add an IResourceProvider to the Addressables.ResourceManager.ResourceProviders list.
         /// </summary>
-        public List<ObjectInitializationData> ResourceProviderData { get { return m_ResourceProviderData; } }
+        public List<ObjectInitializationData> ResourceProviderData
+        {
+            get { return m_ResourceProviderData; }
+            set { m_ResourceProviderData = value; }
+        }
+
+        /// <summary>
+        /// The IDs for the Resource Providers.
+        /// </summary>
+        public string[] ProviderIds
+        {
+            get { return m_ProviderIds; }
+        }
+
+        /// <summary>
+        /// Internal Content Catalog Entry IDs for Addressable Assets.
+        /// </summary>
+        public string[] InternalIds
+        {
+            get { return m_InternalIds; }
+        }
 
         [FormerlySerializedAs("m_providerIds")]
         [SerializeField]
-        string[] m_ProviderIds = null;
+        internal string[] m_ProviderIds = null;
         [FormerlySerializedAs("m_internalIds")]
         [SerializeField]
-        string[] m_InternalIds = null;
+        internal string[] m_InternalIds = null;
         [FormerlySerializedAs("m_keyDataString")]
         [SerializeField]
-        string m_KeyDataString = null;
+        internal string m_KeyDataString = null;
         [FormerlySerializedAs("m_bucketDataString")]
         [SerializeField]
-        string m_BucketDataString = null;
+        internal string m_BucketDataString = null;
         [FormerlySerializedAs("m_entryDataString")]
         [SerializeField]
-        string m_EntryDataString = null;
+        internal string m_EntryDataString = null;
         
         const int k_ByteSize = 4;
         const int k_EntryDataItemPerEntry = 7;
         
         [FormerlySerializedAs("m_extraDataString")]
         [SerializeField]
-        string m_ExtraDataString = null;
+        internal string m_ExtraDataString = null;
 
         [SerializeField]
-        string[] m_Keys = null;
+        internal string[] m_Keys = null;
 
         [SerializeField]
-        SerializedType[] m_resourceTypes = null;
+        internal SerializedType[] m_resourceTypes = null;
 
         struct Bucket
         {
@@ -194,8 +228,7 @@ namespace UnityEngine.AddressableAssets.ResourceLocators
 
             public int Hash(Type t)
             {
-                var hash = m_HashCode * 31 + t.GetHashCode();
-                return hash;
+                return (m_HashCode * 31 + t.GetHashCode()) * 31 + DependencyHashCode;
             }
 
             public CompactLocation(ResourceLocationMap locator, string internalId, string providerId, object dependencyKey, object data, int depHash, string primaryKey, Type type)
@@ -210,6 +243,26 @@ namespace UnityEngine.AddressableAssets.ResourceLocators
                 m_PrimaryKey = primaryKey;
                 m_Type = type == null ? typeof(object) : type;
             }
+        }
+
+        internal void CleanData()
+        {
+            m_KeyDataString = "";
+            m_BucketDataString = "";
+            m_EntryDataString = "";
+            m_ExtraDataString = "";
+            m_InternalIds = null;
+            m_Keys = null;
+            m_LocatorId = "";
+            m_ProviderIds = null;
+            m_ResourceProviderData = null;
+            m_resourceTypes = null;
+        }
+
+        internal ResourceLocationMap CreateCustomLocator(string overrideId, string providerSuffix = null)
+        {
+            m_LocatorId = overrideId;
+            return CreateLocator(providerSuffix);
         }
 
         /// <summary>
@@ -246,13 +299,14 @@ namespace UnityEngine.AddressableAssets.ResourceLocators
                 }
             }
             var extraData = Convert.FromBase64String(m_ExtraDataString);
+
             var keyData = Convert.FromBase64String(m_KeyDataString);
             var keyCount = BitConverter.ToInt32(keyData, 0);
             var keys = new object[keyCount];
             for (int i = 0; i < buckets.Length; i++)
                 keys[i] = SerializationUtilities.ReadObjectFromByteArray(keyData, buckets[i].dataOffset);
 
-            var locator = new ResourceLocationMap(buckets.Length);
+            var locator = new ResourceLocationMap(m_LocatorId, buckets.Length);
 
             var entryData = Convert.FromBase64String(m_EntryDataString);
             int count = SerializationUtilities.ReadInt32FromByteArray(entryData, 0);
@@ -303,8 +357,10 @@ namespace UnityEngine.AddressableAssets.ResourceLocators
         /// Create a new ContentCatalogData object with the specified entries.
         /// </summary>
         /// <param name="entries">The data entries.</param>
-        public ContentCatalogData(IList<ContentCatalogDataEntry> entries)
+        /// <param name="id">The id of the locator.</param>
+        public ContentCatalogData(IList<ContentCatalogDataEntry> entries, string id = null)
         {
+            m_LocatorId = id;
             SetData(entries);
         }
 
@@ -413,6 +469,7 @@ namespace UnityEngine.AddressableAssets.ResourceLocators
             m_ExtraDataString = Convert.ToBase64String(extraDataList.ToArray());
 
             //create extra entries for dependency sets
+            Dictionary<int, object> hashSources = new Dictionary<int, object>();
             int originalEntryCount = data.Count;
             for (int i = 0; i < originalEntryCount; i++)
             {
@@ -420,10 +477,8 @@ namespace UnityEngine.AddressableAssets.ResourceLocators
                 if (entry.Dependencies == null || entry.Dependencies.Count < 2)
                     continue;
 
-                //seed and and factor values taken from https://stackoverflow.com/questions/1646807/quick-and-simple-hash-code-combinations
-                int hashCode = 1009;
-                foreach (var dep in entry.Dependencies)
-                    hashCode = hashCode * 9176 + dep.GetHashCode();
+                int hashCode = CalculateCollectedHash(entry.Dependencies, hashSources);
+                
                 bool isNew = false;
                 keys.Add(hashCode, ref isNew);
                 if (isNew)
@@ -490,6 +545,28 @@ namespace UnityEngine.AddressableAssets.ResourceLocators
             }
         }
 
+        internal int CalculateCollectedHash(List<object> objects, Dictionary<int, object> hashSources)
+        {
+            var hashSource = new HashSet<object>(objects);
+            var hashCode = GetHashCodeForEnumerable(hashSource);
+            if (hashSources.TryGetValue(hashCode, out var previousHashSource))
+            {
+                if (!(previousHashSource is HashSet<object> b) || !hashSource.SetEquals(b))
+                    throw new Exception($"INCORRECT HASH: the same hash ({hashCode}) for different dependency lists:\nsource 1: {previousHashSource}\nsource 2: {hashSource}");
+            }
+            else
+                hashSources.Add(hashCode, hashSource);
+
+            return hashCode;
+        }
+
+        internal static int GetHashCodeForEnumerable(IEnumerable<object> set)
+        {
+            int hash = 0;
+            foreach (object o in set)
+                hash = hash * 31 + o.GetHashCode();
+            return hash;
+        }
 
 #if REFERENCE_IMPLEMENTATION
         public void SetDataOld(List<ResourceLocationData> locations, List<string> labels)

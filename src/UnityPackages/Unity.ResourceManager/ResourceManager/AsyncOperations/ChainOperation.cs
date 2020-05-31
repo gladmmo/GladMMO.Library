@@ -43,14 +43,36 @@ namespace UnityEngine.ResourceManagement
                 errorMsg = string.Format("ChainOperation of Type: {0} failed because dependent operation failed\n{1}", typeof(TObject), x.OperationException != null ? x.OperationException.Message : string.Empty);
             Complete(m_WrappedOp.Result, x.Status == AsyncOperationStatus.Succeeded, errorMsg);
         }
-
+         
         protected override void Destroy()
         {
-            m_WrappedOp.Release();
-            m_DepOp.Release();
+            if(m_WrappedOp.IsValid())
+                m_WrappedOp.Release();
+
+            if(m_DepOp.IsValid())
+                m_DepOp.Release();
         }
-        
-        protected override float Progress => m_DepOp.PercentComplete;
+
+        protected override float Progress
+        {
+            get
+            {
+                float total = 0f;
+                int numberOfOps = 2;
+
+                if (m_DepOp.IsValid())
+                    total += m_DepOp.PercentComplete;
+                else
+                    total++;
+
+                if (m_WrappedOp.IsValid())
+                    total += m_WrappedOp.PercentComplete;
+                else
+                    total++;
+
+                return total / numberOfOps;
+            }
+        }
     }
 
     class ChainOperationTypelessDepedency<TObject> : AsyncOperationBase<TObject>
@@ -94,10 +116,32 @@ namespace UnityEngine.ResourceManagement
 
         protected override void Destroy()
         {
-            m_WrappedOp.Release();
-            m_DepOp.Release();
+            if(m_WrappedOp.IsValid())
+                m_WrappedOp.Release();
+
+            if(m_DepOp.IsValid())
+                m_DepOp.Release();
         }
 
-        protected override float Progress => m_DepOp.PercentComplete;
+        protected override float Progress
+        {
+            get
+            {
+                float total = 0f;
+                int numberOfOps = 2;
+
+                if (m_DepOp.IsValid())
+                    total += m_DepOp.PercentComplete;
+                else
+                    total++;
+
+                if (m_WrappedOp.IsValid())
+                    total += m_WrappedOp.PercentComplete;
+                else
+                    total++;
+
+                return total / numberOfOps;
+            }
+        }
     }
 }

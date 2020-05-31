@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.ResourceManagement.ResourceLocations;
@@ -14,26 +15,19 @@ namespace UnityEngine.ResourceManagement.ResourceProviders.Simulation
     [Serializable]
     public class VirtualAssetBundleRequestOptions : AssetBundleRequestOptions
     {
-        /// <summary>
-        /// Computes the amount of data needed to be downloaded for this bundle.
-        /// </summary>
-        /// <param name="loc">The location of the bundle.</param>
-        /// <returns>The size in bytes of the bundle that is needed to be downloaded.  If the local cache contains the bundle or it is a local bundle, 0 will be returned.</returns>
-        public override long ComputeSize(IResourceLocation loc)
+        /// <inheritdoc/>
+        public override long ComputeSize(IResourceLocation location, ResourceManager resourceManager)
         {
-            if (!ResourceManagerConfig.IsPathRemote(loc.InternalId))
-            {
-//                Debug.LogFormat("Location {0} is local, ignoring size", loc);
+            var id = resourceManager == null ? location.InternalId : resourceManager.TransformInternalId(location);
+            if (!ResourceManagerConfig.IsPathRemote(id))
                 return 0;
-            }
+
             var locHash = Hash128.Parse(Hash);
             if (!locHash.isValid)
-            {
- //               Debug.LogFormat("Location {0} has invalid hash, using size of {1}", loc, BundleSize);
                 return BundleSize;
-            }
-#if !UNITY_SWITCH && !UNITY_PS4
-            var bundleName = Path.GetFileNameWithoutExtension(loc.InternalId);
+
+#if ENABLE_CACHING
+            var bundleName = Path.GetFileNameWithoutExtension(id);
             if (locHash.isValid) //If we have a hash, ensure that our desired version is cached.
             {
                 if (Caching.IsVersionCached(bundleName, locHash))
@@ -47,7 +41,7 @@ namespace UnityEngine.ResourceManagement.ResourceProviders.Simulation
                 if (versions.Count > 0)
                     return 0;
             }
-#endif //!UNITY_SWITCH && !UNITY_PS4
+#endif //ENABLE_CACHING
             return BundleSize;
         }
     }
@@ -55,6 +49,7 @@ namespace UnityEngine.ResourceManagement.ResourceProviders.Simulation
     /// <summary>
     /// Provides assets from virtual asset bundles.  Actual loads are done through the AssetDatabase API.
     /// </summary>
+    [DisplayName("Assets from Virtual Bundles")]
     public class VirtualBundledAssetProvider : ResourceProviderBase
     {
         /// <summary>
@@ -73,7 +68,7 @@ namespace UnityEngine.ResourceManagement.ResourceProviders.Simulation
             public void Start(ProvideHandle provideHandle, VirtualAssetBundle bundle)
             {
                 m_PI = provideHandle;
-                m_RequestOperation = bundle.LoadAssetAsync(m_PI.Type, m_PI.Location);
+                m_RequestOperation = bundle.LoadAssetAsync(m_PI, m_PI.Location);
                 m_RequestOperation.Completed += RequestOperation_Completed;
             }
 
@@ -93,7 +88,7 @@ namespace UnityEngine.ResourceManagement.ResourceProviders.Simulation
             VirtualAssetBundle bundle = deps[0] as VirtualAssetBundle;
             if (bundle == null)
             {
-                provideHandle.Complete<object>(null, false, null);
+                provideHandle.Complete<object>(null, false, new Exception($"Unable to load asset of type {provideHandle.Type} from location {provideHandle.Location}."));
             }
             else
             {

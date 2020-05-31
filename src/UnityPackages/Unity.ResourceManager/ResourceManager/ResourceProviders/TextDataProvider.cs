@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using UnityEngine.Networking;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -11,6 +12,7 @@ namespace UnityEngine.ResourceManagement.ResourceProviders
     /// <summary>
     /// Provides raw text from a local or remote URL.
     /// </summary>
+    [DisplayName("Text Data Provider")]
     public class TextDataProvider : ResourceProviderBase
     {
         /// <summary>
@@ -22,6 +24,7 @@ namespace UnityEngine.ResourceManagement.ResourceProviders
         {
             TextDataProvider m_Provider;
             UnityWebRequestAsyncOperation m_RequestOperation;
+            WebRequestQueueOperation m_RequestQueueOperation;
             bool m_IgnoreFailures;
             ProvideHandle m_PI;
 
@@ -33,7 +36,7 @@ namespace UnityEngine.ResourceManagement.ResourceProviders
                 provideHandle.SetProgressCallback(GetPercentComplete);
                 m_Provider = rawProvider;
                 m_IgnoreFailures = ignoreFailures;
-                var path = m_PI.Location.InternalId;
+                var path = m_PI.ResourceManager.TransformInternalId(m_PI.Location);
                 if (File.Exists(path))
                 {
 #if NET_4_6
@@ -42,12 +45,28 @@ namespace UnityEngine.ResourceManagement.ResourceProviders
 #endif
                     var text = File.ReadAllText(path);
                     object result = m_Provider.Convert(m_PI.Type, text);
-                    m_PI.Complete(result, result != null, null);
+                    m_PI.Complete(result, result != null, result == null ? new Exception($"Unable to load asset of type {m_PI.Type} from location {m_PI.Location}.") : null);
                 }
                 else if (ResourceManagerConfig.ShouldPathUseWebRequest(path))
                 {
-                    m_RequestOperation = new UnityWebRequest(path, UnityWebRequest.kHttpVerbGET, new DownloadHandlerBuffer(), null).SendWebRequest();
-                    m_RequestOperation.completed += RequestOperation_completed;
+                    UnityWebRequest request = new UnityWebRequest(path, UnityWebRequest.kHttpVerbGET, new DownloadHandlerBuffer(), null);
+                    m_RequestQueueOperation = WebRequestQueue.QueueRequest(request);
+                    if (m_RequestQueueOperation.IsDone)
+                    {
+                        m_RequestOperation = m_RequestQueueOperation.Result;
+                        if(m_RequestOperation.isDone)
+                            RequestOperation_completed(m_RequestOperation);
+                        else
+                            m_RequestOperation.completed += RequestOperation_completed;
+                    }
+                    else
+                    {
+                        m_RequestQueueOperation.OnComplete += asyncOperation =>
+                        {
+                            m_RequestOperation = asyncOperation;
+                            m_RequestOperation.completed += RequestOperation_completed;
+                        };
+                    }
                 }
                 else
                 {
@@ -55,9 +74,9 @@ namespace UnityEngine.ResourceManagement.ResourceProviders
                     //Don't log errors when loading from the persistentDataPath since these files are expected to not exist until created
                     if (!m_IgnoreFailures)
                     {
-                        exception = new Exception(string.Format("Invalid path in RawDataProvider: '{0}'.", path));
+                        exception = new Exception(string.Format("Invalid path in " + nameof(TextDataProvider) + " : '{0}'.", path));
                     }
-                    m_PI.Complete<object>(null, false, exception);
+                    m_PI.Complete<object>(null, m_IgnoreFailures, exception);
                 }
             }
 
@@ -72,15 +91,14 @@ namespace UnityEngine.ResourceManagement.ResourceProviders
                     if (string.IsNullOrEmpty(webReq.error))
                         result = m_Provider.Convert(m_PI.Type, webReq.downloadHandler.text);
                     else
-                        exception = new Exception(string.Format("RawDataProvider unable to load from url {0}, result='{1}'.", webReq.url, webReq.error));
+                        exception = new Exception(string.Format(nameof(TextDataProvider) + " unable to load from url {0}, result='{1}'.", webReq.url, webReq.error));
                 }
                 else
                 {
-                    exception = new Exception("RawDataProvider unable to load from unknown url.");
+                    exception = new Exception(nameof(TextDataProvider) + " unable to load from unknown url.");
                 }
-                if (m_IgnoreFailures)
-                    exception = null;
-                m_PI.Complete(result, result != null, exception);
+
+                m_PI.Complete(result, result != null || m_IgnoreFailures, exception);
             }
         }
 

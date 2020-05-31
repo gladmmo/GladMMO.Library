@@ -39,6 +39,7 @@ namespace UnityEngine.ResourceManagement.ResourceLocations
         /// </summary>
         public object Data { get { return m_Data; } set { m_Data = value; } }
 
+        /// <inheritdoc/>
         public string PrimaryKey
         {
             get { return m_PrimaryKey; }
@@ -60,10 +61,9 @@ namespace UnityEngine.ResourceManagement.ResourceLocations
         /// </summary>
         /// <param name="t">The type to hash with.</param>
         /// <returns>The combined hash code of the location and type.</returns>
-                public int Hash(Type t)
+        public int Hash(Type t)
         {
-            var hash = m_HashCode * 31 + t.GetHashCode();
-            return hash;
+            return (m_HashCode * 31 + t.GetHashCode()) * 31 + DependencyHashCode;
         }
 
         /// <summary>
@@ -85,9 +85,10 @@ namespace UnityEngine.ResourceManagement.ResourceLocations
         public ResourceLocationBase(string name, string id, string providerId, Type t, params IResourceLocation[] dependencies)
         {
             if (string.IsNullOrEmpty(id))
-                throw new ArgumentNullException(id);
+                throw new ArgumentNullException(nameof(id));
             if (string.IsNullOrEmpty(providerId))
-                throw new ArgumentNullException(providerId);
+                throw new ArgumentNullException(nameof(providerId));
+            m_PrimaryKey = name;
             m_HashCode = (name.GetHashCode() * 31 + id.GetHashCode()) * 31 + providerId.GetHashCode();
             m_Name = name;
             m_Id = id;

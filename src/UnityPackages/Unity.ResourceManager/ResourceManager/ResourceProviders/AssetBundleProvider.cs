@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using UnityEngine.Networking;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -16,7 +17,7 @@ namespace UnityEngine.ResourceManagement.ResourceProviders
     public interface IAssetBundleResource
     {
         AssetBundle GetAssetBundle();
-        
+
     }
 
     /// <summary>
@@ -86,13 +87,14 @@ namespace UnityEngine.ResourceManagement.ResourceProviders
         /// </summary>
         /// <param name="loc">The location of the bundle.</param>
         /// <returns>The size in bytes of the bundle that is needed to be downloaded.  If the local cache contains the bundle or it is a local bundle, 0 will be returned.</returns>
-        public virtual long ComputeSize(IResourceLocation loc)
+        public virtual long ComputeSize(IResourceLocation location, ResourceManager resourceManager)
         {
-            if (!ResourceManagerConfig.IsPathRemote(loc.InternalId))
+            var id = resourceManager == null ? location.InternalId : resourceManager.TransformInternalId(location);
+            if (!ResourceManagerConfig.IsPathRemote(id))
                 return 0;
             var locHash = Hash128.Parse(Hash);
-#if !UNITY_SWITCH && !UNITY_PS4
-            var bundleName = Path.GetFileNameWithoutExtension(loc.InternalId);
+#if ENABLE_CACHING
+            var bundleName = Path.GetFileNameWithoutExtension(id);
             if (locHash.isValid) //If we have a hash, ensure that our desired version is cached.
             {
                 if (Caching.IsVersionCached(new CachedAssetBundle(bundleName, locHash)))
@@ -106,7 +108,7 @@ namespace UnityEngine.ResourceManagement.ResourceProviders
                 if (versions.Count > 0)
                     return 0;
             }
-#endif //!UNITY_SWITCH && !UNITY_PS4
+#endif //ENABLE_CACHING
             return BundleSize;
         }
     }
@@ -116,18 +118,20 @@ namespace UnityEngine.ResourceManagement.ResourceProviders
         AssetBundle m_AssetBundle;
         DownloadHandlerAssetBundle m_downloadHandler;
         AsyncOperation m_RequestOperation;
+        WebRequestQueueOperation m_WebRequestQueueOperation;
         ProvideHandle m_ProvideHandle;
         AssetBundleRequestOptions m_Options;
         int m_Retries;
 
         UnityWebRequest CreateWebRequest(IResourceLocation loc)
         {
+            var url = m_ProvideHandle.ResourceManager.TransformInternalId(loc);
             if (m_Options == null)
-                return UnityWebRequestAssetBundle.GetAssetBundle(loc.InternalId);
+                return UnityWebRequestAssetBundle.GetAssetBundle(url);
 
             var webRequest = !string.IsNullOrEmpty(m_Options.Hash) ?
-                UnityWebRequestAssetBundle.GetAssetBundle(loc.InternalId, Hash128.Parse(m_Options.Hash), m_Options.Crc) :
-                UnityWebRequestAssetBundle.GetAssetBundle(loc.InternalId, m_Options.Crc);
+                UnityWebRequestAssetBundle.GetAssetBundle(url, Hash128.Parse(m_Options.Hash), m_Options.Crc) :
+                UnityWebRequestAssetBundle.GetAssetBundle(url, m_Options.Crc);
 
             if (m_Options.Timeout > 0)
                 webRequest.timeout = m_Options.Timeout;
@@ -169,13 +173,13 @@ namespace UnityEngine.ResourceManagement.ResourceProviders
             m_ProvideHandle = provideHandle;
             m_Options = m_ProvideHandle.Location.Data as AssetBundleRequestOptions;
             m_RequestOperation = null;
-            BeginOperation();
             provideHandle.SetProgressCallback(PercentComplete);
+            BeginOperation();
         }
 
         private void BeginOperation()
         {
-            string path = m_ProvideHandle.Location.InternalId;
+            string path = m_ProvideHandle.ResourceManager.TransformInternalId(m_ProvideHandle.Location);
             if (File.Exists(path))
             {
                 m_RequestOperation = AssetBundle.LoadFromFileAsync(path, m_Options == null ? 0 : m_Options.Crc);
@@ -185,8 +189,20 @@ namespace UnityEngine.ResourceManagement.ResourceProviders
             {
                 var req = CreateWebRequest(m_ProvideHandle.Location);
                 req.disposeDownloadHandlerOnDispose = false;
-                m_RequestOperation = req.SendWebRequest();
-                m_RequestOperation.completed += WebRequestOperationCompleted;
+                m_WebRequestQueueOperation = WebRequestQueue.QueueRequest(req);
+                if (m_WebRequestQueueOperation.IsDone)
+                {
+                    m_RequestOperation = m_WebRequestQueueOperation.Result;
+                    m_RequestOperation.completed += WebRequestOperationCompleted;
+                }
+                else
+                {
+                    m_WebRequestQueueOperation.OnComplete += asyncOp =>
+                    {
+                        m_RequestOperation = asyncOp;
+                        m_RequestOperation.completed += WebRequestOperationCompleted;
+                    };
+                }
             }
             else
             {
@@ -249,8 +265,10 @@ namespace UnityEngine.ResourceManagement.ResourceProviders
     /// <summary>
     /// IResourceProvider for asset bundles.  Loads bundles via UnityWebRequestAssetBundle API if the internalId starts with "http".  If not, it will load the bundle via AssetBundle.LoadFromFileAsync.
     /// </summary>
+    [DisplayName("AssetBundle Provider")]
     public class AssetBundleProvider : ResourceProviderBase
     {
+
         /// <inheritdoc/>
         public override void Provide(ProvideHandle providerInterface)
         {
@@ -261,12 +279,12 @@ namespace UnityEngine.ResourceManagement.ResourceProviders
         {
             return typeof(IAssetBundleResource);
         }
-
+        
         /// <summary>
         /// Releases the asset bundle via AssetBundle.Unload(true).
         /// </summary>
-        /// <param name="location"></param>
-        /// <param name="asset"></param>
+        /// <param name="location">The location of the asset to release</param>
+        /// <param name="asset">The asset in question</param>
         /// <returns></returns>
         public override void Release(IResourceLocation location, object asset)
         {

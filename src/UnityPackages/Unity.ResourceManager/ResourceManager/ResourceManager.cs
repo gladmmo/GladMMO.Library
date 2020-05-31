@@ -12,6 +12,10 @@ using UnityEngine.SceneManagement;
 
 [assembly: InternalsVisibleTo("Unity.ResourceManager.Tests")]
 [assembly: InternalsVisibleTo("Unity.Addressables.Tests")]
+[assembly: InternalsVisibleTo("Unity.Addressables")]
+#if UNITY_EDITOR
+[assembly: InternalsVisibleTo("Unity.Addressables.Editor")]
+#endif
 
 namespace UnityEngine.ResourceManagement
 {
@@ -25,9 +29,6 @@ namespace UnityEngine.ResourceManagement
         /// </summary>
         public enum DiagnosticEventType
         {
-            EventCount,
-            FrameRate,
-            HeapSize,
             AsyncOperationFail,
             AsyncOperationCreate,
             AsyncOperationPercentComplete,
@@ -37,12 +38,84 @@ namespace UnityEngine.ResourceManagement
         }
 
         /// <summary>
+        /// Container for information associated with a Diagnostics event.
+        /// </summary>
+        public struct DiagnosticEventContext
+        {
+            /// <summary>
+            /// Operation handle for the event.
+            /// </summary>
+            public AsyncOperationHandle OperationHandle { get; }
+
+            /// <summary>
+            /// The type of diagnostic event.
+            /// </summary>
+            public DiagnosticEventType Type { get; }
+
+            /// <summary>
+            /// The value for this event.
+            /// </summary>
+            public int EventValue { get; }
+
+            /// <summary>
+            /// The IResourceLocation being provided by the operation triggering this event.
+            /// This value is null if the event is not while providing a resource. 
+            /// </summary>
+            public IResourceLocation Location { get; }
+
+            /// <summary>
+            /// Addition data included with this event.
+            /// </summary>
+            public object Context { get; }
+
+            /// <summary>
+            /// Any error that occured.
+            /// </summary>
+            public string Error { get; }
+
+            /// <summary>
+            /// Construct a new DiagnosticEventContext.
+            /// </summary>
+            /// <param name="op">Operation handle for the event.</param>
+            /// <param name="type">The type of diagnostic event.</param>
+            /// <param name="eventValue">The value for this event.</param>
+            /// <param name="error">Any error that occured.</param>
+            /// <param name="context">Additional context data.</param>
+            public DiagnosticEventContext(AsyncOperationHandle op, DiagnosticEventType type, int eventValue = 0, string error = null, object context = null)
+            {
+                OperationHandle = op;
+                Type = type;
+                EventValue = eventValue;
+                Location = op.m_InternalOp != null && op.m_InternalOp is IGenericProviderOperation gen
+                    ? gen.Location
+                    : null;
+                Error = error;
+                Context = context;
+            }
+        }
+
+        /// <summary>
         /// Global exception handler.  This will be called whenever an IAsyncOperation.OperationException is set to a non-null value.
         /// </summary>
         public static Action<AsyncOperationHandle, Exception> ExceptionHandler { get; set; }
 
+        /// <summary>
+        /// Functor to transform internal ids before being used by the providers.
+        /// </summary>
+        public Func<IResourceLocation, string> InternalIdTransformFunc { get; set; }
+
+        /// <summary>
+        /// Checks for an internal id transform function and uses it to modify the internal id value.
+        /// </summary>
+        /// <param name="location">The location to transform the internal id of.</param>
+        /// <returns>If a transform func is set, use it to pull the local id. otheriwse the InternalId property of the location is used.</returns>
+        public string TransformInternalId(IResourceLocation location)
+        {
+            return InternalIdTransformFunc == null ? location.InternalId : InternalIdTransformFunc(location);
+        }
+
         internal bool CallbackHooksEnabled = true; // tests might need to disable the callback hooks to manually pump updating
-        private MonoBehaviourCallbackHooks m_CallbackHooks;
+        internal MonoBehaviourCallbackHooks m_CallbackHooks;
 
         ListWithEvents<IResourceProvider> m_ResourceProviders = new ListWithEvents<IResourceProvider>();
         IAllocationStrategy m_allocator;
@@ -60,8 +133,8 @@ namespace UnityEngine.ResourceManagement
         DelegateList<float> m_UpdateCallbacks = DelegateList<float>.CreateWithGlobalCache();
         List<IAsyncOperation> m_DeferredCompleteCallbacks = new List<IAsyncOperation>();
 
-
-        Action<AsyncOperationHandle, DiagnosticEventType, int, object> m_diagnosticsHandler;
+        Action<AsyncOperationHandle, DiagnosticEventType, int, object> m_obsoleteDiagnosticsHandler; // For use in working with Obsolete RegisterDiagnosticCallback method.
+        Action<DiagnosticEventContext> m_diagnosticsHandler;
         Action<IAsyncOperation> m_ReleaseOpNonCached;
         Action<IAsyncOperation> m_ReleaseOpCached;
         Action<IAsyncOperation> m_ReleaseInstanceOp;
@@ -104,11 +177,13 @@ namespace UnityEngine.ResourceManagement
         /// The allocation strategy object.
         /// </summary>
         public IAllocationStrategy Allocator { get { return m_allocator; } set { m_allocator = value; } }
+        
         /// <summary>
         /// Gets the list of configured <see cref="IResourceProvider"/> objects. Resource Providers handle load and release operations for <see cref="IResourceLocation"/> objects.
         /// </summary>
         /// <value>The resource providers list.</value>
         public IList<IResourceProvider> ResourceProviders { get { return m_ResourceProviders; } }
+        
         /// <summary>
         /// The CertificateHandler instance object.
         /// </summary>
@@ -143,7 +218,7 @@ namespace UnityEngine.ResourceManagement
                 RemoveUpdateReciever(updateReceiver);
         }
 
-        private void RegisterForCallbacks()
+        internal void RegisterForCallbacks()
         {
             if (CallbackHooksEnabled && m_CallbackHooks == null)
             {
@@ -155,25 +230,60 @@ namespace UnityEngine.ResourceManagement
         /// <summary>
         /// Clears out the diagnostics callback handler.
         /// </summary>
+        [Obsolete("ClearDiagnosticsCallback is Obsolete, use ClearDiagnosticCallbacks instead.")]
         public void ClearDiagnosticsCallback()
         {
             m_diagnosticsHandler = null;
+            m_obsoleteDiagnosticsHandler = null;
+        }
+
+        /// <summary>
+        /// Clears out the diagnostics callbacks handler.
+        /// </summary>
+        public void ClearDiagnosticCallbacks()
+        {
+            m_diagnosticsHandler = null;
+            m_obsoleteDiagnosticsHandler = null;
+        }
+
+        /// <summary>
+        /// Unregister a handler for diagnostic events.
+        /// </summary>
+        /// <param name="func">The event handler function.</param>
+        public void UnregisterDiagnosticCallback(Action<DiagnosticEventContext> func)
+        {
+            if (m_diagnosticsHandler != null)
+                m_diagnosticsHandler -= func;
+            else
+                Debug.LogError("No Diagnostic callbacks registered, cannot remove callback.");
         }
 
         /// <summary>
         /// Register a handler for diagnostic events.
         /// </summary>
         /// <param name="func">The event handler function.</param>
+        [Obsolete]
         public void RegisterDiagnosticCallback(Action<AsyncOperationHandle, ResourceManager.DiagnosticEventType, int, object> func)
         {
-            m_diagnosticsHandler = func;
+            m_obsoleteDiagnosticsHandler = func;
         }
 
-        internal void PostDiagnosticEvent(AsyncOperationHandle op, ResourceManager.DiagnosticEventType type, int eventValue = 0, object context = null)
+        /// <summary>
+        /// Register a handler for diagnostic events.
+        /// </summary>
+        /// <param name="func">The event handler function.</param>
+        public void RegisterDiagnosticCallback(Action<DiagnosticEventContext> func)
         {
-            if (m_diagnosticsHandler == null)
+            m_diagnosticsHandler += func;
+        }
+
+        internal void PostDiagnosticEvent(DiagnosticEventContext context)
+        {
+            m_diagnosticsHandler?.Invoke(context);
+
+            if (m_obsoleteDiagnosticsHandler == null)
                 return;
-            m_diagnosticsHandler(op, type, eventValue, context);
+            m_obsoleteDiagnosticsHandler(context.OperationHandle, context.Type, context.EventValue, string.IsNullOrEmpty(context.Error) ? context.Context : context.Error);
         }
 
         /// <summary>
@@ -187,7 +297,7 @@ namespace UnityEngine.ResourceManagement
             if (location != null)
             {
                 IResourceProvider prov = null;
-                var hash = location.ProviderId.GetHashCode() * 31 + (t == null ? 0: t.GetHashCode());
+                var hash = location.ProviderId.GetHashCode() * 31 + (t == null ? 0 : t.GetHashCode());
                 if (!m_providerMap.TryGetValue(hash, out prov))
                 {
                     for (int i = 0; i < ResourceProviders.Count; i++)
@@ -214,7 +324,7 @@ namespace UnityEngine.ResourceManagement
             return t != null ? t : typeof(object);
         }
 
-        private int CalculateLocationsHash(IList<IResourceLocation> locations, Type t=null)
+        private int CalculateLocationsHash(IList<IResourceLocation> locations, Type t = null)
         {
             if (locations == null || locations.Count == 0)
                 return 0;
@@ -262,7 +372,7 @@ namespace UnityEngine.ResourceManagement
             // Calculate the hash of the dependencies
             int depHash = location.DependencyHashCode;
             var depOp = location.HasDependencies ? ProvideResourceGroupCached(location.Dependencies, depHash, null, null) : default(AsyncOperationHandle<IList<AsyncOperationHandle>>);
-            if(provider == null)
+            if (provider == null)
                 provider = GetResourceProvider(desiredType, location);
 
             ((IGenericProviderOperation)op).Init(this, provider, location, depOp);
@@ -310,19 +420,18 @@ namespace UnityEngine.ResourceManagement
 
         class CompletedOperation<TObject> : AsyncOperationBase<TObject>
         {
-            TObject m_Result;
             bool m_Success;
             string m_ErrorMsg;
             public CompletedOperation() { }
             public void Init(TObject result, bool success, string errorMsg)
             {
-                m_Result = result;
+                Result = result;
                 m_Success = success;
                 m_ErrorMsg = errorMsg;
             }
             protected override void Execute()
             {
-                Complete(m_Result, m_Success, m_ErrorMsg);
+                Complete(Result, m_Success, m_ErrorMsg);
             }
         }
 
@@ -402,6 +511,13 @@ namespace UnityEngine.ResourceManagement
             return StartOperation(cop, default(AsyncOperationHandle));
         }
 
+        internal AsyncOperationHandle<TObject> CreateCompletedOperation<TObject>(TObject result, bool success, string errorMsg)
+        {
+            var cop = CreateOperation<CompletedOperation<TObject>>(typeof(CompletedOperation<TObject>), typeof(CompletedOperation<TObject>).GetHashCode(), 0, null);
+            cop.Init(result, success, errorMsg);
+            return StartOperation(cop, default(AsyncOperationHandle));
+        }
+
         /// <summary>
         /// Release the operation associated with the specified handle
         /// </summary>
@@ -428,6 +544,36 @@ namespace UnityEngine.ResourceManagement
                 return (GroupOperation)opGeneric;
             }
             return null;
+        }
+
+        /// <summary>
+        /// Create a group operation for a set of locations.
+        /// </summary>
+        /// <typeparam name="T">The expected object type for the operations.</typeparam>
+        /// <param name="locations">The list of locations to load.</param>
+        /// <returns>The operation for the entire group.</returns>
+        public AsyncOperationHandle<IList<AsyncOperationHandle>> CreateGroupOperation<T>(IList<IResourceLocation> locations)
+        {
+            var op = CreateOperation<GroupOperation>(typeof(GroupOperation), s_GroupOperationTypeHash, 0, m_ReleaseOpNonCached);
+            var ops = new List<AsyncOperationHandle>(locations.Count);
+            foreach (var loc in locations)
+                ops.Add(ProvideResource<T>(loc));
+
+            op.Init(ops);
+            return StartOperation(op, default);
+        }
+
+        /// <summary>
+        /// Create a group operation for a set of AsyncOperationHandles
+        /// </summary>
+        /// <param name="operations">The list of operations that need to complete.</param>
+        /// <param name="releasedCachedOpOnComplete">Determine if the cached operation should be released or not.</param>
+        /// <returns>The operation for the entire group</returns>
+        public AsyncOperationHandle<IList<AsyncOperationHandle>> CreateGenericGroupOperation(List<AsyncOperationHandle> operations, bool releasedCachedOpOnComplete = false)
+        {
+            var op = CreateOperation<GroupOperation>(typeof(GroupOperation), s_GroupOperationTypeHash, operations.GetHashCode(), releasedCachedOpOnComplete ? m_ReleaseOpCached : m_ReleaseOpNonCached);
+            op.Init(operations);
+            return StartOperation(op, default);
         }
 
         internal AsyncOperationHandle<IList<AsyncOperationHandle>> ProvideResourceGroupCached(IList<IResourceLocation> locations, int groupHash, Type desiredType, Action<AsyncOperationHandle> callback)
@@ -469,27 +615,27 @@ namespace UnityEngine.ResourceManagement
         /// <param name="locations">locations to load.</param>
         /// <param name="callback">This callback will be invoked once for each object that is loaded.</param>
         /// <typeparam name="TObject">Object type to load.</typeparam>
-        public AsyncOperationHandle<IList<TObject>> ProvideResources<TObject>(IList<IResourceLocation> locations, Action<TObject> callback=null)
+        public AsyncOperationHandle<IList<TObject>> ProvideResources<TObject>(IList<IResourceLocation> locations, Action<TObject> callback = null)
         {
             if (locations == null)
                 return CreateCompletedOperation<IList<TObject>>(null, "Null Location");
 
             Action<AsyncOperationHandle> callbackGeneric = null;
-            if(callback != null)
+            if (callback != null)
             {
                 callbackGeneric = (x) => callback((TObject)(x.Result));
             }
             var typelessHandle = ProvideResourceGroupCached(locations, CalculateLocationsHash(locations, typeof(TObject)), typeof(TObject), callbackGeneric);
             var chainOp = CreateChainOperation(typelessHandle, (x) =>
-               {
-                   if(x.Status != AsyncOperationStatus.Succeeded)
-                       return CreateCompletedOperation<IList<TObject>>(null, x.OperationException != null ? x.OperationException.Message : "ProvidResources failed");
+            {
+                if (x.Status != AsyncOperationStatus.Succeeded)
+                    return CreateCompletedOperation<IList<TObject>>(null, x.OperationException != null ? x.OperationException.Message : "ProvidResources failed");
 
-                   var list = new List<TObject>();
-                   foreach(var r in x.Result)
-                       list.Add(r.Convert<TObject>().Result);
-                   return CreateCompletedOperation<IList<TObject>>(list, string.Empty);
-               });
+                var list = new List<TObject>();
+                foreach (var r in x.Result)
+                    list.Add(r.Convert<TObject>().Result);
+                return CreateCompletedOperation<IList<TObject>>(list, string.Empty);
+            });
             // chain operation holds the dependency
             typelessHandle.Release();
             return chainOp;
@@ -522,21 +668,21 @@ namespace UnityEngine.ResourceManagement
             cOp.Init(dependentOp, callback);
             return StartOperation(cOp, dependentOp);
         }
-        class InstanceOperation : AsyncOperationBase<GameObject>
+        internal class InstanceOperation : AsyncOperationBase<GameObject>
         {
             AsyncOperationHandle<GameObject> m_dependency;
             InstantiationParameters m_instantiationParams;
             IInstanceProvider m_instanceProvider;
             GameObject m_instance;
-            ResourceManager m_RM;
             Scene m_scene;
-            
+
             public void Init(ResourceManager rm, IInstanceProvider instanceProvider, InstantiationParameters instantiationParams, AsyncOperationHandle<GameObject> dependency)
             {
                 m_RM = rm;
                 m_dependency = dependency;
                 m_instanceProvider = instanceProvider;
                 m_instantiationParams = instantiationParams;
+                m_scene = default(Scene);
             }
 
             protected override void GetDependencies(List<AsyncOperationHandle> deps)
@@ -560,13 +706,21 @@ namespace UnityEngine.ResourceManagement
                 m_instanceProvider.ReleaseInstance(m_RM, m_instance);
             }
 
+            protected override float Progress
+            {
+                get
+                {
+                    return m_dependency.PercentComplete;
+                }
+            }
+
             protected override void Execute()
             {
                 Exception e = m_dependency.OperationException;
                 if (m_dependency.Status == AsyncOperationStatus.Succeeded)
                 {
                     m_instance = m_instanceProvider.ProvideInstance(m_RM, m_dependency, m_instantiationParams);
-                    if(m_instance != null)
+                    if (m_instance != null)
                         m_scene = m_instance.scene;
                     Complete(m_instance, true, null);
                 }
@@ -606,8 +760,8 @@ namespace UnityEngine.ResourceManagement
         {
             if (sceneProvider == null)
                 throw new NullReferenceException("sceneProvider is null");
- //           if (sceneLoadHandle.ReferenceCount == 0)
- //               return CreateCompletedOperation<SceneInstance>(default(SceneInstance), "");
+            //           if (sceneLoadHandle.ReferenceCount == 0)
+            //               return CreateCompletedOperation<SceneInstance>(default(SceneInstance), "");
             return sceneProvider.ReleaseScene(this, sceneLoadHandle);
         }
 
@@ -632,11 +786,7 @@ namespace UnityEngine.ResourceManagement
             m_TrackedInstanceOperations.Add(baseOp);
             return StartOperation<GameObject>(baseOp, depOp);
         }
-		
-        /// <summary>
-        /// Cleans up ref counting on any instances that were in a newly closed scene.
-        /// </summary>
-        /// <param name="scene">The scene that was closed</param>
+
         public void CleanupSceneInstances(Scene scene)
         {
             List<InstanceOperation> handlesToRelease = null;
@@ -681,7 +831,7 @@ namespace UnityEngine.ResourceManagement
         {
             m_UpdateCallbacks.Invoke(unscaledDeltaTime);
             m_UpdatingReceivers = true;
-            for (int i = 0; i < m_UpdateReceivers.Count; i++ )
+            for (int i = 0; i < m_UpdateReceivers.Count; i++)
                 m_UpdateReceivers[i].Update(unscaledDeltaTime);
             m_UpdatingReceivers = false;
             if (m_UpdateReceiversToRemove != null)
