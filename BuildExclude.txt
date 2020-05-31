@@ -33,3 +33,4 @@ System.ServiceModel.dll
 System.ServiceModel.Primitives.dll
 System.ComponentModel.Primitives.dll
 VivoxUnity.dll
+JetBrains.Annotations.dll
