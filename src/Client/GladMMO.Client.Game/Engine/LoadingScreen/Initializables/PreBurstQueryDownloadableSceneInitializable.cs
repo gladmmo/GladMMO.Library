@@ -9,6 +9,7 @@ using Nito.AsyncEx;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Networking;
+using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.SceneManagement;
 
 namespace GladMMO
@@ -74,12 +75,9 @@ namespace GladMMO
 					//Can't do web request not on the main thread, sadly.
 					await new UnityYieldAwaitable();
 
-					WorldDownloader downloader = new WorldDownloader(Logger);
+					AsyncOperationHandle worldLoadHandle = GladMMOSceneManager.LoadAddressableSceneAsync("test");
 
-					await downloader.DownloadAsync(urlDownloadResponse.DownloadURL, urlDownloadResponse.Version, o =>
-					{
-						OnWorldDownloadBegins?.Invoke(this, new WorldDownloadBeginEventArgs(o));
-					});
+					OnWorldDownloadBegins?.Invoke(this, new WorldDownloadBeginEventArgs(worldLoadHandle));
 				}
 				catch (Exception e)
 				{

@@ -73,7 +73,7 @@ namespace GladMMO
 				//TODO: handle character session failure
 				CharacterData.UpdateCharacterId(SelectedCharacterGuid);
 
-				GladMMOSceneManager.LoadSceneAsync(GladMMOClientConstants.WORLD_DOWNLOAD_SCENE_NAME);
+				GladMMOSceneManager.LoadAddressableSceneAsync(GladMMOClientConstants.WORLD_DOWNLOAD_SCENE_NAME);
 			});
 		}
 	}

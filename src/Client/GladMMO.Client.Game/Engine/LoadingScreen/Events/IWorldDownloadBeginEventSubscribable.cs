@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace GladMMO
 {
@@ -12,11 +13,11 @@ namespace GladMMO
 
 	public sealed class WorldDownloadBeginEventArgs : EventArgs
 	{
-		public AsyncOperation DownloadOperation { get; }
+		public AsyncOperationHandle DownloadOperation { get; }
 
-		public WorldDownloadBeginEventArgs([NotNull] AsyncOperation downloadOperation)
+		public WorldDownloadBeginEventArgs([NotNull] AsyncOperationHandle downloadOperation)
 		{
-			DownloadOperation = downloadOperation ?? throw new ArgumentNullException(nameof(downloadOperation));
+			DownloadOperation = downloadOperation;
 		}
 	}
 }

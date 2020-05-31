@@ -49,7 +49,7 @@ namespace GladMMO
 				//requests later at all
 				TokenRepository.Update(args.TokenResult.AccessToken);
 
-				GladMMOSceneManager.LoadSceneAsync(GladMMOClientConstants.CHARACTER_SELECTION_SCENE_NAME);
+				GladMMOSceneManager.LoadAddressableSceneAsync(GladMMOClientConstants.CHARACTER_SELECTION_SCENE_NAME);
 			});
 		}
 	}

@@ -25,7 +25,7 @@ namespace GladMMO
 			await new UnityYieldAwaitable();
 			BackButton.AddOnClickListener(() =>
 			{
-				GladMMOSceneManager.LoadSceneAsync(GladMMOClientConstants.CHARACTER_SELECTION_SCENE_NAME);
+				GladMMOSceneManager.LoadAddressableSceneAsync(GladMMOClientConstants.CHARACTER_SELECTION_SCENE_NAME);
 			});
 		}
 	}

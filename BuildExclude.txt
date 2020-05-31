@@ -34,3 +34,7 @@ System.ServiceModel.Primitives.dll
 System.ComponentModel.Primitives.dll
 VivoxUnity.dll
 JetBrains.Annotations.dll
+System.IO.FileSystem.Primitives.dll
+Unity.Addressables.dll
+Unity.ResourceManager.dll
+System.Xml.XmlDocument.dll

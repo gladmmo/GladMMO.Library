@@ -42,6 +42,7 @@
   <ItemGroup>
     <Folder Include="Async\" />
     <Folder Include="Components\" />
+    <Folder Include="Content\" />
     <Folder Include="Factory\" />
     <Folder Include="Models\" />
   </ItemGroup>

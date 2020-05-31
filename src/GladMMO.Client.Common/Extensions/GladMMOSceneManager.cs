@@ -1,28 +1,67 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
+using UnityEngine.ResourceManagement.AsyncOperations;
+using UnityEngine.ResourceManagement.ResourceProviders;
 using UnityEngine.SceneManagement;
 
 namespace GladMMO
 {
 	public static class GladMMOSceneManager
 	{
-		public static void LoadSceneAsync([NotNull] string sceneName)
+		//Hacky, but don't want to deal with addressables any other way right now
+		private static ConcurrentDictionary<string, AsyncOperationHandle<SceneInstance>> AddressableSceneMap { get; } = new ConcurrentDictionary<string, AsyncOperationHandle<SceneInstance>>();
+
+		public static AsyncOperationHandle LoadAddressableSceneAsync([NotNull] string sceneName)
 		{
-			if (string.IsNullOrWhiteSpace(sceneName)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(sceneName));
+			//Case where our active scene is an addressable scene.
+			if (AddressableSceneMap.ContainsKey(SceneManager.GetActiveScene().name))
+			{
+				AsyncOperationHandle<SceneInstance> sceneHandle = AddressableSceneMap[SceneManager.GetActiveScene().name];
+				AddressableSceneMap.TryRemove(SceneManager.GetActiveScene().name, out var _);
+				AsyncOperationHandle<SceneInstance> unloadOperationHandle = UnityEngine.AddressableAssets.Addressables.UnloadSceneAsync(sceneHandle);
 
-			AsyncOperation unloadActiveSceneAsync = SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene());
-			unloadActiveSceneAsync.allowSceneActivation = false;
+				AsyncOperationHandle<SceneInstance> sceneLoadHandle = UnityEngine.AddressableAssets.Addressables.LoadSceneAsync(sceneName, UnityEngine.SceneManagement.LoadSceneMode.Additive, false);
+				AddressableSceneMap[sceneName] = sceneLoadHandle;
 
-			AsyncOperation loadSceneAsync = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
-			loadSceneAsync.allowSceneActivation = false;
+				unloadOperationHandle.Completed += op =>
+				{
+					sceneLoadHandle.Completed += loadOperation => ActivateScene(sceneLoadHandle);
+				};
 
-			//It's important that the newly loaded scene is set as active, or it messes everything up.
-			loadSceneAsync.completed += operation => SceneManager.SetActiveScene(SceneManager.GetSceneByName(sceneName));
+				return sceneLoadHandle;
+			}
+			else
+			{
+				AsyncOperation unloadOperationHandle = SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene());
+				unloadOperationHandle.allowSceneActivation = false;
 
-			unloadActiveSceneAsync.completed += operation => loadSceneAsync.allowSceneActivation = true;
-			unloadActiveSceneAsync.allowSceneActivation = true;
+				AsyncOperationHandle<SceneInstance> sceneLoadHandle = UnityEngine.AddressableAssets.Addressables.LoadSceneAsync(sceneName, LoadSceneMode.Additive, false);
+				AddressableSceneMap[sceneName] = sceneLoadHandle;
+
+				unloadOperationHandle.completed += op =>
+				{
+					sceneLoadHandle.Completed += loadOperation => ActivateScene(sceneLoadHandle);
+				};
+				unloadOperationHandle.allowSceneActivation = true;
+
+				return sceneLoadHandle;
+			}
+		}
+
+		private static void ActivateScene(AsyncOperationHandle<SceneInstance> sceneLoadHandle)
+		{
+			sceneLoadHandle.Result.Activate();
+			SceneManager.sceneLoaded += OnSceneLoaded;
+		}
+
+		//We have to set this here because when Activate is called the scene is not instantly loaded.
+		private static void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+		{
+			SceneManager.sceneLoaded -= OnSceneLoaded;
+			SceneManager.SetActiveScene(SceneManager.GetSceneByName(scene.name));
 		}
 	}
 }

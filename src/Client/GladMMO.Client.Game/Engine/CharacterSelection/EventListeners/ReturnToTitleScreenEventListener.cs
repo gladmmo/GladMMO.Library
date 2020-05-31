@@ -23,7 +23,7 @@ namespace GladMMO
 		{
 			args.Button.IsInteractable = false;
 
-			GladMMOSceneManager.LoadSceneAsync(GladMMOClientConstants.TITLE_SCREEN_NAME);
+			GladMMOSceneManager.LoadAddressableSceneAsync(GladMMOClientConstants.TITLE_SCREEN_NAME);
 		}
 	}
 }

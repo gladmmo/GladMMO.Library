@@ -4,6 +4,7 @@ using System.Text;
 using Autofac.Features.AttributeFilters;
 using Glader.Essentials;
 using UnityEngine;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace GladMMO
 {
@@ -14,7 +15,7 @@ namespace GladMMO
 
 		public IUIText DownloadText { get; }
 
-		private AsyncOperation CurrentDownloadOperation { get; set; } = null;
+		private AsyncOperationHandle CurrentDownloadOperation { get; set; }
 
 		public SetDownloadProgressEventListener(IWorldDownloadBeginEventSubscribable subscriptionService,
 			[KeyFilter(UnityUIRegisterationKey.WorldDownloadProgress)] [NotNull] IUIFillableImage downloadFillImage,
@@ -33,11 +34,11 @@ namespace GladMMO
 		public void Tick()
 		{
 			//Can't do anything without world downloading operation.
-			if (CurrentDownloadOperation == null)
+			if (!CurrentDownloadOperation.IsValid())
 				return;
 
-			DownloadText.Text = $"{CurrentDownloadOperation.progress * 100}%";
-			DownloadFillImage.FillAmount = CurrentDownloadOperation.progress;
+			DownloadText.Text = $"{CurrentDownloadOperation.PercentComplete}%";
+			DownloadFillImage.FillAmount = CurrentDownloadOperation.PercentComplete / 100.0f;
 		}
 	}
 }
