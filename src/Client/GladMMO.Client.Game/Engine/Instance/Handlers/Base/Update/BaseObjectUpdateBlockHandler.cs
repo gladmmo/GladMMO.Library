@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
+using System.Threading.Tasks;
 using Common.Logging;
 using FreecraftCore;
+using Glader.Essentials;
 
 namespace GladMMO
 {
-	public abstract class BaseObjectUpdateBlockHandler<TSpecificUpdateBlockType> : IObjectUpdateBlockHandler<TSpecificUpdateBlockType>
+	public abstract class BaseObjectUpdateBlockHandler<TSpecificUpdateBlockType> : IObjectUpdateBlockHandler<TSpecificUpdateBlockType>, IGameInitializable
 		where TSpecificUpdateBlockType : ObjectUpdateBlock
 	{
 		/// <inheritdoc />
@@ -35,6 +37,12 @@ namespace GladMMO
 				HandleUpdateBlock((TSpecificUpdateBlockType)updateBlock);
 			else
 				throw new InvalidOperationException($"Failed to handle UpdateBlock: {updateBlock.GetType().Name} in {GetType().Name} because does not match Type: {typeof(TSpecificUpdateBlockType).Name}.");
+		}
+
+		//Hack to get it into the scene.
+		public Task OnGameInitialized()
+		{
+			return Task.CompletedTask;
 		}
 	}
 }
