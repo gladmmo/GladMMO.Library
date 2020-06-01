@@ -42,37 +42,5 @@ namespace GladMMO
 			//We just return the world that this zone is for.
 			return Ok(entryModel.WorldId);
 		}
-
-		//We don't require authorization because it's not unique per-player
-		//It's also not a secret. They could auth then grab every endpoint.
-		//No reason to try to hide it.
-		[HttpGet("{id}/endpoint")]
-		[ProducesJson]
-		[ResponseCache(Duration = 300)]
-		public async Task<IActionResult> GetServerEndpoint([FromRoute(Name = "id")] int zoneId)
-		{
-			if(!ModelState.IsValid)
-				return BadRequest(new ResolveServiceEndpointResponse(ResolveServiceEndpointResponseCode.GeneralRequestError));
-
-			//We reuse the service discovery response model
-			if(!await ZoneRepository.ContainsAsync(zoneId))
-				return BadRequest(new ResolveServiceEndpointResponse(ResolveServiceEndpointResponseCode.ServiceUnlisted));
-
-			//Small interval for race condition. So we try catch.
-			try
-			{
-				ZoneInstanceEntryModel zone = await ZoneRepository.RetrieveAsync(zoneId);
-
-				//Should be good, we just send them the endpoint
-				if(zone != null)
-					return Ok(new ResolveServiceEndpointResponse(new ResolvedEndpoint(zone.ZoneServerAddress, zone.ZoneServerPort)));
-			}
-			catch(Exception)
-			{
-				//TODO: Logging/event
-			}
-
-			return BadRequest(new ResolveServiceEndpointResponse(ResolveServiceEndpointResponseCode.GeneralRequestError));
-		}
 	}
 }
