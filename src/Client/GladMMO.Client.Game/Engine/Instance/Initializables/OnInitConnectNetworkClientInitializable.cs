@@ -64,9 +64,8 @@ namespace GladMMO
 							Logger.Debug($"Connected to: {endpointResponse}");
 					}
 				}
-				else
-				if(Logger.IsErrorEnabled)
-					Logger.Error($"Failed to query ZoneEndpoint.");
+				else if(Logger.IsErrorEnabled)
+					Logger.Error($"Failed to query ZoneEndpoint. Reason: {endpointResponse.ResultCode}");
 			}
 			catch (Exception e)
 			{
