@@ -56,7 +56,7 @@ namespace GladMMO
 				.SingleInstance();
 
 			builder.RegisterType<NetworkVisibilityCreationBlockToVisibilityEventFactory>()
-				.As<IFactoryCreatable<NetworkEntityNowVisibleEventArgs, ObjectCreationData>>()
+				.As<IFactoryCreatable<NetworkEntityNowVisibleEventArgs, ObjectUpdateCreateObject1Block>>()
 				.SingleInstance();
 
 			//DefaultEntityVisibilityEventPublisher : INetworkEntityVisibilityEventPublisher, INetworkEntityVisibleEventSubscribable
