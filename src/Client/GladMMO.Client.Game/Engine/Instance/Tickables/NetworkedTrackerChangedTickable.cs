@@ -8,7 +8,8 @@ using UnityEngine;
 
 namespace GladMMO
 {
-	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
+	//TrinityCore: System was used in the past before for VR controller input broadcast handling.
+	/*[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
 	public sealed class NetworkedTrackerChangedTickable : EventQueueBasedTickable<IPlayerTrackerTransformChangedEventSubscribable, PlayerTrackerTransformChangedEventArgs>
 	{
 		private IReadonlyKnownEntitySet KnownEntities { get; }
@@ -68,5 +69,5 @@ namespace GladMMO
 
 			return index;
 		}
-	}
+	}*/
 }
