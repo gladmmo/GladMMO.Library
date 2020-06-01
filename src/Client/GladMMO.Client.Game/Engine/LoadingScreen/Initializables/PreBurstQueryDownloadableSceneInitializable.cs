@@ -57,7 +57,7 @@ namespace GladMMO
 
 					//TODO: Handle throwing/error
 					//We need to know the world the zone is it, so we can request a download URL for it.
-					var worldConfig = await ZoneDataService.GetZoneWorldConfigurationAsync(args.ZoneIdentifier)
+					/*var worldConfig = await ZoneDataService.GetZoneWorldConfigurationAsync(args.ZoneIdentifier)
 						.ConfigureAwaitFalse();
 
 					if (!worldConfig.isSuccessful)
@@ -70,12 +70,13 @@ namespace GladMMO
 						.ConfigureAwaitFalse();
 
 					if(Logger.IsInfoEnabled)
-						Logger.Info($"World Download Url: {urlDownloadResponse.DownloadURL}");
+						Logger.Info($"World Download Url: {urlDownloadResponse.DownloadURL}");*/
 
 					//Can't do web request not on the main thread, sadly.
 					await new UnityYieldAwaitable();
 
-					AsyncOperationHandle worldLoadHandle = GladMMOSceneManager.LoadAddressableSceneAsync("test");
+					AsyncOperationHandle worldLoadHandle = GladMMOSceneManager.LoadAddressableSceneAsync("TestMap");
+					worldLoadHandle.Completed += op => GladMMOSceneManager.LoadAddressableSceneAdditiveAsync(GladMMOClientConstants.INSTANCE_SERVER_SCENE_NAME);
 
 					OnWorldDownloadBegins?.Invoke(this, new WorldDownloadBeginEventArgs(worldLoadHandle));
 				}

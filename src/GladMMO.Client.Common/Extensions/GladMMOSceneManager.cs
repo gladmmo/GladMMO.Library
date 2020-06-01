@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.ResourceManagement.ResourceProviders;
@@ -13,6 +15,24 @@ namespace GladMMO
 	{
 		//Hacky, but don't want to deal with addressables any other way right now
 		private static ConcurrentDictionary<string, AsyncOperationHandle<SceneInstance>> AddressableSceneMap { get; } = new ConcurrentDictionary<string, AsyncOperationHandle<SceneInstance>>();
+
+		public static Task UnloadAllAddressableScenesAsync()
+		{
+			Task<SceneInstance>[] awaitableUnloads = AddressableSceneMap
+				.Values
+				.Select(s => UnityEngine.AddressableAssets.Addressables.UnloadSceneAsync(s).Task)
+				.ToArray();
+
+			return Task.WhenAll(awaitableUnloads);
+		}
+
+		public static AsyncOperationHandle LoadAddressableSceneAdditiveAsync([NotNull] string sceneName)
+		{
+			AsyncOperationHandle<SceneInstance> sceneLoadHandle = UnityEngine.AddressableAssets.Addressables.LoadSceneAsync(sceneName, UnityEngine.SceneManagement.LoadSceneMode.Additive, true);
+
+			AddressableSceneMap[sceneName] = sceneLoadHandle;
+			return sceneLoadHandle;
+		}
 
 		public static AsyncOperationHandle LoadAddressableSceneAsync([NotNull] string sceneName)
 		{
