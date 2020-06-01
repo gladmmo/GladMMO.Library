@@ -10,22 +10,17 @@ using GladNet;
 
 namespace GladMMO
 {
-	[AdditionalRegisterationAs(typeof(INetworkEntityVisibilityLostEventSubscribable))]
 	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
-	public sealed class ObjectUpdateCreateObject1BlockHandler : BaseObjectUpdateBlockHandler<ObjectUpdateCreateObject1Block>,
-		INetworkEntityVisibilityLostEventSubscribable
+	public sealed class ObjectUpdateCreateObject1BlockHandler : BaseObjectUpdateBlockHandler<ObjectUpdateCreateObject1Block>
 	{
-		/// <inheritdoc />
-		public event EventHandler<NetworkEntityVisibilityLostEventArgs> OnNetworkEntityVisibilityLost;
-
 		private INetworkEntityVisibilityEventPublisher VisibilityEventPublisher { get; }
 
-		private IFactoryCreatable<NetworkEntityNowVisibleEventArgs, ObjectCreationData> VisibileEventFactory { get; }
+		private IFactoryCreatable<NetworkEntityNowVisibleEventArgs, ObjectUpdateCreateObject1Block> VisibileEventFactory { get; }
 
 		/// <inheritdoc />
 		public ObjectUpdateCreateObject1BlockHandler(ILog logger,
 			[NotNull] INetworkEntityVisibilityEventPublisher visibilityEventPublisher,
-			[NotNull] IFactoryCreatable<NetworkEntityNowVisibleEventArgs, ObjectCreationData> visibileEventFactory)
+			[NotNull] IFactoryCreatable<NetworkEntityNowVisibleEventArgs, ObjectUpdateCreateObject1Block> visibileEventFactory)
 			: base(ObjectUpdateType.UPDATETYPE_CREATE_OBJECT, logger)
 		{
 			VisibilityEventPublisher = visibilityEventPublisher ?? throw new ArgumentNullException(nameof(visibilityEventPublisher));
@@ -57,7 +52,7 @@ namespace GladMMO
 							Logger.Info($"Recieved local player spawn data. Id:{updateBlock.CreationData.CreationGuid.CurrentObjectGuid}");
 					}
 
-					NetworkEntityNowVisibleEventArgs visibilityEvent = VisibileEventFactory.Create(updateBlock.CreationData);
+					NetworkEntityNowVisibleEventArgs visibilityEvent = VisibileEventFactory.Create(updateBlock);
 
 					//Now we broadcast that an entity is now visible.
 					VisibilityEventPublisher.Publish(visibilityEvent);
