@@ -31,7 +31,9 @@ namespace GladMMO
 					args.Instance.RegisterType<AuthenticateSessionResponse>();
 					args.Instance.RegisterType<CharacterLoginRequest>();
 					args.Instance.RegisterType<CharacterListRequest>();
-					args.Instance.RegisterType<CharacterListResponse>();
+
+					//We don't really need this packet but we need it for normal TC login flow.
+					args.Instance.RegisterType<FreecraftCore.CharacterListResponse>();
 					args.Instance.RegisterType<SMSG_LOGIN_VERIFY_WORLD_PAYLOAD>();
 					args.Instance.RegisterType<SMSG_COMPRESSED_UPDATE_OBJECT_Payload>();
 					args.Instance.RegisterType<ChatMessageRequest>();
