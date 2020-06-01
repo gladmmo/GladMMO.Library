@@ -70,5 +70,37 @@ namespace GladMMO
 				return BuildFailedResponseModel(ResolveServiceEndpointResponseCode.GeneralRequestError);
 			}
 		}
+
+		//TODO: Don't use ResolveServiceEndpointResponse
+		//TODO: Add player authorization.
+		//TODO: We should verify that the requesting user has a reason to get the server endpoint.
+		[HttpGet("{id}/endpoint")]
+		[ProducesJson]
+		[ResponseCache(Duration = 300)]
+		public async Task<IActionResult> GetServerEndpoint([FromRoute(Name = "id")] int zoneId)
+		{
+			if(!ModelState.IsValid)
+				return Json(new ResolveServiceEndpointResponse(ResolveServiceEndpointResponseCode.GeneralRequestError));
+
+			//We reuse the service discovery response model
+			if(!await ZoneRepository.ContainsAsync(zoneId))
+				return Json(new ResolveServiceEndpointResponse(ResolveServiceEndpointResponseCode.ServiceUnlisted));
+
+			//Small interval for race condition. So we try catch.
+			try
+			{
+				ZoneInstanceEntryModel zone = await ZoneRepository.RetrieveAsync(zoneId);
+
+				//Should be good, we just send them the endpoint
+				if(zone != null)
+					return Ok(new ResolveServiceEndpointResponse(new ResolvedEndpoint(zone.ZoneServerAddress, zone.ZoneServerPort)));
+			}
+			catch(Exception)
+			{
+				//TODO: Logging/event
+			}
+
+			return Json(new ResolveServiceEndpointResponse(ResolveServiceEndpointResponseCode.GeneralRequestError));
+		}
 	}
 }
