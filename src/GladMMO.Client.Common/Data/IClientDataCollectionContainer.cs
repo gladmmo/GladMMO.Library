@@ -36,6 +36,27 @@ namespace GladMMO
 		}
 
 		/// <summary>
+		/// Attempts to retrieve the entry with id <see cref="key"/>.
+		/// Looking for DBC entry type specified by the generic parameter.
+		/// If not found it throws an exception.
+		/// </summary>
+		/// <typeparam name="TEntryType">The DBC entry type.</typeparam>
+		/// <param name="collection">Data collection.</param>
+		/// <param name="key">Entry id.</param>
+		/// <exception cref="KeyNotFoundException">Throws if the specified <see cref="key"/> was not found.</exception>
+		/// <returns>The DBC entry.</returns>
+		public static TEntryType AssertEntry<TEntryType>([NotNull] this IClientDataCollectionContainer collection, int key)
+			where TEntryType : IDBCEntryIdentifiable
+		{
+			if(collection == null) throw new ArgumentNullException(nameof(collection));
+
+			if(!HasEntry<TEntryType>(collection, key))
+				throw new KeyNotFoundException($"{typeof(TEntryType).Name} does not contain Key: {key}");
+
+			return collection.DataType<TEntryType>()[key];
+		}
+
+		/// <summary>
 		/// Indicates if an entry exists with the id <see cref="key"/>.
 		/// Looking for DBC entry type specified by the generic parameter.
 		/// </summary>
