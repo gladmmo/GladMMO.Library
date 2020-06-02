@@ -43,10 +43,64 @@ namespace GladMMO
 			//Server has authority in rejecting this hint, and it should if it finds its
 			//WAY off. However this is how we deal with the issue of desyncronization
 			//by having the client be semi-authorative about where it is.
-			WorldTransform entity = TransformMap.RetrieveEntity(PlayerDetails.LocalPlayerGuid);
+			WorldTransform worldTransformComponent = TransformMap.RetrieveEntity(PlayerDetails.LocalPlayerGuid);
 
-			Debug.LogError($"TODO: REIMPLEMENT MOVEMENT NETWORKING");
-			//SendService.SendMessage(new ClientMovementDataUpdateRequest(new Vector2(args.NewHorizontalInput, args.NewVerticalInput), timeStamp, new Vector3(entity.PositionX, entity.PositionY, entity.PositionZ)));
+			//Did we stop?
+			if (!args.isMoving)
+			{
+				SendService.SendMessage(new MSG_MOVE_STOP_Payload(new PackedGuid(PlayerDetails.LocalPlayerGuid), BuildStopMovementInfo(worldTransformComponent)));
+			}
+			else
+			{
+				//We going left baby
+				if (args.NewHorizontalInput < 0 && Math.Abs(args.NewVerticalInput) < float.Epsilon)
+				{
+					SendService.SendMessage(BuildStrafeLeftPayload(args, worldTransformComponent));
+				}
+				else if(args.NewHorizontalInput > 0 && Math.Abs(args.NewVerticalInput) < float.Epsilon)
+				{
+					SendService.SendMessage(BuildStrafeRightPayload(args, worldTransformComponent));
+				}
+
+				//TODO: Handle other cases.
+			}
+		}
+
+		private GamePacketPayload BuildStrafeRightPayload(MovementInputChangedEventArgs args, WorldTransform worldTransformComponent)
+		{
+			if(args.isHeartBeat)
+				return new MSG_MOVE_HEARTBEAT_Payload(new PackedGuid(PlayerDetails.LocalPlayerGuid), BuildRightStrafeMovementInfo(worldTransformComponent));
+
+			return new MSG_MOVE_START_STRAFE_RIGHT_Payload(new PackedGuid(PlayerDetails.LocalPlayerGuid), BuildRightStrafeMovementInfo(worldTransformComponent));
+		}
+
+		private GamePacketPayload BuildStrafeLeftPayload(MovementInputChangedEventArgs args, WorldTransform worldTransformComponent)
+		{
+			if(args.isHeartBeat)
+				return new MSG_MOVE_HEARTBEAT_Payload(new PackedGuid(PlayerDetails.LocalPlayerGuid), BuildLeftStrafeMovementInfo(worldTransformComponent));
+
+			return new MSG_MOVE_START_STRAFE_LEFT_Payload(new PackedGuid(PlayerDetails.LocalPlayerGuid), BuildLeftStrafeMovementInfo(worldTransformComponent));
+		}
+
+		private MovementInfo BuildRightStrafeMovementInfo(WorldTransform worldTransformComponent)
+		{
+			Vector3 position = new Vector3(worldTransformComponent.PositionX, worldTransformComponent.PositionY, worldTransformComponent.PositionZ);
+
+			return new MovementInfo(MovementFlag.MOVEMENTFLAG_RIGHT | MovementFlag.MOVEMENTFLAG_STRAFE_RIGHT, MovementFlagExtra.None, (uint)TimeService.CurrentRemoteTime, position.ToWoWVector(), worldTransformComponent.YAxisRotation, null, 0, 0, 0, null, 0);
+		}
+
+		private MovementInfo BuildLeftStrafeMovementInfo(WorldTransform worldTransformComponent)
+		{
+			Vector3 position = new Vector3(worldTransformComponent.PositionX, worldTransformComponent.PositionY, worldTransformComponent.PositionZ);
+
+			return new MovementInfo(MovementFlag.MOVEMENTFLAG_LEFT | MovementFlag.MOVEMENTFLAG_STRAFE_LEFT, MovementFlagExtra.None, (uint)TimeService.CurrentRemoteTime, position.ToWoWVector(), worldTransformComponent.YAxisRotation, null, 0, 0, 0, null, 0);
+		}
+
+		private MovementInfo BuildStopMovementInfo(WorldTransform worldTransformComponent)
+		{
+			Vector3 position = new Vector3(worldTransformComponent.PositionX, worldTransformComponent.PositionY, worldTransformComponent.PositionZ);
+
+			return new MovementInfo(MovementFlag.MOVEMENTFLAG_NONE, MovementFlagExtra.None, (uint) TimeService.CurrentRemoteTime, position.ToWoWVector(), worldTransformComponent.YAxisRotation, null, 0, 0, 0, null, 0);
 		}
 	}
 }
