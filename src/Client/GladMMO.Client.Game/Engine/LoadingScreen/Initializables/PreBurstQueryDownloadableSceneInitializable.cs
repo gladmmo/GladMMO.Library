@@ -23,70 +23,32 @@ namespace GladMMO
 	[SceneTypeCreateGladMMO(GameSceneType.PreZoneBurstingScreen)]
 	public sealed class PreBurstQueryDownloadableSceneInitializable : ThreadUnSafeBaseSingleEventListenerInitializable<ICharacterSessionDataChangedEventSubscribable, CharacterSessionDataChangedEventArgs>, IWorldDownloadBeginEventSubscribable
 	{
-		private IZoneDataService ZoneDataService { get; }
-
-		private IDownloadableContentServerServiceClient ContentService { get; }
-
 		private ILog Logger { get; }
+
+		private IClientDataCollectionContainer ClientData { get; }
 
 		public event EventHandler<WorldDownloadBeginEventArgs> OnWorldDownloadBegins;
 
 		public PreBurstQueryDownloadableSceneInitializable(ICharacterSessionDataChangedEventSubscribable subscriptionService,
 			[NotNull] ILog logger,
-			[NotNull] IDownloadableContentServerServiceClient contentService,
-			[NotNull] IZoneDataService zoneDataService) 
+			[NotNull] IClientDataCollectionContainer clientData) 
 			: base(subscriptionService)
 		{
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
-			ContentService = contentService ?? throw new ArgumentNullException(nameof(contentService));
-			ZoneDataService = zoneDataService ?? throw new ArgumentNullException(nameof(zoneDataService));
+			ClientData = clientData ?? throw new ArgumentNullException(nameof(clientData));
 		}
 
 		protected override void OnThreadUnSafeEventFired(object source, CharacterSessionDataChangedEventArgs args)
 		{
 			if(Logger.IsInfoEnabled)
-				Logger.Info($"Starting process to download world.");
+				Logger.Info($"Loading MapId: {args.ZoneIdentifier}");
 
-			UnityAsyncHelper.UnityMainThreadContext.PostAsync(async () =>
-			{
-				long worldId = 0;
-				try
-				{
-					//TODO: Handle failure
-					ProjectVersionStage.AssertAlpha();
+			MapEntry<string> map = ClientData.AssertEntry<MapEntry<string>>(args.ZoneIdentifier);
 
-					//TODO: Handle throwing/error
-					//We need to know the world the zone is it, so we can request a download URL for it.
-					/*var worldConfig = await ZoneDataService.GetZoneWorldConfigurationAsync(args.ZoneIdentifier)
-						.ConfigureAwaitFalse();
+			AsyncOperationHandle worldLoadHandle = GladMMOSceneManager.LoadAddressableSceneAsync(new MapFilePath(map.Directory));
+			worldLoadHandle.Completed += op => GladMMOSceneManager.LoadAddressableSceneAdditiveAsync(GladMMOClientConstants.INSTANCE_SERVER_SCENE_NAME);
 
-					if (!worldConfig.isSuccessful)
-						throw new InvalidOperationException($"Failed to query World Configuration for ZoneId: {args.ZoneIdentifier}");
-
-					worldId = worldConfig.Result.WorldId;
-
-					//With the worldid we can get the download URL.
-					ContentDownloadURLResponse urlDownloadResponse = await ContentService.RequestWorldDownloadUrl(worldId)
-						.ConfigureAwaitFalse();
-
-					if(Logger.IsInfoEnabled)
-						Logger.Info($"World Download Url: {urlDownloadResponse.DownloadURL}");*/
-
-					//Can't do web request not on the main thread, sadly.
-					await new UnityYieldAwaitable();
-
-					AsyncOperationHandle worldLoadHandle = GladMMOSceneManager.LoadAddressableSceneAsync("TestMap");
-					worldLoadHandle.Completed += op => GladMMOSceneManager.LoadAddressableSceneAdditiveAsync(GladMMOClientConstants.INSTANCE_SERVER_SCENE_NAME);
-
-					OnWorldDownloadBegins?.Invoke(this, new WorldDownloadBeginEventArgs(worldLoadHandle));
-				}
-				catch (Exception e)
-				{
-					if(Logger.IsErrorEnabled)
-						Logger.Error($"Failed to query for Download URL for ZoneId: {args.ZoneIdentifier} WorldId: {worldId} (0 if never succeeded request). Error: {e.Message}");
-					throw;
-				}
-			});
+			OnWorldDownloadBegins?.Invoke(this, new WorldDownloadBeginEventArgs(worldLoadHandle));
 		}
 	}
 }
