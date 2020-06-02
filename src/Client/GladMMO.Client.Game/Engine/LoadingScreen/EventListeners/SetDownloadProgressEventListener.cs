@@ -18,8 +18,8 @@ namespace GladMMO
 		private AsyncOperationHandle CurrentDownloadOperation { get; set; }
 
 		public SetDownloadProgressEventListener(IWorldDownloadBeginEventSubscribable subscriptionService,
-			[KeyFilter(UnityUIRegisterationKey.WorldDownloadProgress)] [NotNull] IUIFillableImage downloadFillImage,
-			[KeyFilter(UnityUIRegisterationKey.WorldDownloadProgress)] [NotNull] IUIText downloadText) 
+			[KeyFilter(UnityUIRegisterationKey.LoadingScreenBar)] [NotNull] IUIFillableImage downloadFillImage,
+			[KeyFilter(UnityUIRegisterationKey.LoadingScreenBar)] [NotNull] IUIText downloadText) 
 			: base(subscriptionService)
 		{
 			DownloadFillImage = downloadFillImage ?? throw new ArgumentNullException(nameof(downloadFillImage));
@@ -34,7 +34,7 @@ namespace GladMMO
 		public void Tick()
 		{
 			//Can't do anything without world downloading operation.
-			if (!CurrentDownloadOperation.IsValid())
+			if (!CurrentDownloadOperation.IsValid() || CurrentDownloadOperation.Status == AsyncOperationStatus.Failed)
 				return;
 
 			DownloadText.Text = $"{CurrentDownloadOperation.PercentComplete}%";

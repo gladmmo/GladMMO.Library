@@ -41,7 +41,7 @@ namespace GladMMO
 
 		LoginTextBox = 14,
 
-		WorldDownloadProgress = 15,
+		Unk15 = 15,
 
 		CharacterCreateButton = 16,
 
