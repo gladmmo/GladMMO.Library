@@ -9,6 +9,7 @@ using Glader.Essentials;
 
 namespace GladMMO
 {
+	[AdditionalRegisterationAs(typeof(IObjectUpdateBlockHandler))]
 	public abstract class BaseObjectUpdateBlockHandler<TSpecificUpdateBlockType> : IObjectUpdateBlockHandler<TSpecificUpdateBlockType>, IGameInitializable
 		where TSpecificUpdateBlockType : ObjectUpdateBlock
 	{
