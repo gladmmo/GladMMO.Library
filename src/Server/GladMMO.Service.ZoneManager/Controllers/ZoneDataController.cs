@@ -82,8 +82,13 @@ namespace GladMMO
 			if(!ModelState.IsValid)
 				return Json(new ResolveServiceEndpointResponse(ResolveServiceEndpointResponseCode.GeneralRequestError));
 
+			ProjectVersionStage.AssertBeta();
+
+			//TrinityCore: for now we just return local TC instance
+			return Ok(new ResolveServiceEndpointResponse(new ResolvedEndpoint("127.0.0.1", 8085)));
+
 			//We reuse the service discovery response model
-			if(!await ZoneRepository.ContainsAsync(zoneId))
+			/*if(!await ZoneRepository.ContainsAsync(zoneId))
 				return Json(new ResolveServiceEndpointResponse(ResolveServiceEndpointResponseCode.ServiceUnlisted));
 
 			//Small interval for race condition. So we try catch.
@@ -100,7 +105,7 @@ namespace GladMMO
 				//TODO: Logging/event
 			}
 
-			return Json(new ResolveServiceEndpointResponse(ResolveServiceEndpointResponseCode.GeneralRequestError));
+			return Json(new ResolveServiceEndpointResponse(ResolveServiceEndpointResponseCode.GeneralRequestError));*/
 		}
 	}
 }
