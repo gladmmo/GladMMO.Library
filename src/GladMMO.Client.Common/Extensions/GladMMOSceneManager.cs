@@ -46,10 +46,13 @@ namespace GladMMO
 
 				AsyncOperationHandle<SceneInstance> unloadOperationHandle = UnityEngine.AddressableAssets.Addressables.UnloadSceneAsync(sceneHandle);
 
-				AsyncOperationHandle<SceneInstance> sceneLoadHandle = UnityEngine.AddressableAssets.Addressables.LoadSceneAsync(sceneName, UnityEngine.SceneManagement.LoadSceneMode.Additive, false);
+				AsyncOperationHandle<SceneInstance> sceneLoadHandle = InternalLoadAddressableSceneAsync(sceneName);
 
-				if (!sceneLoadHandle.IsValid())
+				if (!sceneLoadHandle.IsValid() || sceneLoadHandle.Status == AsyncOperationStatus.Failed)
+				{
+					UnityEngine.AddressableAssets.Addressables.Release(sceneLoadHandle);
 					throw new InvalidOperationException($"Failed to load Addressable Scene: {sceneName}");
+				}
 
 				AddressableSceneMap[sceneName] = sceneLoadHandle;
 
@@ -68,10 +71,13 @@ namespace GladMMO
 				AsyncOperation unloadOperationHandle = SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene());
 				unloadOperationHandle.allowSceneActivation = false;
 
-				AsyncOperationHandle<SceneInstance> sceneLoadHandle = UnityEngine.AddressableAssets.Addressables.LoadSceneAsync(sceneName, LoadSceneMode.Additive, false);
+				AsyncOperationHandle<SceneInstance> sceneLoadHandle = InternalLoadAddressableSceneAsync(sceneName);
 
-				if(!sceneLoadHandle.IsValid())
+				if (!sceneLoadHandle.IsValid() || sceneLoadHandle.Status == AsyncOperationStatus.Failed)
+				{
+					UnityEngine.AddressableAssets.Addressables.Release(sceneLoadHandle);
 					throw new InvalidOperationException($"Failed to load Addressable Scene: {sceneName}");
+				}
 
 				AddressableSceneMap[sceneName] = sceneLoadHandle;
 
@@ -82,6 +88,18 @@ namespace GladMMO
 				unloadOperationHandle.allowSceneActivation = true;
 
 				return sceneLoadHandle;
+			}
+		}
+
+		private static AsyncOperationHandle<SceneInstance> InternalLoadAddressableSceneAsync(string sceneName)
+		{
+			try
+			{
+				return UnityEngine.AddressableAssets.Addressables.LoadSceneAsync(sceneName, UnityEngine.SceneManagement.LoadSceneMode.Additive, false);
+			}
+			catch (Exception e)
+			{
+				throw new InvalidOperationException($"Attempted to load Scene: {sceneName} but it failed. Reason: {e.Message}", e);
 			}
 		}
 
