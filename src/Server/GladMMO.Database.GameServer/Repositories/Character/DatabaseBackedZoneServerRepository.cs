@@ -80,8 +80,11 @@ namespace GladMMO
 				.Where(z => (currentTickTime - z.LastCheckinTime) >= expirationTimeLength)
 				.ToArrayAsync(cancellationToken);
 
-			Context.ZoneEntries.RemoveRange(expiredZoneModels);
-			await Context.SaveChangesAsync(cancellationToken);
+			if (expiredZoneModels.Any())
+			{
+				Context.ZoneEntries.RemoveRange(expiredZoneModels);
+				await Context.SaveChangesAsync(cancellationToken);
+			}
 		}
 
 		public Task<ZoneInstanceEntryModel> AnyAsync(CancellationToken cancellationToken = default(CancellationToken))
