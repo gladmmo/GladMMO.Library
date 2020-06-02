@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 
 namespace GladMMO
 {
-	public abstract class ReOccurringTimedJob : IHostedService
+	public abstract class ReOccurringTimedJob : BackgroundService
 	{
 		private TimedJobConfig JobConfig { get; }
 
@@ -21,26 +21,33 @@ namespace GladMMO
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
-		public async Task StartAsync(CancellationToken cancellationToken)
+		public override Task StartAsync(CancellationToken cancellationToken)
 		{
 			if(Logger.IsEnabled(LogLevel.Information))
 				Logger.LogInformation($"Job: {GetType().Name} is starting.");
 
+			return base.StartAsync(cancellationToken);
+		}
+
+		public override Task StopAsync(CancellationToken cancellationToken)
+		{
+			if(Logger.IsEnabled(LogLevel.Information))
+				Logger.LogInformation($"Job: {GetType().Name} is gracefully stopping.");
+
+			return base.StopAsync(cancellationToken);
+		}
+
+		protected override async Task ExecuteAsync(CancellationToken cancellationToken)
+		{
 			//Design decision to better handle tasks that start up.
 			//Don't let them run immediately.
 			await Task.Delay(JobConfig.IntervalMilliseconds, cancellationToken);
 
-			while (!cancellationToken.IsCancellationRequested)
+			while(!cancellationToken.IsCancellationRequested)
 			{
 				await ExecuteJobAsync(cancellationToken);
 				await Task.Delay(JobConfig.IntervalMilliseconds, cancellationToken);
 			}
-		}
-
-		public async Task StopAsync(CancellationToken cancellationToken)
-		{
-			if(Logger.IsEnabled(LogLevel.Information))
-				Logger.LogInformation($"Job: {GetType().Name} is gracefully stopping.");
 		}
 
 		protected abstract Task ExecuteJobAsync(CancellationToken cancellationToken);

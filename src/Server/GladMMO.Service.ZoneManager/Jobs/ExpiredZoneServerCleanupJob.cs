@@ -29,6 +29,9 @@ namespace GladMMO
 				//Important that we don't maintain open DB contextexts so we need to create on the fly
 				using(var repoContainer = ZoneServerRepository.Create())
 					await repoContainer.Repository.CleanupExpiredZonesAsync(cancellationToken);
+
+				if(Logger.IsEnabled(LogLevel.Information))
+					Logger.LogError($"Finished cleaning up expired zones.");
 			}
 			catch (Exception e)
 			{

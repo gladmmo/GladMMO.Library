@@ -73,8 +73,6 @@ namespace GladMMO
 			services.AddCommonLoggingAdapter();
 
 			services.AddHostedService<ExpiredZoneServerCleanupJob>();
-			
-
 			services.AddSingleton<TimedJobConfig<ExpiredZoneServerCleanupJob>>(new TimedJobConfig<ExpiredZoneServerCleanupJob>(TimeSpan.FromMinutes(11)));
 		}
 
