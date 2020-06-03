@@ -98,21 +98,27 @@ namespace GladMMO
 		{
 			Vector3 position = new Vector3(worldTransformComponent.PositionX, worldTransformComponent.PositionY, worldTransformComponent.PositionZ);
 
-			return new MovementInfo(MovementFlag.MOVEMENTFLAG_RIGHT | MovementFlag.MOVEMENTFLAG_STRAFE_RIGHT, MovementFlagExtra.None, (uint)TimeService.CurrentRemoteTime, position.ToWoWVector(), worldTransformComponent.YAxisRotation, null, 0, 0, 0, null, 0);
+			return new MovementInfo(MovementFlag.MOVEMENTFLAG_STRAFE_RIGHT, MovementFlagExtra.None, (uint)TimeService.CurrentRemoteTime, position.ToWoWVector(), CalculateWoWMovementInfoRotation(worldTransformComponent), null, 0, 0, 0, null, 0);
 		}
 
 		private MovementInfo BuildLeftStrafeMovementInfo(WorldTransform worldTransformComponent)
 		{
 			Vector3 position = new Vector3(worldTransformComponent.PositionX, worldTransformComponent.PositionY, worldTransformComponent.PositionZ);
 
-			return new MovementInfo(MovementFlag.MOVEMENTFLAG_LEFT | MovementFlag.MOVEMENTFLAG_STRAFE_LEFT, MovementFlagExtra.None, (uint)TimeService.CurrentRemoteTime, position.ToWoWVector(), worldTransformComponent.YAxisRotation, null, 0, 0, 0, null, 0);
+			return new MovementInfo(MovementFlag.MOVEMENTFLAG_STRAFE_LEFT, MovementFlagExtra.None, (uint)TimeService.CurrentRemoteTime, position.ToWoWVector(), CalculateWoWMovementInfoRotation(worldTransformComponent), null, 0, 0, 0, null, 0);
+		}
+
+		private static float CalculateWoWMovementInfoRotation(WorldTransform worldTransformComponent)
+		{
+			//See TrinityCore: Position::NormalizeOrientation
+			return (worldTransformComponent.YAxisRotation / 360.0f) * 2.0f * (float)Math.PI;
 		}
 
 		private MovementInfo BuildStopMovementInfo(WorldTransform worldTransformComponent)
 		{
 			Vector3 position = new Vector3(worldTransformComponent.PositionX, worldTransformComponent.PositionY, worldTransformComponent.PositionZ);
 
-			return new MovementInfo(MovementFlag.MOVEMENTFLAG_NONE, MovementFlagExtra.None, (uint) TimeService.CurrentRemoteTime, position.ToWoWVector(), worldTransformComponent.YAxisRotation, null, 0, 0, 0, null, 0);
+			return new MovementInfo(MovementFlag.MOVEMENTFLAG_NONE, MovementFlagExtra.None, (uint) TimeService.CurrentRemoteTime, position.ToWoWVector(), CalculateWoWMovementInfoRotation(worldTransformComponent), null, 0, 0, 0, null, 0);
 		}
 	}
 }
