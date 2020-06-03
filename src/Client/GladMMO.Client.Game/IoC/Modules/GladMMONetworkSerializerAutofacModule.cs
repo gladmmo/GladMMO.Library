@@ -48,6 +48,8 @@ namespace GladMMO
 					args.Instance.RegisterType<MSG_MOVE_START_STRAFE_RIGHT_Payload>();
 					args.Instance.RegisterType<MSG_MOVE_HEARTBEAT_Payload>();
 
+					args.Instance.RegisterType<PingRequest>();
+
 					args.Instance.Compile();
 				})
 				.SingleInstance();
