@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace GladMMO
 {
-	public class LocalClientInterpolatedCorrectionMovementGenerator : BaseMovementGenerator<MovementBlockData>
+	public class LocalClientInterpolatedCorrectionMovementGenerator : BaseMovementGenerator<MovementInfo>
 	{
 		protected Lazy<CharacterController> Controller { get; }
 
@@ -14,7 +14,7 @@ namespace GladMMO
 		//See: AvatarLerper for an example of this.
 		private float LerpPower { get; } = 0.4f;
 
-		public LocalClientInterpolatedCorrectionMovementGenerator(MovementBlockData movementData, [NotNull] Lazy<CharacterController> controller, bool shouldSetRotation = true) 
+		public LocalClientInterpolatedCorrectionMovementGenerator(MovementInfo movementData, [NotNull] Lazy<CharacterController> controller, bool shouldSetRotation = true) 
 			: base(movementData)
 		{
 			Controller = controller ?? throw new ArgumentNullException(nameof(controller));
@@ -25,7 +25,7 @@ namespace GladMMO
 		{
 			if (ShouldSetRotation)
 				//We must still set rotation here
-				entity.transform.eulerAngles = new Vector3(entity.transform.eulerAngles.x, MovementData.MoveInfo.Orientation, entity.transform.eulerAngles.z);
+				entity.transform.eulerAngles = new Vector3(entity.transform.eulerAngles.x, MovementData.Orientation, entity.transform.eulerAngles.z);
 
 			//Normally, we should set at least the rotation here but this is ONLY
 			//for use with the local player, so we basically should do nothing.
@@ -37,7 +37,7 @@ namespace GladMMO
 			//TODO: We should sleep/stop this movement generator after it's completed.
 			//Reason: See https://forum.unity.com/threads/does-transform-position-work-on-a-charactercontroller.36149/
 			Controller.Value.enabled = false;
-			entity.transform.position = Vector3.Lerp(entity.transform.position, MovementData.MoveInfo.Position.ToUnityVector(), LerpPower);
+			entity.transform.position = Vector3.Lerp(entity.transform.position, MovementData.Position.ToUnityVector(), LerpPower);
 			Controller.Value.enabled = true;
 
 			return entity.transform.position;

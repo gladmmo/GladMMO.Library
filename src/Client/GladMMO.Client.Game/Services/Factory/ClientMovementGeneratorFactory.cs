@@ -6,7 +6,7 @@ using UnityEngine;
 namespace GladMMO
 {
 	//TODO: This is a WIP. It does not support movement generator creation will. It does not really support anything but players.
-	public sealed class ClientMovementGeneratorFactory : IFactoryCreatable<IMovementGenerator<GameObject>, EntityAssociatedData<MovementBlockData>>
+	public sealed class ClientMovementGeneratorFactory : IFactoryCreatable<IMovementGenerator<GameObject>, EntityAssociatedData<MovementInfo>>
 	{
 		private IReadonlyEntityGuidMappable<CharacterController> ControllerMappable { get; }
 
@@ -18,7 +18,7 @@ namespace GladMMO
 			LocalPlayerDetails = localPlayerDetails ?? throw new ArgumentNullException(nameof(localPlayerDetails));
 		}
 
-		public IMovementGenerator<GameObject> Create(EntityAssociatedData<MovementBlockData> context)
+		public IMovementGenerator<GameObject> Create(EntityAssociatedData<MovementInfo> context)
 		{
 			switch (context.EntityGuid.TypeId)
 			{
@@ -26,7 +26,7 @@ namespace GladMMO
 					return CreatePlayerMovementGenerator(context);
 				case EntityTypeId.TYPEID_GAMEOBJECT:
 					//TODO: Support non-static GameObjects.
-					return new IdleMovementGenerator(context.Data.MoveInfo.Position.ToUnityVector());
+					return new IdleMovementGenerator(context.Data.Position.ToUnityVector());
 				case EntityTypeId.TYPEID_UNIT:
 					//TODO: Support non-static NPCs.
 					return CreateCreatureMovementGenerator(context);
@@ -37,12 +37,12 @@ namespace GladMMO
 			throw new NotSupportedException($"TODO: Encountered unsupported movement data: {context.Data.GetType().Name}");
 		}
 
-		private static IMovementGenerator<GameObject> CreateCreatureMovementGenerator(EntityAssociatedData<MovementBlockData> context)
+		private static IMovementGenerator<GameObject> CreateCreatureMovementGenerator(EntityAssociatedData<MovementInfo> context)
 		{
 			throw new InvalidOperationException($"Recieved unhandled Movement Type: {context.Data.GetType().Name} for Creature: {context.EntityGuid}.");
 		}
 
-		private IMovementGenerator<GameObject> CreatePlayerMovementGenerator(EntityAssociatedData<MovementBlockData> context)
+		private IMovementGenerator<GameObject> CreatePlayerMovementGenerator(EntityAssociatedData<MovementInfo> context)
 		{
 			//The reason we use a lazy here is because we can't promise that the character controller exists AT ALL at this point sadly.
 			return new ClientCharacterControllerInputMovementGenerator(context.Data, BuildLazyControllerFactory(context), LocalPlayerDetails.LocalPlayerGuid != context.EntityGuid);
@@ -50,7 +50,7 @@ namespace GladMMO
 			throw new NotSupportedException($"TODO: Encountered unsupported movement data: {context.Data.GetType().Name}");
 		}
 
-		private Lazy<CharacterController> BuildLazyControllerFactory(EntityAssociatedData<MovementBlockData> context)
+		private Lazy<CharacterController> BuildLazyControllerFactory(EntityAssociatedData<MovementInfo> context)
 		{
 			return new Lazy<CharacterController>(() => ControllerMappable.RetrieveEntity(context.EntityGuid));
 		}

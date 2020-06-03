@@ -10,12 +10,12 @@ namespace GladMMO
 	{
 		private IReadonlyEntityGuidMappable<IMovementDirectionChangedListener> MovementDirectionChangeListenerMappable { get; }
 
-		private IReadonlyEntityGuidMappable<MovementBlockData> MovementDataMappable { get; }
+		private IReadonlyEntityGuidMappable<MovementInfo> MovementDataMappable { get; }
 
 		private IReadonlyKnownEntitySet KnownEntities { get; }
 
 		public MovementDirectionDispatchTickable([NotNull] IReadonlyEntityGuidMappable<IMovementDirectionChangedListener> movementDirectionChangeListenerMappable,
-			[NotNull] IReadonlyEntityGuidMappable<MovementBlockData> movementDataMappable,
+			[NotNull] IReadonlyEntityGuidMappable<MovementInfo> movementDataMappable,
 			[NotNull] IReadonlyKnownEntitySet knownEntities)
 		{
 			MovementDirectionChangeListenerMappable = movementDirectionChangeListenerMappable ?? throw new ArgumentNullException(nameof(movementDirectionChangeListenerMappable));
@@ -25,6 +25,7 @@ namespace GladMMO
 
 		public void Tick()
 		{
+			//This is only for Gaia Online avatars.
 			//TODO: Renable movement change listener handling.
 			//foreach(var listener in MovementDirectionChangeListenerMappable.EnumerateWithGuid(KnownEntities, EntityTypeId.TYPEID_PLAYER))
 			//	if(MovementDataMappable[listener.EntityGuid] is MovementBlockData posChangeData)

@@ -18,17 +18,21 @@ namespace GladMMO
 
 		private ILocalPlayerDetails PlayerDetails { get; }
 
+		//Dependency where we can forward for local movement prediction.
+		private MSG_MOVE_PayloadHandler MovementPacketHandler { get; }
+
 		public OnMoveInputChangeNetworkSendInputEventListener(IMovementInputChangedEventSubscribable subscriptionService,
 			[NotNull] IPeerPayloadSendService<GamePacketPayload> sendService,
 			[NotNull] IReadonlyNetworkTimeService timeService,
 			[NotNull] IReadonlyEntityGuidMappable<WorldTransform> transformMap,
-			[NotNull] ILocalPlayerDetails playerDetails) 
+			[NotNull] ILocalPlayerDetails playerDetails, MSG_MOVE_PayloadHandler movementPacketHandler) 
 			: base(subscriptionService)
 		{
 			SendService = sendService ?? throw new ArgumentNullException(nameof(sendService));
 			TimeService = timeService ?? throw new ArgumentNullException(nameof(timeService));
 			TransformMap = transformMap ?? throw new ArgumentNullException(nameof(transformMap));
 			PlayerDetails = playerDetails ?? throw new ArgumentNullException(nameof(playerDetails));
+			MovementPacketHandler = movementPacketHandler;
 		}
 
 		protected override void OnEventFired(object source, MovementInputChangedEventArgs args)
@@ -45,24 +49,32 @@ namespace GladMMO
 			//by having the client be semi-authorative about where it is.
 			WorldTransform worldTransformComponent = TransformMap.RetrieveEntity(PlayerDetails.LocalPlayerGuid);
 
+			GamePacketPayload payloadToSend = default;
+
 			//Did we stop?
 			if (!args.isMoving)
 			{
-				SendService.SendMessage(new MSG_MOVE_STOP_Payload(new PackedGuid(PlayerDetails.LocalPlayerGuid), BuildStopMovementInfo(worldTransformComponent)));
+				payloadToSend = new MSG_MOVE_STOP_Payload(new PackedGuid(PlayerDetails.LocalPlayerGuid), BuildStopMovementInfo(worldTransformComponent));
 			}
 			else
 			{
 				//We going left baby
 				if (args.NewHorizontalInput < 0 && Math.Abs(args.NewVerticalInput) < float.Epsilon)
 				{
-					SendService.SendMessage(BuildStrafeLeftPayload(args, worldTransformComponent));
+					payloadToSend = BuildStrafeLeftPayload(args, worldTransformComponent);
 				}
 				else if(args.NewHorizontalInput > 0 && Math.Abs(args.NewVerticalInput) < float.Epsilon)
 				{
-					SendService.SendMessage(BuildStrafeRightPayload(args, worldTransformComponent));
+					payloadToSend = BuildStrafeRightPayload(args, worldTransformComponent);
 				}
 
 				//TODO: Handle other cases.
+			}
+
+			if (payloadToSend != default)
+			{
+				SendService.SendMessage(payloadToSend);
+				MovementPacketHandler.SpoofLocal(payloadToSend);
 			}
 		}
 

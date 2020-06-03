@@ -13,12 +13,16 @@ namespace GladMMO
 
 		private IEntityGuidMappable<MovementBlockData> MovementBlockMappable { get; }
 
+		private IEntityGuidMappable<MovementInfo> MovementInfoMappable { get; }
+
 		/// <inheritdoc />
 		public NetworkVisibilityCreationBlockToVisibilityEventFactory([NotNull] IEntityGuidMappable<IChangeTrackableEntityDataCollection> changeTrackableCollection,
-			[NotNull] IEntityGuidMappable<MovementBlockData> movementBlockMappable)
+			[NotNull] IEntityGuidMappable<MovementBlockData> movementBlockMappable,
+			[NotNull] IEntityGuidMappable<MovementInfo> movementInfoMappable)
 		{
 			ChangeTrackableCollection = changeTrackableCollection ?? throw new ArgumentNullException(nameof(changeTrackableCollection));
 			MovementBlockMappable = movementBlockMappable ?? throw new ArgumentNullException(nameof(movementBlockMappable));
+			MovementInfoMappable = movementInfoMappable ?? throw new ArgumentNullException(nameof(movementInfoMappable));
 		}
 
 		/// <inheritdoc />
@@ -31,6 +35,7 @@ namespace GladMMO
 
 			ChangeTrackableCollection.AddObject(guid, trackingEntityFieldDataCollectionDecorator);
 			MovementBlockMappable.AddObject(guid, context.CreationData.MovementData);
+			MovementInfoMappable.AddObject(guid, context.CreationData.MovementData.MoveInfo);
 
 			return new NetworkEntityNowVisibleEventArgs(guid);
 		}

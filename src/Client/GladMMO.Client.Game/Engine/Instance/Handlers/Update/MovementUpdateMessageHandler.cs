@@ -16,9 +16,9 @@ namespace GladMMO
 	{
 		private IFactoryCreatable<IMovementGenerator<GameObject>, EntityAssociatedData<MovementBlockData>> MovementGeneratorFactory { get; }
 
-		private IEntityGuidMappable<IMovementGenerator<GameObject>> MovementGeneratorMappable { get; }
-
 		private IEntityGuidMappable<MovementBlockData> MovementDataMappable { get; }
+
+		private IEntityGuidMappable<IMovementGenerator<GameObject>> MovementGeneratorMappable { get; }
 
 		private IReadonlyKnownEntitySet KnownEntities { get; }
 
@@ -60,7 +60,7 @@ namespace GladMMO
 			return Task.CompletedTask;
 		}
 
-		public void HandleMovementUpdate(EntityAssociatedData<MovementBlockData> movementUpdate, bool forceHandleLocal = false)
+		public void HandleMovementUpdate(EntityAssociatedData<MovementInfo> movementUpdate, bool forceHandleLocal = false)
 		{
 			if (!KnownEntities.isEntityKnown(movementUpdate.EntityGuid))
 			{

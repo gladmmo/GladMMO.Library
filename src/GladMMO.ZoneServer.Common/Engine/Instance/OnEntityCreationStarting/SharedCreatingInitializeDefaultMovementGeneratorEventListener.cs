@@ -12,7 +12,7 @@ namespace GladMMO
 	/// </summary>
 	public class SharedCreatingInitializeDefaultMovementGeneratorEventListener : BaseSingleEventListenerInitializable<IEntityCreationFinishedEventSubscribable, EntityCreationFinishedEventArgs>
 	{
-		private IFactoryCreatable<IMovementGenerator<GameObject>, EntityAssociatedData<MovementBlockData>> MovementGeneratorFactory { get; }
+		private IFactoryCreatable<IMovementGenerator<GameObject>, EntityAssociatedData<MovementInfo>> MovementGeneratorFactory { get; }
 
 		private IEntityGuidMappable<IMovementGenerator<GameObject>> MovementGeneratorMappable { get; }
 
@@ -20,7 +20,7 @@ namespace GladMMO
 
 		public SharedCreatingInitializeDefaultMovementGeneratorEventListener(IEntityCreationFinishedEventSubscribable subscriptionService,
 			[NotNull] IEntityGuidMappable<IMovementGenerator<GameObject>> movementGeneratorMappable,
-			[NotNull] IFactoryCreatable<IMovementGenerator<GameObject>, EntityAssociatedData<MovementBlockData>> movementGeneratorFactory,
+			[NotNull] IFactoryCreatable<IMovementGenerator<GameObject>, EntityAssociatedData<MovementInfo>> movementGeneratorFactory,
 			[NotNull] IReadonlyEntityGuidMappable<MovementBlockData> movementDataMappable) 
 			: base(subscriptionService)
 		{
@@ -33,7 +33,7 @@ namespace GladMMO
 		{
 			MovementBlockData movementData = MovementDataMappable.RetrieveEntity(args.EntityGuid);
 
-			IMovementGenerator<GameObject> generator = MovementGeneratorFactory.Create(new EntityAssociatedData<MovementBlockData>(args.EntityGuid, movementData));
+			IMovementGenerator<GameObject> generator = MovementGeneratorFactory.Create(new EntityAssociatedData<MovementInfo>(args.EntityGuid, movementData.MoveInfo));
 			MovementGeneratorMappable.AddObject(args.EntityGuid, generator);
 		}
 	}
