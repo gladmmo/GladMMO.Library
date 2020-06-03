@@ -13,7 +13,7 @@ namespace GladMMO
 	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
 	public sealed class MovementInputBroadcastingTickable : OnLocalPlayerSpawnedEventListener, IGameTickable, IMovementInputChangedEventSubscribable
 	{
-		public const int HEARTBEAT_MILLISECOND_TIME = 200;
+		public const int HEARTBEAT_MILLISECOND_TIME = 500;
 
 		/// <inheritdoc />
 		public event EventHandler<MovementInputChangedEventArgs> OnMovementInputDataChanged;

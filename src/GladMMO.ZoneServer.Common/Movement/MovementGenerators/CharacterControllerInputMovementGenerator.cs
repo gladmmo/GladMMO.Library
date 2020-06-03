@@ -12,8 +12,9 @@ namespace GladMMO
 	{
 		private Vector3 CachedMovementDirection;
 
-		//TODO: We shouldn't do this here
-		private float DefaultPlayerSpeed = 4.0f;
+		//See: https://wowwiki.fandom.com/wiki/Speed
+		//TODO: We shouldn't do this here, still true!
+		private float DefaultPlayerSpeed = 7.0f; //Characters are extremely fast by real-world standards. The standard running speed is 7 yards per second
 
 		public const float CHARACTERCONTROLLER_GRAVITY_SPEED = -(9.8f * 9.8f);
 
@@ -41,14 +42,14 @@ namespace GladMMO
 			//Now, we should also create the movement direction\
 			Vector3 directionVector = Vector3.zero;
 
-			if (this.MovementData.MoveFlags.HasFlag(MovementFlag.MOVEMENTFLAG_RIGHT))
+			if (this.MovementData.MoveFlags.HasAnyFlags(MovementFlag.MOVEMENTFLAG_RIGHT | MovementFlag.MOVEMENTFLAG_STRAFE_RIGHT))
 				directionVector += Vector3.right;
-			else if (this.MovementData.MoveFlags.HasFlag(MovementFlag.MOVEMENTFLAG_LEFT))
+			else if (this.MovementData.MoveFlags.HasAnyFlags(MovementFlag.MOVEMENTFLAG_LEFT | MovementFlag.MOVEMENTFLAG_STRAFE_LEFT))
 				directionVector += Vector3.left;
 
-			if(this.MovementData.MoveFlags.HasFlag(MovementFlag.MOVEMENTFLAG_FORWARD))
+			if(this.MovementData.MoveFlags.HasAnyFlags(MovementFlag.MOVEMENTFLAG_FORWARD))
 				directionVector += Vector3.forward;
-			else if(this.MovementData.MoveFlags.HasFlag(MovementFlag.MOVEMENTFLAG_BACKWARD))
+			else if(this.MovementData.MoveFlags.HasAnyFlags(MovementFlag.MOVEMENTFLAG_BACKWARD))
 				directionVector += Vector3.back;
 
 			directionVector = directionVector.normalized;
