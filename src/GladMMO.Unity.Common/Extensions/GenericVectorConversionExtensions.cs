@@ -11,12 +11,12 @@ namespace GladMMO
 		{
 			//HelloKitty: So, in WoW compared to Unity3D the coordinate system is as follows
 			//Z is actually up in WoW.
-			return new Vector3(freecraftVector.Y, freecraftVector.Z, freecraftVector.X);
+			return new Vector3(-freecraftVector.Y, freecraftVector.Z, -freecraftVector.X);
 		}
 
 		public static Vector3<float> ToWoWVector(this ref Vector3 unityVector)
 		{
-			return new Vector3<float>(unityVector.z, unityVector.x, unityVector.y);
+			return new Vector3<float>(-unityVector.z, -unityVector.x, unityVector.y);
 		}
 	}
 }
