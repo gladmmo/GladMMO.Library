@@ -18,6 +18,8 @@ namespace GladMMO
 
 		private ILocalPlayerDetails PlayerDetails { get; }
 
+		private IEntityGuidMappable<MovementInfo> MovementInfoMappable { get; }
+
 		//Dependency where we can forward for local movement prediction.
 		private MSG_MOVE_PayloadHandler MovementPacketHandler { get; }
 
@@ -25,7 +27,8 @@ namespace GladMMO
 			[NotNull] IPeerPayloadSendService<GamePacketPayload> sendService,
 			[NotNull] IReadonlyNetworkTimeService timeService,
 			[NotNull] IReadonlyEntityGuidMappable<WorldTransform> transformMap,
-			[NotNull] ILocalPlayerDetails playerDetails, MSG_MOVE_PayloadHandler movementPacketHandler) 
+			[NotNull] ILocalPlayerDetails playerDetails, MSG_MOVE_PayloadHandler movementPacketHandler,
+			[NotNull] IEntityGuidMappable<MovementInfo> movementInfoMappable) 
 			: base(subscriptionService)
 		{
 			SendService = sendService ?? throw new ArgumentNullException(nameof(sendService));
@@ -33,6 +36,7 @@ namespace GladMMO
 			TransformMap = transformMap ?? throw new ArgumentNullException(nameof(transformMap));
 			PlayerDetails = playerDetails ?? throw new ArgumentNullException(nameof(playerDetails));
 			MovementPacketHandler = movementPacketHandler;
+			MovementInfoMappable = movementInfoMappable ?? throw new ArgumentNullException(nameof(movementInfoMappable));
 		}
 
 		protected override void OnEventFired(object source, MovementInputChangedEventArgs args)
@@ -44,22 +48,24 @@ namespace GladMMO
 			WorldTransform worldTransformComponent = TransformMap.RetrieveEntity(PlayerDetails.LocalPlayerGuid);
 
 			GamePacketPayload payloadToSend = default;
+			MovementInfo movementInfo = default;
 
 			//Did we stop?
 			if (!args.isMoving)
 			{
-				payloadToSend = new MSG_MOVE_STOP_Payload(new PackedGuid(PlayerDetails.LocalPlayerGuid), BuildStopMovementInfo(worldTransformComponent));
+				movementInfo = BuildStopMovementInfo(worldTransformComponent);
+				payloadToSend = new MSG_MOVE_STOP_Payload(new PackedGuid(PlayerDetails.LocalPlayerGuid), movementInfo);
 			}
 			else
 			{
 				//We going left baby
 				if (args.NewHorizontalInput < 0 && Math.Abs(args.NewVerticalInput) < float.Epsilon)
 				{
-					payloadToSend = BuildStrafeLeftPayload(args, worldTransformComponent);
+					payloadToSend = BuildStrafeLeftPayload(args, worldTransformComponent, out movementInfo);
 				}
 				else if(args.NewHorizontalInput > 0 && Math.Abs(args.NewVerticalInput) < float.Epsilon)
 				{
-					payloadToSend = BuildStrafeRightPayload(args, worldTransformComponent);
+					payloadToSend = BuildStrafeRightPayload(args, worldTransformComponent, out movementInfo);
 				}
 
 				//TODO: Handle other cases.
@@ -67,25 +73,26 @@ namespace GladMMO
 
 			if (payloadToSend != default)
 			{
+				MovementInfoMappable.ReplaceObject(PlayerDetails.LocalPlayerGuid, movementInfo);
 				SendService.SendMessage(payloadToSend);
 				MovementPacketHandler.SpoofLocal(payloadToSend);
 			}
 		}
 
-		private GamePacketPayload BuildStrafeRightPayload(MovementInputChangedEventArgs args, WorldTransform worldTransformComponent)
+		private GamePacketPayload BuildStrafeRightPayload(MovementInputChangedEventArgs args, WorldTransform worldTransformComponent, out MovementInfo movementInfo)
 		{
 			if(args.isHeartBeat)
-				return new MSG_MOVE_HEARTBEAT_Payload(new PackedGuid(PlayerDetails.LocalPlayerGuid), BuildRightStrafeMovementInfo(worldTransformComponent));
+				return new MSG_MOVE_HEARTBEAT_Payload(new PackedGuid(PlayerDetails.LocalPlayerGuid), movementInfo = BuildRightStrafeMovementInfo(worldTransformComponent));
 
-			return new MSG_MOVE_START_STRAFE_RIGHT_Payload(new PackedGuid(PlayerDetails.LocalPlayerGuid), BuildRightStrafeMovementInfo(worldTransformComponent));
+			return new MSG_MOVE_START_STRAFE_RIGHT_Payload(new PackedGuid(PlayerDetails.LocalPlayerGuid), movementInfo = BuildRightStrafeMovementInfo(worldTransformComponent));
 		}
 
-		private GamePacketPayload BuildStrafeLeftPayload(MovementInputChangedEventArgs args, WorldTransform worldTransformComponent)
+		private GamePacketPayload BuildStrafeLeftPayload(MovementInputChangedEventArgs args, WorldTransform worldTransformComponent, out MovementInfo movementInfo)
 		{
 			if(args.isHeartBeat)
-				return new MSG_MOVE_HEARTBEAT_Payload(new PackedGuid(PlayerDetails.LocalPlayerGuid), BuildLeftStrafeMovementInfo(worldTransformComponent));
+				return new MSG_MOVE_HEARTBEAT_Payload(new PackedGuid(PlayerDetails.LocalPlayerGuid), movementInfo = BuildLeftStrafeMovementInfo(worldTransformComponent));
 
-			return new MSG_MOVE_START_STRAFE_LEFT_Payload(new PackedGuid(PlayerDetails.LocalPlayerGuid), BuildLeftStrafeMovementInfo(worldTransformComponent));
+			return new MSG_MOVE_START_STRAFE_LEFT_Payload(new PackedGuid(PlayerDetails.LocalPlayerGuid), movementInfo = BuildLeftStrafeMovementInfo(worldTransformComponent));
 		}
 
 		private MovementInfo BuildRightStrafeMovementInfo(WorldTransform worldTransformComponent)

@@ -1,6 +1,7 @@
 ﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Text;
+using Fasterflect;
 using Glader.Essentials;
 using GladNet;
 using UnityEngine;
@@ -14,30 +15,48 @@ namespace GladMMO
 
 		private IReadonlyNetworkTimeService TimeService { get; }
 
-		private IReadonlyEntityGuidMappable<WorldTransform> TransformMappable { get; }
+		private IEntityGuidMappable<MovementInfo> MovementInfoMappable { get; }
 
 		private IReadonlyLocalPlayerDetails PlayerDetails { get; }
+
+		private IReadonlyEntityGuidMappable<WorldTransform> WorldTransformMappable { get; }
 
 		public OnCameraInputChangedSendRotationUpdateEventListener(ICameraInputChangedEventSubscribable subscriptionService,
 			[NotNull] IPeerPayloadSendService<GamePacketPayload> sendService,
 			[NotNull] IReadonlyNetworkTimeService timeService,
-			[NotNull] IReadonlyEntityGuidMappable<WorldTransform> transformMappable,
-			[NotNull] IReadonlyLocalPlayerDetails playerDetails) 
+			[NotNull] IEntityGuidMappable<MovementInfo> transformMappable,
+			[NotNull] IReadonlyLocalPlayerDetails playerDetails,
+			[NotNull] IReadonlyEntityGuidMappable<WorldTransform> worldTransformMappable) 
 			: base(subscriptionService)
 		{
 			SendService = sendService ?? throw new ArgumentNullException(nameof(sendService));
 			TimeService = timeService ?? throw new ArgumentNullException(nameof(timeService));
-			TransformMappable = transformMappable ?? throw new ArgumentNullException(nameof(transformMappable));
+			MovementInfoMappable = transformMappable ?? throw new ArgumentNullException(nameof(transformMappable));
 			PlayerDetails = playerDetails ?? throw new ArgumentNullException(nameof(playerDetails));
+			WorldTransformMappable = worldTransformMappable ?? throw new ArgumentNullException(nameof(worldTransformMappable));
 		}
 
 		protected override void OnEventFired(object source, CameraInputChangedEventArgs args)
 		{
-			WorldTransform entity = TransformMappable.RetrieveEntity(PlayerDetails.LocalPlayerGuid);
+			MovementInfo info = MovementInfoMappable.RetrieveEntity(PlayerDetails.LocalPlayerGuid);
+			WorldTransform transform = WorldTransformMappable.RetrieveEntity(PlayerDetails.LocalPlayerGuid);
 
-			Debug.LogError($"TODO REIMPLEMENT MOUSE TURNING.");
-			//SendService.SendMessage(new MSG_MOVE_SET_FACING_Payload(PackedGuid.Empty, new MovementInfo(MovementFlag.MOVEMENTFLAG_NONE, MovementFlagExtra.None, 0, )))
-			//SendService.SendMessage(new ClientRotationDataUpdateRequest(args.Rotation, TimeService.CurrentRemoteTime, new Vector3(entity.PositionX, entity.PositionY, entity.PositionZ)));
+			Vector3 currentPosition = new Vector3(transform.PositionX, transform.PositionY, transform.PositionZ);
+
+			MovementInfo info2 = new MovementInfo(info.MoveFlags, info.ExtraFlags, (uint)TimeService.MillisecondsSinceStartup,
+				currentPosition.ToWoWVector(), CalculateWoWMovementInfoRotation(args.Rotation), info.TransportationInformation, info.TransportationTime, 
+				info.MovePitch, info.FallTime, info.FallData, info.SplineElevation);
+
+
+			MovementInfoMappable.ReplaceObject(PlayerDetails.LocalPlayerGuid, info2);
+
+			SendService.SendMessage(new MSG_MOVE_SET_FACING_Payload(new PackedGuid(PlayerDetails.LocalPlayerGuid), info2));
+		}
+
+		private static float CalculateWoWMovementInfoRotation(float rotation)
+		{
+			//See TrinityCore: Position::NormalizeOrientation
+			return (rotation / 360.0f) * 2.0f * (float)Math.PI;
 		}
 	}
 }
