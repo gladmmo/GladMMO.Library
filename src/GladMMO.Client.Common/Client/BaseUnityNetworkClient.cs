@@ -124,12 +124,18 @@ namespace GladMMO
 		}
 
 		/// <inheritdoc />
-		public Task StopHandlingNetworkClient()
+		public Task StopHandlingNetworkClient(bool handleImmediately = false)
 		{
+			//If not handling, 
+			if(!isNetworkHandling)
+				return Task.CompletedTask;
+
 			isNetworkHandling = false;
 
 			CancelTokenSource.Cancel();
-			//TODO: Should we await for the dispatch thread to actually end??
+			
+			if(handleImmediately)
+				OnClientStoppedHandlingMessages();
 
 			return Task.CompletedTask;
 		}
