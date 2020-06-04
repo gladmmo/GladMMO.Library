@@ -15,16 +15,26 @@ namespace FreecraftCore.Swarm
 	{
 		private ILocalCharacterDataRepository CharacterDataRepository { get; }
 
+		private INetworkTimeService TimeService { get; }
+
 		/// <inheritdoc />
-		public CharacterListResponseHandler(ILog logger, [NotNull] ILocalCharacterDataRepository characterDataRepository)
+		public CharacterListResponseHandler(ILog logger, 
+			[NotNull] ILocalCharacterDataRepository characterDataRepository,
+			[NotNull] INetworkTimeService timeService)
 			: base(logger)
 		{
 			CharacterDataRepository = characterDataRepository ?? throw new ArgumentNullException(nameof(characterDataRepository));
+			TimeService = timeService ?? throw new ArgumentNullException(nameof(timeService));
 		}
 
 		/// <inheritdoc />
 		public override async Task HandleMessage(IPeerMessageContext<GamePacketPayload> context, CharacterListResponse payload)
 		{
+			//Not accurate to WoW client but the first packet we are going to send
+			//is the packet that will get the server absolute timestamp.
+			await context.PayloadSendService.SendMessage(new CMSG_QUERY_TIME_Payload());
+			TimeService.RecalculateQueryTime();
+
 			//TODO: Support character login request to character selection selected character.
 			//Idea here is to just login to the first character.
 			await context.PayloadSendService.SendMessage(new CharacterLoginRequest(CharacterDataRepository.LocalCharacterGuid));
