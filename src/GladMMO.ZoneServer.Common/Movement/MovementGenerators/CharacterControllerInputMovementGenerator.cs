@@ -55,7 +55,7 @@ namespace GladMMO
 			directionVector = directionVector.normalized;
 
 			CachedMovementDirection = directionVector;
-			LastMovementUpdateTime = MovementData.TimeStamp;
+			LastMovementUpdateTime = MovementData.TimeStamp; //TODO: Client uses milliseconds since startup.
 
 			//Directly set to the current position incase we're not there.
 			entity.transform.position = CurrentPosition;
@@ -81,6 +81,7 @@ namespace GladMMO
 			//gravity
 			//Don't need to subtract the cached direction Y because it should be 0, or treated as 0.
 			CachedMovementDirection.y = (CHARACTERCONTROLLER_GRAVITY_SPEED * diff);
+			Debug.Log($"Move: {CachedMovementDirection} Diff: {diff}");
 			Controller.Value.Move(entity.transform.worldToLocalMatrix.inverse * CachedMovementDirection * diff * DefaultPlayerSpeed);
 
 			//Our new last movement time is now the current time.
@@ -92,7 +93,7 @@ namespace GladMMO
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		private float DiffFromStartTime(long currentTime)
 		{
-			float diff = (float)(currentTime - LastMovementUpdateTime) / TimeSpan.TicksPerSecond;
+			float diff = (float)(currentTime - LastMovementUpdateTime) / 1000.0f; //it's in milliseconds now.
 
 			//Special case of rounding error can cause small negative diff from local
 			//Remote clients timestamps aren't adjusted by server so we get what they sent

@@ -43,6 +43,7 @@ namespace GladMMO
 					args.Instance.RegisterType<MSG_MOVE_HEARTBEAT_Payload>();
 
 					args.Instance.RegisterType<MSG_MOVE_START_FORWARD_Payload>();
+					args.Instance.RegisterType<MSG_MOVE_START_BACKWARD_Payload>();
 					args.Instance.RegisterType<MSG_MOVE_STOP_Payload>();
 					args.Instance.RegisterType<MSG_MOVE_START_STRAFE_LEFT_Payload>();
 					args.Instance.RegisterType<MSG_MOVE_START_STRAFE_RIGHT_Payload>();

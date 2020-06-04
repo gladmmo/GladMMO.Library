@@ -43,7 +43,7 @@ namespace GladMMO
 
 			Vector3 currentPosition = new Vector3(transform.PositionX, transform.PositionY, transform.PositionZ);
 
-			MovementInfo info2 = new MovementInfo(info.MoveFlags, info.ExtraFlags, (uint)TimeService.MillisecondsSinceStartup,
+			MovementInfo info2 = new MovementInfo(info.MoveFlags, info.ExtraFlags, (uint)TimeService.CurrentRemoteTime,
 				currentPosition.ToWoWVector(), CalculateWoWMovementInfoRotation(args.Rotation), info.TransportationInformation, info.TransportationTime, 
 				info.MovePitch, info.FallTime, info.FallData, info.SplineElevation);
 
@@ -56,7 +56,7 @@ namespace GladMMO
 		private static float CalculateWoWMovementInfoRotation(float rotation)
 		{
 			//See TrinityCore: Position::NormalizeOrientation
-			return (rotation / 360.0f) * 2.0f * (float)Math.PI;
+			return -(rotation / 360.0f) * 2.0f * (float)Math.PI;
 		}
 	}
 }

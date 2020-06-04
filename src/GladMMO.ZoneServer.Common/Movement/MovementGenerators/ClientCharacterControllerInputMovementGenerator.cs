@@ -32,7 +32,7 @@ namespace GladMMO
 			Controller.Value.enabled = true;
 
 			//We use the server set position here.
-			return MovementData.Position.ToUnityVector();
+			return entity.transform.position;
 		}
 	}
 }

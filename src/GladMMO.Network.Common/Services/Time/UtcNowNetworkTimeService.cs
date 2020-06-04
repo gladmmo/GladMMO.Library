@@ -8,14 +8,14 @@ namespace GladMMO
 	//TODO: Unit test, when I'm not lazy.
 	public sealed class UtcNowNetworkTimeService : INetworkTimeService
 	{
-		public long EPOCH_TICKS { get; } = new DateTime(1970, 1, 1).Ticks;
+		public long EPOCH_TICKS { get; } = new DateTime(1970, 1, 1).Ticks / TimeSpan.TicksPerMillisecond;
 
 		/// <inheritdoc />
 		public long CurrentTimeOffset { get; private set; }
 
-		//This becomes UNIX time in TICKS (not Unix Timestamp which is seconds)
+		//This becomes time since system startup in ticks.
 		/// <inheritdoc />
-		public long CurrentLocalTime => DateTime.UtcNow.Ticks - EPOCH_TICKS;
+		public long CurrentLocalTime => Environment.TickCount;
 
 		/// <inheritdoc />
 		public long CurrentLatency { get; private set; }
@@ -31,8 +31,7 @@ namespace GladMMO
 		{
 			get
 			{
-				//TODO: How to handle this check.
-				long value = CurrentLocalTime - CurrentTimeOffset;
+				long value = (CurrentLocalTime - CurrentTimeOffset);
 				return value;
 			}
 		}

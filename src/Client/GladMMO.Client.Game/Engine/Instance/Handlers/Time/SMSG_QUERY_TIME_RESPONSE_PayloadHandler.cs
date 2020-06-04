@@ -26,8 +26,7 @@ namespace GladMMO
 		public override Task HandleMessage(IPeerMessageContext<GamePacketPayload> context, SMSG_QUERY_TIME_RESPONSE_Payload payload)
 		{
 			//SMSG_QUERY_TIME_RESPONSE_Payload actually returns a uint32 UNIX timestamp in the form of SECONDS.
-			//This is an important distinction to ticks. So we must convert it to ticks.
-			TimeService.SetTimeSyncronization(TimeService.LastQueryTime, payload.CurrentTime * TimeSpan.TicksPerSecond); //It's in UNIX timestamp SECONDS.
+			TimeService.SetTimeSyncronization(TimeService.LastQueryTime, payload.CurrentTime * 1000); //It's in UNIX timestamp SECONDS, we need it in MILLISECONDS.
 			return Task.CompletedTask;
 		}
 	}
