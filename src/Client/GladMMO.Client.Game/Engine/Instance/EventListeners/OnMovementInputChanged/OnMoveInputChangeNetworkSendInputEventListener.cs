@@ -37,12 +37,6 @@ namespace GladMMO
 
 		protected override void OnEventFired(object source, MovementInputChangedEventArgs args)
 		{
-			//We send remote time instead of remoteTime + latency because
-			//our client is going to move right away and we want EVERYONE
-			//to view us as if we had started moving at the same time as the
-			//local client percieves it.
-			long timeStamp = TimeService.CurrentRemoteTime;
-
 			//We also are going to send a position hint to the server.
 			//Server has authority in rejecting this hint, and it should if it finds its
 			//WAY off. However this is how we deal with the issue of desyncronization
@@ -98,14 +92,14 @@ namespace GladMMO
 		{
 			Vector3 position = new Vector3(worldTransformComponent.PositionX, worldTransformComponent.PositionY, worldTransformComponent.PositionZ);
 
-			return new MovementInfo(MovementFlag.MOVEMENTFLAG_STRAFE_RIGHT, MovementFlagExtra.None, (uint)TimeService.CurrentRemoteTime, position.ToWoWVector(), CalculateWoWMovementInfoRotation(worldTransformComponent), null, 0, 0, 0, null, 0);
+			return new MovementInfo(MovementFlag.MOVEMENTFLAG_STRAFE_RIGHT, MovementFlagExtra.None, (uint) TimeService.MillisecondsSinceStartup, position.ToWoWVector(), CalculateWoWMovementInfoRotation(worldTransformComponent), null, 0, 0, 0, null, 0);
 		}
 
 		private MovementInfo BuildLeftStrafeMovementInfo(WorldTransform worldTransformComponent)
 		{
 			Vector3 position = new Vector3(worldTransformComponent.PositionX, worldTransformComponent.PositionY, worldTransformComponent.PositionZ);
 
-			return new MovementInfo(MovementFlag.MOVEMENTFLAG_STRAFE_LEFT, MovementFlagExtra.None, (uint)TimeService.CurrentRemoteTime, position.ToWoWVector(), CalculateWoWMovementInfoRotation(worldTransformComponent), null, 0, 0, 0, null, 0);
+			return new MovementInfo(MovementFlag.MOVEMENTFLAG_STRAFE_LEFT, MovementFlagExtra.None, (uint) TimeService.MillisecondsSinceStartup, position.ToWoWVector(), CalculateWoWMovementInfoRotation(worldTransformComponent), null, 0, 0, 0, null, 0);
 		}
 
 		private static float CalculateWoWMovementInfoRotation(WorldTransform worldTransformComponent)
@@ -118,7 +112,7 @@ namespace GladMMO
 		{
 			Vector3 position = new Vector3(worldTransformComponent.PositionX, worldTransformComponent.PositionY, worldTransformComponent.PositionZ);
 
-			return new MovementInfo(MovementFlag.MOVEMENTFLAG_NONE, MovementFlagExtra.None, (uint) TimeService.CurrentRemoteTime, position.ToWoWVector(), CalculateWoWMovementInfoRotation(worldTransformComponent), null, 0, 0, 0, null, 0);
+			return new MovementInfo(MovementFlag.MOVEMENTFLAG_NONE, MovementFlagExtra.None, (uint) TimeService.MillisecondsSinceStartup, position.ToWoWVector(), CalculateWoWMovementInfoRotation(worldTransformComponent), null, 0, 0, 0, null, 0);
 		}
 	}
 }
