@@ -13,6 +13,17 @@ namespace GladMMO
 		/// <param name="originalLocalTime">The original local time sent in the syncronization packet.</param>
 		/// <param name="remoteTime">The remote time sent back.</param>
 		void SetTimeSyncronization(long originalLocalTime, long remoteTime);
+
+		/// <summary>
+		/// Recalculates the time stamp for when a time query was sent.
+		/// (current local time.
+		/// </summary>
+		void RecalculateQueryTime();
+
+		/// <summary>
+		/// Represents the timestamp from the last time query.
+		/// </summary>
+		long LastQueryTime { get; }
 	}
 
 	public interface IReadonlyNetworkTimeService
@@ -58,5 +69,10 @@ namespace GladMMO
 		/// Likely based on the <see cref="CurrentLocalTime"/> and the <see cref="CurrentTimeOffset"/>.
 		/// </summary>
 		long CurrentRemoteTime { get; }
+
+		/// <summary>
+		/// Represents the milliseconds since application startup.
+		/// </summary>
+		int MillisecondsSinceStartup { get; }
 	}
 }

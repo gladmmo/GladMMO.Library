@@ -8,14 +8,20 @@ namespace GladMMO
 	//TODO: Unit test, when I'm not lazy.
 	public sealed class UtcNowNetworkTimeService : INetworkTimeService
 	{
+		public long EPOCH_TICKS { get; } = new DateTime(1970, 1, 1).Ticks;
+
 		/// <inheritdoc />
 		public long CurrentTimeOffset { get; private set; }
 
+		//This becomes UNIX time in TICKS (not Unix Timestamp which is seconds)
 		/// <inheritdoc />
-		public long CurrentLocalTime => DateTime.UtcNow.Ticks;
+		public long CurrentLocalTime => DateTime.UtcNow.Ticks - EPOCH_TICKS;
 
 		/// <inheritdoc />
 		public long CurrentLatency { get; private set; }
+
+		/// <inheritdoc />
+		public long LastQueryTime { get; private set; }
 
 		/*ct - rt = to
 		rt = -(to - ct)
@@ -30,6 +36,9 @@ namespace GladMMO
 				return value;
 			}
 		}
+
+		/// <inheritdoc />
+		public int MillisecondsSinceStartup => Environment.TickCount;
 
 		/// <inheritdoc />
 		public long CalculateRoundTripTime(long originalLocalTime)
@@ -62,6 +71,12 @@ namespace GladMMO
 		{
 			CurrentTimeOffset = CalculateTimeOffset(originalLocalTime, remoteTime);
 			CurrentLatency = CalculateRoundTripTime(originalLocalTime) / 2;
+		}
+
+		/// <inheritdoc />
+		public void RecalculateQueryTime()
+		{
+			LastQueryTime = CurrentLocalTime;
 		}
 	}
 }
