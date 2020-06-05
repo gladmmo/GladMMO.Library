@@ -46,6 +46,10 @@ namespace GladMMO
 							if(logger.IsInfoEnabled)
 								logger.Info($"Registered type: {t}");
 
+							//TODO: This packet is broken for serialization, need to investigate.
+							if (typeof(SMSG_ADDON_INFO_Payload) == t)
+								continue;
+
 							args.Instance.RegisterType(t);
 						}
 					}
