@@ -179,9 +179,17 @@ namespace GladMMO
 				if(token.IsCancellationRequested)
 					return null;
 
-				//Deserialize the bytes starting from the begining but ONLY read up to the payload size. We reuse this buffer and it's large
-				//so if we don't specify the length we could end up with an issue.
-				payload = Serializer.Deserialize<TReadPayloadBaseType>(PacketPayloadReadBuffer, 0, header.PayloadSize);
+				try
+				{
+					//Deserialize the bytes starting from the begining but ONLY read up to the payload size. We reuse this buffer and it's large
+					//so if we don't specify the length we could end up with an issue.
+					payload = Serializer.Deserialize<TReadPayloadBaseType>(PacketPayloadReadBuffer, 0, header.PayloadSize);
+				}
+				catch (Exception e)
+				{
+					UnityEngine.Debug.LogError($"Encountered Exception in deserializing: {typeof(TReadPayloadBaseType).Name} with OpCode: {(NetworkOperationCode)PacketPayloadReadBuffer.Reinterpret<short>()}. Reason: {e.Message}");
+					throw;
+				}
 			}
 
 			//TODO: This is bad for performance because it copies of the buffer, only use this during dev.
