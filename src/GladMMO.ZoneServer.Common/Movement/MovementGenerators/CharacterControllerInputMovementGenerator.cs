@@ -55,7 +55,12 @@ namespace GladMMO
 			directionVector = directionVector.normalized;
 
 			CachedMovementDirection = directionVector;
-			LastMovementUpdateTime = MovementData.TimeStamp; //TODO: Client uses milliseconds since startup.
+
+			//TODO: Remote WoW client causes this calculation:
+			/*Latency: 125 RemoteTime: 2216242605 Offset: -1733671480
+			DIFF > 5 SECONDS: 2111631 MoveInfo TimeStamp: 104696689*/
+			//Therefore, we must revisit this and for now use local client timestamp at info start using.
+			LastMovementUpdateTime = currentTime; //TODO: Client uses milliseconds since startup.
 
 			//Directly set to the current position incase we're not there.
 			entity.transform.position = CurrentPosition;
@@ -77,6 +82,10 @@ namespace GladMMO
 
 			if(diff < 0.0f)
 				throw new InvalidOperationException($"Movement diff time is less than 0. Diff: {diff}");
+
+			//Some debug code
+			if(diff > 5.0f)
+				Debug.LogError($"DIFF > 5 SECONDS: {diff} MoveInfo TimeStamp: {MovementData.TimeStamp}");
 
 			//gravity
 			//Don't need to subtract the cached direction Y because it should be 0, or treated as 0.

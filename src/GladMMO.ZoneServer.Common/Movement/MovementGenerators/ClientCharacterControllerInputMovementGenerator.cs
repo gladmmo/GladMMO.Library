@@ -7,16 +7,21 @@ using UnityEngine;
 
 namespace GladMMO
 {
-	
 	public sealed class ClientCharacterControllerInputMovementGenerator : CharacterControllerInputMovementGenerator
 	{
 		//This property mostly exists to allow for callers who may know rotation shouldn't be set can deny it.
-		private bool ShouldSetRotation { get; }
+		private bool ShouldSetRotation { get; set; } //mutable now so we can turn it off.
+
+		private float Rotation { get; }
 
 		public ClientCharacterControllerInputMovementGenerator(MovementInfo movementData, Lazy<CharacterController> controller, bool shouldSetRotation = true) 
 			: base(movementData, controller)
 		{
 			ShouldSetRotation = shouldSetRotation;
+
+			//TODO: Centralize this rotation stuff.
+			if(ShouldSetRotation)
+				Rotation = -((MovementData.Orientation) / (2.0f * (float) Math.PI) * 360.0f) % 360.0f;
 		}
 
 		protected override Vector3 Start(GameObject entity, long currentTime)
@@ -27,8 +32,10 @@ namespace GladMMO
 			Controller.Value.enabled = false;
 			//Sets the new authoratively specified movement position.
 			entity.transform.position = MovementData.Position.ToUnityVector();
+
 			if (ShouldSetRotation)
-				entity.transform.eulerAngles = new Vector3(entity.transform.eulerAngles.x, MovementData.Orientation, entity.transform.eulerAngles.z);
+				entity.transform.eulerAngles = new Vector3(entity.transform.eulerAngles.x, Rotation, entity.transform.eulerAngles.z);
+
 			Controller.Value.enabled = true;
 
 			//We use the server set position here.
