@@ -82,5 +82,22 @@ namespace GladMMO
 				return (NewVerticalInput.GetHashCode() * 397) ^ NewHorizontalInput.GetHashCode();
 			}
 		}
+
+		public MovementFlag BuildMovementFlags()
+		{
+			MovementFlag flags = MovementFlag.MOVEMENTFLAG_NONE;
+
+			if (NewHorizontalInput > 0.0f)
+				flags |= MovementFlag.MOVEMENTFLAG_STRAFE_RIGHT;
+			else if (NewHorizontalInput < 0.0f)
+				flags |= MovementFlag.MOVEMENTFLAG_STRAFE_LEFT;
+
+			if (NewVerticalInput > 0.0f)
+				flags |= MovementFlag.MOVEMENTFLAG_FORWARD;
+			else if (NewVerticalInput < 0.0f)
+				flags |= MovementFlag.MOVEMENTFLAG_BACKWARD;
+
+			return flags;
+		}
 	}
 }

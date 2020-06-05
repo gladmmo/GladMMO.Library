@@ -81,7 +81,7 @@ namespace GladMMO
 			//gravity
 			//Don't need to subtract the cached direction Y because it should be 0, or treated as 0.
 			CachedMovementDirection.y = (CHARACTERCONTROLLER_GRAVITY_SPEED * diff);
-			Debug.Log($"Move: {CachedMovementDirection} Diff: {diff}");
+			//Debug.Log($"Move: {CachedMovementDirection} Diff: {diff}");
 			Controller.Value.Move(entity.transform.worldToLocalMatrix.inverse * CachedMovementDirection * diff * DefaultPlayerSpeed);
 
 			//Our new last movement time is now the current time.

@@ -70,12 +70,12 @@ namespace GladMMO
 				{
 					payloadToSend = BuildStrafeRightPayload(args, worldTransformComponent, out movementInfo);
 				}
-				else if (Math.Abs(args.NewHorizontalInput) < float.Epsilon && args.NewVerticalInput > 0)
+				else if (args.NewVerticalInput > 0)
 				{
 					//moving forward
 					payloadToSend = BuildForwardMovePayload(args, worldTransformComponent, out movementInfo);
 				}
-				else if (Math.Abs(args.NewHorizontalInput) < float.Epsilon && args.NewVerticalInput < 0)
+				else if (args.NewVerticalInput < 0)
 				{
 					//moving backwards
 					payloadToSend = BuildBackwardsMovePayload(args, worldTransformComponent, out movementInfo);
@@ -95,61 +95,61 @@ namespace GladMMO
 		private GamePacketPayload BuildForwardMovePayload(MovementInputChangedEventArgs args, WorldTransform worldTransformComponent, out MovementInfo movementInfo)
 		{
 			if(args.isHeartBeat)
-				return new MSG_MOVE_HEARTBEAT_Payload(new PackedGuid(PlayerDetails.LocalPlayerGuid), movementInfo = BuildForwardMovementInfo(worldTransformComponent));
+				return new MSG_MOVE_HEARTBEAT_Payload(new PackedGuid(PlayerDetails.LocalPlayerGuid), movementInfo = BuildForwardMovementInfo(args, worldTransformComponent));
 
-			return new MSG_MOVE_START_FORWARD_Payload(new PackedGuid(PlayerDetails.LocalPlayerGuid), movementInfo = BuildForwardMovementInfo(worldTransformComponent));
+			return new MSG_MOVE_START_FORWARD_Payload(new PackedGuid(PlayerDetails.LocalPlayerGuid), movementInfo = BuildForwardMovementInfo(args, worldTransformComponent));
 		}
 
 		private GamePacketPayload BuildBackwardsMovePayload(MovementInputChangedEventArgs args, WorldTransform worldTransformComponent, out MovementInfo movementInfo)
 		{
 			if(args.isHeartBeat)
-				return new MSG_MOVE_HEARTBEAT_Payload(new PackedGuid(PlayerDetails.LocalPlayerGuid), movementInfo = BuildBackwardsMovementInfo(worldTransformComponent));
+				return new MSG_MOVE_HEARTBEAT_Payload(new PackedGuid(PlayerDetails.LocalPlayerGuid), movementInfo = BuildBackwardsMovementInfo(args, worldTransformComponent));
 
-			return new MSG_MOVE_START_BACKWARD_Payload(new PackedGuid(PlayerDetails.LocalPlayerGuid), movementInfo = BuildBackwardsMovementInfo(worldTransformComponent));
+			return new MSG_MOVE_START_BACKWARD_Payload(new PackedGuid(PlayerDetails.LocalPlayerGuid), movementInfo = BuildBackwardsMovementInfo(args, worldTransformComponent));
 		}
 
 		private GamePacketPayload BuildStrafeRightPayload(MovementInputChangedEventArgs args, WorldTransform worldTransformComponent, out MovementInfo movementInfo)
 		{
 			if(args.isHeartBeat)
-				return new MSG_MOVE_HEARTBEAT_Payload(new PackedGuid(PlayerDetails.LocalPlayerGuid), movementInfo = BuildRightStrafeMovementInfo(worldTransformComponent));
+				return new MSG_MOVE_HEARTBEAT_Payload(new PackedGuid(PlayerDetails.LocalPlayerGuid), movementInfo = BuildRightStrafeMovementInfo(args, worldTransformComponent));
 
-			return new MSG_MOVE_START_STRAFE_RIGHT_Payload(new PackedGuid(PlayerDetails.LocalPlayerGuid), movementInfo = BuildRightStrafeMovementInfo(worldTransformComponent));
+			return new MSG_MOVE_START_STRAFE_RIGHT_Payload(new PackedGuid(PlayerDetails.LocalPlayerGuid), movementInfo = BuildRightStrafeMovementInfo(args, worldTransformComponent));
 		}
 
 		private GamePacketPayload BuildStrafeLeftPayload(MovementInputChangedEventArgs args, WorldTransform worldTransformComponent, out MovementInfo movementInfo)
 		{
 			if(args.isHeartBeat)
-				return new MSG_MOVE_HEARTBEAT_Payload(new PackedGuid(PlayerDetails.LocalPlayerGuid), movementInfo = BuildLeftStrafeMovementInfo(worldTransformComponent));
+				return new MSG_MOVE_HEARTBEAT_Payload(new PackedGuid(PlayerDetails.LocalPlayerGuid), movementInfo = BuildLeftStrafeMovementInfo(args, worldTransformComponent));
 
-			return new MSG_MOVE_START_STRAFE_LEFT_Payload(new PackedGuid(PlayerDetails.LocalPlayerGuid), movementInfo = BuildLeftStrafeMovementInfo(worldTransformComponent));
+			return new MSG_MOVE_START_STRAFE_LEFT_Payload(new PackedGuid(PlayerDetails.LocalPlayerGuid), movementInfo = BuildLeftStrafeMovementInfo(args, worldTransformComponent));
 		}
 
-		private MovementInfo BuildForwardMovementInfo(WorldTransform worldTransformComponent)
+		private MovementInfo BuildForwardMovementInfo(MovementInputChangedEventArgs args, WorldTransform worldTransformComponent)
 		{
 			Vector3 position = new Vector3(worldTransformComponent.PositionX, worldTransformComponent.PositionY, worldTransformComponent.PositionZ);
 
-			return new MovementInfo(MovementFlag.MOVEMENTFLAG_FORWARD, MovementFlagExtra.None, (uint)TimeService.CurrentRemoteTime, position.ToWoWVector(), CalculateWoWMovementInfoRotation(worldTransformComponent), null, 0, 0, 0, null, 0);
+			return new MovementInfo(args.BuildMovementFlags(), MovementFlagExtra.None, (uint)TimeService.CurrentRemoteTime, position.ToWoWVector(), CalculateWoWMovementInfoRotation(worldTransformComponent), null, 0, 0, 0, null, 0);
 		}
 
-		private MovementInfo BuildBackwardsMovementInfo(WorldTransform worldTransformComponent)
+		private MovementInfo BuildBackwardsMovementInfo(MovementInputChangedEventArgs args, WorldTransform worldTransformComponent)
 		{
 			Vector3 position = new Vector3(worldTransformComponent.PositionX, worldTransformComponent.PositionY, worldTransformComponent.PositionZ);
 
-			return new MovementInfo(MovementFlag.MOVEMENTFLAG_BACKWARD, MovementFlagExtra.None, (uint)TimeService.CurrentRemoteTime, position.ToWoWVector(), CalculateWoWMovementInfoRotation(worldTransformComponent), null, 0, 0, 0, null, 0);
+			return new MovementInfo(args.BuildMovementFlags(), MovementFlagExtra.None, (uint)TimeService.CurrentRemoteTime, position.ToWoWVector(), CalculateWoWMovementInfoRotation(worldTransformComponent), null, 0, 0, 0, null, 0);
 		}
 
-		private MovementInfo BuildRightStrafeMovementInfo(WorldTransform worldTransformComponent)
+		private MovementInfo BuildRightStrafeMovementInfo(MovementInputChangedEventArgs args, WorldTransform worldTransformComponent)
 		{
 			Vector3 position = new Vector3(worldTransformComponent.PositionX, worldTransformComponent.PositionY, worldTransformComponent.PositionZ);
 
-			return new MovementInfo(MovementFlag.MOVEMENTFLAG_STRAFE_RIGHT, MovementFlagExtra.None, (uint)TimeService.CurrentRemoteTime, position.ToWoWVector(), CalculateWoWMovementInfoRotation(worldTransformComponent), null, 0, 0, 0, null, 0);
+			return new MovementInfo(args.BuildMovementFlags(), MovementFlagExtra.None, (uint)TimeService.CurrentRemoteTime, position.ToWoWVector(), CalculateWoWMovementInfoRotation(worldTransformComponent), null, 0, 0, 0, null, 0);
 		}
 
-		private MovementInfo BuildLeftStrafeMovementInfo(WorldTransform worldTransformComponent)
+		private MovementInfo BuildLeftStrafeMovementInfo(MovementInputChangedEventArgs args, WorldTransform worldTransformComponent)
 		{
 			Vector3 position = new Vector3(worldTransformComponent.PositionX, worldTransformComponent.PositionY, worldTransformComponent.PositionZ);
 
-			return new MovementInfo(MovementFlag.MOVEMENTFLAG_STRAFE_LEFT, MovementFlagExtra.None, (uint)TimeService.CurrentRemoteTime, position.ToWoWVector(), CalculateWoWMovementInfoRotation(worldTransformComponent), null, 0, 0, 0, null, 0);
+			return new MovementInfo(args.BuildMovementFlags(), MovementFlagExtra.None, (uint)TimeService.CurrentRemoteTime, position.ToWoWVector(), CalculateWoWMovementInfoRotation(worldTransformComponent), null, 0, 0, 0, null, 0);
 		}
 
 		private static float CalculateWoWMovementInfoRotation(WorldTransform worldTransformComponent)
