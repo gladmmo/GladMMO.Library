@@ -49,7 +49,7 @@ namespace GladMMO
 			NetworkOperationCode code = message.Payload.GetOperationCode();
 
 			if (code >= NetworkOperationCode.MSG_MOVE_START_FORWARD && code <= NetworkOperationCode.MSG_MOVE_SET_PITCH)
-				return false;
+				return true;
 			else
 				return false;
 		}
