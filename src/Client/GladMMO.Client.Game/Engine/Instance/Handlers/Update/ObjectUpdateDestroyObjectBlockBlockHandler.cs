@@ -10,13 +10,16 @@ using GladNet;
 
 namespace GladMMO
 {
-	[AdditionalRegisterationAs(typeof(INetworkEntityVisibilityLostEventSubscribable))]
 	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
-	public sealed class ObjectUpdateDestroyObjectBlockBlockHandler : BaseObjectUpdateBlockHandler<ObjectUpdateDestroyObjectBlock>,
-		INetworkEntityVisibilityLostEventSubscribable
+	public sealed class ObjectUpdateDestroyObjectBlockBlockHandler : BaseObjectUpdateBlockHandler<ObjectUpdateDestroyObjectBlock>
 	{
-		/// <inheritdoc />
-		public event EventHandler<NetworkEntityVisibilityLostEventArgs> OnNetworkEntityVisibilityLost;
+		public INetworkEntityVisibilityLostEventPublisher VisibilityLostPublisher { get; }
+
+		public ObjectUpdateDestroyObjectBlockBlockHandler(ObjectUpdateType updateType, ILog logger, [NotNull] INetworkEntityVisibilityLostEventPublisher visibilityLostPublisher) 
+			: base(updateType, logger)
+		{
+			VisibilityLostPublisher = visibilityLostPublisher ?? throw new ArgumentNullException(nameof(visibilityLostPublisher));
+		}
 
 		/// <inheritdoc />
 		public ObjectUpdateDestroyObjectBlockBlockHandler(ILog logger)
@@ -35,7 +38,7 @@ namespace GladMMO
 				ObjectGuid guid = new ObjectGuid(destroyData);
 				Logger.Info($"Attempting to Despawn: {guid}");
 
-				OnNetworkEntityVisibilityLost?.Invoke(this, new NetworkEntityVisibilityLostEventArgs(guid));
+				VisibilityLostPublisher.PublishEvent(this, new NetworkEntityVisibilityLostEventArgs(guid));
 			}
 		}
 	}
