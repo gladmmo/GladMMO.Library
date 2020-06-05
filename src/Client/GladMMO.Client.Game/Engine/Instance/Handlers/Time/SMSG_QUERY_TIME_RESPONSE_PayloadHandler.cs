@@ -27,6 +27,7 @@ namespace GladMMO
 		{
 			//SMSG_QUERY_TIME_RESPONSE_Payload actually returns a uint32 UNIX timestamp in the form of SECONDS.
 			TimeService.SetTimeSyncronization(TimeService.LastQueryTime, payload.CurrentTime * 1000); //It's in UNIX timestamp SECONDS, we need it in MILLISECONDS.
+			Logger.Info($"Latency: {TimeService.CurrentLatency} RemoteTime: {TimeService.CurrentRemoteTime} Offset: {TimeService.CurrentTimeOffset}");
 			return Task.CompletedTask;
 		}
 	}
