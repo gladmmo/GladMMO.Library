@@ -21,6 +21,10 @@ namespace GladMMO
 
 		public override Task HandleMessage(IPeerMessageContext<GamePacketPayload> context, SMSG_DESTROY_OBJECT_Payload payload)
 		{
+			//Only log info for players.
+			if(Logger.IsInfoEnabled && payload.DestroyedObject.isType(EntityTypeId.TYPEID_PLAYER))
+				Logger.Info($"Entity: {payload.DestroyedObject} SMSG_DESTROY_OBJECT Death: {payload.IsForDeath}");
+
 			VisibilityLostPublisher.PublishEvent(this, new NetworkEntityVisibilityLostEventArgs(payload.DestroyedObject));
 			return Task.CompletedTask;
 		}
