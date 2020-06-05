@@ -16,6 +16,15 @@ namespace GladMMO
 		//TODO: We shouldn't do this here, still true!
 		private float DefaultPlayerSpeed = 7.0f; //Characters are extremely fast by real-world standards. The standard running speed is 7 yards per second
 
+		//TODO: Update gravity
+		//https://www.mmo-champion.com/threads/1955227-If-you-were-ver-curious-about-how-fast-players-fall-in-wow
+		//https://us.forums.blizzard.com/en/wow/t/has-anyone-figured-out-terminal-velocity-in-wow/385478/21
+		/*Using a run macro, it has been calculated
+
+		Standard Run Speed: 7 yards / sec
+		Also a Mile ever 4 mins 12 sec.
+		Falling: 58.75 yards / sec!
+		Terminal Velocity: 58.75 yards / sec = 120.1705 mph*/
 		public const float CHARACTERCONTROLLER_GRAVITY_SPEED = -(9.8f * 9.8f);
 
 		private long LastMovementUpdateTime { get; set; }
