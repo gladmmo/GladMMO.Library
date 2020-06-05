@@ -35,8 +35,18 @@ namespace GladMMO
 			if (!CanHandle(message))
 				return false;
 
-			await HandleMessage(context, (TSpecificPayloadType)message.Payload)
-				.ConfigureAwaitFalseVoid();
+			try
+			{
+				await HandleMessage(context, (TSpecificPayloadType)message.Payload)
+					.ConfigureAwaitFalseVoid();
+			}
+			catch (Exception e)
+			{
+				if(Logger.IsErrorEnabled)
+					Logger.Error($"Error in {GetType().Name}.");
+
+				throw;
+			}
 
 			return true;
 		}

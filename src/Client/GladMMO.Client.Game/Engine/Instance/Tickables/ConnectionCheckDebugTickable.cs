@@ -34,7 +34,12 @@ namespace GladMMO
 			//remote service disconnected us and that we should stop, which will then fire
 			//the disconnection event below.
 			if (!Client.isConnected && ClientManager.isNetworkHandling)
+			{
+				if(Logger.IsWarnEnabled)
+					Logger.Warn($"{nameof(ConnectionCheckDebugTickable)} dispatching StopHandlingNetworkClient");
+
 				ClientManager.StopHandlingNetworkClient();
+			}
 		}
 
 		protected override void OnEventFired(object source, EventArgs args)
