@@ -45,6 +45,7 @@
     <Folder Include="Content\" />
     <Folder Include="Factory\" />
     <Folder Include="Models\" />
+    <Folder Include="Services\" />
   </ItemGroup>
 
 </Project>
