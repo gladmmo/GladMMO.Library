@@ -12,10 +12,14 @@ namespace GladMMO
 		private IGeneralErrorEncounteredEventPublisher ErrorPublisher { get; }
 
 		public ReturnToWorldDownloadScreenOnDisconnectionEventListener(INetworkClientDisconnectedEventSubscribable subscriptionService,
+			IInstanceLogoutEventSubscribable logoutEventSubscriptionService,
 			[NotNull] IGeneralErrorEncounteredEventPublisher errorPublisher) 
 			: base(subscriptionService)
 		{
 			ErrorPublisher = errorPublisher ?? throw new ArgumentNullException(nameof(errorPublisher));
+
+			//We want to NOT display the disconnected client error if we're doing a normal logout.
+			logoutEventSubscriptionService.OnInstanceLogout += (sender, args) => this.Unsubscribe();
 		}
 
 		protected override void OnThreadUnSafeEventFired(object source, EventArgs args)

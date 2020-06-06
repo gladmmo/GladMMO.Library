@@ -93,9 +93,6 @@ namespace GladMMO
 
 		public static void RegisterExpectedInSceneDependecyMocks(ContainerBuilder builder)
 		{
-			builder.RegisterInstance(Mock.Of<ISceneManager>())
-				.As<ISceneManager>();
-
 			//Common thing used in temp registeration
 			builder.RegisterInstance(ObjectGuid.Empty)
 				.AsSelf();

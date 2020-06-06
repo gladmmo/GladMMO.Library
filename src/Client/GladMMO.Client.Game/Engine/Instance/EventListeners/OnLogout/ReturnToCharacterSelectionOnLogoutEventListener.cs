@@ -1,31 +1,26 @@
-﻿using System; using FreecraftCore;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Autofac;
 using Common.Logging;
 using Glader.Essentials;
 using Nito.AsyncEx;
-using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace GladMMO
 {
-	[SceneTypeCreateGladMMO(GameSceneType.CharacterCreationScreen)]
-	public sealed class ReturnCharacterSelectionEventListener : ButtonClickedEventListener<ISceneBackButtonClickedSubscribable>
+	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
+	public sealed class ReturnToCharacterSelectionOnLogoutEventListener : BaseSingleEventListenerInitializable<IInstanceLogoutEventSubscribable>
 	{
 		private ILog Logger { get; }
 
-		public ReturnCharacterSelectionEventListener(ISceneBackButtonClickedSubscribable subscriptionService,
-			[NotNull] ILog logger) 
+		public ReturnToCharacterSelectionOnLogoutEventListener(IInstanceLogoutEventSubscribable subscriptionService,
+			[NotNull] ILog logger)
 			: base(subscriptionService)
 		{
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
-		protected override void OnEventFired(object source, ButtonClickedEventArgs args)
+		protected override void OnEventFired(object source, EventArgs args)
 		{
-			args.Button.IsInteractable = false;
-
 			UnityAsyncHelper.UnityMainThreadContext.PostAsync(async () =>
 			{
 				await GladMMOSceneManager.UnloadAllAddressableScenesAsync();
