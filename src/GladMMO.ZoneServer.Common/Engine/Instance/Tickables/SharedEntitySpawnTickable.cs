@@ -36,6 +36,17 @@ namespace GladMMO
 		/// <inheritdoc />
 		protected override void HandleEvent(TEventArgs args)
 		{
+			//Due to issue with TrinityCore/WoW design or implementation
+			//we must actually check if the entity already exists.
+			//Otherwise, we will duplicate spawn
+			if (KnownEntities.isEntityKnown(args.EntityGuid))
+			{
+				if(Logger.IsWarnEnabled)
+					Logger.Warn($"Duplicate Spawn Request: {args.EntityGuid} (Known Issue). Ignore.");
+
+				return;
+			}
+
 			try
 			{
 				if(Logger.IsInfoEnabled)
