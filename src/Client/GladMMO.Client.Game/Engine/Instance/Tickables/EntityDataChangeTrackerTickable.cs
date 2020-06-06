@@ -52,8 +52,8 @@ namespace GladMMO
 						//We need to try to dispatch events for each changed value.
 						foreach(int changedIndex in changeTrackable.ChangeTrackingArray.EnumerateSetBitsByIndex())
 						{
-							if(Logger.IsDebugEnabled)
-								Logger.Debug($"Entity: {entity.TypeId}:{entity.CurrentObjectGuid} ChangedData: {changedIndex}:{changeTrackable.GetFieldValue<int>((int)changedIndex)}");
+							//if(Logger.IsDebugEnabled)
+							//	Logger.Debug($"Entity: {entity.TypeId}:{entity.CurrentObjectGuid} ChangedData: {changedIndex}:{changeTrackable.GetFieldValue<int>((int)changedIndex)}");
 
 							//TODO: We don't REALLY want to lock on the dispatching. This could be a REAL bottleneck in the future. We need to redesign this abit
 							//TODO: Might be a better way to handle this API, and provide the value instead of the collection.
