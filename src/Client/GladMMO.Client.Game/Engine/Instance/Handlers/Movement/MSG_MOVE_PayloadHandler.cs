@@ -48,7 +48,7 @@ namespace GladMMO
 		{
 			NetworkOperationCode code = message.Payload.GetOperationCode();
 
-			if (code >= NetworkOperationCode.MSG_MOVE_START_FORWARD && code <= NetworkOperationCode.MSG_MOVE_SET_PITCH)
+			if (code >= NetworkOperationCode.MSG_MOVE_START_FORWARD && code <= NetworkOperationCode.MSG_MOVE_SET_PITCH || code == NetworkOperationCode.MSG_MOVE_HEARTBEAT)
 				return true;
 			else
 				return false;
