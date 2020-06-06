@@ -43,7 +43,7 @@ namespace GladMMO
 			catch (Exception e)
 			{
 				if(Logger.IsErrorEnabled)
-					Logger.Error($"Error in {GetType().Name}.");
+					Logger.Error($"Error in {GetType().Name}. Reason: {e.Message}");
 
 				throw;
 			}
