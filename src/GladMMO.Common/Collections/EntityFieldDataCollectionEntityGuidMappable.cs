@@ -13,7 +13,7 @@ namespace GladMMO
 
 		public EntityFieldDataCollectionEntityGuidMappable()
 		{
-			InternalMap = new ConcurrentDictionary<ObjectGuid, IChangeTrackableEntityDataCollection>();
+			InternalMap = new ConcurrentDictionary<ObjectGuid, IChangeTrackableEntityDataCollection>(ObjectGuidEqualityComparer<ObjectGuid>.Instance);
 		}
 
 		bool IReadonlyEntityGuidMappable<ObjectGuid, IChangeTrackableEntityDataCollection>.ContainsKey(ObjectGuid key)
