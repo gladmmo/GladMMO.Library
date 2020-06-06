@@ -49,8 +49,10 @@ namespace GladMMO
 					if(updateBlock.CreationData.MovementData.UpdateFlags.HasFlag(ObjectUpdateFlags.UPDATEFLAG_SELF))
 					{
 						if(Logger.IsInfoEnabled)
-							Logger.Info($"Recieved local player spawn data. Id:{updateBlock.CreationData.CreationGuid.CurrentObjectGuid}");
+							Logger.Info($"Recieved local player spawn data. Id: {updateBlock.CreationData.CreationGuid.CurrentObjectGuid}");
 					}
+					else if(Logger.IsInfoEnabled)
+						Logger.Info($"Recieved Remote Player Spawn Data. Id: {updateBlock.CreationData.CreationGuid.CurrentObjectGuid}");
 
 					NetworkEntityNowVisibleEventArgs visibilityEvent = VisibileEventFactory.Create(updateBlock);
 
