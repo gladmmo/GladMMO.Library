@@ -32,7 +32,7 @@ namespace GladMMO
 				int updateDiffIndex = 0;
 				foreach(int setIndex in fieldsCollection.UpdateMask.EnumerateSetBitsByIndex())
 				{
-					changeTrackable.SetFieldValue(setIndex, fieldsCollection.UpdateDiffValues.ElementAt(updateDiffIndex));
+					changeTrackable.SetFieldValue(setIndex, fieldsCollection.UpdateDiffValues.Reinterpret<int>(updateDiffIndex * sizeof(int)));
 
 					//Hey, so there was a bug for 8byte values that caused this to break.
 					//I know it's bad design but we all have deadlines here. We NEED this to FORCEIBLY
@@ -41,6 +41,7 @@ namespace GladMMO
 					//that nobody understands. If you're here, then you understand. Tell them only that the Lich King is dead
 					//and that Bolvar Fordragon died with him.
 					changeTrackable.ChangeTrackingArray.Set(setIndex, true);
+
 					updateDiffIndex++;
 				}
 			}
