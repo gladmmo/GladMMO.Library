@@ -35,7 +35,10 @@ namespace GladMMO
 			{
 				AutofacScope.Dispose();
 
-				GladMMOSceneManager.LoadAddressableSceneAsync(GladMMOClientConstants.CHARACTER_SELECTION_SCENE_NAME);
+				await GladMMOSceneManager.UnloadAllAddressableScenesAsync();
+
+				//TODO: This is a hack because we've unloaded all scenes.
+				GladMMOSceneManager.LoadAddressableSceneAdditiveAsync(GladMMOClientConstants.CHARACTER_SELECTION_SCENE_NAME, true);
 			});
 		}
 	}

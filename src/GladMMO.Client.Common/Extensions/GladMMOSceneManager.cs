@@ -16,21 +16,29 @@ namespace GladMMO
 		//Hacky, but don't want to deal with addressables any other way right now
 		private static ConcurrentDictionary<string, AsyncOperationHandle<SceneInstance>> AddressableSceneMap { get; } = new ConcurrentDictionary<string, AsyncOperationHandle<SceneInstance>>();
 
-		public static Task UnloadAllAddressableScenesAsync()
+		public static async Task UnloadAllAddressableScenesAsync()
 		{
+			foreach(var scene in AddressableSceneMap.Values)
+				Debug.Log($"Unloading Scene: {scene.Result.Scene.name}");
+
 			Task<SceneInstance>[] awaitableUnloads = AddressableSceneMap
 				.Values
 				.Select(s => UnityEngine.AddressableAssets.Addressables.UnloadSceneAsync(s).Task)
 				.ToArray();
 
-			return Task.WhenAll(awaitableUnloads);
+			await Task.WhenAll(awaitableUnloads);
+			AddressableSceneMap.Clear();
 		}
 
-		public static AsyncOperationHandle LoadAddressableSceneAdditiveAsync([NotNull] string sceneName)
+		public static AsyncOperationHandle LoadAddressableSceneAdditiveAsync([NotNull] string sceneName, bool setAsActiveScene = false)
 		{
 			AsyncOperationHandle<SceneInstance> sceneLoadHandle = UnityEngine.AddressableAssets.Addressables.LoadSceneAsync(sceneName, UnityEngine.SceneManagement.LoadSceneMode.Additive, true);
 
 			AddressableSceneMap[sceneName] = sceneLoadHandle;
+
+			if (setAsActiveScene)
+				sceneLoadHandle.Completed += op => SceneManager.SetActiveScene(op.Result.Scene);
+
 			return sceneLoadHandle;
 		}
 
