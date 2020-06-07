@@ -15,15 +15,19 @@ namespace GladMMO
 
 		private ILog Logger { get; }
 
+		private ILocalPlayerDetails PlayerDetails { get; }
+
 		public DemoSpellCastingActionBarEventListener(IActionBarButtonPressedEventSubscribable subscriptionService,
 			[NotNull] IPeerPayloadSendService<GamePacketPayload> sendService,
 			[NotNull] IReadonlyActionBarCollection actionBarCollection,
-			[NotNull] ILog logger) 
+			[NotNull] ILog logger,
+			[NotNull] ILocalPlayerDetails playerDetails) 
 			: base(subscriptionService)
 		{
 			SendService = sendService ?? throw new ArgumentNullException(nameof(sendService));
 			ActionBarCollection = actionBarCollection ?? throw new ArgumentNullException(nameof(actionBarCollection));
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
+			PlayerDetails = playerDetails ?? throw new ArgumentNullException(nameof(playerDetails));
 		}
 
 		protected override void OnActionBarButtonPressed(ActionBarIndex index)
@@ -35,8 +39,15 @@ namespace GladMMO
 					Logger.Debug($"Action bar Index: {index} pressed.");
 
 				Logger.Error($"TODO REIMPLEMENT SPELL CASTING");
-				//if(ActionBarCollection[index].Type == ActionBarIndexType.Spell)
-				//	SendService.SendMessage(new SpellCastRequestPayload(ActionBarCollection[index].ActionId));
+				if (ActionBarCollection[index].Type == ActionButtonType.ACTION_BUTTON_SPELL)
+				{
+					//We try to get a target
+					ObjectGuid target = PlayerDetails.EntityData.GetEntityGuidValue(EUnitFields.UNIT_FIELD_TARGET);
+					if(target.isEmpty())
+						SendService.SendMessage(new CMSG_CAST_SPELL_Payload(1, ActionBarCollection[index].ActionId, SpellTargetInfo.CreateSingleTargetUnitCast(PlayerDetails.LocalPlayerGuid)));
+					else
+						SendService.SendMessage(new CMSG_CAST_SPELL_Payload(1, ActionBarCollection[index].ActionId, SpellTargetInfo.CreateSingleTargetUnitCast(target)));
+				}
 			}
 			else
 			{

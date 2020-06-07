@@ -4,9 +4,9 @@ using System.Text;
 
 namespace GladMMO
 {
-	public interface ILocalPlayerDetails
+	public interface ILocalPlayerDetails : IReadonlyLocalPlayerDetails
 	{
-		ObjectGuid LocalPlayerGuid { get; set; }
+		new ObjectGuid LocalPlayerGuid { get; set; }
 	}
 
 	public interface IReadonlyLocalPlayerDetails
