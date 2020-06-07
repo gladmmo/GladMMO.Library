@@ -93,9 +93,11 @@ namespace GladMMO
 			services.AddTransient<IGuildCharacterMembershipRepository, DatabaseBackedGuildCharacterMembershipRepository>();
 			services.AddTransient<ICharacterAppearanceRepository, DatabaseBackedCharacterAppearanceRepository>();
 			services.AddTransient<ICharacterDataRepository, DatabaseBackedCharacterDataRepository>();
+
 			//DatabaseBackedCharacterActionBarRepository
-			services.AddTransient<ICharacterActionBarRepository, DatabaseBackedCharacterActionBarRepository>();
-			services.AddTransient<ICharacterDefaultActionBarRepository, DatabaseBackedDefaultActionBarRepository>();
+			services.AddTransient<ITrinityCharacterActionBarRepository, TrinityCoreCharacterActionBarRepository>();
+			//services.AddTransient<ICharacterActionBarRepository, DatabaseBackedCharacterActionBarRepository>();
+			//services.AddTransient<ICharacterDefaultActionBarRepository, DatabaseBackedDefaultActionBarRepository>();
 		}
 
 		private static void RegisterTrinityCoreDatabase(IServiceCollection services)

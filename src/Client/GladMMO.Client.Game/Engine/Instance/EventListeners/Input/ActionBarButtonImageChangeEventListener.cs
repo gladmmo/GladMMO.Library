@@ -5,6 +5,7 @@ using System.Text;
 using Autofac.Features.AttributeFilters;
 using Common.Logging;
 using Glader.Essentials;
+using Nito.AsyncEx;
 using UnityEngine;
 
 namespace GladMMO
@@ -15,20 +16,20 @@ namespace GladMMO
 		//TODO: Support multiple actionbars.
 		private IUIActionBarRow ActionBarRow { get; }
 
-		private IContentIconDataCollection ContentIconCollection { get; }
+		private IClientDataCollectionContainer ClientData { get; }
 
-		private ISpellDataCollection SpellDataCollection { get; }
+		private IAddressableContentLoader ContentLoadService { get; }
 
 		public ActionBarButtonImageChangeEventListener(IActionBarButtonStateChangedEventSubscribable subscriptionService,
 			[NotNull] ILog logger,
 			[KeyFilter(UnityUIRegisterationKey.ActionBarRow1)] [NotNull] IUIActionBarRow actionBarRow,
-			[NotNull] IContentIconDataCollection contentIconCollection,
-			[NotNull] ISpellDataCollection spellDataCollection) 
+			[NotNull] IClientDataCollectionContainer clientData,
+			[NotNull] IAddressableContentLoader contentLoadService) 
 			: base(subscriptionService, false, logger)
 		{
 			ActionBarRow = actionBarRow ?? throw new ArgumentNullException(nameof(actionBarRow));
-			ContentIconCollection = contentIconCollection ?? throw new ArgumentNullException(nameof(contentIconCollection));
-			SpellDataCollection = spellDataCollection ?? throw new ArgumentNullException(nameof(spellDataCollection));
+			ClientData = clientData ?? throw new ArgumentNullException(nameof(clientData));
+			ContentLoadService = contentLoadService ?? throw new ArgumentNullException(nameof(contentLoadService));
 		}
 
 		protected override void HandleEvent(ActionBarButtonStateChangedEventArgs args)
@@ -38,26 +39,30 @@ namespace GladMMO
 			{
 				IUIActionBarButton barButton = ActionBarRow[args.Index];
 
-				if (args.ActionType == ActionBarIndexType.Empty)
+				//TODO: Change way we handle EMPTY/remove
+				/*if (args.ActionType == ActionBarIndexType.Empty)
 				{
 					barButton.SetElementActive(false);
 				}
-				else
+				else*/
 				{
 					barButton.SetElementActive(true);
 
 					//TODO: Refactor for spell/item
-					if (args.ActionType == ActionBarIndexType.Spell)
+					if (args.ActionType == ActionButtonType.ACTION_BUTTON_SPELL)
 					{
-						//TODO: Abstract the icon content loading
-						//TODO: Don't assume we have the content icon. Throw/log better exception
-						SpellDefinitionDataModel definition = SpellDataCollection.GetSpellDefinition(args.ActionId);
-						ContentIconInstanceModel icon = ContentIconCollection[definition.SpellIconId];
-
 						ProjectVersionStage.AssertAlpha();
-						//TODO: Load async
-						Texture2D iconTexture = Resources.Load<Texture2D>(Path.Combine("Icon", Path.GetFileNameWithoutExtension(icon.IconPathName)));
-						barButton.ActionBarImageIcon.SetSpriteTexture(iconTexture);
+
+						//Check the SPELL DBC
+						SpellEntry<string> spellEntry = ClientData.AssertEntry<SpellEntry<string>>(args.ActionId);
+						SpellIconEntry<string> iconEntry = ClientData.AssertEntry<SpellIconEntry<string>>((int) spellEntry.SpellIconID);
+
+						UnityAsyncHelper.UnityMainThreadContext.PostAsync(async () =>
+						{
+							Texture2D icon = await ContentLoadService.LoadContentAsync<Texture2D>(iconEntry.TextureFileName);
+
+							barButton.ActionBarImageIcon.SetSpriteTexture(icon);
+						});
 					}
 					else
 					{

@@ -11,7 +11,7 @@ namespace GladMMO
 		[CanBeNull]
 		int? LinkedSpellId { get; }
 
-		ActionBarIndexType ActionType { get; }
+		FreecraftCore.ActionButtonType ActionType { get; }
 
 		int ActionId { get; }
 	}

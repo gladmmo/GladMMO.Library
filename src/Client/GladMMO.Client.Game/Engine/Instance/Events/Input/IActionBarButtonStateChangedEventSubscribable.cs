@@ -17,11 +17,11 @@ namespace GladMMO
 		/// </summary>
 		public ActionBarIndex Index { get; }
 
-		public ActionBarIndexType ActionType { get; }
+		public ActionButtonType ActionType { get; }
 
 		public int ActionId { get; }
 
-		public ActionBarButtonStateChangedEventArgs(ActionBarIndex index, ActionBarIndexType actionType, int actionId)
+		public ActionBarButtonStateChangedEventArgs(ActionBarIndex index, ActionButtonType actionType, int actionId)
 		{
 			if (!Enum.IsDefined(typeof(ActionBarIndex), index)) throw new InvalidEnumArgumentException(nameof(index), (int) index, typeof(ActionBarIndex));
 			if (actionId <= 0) throw new ArgumentOutOfRangeException(nameof(actionId));
@@ -29,14 +29,6 @@ namespace GladMMO
 			Index = index;
 			ActionType = actionType;
 			ActionId = actionId;
-		}
-
-		public ActionBarButtonStateChangedEventArgs(ActionBarIndex index)
-		{
-			if (!Enum.IsDefined(typeof(ActionBarIndex), index)) throw new InvalidEnumArgumentException(nameof(index), (int)index, typeof(ActionBarIndex));
-
-			ActionType = ActionBarIndexType.Empty;
-			Index = index;
 		}
 	}
 }

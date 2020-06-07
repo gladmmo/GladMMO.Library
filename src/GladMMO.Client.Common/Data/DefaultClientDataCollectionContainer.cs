@@ -23,7 +23,9 @@ namespace GladMMO
 		internal static Type[] DBCTypes = new[]
 		{
 			typeof(MapEntry<string>),
-			typeof(LoadingScreensEntry<string>)
+			typeof(LoadingScreensEntry<string>),
+			typeof(SpellIconEntry<string>),
+			typeof(SpellEntry<string>)
 		};
 
 		internal static IEnumerable<Type> DBCCollectionTypes
@@ -61,6 +63,8 @@ namespace GladMMO
 		{
 			await LoadFileAsync<MapEntry<string>>().AddToDictionary(GDBCCollectionMap);
 			await LoadFileAsync<LoadingScreensEntry<string>>().AddToDictionary(GDBCCollectionMap);
+			await LoadFileAsync<SpellIconEntry<string>>().AddToDictionary(GDBCCollectionMap);
+			await LoadFileAsync<SpellEntry<string>>().AddToDictionary(GDBCCollectionMap);
 		}
 
 		public IGDBCCollection<TEntryType> DataType<TEntryType>()

@@ -30,12 +30,12 @@ namespace GladMMO
 		public bool IsSet(ActionBarIndex index)
 		{
 			if (BackingCollection.ContainsKey(index))
-				return BackingCollection[index].Type != ActionBarIndexType.Empty;
+				return true; //Old design was we'd have EMPTY type
 			else
 				return false;
 		}
 
-		public CharacterActionBarInstanceModel this[ActionBarIndex index] => IsSet(index) ? BackingCollection[index] : new CharacterActionBarInstanceModel(index, ActionBarIndexType.Empty, 0);
+		public CharacterActionBarInstanceModel this[ActionBarIndex index] => IsSet(index) ? BackingCollection[index] : null;
 
 		public void Add([NotNull] CharacterActionBarInstanceModel actionBarModel)
 		{

@@ -150,6 +150,25 @@ namespace GladMMO
 			};
 		}
 
+		[ProducesJson]
+		[HttpGet("{id}/actionbar")]
+		[NoResponseCache]
+		[AuthorizeJwt]
+		public async Task<IActionResult> GetCharacterActionBar([FromRoute(Name = "id")] int characterId, 
+			[FromServices] ITrinityCharacterActionBarRepository actionBarRepository,
+			[FromServices] ITypeConverterProvider<ICharacterActionBarEntry, CharacterActionBarInstanceModel> converter)
+		{
+			ProjectVersionStage.AssertBeta();
+			//TODO: Check that they own the character.
+
+			CharacterAction[] actionBarEntries = await actionBarRepository.RetrieveAllForCharacterAsync(characterId);
+			CharacterActionBarInstanceModel[] barInstanceModels = actionBarEntries.Select(converter.Convert)
+				.ToArrayTryAvoidCopy();
+
+			//Just send it as raw JSON.
+			return Json(barInstanceModels);
+		}
+
 		//CharacterCreationRequest
 	}
 
@@ -327,37 +346,5 @@ namespace GladMMO
 		}
 
 		//CharacterActionBarInstanceModel
-		[ProducesJson]
-		[HttpGet("{id}/actionbar")]
-		[NoResponseCache]
-		[AuthorizeJwt]
-		public async Task<IActionResult> GetCharacterActionBar([FromRoute(Name = "id")] int characterId, [FromServices] ICharacterActionBarRepository actionBarRepository,
-			[FromServices] ICharacterDefaultActionBarRepository characterDefaultActionBarRepository,
-			[FromServices] ITypeConverterProvider<ICharacterActionBarEntry, CharacterActionBarInstanceModel> converter)
-		{
-			ProjectVersionStage.AssertBeta();
-			//TODO: Check that they own the character.
-
-			if (await actionBarRepository.ContainsAsync(characterId))
-			{
-				CharacterActionBarEntry[] actionBarEntries = await actionBarRepository.RetrieveAllForCharacterAsync(characterId);
-				CharacterActionBarInstanceModel[] barInstanceModels = actionBarEntries.Select(converter.Convert)
-					.ToArrayTryAvoidCopy();
-
-				//Just send it as raw JSON.
-				return Json(barInstanceModels);
-			}
-			else
-			{
-				//We need the default action bars
-				//Right now we only have 1 class so let's use mage.
-				CharacterDefaultActionBarEntry[] actionBarEntries = await characterDefaultActionBarRepository.RetrieveAllActionsAsync(EntityPlayerClassType.Mage);
-				CharacterActionBarInstanceModel[] barInstanceModels = actionBarEntries.Select(converter.Convert)
-					.ToArrayTryAvoidCopy();
-
-				//TODO: Return default bars.
-				return Json(barInstanceModels);
-			}
-		}
 	}*/
 }

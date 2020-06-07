@@ -27,6 +27,10 @@ namespace GladMMO
 				return CachedClientDataCollection;
 			});
 
+			builder.RegisterType<DefaultAddressableContentLoader>()
+				.As<IAddressableContentLoader>()
+				.SingleInstance();
+
 			//Don't need serializer for reading/writing if it's not null
 			//Otherwise the issue
 			if (CachedClientDataCollection == null)

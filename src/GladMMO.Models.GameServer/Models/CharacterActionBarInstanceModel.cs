@@ -19,7 +19,7 @@ namespace GladMMO
 		/// The type of action this bar index is linked to.
 		/// </summary>
 		[JsonProperty]
-		public ActionBarIndexType Type { get; private set; }
+		public FreecraftCore.ActionButtonType Type { get; private set; }
 
 		/// <summary>
 		/// The ID of the action bar action.
@@ -29,10 +29,10 @@ namespace GladMMO
 		[JsonProperty]
 		public int ActionId { get; private set; }
 
-		public CharacterActionBarInstanceModel(ActionBarIndex barIndex, ActionBarIndexType type, int actionId)
+		public CharacterActionBarInstanceModel(ActionBarIndex barIndex, FreecraftCore.ActionButtonType type, int actionId)
 		{
 			if (!Enum.IsDefined(typeof(ActionBarIndex), barIndex)) throw new InvalidEnumArgumentException(nameof(barIndex), (int) barIndex, typeof(ActionBarIndex));
-			if (!Enum.IsDefined(typeof(ActionBarIndexType), type)) throw new InvalidEnumArgumentException(nameof(type), (int) type, typeof(ActionBarIndexType));
+			if (!Enum.IsDefined(typeof(FreecraftCore.ActionButtonType), type)) throw new InvalidEnumArgumentException(nameof(type), (int) type, typeof(FreecraftCore.ActionButtonType));
 			if (actionId < 0) throw new ArgumentOutOfRangeException(nameof(actionId));
 
 			BarIndex = barIndex;
@@ -45,7 +45,7 @@ namespace GladMMO
 			if (!Enum.IsDefined(typeof(ActionBarIndex), barIndex)) throw new InvalidEnumArgumentException(nameof(barIndex), (int) barIndex, typeof(ActionBarIndex));
 			if (actionId < 0) throw new ArgumentOutOfRangeException(nameof(actionId));
 			
-			return new CharacterActionBarInstanceModel(barIndex, ActionBarIndexType.Item, actionId);
+			return new CharacterActionBarInstanceModel(barIndex, FreecraftCore.ActionButtonType.ACTION_BUTTON_ITEM, actionId);
 		}
 
 		public static CharacterActionBarInstanceModel CreateSpellAction(ActionBarIndex barIndex, int actionId)
@@ -53,7 +53,7 @@ namespace GladMMO
 			if(!Enum.IsDefined(typeof(ActionBarIndex), barIndex)) throw new InvalidEnumArgumentException(nameof(barIndex), (int)barIndex, typeof(ActionBarIndex));
 			if(actionId < 0) throw new ArgumentOutOfRangeException(nameof(actionId));
 
-			return new CharacterActionBarInstanceModel(barIndex, ActionBarIndexType.Spell, actionId);
+			return new CharacterActionBarInstanceModel(barIndex, FreecraftCore.ActionButtonType.ACTION_BUTTON_SPELL, actionId);
 		}
 
 		/// <summary>

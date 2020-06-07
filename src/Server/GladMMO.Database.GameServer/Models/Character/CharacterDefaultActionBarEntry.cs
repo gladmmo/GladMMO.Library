@@ -37,7 +37,7 @@ namespace GladMMO
 
 		//TODO: Support items.
 		[NotMapped]
-		public ActionBarIndexType ActionType => LinkedSpellId.HasValue ? ActionBarIndexType.Spell : ActionBarIndexType.Empty;
+		public FreecraftCore.ActionButtonType ActionType => LinkedSpellId.HasValue ? ActionButtonType.ACTION_BUTTON_SPELL : ActionButtonType.ACTION_BUTTON_ITEM;
 
 		[NotMapped]
 		public int ActionId => LinkedSpellId.HasValue ? LinkedSpellId.Value : 0;

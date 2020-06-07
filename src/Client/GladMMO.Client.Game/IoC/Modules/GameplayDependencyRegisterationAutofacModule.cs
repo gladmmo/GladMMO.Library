@@ -22,7 +22,6 @@ namespace GladMMO
 			builder.RegisterModule<SocialServiceDependencyAutofacModule>();
 			builder.RegisterModule<VivoxVoiceDependencyModule>();
 			builder.RegisterModule<SpellDataServiceDependencyAutofacModule>();
-			builder.RegisterModule<StaticGameContentAutofacModule>();
 
 			builder.RegisterType<EntityPrefabFactory>()
 				.As<IFactoryCreatable<GameObject, EntityPrefab>>()
