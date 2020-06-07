@@ -47,7 +47,7 @@ namespace GladMMO
 
 		private IReadonlyNetworkTimeService TimeService { get; }
 
-		private IReadonlySpellDataCollection SpellDataCollection { get; }
+		//private IReadonlySpellDataCollection SpellDataCollection { get; }
 
 		private BarCastingState CastingState { get; set; } = new BarCastingState(false);
 
@@ -55,14 +55,12 @@ namespace GladMMO
 		public UpdateLocalPlayerCastBarEventListener(ILocalPlayerSpellCastingStateChangedEventSubscribable subscriptionService,
 			[NotNull] ILog logger,
 			[KeyFilter(UnityUIRegisterationKey.LocalPlayerCastBar)] [NotNull] IUICastingBar castingBar,
-			[NotNull] IReadonlyNetworkTimeService timeService,
-			[NotNull] IReadonlySpellDataCollection spellDataCollection)
+			[NotNull] IReadonlyNetworkTimeService timeService)
 			: base(subscriptionService)
 		{
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
 			CastingBar = castingBar ?? throw new ArgumentNullException(nameof(castingBar));
 			TimeService = timeService ?? throw new ArgumentNullException(nameof(timeService));
-			SpellDataCollection = spellDataCollection ?? throw new ArgumentNullException(nameof(spellDataCollection));
 		}
 
 		public void Tick()
@@ -92,10 +90,11 @@ namespace GladMMO
 			}
 			else
 			{
-				SpellDefinitionDataModel spellDefinition = SpellDataCollection.GetSpellDefinition(args.CastingSpellId);
+				Logger.Error($"TODO: REIMPLEMENT CASTING BAR!");
+				/*SpellDefinitionDataModel spellDefinition = SpellDataCollection.GetSpellDefinition(args.CastingSpellId);
 				CastingState = new BarCastingState(true, spellDefinition, args.CastingStartTimeStamp);
 				CastingBar.CastingBarSpellNameText.Text = spellDefinition.SpellName;
-				CastingBar.SetElementActive(true);
+				CastingBar.SetElementActive(true);*/
 			}
 		}
 	}

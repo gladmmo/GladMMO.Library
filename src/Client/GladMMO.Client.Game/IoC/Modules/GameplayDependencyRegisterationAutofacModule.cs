@@ -79,11 +79,6 @@ namespace GladMMO
 				.As<IClientGameObjectEntityBehaviourFactory>()
 				.SingleInstance();
 
-			//DefaultSpellDataCollection : ISpellDataCollection, IReadonlySpellDataCollection
-			builder.RegisterType<DefaultSpellDataCollection>()
-				.AsImplementedInterfaces()
-				.SingleInstance();
-
 			//DefaultKnownSpellSet : IKnownSpellSet
 			builder.RegisterType<DefaultKnownSpellSet>()
 				.As<IKnownSpellSet>()
