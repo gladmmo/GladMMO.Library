@@ -10,14 +10,14 @@ using GladNet;
 namespace GladMMO
 {
 	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
-	public sealed class SMSG_SPELL_START_Payload_PayloadHandler : BaseGameClientGameMessageHandler<SMSG_SPELL_START_Payload>
+	public sealed class SMSG_SPELL_FAILURE_Payload_PayloadHandler : BaseGameClientGameMessageHandler<SMSG_SPELL_FAILURE_Payload>
 	{
 		private ILocalPlayerSpellCastingStateChangedEventPublisher SpellCastingStatePublisher { get; }
 
 		private ILocalPlayerDetails PlayerDetails { get; }
 
 		/// <inheritdoc />
-		public SMSG_SPELL_START_Payload_PayloadHandler(ILog logger, [NotNull] ILocalPlayerDetails playerDetails,
+		public SMSG_SPELL_FAILURE_Payload_PayloadHandler(ILog logger, [NotNull] ILocalPlayerDetails playerDetails,
 			[NotNull] ILocalPlayerSpellCastingStateChangedEventPublisher spellCastingStatePublisher)
 			: base(logger)
 		{
@@ -25,10 +25,10 @@ namespace GladMMO
 			SpellCastingStatePublisher = spellCastingStatePublisher ?? throw new ArgumentNullException(nameof(spellCastingStatePublisher));
 		}
 
-		public override Task HandleMessage(IPeerMessageContext<GamePacketPayload> context, SMSG_SPELL_START_Payload payload)
+		public override Task HandleMessage(IPeerMessageContext<GamePacketPayload> context, SMSG_SPELL_FAILURE_Payload payload)
 		{
-			if(payload.CastData.SpellSource == PlayerDetails.LocalPlayerGuid)
-				SpellCastingStatePublisher.PublishEvent(this, new SpellCastingStateChangedEventArgs(payload.CastData.SpellId, (int)payload.CastData.TimeDiff, SpellCastingEventChangeState.Casting, payload.CastData.CalculateTemporallyUniqueKey()));
+			if(payload.FailureData.Caster == PlayerDetails.LocalPlayerGuid)
+				SpellCastingStatePublisher.PublishEvent(this, new SpellCastingStateChangedEventArgs(payload.FailureData.SpellId, 0, SpellCastingEventChangeState.Canceled, payload.FailureData.CalculateTemporallyUniqueKey()));
 
 			return Task.CompletedTask;
 		}

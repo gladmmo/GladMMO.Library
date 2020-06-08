@@ -17,6 +17,8 @@ namespace GladMMO
 
 		private ILocalPlayerDetails PlayerDetails { get; }
 
+		private byte CastIncrement = 1;
+
 		public DemoSpellCastingActionBarEventListener(IActionBarButtonPressedEventSubscribable subscriptionService,
 			[NotNull] IPeerPayloadSendService<GamePacketPayload> sendService,
 			[NotNull] IReadonlyActionBarCollection actionBarCollection,
@@ -44,9 +46,9 @@ namespace GladMMO
 					//We try to get a target
 					ObjectGuid target = PlayerDetails.EntityData.GetEntityGuidValue(EUnitFields.UNIT_FIELD_TARGET);
 					if(target.isEmpty())
-						SendService.SendMessage(new CMSG_CAST_SPELL_Payload(1, ActionBarCollection[index].ActionId, SpellTargetInfo.CreateSingleTargetUnitCast(PlayerDetails.LocalPlayerGuid)));
+						SendService.SendMessage(new CMSG_CAST_SPELL_Payload(CalculateNewCastCount() , ActionBarCollection[index].ActionId, SpellTargetInfo.CreateSingleTargetUnitCast(PlayerDetails.LocalPlayerGuid)));
 					else
-						SendService.SendMessage(new CMSG_CAST_SPELL_Payload(1, ActionBarCollection[index].ActionId, SpellTargetInfo.CreateSingleTargetUnitCast(target)));
+						SendService.SendMessage(new CMSG_CAST_SPELL_Payload(CalculateNewCastCount(), ActionBarCollection[index].ActionId, SpellTargetInfo.CreateSingleTargetUnitCast(target)));
 				}
 			}
 			else
@@ -54,6 +56,11 @@ namespace GladMMO
 				if(Logger.IsDebugEnabled)
 					Logger.Debug($"Action bar Index: {index} pressed but no associated action.");
 			}
+		}
+
+		private byte CalculateNewCastCount()
+		{
+			return CastIncrement = (byte) ((CastIncrement + 1) % 255);
 		}
 	}
 }
