@@ -40,7 +40,6 @@ namespace GladMMO
 				if(Logger.IsDebugEnabled)
 					Logger.Debug($"Action bar Index: {index} pressed.");
 
-				Logger.Error($"TODO REIMPLEMENT SPELL CASTING");
 				if (ActionBarCollection[index].Type == ActionButtonType.ACTION_BUTTON_SPELL)
 				{
 					//We try to get a target
