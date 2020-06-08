@@ -32,11 +32,16 @@ namespace GladMMO
 		protected override void OnEventFired(object source, LocalPlayerSpawnedEventArgs args)
 		{
 			//One local player spawn we want to subscribe the resource updates
-			RecalulateHealthUI(PlayerDetails.EntityData.GetFieldValue<int>((int)EUnitFields.UNIT_FIELD_HEALTH));
+			RecalulateHealthUI(PlayerDetails.EntityData.GetFieldValue<int>((int) EUnitFields.UNIT_FIELD_HEALTH));
+			RecalculatePowerUI(PlayerDetails.EntityData.GetFieldValue<int>((int) EUnitFields.UNIT_FIELD_MAXPOWER1));
 
 			//TODO: Any way to do type inference on generics for Action types???
 			//We should subscribe to changes in the current health
 			EntityDataCallbackRegister.RegisterCallback<int>(PlayerDetails.LocalPlayerGuid, (int)EUnitFields.UNIT_FIELD_HEALTH, OnCurrentHealthChangedValue);
+			EntityDataCallbackRegister.RegisterCallback<int>(PlayerDetails.LocalPlayerGuid, (int)EUnitFields.UNIT_FIELD_MAXHEALTH, OnCurrentHealthChangedValue);
+
+			EntityDataCallbackRegister.RegisterCallback<int>(PlayerDetails.LocalPlayerGuid, (int)EUnitFields.UNIT_FIELD_POWER1, OnCurrentPowerChangedValue);
+			EntityDataCallbackRegister.RegisterCallback<int>(PlayerDetails.LocalPlayerGuid, (int)EUnitFields.UNIT_FIELD_MAXPOWER1, OnCurrentPowerChangedValue);
 		}
 
 		private void RecalulateHealthUI(int currentHealth)
@@ -49,9 +54,24 @@ namespace GladMMO
 			PlayerUnitFrame.HealthBar.BarText.Text = $"{currentHealth} / {PlayerDetails.EntityData.GetFieldValue<int>((int)EUnitFields.UNIT_FIELD_MAXHEALTH)}";
 		}
 
+		private void RecalculatePowerUI(int currentPower)
+		{
+			float healthPercentage = (float)currentPower / PlayerDetails.EntityData.GetFieldValue<int>((int)EUnitFields.UNIT_FIELD_MAXPOWER1);
+
+			PlayerUnitFrame.TechniquePointsBar.BarFillable.FillAmount = healthPercentage;
+
+			//Also we want to see the percentage text
+			PlayerUnitFrame.TechniquePointsBar.BarText.Text = $"{currentPower} / {PlayerDetails.EntityData.GetFieldValue<int>((int)EUnitFields.UNIT_FIELD_MAXPOWER1)}";
+		}
+
 		private void OnCurrentHealthChangedValue(ObjectGuid source, EntityDataChangedArgs<int> changeArgs)
 		{
 			RecalulateHealthUI(changeArgs.NewValue);
+		}
+
+		private void OnCurrentPowerChangedValue(ObjectGuid source, EntityDataChangedArgs<int> changeArgs)
+		{
+			RecalculatePowerUI(changeArgs.NewValue);
 		}
 	}
 }

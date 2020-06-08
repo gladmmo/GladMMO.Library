@@ -39,10 +39,28 @@ namespace GladMMO
 			//Listen for both max and current health.
 			Unregisterables.Add(EntityDataChangeCallbackService.RegisterCallback<int>(args.TargetedEntity, (int)EUnitFields.UNIT_FIELD_HEALTH, OnTargetEntityHealthChanged));
 			Unregisterables.Add(EntityDataChangeCallbackService.RegisterCallback<int>(args.TargetedEntity, (int)EUnitFields.UNIT_FIELD_MAXHEALTH, OnTargetEntityHealthChanged));
+			Unregisterables.Add(EntityDataChangeCallbackService.RegisterCallback<int>(args.TargetedEntity, (int)EUnitFields.UNIT_FIELD_POWER1, OnTargetEntityPowerChanged));
+			Unregisterables.Add(EntityDataChangeCallbackService.RegisterCallback<int>(args.TargetedEntity, (int)EUnitFields.UNIT_FIELD_MAXPOWER1, OnTargetEntityPowerChanged));
+
 
 			//Only initialize if we have their values
 			if (entityData.DataSetIndicationArray.Get((int) EUnitFields.UNIT_FIELD_HEALTH))
 				OnTargetEntityHealthChanged(args.TargetedEntity, new EntityDataChangedArgs<int>(0, 0));
+
+			if(entityData.DataSetIndicationArray.Get((int)EUnitFields.UNIT_FIELD_POWER1))
+				OnTargetEntityPowerChanged(args.TargetedEntity, new EntityDataChangedArgs<int>(0, 0));
+		}
+
+		private void OnTargetEntityPowerChanged(ObjectGuid entity, EntityDataChangedArgs<int> args)
+		{
+			IEntityDataFieldContainer entityData = EntityDataMappable.RetrieveEntity(entity);
+
+			//Ignore the changed value.
+			int power = entityData.GetFieldValue<int>(EUnitFields.UNIT_FIELD_POWER1);
+			int maxPower = entityData.GetFieldValue<int>(EUnitFields.UNIT_FIELD_MAXPOWER1);
+
+			TargetUnitFrame.TechniquePointsBar.BarText.Text = $"{power} / {maxPower}";
+			TargetUnitFrame.TechniquePointsBar.BarFillable.FillAmount = (float)power / maxPower;
 		}
 
 		private void OnTargetEntityHealthChanged(ObjectGuid entity, EntityDataChangedArgs<int> args)
