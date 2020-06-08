@@ -7,6 +7,7 @@ using UnityEngine;
 
 namespace GladMMO
 {
+	//TODO: Demo script.
 	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
 	public sealed class DemoMakeObjectsClickableInteractableEventListener : EntityCreationFinishedEventListener
 	{
@@ -50,8 +51,7 @@ namespace GladMMO
 					//Check if they are selectable
 					if (!EntityDataFieldMappable.RetrieveEntity(args.EntityGuid).HasBaseObjectFieldFlag(UnitFlags.UNIT_FLAG_NOT_SELECTABLE))
 					{
-						//SendService.SendMessage(new ClientInteractNetworkedObjectRequestPayload(args.EntityGuid, ClientInteractNetworkedObjectRequestPayload.InteractType.Selection));
-
+						SendService.SendMessage(new CMSG_SET_SELECTION_Payload(args.EntityGuid));
 						//Client side prediction of player target
 						LocalPlayerDetails.EntityData.SetFieldValue(EUnitFields.UNIT_FIELD_TARGET, args.EntityGuid);
 					}

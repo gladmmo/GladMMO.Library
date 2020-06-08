@@ -59,11 +59,9 @@ namespace GladMMO
 			TargetUnitFrame.SetElementActive(false);
 			CurrentTarget = ObjectGuid.Empty;
 
-			Logger.Error($"TODO REIMPLEMENT TARGET CLEARING ON DESPAWN");
-
 			//We send an empty interaction packet to indicate our target should be cleared.
 			//Server doesn't actually know the entity we targeted went out of scope.
-			//SendService.SendMessage(new ClientInteractNetworkedObjectRequestPayload(ObjectGuid.Empty, ClientInteractNetworkedObjectRequestPayload.InteractType.Selection));
+			SendService.SendMessage(new CMSG_SET_SELECTION_Payload(ObjectGuid.Empty));
 		}
 
 		protected override void OnLocalPlayerSpawned(LocalPlayerSpawnedEventArgs args)
