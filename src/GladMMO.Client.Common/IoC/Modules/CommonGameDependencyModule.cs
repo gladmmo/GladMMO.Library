@@ -86,11 +86,6 @@ namespace GladMMO
 				.As<IEntityNameQueryable>()
 				.SingleInstance();
 
-			//Used on character selection too.
-			builder.RegisterType<DefaultEntityExperienceLevelStrategy>()
-				.As<IEntityExperienceLevelStrategy>()
-				.SingleInstance();
-
 			RegisterEntityContainers(builder);
 		}
 
