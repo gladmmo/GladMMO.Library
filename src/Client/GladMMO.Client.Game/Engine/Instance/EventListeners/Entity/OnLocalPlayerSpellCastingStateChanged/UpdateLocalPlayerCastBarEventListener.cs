@@ -27,7 +27,12 @@ namespace GladMMO
 		//TODO: Use spell entry dutation eventually
 		public long CastDuration => EndTimeStamp - StartTimeStamp;
 
-		public BarCastingState(bool isSpellCasting, [NotNull] SpellEntry<string> spellDefinition, long startTimeStamp, long endTimeStamp)
+		/// <summary>
+		/// Temporarily unique-ish identifier.
+		/// </summary>
+		public long Identifier { get; }
+
+		public BarCastingState(bool isSpellCasting, [NotNull] SpellEntry<string> spellDefinition, long startTimeStamp, long endTimeStamp, long identifier)
 		{
 			if (startTimeStamp < 0) throw new ArgumentOutOfRangeException(nameof(startTimeStamp));
 			if (endTimeStamp <= 0) throw new ArgumentOutOfRangeException(nameof(endTimeStamp));
@@ -36,11 +41,13 @@ namespace GladMMO
 			SpellDefinition = spellDefinition ?? throw new ArgumentNullException(nameof(spellDefinition));
 			StartTimeStamp = startTimeStamp;
 			EndTimeStamp = endTimeStamp;
+			Identifier = identifier;
 		}
 
-		public BarCastingState(bool isSpellCasting)
+		public BarCastingState(bool isSpellCasting, long identifier)
 		{
 			this.isSpellCasting = isSpellCasting;
+			Identifier = identifier;
 		}
 	}
 
@@ -55,7 +62,7 @@ namespace GladMMO
 
 		private IClientDataCollectionContainer ClientData { get; }
 
-		private BarCastingState CastingState { get; set; } = new BarCastingState(false);
+		private BarCastingState CastingState { get; set; } = new BarCastingState(false, 0);
 
 		/// <inheritdoc />
 		public UpdateLocalPlayerCastBarEventListener(ILocalPlayerSpellCastingStateChangedEventSubscribable subscriptionService,
@@ -90,20 +97,29 @@ namespace GladMMO
 			if(Logger.IsInfoEnabled)
 				Logger.Info($"Player started casting Spell: {args.CastingSpellId}");
 
-			//Spell casting stopped. Disable the bar.
-			if(!args.isCasting)
+			//If the current state and the new state match keys, then it's an update to the current casting state
+			if (CastingState.Identifier == args.SpellCastIdentifier)
 			{
-				CastingBar.SetElementActive(false);
-				CastingBar.CastingBarFillable.FillAmount = 0;
-				CastingState = new BarCastingState(false);
+				//TODO: Different handling for STOPPED vs Canceled/Interrupted.
+				//Spell casting stopped. Disable the bar.
+				if((args.State == SpellCastingEventChangeState.Canceled || args.State == SpellCastingEventChangeState.Stopped) && CastingState.isSpellCasting)
+				{
+					CastingBar.SetElementActive(false);
+					CastingBar.CastingBarFillable.FillAmount = 0;
+					CastingState = new BarCastingState(false, args.SpellCastIdentifier);
+				}
 			}
 			else
 			{
-				SpellEntry<string> entry = ClientData.AssertEntry<SpellEntry<string>>(args.CastingSpellId);
+				//otherwise, if keys don't match this is a NEW cast and we should ignore any old or current state.
+				if (args.isCasting)
+				{
+					SpellEntry<string> entry = ClientData.AssertEntry<SpellEntry<string>>(args.CastingSpellId);
 
-				CastingState = new BarCastingState(true, entry, TimeService.CurrentRemoteTime, TimeService.CurrentRemoteTime + args.RemainingCastTime);
-				CastingBar.CastingBarSpellNameText.Text = entry.SpellName.enUS;
-				CastingBar.SetElementActive(true);
+					CastingState = new BarCastingState(true, entry, TimeService.CurrentRemoteTime, TimeService.CurrentRemoteTime + args.RemainingCastTime, args.SpellCastIdentifier);
+					CastingBar.CastingBarSpellNameText.Text = entry.SpellName.enUS;
+					CastingBar.SetElementActive(true);
+				}
 			}
 		}
 	}

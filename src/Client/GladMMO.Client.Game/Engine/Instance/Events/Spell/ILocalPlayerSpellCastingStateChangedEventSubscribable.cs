@@ -4,6 +4,13 @@ using System.Text;
 
 namespace GladMMO
 {
+	public enum SpellCastingEventChangeState
+	{
+		Stopped = 0,
+		Canceled = 1,
+		Casting = 3,
+	}
+
 	public interface ILocalPlayerSpellCastingStateChangedEventSubscribable
 	{
 		event EventHandler<SpellCastingStateChangedEventArgs> OnSpellCastingStateChanged;
@@ -22,15 +29,31 @@ namespace GladMMO
 		/// </summary>
 		public int CastingSpellId { get; }
 
-		public bool isCasting => CastingSpellId != 0;
+		/// <summary>
+		/// Indicates if the state is a casting state.
+		/// </summary>
+		public bool isCasting => State == SpellCastingEventChangeState.Casting;
 
-		public SpellCastingStateChangedEventArgs(int castingSpellId, int remainingCastTime)
+		/// <summary>
+		/// Indicates the new state.
+		/// </summary>
+		public SpellCastingEventChangeState State { get; }
+
+		/// <summary>
+		/// 64bit temporarily unique spell cast identifier.
+		/// (Can be used to link events like Start, Go and Cancel within a short period of time).
+		/// </summary>
+		public long SpellCastIdentifier { get; }
+
+		public SpellCastingStateChangedEventArgs(int castingSpellId, int remainingCastTime, SpellCastingEventChangeState state, long spellCastIdentifier)
 		{
 			if (castingSpellId < 0) throw new ArgumentOutOfRangeException(nameof(castingSpellId));
 			if (remainingCastTime < 0) throw new ArgumentOutOfRangeException(nameof(remainingCastTime));
 
 			CastingSpellId = castingSpellId;
 			RemainingCastTime = remainingCastTime;
+			State = state;
+			SpellCastIdentifier = spellCastIdentifier;
 		}
 	}
 }
