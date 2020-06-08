@@ -15,21 +15,27 @@ namespace GladMMO
 		/// <summary>
 		/// Null if <see cref="isSpellCasting"/> is not true.
 		/// </summary>
-		[CanBeNull]
-		public SpellDefinitionDataModel SpellDefinition { get; }
+		public SpellEntry<string> SpellDefinition { get; }
 
 		/// <summary>
 		/// The starting cast timestamp. 0 if <see cref="isSpellCasting"/> is false.
 		/// </summary>
 		public long StartTimeStamp { get; }
 
-		public BarCastingState(bool isSpellCasting, [CanBeNull] [NotNull] SpellDefinitionDataModel spellDefinition, long startTimeStamp)
+		public long EndTimeStamp { get; }
+
+		//TODO: Use spell entry dutation eventually
+		public long CastDuration => EndTimeStamp - StartTimeStamp;
+
+		public BarCastingState(bool isSpellCasting, [NotNull] SpellEntry<string> spellDefinition, long startTimeStamp, long endTimeStamp)
 		{
-			if(startTimeStamp < 0) throw new ArgumentOutOfRangeException(nameof(startTimeStamp));
+			if (startTimeStamp < 0) throw new ArgumentOutOfRangeException(nameof(startTimeStamp));
+			if (endTimeStamp <= 0) throw new ArgumentOutOfRangeException(nameof(endTimeStamp));
 
 			this.isSpellCasting = isSpellCasting;
 			SpellDefinition = spellDefinition ?? throw new ArgumentNullException(nameof(spellDefinition));
 			StartTimeStamp = startTimeStamp;
+			EndTimeStamp = endTimeStamp;
 		}
 
 		public BarCastingState(bool isSpellCasting)
@@ -47,7 +53,7 @@ namespace GladMMO
 
 		private IReadonlyNetworkTimeService TimeService { get; }
 
-		//private IReadonlySpellDataCollection SpellDataCollection { get; }
+		private IClientDataCollectionContainer ClientData { get; }
 
 		private BarCastingState CastingState { get; set; } = new BarCastingState(false);
 
@@ -55,12 +61,14 @@ namespace GladMMO
 		public UpdateLocalPlayerCastBarEventListener(ILocalPlayerSpellCastingStateChangedEventSubscribable subscriptionService,
 			[NotNull] ILog logger,
 			[KeyFilter(UnityUIRegisterationKey.LocalPlayerCastBar)] [NotNull] IUICastingBar castingBar,
-			[NotNull] IReadonlyNetworkTimeService timeService)
+			[NotNull] IReadonlyNetworkTimeService timeService,
+			[NotNull] IClientDataCollectionContainer clientData)
 			: base(subscriptionService)
 		{
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
 			CastingBar = castingBar ?? throw new ArgumentNullException(nameof(castingBar));
 			TimeService = timeService ?? throw new ArgumentNullException(nameof(timeService));
+			ClientData = clientData ?? throw new ArgumentNullException(nameof(clientData));
 		}
 
 		public void Tick()
@@ -71,12 +79,13 @@ namespace GladMMO
 			long currentRemoteTime = TimeService.CurrentRemoteTime;
 
 			//This is UTC tick time. We need to convert it to seconds.
-			TimeSpan span = new TimeSpan(Math.Max(0, currentRemoteTime - CastingState.StartTimeStamp)); //time sync may be abit off so clamp it
+			long span = currentRemoteTime - CastingState.StartTimeStamp; //time sync may be abit off so clamp it
 
-			CastingBar.CastingBarFillable.FillAmount = (float)(span.TotalMilliseconds / (float)CastingState.SpellDefinition.CastTime);
+			//TODO: Handle spell duration.
+			CastingBar.CastingBarFillable.FillAmount = (float)(span / (float)CastingState.CastDuration);
 		}
 
-		protected override void OnEventFired(object source, SpellCastingStateChangedEventArgs args)
+		protected override void OnThreadUnSafeEventFired(object source, SpellCastingStateChangedEventArgs args)
 		{
 			if(Logger.IsInfoEnabled)
 				Logger.Info($"Player started casting Spell: {args.CastingSpellId}");
@@ -90,11 +99,11 @@ namespace GladMMO
 			}
 			else
 			{
-				Logger.Error($"TODO: REIMPLEMENT CASTING BAR!");
-				/*SpellDefinitionDataModel spellDefinition = SpellDataCollection.GetSpellDefinition(args.CastingSpellId);
-				CastingState = new BarCastingState(true, spellDefinition, args.CastingStartTimeStamp);
-				CastingBar.CastingBarSpellNameText.Text = spellDefinition.SpellName;
-				CastingBar.SetElementActive(true);*/
+				SpellEntry<string> entry = ClientData.AssertEntry<SpellEntry<string>>(args.CastingSpellId);
+
+				CastingState = new BarCastingState(true, entry, TimeService.CurrentRemoteTime, TimeService.CurrentRemoteTime + args.RemainingCastTime);
+				CastingBar.CastingBarSpellNameText.Text = entry.SpellName.enUS;
+				CastingBar.SetElementActive(true);
 			}
 		}
 	}

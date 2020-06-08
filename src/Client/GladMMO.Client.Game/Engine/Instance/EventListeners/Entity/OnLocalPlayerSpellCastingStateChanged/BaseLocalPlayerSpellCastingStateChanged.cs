@@ -5,7 +5,7 @@ using Glader.Essentials;
 
 namespace GladMMO
 {
-	public abstract class BaseLocalPlayerSpellCastingStateChanged : BaseSingleEventListenerInitializable<ILocalPlayerSpellCastingStateChangedEventSubscribable, SpellCastingStateChangedEventArgs>
+	public abstract class BaseLocalPlayerSpellCastingStateChanged : ThreadUnSafeBaseSingleEventListenerInitializable<ILocalPlayerSpellCastingStateChangedEventSubscribable, SpellCastingStateChangedEventArgs>
 	{
 		protected BaseLocalPlayerSpellCastingStateChanged(ILocalPlayerSpellCastingStateChangedEventSubscribable subscriptionService) 
 			: base(subscriptionService)
