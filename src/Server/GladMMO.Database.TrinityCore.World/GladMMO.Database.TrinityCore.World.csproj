@@ -194,7 +194,6 @@
     <Compile Include="Models\WaypointData.cs" />
     <Compile Include="Models\Waypoints.cs" />
     <Compile Include="Models\WaypointScripts.cs" />
-    <Compile Include="Models\wotlk_worldContext.cs" />
   </ItemGroup>
 
   <ItemGroup>
