@@ -1,6 +1,7 @@
 ﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Text;
+using Common.Logging;
 using Fasterflect;
 using Glader.Essentials;
 using UnityEngine;
@@ -16,8 +17,9 @@ namespace GladMMO
 		public ClientOnEntityCreatingCreateWorldObjectRepresentationEventListener(IEntityCreationStartingEventSubscribable subscriptionService, 
 			IFactoryCreatable<GameObject, EntityPrefab> prefabFactory, 
 			IReadonlyEntityGuidMappable<MovementBlockData> movementDataMappable, 
-			ILocalCharacterDataRepository characterDataRepository) 
-			: base(subscriptionService, prefabFactory, movementDataMappable)
+			ILocalCharacterDataRepository characterDataRepository,
+			ILog logger) 
+			: base(subscriptionService, prefabFactory, movementDataMappable, logger)
 		{
 			CharacterDataRepository = characterDataRepository;
 		}
