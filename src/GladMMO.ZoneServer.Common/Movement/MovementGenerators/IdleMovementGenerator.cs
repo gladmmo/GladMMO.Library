@@ -23,8 +23,7 @@ namespace GladMMO
 			//Immediately we're idle so let's stop the generator.
 			StopGenerator();
 
-			//Let's do nothing!
-			return InitialPosition;
+			return entity.transform.position = InitialPosition;
 		}
 
 		protected override Vector3 InternalUpdate(GameObject entity, long currentTime)
