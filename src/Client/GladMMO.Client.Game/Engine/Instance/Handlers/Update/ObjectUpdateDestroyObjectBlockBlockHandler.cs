@@ -15,17 +15,11 @@ namespace GladMMO
 	{
 		public INetworkEntityVisibilityLostEventPublisher VisibilityLostPublisher { get; }
 
-		public ObjectUpdateDestroyObjectBlockBlockHandler(ObjectUpdateType updateType, ILog logger, [NotNull] INetworkEntityVisibilityLostEventPublisher visibilityLostPublisher) 
-			: base(updateType, logger)
-		{
-			VisibilityLostPublisher = visibilityLostPublisher ?? throw new ArgumentNullException(nameof(visibilityLostPublisher));
-		}
-
-		/// <inheritdoc />
-		public ObjectUpdateDestroyObjectBlockBlockHandler(ILog logger)
+		public ObjectUpdateDestroyObjectBlockBlockHandler(ILog logger, 
+			[NotNull] INetworkEntityVisibilityLostEventPublisher visibilityLostPublisher) 
 			: base(ObjectUpdateType.UPDATETYPE_OUT_OF_RANGE_OBJECTS, logger)
 		{
-
+			VisibilityLostPublisher = visibilityLostPublisher ?? throw new ArgumentNullException(nameof(visibilityLostPublisher));
 		}
 
 		/// <inheritdoc />
@@ -35,10 +29,8 @@ namespace GladMMO
 
 			foreach (PackedGuid destroyData in updateBlock.DestroyedGuids.Items)
 			{
-				ObjectGuid guid = new ObjectGuid(destroyData);
-				Logger.Info($"Attempting to Despawn: {guid}");
-
-				VisibilityLostPublisher.PublishEvent(this, new NetworkEntityVisibilityLostEventArgs(guid));
+				Logger.Info($"Attempting to Despawn: {destroyData}");
+				VisibilityLostPublisher.PublishEvent(this, new NetworkEntityVisibilityLostEventArgs(destroyData));
 			}
 		}
 	}
