@@ -12,8 +12,8 @@ namespace GladMMO
 		public ClientInitializeDefaultMovementGeneratorEventListener(IEntityCreationFinishedEventSubscribable subscriptionService, 
 			IEntityGuidMappable<IMovementGenerator<GameObject>> movementGeneratorMappable, 
 			IFactoryCreatable<IMovementGenerator<GameObject>, EntityAssociatedData<MovementInfo>> movementGeneratorFactory, 
-			IReadonlyEntityGuidMappable<MovementBlockData> movementDataMappable) 
-			: base(subscriptionService, movementGeneratorMappable, movementGeneratorFactory, movementDataMappable)
+			IReadonlyEntityGuidMappable<MovementBlockData> movementDataMappable, IEntityGuidMappable<SplineInfo> splineInfoMappable) 
+			: base(subscriptionService, movementGeneratorMappable, movementGeneratorFactory, movementDataMappable, splineInfoMappable)
 		{
 
 		}

@@ -23,23 +23,32 @@ namespace GladMMO
 		protected long EndTimeStamp { get; set; }
 
 		public LinearPathMovementGenerator(LinearPathMoveInfo movementData, Vector3 initialPosition, int totalLengthDuration) 
+			: this(movementData, initialPosition, totalLengthDuration, 0)
+		{
+			
+		}
+
+		public LinearPathMovementGenerator(LinearPathMoveInfo movementData, Vector3 initialPosition, int totalLengthDuration, int timeElapsed)
 			: base(movementData, initialPosition)
 		{
-			if (totalLengthDuration < 0) throw new ArgumentOutOfRangeException(nameof(totalLengthDuration));
+			if(totalLengthDuration < 0) throw new ArgumentOutOfRangeException(nameof(totalLengthDuration));
 
 			TotalLengthDuration = totalLengthDuration;
 
+			//Push the Start timestamp backwards, since some splines we may see start in the middle.
+			StartTimeStamp -= timeElapsed;
+
 			//TODO: support middle points
-			GeneratedPath = new Vector3[1 + 1]{ initialPosition, movementData.FinalPosition.ToUnityVector() };
+			GeneratedPath = new Vector3[1 + 1] { initialPosition, movementData.FinalPosition.ToUnityVector() };
 			TimeWeights = new int[GeneratedPath.Length - 1];
 
 			//TODO: Don't hardcode speed.
 			//TODO: Calculate weighted time between points
-			for (int i = 0; i < GeneratedPath.Length - 1; i++)
-				TimeWeights[i] = (int) (1000 * Vector3.Distance(GeneratedPath[i], GeneratedPath[i + 1]) / 8.0f); //Creatures default speed is 8.0 yards a second.
+			for(int i = 0; i < GeneratedPath.Length - 1; i++)
+				TimeWeights[i] = (int)(1000 * Vector3.Distance(GeneratedPath[i], GeneratedPath[i + 1]) / 8.0f); //Creatures default speed is 8.0 yards a second.
 
 			//Now add the previous index weights
-			for (int i = 1; i < TimeWeights.Length; i++)
+			for(int i = 1; i < TimeWeights.Length; i++)
 				TimeWeights[i] = TimeWeights[i - 1];
 		}
 
@@ -52,7 +61,8 @@ namespace GladMMO
 			}
 			else
 			{
-				StartTimeStamp = currentTime;
+				//We ADD current time to it because the ctor may have added a negative offset.
+				StartTimeStamp += currentTime;
 
 				//Calculate the ending timestamp as the total duration by SPEED and convert to milliseconds.
 				EndTimeStamp = ((long)(TotalLengthDuration) + StartTimeStamp);

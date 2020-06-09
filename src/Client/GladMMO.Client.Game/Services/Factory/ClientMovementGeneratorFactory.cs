@@ -12,10 +12,15 @@ namespace GladMMO
 
 		private ILocalPlayerDetails LocalPlayerDetails { get; }
 
-		public ClientMovementGeneratorFactory([NotNull] IReadonlyEntityGuidMappable<CharacterController> controllerMappable, [NotNull] ILocalPlayerDetails localPlayerDetails)
+		private IReadonlyEntityGuidMappable<SplineInfo> SplineInfoMappable { get; }
+
+		public ClientMovementGeneratorFactory([NotNull] IReadonlyEntityGuidMappable<CharacterController> controllerMappable, 
+			[NotNull] ILocalPlayerDetails localPlayerDetails,
+			[NotNull] IReadonlyEntityGuidMappable<SplineInfo> splineInfoMappable)
 		{
 			ControllerMappable = controllerMappable ?? throw new ArgumentNullException(nameof(controllerMappable));
 			LocalPlayerDetails = localPlayerDetails ?? throw new ArgumentNullException(nameof(localPlayerDetails));
+			SplineInfoMappable = splineInfoMappable ?? throw new ArgumentNullException(nameof(splineInfoMappable));
 		}
 
 		public IMovementGenerator<GameObject> Create(EntityAssociatedData<MovementInfo> context)
@@ -28,8 +33,16 @@ namespace GladMMO
 					//TODO: Support non-static GameObjects.
 					return new IdleMovementGenerator(context.Data.Position.ToUnityVector());
 				case EntityTypeId.TYPEID_UNIT:
-					//TODO: Support non-static NPCs.
-					return new IdleMovementGenerator(context.Data.Position.ToUnityVector());
+					if (context.Data.MoveFlags.HasAnyFlags(MovementFlag.MOVEMENTFLAG_SPLINE_ENABLED))
+					{
+						SplineInfo info = SplineInfoMappable.RetrieveEntity(context.EntityGuid);
+
+						//TODO: Support cyclical
+						LinearPathMoveInfo spoofedLinearMoveInfo = new LinearPathMoveInfo(info.WayPoints.Length - 1, info.SplineEndpoint, Array.Empty<byte>());
+						return new LinearPathMovementGenerator(spoofedLinearMoveInfo, context.Data.Position.ToUnityVector(), info.SplineFullTime, info.SplineTime);
+					}
+					else
+						return new IdleMovementGenerator(context.Data.Position.ToUnityVector());
 				default:
 					throw new ArgumentOutOfRangeException();
 			}
