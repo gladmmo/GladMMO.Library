@@ -36,7 +36,7 @@ namespace GladMMO
 			//TODO: Don't hardcode speed.
 			//TODO: Calculate weighted time between points
 			for (int i = 0; i < GeneratedPath.Length - 1; i++)
-				TimeWeights[i] = (int) (1000 * Vector3.Distance(GeneratedPath[i], GeneratedPath[i + 1]) / 7.0f);
+				TimeWeights[i] = (int) (1000 * Vector3.Distance(GeneratedPath[i], GeneratedPath[i + 1]) / 8.0f); //Creatures default speed is 8.0 yards a second.
 
 			//Now add the previous index weights
 			for (int i = 1; i < TimeWeights.Length; i++)
