@@ -53,11 +53,6 @@ namespace GladMMO
 					}
 					else if(Logger.IsInfoEnabled)
 						Logger.Info($"Recieved Remote Player Spawn Data. Id: {updateBlock.CreationData.CreationGuid.CurrentObjectGuid}");
-
-					NetworkEntityNowVisibleEventArgs visibilityEvent = VisibileEventFactory.Create(updateBlock);
-
-					//Now we broadcast that an entity is now visible.
-					VisibilityEventPublisher.Publish(visibilityEvent);
 					break;
 				case ObjectType.GameObject:
 					break;
@@ -76,6 +71,11 @@ namespace GladMMO
 				default:
 					throw new ArgumentOutOfRangeException($"Unable to handle the creation of ObjectType: {updateBlock.UpdateType}");
 			}
+
+			NetworkEntityNowVisibleEventArgs visibilityEvent = VisibileEventFactory.Create(updateBlock);
+
+			//Now we broadcast that an entity is now visible.
+			VisibilityEventPublisher.Publish(visibilityEvent);
 		}
 	}
 }
