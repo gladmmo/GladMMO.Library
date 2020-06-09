@@ -19,12 +19,12 @@ namespace GladMMO
 	{
 		private INetworkEntityVisibilityEventPublisher VisibilityEventPublisher { get; }
 
-		private IFactoryCreatable<NetworkEntityNowVisibleEventArgs, ObjectUpdateCreateObject1Block> VisibileEventFactory { get; }
+		private IFactoryCreatable<NetworkEntityNowVisibleEventArgs, ObjectCreationData> VisibileEventFactory { get; }
 
 		/// <inheritdoc />
 		public ObjectUpdateCreateObject2BlockHandler(ILog logger,
 			[NotNull] INetworkEntityVisibilityEventPublisher visibilityEventPublisher,
-			[NotNull] IFactoryCreatable<NetworkEntityNowVisibleEventArgs, ObjectUpdateCreateObject1Block> visibileEventFactory)
+			[NotNull] IFactoryCreatable<NetworkEntityNowVisibleEventArgs, ObjectCreationData> visibileEventFactory)
 			: base(ObjectUpdateType.UPDATETYPE_CREATE_OBJECT, logger)
 		{
 			VisibilityEventPublisher = visibilityEventPublisher ?? throw new ArgumentNullException(nameof(visibilityEventPublisher));
@@ -49,14 +49,8 @@ namespace GladMMO
 				case ObjectType.Unit:
 					break;
 				case ObjectType.Player:
-					//HelloKitty: This is the special case of the local player spawning into the world.
-					if(updateBlock.CreationData.MovementData.UpdateFlags.HasFlag(ObjectUpdateFlags.UPDATEFLAG_SELF))
-					{
-						if(Logger.IsInfoEnabled)
-							Logger.Info($"Recieved local player spawn data. Id: {updateBlock.CreationData.CreationGuid.CurrentObjectGuid}");
-					}
-					else if(Logger.IsInfoEnabled)
-						Logger.Info($"Recieved Remote Player Spawn Data. Id: {updateBlock.CreationData.CreationGuid.CurrentObjectGuid}");
+					if(Logger.IsWarnEnabled)
+						Logger.Warn($"Encountered Respawn for Player.");
 					break;
 				case ObjectType.GameObject:
 					break;
@@ -76,7 +70,7 @@ namespace GladMMO
 					throw new ArgumentOutOfRangeException($"Unable to handle the creation of ObjectType: {updateBlock.UpdateType}");
 			}
 
-			NetworkEntityNowVisibleEventArgs visibilityEvent = VisibileEventFactory.Create(updateBlock);
+			NetworkEntityNowVisibleEventArgs visibilityEvent = VisibileEventFactory.Create(updateBlock.CreationData);
 
 			//Now we broadcast that an entity is now visible.
 			VisibilityEventPublisher.Publish(visibilityEvent);

@@ -7,7 +7,7 @@ using Glader.Essentials;
 
 namespace GladMMO
 {
-	public sealed class NetworkVisibilityCreationBlockToVisibilityEventFactory : IFactoryCreatable<NetworkEntityNowVisibleEventArgs, ObjectUpdateCreateObject1Block>
+	public sealed class NetworkVisibilityCreationBlockToVisibilityEventFactory : IFactoryCreatable<NetworkEntityNowVisibleEventArgs, ObjectCreationData>
 	{
 		private IEntityGuidMappable<IChangeTrackableEntityDataCollection> ChangeTrackableCollection { get; }
 
@@ -30,9 +30,9 @@ namespace GladMMO
 		}
 
 		/// <inheritdoc />
-		public NetworkEntityNowVisibleEventArgs Create(ObjectUpdateCreateObject1Block context)
+		public NetworkEntityNowVisibleEventArgs Create(ObjectCreationData context)
 		{
-			ObjectGuid guid = context.CreationData.CreationGuid;
+			ObjectGuid guid = context.CreationGuid;
 
 			//The following conditional logic and checks are required due to STUPID
 			//WoW or TrinityCore design that can tell client an entity exists multiple times.
@@ -43,25 +43,25 @@ namespace GladMMO
 			//It's possible main thread doesn't KNOW it yet but that the data exists
 			//since this is potentially a duplicate create block.
 			//So we must check exist of data.
-			if (MovementBlockMappable.ContainsKey(context.CreationData.CreationGuid))
+			if (MovementBlockMappable.ContainsKey(context.CreationGuid))
 			{
-				IEntityDataFieldContainer container = CreateInitialEntityFieldContainer(context.CreationData.ObjectValuesCollection);
-				ChangeTrackingEntityFieldDataCollectionDecorator trackingEntityFieldDataCollectionDecorator = new ChangeTrackingEntityFieldDataCollectionDecorator(container, context.CreationData.ObjectValuesCollection.UpdateMask);
+				IEntityDataFieldContainer container = CreateInitialEntityFieldContainer(context.ObjectValuesCollection);
+				ChangeTrackingEntityFieldDataCollectionDecorator trackingEntityFieldDataCollectionDecorator = new ChangeTrackingEntityFieldDataCollectionDecorator(container, context.ObjectValuesCollection.UpdateMask);
 
 				//TODO: Is this correct behavior for 3.3.5?? Sometimes you get DUPLICATE creates.
 				ChangeTrackableCollection.ReplaceObject(guid, trackingEntityFieldDataCollectionDecorator);
-				MovementBlockMappable.ReplaceObject(guid, context.CreationData.MovementData);
-				MovementInfoMappable.ReplaceObject(guid, context.CreationData.MovementData.MoveInfo);
+				MovementBlockMappable.ReplaceObject(guid, context.MovementData);
+				MovementInfoMappable.ReplaceObject(guid, context.MovementData.MoveInfo);
 			}
 			else
 			{
-				IEntityDataFieldContainer container = CreateInitialEntityFieldContainer(context.CreationData.ObjectValuesCollection);
-				ChangeTrackingEntityFieldDataCollectionDecorator trackingEntityFieldDataCollectionDecorator = new ChangeTrackingEntityFieldDataCollectionDecorator(container, context.CreationData.ObjectValuesCollection.UpdateMask);
+				IEntityDataFieldContainer container = CreateInitialEntityFieldContainer(context.ObjectValuesCollection);
+				ChangeTrackingEntityFieldDataCollectionDecorator trackingEntityFieldDataCollectionDecorator = new ChangeTrackingEntityFieldDataCollectionDecorator(container, context.ObjectValuesCollection.UpdateMask);
 
 				//TODO: Is this correct behavior for 3.3.5?? Sometimes you get DUPLICATE creates.
 				ChangeTrackableCollection.AddObject(guid, trackingEntityFieldDataCollectionDecorator);
-				MovementBlockMappable.AddObject(guid, context.CreationData.MovementData);
-				MovementInfoMappable.AddObject(guid, context.CreationData.MovementData.MoveInfo);
+				MovementBlockMappable.AddObject(guid, context.MovementData);
+				MovementInfoMappable.AddObject(guid, context.MovementData.MoveInfo);
 			}
 
 			return new NetworkEntityNowVisibleEventArgs(guid);

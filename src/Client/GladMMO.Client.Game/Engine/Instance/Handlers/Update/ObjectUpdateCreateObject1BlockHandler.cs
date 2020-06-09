@@ -15,12 +15,12 @@ namespace GladMMO
 	{
 		private INetworkEntityVisibilityEventPublisher VisibilityEventPublisher { get; }
 
-		private IFactoryCreatable<NetworkEntityNowVisibleEventArgs, ObjectUpdateCreateObject1Block> VisibileEventFactory { get; }
+		private IFactoryCreatable<NetworkEntityNowVisibleEventArgs, ObjectCreationData> VisibileEventFactory { get; }
 
 		/// <inheritdoc />
 		public ObjectUpdateCreateObject1BlockHandler(ILog logger,
 			[NotNull] INetworkEntityVisibilityEventPublisher visibilityEventPublisher,
-			[NotNull] IFactoryCreatable<NetworkEntityNowVisibleEventArgs, ObjectUpdateCreateObject1Block> visibileEventFactory)
+			[NotNull] IFactoryCreatable<NetworkEntityNowVisibleEventArgs, ObjectCreationData> visibileEventFactory)
 			: base(ObjectUpdateType.UPDATETYPE_CREATE_OBJECT, logger)
 		{
 			VisibilityEventPublisher = visibilityEventPublisher ?? throw new ArgumentNullException(nameof(visibilityEventPublisher));
