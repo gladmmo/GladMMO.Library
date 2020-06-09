@@ -72,7 +72,7 @@ namespace GladMMO
 					throw new ArgumentOutOfRangeException($"Unable to handle the creation of ObjectType: {updateBlock.UpdateType}");
 			}
 
-			NetworkEntityNowVisibleEventArgs visibilityEvent = VisibileEventFactory.Create(updateBlock);
+			NetworkEntityNowVisibleEventArgs visibilityEvent = VisibileEventFactory.Create(updateBlock.CreationData);
 
 			//Now we broadcast that an entity is now visible.
 			VisibilityEventPublisher.Publish(visibilityEvent);

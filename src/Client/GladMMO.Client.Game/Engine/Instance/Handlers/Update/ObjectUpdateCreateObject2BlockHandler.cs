@@ -25,7 +25,7 @@ namespace GladMMO
 		public ObjectUpdateCreateObject2BlockHandler(ILog logger,
 			[NotNull] INetworkEntityVisibilityEventPublisher visibilityEventPublisher,
 			[NotNull] IFactoryCreatable<NetworkEntityNowVisibleEventArgs, ObjectCreationData> visibileEventFactory)
-			: base(ObjectUpdateType.UPDATETYPE_CREATE_OBJECT, logger)
+			: base(ObjectUpdateType.UPDATETYPE_CREATE_OBJECT2, logger)
 		{
 			VisibilityEventPublisher = visibilityEventPublisher ?? throw new ArgumentNullException(nameof(visibilityEventPublisher));
 			VisibileEventFactory = visibileEventFactory ?? throw new ArgumentNullException(nameof(visibileEventFactory));
