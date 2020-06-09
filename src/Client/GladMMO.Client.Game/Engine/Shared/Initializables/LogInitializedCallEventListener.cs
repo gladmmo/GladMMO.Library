@@ -19,7 +19,8 @@ namespace GladMMO
 
 		public Task OnGameStart()
 		{
-			Logger.Error($"Scene Initialized called.");
+			if(Logger.IsDebugEnabled)
+				Logger.Debug($"Scene Initialized called.");
 
 			return Task.CompletedTask;
 		}
