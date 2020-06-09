@@ -1,0 +1,222 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netcoreapp2.1;netstandard2.0</TargetFrameworks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Models\**" />
+    <EmbeddedResource Remove="Models\**" />
+    <None Remove="Models\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Models\AccessRequirement.cs" />
+    <Compile Include="Models\AchievementCriteriaData.cs" />
+    <Compile Include="Models\AchievementDbc.cs" />
+    <Compile Include="Models\AchievementReward.cs" />
+    <Compile Include="Models\AchievementRewardLocale.cs" />
+    <Compile Include="Models\AreatriggerInvolvedrelation.cs" />
+    <Compile Include="Models\AreatriggerScripts.cs" />
+    <Compile Include="Models\AreatriggerTavern.cs" />
+    <Compile Include="Models\AreatriggerTeleport.cs" />
+    <Compile Include="Models\BattlegroundTemplate.cs" />
+    <Compile Include="Models\BattlemasterEntry.cs" />
+    <Compile Include="Models\BroadcastText.cs" />
+    <Compile Include="Models\BroadcastTextLocale.cs" />
+    <Compile Include="Models\Command.cs" />
+    <Compile Include="Models\Conditions.cs" />
+    <Compile Include="Models\Creature.cs" />
+    <Compile Include="Models\CreatureAddon.cs" />
+    <Compile Include="Models\CreatureClasslevelstats.cs" />
+    <Compile Include="Models\CreatureDefaultTrainer.cs" />
+    <Compile Include="Models\CreatureEquipTemplate.cs" />
+    <Compile Include="Models\CreatureFormations.cs" />
+    <Compile Include="Models\CreatureLootTemplate.cs" />
+    <Compile Include="Models\CreatureModelInfo.cs" />
+    <Compile Include="Models\CreatureMovementOverride.cs" />
+    <Compile Include="Models\CreatureOnkillReputation.cs" />
+    <Compile Include="Models\CreatureQuestender.cs" />
+    <Compile Include="Models\CreatureQuestitem.cs" />
+    <Compile Include="Models\CreatureQueststarter.cs" />
+    <Compile Include="Models\CreatureSummonGroups.cs" />
+    <Compile Include="Models\CreatureTemplate.cs" />
+    <Compile Include="Models\CreatureTemplateAddon.cs" />
+    <Compile Include="Models\CreatureTemplateLocale.cs" />
+    <Compile Include="Models\CreatureTemplateMovement.cs" />
+    <Compile Include="Models\CreatureTemplateResistance.cs" />
+    <Compile Include="Models\CreatureTemplateSpell.cs" />
+    <Compile Include="Models\CreatureText.cs" />
+    <Compile Include="Models\CreatureTextLocale.cs" />
+    <Compile Include="Models\Disables.cs" />
+    <Compile Include="Models\DisenchantLootTemplate.cs" />
+    <Compile Include="Models\EventScripts.cs" />
+    <Compile Include="Models\ExplorationBasexp.cs" />
+    <Compile Include="Models\FishingLootTemplate.cs" />
+    <Compile Include="Models\GameEvent.cs" />
+    <Compile Include="Models\GameEventArenaSeasons.cs" />
+    <Compile Include="Models\GameEventBattlegroundHoliday.cs" />
+    <Compile Include="Models\GameEventCondition.cs" />
+    <Compile Include="Models\GameEventCreature.cs" />
+    <Compile Include="Models\GameEventCreatureQuest.cs" />
+    <Compile Include="Models\GameEventGameobject.cs" />
+    <Compile Include="Models\GameEventGameobjectQuest.cs" />
+    <Compile Include="Models\GameEventModelEquip.cs" />
+    <Compile Include="Models\GameEventNpcflag.cs" />
+    <Compile Include="Models\GameEventNpcVendor.cs" />
+    <Compile Include="Models\GameEventPool.cs" />
+    <Compile Include="Models\GameEventPrerequisite.cs" />
+    <Compile Include="Models\GameEventQuestCondition.cs" />
+    <Compile Include="Models\GameEventSeasonalQuestrelation.cs" />
+    <Compile Include="Models\Gameobject.cs" />
+    <Compile Include="Models\GameobjectAddon.cs" />
+    <Compile Include="Models\GameobjectLootTemplate.cs" />
+    <Compile Include="Models\GameobjectOverrides.cs" />
+    <Compile Include="Models\GameobjectQuestender.cs" />
+    <Compile Include="Models\GameobjectQuestitem.cs" />
+    <Compile Include="Models\GameobjectQueststarter.cs" />
+    <Compile Include="Models\GameobjectTemplate.cs" />
+    <Compile Include="Models\GameobjectTemplateAddon.cs" />
+    <Compile Include="Models\GameobjectTemplateLocale.cs" />
+    <Compile Include="Models\GameTele.cs" />
+    <Compile Include="Models\GameWeather.cs" />
+    <Compile Include="Models\GossipMenu.cs" />
+    <Compile Include="Models\GossipMenuOption.cs" />
+    <Compile Include="Models\GossipMenuOptionLocale.cs" />
+    <Compile Include="Models\GraveyardZone.cs" />
+    <Compile Include="Models\HolidayDates.cs" />
+    <Compile Include="Models\InstanceEncounters.cs" />
+    <Compile Include="Models\InstanceSpawnGroups.cs" />
+    <Compile Include="Models\InstanceTemplate.cs" />
+    <Compile Include="Models\ItemEnchantmentTemplate.cs" />
+    <Compile Include="Models\ItemLootTemplate.cs" />
+    <Compile Include="Models\ItemSetNames.cs" />
+    <Compile Include="Models\ItemSetNamesLocale.cs" />
+    <Compile Include="Models\ItemTemplate.cs" />
+    <Compile Include="Models\ItemTemplateLocale.cs" />
+    <Compile Include="Models\LfgDungeonRewards.cs" />
+    <Compile Include="Models\LfgDungeonTemplate.cs" />
+    <Compile Include="Models\LinkedRespawn.cs" />
+    <Compile Include="Models\MailLevelReward.cs" />
+    <Compile Include="Models\MailLootTemplate.cs" />
+    <Compile Include="Models\MillingLootTemplate.cs" />
+    <Compile Include="Models\NpcSpellclickSpells.cs" />
+    <Compile Include="Models\NpcText.cs" />
+    <Compile Include="Models\NpcTextLocale.cs" />
+    <Compile Include="Models\NpcVendor.cs" />
+    <Compile Include="Models\OutdoorpvpTemplate.cs" />
+    <Compile Include="Models\PageText.cs" />
+    <Compile Include="Models\PageTextLocale.cs" />
+    <Compile Include="Models\PetLevelstats.cs" />
+    <Compile Include="Models\PetNameGeneration.cs" />
+    <Compile Include="Models\PickpocketingLootTemplate.cs" />
+    <Compile Include="Models\PlayerClasslevelstats.cs" />
+    <Compile Include="Models\Playercreateinfo.cs" />
+    <Compile Include="Models\PlayercreateinfoAction.cs" />
+    <Compile Include="Models\PlayercreateinfoCastSpell.cs" />
+    <Compile Include="Models\PlayercreateinfoItem.cs" />
+    <Compile Include="Models\PlayercreateinfoSkills.cs" />
+    <Compile Include="Models\PlayercreateinfoSpellCustom.cs" />
+    <Compile Include="Models\PlayerFactionchangeAchievement.cs" />
+    <Compile Include="Models\PlayerFactionchangeItems.cs" />
+    <Compile Include="Models\PlayerFactionchangeQuests.cs" />
+    <Compile Include="Models\PlayerFactionchangeReputations.cs" />
+    <Compile Include="Models\PlayerFactionchangeSpells.cs" />
+    <Compile Include="Models\PlayerFactionchangeTitles.cs" />
+    <Compile Include="Models\PlayerLevelstats.cs" />
+    <Compile Include="Models\PlayerTotemModel.cs" />
+    <Compile Include="Models\PlayerXpForLevel.cs" />
+    <Compile Include="Models\PointsOfInterest.cs" />
+    <Compile Include="Models\PointsOfInterestLocale.cs" />
+    <Compile Include="Models\PoolMembers.cs" />
+    <Compile Include="Models\PoolTemplate.cs" />
+    <Compile Include="Models\ProspectingLootTemplate.cs" />
+    <Compile Include="Models\QuestDetails.cs" />
+    <Compile Include="Models\QuestGreeting.cs" />
+    <Compile Include="Models\QuestGreetingLocale.cs" />
+    <Compile Include="Models\QuestMailSender.cs" />
+    <Compile Include="Models\QuestOfferReward.cs" />
+    <Compile Include="Models\QuestOfferRewardLocale.cs" />
+    <Compile Include="Models\QuestPoi.cs" />
+    <Compile Include="Models\QuestPoiPoints.cs" />
+    <Compile Include="Models\QuestPoolMembers.cs" />
+    <Compile Include="Models\QuestPoolTemplate.cs" />
+    <Compile Include="Models\QuestRequestItems.cs" />
+    <Compile Include="Models\QuestRequestItemsLocale.cs" />
+    <Compile Include="Models\QuestTemplate.cs" />
+    <Compile Include="Models\QuestTemplateAddon.cs" />
+    <Compile Include="Models\QuestTemplateLocale.cs" />
+    <Compile Include="Models\ReferenceLootTemplate.cs" />
+    <Compile Include="Models\ReputationRewardRate.cs" />
+    <Compile Include="Models\ReputationSpilloverTemplate.cs" />
+    <Compile Include="Models\ScriptSplineChainMeta.cs" />
+    <Compile Include="Models\ScriptSplineChainWaypoints.cs" />
+    <Compile Include="Models\ScriptWaypoint.cs" />
+    <Compile Include="Models\SkillDiscoveryTemplate.cs" />
+    <Compile Include="Models\SkillExtraItemTemplate.cs" />
+    <Compile Include="Models\SkillFishingBaseLevel.cs" />
+    <Compile Include="Models\SkillPerfectItemTemplate.cs" />
+    <Compile Include="Models\SkinningLootTemplate.cs" />
+    <Compile Include="Models\SmartScripts.cs" />
+    <Compile Include="Models\SpawnGroup.cs" />
+    <Compile Include="Models\SpawnGroupTemplate.cs" />
+    <Compile Include="Models\SpellArea.cs" />
+    <Compile Include="Models\SpellBonusData.cs" />
+    <Compile Include="Models\SpellCustomAttr.cs" />
+    <Compile Include="Models\SpellDbc.cs" />
+    <Compile Include="Models\SpelldifficultyDbc.cs" />
+    <Compile Include="Models\SpellEnchantProcData.cs" />
+    <Compile Include="Models\SpellGroup.cs" />
+    <Compile Include="Models\SpellGroupStackRules.cs" />
+    <Compile Include="Models\SpellLearnSpell.cs" />
+    <Compile Include="Models\SpellLinkedSpell.cs" />
+    <Compile Include="Models\SpellLootTemplate.cs" />
+    <Compile Include="Models\SpellPetAuras.cs" />
+    <Compile Include="Models\SpellProc.cs" />
+    <Compile Include="Models\SpellRanks.cs" />
+    <Compile Include="Models\SpellRequired.cs" />
+    <Compile Include="Models\SpellScriptNames.cs" />
+    <Compile Include="Models\SpellScripts.cs" />
+    <Compile Include="Models\SpellTargetPosition.cs" />
+    <Compile Include="Models\SpellThreat.cs" />
+    <Compile Include="Models\Trainer.cs" />
+    <Compile Include="Models\TrainerLocale.cs" />
+    <Compile Include="Models\TrainerSpell.cs" />
+    <Compile Include="Models\Transports.cs" />
+    <Compile Include="Models\TrinityString.cs" />
+    <Compile Include="Models\Updates.cs" />
+    <Compile Include="Models\UpdatesInclude.cs" />
+    <Compile Include="Models\VehicleAccessory.cs" />
+    <Compile Include="Models\VehicleSeatAddon.cs" />
+    <Compile Include="Models\VehicleTemplateAccessory.cs" />
+    <Compile Include="Models\Version.cs" />
+    <Compile Include="Models\WardenChecks.cs" />
+    <Compile Include="Models\WaypointData.cs" />
+    <Compile Include="Models\Waypoints.cs" />
+    <Compile Include="Models\WaypointScripts.cs" />
+    <Compile Include="Models\wotlk_worldContext.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.1" />
+    <PackageReference Include="Nito.AsyncEx.Coordination" Version="5.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.1" />
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.1.1" />
+    <PackageReference Include="System.Memory" Version="4.5.3" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\GladMMO.Database.Common\GladMMO.Database.Common.csproj" />
+    <ProjectReference Include="..\GladMMO.Database.GameServer\GladMMO.Database.GameServer.csproj" />
+  </ItemGroup>
+
+</Project>
