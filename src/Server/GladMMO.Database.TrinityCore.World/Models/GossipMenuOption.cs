@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace GladMMO.Database.TrinityCore.World.Models
+namespace GladMMO
 {
     public partial class GossipMenuOption
     {

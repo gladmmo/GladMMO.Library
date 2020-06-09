@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace GladMMO.Database.TrinityCore.World.Models
+namespace GladMMO
 {
     public partial class wotlk_worldContext : DbContext
     {
