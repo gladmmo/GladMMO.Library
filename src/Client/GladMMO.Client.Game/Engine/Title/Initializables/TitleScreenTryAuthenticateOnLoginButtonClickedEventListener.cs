@@ -11,6 +11,12 @@ using UnityEngine.SceneManagement;
 
 namespace GladMMO
 {
+	//TODO: We use this temporarily because TC needs not auth token (yet) but an account name.
+	public static class PreBetaUsernameStorage
+	{
+		public static string UserName { get; internal set; }
+	}
+
 	[AdditionalRegisterationAs(typeof(IAuthenticationResultRecievedEventSubscribable))]
 	[SceneTypeCreateGladMMO(GameSceneType.TitleScreen)]
 	public sealed class TitleScreenTryAuthenticateOnLoginButtonClickedEventListener : BaseSingleEventListenerInitializable<ILoginButtonClickedEventSubscribable>, IAuthenticationResultRecievedEventSubscribable
@@ -103,6 +109,7 @@ namespace GladMMO
 					if(Logger.IsDebugEnabled)
 						Logger.Debug($"Auth Response for User: {UsernameText.Text} Result: {PlayerAccountJWTModel?.isTokenValid} OptionalError: {PlayerAccountJWTModel?.Error} OptionalErrorDescription: {PlayerAccountJWTModel?.ErrorDescription}");
 
+					PreBetaUsernameStorage.UserName = UsernameText.Text.ToUpper();
 					//Even if it's null, we should broadcast the event.
 					OnAuthenticationResultRecieved?.Invoke(this, new AuthenticationResultEventArgs(new PlayerAccountJWTModel(PlayerAccountJWTModel.AccessToken)));
 				}
