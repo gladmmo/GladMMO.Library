@@ -20,7 +20,7 @@ namespace GladMMO
 		[AuthorizeJwt]
 		[NoResponseCache]
 		[HttpPost("proximity/join")]
-		public async Task<IActionResult> JoinZoneProximityChat([FromServices] ICharacterSessionRepository characterSessionRepository,
+		public async Task<IActionResult> JoinZoneProximityChat([FromServices] ITrinityCharacterRepository characterRepository,
 			[FromServices] IFactoryCreatable<VivoxTokenClaims, VivoxTokenClaimsCreationContext> claimsFactory,
 			[FromServices] IVivoxTokenSignService signService)
 		{
@@ -28,17 +28,19 @@ namespace GladMMO
 
 			//If the user doesn't actually have a claimed session in the game
 			//then we shouldn't log them into Vivox.
-			if (!await characterSessionRepository.AccountHasActiveSession(accountId))
+			if (!await characterRepository.AccountHasActiveSession(accountId))
 				return BuildFailedResponseModel(VivoxLoginResponseCode.NoActiveCharacterSession);
 
-			int characterId = await RetrieveSessionCharacterIdAsync(characterSessionRepository, accountId);
+			int characterId = await RetrieveSessionCharacterIdAsync(characterRepository, accountId);
 
-			CharacterSessionModel session = await characterSessionRepository.RetrieveAsync(characterId);
+			Characters session = await characterRepository.RetrieveAsync((uint)characterId);
 
 			//Players in the same zone will all join the same proximity channel such as Prox-1.
 			//They can use this for proximity text and voice chat.
+			//TODO: Support cases where a character is put into a different map than the DB says it should be in
+			//TODO: Support instances, right now all instances share the same channel.
 			//TODO: Use a factory for channel name generation maybe?
-			VivoxTokenClaims claims = claimsFactory.Create(new VivoxTokenClaimsCreationContext(characterId, VivoxAction.JoinChannel, new VivoxChannelData(true, $"Prox-{session.ZoneId}")));
+			VivoxTokenClaims claims = claimsFactory.Create(new VivoxTokenClaimsCreationContext(characterId, VivoxAction.JoinChannel, new VivoxChannelData(true, $"Prox-{session.Map}")));
 
 			//We don't send it back in a JSON form even though it's technically a JSON object
 			//because the client just needs it as a raw string anyway to put through the Vivox client API.
@@ -55,7 +57,9 @@ namespace GladMMO
 		{
 			int accountId = this.ClaimsReader.GetAccountIdInt(User);
 
-			//If the user doesn't actually have a claimed session in the game
+			return BuildFailedResponseModel(VivoxLoginResponseCode.ChannelUnavailable);
+
+			/*//If the user doesn't actually have a claimed session in the game
 			//then we shouldn't log them into Vivox.
 			if(!await characterSessionRepository.AccountHasActiveSession(accountId))
 				return BuildFailedResponseModel(VivoxLoginResponseCode.NoActiveCharacterSession);
@@ -72,15 +76,15 @@ namespace GladMMO
 
 			//We don't send it back in a JSON form even though it's technically a JSON object
 			//because the client just needs it as a raw string anyway to put through the Vivox client API.
-			return BuildSuccessfulResponseModel(new VivoxChannelJoinResponse(signService.CreateSignature(claims), claims.DestinationSIPURI));
+			return BuildSuccessfulResponseModel(new VivoxChannelJoinResponse(signService.CreateSignature(claims), claims.DestinationSIPURI));*/
 		}
 
-		private static async Task<int> RetrieveSessionCharacterIdAsync(ICharacterSessionRepository characterSessionRepository, int accountId)
+		private static async Task<int> RetrieveSessionCharacterIdAsync(ITrinityCharacterRepository characterRepository, int accountId)
 		{
 			//TODO: Technically a race condition here.
 			//Now let's actually get the character id of the session that the account has
-			ClaimedSessionsModel session = await characterSessionRepository.RetrieveClaimedSessionByAccountId(accountId);
-			int characterId = session.CharacterId;
+			Characters session = await characterRepository.RetrieveClaimedSessionByAccountId(accountId);
+			int characterId = (int) session.Guid;
 			return characterId;
 		}
 	}
