@@ -14,7 +14,7 @@ namespace GladMMO
 	[AdditionalRegisterationAs(typeof(IPlayerGroupLeftEventSubscribable))]
 	[AdditionalRegisterationAs(typeof(IPlayerGroupJoinedEventSubscribable))]
 	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
-	public sealed class ServerGroupListEventPayloadHandler : BaseGameClientGameMessageHandler<ServerGroupListEvent>, IPlayerGroupJoinedEventSubscribable, IPlayerGroupLeftEventSubscribable
+	public sealed class SMSG_GROUP_LIST_PayloadHandler : BaseGameClientGameMessageHandler<SMSG_GROUP_LIST_Payload>, IPlayerGroupJoinedEventSubscribable, IPlayerGroupLeftEventSubscribable
 	{
 		private HashSet<ObjectGuid> GroupedPlayerSet { get; }
 
@@ -27,7 +27,7 @@ namespace GladMMO
 		public event EventHandler<PlayerLeftGroupEventArgs> OnPlayerLeftGroup;
 
 		/// <inheritdoc />
-		public ServerGroupListEventPayloadHandler(ILog logger)
+		public SMSG_GROUP_LIST_PayloadHandler(ILog logger)
 			: base(logger)
 		{
 			GroupedPlayerSet = new HashSet<ObjectGuid>(ObjectGuidEqualityComparer<ObjectGuid>.Instance);
@@ -35,7 +35,7 @@ namespace GladMMO
 		}
 
 		/// <inheritdoc />
-		public override Task HandleMessage(IPeerMessageContext<GamePacketPayload> context, ServerGroupListEvent payload)
+		public override Task HandleMessage(IPeerMessageContext<GamePacketPayload> context, SMSG_GROUP_LIST_Payload payload)
 		{
 			if(Logger.IsDebugEnabled)
 			{
