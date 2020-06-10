@@ -8,6 +8,10 @@ using UnityEngine.SceneManagement;
 
 namespace GladMMO
 {
+	[SceneTypeCreateGladMMO(GameSceneType.CharacterCreationScreen)]
+	[SceneTypeCreateGladMMO(GameSceneType.TitleScreen)]
+	[SceneTypeCreateGladMMO(GameSceneType.PreZoneBurstingScreen)]
+	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
 	[SceneTypeCreateGladMMO(GameSceneType.CharacterSelection)]
 	public sealed class AutofacCleanupInitializableEventListener : IGameInitializable
 	{
