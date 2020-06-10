@@ -104,14 +104,17 @@ namespace GladMMO
 
 			try
 			{
-				using(FileStream stream = new FileStream(path, FileMode.Open, FileAccess.Read))
-				using(MemoryStream ms = new MemoryStream())
-				{
-					await stream.CopyToAsync(ms)
-						.ConfigureAwaitFalseVoid();
 
-					ms.Position = 0;
-					return Serializer.Deserialize<GDBCCollection<T>>(new DefaultStreamReaderStrategy(ms.ToArray()));
+				using (MemoryStream ms = new MemoryStream())
+				{
+					using(FileStream stream = new FileStream(path, FileMode.Open, FileAccess.Read))
+					{
+						await stream.CopyToAsync(ms)
+							.ConfigureAwaitFalseVoid();
+						ms.Position = 0;
+					}
+
+					return Serializer.Deserialize<GDBCCollection<T>>(new DefaultStreamReaderStrategy(ms));
 				}
 			}
 			catch (Exception e)

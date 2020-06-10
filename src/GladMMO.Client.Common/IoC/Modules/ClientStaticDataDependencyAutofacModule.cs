@@ -61,7 +61,6 @@ namespace GladMMO
 		{
 			if (serializer == null) throw new ArgumentNullException(nameof(serializer));
 
-			//TODO: Multithreaded loading
 			var collectionContainer = new DefaultClientDataCollectionContainer(serializer);
 			collectionContainer.StartLoadingAsync();
 
