@@ -77,7 +77,7 @@ namespace GladMMO
 					Logger.Error($"Failed to initialize instance server connection. Reason: {e.Message}");
 
 				//We NEVER throw within an initializer
-				GeneralErrorPublisher.PublishEvent(this, new GeneralErrorEncounteredEventArgs("Network Error", "Failed to initialize instance server connection.", () => LogoutEventPublisher.PublishEvent(this, EventArgs.Empty));
+				GeneralErrorPublisher.PublishEvent(this, new GeneralErrorEncounteredEventArgs("Network Error", "Failed to initialize instance server connection.", () => LogoutEventPublisher.PublishEvent(this, EventArgs.Empty)));
 			}
 		}
 	}
