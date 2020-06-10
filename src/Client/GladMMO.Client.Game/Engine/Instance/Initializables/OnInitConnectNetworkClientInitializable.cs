@@ -25,18 +25,22 @@ namespace GladMMO
 
 		private IGeneralErrorEncounteredEventPublisher GeneralErrorPublisher { get; }
 
+		private IInstanceLogoutEventPublisher LogoutEventPublisher { get; }
+
 		public OnInitConnectNetworkClientInitializable(
 			[NotNull] IConnectionService client,
 			[NotNull] IZoneDataService zoneServiceClient,
 			[NotNull] IReadonlyZoneDataRepository zoneDataRepository,
 			[NotNull] ILog logger,
-			[NotNull] IGeneralErrorEncounteredEventPublisher generalErrorPublisher)
+			[NotNull] IGeneralErrorEncounteredEventPublisher generalErrorPublisher,
+			[NotNull] IInstanceLogoutEventPublisher logoutEventPublisher)
 		{
 			Client = client ?? throw new ArgumentNullException(nameof(client));
 			ZoneServiceClient = zoneServiceClient ?? throw new ArgumentNullException(nameof(zoneServiceClient));
 			ZoneDataRepository = zoneDataRepository ?? throw new ArgumentNullException(nameof(zoneDataRepository));
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
 			GeneralErrorPublisher = generalErrorPublisher ?? throw new ArgumentNullException(nameof(generalErrorPublisher));
+			LogoutEventPublisher = logoutEventPublisher ?? throw new ArgumentNullException(nameof(logoutEventPublisher));
 		}
 
 		public async Task OnGameInitialized()
@@ -73,7 +77,7 @@ namespace GladMMO
 					Logger.Error($"Failed to initialize instance server connection. Reason: {e.Message}");
 
 				//We NEVER throw within an initializer
-				GeneralErrorPublisher.PublishEvent(this, new GeneralErrorEncounteredEventArgs("Network Error", "Failed to initialize instance server connection.", () => GladMMOSceneManager.LoadAddressableSceneAsync(GladMMOClientConstants.CHARACTER_SELECTION_SCENE_NAME)));
+				GeneralErrorPublisher.PublishEvent(this, new GeneralErrorEncounteredEventArgs("Network Error", "Failed to initialize instance server connection.", () => LogoutEventPublisher.PublishEvent(this, EventArgs.Empty));
 			}
 		}
 	}
