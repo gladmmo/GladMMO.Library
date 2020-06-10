@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Glader.Essentials.Common" Version="1.0.35" />
+    <PackageReference Include="Glader.Essentials.Common" Version="1.0.36" />
     <PackageReference Include="GladNet3.Client.API" Version="3.0.48" />
     <PackageReference Include="GladNet3.Common.API" Version="3.0.48" />
     <PackageReference Include="protobuf-net" Version="2.3.7" />

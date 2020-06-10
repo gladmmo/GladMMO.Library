@@ -25,7 +25,7 @@
 
   <ItemGroup>
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="4.2.2" />
-    <PackageReference Include="Glader.Essentials.Unity" Version="1.0.35" />
+    <PackageReference Include="Glader.Essentials.Unity" Version="1.0.36" />
     <PackageReference Include="GladNet3.Client.API" Version="3.0.48" />
     <PackageReference Include="GladNet3.Client.DotNetTcpClient" Version="3.0.48" />
     <PackageReference Include="GladNet3.Handler.API" Version="3.0.48" />
