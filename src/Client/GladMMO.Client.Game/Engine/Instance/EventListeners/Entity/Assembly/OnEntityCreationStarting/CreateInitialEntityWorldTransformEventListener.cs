@@ -22,6 +22,21 @@ namespace GladMMO
 
 		protected override void OnEventFired(object source, EntityCreationStartingEventArgs args)
 		{
+			switch (args.EntityGuid.TypeId)
+			{
+				case EntityTypeId.TYPEID_OBJECT:
+				case EntityTypeId.TYPEID_ITEM:
+				case EntityTypeId.TYPEID_CONTAINER:
+					return; //This object types don't have movement.
+				case EntityTypeId.TYPEID_UNIT:
+				case EntityTypeId.TYPEID_PLAYER:
+				case EntityTypeId.TYPEID_GAMEOBJECT:
+				case EntityTypeId.TYPEID_DYNAMICOBJECT:
+				case EntityTypeId.TYPEID_CORPSE:
+				default:
+					break;
+			}
+
 			MovementBlockData movementData = MovementDataMappable.RetrieveEntity(args.EntityGuid);
 
 			//We just need to make the world transform match
