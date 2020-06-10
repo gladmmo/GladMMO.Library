@@ -71,9 +71,6 @@ namespace GladMMO
 			//Therefore, we must revisit this and for now use local client timestamp at info start using.
 			LastMovementUpdateTime = currentTime; //TODO: Client uses milliseconds since startup.
 
-			//Directly set to the current position incase we're not there.
-			entity.transform.position = CurrentPosition;
-
 			//If the direction is zero just stop the generator.
 			if (this.MovementData.MoveFlags == 0)
 			{
@@ -91,6 +88,8 @@ namespace GladMMO
 
 			if(diff < 0.0f)
 				throw new InvalidOperationException($"Movement diff time is less than 0. Diff: {diff}");
+			else if (Math.Abs(diff) < float.Epsilon)
+				return entity.transform.position;
 
 			//Some debug code
 			if(diff > 5.0f)
@@ -98,7 +97,9 @@ namespace GladMMO
 
 			//gravity
 			//Don't need to subtract the cached direction Y because it should be 0, or treated as 0.
-			CachedMovementDirection.y = (CHARACTERCONTROLLER_GRAVITY_SPEED * diff);
+			if(!Controller.Value.isGrounded) //this is to prevent stutter, mostly matters for local
+				CachedMovementDirection.y = (CHARACTERCONTROLLER_GRAVITY_SPEED * diff);
+
 			//Debug.Log($"Move: {CachedMovementDirection} Diff: {diff}");
 			Controller.Value.Move(entity.transform.worldToLocalMatrix.inverse * CachedMovementDirection * diff * DefaultPlayerSpeed);
 
@@ -108,8 +109,9 @@ namespace GladMMO
 			return entity.transform.position;
 		}
 
+		//I know virtuals likely cannot be inlined, but leaving this attribute from the past.
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		private float DiffFromStartTime(long currentTime)
+		protected virtual float DiffFromStartTime(long currentTime)
 		{
 			float diff = (float)(currentTime - LastMovementUpdateTime) / 1000.0f; //it's in milliseconds now.
 
@@ -117,7 +119,7 @@ namespace GladMMO
 			//Remote clients timestamps aren't adjusted by server so we get what they sent
 			//which if there is a drift or lack of syncronization it may end up negative.
 			if (diff < 0.0f)
-				return 0.01f; //we do this so it moves a tiny bit at least. This is kind of a hack to prevent Moving movement generators from stationary time desync
+				return 0.0f; //we do this so it moves a tiny bit at least. This is kind of a hack to prevent Moving movement generators from stationary time desync
 
 			return diff;
 		}

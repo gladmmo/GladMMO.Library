@@ -88,7 +88,10 @@ namespace GladMMO
 			{
 				MovementInfoMappable.ReplaceObject(PlayerDetails.LocalPlayerGuid, movementInfo);
 				SendService.SendMessage(payloadToSend);
-				MovementPacketHandler.SpoofLocal(payloadToSend);
+
+				//Don't handle heartbeats locally.
+				if(!args.isHeartBeat)
+					MovementPacketHandler.SpoofLocal(payloadToSend);
 			}
 		}
 

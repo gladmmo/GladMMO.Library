@@ -53,9 +53,7 @@ namespace GladMMO
 		private IMovementGenerator<GameObject> CreatePlayerMovementGenerator(EntityAssociatedData<MovementInfo> context)
 		{
 			//The reason we use a lazy here is because we can't promise that the character controller exists AT ALL at this point sadly.
-			return new ClientCharacterControllerInputMovementGenerator(context.Data, BuildLazyControllerFactory(context), LocalPlayerDetails.LocalPlayerGuid != context.EntityGuid);
-
-			throw new NotSupportedException($"TODO: Encountered unsupported movement data: {context.Data.GetType().Name}");
+			return new ClientCharacterControllerInputMovementGenerator(context.Data, BuildLazyControllerFactory(context), LocalPlayerDetails.LocalPlayerGuid == context.EntityGuid);
 		}
 
 		private Lazy<CharacterController> BuildLazyControllerFactory(EntityAssociatedData<MovementInfo> context)

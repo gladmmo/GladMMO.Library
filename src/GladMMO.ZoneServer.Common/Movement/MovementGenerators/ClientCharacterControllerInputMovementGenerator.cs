@@ -10,36 +10,51 @@ namespace GladMMO
 	public sealed class ClientCharacterControllerInputMovementGenerator : CharacterControllerInputMovementGenerator
 	{
 		//This property mostly exists to allow for callers who may know rotation shouldn't be set can deny it.
-		private bool ShouldSetRotation { get; set; } //mutable now so we can turn it off.
+		private float Rotation { get; } //mutable now so we can turn it off.
 
-		private float Rotation { get; }
+		private bool IsLocalClient { get; }
 
-		public ClientCharacterControllerInputMovementGenerator(MovementInfo movementData, Lazy<CharacterController> controller, bool shouldSetRotation = true) 
+		public ClientCharacterControllerInputMovementGenerator(MovementInfo movementData, Lazy<CharacterController> controller, bool isLocalClient = false) 
 			: base(movementData, controller)
 		{
-			ShouldSetRotation = shouldSetRotation;
+			IsLocalClient = isLocalClient;
 
 			//TODO: Centralize this rotation stuff.
-			if(ShouldSetRotation)
+			if(!IsLocalClient)
 				Rotation = -((MovementData.Orientation) / (2.0f * (float) Math.PI) * 360.0f) % 360.0f;
 		}
 
 		protected override Vector3 Start(GameObject entity, long currentTime)
 		{
-			base.Start(entity, currentTime);
+			if (IsLocalClient)
+			{
+				return base.Start(entity, currentTime);
+			}
+			else
+				base.Start(entity, currentTime);
 
 			//Reason: See https://forum.unity.com/threads/does-transform-position-work-on-a-charactercontroller.36149/
 			Controller.Value.enabled = false;
+
 			//Sets the new authoratively specified movement position.
+			//Directly set to the current position incase we're not there.
 			entity.transform.position = MovementData.Position.ToUnityVector();
 
-			if (ShouldSetRotation)
+			if (!IsLocalClient)
 				entity.transform.eulerAngles = new Vector3(entity.transform.eulerAngles.x, Rotation, entity.transform.eulerAngles.z);
 
 			Controller.Value.enabled = true;
 
 			//We use the server set position here.
 			return entity.transform.position;
+		}
+
+		protected override float DiffFromStartTime(long currentTime)
+		{
+			if (!IsLocalClient)
+				return base.DiffFromStartTime(currentTime);
+			else
+				return Time.deltaTime; //local client should use SUPER accurate Time.deltaTime. Too noticable locally due to camera otherwise.
 		}
 	}
 }
