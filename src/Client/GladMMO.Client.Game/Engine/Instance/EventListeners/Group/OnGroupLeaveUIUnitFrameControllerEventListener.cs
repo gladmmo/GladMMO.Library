@@ -6,7 +6,7 @@ using Glader.Essentials;
 
 namespace GladMMO
 {
-	//[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
+	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
 	public sealed class OnGroupLeaveUIUnitFrameControllerEventListener : EventQueueBasedTickable<IPlayerGroupLeftEventSubscribable, PlayerLeftGroupEventArgs>
 	{
 		private IGroupUnitFrameManager GroupUnitframeManager { get; }
