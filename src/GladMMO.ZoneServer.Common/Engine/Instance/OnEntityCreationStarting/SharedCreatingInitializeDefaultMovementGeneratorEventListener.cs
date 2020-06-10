@@ -1,6 +1,7 @@
 ﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Text;
+using Fasterflect;
 using Glader.Essentials;
 using UnityEngine;
 
@@ -35,6 +36,10 @@ namespace GladMMO
 
 		protected override void OnEventFired(object source, EntityCreationFinishedEventArgs args)
 		{
+			//Non-world objects don't have move generators.
+			if (!args.EntityGuid.IsWorldObject())
+				return;
+
 			MovementBlockData movementData = MovementDataMappable.RetrieveEntity(args.EntityGuid);
 
 			//We're dead, an unmoving corpse.

@@ -22,9 +22,10 @@ namespace GladMMO
 			AutofacScope = autofacScope ?? throw new ArgumentNullException(nameof(autofacScope));
 		}
 
-		public async Task OnGameInitialized()
+		public Task OnGameInitialized()
 		{
 			SceneManager.sceneLoaded += CleanupAutofac;
+			return Task.CompletedTask;
 		}
 
 		public void CleanupAutofac(Scene scene, LoadSceneMode mode)

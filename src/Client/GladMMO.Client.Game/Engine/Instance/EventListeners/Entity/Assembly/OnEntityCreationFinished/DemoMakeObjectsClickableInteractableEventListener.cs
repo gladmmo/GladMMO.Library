@@ -39,6 +39,10 @@ namespace GladMMO
 
 		protected override void OnEventFired(object source, EntityCreationFinishedEventArgs args)
 		{
+			//Only world objects
+			if(!args.EntityGuid.IsWorldObject())
+				return;
+
 			GameObject entity = GameObjectMappable.RetrieveEntity(args.EntityGuid);
 
 			//Adding a test/demo collider to allow for a clicking volume.
