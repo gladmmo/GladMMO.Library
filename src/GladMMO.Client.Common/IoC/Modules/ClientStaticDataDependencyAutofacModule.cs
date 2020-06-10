@@ -37,16 +37,22 @@ namespace GladMMO
 			{
 				builder.RegisterType<SerializerService>()
 					.AsSelf()
+					.SingleInstance()
 					.As<ISerializerService>()
-					.OnActivated(args =>
+					.OnActivating(args =>
 					{
-						foreach (Type dbcType in DefaultClientDataCollectionContainer.DBCTypes)
-							args.Instance.RegisterType(dbcType);
+						try
+						{
+							foreach (Type dbcType in DefaultClientDataCollectionContainer.DBCTypes)
+								args.Instance.RegisterType(dbcType);
 
-						foreach (Type collectionType in DefaultClientDataCollectionContainer.DBCCollectionTypes)
-							args.Instance.RegisterType(collectionType);
-
-						args.Instance.Compile();
+							foreach (Type collectionType in DefaultClientDataCollectionContainer.DBCCollectionTypes)
+								args.Instance.RegisterType(collectionType);
+						}
+						finally
+						{
+							args.Instance.Compile();
+						}
 					});
 			}
 		}

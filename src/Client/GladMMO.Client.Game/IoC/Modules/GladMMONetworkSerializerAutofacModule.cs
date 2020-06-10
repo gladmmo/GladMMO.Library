@@ -24,8 +24,9 @@ namespace GladMMO
 		{
 			builder.RegisterType<SerializerService>()
 				.AsSelf()
+				.SingleInstance()
 				.As<ISerializerService>()
-				.OnActivated(args =>
+				.OnActivating(args =>
 				{
 					//TODO: Automate discovery of payload types.
 					args.Instance.RegisterType<GamePacketPayload>();
@@ -41,7 +42,7 @@ namespace GladMMO
 							.Where(t => t.IsAssignableTo<GamePacketPayload>())
 							.ToArray();
 
-						foreach(Type t in types)
+						foreach (Type t in types)
 						{
 							/*if(logger.IsInfoEnabled)
 								logger.Info($"Registered type: {t}");*/
@@ -55,13 +56,15 @@ namespace GladMMO
 					}
 					catch (Exception e)
 					{
-						if(logger.IsErrorEnabled)
+						if (logger.IsErrorEnabled)
 							logger.Error($"Failed to Register Packet Types. Reason: {e.Message}");
 
 						throw;
 					}
-
-					args.Instance.Compile();
+					finally
+					{
+						args.Instance.Compile();
+					}
 				})
 				.SingleInstance();
 
