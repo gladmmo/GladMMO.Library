@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Glader.Essentials;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
@@ -45,7 +46,7 @@ namespace GladMMO
 		{
 			if (action == null) throw new ArgumentNullException(nameof(action));
 
-			ButtonObject.onClick.AddListener(() => action());
+			ButtonObject.onClick.AddListener(new UnityAction(action));
 		}
 
 		public void AddOnClickListenerAsync(Func<Task> action)
@@ -56,6 +57,11 @@ namespace GladMMO
 			{
 				StartCoroutine(this.AsyncCallbackHandler(action()));
 			});
+		}
+
+		public void RemoveOnClickListener(Action action)
+		{
+			ButtonObject.onClick.RemoveListener(new UnityAction(action));
 		}
 
 		public void SimulateClick(bool eventsOnly)

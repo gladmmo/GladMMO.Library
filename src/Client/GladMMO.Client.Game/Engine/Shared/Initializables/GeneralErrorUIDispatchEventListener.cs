@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Autofac.Features.AttributeFilters;
+using Common.Logging;
 using Glader.Essentials;
 using UnityEngine.SceneManagement;
 
@@ -14,7 +15,7 @@ namespace GladMMO
 	[SceneTypeCreateGladMMO(GameSceneType.TitleScreen)]
 	[SceneTypeCreateGladMMO(GameSceneType.PreZoneBurstingScreen)]
 	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
-	public sealed class GeneralErrorUIDispatchEventListener : ThreadUnSafeBaseSingleEventListenerInitializable<IGeneralErrorEncounteredEventSubscribable, GeneralErrorEncounteredEventArgs>
+	public sealed class GeneralErrorUIDispatchEventListener : ThreadUnSafeBaseSingleEventListenerInitializable<IGeneralErrorEncounteredEventSubscribable, GeneralErrorEncounteredEventArgs>, IDisposable
 	{
 		public IUIText ErrorTitle { get; }
 
@@ -23,6 +24,8 @@ namespace GladMMO
 		public IUIButton ErrorButton { get; }
 
 		public IUIElement ErrorDialogBox { get; }
+
+		private ILog Logger { get; }
 
 		//We don't use a stack because we want to handle errors
 		//first in first out. This means we could have SERVE errors in front of minor errors so we
@@ -34,7 +37,8 @@ namespace GladMMO
 			[KeyFilter(UnityUIRegisterationKey.ErrorTitle)] [NotNull] IUIText errorTitle,
 			[KeyFilter(UnityUIRegisterationKey.ErrorMessage)] [NotNull] IUIText errorMessage,
 			[KeyFilter(UnityUIRegisterationKey.ErrorOkButton)] [NotNull] IUIButton errorButton,
-			[KeyFilter(UnityUIRegisterationKey.ErrorBox)] [NotNull] IUIElement errorDialogBox)
+			[KeyFilter(UnityUIRegisterationKey.ErrorBox)] [NotNull] IUIElement errorDialogBox,
+			[NotNull] ILog logger)
 			: base(subscriptionService)
 		{
 			if (subscriptionService == null) throw new ArgumentNullException(nameof(subscriptionService));
@@ -42,14 +46,21 @@ namespace GladMMO
 			ErrorMessage = errorMessage ?? throw new ArgumentNullException(nameof(errorMessage));
 			ErrorButton = errorButton ?? throw new ArgumentNullException(nameof(errorButton));
 			ErrorDialogBox = errorDialogBox ?? throw new ArgumentNullException(nameof(errorDialogBox));
+			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
 			ErrorArgsQueue = new Queue<GeneralErrorEncounteredEventArgs>(2);
 			//Register callback into this dispatcher.
 			ErrorButton.AddOnClickListener(OnErrorOkButtonClicked);
+
+			if(logger.IsDebugEnabled)
+				Logger.Debug($"Creating Error Handler for Scene: {SceneManager.GetActiveScene().name}");
 		}
 
 		private void OnErrorOkButtonClicked()
 		{
+			if(Logger.IsWarnEnabled)
+				Logger.Warn($"Error Frame OK. Error Args Count: {ErrorArgsQueue.Count}.");
+
 			//They clicked ok.
 			//Dispatch the action if any in the current top of the queue
 			//and we need to handle the next error too
@@ -63,6 +74,9 @@ namespace GladMMO
 
 		protected override void OnThreadUnSafeEventFired(object source, GeneralErrorEncounteredEventArgs args)
 		{
+			if(Logger.IsWarnEnabled)
+				Logger.Warn($"General Error Encountered. Processing.");
+
 			ErrorArgsQueue.Enqueue(args);
 
 			//if the one we added is the only one we should set the values.
@@ -77,6 +91,14 @@ namespace GladMMO
 			ErrorTitle.Text = args.ErrorTitle;
 			ErrorMessage.Text = args.ErrorMessage;
 			ErrorDialogBox.SetElementActive(true);
+		}
+
+		public void Dispose()
+		{
+			if(Logger.IsDebugEnabled)
+				Logger.Debug($"Unregistered General Error hook.");
+
+			ErrorButton.RemoveOnClickListener(OnErrorOkButtonClicked);
 		}
 	}
 }
