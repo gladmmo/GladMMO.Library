@@ -59,12 +59,24 @@ namespace GladMMO
 			DataLoadingTask = CreateDataLoadingTask();
 		}
 
-		private async Task CreateDataLoadingTask()
+		private Task CreateDataLoadingTask()
 		{
-			await LoadFileAsync<MapEntry<string>>().AddToDictionary(GDBCCollectionMap);
-			await LoadFileAsync<LoadingScreensEntry<string>>().AddToDictionary(GDBCCollectionMap);
-			await LoadFileAsync<SpellIconEntry<string>>().AddToDictionary(GDBCCollectionMap);
-			await LoadFileAsync<SpellEntry<string>>().AddToDictionary(GDBCCollectionMap);
+			List<Task> loadingTaskList = new List<Task>
+			{
+				//ALWAYS start this one first.
+				LoadOnBackgroundThreadAsync<SpellEntry<string>>(),
+				LoadOnBackgroundThreadAsync<MapEntry<string>>(), 
+				LoadOnBackgroundThreadAsync<LoadingScreensEntry<string>>(), 
+				LoadOnBackgroundThreadAsync<SpellIconEntry<string>>(), 
+			};
+
+			return Task.WhenAll(loadingTaskList);
+		}
+
+		private Task LoadOnBackgroundThreadAsync<T>() 
+			where T : IDBCEntryIdentifiable
+		{
+			return Task.Factory.StartNew(async () => await LoadFileAsync<T>().AddToDictionary(GDBCCollectionMap), TaskCreationOptions.PreferFairness);
 		}
 
 		public IGDBCCollection<TEntryType> DataType<TEntryType>()
