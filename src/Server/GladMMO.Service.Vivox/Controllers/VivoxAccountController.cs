@@ -20,7 +20,7 @@ namespace GladMMO
 		[AuthorizeJwt]
 		[NoResponseCache]
 		[HttpPost("Login")]
-		public async Task<IActionResult> LoginVivox([FromServices] ICharacterSessionRepository characterSessionRepository,
+		public async Task<IActionResult> LoginVivox([FromServices] ITrinityCharacterRepository characterRepository,
 			[FromServices] IFactoryCreatable<VivoxTokenClaims, VivoxTokenClaimsCreationContext> claimsFactory,
 			[FromServices] IVivoxTokenSignService signService)
 		{
@@ -28,10 +28,10 @@ namespace GladMMO
 
 			//If the user doesn't actually have a claimed session in the game
 			//then we shouldn't log them into Vivox.
-			if (!await characterSessionRepository.AccountHasActiveSession(accountId))
+			if (!await characterRepository.AccountHasActiveSession(accountId))
 				return BuildFailedResponseModel(VivoxLoginResponseCode.NoActiveCharacterSession);
 
-			int characterId = await RetrieveSessionCharacterIdAsync(characterSessionRepository, accountId);
+			int characterId = await RetrieveSessionCharacterIdAsync(characterRepository, accountId);
 
 			VivoxTokenClaims claims = claimsFactory.Create(new VivoxTokenClaimsCreationContext(characterId, VivoxAction.Login));
 
@@ -40,12 +40,12 @@ namespace GladMMO
 			return BuildSuccessfulResponseModel(signService.CreateSignature(claims));
 		}
 
-		private static async Task<int> RetrieveSessionCharacterIdAsync(ICharacterSessionRepository characterSessionRepository, int accountId)
+		private static async Task<int> RetrieveSessionCharacterIdAsync(ITrinityCharacterRepository characterRepository, int accountId)
 		{
 			//TODO: Technically a race condition here.
 			//Now let's actually get the character id of the session that the account has
-			ClaimedSessionsModel session = await characterSessionRepository.RetrieveClaimedSessionByAccountId(accountId);
-			int characterId = session.CharacterId;
+			Characters session = await characterRepository.RetrieveClaimedSessionByAccountId(accountId);
+			int characterId = (int) session.Guid;
 			return characterId;
 		}
 	}

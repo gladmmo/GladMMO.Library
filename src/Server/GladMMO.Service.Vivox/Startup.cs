@@ -58,26 +58,11 @@ namespace GladMMO
 		{
 			if (services == null) throw new ArgumentNullException(nameof(services));
 
-			services.AddDbContext<CharacterDatabaseContext>(o =>
-			{
-				//Fuck configuration, I'm sick of it and we can't check it into source control
-				//so we're using enviroment variables for sensitive deployment specific values.
-#if AZURE_RELEASE || AZURE_DEBUG
-				try
-				{
-					o.UseMySql(Environment.GetEnvironmentVariable(GladMMOServiceConstants.CHARACTER_DATABASE_CONNECTION_STRING_ENV_VAR_PATH));
-				}
-				catch(Exception e)
-				{
-					throw new InvalidOperationException($"Failed to register Authentication Database. Make sure Env Variable path: {GladMMOServiceConstants.AUTHENTICATION_DATABASE_CONNECTION_STRING_ENV_VAR_PATH} is correctly configured.", e);
-				}
-#else
-				o.UseMySql("Server=127.0.0.1;Database=guardians.gameserver;Uid=root;Pwd=test;");
-#endif
-			});
+			//"server=127.0.0.1;port=3307;user=root;password=test;database=proudmoore_world Timeout=9000"
+			services.AddDbContext<wotlk_charactersContext>(builder => { builder.UseMySql("server=127.0.0.1;port=3307;user=root;password=test;database=wotlk_characters"); })
+				.AddEntityFrameworkMySql();
 
-			services.AddTransient<ICharacterSessionRepository, DatabaseBackedCharacterSessionRepository>();
-			services.AddTransient<IGuildCharacterMembershipRepository, DatabaseBackedGuildCharacterMembershipRepository>();
+			services.AddTransient<ITrinityCharacterRepository, TrinityCoreCharacterRepository>();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
