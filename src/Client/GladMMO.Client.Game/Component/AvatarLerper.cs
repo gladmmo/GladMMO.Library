@@ -14,7 +14,6 @@ namespace GladMMO
 		[SerializeField]
 		private Transform TransformToFollow;
 
-		[Range(0.0f, 1.0f)]
 		[SerializeField]
 		private float LerpPower = 0.7f;
 
@@ -26,8 +25,8 @@ namespace GladMMO
 
 		void LateUpdate()
 		{
-			lastPosition = transform.position = Vector3.Lerp(lastPosition, TransformToFollow.position, LerpPower);
-			lastRotation = transform.rotation = Quaternion.Slerp(lastRotation, TransformToFollow.rotation, LerpPower);
+			lastPosition = transform.position = Vector3.Slerp(lastPosition, TransformToFollow.position, LerpPower * Time.deltaTime);
+			lastRotation = transform.rotation = Quaternion.Slerp(lastRotation, TransformToFollow.rotation, LerpPower * Time.deltaTime);
 		}
 	}
 }
