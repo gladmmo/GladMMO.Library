@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using FreecraftCore;
 using FreecraftCore.Serializer;
@@ -14,7 +15,8 @@ namespace GladMMO
 		public static async Task AddToDictionary<T>(this Task<GDBCCollection<T>> collection, IDictionary<Type, object> map)
 			where T : IDBCEntryIdentifiable
 		{
-			map.Add(typeof(T), await collection);
+			map.Add(typeof(T), await collection.ConfigureAwaitFalse());
+			UnityEngine.Debug.Log($"Finished loading DBC {typeof(T).Name} on Thread: {Thread.CurrentThread.ManagedThreadId}");
 		}
 	}
 
@@ -48,6 +50,9 @@ namespace GladMMO
 		public DefaultClientDataCollectionContainer([NotNull] ISerializerService serializer)
 		{
 			Serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
+
+			if(!serializer.isCompiled)
+				throw new InvalidOperationException($"Serializer not compiled.");
 		}
 
 		public void StartLoadingAsync()
@@ -76,7 +81,7 @@ namespace GladMMO
 		private Task LoadOnBackgroundThreadAsync<T>() 
 			where T : IDBCEntryIdentifiable
 		{
-			return Task.Factory.StartNew(async () => await LoadFileAsync<T>().AddToDictionary(GDBCCollectionMap), TaskCreationOptions.PreferFairness);
+			return LoadFileAsync<T>().AddToDictionary(GDBCCollectionMap);
 		}
 
 		public IGDBCCollection<TEntryType> DataType<TEntryType>()
@@ -102,7 +107,9 @@ namespace GladMMO
 				using(FileStream stream = new FileStream(path, FileMode.Open, FileAccess.Read))
 				using(MemoryStream ms = new MemoryStream())
 				{
-					await stream.CopyToAsync(ms);
+					await stream.CopyToAsync(ms)
+						.ConfigureAwaitFalseVoid();
+
 					ms.Position = 0;
 					return Serializer.Deserialize<GDBCCollection<T>>(new DefaultStreamReaderStrategy(ms.ToArray()));
 				}
