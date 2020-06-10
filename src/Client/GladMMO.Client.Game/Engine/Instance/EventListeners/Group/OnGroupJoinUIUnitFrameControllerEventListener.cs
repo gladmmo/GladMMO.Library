@@ -16,15 +16,19 @@ namespace GladMMO
 
 		private IGroupUnitFrameManager GroupUnitframeManager { get; }
 
+		private IEntityNameQueryable NameQueryable { get; }
+
 		/// <inheritdoc />
 		public OnGroupJoinUIUnitFrameControllerEventListener(IPlayerGroupJoinedEventSubscribable subscriptionService,
 			[NotNull] IReadonlyEntityGuidMappable<IEntityDataFieldContainer> entityDataMappable,
 			[NotNull] ILog logger,
-			[NotNull] IGroupUnitFrameManager groupUnitframeManager)
+			[NotNull] IGroupUnitFrameManager groupUnitframeManager,
+			[NotNull] IEntityNameQueryable nameQueryable)
 			: base(subscriptionService, true, logger)
 		{
 			EntityDataMappable = entityDataMappable ?? throw new ArgumentNullException(nameof(entityDataMappable));
 			GroupUnitframeManager = groupUnitframeManager ?? throw new ArgumentNullException(nameof(groupUnitframeManager));
+			NameQueryable = nameQueryable ?? throw new ArgumentNullException(nameof(nameQueryable));
 		}
 
 		/// <inheritdoc />
@@ -55,6 +59,11 @@ namespace GladMMO
 				RecaculateLevelUI(args.PlayerGuid, EntityDataMappable.RetrieveEntity(args.PlayerGuid).GetFieldValue<int>((int)EUnitFields.UNIT_FIELD_LEVEL));
 				GroupUnitframeManager[args.PlayerGuid].SetElementActive(true);
 			}
+
+			//TODO: Support when we don't know it.
+			//Initialize name
+			if (NameQueryable.Exists(args.PlayerGuid))
+				GroupUnitframeManager[args.PlayerGuid].UnitName.Text = NameQueryable.Retrieve(args.PlayerGuid);
 		}
 
 		private void OnCurrentLevelChanged(ObjectGuid entity, EntityDataChangedArgs<int> eventArgs)
