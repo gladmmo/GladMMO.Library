@@ -33,6 +33,9 @@ namespace GladMMO
 		//Eventually we should do a priority queue.
 		private Queue<GeneralErrorEncounteredEventArgs> ErrorArgsQueue { get; }
 
+		//TODO: Find a better way to unregister.
+		private Action OnErrorButtonPressedOkPersistedAction { get; }
+
 		public GeneralErrorUIDispatchEventListener([NotNull] IGeneralErrorEncounteredEventSubscribable subscriptionService,
 			[KeyFilter(UnityUIRegisterationKey.ErrorTitle)] [NotNull] IUIText errorTitle,
 			[KeyFilter(UnityUIRegisterationKey.ErrorMessage)] [NotNull] IUIText errorMessage,
@@ -49,8 +52,12 @@ namespace GladMMO
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
 			ErrorArgsQueue = new Queue<GeneralErrorEncounteredEventArgs>(2);
+
+			//TODO: Find a better way to unregister.
+			OnErrorButtonPressedOkPersistedAction = OnErrorOkButtonClicked;
+
 			//Register callback into this dispatcher.
-			ErrorButton.AddOnClickListener(OnErrorOkButtonClicked);
+			ErrorButton.AddOnClickListener(OnErrorButtonPressedOkPersistedAction);
 
 			if(logger.IsDebugEnabled)
 				Logger.Debug($"Creating Error Handler for Scene: {SceneManager.GetActiveScene().name}");
@@ -58,18 +65,28 @@ namespace GladMMO
 
 		private void OnErrorOkButtonClicked()
 		{
-			if(Logger.IsWarnEnabled)
-				Logger.Warn($"Error Frame OK. Error Args Count: {ErrorArgsQueue.Count}.");
+			try
+			{
+				if(Logger.IsWarnEnabled)
+					Logger.Warn($"Error Frame OK. Error Args Count: {ErrorArgsQueue.Count}.");
 
-			//They clicked ok.
-			//Dispatch the action if any in the current top of the queue
-			//and we need to handle the next error too
-			ErrorArgsQueue.Dequeue().OnButtonClicked?.Invoke();
+				//They clicked ok.
+				//Dispatch the action if any in the current top of the queue
+				//and we need to handle the next error too
+				ErrorArgsQueue.Dequeue().OnButtonClicked?.Invoke();
 
-			if (ErrorArgsQueue.Any())
-				InitializeErrorMenu(ErrorArgsQueue.Peek());
-			else
-				ErrorDialogBox.SetElementActive(false);
+				if(ErrorArgsQueue.Any())
+					InitializeErrorMenu(ErrorArgsQueue.Peek());
+				else
+					ErrorDialogBox.SetElementActive(false);
+			}
+			catch (Exception e)
+			{
+				if(Logger.IsErrorEnabled)
+					Logger.Error($"Encountered Error in Error Handler. Error: {e.Message}");
+
+				throw;
+			}
 		}
 
 		protected override void OnThreadUnSafeEventFired(object source, GeneralErrorEncounteredEventArgs args)
@@ -98,7 +115,7 @@ namespace GladMMO
 			if(Logger.IsDebugEnabled)
 				Logger.Debug($"Unregistered General Error hook.");
 
-			ErrorButton.RemoveOnClickListener(OnErrorOkButtonClicked);
+			ErrorButton.RemoveOnClickListener(OnErrorButtonPressedOkPersistedAction);
 		}
 	}
 }
