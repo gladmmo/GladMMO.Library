@@ -138,6 +138,10 @@ namespace GladMMO
 				AtLogin = 32, //use login flags enum
 				Health = 500000000,
 				TalentGroupsCount = 1,
+				Map = 13, //Test map
+				PositionX = 0,
+				PositionY = 0,
+				PositionZ = -144.698f,
 
 				Race = (byte)FreecraftCore.CharacterRace.HUMAN,
 				Class = (byte)FreecraftCore.CharacterClass.Warrior,
