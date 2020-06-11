@@ -69,9 +69,14 @@ namespace GladMMO
 
 		public void Disable()
 		{
+			InternalChangeState(false);
+		}
+
+		private void InternalChangeState(bool state)
+		{
 			//Can only do this on the main thread.
 			if (UnityAsyncHelper.UnityMainThreadContext == SynchronizationContext.Current)
-				InternalSetActive(false);
+				InternalSetActive(state);
 			else
 			{
 				//Not on main thread
@@ -79,7 +84,7 @@ namespace GladMMO
 				{
 					using (await SyncObj.LockAsync())
 					{
-						InternalSetActive(false);
+						InternalSetActive(state);
 					}
 				});
 			}
@@ -102,7 +107,7 @@ namespace GladMMO
 					Logger.Warn($"Requested LoadingScreen for Map: {mapId} but doesn't exist.");
 
 				//Even if we don't have it, load whatever we DO have as a default.
-				InternalSetActive(true);
+				InternalChangeState(true);
 				return;
 			}
 
@@ -114,7 +119,7 @@ namespace GladMMO
 					Logger.Warn($"Requested LoadingScreen for Map: {mapId} with LoadingScreen: {loadingScreenId} but doesn't exist.");
 
 				//Even if we don't have it, load whatever we DO have as a default.
-				InternalSetActive(true);
+				InternalChangeState(true);
 				return;
 			}
 
