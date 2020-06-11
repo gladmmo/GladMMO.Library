@@ -41,6 +41,8 @@ namespace GladMMO
 		/// </summary>
 		protected CancellationTokenSource CancelTokenSource { get; } = new CancellationTokenSource();
 
+		private volatile bool StopSilently = false;
+
 		/// <inheritdoc />
 		protected BaseUnityNetworkClient(
 			MessageHandlerService<TIncomingPayloadType, TOutgoingPayloadType> handlers, 
@@ -82,12 +84,19 @@ namespace GladMMO
 						bool result = await Handlers.TryHandleMessage(MessageContextFactory.Create(client, client, requestService), message)
 							.ConfigureAwaitFalse();
 					}
+					catch (OperationCanceledException e)
+					{
+						if (!StopSilently)
+						{
+							if(Logger.IsInfoEnabled)
+								Logger.Info($"Error: {e.Message}\n\n Stack Trace: {e.StackTrace}");
+						}
+					}
 					catch (Exception e)
 					{
 						if (Logger.IsInfoEnabled)
 							Logger.Info($"Error: {e.Message}\n\n Stack Trace: {e.StackTrace}");
 					}
-
 				}
 			}
 			catch (Exception e)
@@ -102,7 +111,8 @@ namespace GladMMO
 				if(Logger.IsInfoEnabled)
 					Logger.Info("Network client stopped reading.");
 
-				OnClientStoppedHandlingMessages();
+				if(!StopSilently)
+					OnClientStoppedHandlingMessages();
 			}
 		}
 
@@ -124,7 +134,7 @@ namespace GladMMO
 		}
 
 		/// <inheritdoc />
-		public Task StopHandlingNetworkClient(bool handleImmediately = false)
+		public Task StopHandlingNetworkClient(bool handleImmediately = false, bool silent = false)
 		{
 			//If not handling, 
 			if(!isNetworkHandling)
@@ -132,9 +142,10 @@ namespace GladMMO
 
 			isNetworkHandling = false;
 
+			StopSilently = silent;
 			CancelTokenSource.Cancel();
 			
-			if(handleImmediately)
+			if(handleImmediately && !silent)
 				OnClientStoppedHandlingMessages();
 
 			return Task.CompletedTask;

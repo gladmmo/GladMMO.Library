@@ -19,6 +19,6 @@ namespace GladMMO
 
 		Task StartHandlingNetworkClient([NotNull] IManagedNetworkClient<TOutgoingPayloadType, TIncomingPayloadType> client);
 
-		Task StopHandlingNetworkClient(bool handleImmediately = false);
+		Task StopHandlingNetworkClient(bool handleImmediately = false, bool silent = false);
 	}
 }

@@ -5,8 +5,7 @@ using Glader.Essentials;
 
 namespace GladMMO
 {
-	//[SceneTypeCreateGladMMO(GameSceneType.CharacterSelection)]
-	//[SceneTypeCreateGladMMO(GameSceneType.PreZoneBurstingScreen)]
+	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
 	public sealed class SharedOnSceneChangedDisableNetworkHandlingEventListener : BaseSingleEventListenerInitializable<IRequestedSceneChangeEventSubscribable, RequestedSceneChangeEventArgs>
 	{
 		private INetworkClientManager ClientManager { get; }
@@ -24,7 +23,7 @@ namespace GladMMO
 			//When a scene change is sent by the server, we are DEFINITELY going to change the scene.
 			//When we do, we need to export/disconnect the client from it's handling
 			//so to do that we just tell the client manager to disconnect.
-			ClientManager.StopHandlingNetworkClient().Wait();
+			ClientManager.StopHandlingNetworkClient(true, true);
 		}
 	}
 }
