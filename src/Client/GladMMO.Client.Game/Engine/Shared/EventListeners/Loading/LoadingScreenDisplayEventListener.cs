@@ -13,41 +13,21 @@ namespace GladMMO
 	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
 	public sealed class LoadingScreenDisplayEventListener : BaseSingleEventListenerInitializable<IRequestedSceneChangeEventSubscribable, RequestedSceneChangeEventArgs>
 	{
-		public IUIElement LoadingScreenRoot { get; }
-
-		public IUIImage LoadingScreenBackgroundImage { get; }
-
-		public IClientDataCollectionContainer ClientData { get; }
+		private ILoadingScreenManagementService LoadingScreenService { get; }
 
 		public LoadingScreenDisplayEventListener([NotNull] IRequestedSceneChangeEventSubscribable subscriptionService,
-			[KeyFilter(UnityUIRegisterationKey.LoadingScreen)] [NotNull] IUIElement loadingScreenRoot,
-			[KeyFilter(UnityUIRegisterationKey.LoadingScreen)] [NotNull] IUIImage loadingScreenBackgroundImage,
-			[NotNull] IClientDataCollectionContainer clientData) 
+			[NotNull] ILoadingScreenManagementService loadingScreenService) 
 			: base(subscriptionService)
 		{
-			LoadingScreenRoot = loadingScreenRoot ?? throw new ArgumentNullException(nameof(loadingScreenRoot));
-			LoadingScreenBackgroundImage = loadingScreenBackgroundImage ?? throw new ArgumentNullException(nameof(loadingScreenBackgroundImage));
-			ClientData = clientData ?? throw new ArgumentNullException(nameof(clientData));
+			LoadingScreenService = loadingScreenService ?? throw new ArgumentNullException(nameof(loadingScreenService));
 		}
 
 		protected override void OnEventFired(object source, RequestedSceneChangeEventArgs args)
 		{
 			if (args.isLoadingSpecificMap)
 			{
-				var mapEntry = ClientData.GetEntry<MapEntry<string>>(args.MapId);
-				if (ClientData.HasEntry<LoadingScreensEntry<string>>(mapEntry.LoadingScreenId))
-				{
-					//TODO: Handle widescreen
-					var loadingScreen = ClientData.GetEntry<LoadingScreensEntry<string>>(mapEntry.LoadingScreenId);
-
-					//Note: Extensions must be omitted. https://docs.unity3d.com/ScriptReference/Resources.Load.html
-					string imagePath = Path.ChangeExtension(loadingScreen.FilePath, null);
-
-					LoadingScreenBackgroundImage.SetSpriteTexture(Resources.Load<Texture2D>(imagePath));
-				}
+				LoadingScreenService.EnableLoadingScreenForMap(args.MapId);
 			}
-
-			LoadingScreenRoot.SetElementActive(true);
 		}
 	}
 }

@@ -9,18 +9,18 @@ namespace GladMMO
 	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
 	public sealed class DisableLoadingScreenOnLocalPlayerSpawnedEventListener : OnLocalPlayerSpawnedEventListener
 	{
-		public IUIElement LoadingScreenRoot { get; }
+		private ILoadingScreenManagementService LoadingScreenService { get; }
 
 		public DisableLoadingScreenOnLocalPlayerSpawnedEventListener(ILocalPlayerSpawnedEventSubscribable subscriptionService,
-			[KeyFilter(UnityUIRegisterationKey.LoadingScreen)] [NotNull] IUIElement loadingScreenRoot) 
+			[NotNull] ILoadingScreenManagementService loadingScreenService) 
 			: base(subscriptionService)
 		{
-			LoadingScreenRoot = loadingScreenRoot ?? throw new ArgumentNullException(nameof(loadingScreenRoot));
+			LoadingScreenService = loadingScreenService ?? throw new ArgumentNullException(nameof(loadingScreenService));
 		}
 
 		protected override void OnLocalPlayerSpawned(LocalPlayerSpawnedEventArgs args)
 		{
-			LoadingScreenRoot.SetElementActive(false);
+			LoadingScreenService.Disable();
 		}
 	}
 }

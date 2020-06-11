@@ -7,21 +7,20 @@ using Glader.Essentials;
 
 namespace GladMMO
 {
-	[SceneTypeCreateGladMMO(GameSceneType.TitleScreen)]
 	[SceneTypeCreateGladMMO(GameSceneType.CharacterSelection)]
 	public sealed class ClearLoadingScreenInitializable : IGameInitializable
 	{
-		private IUIElement LoadingScreenRoot { get; }
+		private ILoadingScreenManagementService LoadingScreenService { get; }
 
-		public ClearLoadingScreenInitializable([KeyFilter(UnityUIRegisterationKey.LoadingScreen)] [NotNull] IUIElement loadingScreenRoot)
+		public ClearLoadingScreenInitializable([NotNull] ILoadingScreenManagementService loadingScreenService)
 		{
-			LoadingScreenRoot = loadingScreenRoot ?? throw new ArgumentNullException(nameof(loadingScreenRoot));
+			LoadingScreenService = loadingScreenService ?? throw new ArgumentNullException(nameof(loadingScreenService));
 		}
 
 		public Task OnGameInitialized()
 		{
-			if(LoadingScreenRoot.isActive)
-				LoadingScreenRoot.SetElementActive(false);
+			if(LoadingScreenService.isActive)
+				LoadingScreenService.Disable();
 
 			return Task.CompletedTask;
 		}
