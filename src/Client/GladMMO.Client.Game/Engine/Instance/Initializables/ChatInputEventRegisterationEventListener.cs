@@ -87,7 +87,14 @@ namespace GladMMO
 						case "/s":
 							type = ChatChannelType.Proximity;
 							break;
+						default:
+							type = ChatChannelType.System;
+							break;
 					}
+				}
+				else if (ChatEnterText.Text[0] == '.')
+				{
+					type = ChatChannelType.RealtimeServerCommand;
 				}
 
 				OnChatMessageEntered?.Invoke(this, new ChatTextMessageEnteredEventArgs(type, chatMessage));
