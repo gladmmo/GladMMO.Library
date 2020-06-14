@@ -66,10 +66,10 @@ namespace GladMMO
 
 		protected override void OnLocalPlayerSpawned(LocalPlayerSpawnedEventArgs args)
 		{
-			RegisterPlayerDataChangeCallback<ulong>(EUnitFields.UNIT_FIELD_TARGET, OnPlayerTargetEntityDatChanged);
+			RegisterPlayerDataChangeCallback<ulong>(EUnitFields.UNIT_FIELD_TARGET, OnPlayerTargetEntityDataChanged);
 		}
 
-		private void OnPlayerTargetEntityDatChanged(ObjectGuid entity, EntityDataChangedArgs<ulong> changeArgs)
+		private void OnPlayerTargetEntityDataChanged(ObjectGuid entity, EntityDataChangedArgs<ulong> changeArgs)
 		{
 			ObjectGuid guid = new ObjectGuid(changeArgs.NewValue);
 
