@@ -36,7 +36,6 @@ namespace GladMMO
 					if (context.Data.MoveFlags.HasAnyFlags(MovementFlag.MOVEMENTFLAG_SPLINE_ENABLED))
 					{
 						SplineInfo info = SplineInfoMappable.RetrieveEntity(context.EntityGuid);
-
 						//TODO: Support cyclical
 						LinearPathMoveInfo spoofedLinearMoveInfo = new LinearPathMoveInfo(info.WayPoints.Length - 1, info.SplineEndpoint, Array.Empty<byte>());
 						return new LinearPathMovementGenerator(spoofedLinearMoveInfo, context.Data.Position.ToUnityVector(), info.SplineFullTime, info.SplineTime);

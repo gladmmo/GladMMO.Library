@@ -38,7 +38,6 @@ namespace GladMMO
 
 				//All these types have a spline.
 				case MonsterMoveType.MonsterMoveNormal:
-					break;
 				case MonsterMoveType.MonsterMoveFacingSpot:
 				case MonsterMoveType.MonsterMoveFacingTarget:
 				case MonsterMoveType.MonsterMoveFacingAngle:
