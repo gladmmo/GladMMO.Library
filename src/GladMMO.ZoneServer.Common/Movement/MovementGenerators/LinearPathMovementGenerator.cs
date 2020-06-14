@@ -57,7 +57,8 @@ namespace GladMMO
 			if (TotalLengthDuration == 0 || TimeWeights[0] == 0) //this case can happen there is no diff between last and first point.
 			{
 				StopGenerator();
-				return entity.transform.position = GeneratedPath.Last();
+
+				return entity.transform.position = GeneratedPath[GeneratedPath.Length - 1]; //this is fine, it's ALWAYS at least 2 in size.
 			}
 			else
 			{
