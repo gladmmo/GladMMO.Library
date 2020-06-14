@@ -7,6 +7,7 @@ using Common.Logging;
 using Glader.Essentials;
 using GladMMO;
 using GladNet;
+using Nito.AsyncEx;
 
 namespace GladMMO
 {
@@ -19,16 +20,16 @@ namespace GladMMO
 	{
 		private INetworkEntityVisibilityEventPublisher VisibilityEventPublisher { get; }
 
-		private IFactoryCreatable<NetworkEntityNowVisibleEventArgs, ObjectCreationData> VisibileEventFactory { get; }
+		private IFactoryCreatable<NetworkEntityNowVisibleEventArgs, ObjectCreationData> VisibleEventFactory { get; }
 
 		/// <inheritdoc />
 		public ObjectUpdateCreateObject2BlockHandler(ILog logger,
 			[NotNull] INetworkEntityVisibilityEventPublisher visibilityEventPublisher,
-			[NotNull] IFactoryCreatable<NetworkEntityNowVisibleEventArgs, ObjectCreationData> visibileEventFactory)
+			[NotNull] IFactoryCreatable<NetworkEntityNowVisibleEventArgs, ObjectCreationData> visibleEventFactory)
 			: base(ObjectUpdateType.UPDATETYPE_CREATE_OBJECT2, logger)
 		{
 			VisibilityEventPublisher = visibilityEventPublisher ?? throw new ArgumentNullException(nameof(visibilityEventPublisher));
-			VisibileEventFactory = visibileEventFactory ?? throw new ArgumentNullException(nameof(visibileEventFactory));
+			VisibleEventFactory = visibleEventFactory ?? throw new ArgumentNullException(nameof(visibleEventFactory));
 		}
 
 		/// <inheritdoc />
@@ -70,7 +71,7 @@ namespace GladMMO
 					throw new ArgumentOutOfRangeException($"Unable to handle the creation of ObjectType: {updateBlock.UpdateType}");
 			}
 
-			NetworkEntityNowVisibleEventArgs visibilityEvent = VisibileEventFactory.Create(updateBlock.CreationData);
+			NetworkEntityNowVisibleEventArgs visibilityEvent = VisibleEventFactory.Create(updateBlock.CreationData);
 
 			//Now we broadcast that an entity is now visible.
 			VisibilityEventPublisher.Publish(visibilityEvent);
