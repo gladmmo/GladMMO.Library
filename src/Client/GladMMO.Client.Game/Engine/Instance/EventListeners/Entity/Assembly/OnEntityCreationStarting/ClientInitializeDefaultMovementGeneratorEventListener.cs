@@ -9,11 +9,10 @@ namespace GladMMO
 	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
 	public sealed class ClientInitializeDefaultMovementGeneratorEventListener : SharedCreatingInitializeDefaultMovementGeneratorEventListener
 	{
-		public ClientInitializeDefaultMovementGeneratorEventListener(IEntityCreationFinishedEventSubscribable subscriptionService, 
-			IEntityGuidMappable<IMovementGenerator<GameObject>> movementGeneratorMappable, 
-			IFactoryCreatable<IMovementGenerator<GameObject>, EntityAssociatedData<MovementInfo>> movementGeneratorFactory, 
-			IReadonlyEntityGuidMappable<MovementBlockData> movementDataMappable, IEntityGuidMappable<SplineInfo> splineInfoMappable) 
-			: base(subscriptionService, movementGeneratorMappable, movementGeneratorFactory, movementDataMappable, splineInfoMappable)
+		public ClientInitializeDefaultMovementGeneratorEventListener(IEntityCreationFinishedEventSubscribable subscriptionService,
+			IReadonlyEntityGuidMappable<MovementBlockData> movementDataMappable,
+			IMovementDataUpdater<MovementBlockData> movementDataUpdater) 
+			: base(subscriptionService, movementDataMappable, movementDataUpdater)
 		{
 
 		}
