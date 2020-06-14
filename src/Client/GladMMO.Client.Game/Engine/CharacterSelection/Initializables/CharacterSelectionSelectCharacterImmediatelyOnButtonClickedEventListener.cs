@@ -28,18 +28,22 @@ namespace GladMMO
 
 		private IReadonlyEntityGuidMappable<CharacterDataInstance> CharacterDataInstance { get; }
 
+		private ILoadingScreenStateChangedEventSubscribable LoadingScreenChangedSubscriptionService { get; }
+
 		/// <inheritdoc />
 		public CharacterSelectionSelectCharacterImmediatelyOnButtonClickedEventListener(
 			IEnterWorldButtonClickedEventSubscribable enterWorldButtonClickableEventSubscribable,
-			[NotNull] ICharacterSelectionButtonClickedEventSubscribable subscriptionService, 
+			[NotNull] ICharacterSelectionButtonClickedEventSubscribable subscriptionService,
 			[NotNull] ILocalCharacterDataRepository characterData, 
 			[NotNull] ILog logger,
-			[NotNull] IReadonlyEntityGuidMappable<CharacterDataInstance> characterDataInstance)
+			[NotNull] IReadonlyEntityGuidMappable<CharacterDataInstance> characterDataInstance,
+			ILoadingScreenStateChangedEventSubscribable loadingScreenChangedSubscriptionService)
 			: base(enterWorldButtonClickableEventSubscribable)
 		{
 			CharacterData = characterData ?? throw new ArgumentNullException(nameof(characterData));
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
 			CharacterDataInstance = characterDataInstance ?? throw new ArgumentNullException(nameof(characterDataInstance));
+			LoadingScreenChangedSubscriptionService = loadingScreenChangedSubscriptionService;
 
 			//Manually rig up.
 			subscriptionService.OnCharacterButtonClicked += OnCharacterButtonClicked;
@@ -65,15 +69,19 @@ namespace GladMMO
 
 				CharacterDataInstance dataInstance = CharacterDataInstance[SelectedCharacterGuid];
 
+				//Since loading screen is ASYNC we need to do this.
+				LoadingScreenChangedSubscriptionService.OnLoadingScreenStateChanged += (sender, eventArgs) =>
+				{
+					//TODO: handle character session failure
+					CharacterData.UpdateCharacterId(SelectedCharacterGuid);
+
+					GladMMOSceneManager.LoadAddressableSceneAsync(GladMMOClientConstants.WORLD_DOWNLOAD_SCENE_NAME);
+				};
+
 				//We do this before sending the player login BECAUSE of a race condition that can be caused
 				//since I actually KNOW this event should disable networking. We should not handle messages in this scene after this point basically.
 				//TODO: Don't hardcode this scene.
 				OnRequestedSceneChange?.Invoke(this, new RequestedSceneChangeEventArgs((PlayableGameScene) 2, dataInstance.MapId));
-
-				//TODO: handle character session failure
-				CharacterData.UpdateCharacterId(SelectedCharacterGuid);
-
-				GladMMOSceneManager.LoadAddressableSceneAsync(GladMMOClientConstants.WORLD_DOWNLOAD_SCENE_NAME);
 			});
 		}
 	}

@@ -9,6 +9,7 @@ using FreecraftCore;
 using Glader.Essentials;
 using Nito.AsyncEx;
 using UnityEngine;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace GladMMO
 {
@@ -129,18 +130,25 @@ namespace GladMMO
 			{
 				using (await SyncObj.LockAsync())
 				{
-					//TODO: Fix addressable path
-					try
-					{
-						string currentPath = $"Assets/Content/{loadingScreenEntry.FilePath.Replace(".blp", ".png")}".Replace('\\', '/');
+					//TODO: This FUCKING shitty Addressable system is SO unfinished. It DOES NOT support task awaiting yet.
+					string currentPath = $"Assets/Content/{loadingScreenEntry.FilePath.Replace(".blp", ".png")}".Replace('\\', '/');
 
-						Texture2D texture = await UnityEngine.AddressableAssets.Addressables.LoadAssetAsync<Texture2D>(currentPath).Task;
-						LoadingScreenBackgroundImage.SetSpriteTexture(texture);
-					}
-					finally
+					/*Texture2D texture = await UnityEngine.AddressableAssets.Addressables.LoadAssetAsync<Texture2D>(currentPath).Task;
+					LoadingScreenBackgroundImage.SetSpriteTexture(texture);*/
+					UnityEngine.AddressableAssets.Addressables.LoadAssetAsync<Texture2D>(currentPath).Completed += handle =>
 					{
-						InternalSetActive(true);
-					}
+						try
+						{
+							if (handle.Status == AsyncOperationStatus.Succeeded)
+								LoadingScreenBackgroundImage.SetSpriteTexture(handle.Result);
+							else if (Logger.IsErrorEnabled)
+								Logger.Error($"Failed to load LoadingScreen: {currentPath}");
+						}
+						finally
+						{
+							InternalSetActive(true);
+						}
+					};
 				}
 			});
 		}
