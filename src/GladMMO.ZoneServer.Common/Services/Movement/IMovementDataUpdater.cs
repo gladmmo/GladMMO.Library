@@ -41,7 +41,7 @@ namespace GladMMO
 		public void Update(ObjectGuid guid, MovementBlockData data, bool updateComponent)
 		{
 			if (updateComponent)
-				MovementDataMappable.ReplaceObject(guid, data);
+				MovementDataMappable[guid] = data;
 
 			//We're dead, an unmoving corpse.
 			if(data.IsDead)

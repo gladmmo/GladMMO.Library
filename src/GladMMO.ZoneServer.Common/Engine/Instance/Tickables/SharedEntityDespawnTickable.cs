@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Common.Logging;
 using Glader.Essentials;
+using Nito.AsyncEx;
 
 namespace GladMMO
 {
@@ -24,46 +25,55 @@ namespace GladMMO
 
 		protected IKnownEntitySet KnownEntities { get; }
 
+		private IReadonlyEntityGuidMappable<AsyncLock> LockMappable { get; }
+
 		protected SharedEntityDespawnTickable(TEventInterfaceType subscriptionService, 
 			ILog logger, 
-			[NotNull] IKnownEntitySet knownEntities)
+			[NotNull] IKnownEntitySet knownEntities,
+			[NotNull] IReadonlyEntityGuidMappable<AsyncLock> lockMappable)
 			: base(subscriptionService, true, logger)
 		{
 			KnownEntities = knownEntities ?? throw new ArgumentNullException(nameof(knownEntities));
+			LockMappable = lockMappable ?? throw new ArgumentNullException(nameof(lockMappable));
 		}
 
 		/// <inheritdoc />
 		protected override void HandleEvent(TEventArgs args)
 		{
-			try
+			AsyncLock syncObj = LockMappable.RetrieveEntity(args.EntityGuid);
+
+			using (syncObj.Lock())
 			{
-				if (!KnownEntities.isEntityKnown(args.EntityGuid))
-					if (Logger.IsWarnEnabled)
-					{
-						Logger.Warn($"Tried to cleanup unknown Entity: {args.EntityGuid}");
-						return;
-					}
-							
+				try
+				{
+					if(!KnownEntities.isEntityKnown(args.EntityGuid))
+						if(Logger.IsWarnEnabled)
+						{
+							Logger.Warn($"Tried to cleanup unknown Entity: {args.EntityGuid}");
+							return;
+						}
 
-				if(Logger.IsInfoEnabled)
-					Logger.Info($"Despawning Entity: {args.EntityGuid}.");
 
-				//It should be assumed none of the event listeners will be async
-				OnEntityDeconstructionStarting?.Invoke(this, new EntityDeconstructionStartingEventArgs(args.EntityGuid));
+					if(Logger.IsInfoEnabled)
+						Logger.Info($"Despawning Entity: {args.EntityGuid}.");
 
-				KnownEntities.RemoveEntity(args.EntityGuid);
+					//It should be assumed none of the event listeners will be async
+					OnEntityDeconstructionStarting?.Invoke(this, new EntityDeconstructionStartingEventArgs(args.EntityGuid));
 
-				if(Logger.IsDebugEnabled)
-					Logger.Debug($"Entity: {args.EntityGuid.TypeId}:{args.EntityGuid.CurrentObjectGuid} is now forgotten.");
+					KnownEntities.RemoveEntity(args.EntityGuid);
 
-				OnEntityDeconstructionFinished?.Invoke(this, new EntityDeconstructionFinishedEventArgs(args.EntityGuid));
-			}
-			catch(Exception e)
-			{
-				if(Logger.IsErrorEnabled)
-					Logger.Error($"Failed to Create Entity: {args.EntityGuid} Exception: {e.Message}\n\nStack: {e.StackTrace}");
+					if(Logger.IsDebugEnabled)
+						Logger.Debug($"Entity: {args.EntityGuid.TypeId}:{args.EntityGuid.CurrentObjectGuid} is now forgotten.");
 
-				throw;
+					OnEntityDeconstructionFinished?.Invoke(this, new EntityDeconstructionFinishedEventArgs(args.EntityGuid));
+				}
+				catch(Exception e)
+				{
+					if(Logger.IsErrorEnabled)
+						Logger.Error($"Failed to Create Entity: {args.EntityGuid} Exception: {e.Message}\n\nStack: {e.StackTrace}");
+
+					throw;
+				}
 			}
 		}
 	}

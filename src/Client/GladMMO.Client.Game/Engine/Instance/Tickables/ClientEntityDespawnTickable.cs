@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Common.Logging;
 using Glader.Essentials;
+using Nito.AsyncEx;
 
 namespace GladMMO
 {
@@ -11,8 +12,9 @@ namespace GladMMO
 	{
 		public ClientEntityDespawnTickable(INetworkEntityVisibilityLostEventSubscribable subscriptionService, 
 			ILog logger, 
-			IKnownEntitySet knownEntities) 
-			: base(subscriptionService, logger, knownEntities)
+			IKnownEntitySet knownEntities, 
+			IReadonlyEntityGuidMappable<AsyncLock> lockMappable) 
+			: base(subscriptionService, logger, knownEntities, lockMappable)
 		{
 		}
 	}

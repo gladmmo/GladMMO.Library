@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Common.Logging;
 using Glader.Essentials;
+using Nito.AsyncEx;
 
 namespace GladMMO
 {
@@ -24,50 +25,59 @@ namespace GladMMO
 
 		public event EventHandler<EntityCreationFinishedEventArgs> OnEntityCreationFinished;
 
+		private IReadonlyEntityGuidMappable<AsyncLock> LockMappable { get; }
+
 		/// <inheritdoc />
 		protected SharedEntitySpawnTickable([NotNull] TEventInterfaceType subscriptionService,
 			[NotNull] ILog logger,
-			[NotNull] IKnownEntitySet knownEntities)
+			[NotNull] IKnownEntitySet knownEntities,
+			[NotNull] IReadonlyEntityGuidMappable<AsyncLock> lockMappable)
 			: base(subscriptionService, true, logger) //TODO: We probably shouldn't spawn everything per frame. We should probably stagger spawning.
 		{
 			KnownEntities = knownEntities ?? throw new ArgumentNullException(nameof(knownEntities));
+			LockMappable = lockMappable ?? throw new ArgumentNullException(nameof(lockMappable));
 		}
 
 		/// <inheritdoc />
 		protected override void HandleEvent(TEventArgs args)
 		{
-			//Due to issue with TrinityCore/WoW design or implementation
-			//we must actually check if the entity already exists.
-			//Otherwise, we will duplicate spawn
-			if (KnownEntities.isEntityKnown(args.EntityGuid))
+			AsyncLock syncObj = LockMappable.RetrieveEntity(args.EntityGuid);
+
+			using (syncObj.Lock())
 			{
-				if(Logger.IsWarnEnabled)
-					Logger.Warn($"Duplicate Spawn Request: {args.EntityGuid} (Known Issue). Ignore.");
+				//Due to issue with TrinityCore/WoW design or implementation
+				//we must actually check if the entity already exists.
+				//Otherwise, we will duplicate spawn
+				if(KnownEntities.isEntityKnown(args.EntityGuid))
+				{
+					if(Logger.IsWarnEnabled)
+						Logger.Warn($"Duplicate Spawn Request: {args.EntityGuid} (Known Issue). Ignore.");
 
-				return;
-			}
+					return;
+				}
 
-			try
-			{
-				if(Logger.IsInfoEnabled)
-					Logger.Info($"Spawning Entity: {args.EntityGuid}.");
+				try
+				{
+					if(Logger.IsInfoEnabled)
+						Logger.Info($"Spawning Entity: {args.EntityGuid}.");
 
-				//It should be assumed none of the event listeners will be async
-				OnEntityCreationStarting?.Invoke(this, new EntityCreationStartingEventArgs(args.EntityGuid));
+					//It should be assumed none of the event listeners will be async
+					OnEntityCreationStarting?.Invoke(this, new EntityCreationStartingEventArgs(args.EntityGuid));
 
-				KnownEntities.AddEntity(args.EntityGuid);
+					KnownEntities.AddEntity(args.EntityGuid);
 
-				if(Logger.IsDebugEnabled)
-					Logger.Debug($"Entity: {args.EntityGuid.TypeId}:{args.EntityGuid.CurrentObjectGuid} is now known.");
+					if(Logger.IsDebugEnabled)
+						Logger.Debug($"Entity: {args.EntityGuid.TypeId}:{args.EntityGuid.CurrentObjectGuid} is now known.");
 
-				OnEntityCreationFinished?.Invoke(this, new EntityCreationFinishedEventArgs(args.EntityGuid));
-			}
-			catch(Exception e)
-			{
-				if(Logger.IsErrorEnabled)
-					Logger.Error($"Failed to Create Entity: {args.EntityGuid} Exception: {e.Message}\n\nStack: {e.StackTrace}");
+					OnEntityCreationFinished?.Invoke(this, new EntityCreationFinishedEventArgs(args.EntityGuid));
+				}
+				catch(Exception e)
+				{
+					if(Logger.IsErrorEnabled)
+						Logger.Error($"Failed to Create Entity: {args.EntityGuid} Exception: {e.Message}\n\nStack: {e.StackTrace}");
 
-				throw;
+					throw;
+				}
 			}
 		}
 	}

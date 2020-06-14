@@ -22,14 +22,18 @@ namespace GladMMO
 
 		private IFactoryCreatable<NetworkEntityNowVisibleEventArgs, ObjectCreationData> VisibleEventFactory { get; }
 
+		private IEntityGuidMappable<AsyncLock> LockMappable { get; }
+
 		/// <inheritdoc />
 		public ObjectUpdateCreateObject2BlockHandler(ILog logger,
 			[NotNull] INetworkEntityVisibilityEventPublisher visibilityEventPublisher,
-			[NotNull] IFactoryCreatable<NetworkEntityNowVisibleEventArgs, ObjectCreationData> visibleEventFactory)
+			[NotNull] IFactoryCreatable<NetworkEntityNowVisibleEventArgs, ObjectCreationData> visibleEventFactory,
+			[NotNull] IEntityGuidMappable<AsyncLock> lockMappable)
 			: base(ObjectUpdateType.UPDATETYPE_CREATE_OBJECT2, logger)
 		{
 			VisibilityEventPublisher = visibilityEventPublisher ?? throw new ArgumentNullException(nameof(visibilityEventPublisher));
 			VisibleEventFactory = visibleEventFactory ?? throw new ArgumentNullException(nameof(visibleEventFactory));
+			LockMappable = lockMappable ?? throw new ArgumentNullException(nameof(lockMappable));
 		}
 
 		/// <inheritdoc />
@@ -38,6 +42,11 @@ namespace GladMMO
 			if(updateBlock == null) throw new ArgumentNullException(nameof(updateBlock));
 
 			Logger.Info($"Attempting to Respawn: {updateBlock.CreationData.CreationObjectType}");
+
+			//TODO: There is a race condition here, this can happen if an entity despawn is occuring at the same time this creation
+			//packet is being processed. Meaning that we could result in unknown behavior
+			if (!LockMappable.ContainsKey(updateBlock.CreationData.CreationGuid))
+				LockMappable.AddObject(updateBlock.CreationData.CreationGuid, new AsyncLock());
 
 			switch(updateBlock.CreationData.CreationObjectType)
 			{

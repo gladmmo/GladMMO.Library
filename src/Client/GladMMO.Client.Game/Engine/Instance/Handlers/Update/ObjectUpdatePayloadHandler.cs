@@ -21,7 +21,7 @@ namespace GladMMO
 		}
 
 		/// <inheritdoc />
-		public override Task HandleMessage(IPeerMessageContext<GamePacketPayload> context, SMSG_COMPRESSED_UPDATE_OBJECT_Payload payload)
+		public override async Task HandleMessage(IPeerMessageContext<GamePacketPayload> context, SMSG_COMPRESSED_UPDATE_OBJECT_Payload payload)
 		{
 			/*
 			[WireDataContractBaseType(3, typeof(ObjectUpdateCreateObject2Block))]
@@ -32,9 +32,11 @@ namespace GladMMO
 			[WireDataContractBaseType(4, typeof(ObjectUpdateDestroyObjectBlock))]
 			*/
 
-			foreach(var updateBlock in payload.UpdateBlocks)
+			//This reason we must lock here is to prevent overriding INITIAL movement data and generation
+			//it's SO dumb but there is a race condition on Entity spawning at the same time we recieve a movement update.
+			foreach (var updateBlock in payload.UpdateBlocks)
 			{
-				switch(updateBlock.UpdateType)
+				switch (updateBlock.UpdateType)
 				{
 					case ObjectUpdateType.UPDATETYPE_VALUES:
 					case ObjectUpdateType.UPDATETYPE_MOVEMENT:
@@ -48,8 +50,6 @@ namespace GladMMO
 						throw new ArgumentOutOfRangeException($"Unable to handle UpdateType: {updateBlock.UpdateType}");
 				}
 			}
-
-			return Task.CompletedTask;
 		}
 	}
 

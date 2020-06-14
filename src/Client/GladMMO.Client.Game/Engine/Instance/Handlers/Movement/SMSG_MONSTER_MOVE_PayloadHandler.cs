@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Common.Logging;
 using FreecraftCore;
 using GladNet;
+using Nito.AsyncEx;
 using UnityEngine;
 
 namespace GladMMO
@@ -16,40 +17,48 @@ namespace GladMMO
 
 		private IReadonlyNetworkTimeService TimeService { get; }
 
+		private IReadonlyEntityGuidMappable<AsyncLock> LockMappable { get; }
+
 		public SMSG_MONSTER_MOVE_PayloadHandler(ILog logger, 
 			[NotNull] IEntityGuidMappable<IMovementGenerator<GameObject>> movementGeneratorMappable,
-			[NotNull] IReadonlyNetworkTimeService timeService) 
+			[NotNull] IReadonlyNetworkTimeService timeService,
+			[NotNull] IReadonlyEntityGuidMappable<AsyncLock> lockMappable) 
 			: base(logger)
 		{
 			MovementGeneratorMappable = movementGeneratorMappable ?? throw new ArgumentNullException(nameof(movementGeneratorMappable));
 			TimeService = timeService ?? throw new ArgumentNullException(nameof(timeService));
+			LockMappable = lockMappable ?? throw new ArgumentNullException(nameof(lockMappable));
 		}
 
-		public override Task HandleMessage(IPeerMessageContext<GamePacketPayload> context, SMSG_MONSTER_MOVE_Payload payload)
+		public override async Task HandleMessage(IPeerMessageContext<GamePacketPayload> context, SMSG_MONSTER_MOVE_Payload payload)
 		{
 			ObjectGuid creatureGuid = payload.MonsterGuid;
 
-			switch (payload.MoveInfo.MoveType)
+			//This reason we must lock here is to prevent overriding INITIAL movement data and generation
+			//it's SO dumb but there is a race condition on Entity spawning at the same time we recieve a movement update.
+			using (await LockMappable.RetrieveEntity(payload.MonsterGuid).LockAsync())
 			{
-				case MonsterMoveType.MonsterMoveStop:
-					//For STOP we basically just idle at this point, the initial point sent down in the move packet.
-					MovementGeneratorMappable.ReplaceObject(creatureGuid, new IdleMovementGenerator(payload.InitialMovePoint.ToUnityVector()));
-					break;
+				switch(payload.MoveInfo.MoveType)
+				{
+					case MonsterMoveType.MonsterMoveStop:
+						//For STOP we basically just idle at this point, the initial point sent down in the move packet.
+						//DO NOT USE REPLACE, WE MAY NOT HAVE MOVE GENERATOR YET!!
+						MovementGeneratorMappable[creatureGuid] = new IdleMovementGenerator(payload.InitialMovePoint.ToUnityVector());
+						break;
 
-				//All these types have a spline.
-				case MonsterMoveType.MonsterMoveNormal:
-				case MonsterMoveType.MonsterMoveFacingSpot:
-				case MonsterMoveType.MonsterMoveFacingTarget:
-				case MonsterMoveType.MonsterMoveFacingAngle:
-					//TODO: Handle different spline types
-					if(payload.OptionalSplineInformation.HasLinearPath)
-						MovementGeneratorMappable.ReplaceObject(creatureGuid, new LinearPathMovementGenerator(payload.OptionalSplineInformation.OptionalLinearPathInformation, payload.InitialMovePoint.ToUnityVector(), payload.OptionalSplineInformation.SplineDuration));
-					break;
-				default:
-					throw new ArgumentOutOfRangeException();
+					//All these types have a spline.
+					case MonsterMoveType.MonsterMoveNormal:
+					case MonsterMoveType.MonsterMoveFacingSpot:
+					case MonsterMoveType.MonsterMoveFacingTarget:
+					case MonsterMoveType.MonsterMoveFacingAngle:
+						//TODO: Handle different spline types
+						if (payload.OptionalSplineInformation.HasLinearPath)
+							MovementGeneratorMappable[creatureGuid] = new LinearPathMovementGenerator(payload.OptionalSplineInformation.OptionalLinearPathInformation, payload.InitialMovePoint.ToUnityVector(), payload.OptionalSplineInformation.SplineDuration);
+						break;
+					default:
+						throw new ArgumentOutOfRangeException();
+				}
 			}
-
-			return Task.CompletedTask;
 		}
 	}
 }
