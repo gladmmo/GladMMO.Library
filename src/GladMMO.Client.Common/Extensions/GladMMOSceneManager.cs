@@ -37,7 +37,7 @@ namespace GladMMO
 			AddressableSceneMap[sceneName] = sceneLoadHandle;
 
 			if (setAsActiveScene)
-				sceneLoadHandle.Completed += op => SceneManager.SetActiveScene(op.Result.Scene);
+				SetActiveOnComplete(sceneLoadHandle);
 
 			return sceneLoadHandle;
 		}
@@ -69,7 +69,7 @@ namespace GladMMO
 					if(!sceneLoadHandle.IsValid())
 						throw new InvalidOperationException($"Failed to setup callback for Addressable Scene: {sceneName}");
 
-					sceneLoadHandle.Completed += loadOperation => ActivateScene(sceneLoadHandle);
+					sceneLoadHandle.Completed += loadOperation => SetActiveOnComplete(sceneLoadHandle);
 				};
 
 				return sceneLoadHandle;
@@ -91,7 +91,7 @@ namespace GladMMO
 
 				unloadOperationHandle.completed += op =>
 				{
-					sceneLoadHandle.Completed += loadOperation => ActivateScene(sceneLoadHandle);
+					sceneLoadHandle.Completed += loadOperation => SetActiveOnComplete(sceneLoadHandle);
 				};
 				unloadOperationHandle.allowSceneActivation = true;
 
@@ -111,10 +111,18 @@ namespace GladMMO
 			}
 		}
 
-		private static void ActivateScene(AsyncOperationHandle<SceneInstance> sceneLoadHandle)
+		private static void SetActiveOnComplete(AsyncOperationHandle<SceneInstance> sceneLoadHandle)
 		{
-			AsyncOperation sceneActivation = sceneLoadHandle.Result.ActivateAsync();
-			sceneActivation.completed += o => SceneManager.SetActiveScene(SceneManager.GetSceneByName(sceneLoadHandle.Result.Scene.name));
+			sceneLoadHandle.Completed += op =>
+			{
+				op.Result.ActivateAsync().completed += op2 =>
+				{
+					SceneManager.SetActiveScene(op.Result.Scene);
+
+					// Force Unity to asynchronously regenerate the tetrahedral tesselation for all loaded Scenes
+					LightProbes.TetrahedralizeAsync();
+				};
+			};
 		}
 	}
 }
