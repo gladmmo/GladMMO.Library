@@ -46,10 +46,28 @@ namespace GladMMO
 
 			return new CustomModelLoaderCancelable(avatarPrefabAsync, Logger, prefab =>
 			{
-				//Callback should only occur is avatarPrefabAsync has completed
-				IPrefabContentResourceHandle handle = avatarPrefabAsync.Result;
+				if (avatarPrefabAsync.IsFaulted)
+				{
+					if(Logger.IsErrorEnabled)
+						Logger.Error($"Failed to load Content: {contentResourceManager.ContentType} Id: {context.ContentId}");
 
-				OnContentPrefabCompletedDownloading?.Invoke(this, new ContentPrefabCompletedDownloadEventArgs(handle, prefab, context.EntityGuid));
+					return;
+				}
+
+				try
+				{
+					//Callback should only occur is avatarPrefabAsync has completed
+					IPrefabContentResourceHandle handle = avatarPrefabAsync.GetAwaiter().GetResult();
+
+					OnContentPrefabCompletedDownloading?.Invoke(this, new ContentPrefabCompletedDownloadEventArgs(handle, prefab, context.EntityGuid));
+				}
+				catch (Exception e)
+				{
+					if(Logger.IsErrorEnabled)
+						Logger.Error($"Failed to load Creature Model Id: {context.ContentId}. Error: {e.Message}");
+
+					throw;
+				}
 			});
 		}
 	}

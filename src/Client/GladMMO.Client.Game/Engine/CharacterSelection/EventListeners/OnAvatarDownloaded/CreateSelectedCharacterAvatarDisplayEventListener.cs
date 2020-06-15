@@ -56,7 +56,6 @@ namespace GladMMO
 			OnContentPrefabRecieved += () =>
 			{
 				GameObject.Destroy(avatar);
-				args.PrefabHandle.Release();
 			};
 		}
 	}

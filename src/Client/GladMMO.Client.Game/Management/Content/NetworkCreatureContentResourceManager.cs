@@ -10,16 +10,31 @@ namespace GladMMO
 	{
 		private IDownloadableContentServerServiceClient ContentClient { get; }
 
-		public NetworkCreatureContentResourceManager([NotNull] IDownloadableContentServerServiceClient contentClient, ILog logger) 
+		private IClientDataCollectionContainer ClientData { get; }
+
+		public NetworkCreatureContentResourceManager([NotNull] IDownloadableContentServerServiceClient contentClient, 
+			ILog logger,
+			[NotNull] IClientDataCollectionContainer clientData) 
 			: base(logger, UserContentType.Creature)
 		{
 			ContentClient = contentClient ?? throw new ArgumentNullException(nameof(contentClient));
+			ClientData = clientData ?? throw new ArgumentNullException(nameof(clientData));
 		}
 
 		protected override async Task<ContentDownloadURLResponse> RequestDownloadURL(long contentId)
 		{
-			return await ContentClient.RequestCreatureModelDownloadUrl(contentId)
-				.ConfigureAwaitFalse();
+			if (!ClientData.HasEntry<CreatureDisplayInfoEntry<string>>((int)contentId))
+				return new ContentDownloadURLResponse(ContentDownloadURLResponseCode.NoContentId);
+
+			CreatureDisplayInfoEntry<string> displayInfoEntry = ClientData.AssertEntry<CreatureDisplayInfoEntry<string>>((int) contentId);
+
+			if (!ClientData.HasEntry<CreatureModelDataEntry<string>>((int)displayInfoEntry.ModelId))
+				return new ContentDownloadURLResponse(ContentDownloadURLResponseCode.NoContentId);
+
+			CreatureModelDataEntry<string> modelDataEntry = ClientData.AssertEntry<CreatureModelDataEntry<string>>(displayInfoEntry.ModelId);
+
+			//WoW content has MDX format in its path, so we should remove it if it exists.
+			return new ContentDownloadURLResponse(modelDataEntry.FilePath.Replace(".mdx", ""), 1);
 		}
 	}
 }

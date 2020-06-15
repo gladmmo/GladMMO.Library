@@ -37,11 +37,11 @@ namespace GladMMO
 				return;
 			}
 
+			//TODO: This was old code when ref count claim/release was manual.
 			//We need to check, and release if there is any, before we replace it.
 			if (PrefabHandleMappable.ContainsKey(args.EntityGuid))
 			{
 				IPrefabContentResourceHandle handle = PrefabHandleMappable.RetrieveEntity(args.EntityGuid);
-				handle.Release();
 				PrefabHandleMappable.RemoveEntityEntry(args.EntityGuid);
 			}
 

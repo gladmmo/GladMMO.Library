@@ -6,15 +6,8 @@ using UnityEngine;
 
 namespace GladMMO
 {
-	public interface IPrefabContentResourceHandle : ILoadedContentResourceHandle
+	public interface IPrefabContentResourceHandle
 	{
-		/// <summary>
-		/// Loads a prefab <see cref="GameObject"/>
-		/// from the resource handle.
-		/// </summary>
-		/// <returns>The prefab.</returns>
-		GameObject LoadPrefab();
-
 		/// <summary>
 		/// Loads a prefab <see cref="GameObject"/>
 		/// from the resource handle async.

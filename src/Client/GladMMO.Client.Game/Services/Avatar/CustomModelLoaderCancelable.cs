@@ -40,38 +40,48 @@ namespace GladMMO
 			//TODO: Asset multiple calls
 			UnityAsyncHelper.UnityMainThreadContext.PostAsync(async () =>
 			{
-				//This guards and prevents unwanted and wasted resources into
-				//loading an avatar that has had its token canceled.
-				if(IsModelChangeCanceled(CurrentCancellationSource))
+				try
 				{
-					ModelChangeCancelLogging();
-					return;
+					//This guards and prevents unwanted and wasted resources into
+					//loading an avatar that has had its token canceled.
+					if(IsModelChangeCanceled(CurrentCancellationSource))
+					{
+						ModelChangeCancelLogging();
+						return;
+					}
+
+					//We need to await the resource but capture the context, because we'll need to be on the main thread.
+					IPrefabContentResourceHandle handle = await PrefabHandleFuture
+						.ConfigureAwait(true);
+
+					//This guards and prevents unwanted and wasted resources into
+					//loading an avatar that has had its token canceled.
+					if(IsModelChangeCanceled(CurrentCancellationSource))
+					{
+						ModelChangeCancelLogging();
+						return;
+					}
+
+					GameObject gameObject = await handle.LoadPrefabAsync()
+						.ConfigureAwait(true);
+
+					//This guards and prevents unwanted and wasted resources into
+					//loading an avatar that has had its token canceled.
+					if(IsModelChangeCanceled(CurrentCancellationSource))
+					{
+						ModelChangeCancelLogging();
+						return;
+					}
+
+					OnAvatarPrefabReadyCallback.Invoke(gameObject);
 				}
-
-				//We need to await the resource but capture the context, because we'll need to be on the main thread.
-				IPrefabContentResourceHandle handle = await PrefabHandleFuture
-					.ConfigureAwait(true);
-
-				//This guards and prevents unwanted and wasted resources into
-				//loading an avatar that has had its token canceled.
-				if(IsModelChangeCanceled(CurrentCancellationSource))
+				catch (Exception e)
 				{
-					ModelChangeCancelLogging();
-					return;
+					if(Logger.IsErrorEnabled)
+						Logger.Error($"Failed to load Content. Reason: {e.Message}. Stack: {e.StackTrace}");
+
+					throw;
 				}
-
-				GameObject gameObject = await handle.LoadPrefabAsync()
-					.ConfigureAwait(true);
-
-				//This guards and prevents unwanted and wasted resources into
-				//loading an avatar that has had its token canceled.
-				if(IsModelChangeCanceled(CurrentCancellationSource))
-				{
-					ModelChangeCancelLogging();
-					return;
-				}
-
-				OnAvatarPrefabReadyCallback.Invoke(gameObject);
 			});
 		}
 
