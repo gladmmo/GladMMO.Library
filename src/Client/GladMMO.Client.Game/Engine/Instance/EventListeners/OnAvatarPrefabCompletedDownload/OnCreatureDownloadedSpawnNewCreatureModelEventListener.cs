@@ -15,13 +15,16 @@ namespace GladMMO
 
 		private ILog Logger { get; }
 
+		private IModelScaleStrategy ModelScaler { get; }
+
 		public OnCreatureDownloadedSpawnNewCreatureModelEventListener(IContentPrefabCompletedDownloadEventSubscribable subscriptionService,
 			[NotNull] ILog logger,
-			[NotNull] IReadonlyEntityGuidMappable<GameObject> gameObjectMappable)
+			[NotNull] IReadonlyEntityGuidMappable<GameObject> gameObjectMappable, [NotNull] IModelScaleStrategy modelScaler)
 			: base(subscriptionService)
 		{
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
 			GameObjectMappable = gameObjectMappable ?? throw new ArgumentNullException(nameof(gameObjectMappable));
+			ModelScaler = modelScaler ?? throw new ArgumentNullException(nameof(modelScaler));
 		}
 
 		protected override void OnEventFired(object source, ContentPrefabCompletedDownloadEventArgs args)
@@ -40,7 +43,7 @@ namespace GladMMO
 				//Now we've assigned the handle, we need to actually handle the spawning/loading of the creature
 				//model as a child of the parent.
 				GameObject root = GameObjectMappable.RetrieveEntity(args.EntityGuid);
-				GameObject newlySpawnedAvatar = InstantiateNewFromPrefab(args.DownloadedPrefabObject, root);
+				GameObject newlySpawnedAvatar = InstantiateNewFromPrefab(args, root);
 			}
 			catch (Exception e)
 			{
@@ -51,16 +54,20 @@ namespace GladMMO
 			}
 		}
 
-		private GameObject InstantiateNewFromPrefab([NotNull] GameObject prefab, [NotNull] GameObject root)
+		private GameObject InstantiateNewFromPrefab([NotNull] ContentPrefabCompletedDownloadEventArgs contentEvent, [NotNull] GameObject root)
 		{
-			if (prefab == null) throw new ArgumentNullException(nameof(prefab));
+			if (contentEvent == null) throw new ArgumentNullException(nameof(contentEvent));
 			if (root == null) throw new ArgumentNullException(nameof(root));
 
 			//This should be the avatar prefab
 			//and we should be on the main thread here so we can now do the spawning and such
 			//Replace the current avatar root gameobject with the new one.
-			GameObject newAvatarRoot = GameObject.Instantiate(prefab, root.transform);
+			GameObject newAvatarRoot = GameObject.Instantiate(contentEvent.DownloadedPrefabObject, root.transform);
 			newAvatarRoot.transform.localScale = root.transform.localScale;
+
+			//Apply creature scale, loading from DBC and dynamic unit field stuff.
+			newAvatarRoot.transform.localScale *= ModelScaler.ComputeScale(contentEvent.EntityGuid);
+
 			newAvatarRoot.transform.localPosition = Vector3.zero;
 			newAvatarRoot.transform.localRotation = Quaternion.identity;
 			return newAvatarRoot;

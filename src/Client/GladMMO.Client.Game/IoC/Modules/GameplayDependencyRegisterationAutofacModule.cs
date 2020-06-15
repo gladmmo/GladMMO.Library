@@ -93,6 +93,11 @@ namespace GladMMO
 				.As<IMovementDataUpdater<MovementBlockData>>()
 				.SingleInstance();
 
+			//DefaultModelScaleStrategy : IModelScaleStrategy
+			builder.RegisterType<DefaultModelScaleStrategy>()
+				.As<IModelScaleStrategy>()
+				.SingleInstance();
+
 			//Ok, now we actually register update block types manually
 			//because it's not worth it to do an assembly-wide search for them.
 			/*builder.RegisterType<DefaultObjectUpdateBlockDispatcher>()
