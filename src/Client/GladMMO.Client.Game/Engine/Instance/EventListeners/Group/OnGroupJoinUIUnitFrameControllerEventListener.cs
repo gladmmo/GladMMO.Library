@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 using Autofac.Features.AttributeFilters;
 using Common.Logging;
 using Glader.Essentials;
+using Nito.AsyncEx;
 
 namespace GladMMO
 {
+	//TODO: Refactor into multiple events.
 	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
 	public sealed class OnGroupJoinUIUnitFrameControllerEventListener : EventQueueBasedTickable<IPlayerGroupJoinedEventSubscribable, PlayerJoinedGroupEventArgs>
 	{
@@ -49,7 +51,6 @@ namespace GladMMO
 					Logger.Debug($"Encountered GroupJoin from far-away Entity: {args.PlayerGuid.RawGuidValue}");
 
 				GroupUnitframeManager[args.PlayerGuid].SetElementActive(true);
-				return;
 			}
 			else
 			{
@@ -64,6 +65,18 @@ namespace GladMMO
 			//Initialize name
 			if (NameQueryable.Exists(args.PlayerGuid))
 				GroupUnitframeManager[args.PlayerGuid].UnitName.Text = NameQueryable.Retrieve(args.PlayerGuid);
+			else
+			{
+				UnityAsyncHelper.UnityMainThreadContext.PostAsync(async () =>
+				{
+					string name = await NameQueryable.RetrieveAsync(args.PlayerGuid);
+
+					//Check that they are still in the group
+					//Possible they left before the request finished.
+					if (GroupUnitframeManager.Contains(args.PlayerGuid))
+						GroupUnitframeManager[args.PlayerGuid].UnitName.Text = name;
+				});
+			}
 		}
 
 		private void OnCurrentLevelChanged(ObjectGuid entity, EntityDataChangedArgs<int> eventArgs)
