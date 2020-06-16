@@ -99,7 +99,14 @@ namespace GladMMO
 					//from that we can get the duration this segment should take and divide it by the total miliseconds elapased since start of segment.
 					float segmentCompleteRatio = i == 0 ? (float)millisecondsTotalDiff / TimeWeights[i] :  (float)(millisecondsTotalDiff - TimeWeights[i - 1]) / (TimeWeights[i] - TimeWeights[i - 1]);
 
+					//TODO: Optimize
+					Vector3 direction = (GeneratedPath[i + 1] - GeneratedPath[i]);
+					direction = new Vector3(direction.x, 0.0f, direction.z);
+
+					entity.transform.rotation = Quaternion.Slerp(entity.transform.rotation, Quaternion.LookRotation(direction, Vector3.up), 100.0f * Time.deltaTime);
 					entity.transform.position = Vector3.Lerp(GeneratedPath[i], GeneratedPath[i + 1], Mathf.Clamp(segmentCompleteRatio, 0, 1.0f));
+
+					Debug.DrawRay(entity.transform.position, direction * 3.0f, Color.blue);
 				}
 			}
 
