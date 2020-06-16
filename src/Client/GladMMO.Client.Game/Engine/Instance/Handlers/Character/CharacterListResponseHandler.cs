@@ -35,12 +35,15 @@ namespace FreecraftCore.Swarm
 
 			//Not accurate to WoW client but the first packet we are going to send
 			//is the packet that will get the server absolute timestamp.
-			await context.PayloadSendService.SendMessage(new CMSG_QUERY_TIME_Payload());
+			await context.PayloadSendService.SendMessageImmediately(new CMSG_QUERY_TIME_Payload())
+				.ConfigureAwaitFalseVoid();
+
 			TimeService.RecalculateQueryTime();
 
 			//TODO: Support character login request to character selection selected character.
 			//Idea here is to just login to the first character.
-			await context.PayloadSendService.SendMessage(new CharacterLoginRequest(CharacterDataRepository.LocalCharacterGuid));
+			context.PayloadSendService.SendMessage(new CharacterLoginRequest(CharacterDataRepository.LocalCharacterGuid))
+				.ConfigureAwaitFalseVoid();
 		}
 	}
 }

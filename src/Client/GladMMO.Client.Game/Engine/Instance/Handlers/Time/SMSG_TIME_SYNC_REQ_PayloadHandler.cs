@@ -25,7 +25,7 @@ namespace GladMMO
 		/// <inheritdoc />
 		public override Task HandleMessage(IPeerMessageContext<GamePacketPayload> context, SMSG_TIME_SYNC_REQ_Payload payload)
 		{
-			context.PayloadSendService.SendMessage(new CMSG_TIME_SYNC_RESP_Payload(payload.SynchronizationCounter, (uint)Environment.TickCount));
+			context.PayloadSendService.SendMessage(new CMSG_TIME_SYNC_RESP_Payload(payload.SynchronizationCounter, (uint)TimeService.MillisecondsSinceStartup));
 			return Task.CompletedTask;
 		}
 	}
