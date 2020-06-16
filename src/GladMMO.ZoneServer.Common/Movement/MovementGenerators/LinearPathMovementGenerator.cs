@@ -7,20 +7,44 @@ using UnityEngine;
 
 namespace GladMMO
 {
+	internal class LinearPointPathState
+	{
+		public int CurrentIndex { get; }
+
+		public int StartTimeStamp { get; }
+
+		public float Distance { get; }
+
+		public int MillisecondsRequiredUntilNextPoint { get; }
+
+		public LinearPointPathState(Vector3 pointA, Vector3 pointB, float speed, int currentIndex, int startTimeStamp)
+		{
+			CurrentIndex = currentIndex;
+			StartTimeStamp = startTimeStamp;
+			Distance = Vector3.Distance(pointA, pointB);
+			MillisecondsRequiredUntilNextPoint = (int) (1000 * (Distance / speed));
+		}
+
+		public LinearPointPathState(float distance, int millisecondsRequiredUntilNextPoint, int currentIndex, int startTimeStamp)
+		{
+			Distance = distance;
+			MillisecondsRequiredUntilNextPoint = millisecondsRequiredUntilNextPoint;
+			CurrentIndex = currentIndex;
+			StartTimeStamp = startTimeStamp;
+		}
+	}
+
 	public class LinearPathMovementGenerator : BaseMovementGenerator<LinearPathMoveInfo>
 	{
 		protected Vector3[] GeneratedPath { get; }
-
-		/// <summary>
-		/// Represents the amount of milliseconds required to traverse from <see cref="GeneratedPath"/> X to <see cref="GeneratedPath"/> X + 1.
-		/// </summary>
-		protected int[] TimeWeights { get; }
 
 		protected int TotalLengthDuration { get; }
 
 		protected long StartTimeStamp { get; set; }
 
 		protected long EndTimeStamp { get; set; }
+
+		private LinearPointPathState State { get; set; }
 
 		public LinearPathMovementGenerator(LinearPathMoveInfo movementData, Vector3 initialPosition, int totalLengthDuration) 
 			: this(movementData, initialPosition, totalLengthDuration, 0)
@@ -38,23 +62,41 @@ namespace GladMMO
 			//Push the Start timestamp backwards, since some splines we may see start in the middle.
 			StartTimeStamp -= timeElapsed;
 
-			//TODO: support middle points
-			GeneratedPath = new Vector3[1 + 1] { initialPosition, movementData.FinalPosition.ToUnityVector() };
-			TimeWeights = new int[GeneratedPath.Length - 1];
+			//Offset
+			//G3D::Vector3 middle = (real_path[0] + real_path[last_idx]) / 2.f;
 
-			//TODO: Don't hardcode speed.
-			//TODO: Calculate weighted time between points
-			for(int i = 0; i < GeneratedPath.Length - 1; i++)
-				TimeWeights[i] = (int)(1000 * Vector3.Distance(GeneratedPath[i], GeneratedPath[i + 1]) / 8.0f); //Creatures default speed is 8.0 yards a second.
+			//All points are OFFSET from middle.
+			// offset = middle - real_path[i];
+			//We need to do: real_path[i] = middle - offset;
+			//or middle - offset = real_path[i];
+			if(movementData.SplineMiddlePoints.Length > 0)
+			{
+				Vector3 finalPoint = movementData.FinalPosition.ToUnityVector();
+				Vector3 midpoint = (initialPosition + finalPoint) / 2.0f;
+				var midPointsConverted = MovementData
+					.SplineMiddlePoints
+					.Select(p => midpoint - p.ToUnityVector())
+					.ToArray();
 
-			//Now add the previous index weights
-			for(int i = 1; i < TimeWeights.Length; i++)
-				TimeWeights[i] = TimeWeights[i - 1];
+				GeneratedPath = new Vector3[1 + 1 + midPointsConverted.Length];
+
+				//I know mid + 1 looks strange, but we do -1 in loop. All good.
+				GeneratedPath[0] = initialPosition;
+				for(int i = 1; i < midPointsConverted.Length + 1; i++) 
+				{
+					GeneratedPath[i] = midPointsConverted[i - 1];
+				}
+				GeneratedPath[GeneratedPath.Length - 1] = finalPoint;
+			}
+			else
+			{
+				GeneratedPath = new Vector3[1 + 1] { initialPosition, movementData.FinalPosition.ToUnityVector() };
+			}
 		}
 
 		protected override Vector3 Start(GameObject entity, long currentTime)
 		{
-			if (TotalLengthDuration == 0 || TimeWeights[0] == 0) //this case can happen there is no diff between last and first point.
+			if (TotalLengthDuration == 0) //this case can happen there is no diff between last and first point.
 			{
 				StopGenerator();
 
@@ -71,6 +113,8 @@ namespace GladMMO
 				//TODO: Is this a hack, to rewrite initial position??
 				if(Vector3.Distance(GeneratedPath[0], entity.transform.position) < 4.0f)
 					GeneratedPath[0] = entity.transform.position;
+
+				State = new LinearPointPathState(GeneratedPath[0], GeneratedPath[1], 8.0f, 0, (int) StartTimeStamp);
 			}
 
 			return entity.transform.position;
@@ -81,42 +125,42 @@ namespace GladMMO
 			if(EndTimeStamp <= currentTime)
 				return entity.transform.position = GeneratedPath.Last();
 
-			int millisecondsTotalDiff = (int) (currentTime - StartTimeStamp);
+			int diffSinceLastPoint = (int)currentTime - State.StartTimeStamp;
 
 			//Possible first tick has no diff, and we can skip
-			if (millisecondsTotalDiff == 0)
+			if (diffSinceLastPoint == 0)
 				return entity.transform.position;
 
 #if DEBUG
-			Debug.DrawRay(entity.transform.position, (entity.transform.position - GeneratedPath[0]), Color.white, 2.0f);
 			for (int i = 0; i < GeneratedPath.Length - 1; i++)
 			{
-				Debug.DrawRay(GeneratedPath[i], (GeneratedPath[i] - GeneratedPath[i + 1]), Color.white, 2.0f);
+				Debug.DrawRay(GeneratedPath[i], (GeneratedPath[i] - GeneratedPath[i + 1]), Color.white);
 			}
 #endif
 
-			//Find the point we're on
-			for (int i = 0; i < TimeWeights.Length; i++)
-			{
-				//If we have pasted this point path
-				if(TimeWeights[i] < millisecondsTotalDiff)
-					continue;
-				else
-				{
-					//X is total time required to reach this point. X - 1 is the time elapsed to reach the starting point of this path.
-					//from that we can get the duration this segment should take and divide it by the total miliseconds elapased since start of segment.
-					float segmentCompleteRatio = i == 0 ? (float)millisecondsTotalDiff / TimeWeights[i] :  (float)(millisecondsTotalDiff - TimeWeights[i - 1]) / (TimeWeights[i] - TimeWeights[i - 1]);
+			//X is total time required to reach this point. X - 1 is the time elapsed to reach the starting point of this path.
+			//from that we can get the duration this segment should take and divide it by the total miliseconds elapased since start of segment.
+			float segmentCompleteRatio = diffSinceLastPoint / (float)State.MillisecondsRequiredUntilNextPoint;
 
-					//TODO: Optimize
-					Vector3 direction = (GeneratedPath[i + 1] - GeneratedPath[i]);
-					direction = new Vector3(direction.x, 0.0f, direction.z);
+			//TODO: Optimize
+			Vector3 direction = (GeneratedPath[State.CurrentIndex + 1] - GeneratedPath[State.CurrentIndex]);
+			direction = new Vector3(direction.x, 0.0f, direction.z);
 
-					entity.transform.rotation = Quaternion.Slerp(entity.transform.rotation, Quaternion.LookRotation(direction, Vector3.up), 100.0f * Time.deltaTime);
-					entity.transform.position = Vector3.Lerp(GeneratedPath[i], GeneratedPath[i + 1], Mathf.Clamp(segmentCompleteRatio, 0, 1.0f));
+			entity.transform.rotation = Quaternion.Slerp(entity.transform.rotation, Quaternion.LookRotation(direction, Vector3.up), 100.0f * Time.deltaTime);
+			entity.transform.position = Vector3.Lerp(GeneratedPath[State.CurrentIndex], GeneratedPath[State.CurrentIndex + 1], Mathf.Clamp(segmentCompleteRatio, 0, 1.0f));
 
 #if DEBUG
-					Debug.DrawRay(entity.transform.position, direction * 3.0f, Color.blue);
+			Debug.DrawRay(entity.transform.position, direction * 3.0f, Color.blue);
 #endif
+
+			//We're at the end
+			if (segmentCompleteRatio >= 1.0f)
+			{
+				if (State.CurrentIndex + 2 == GeneratedPath.Length)
+					StopGenerator();
+				else
+				{
+					State = new LinearPointPathState(GeneratedPath[State.CurrentIndex + 1], GeneratedPath[State.CurrentIndex + 2], 8.0f, State.CurrentIndex + 1, (int) currentTime);
 				}
 			}
 
