@@ -43,7 +43,7 @@ namespace GladMMO
 
 			Vector3 currentPosition = new Vector3(transform.PositionX, transform.PositionY, transform.PositionZ);
 
-			MovementInfo info2 = new MovementInfo(info.MoveFlags, info.ExtraFlags, (uint)TimeService.CurrentRemoteTime,
+			MovementInfo info2 = new MovementInfo(info.MoveFlags, info.ExtraFlags, CalculateMovementInfoTime(),
 				currentPosition.ToWoWVector(), CalculateWoWMovementInfoRotation(args.Rotation), info.TransportationInformation, info.TransportationTime, 
 				info.MovePitch, info.FallTime, info.FallData, info.SplineElevation);
 
@@ -51,6 +51,11 @@ namespace GladMMO
 			MovementInfoMappable.ReplaceObject(PlayerDetails.LocalPlayerGuid, info2);
 
 			SendService.SendMessage(new MSG_MOVE_SET_FACING_Payload(new PackedGuid(PlayerDetails.LocalPlayerGuid), info2));
+		}
+
+		private uint CalculateMovementInfoTime()
+		{
+			return (uint)TimeService.MillisecondsSinceStartup;
 		}
 
 		private static float CalculateWoWMovementInfoRotation(float rotation)

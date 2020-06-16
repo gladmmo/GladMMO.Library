@@ -131,28 +131,28 @@ namespace GladMMO
 		{
 			Vector3 position = new Vector3(worldTransformComponent.PositionX, worldTransformComponent.PositionY, worldTransformComponent.PositionZ);
 
-			return new MovementInfo(args.BuildMovementFlags(), MovementFlagExtra.None, (uint)TimeService.CurrentRemoteTime, position.ToWoWVector(), CalculateWoWMovementInfoRotation(worldTransformComponent), null, 0, 0, 0, null, 0);
+			return new MovementInfo(args.BuildMovementFlags(), MovementFlagExtra.None, CalculateMovementInfoTime(), position.ToWoWVector(), CalculateWoWMovementInfoRotation(worldTransformComponent), null, 0, 0, 0, null, 0);
 		}
 
 		private MovementInfo BuildBackwardsMovementInfo(MovementInputChangedEventArgs args, WorldTransform worldTransformComponent)
 		{
 			Vector3 position = new Vector3(worldTransformComponent.PositionX, worldTransformComponent.PositionY, worldTransformComponent.PositionZ);
 
-			return new MovementInfo(args.BuildMovementFlags(), MovementFlagExtra.None, (uint)TimeService.CurrentRemoteTime, position.ToWoWVector(), CalculateWoWMovementInfoRotation(worldTransformComponent), null, 0, 0, 0, null, 0);
+			return new MovementInfo(args.BuildMovementFlags(), MovementFlagExtra.None, CalculateMovementInfoTime(), position.ToWoWVector(), CalculateWoWMovementInfoRotation(worldTransformComponent), null, 0, 0, 0, null, 0);
 		}
 
 		private MovementInfo BuildRightStrafeMovementInfo(MovementInputChangedEventArgs args, WorldTransform worldTransformComponent)
 		{
 			Vector3 position = new Vector3(worldTransformComponent.PositionX, worldTransformComponent.PositionY, worldTransformComponent.PositionZ);
 
-			return new MovementInfo(args.BuildMovementFlags(), MovementFlagExtra.None, (uint)TimeService.CurrentRemoteTime, position.ToWoWVector(), CalculateWoWMovementInfoRotation(worldTransformComponent), null, 0, 0, 0, null, 0);
+			return new MovementInfo(args.BuildMovementFlags(), MovementFlagExtra.None, CalculateMovementInfoTime(), position.ToWoWVector(), CalculateWoWMovementInfoRotation(worldTransformComponent), null, 0, 0, 0, null, 0);
 		}
 
 		private MovementInfo BuildLeftStrafeMovementInfo(MovementInputChangedEventArgs args, WorldTransform worldTransformComponent)
 		{
 			Vector3 position = new Vector3(worldTransformComponent.PositionX, worldTransformComponent.PositionY, worldTransformComponent.PositionZ);
 
-			return new MovementInfo(args.BuildMovementFlags(), MovementFlagExtra.None, (uint)TimeService.CurrentRemoteTime, position.ToWoWVector(), CalculateWoWMovementInfoRotation(worldTransformComponent), null, 0, 0, 0, null, 0);
+			return new MovementInfo(args.BuildMovementFlags(), MovementFlagExtra.None, CalculateMovementInfoTime(), position.ToWoWVector(), CalculateWoWMovementInfoRotation(worldTransformComponent), null, 0, 0, 0, null, 0);
 		}
 
 		private static float CalculateWoWMovementInfoRotation(WorldTransform worldTransformComponent)
@@ -165,7 +165,12 @@ namespace GladMMO
 		{
 			Vector3 position = new Vector3(worldTransformComponent.PositionX, worldTransformComponent.PositionY, worldTransformComponent.PositionZ);
 
-			return new MovementInfo(MovementFlag.MOVEMENTFLAG_NONE, MovementFlagExtra.None, (uint)TimeService.CurrentRemoteTime, position.ToWoWVector(), CalculateWoWMovementInfoRotation(worldTransformComponent), null, 0, 0, 0, null, 0);
+			return new MovementInfo(MovementFlag.MOVEMENTFLAG_NONE, MovementFlagExtra.None, CalculateMovementInfoTime(), position.ToWoWVector(), CalculateWoWMovementInfoRotation(worldTransformComponent), null, 0, 0, 0, null, 0);
+		}
+
+		private uint CalculateMovementInfoTime()
+		{
+			return (uint)TimeService.MillisecondsSinceStartup;
 		}
 	}
 }
