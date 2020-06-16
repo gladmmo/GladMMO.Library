@@ -87,6 +87,14 @@ namespace GladMMO
 			if (millisecondsTotalDiff == 0)
 				return entity.transform.position;
 
+#if DEBUG
+			Debug.DrawRay(entity.transform.position, (entity.transform.position - GeneratedPath[0]), Color.white, 2.0f);
+			for (int i = 0; i < GeneratedPath.Length - 1; i++)
+			{
+				Debug.DrawRay(GeneratedPath[i], (GeneratedPath[i] - GeneratedPath[i + 1]), Color.white, 2.0f);
+			}
+#endif
+
 			//Find the point we're on
 			for (int i = 0; i < TimeWeights.Length; i++)
 			{
@@ -106,7 +114,9 @@ namespace GladMMO
 					entity.transform.rotation = Quaternion.Slerp(entity.transform.rotation, Quaternion.LookRotation(direction, Vector3.up), 100.0f * Time.deltaTime);
 					entity.transform.position = Vector3.Lerp(GeneratedPath[i], GeneratedPath[i + 1], Mathf.Clamp(segmentCompleteRatio, 0, 1.0f));
 
+#if DEBUG
 					Debug.DrawRay(entity.transform.position, direction * 3.0f, Color.blue);
+#endif
 				}
 			}
 
