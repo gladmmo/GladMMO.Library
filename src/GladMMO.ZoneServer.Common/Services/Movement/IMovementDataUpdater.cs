@@ -46,7 +46,7 @@ namespace GladMMO
 			//We're dead, an unmoving corpse.
 			if(data.IsDead)
 			{
-				MovementGeneratorMappable[guid] = new IdleMovementGenerator(data.MoveInfo.Position.ToUnityVector());
+				MovementGeneratorMappable[guid] = new IdleMovementGenerator(data.MoveInfo.Position.ToUnityVector(), data.MoveInfo.Orientation.ToUnity3DYAxisRotation());
 				return;
 			}
 			else

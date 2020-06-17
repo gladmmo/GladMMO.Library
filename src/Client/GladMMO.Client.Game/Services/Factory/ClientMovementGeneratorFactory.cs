@@ -31,7 +31,7 @@ namespace GladMMO
 					return CreatePlayerMovementGenerator(context);
 				case EntityTypeId.TYPEID_GAMEOBJECT:
 					//TODO: Support non-static GameObjects.
-					return new IdleMovementGenerator(context.Data.Position.ToUnityVector());
+					return new IdleMovementGenerator(context.Data.Position.ToUnityVector(), context.Data.Orientation.ToUnity3DYAxisRotation());
 				case EntityTypeId.TYPEID_UNIT:
 					if (context.Data.MoveFlags.HasAnyFlags(MovementFlag.MOVEMENTFLAG_SPLINE_ENABLED))
 					{
@@ -42,7 +42,7 @@ namespace GladMMO
 						return new LinearPathMovementGenerator(spoofedLinearMoveInfo, context.Data.Position.ToUnityVector(), info.SplineFullTime, info.SplineTime);
 					}
 					else
-						return new IdleMovementGenerator(context.Data.Position.ToUnityVector());
+						return new IdleMovementGenerator(context.Data.Position.ToUnityVector(), context.Data.Orientation.ToUnity3DYAxisRotation());
 				default:
 					throw new ArgumentOutOfRangeException();
 			}

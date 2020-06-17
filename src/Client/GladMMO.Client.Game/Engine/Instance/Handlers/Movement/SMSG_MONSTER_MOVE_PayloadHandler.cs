@@ -43,7 +43,10 @@ namespace GladMMO
 					case MonsterMoveType.MonsterMoveStop:
 						//For STOP we basically just idle at this point, the initial point sent down in the move packet.
 						//DO NOT USE REPLACE, WE MAY NOT HAVE MOVE GENERATOR YET!!
-						MovementGeneratorMappable[creatureGuid] = new IdleMovementGenerator(payload.InitialMovePoint.ToUnityVector());
+
+						//TODO: Provide corect angle, or make angle optional.
+						ProjectVersionStage.AssertInternalTesting();
+						MovementGeneratorMappable[creatureGuid] = new IdleMovementGenerator(payload.InitialMovePoint.ToUnityVector(), 0.0f);
 						break;
 
 					//All these types have a spline.

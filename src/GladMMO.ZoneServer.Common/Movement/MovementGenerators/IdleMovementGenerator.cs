@@ -13,9 +13,12 @@ namespace GladMMO
 	{
 		private Vector3 InitialPosition { get; }
 
-		public IdleMovementGenerator(Vector3 initialPosition)
+		private float YAxisRotation { get; }
+
+		public IdleMovementGenerator(Vector3 initialPosition, float yAxisRotation)
 		{
 			InitialPosition = initialPosition;
+			YAxisRotation = yAxisRotation;
 		}
 
 		protected override Vector3 Start(GameObject entity, long currentTime)
@@ -23,7 +26,9 @@ namespace GladMMO
 			//Immediately we're idle so let's stop the generator.
 			StopGenerator();
 
-			return entity.transform.position = InitialPosition;
+			entity.transform.SetPositionAndRotation(InitialPosition, Quaternion.AngleAxis(YAxisRotation, Vector3.up));
+
+			return entity.transform.position;
 		}
 
 		protected override Vector3 InternalUpdate(GameObject entity, long currentTime)
