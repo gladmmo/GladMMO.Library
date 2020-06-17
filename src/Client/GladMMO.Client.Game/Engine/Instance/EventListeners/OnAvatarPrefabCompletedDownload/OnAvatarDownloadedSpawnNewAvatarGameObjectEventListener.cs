@@ -20,17 +20,21 @@ namespace GladMMO
 
 		private IEntityNameQueryable NameQueryable { get; }
 
+		private IModelScaleStrategy ModelScaler { get; }
+
 		public OnAvatarDownloadedSpawnNewAvatarGameObjectEventListener(IContentPrefabCompletedDownloadEventSubscribable subscriptionService,
 			[NotNull] ILog logger,
 			[NotNull] IReadonlyEntityGuidMappable<EntityGameObjectDirectory> gameObjectDirectoryMappable,
 			[NotNull] IEntityGuidMappable<IMovementDirectionChangedListener> movementDirectionListener,
-			[NotNull] IEntityNameQueryable nameQueryable) 
+			[NotNull] IEntityNameQueryable nameQueryable,
+			[NotNull] IModelScaleStrategy modelScaler) 
 			: base(subscriptionService)
 		{
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
 			GameObjectDirectoryMappable = gameObjectDirectoryMappable ?? throw new ArgumentNullException(nameof(gameObjectDirectoryMappable));
 			MovementDirectionListenerMappable = movementDirectionListener ?? throw new ArgumentNullException(nameof(movementDirectionListener));
 			NameQueryable = nameQueryable ?? throw new ArgumentNullException(nameof(nameQueryable));
+			ModelScaler = modelScaler ?? throw new ArgumentNullException(nameof(modelScaler));
 		}
 
 		protected override void OnEventFired(object source, ContentPrefabCompletedDownloadEventArgs args)
@@ -47,7 +51,7 @@ namespace GladMMO
 				//Now we've assigned the handle, we need to actually handle the spawning/loading of the avatar.
 				GameObject ikRootGameObject = GameObjectDirectoryMappable.RetrieveEntity(args.EntityGuid).GetGameObject(EntityGameObjectDirectory.Type.IKRoot);
 				GameObject currentAvatarRootGameObject = ikRootGameObject.transform.GetChild(0).gameObject;
-				GameObject newlySpawnedAvatar = InstantiateNewFromPrefab(args.DownloadedPrefabObject, currentAvatarRootGameObject);
+				GameObject newlySpawnedAvatar = InstantiateNewFromPrefab(args.EntityGuid, args.DownloadedPrefabObject, currentAvatarRootGameObject);
 
 				//Try to get AvatarBoneSDKData from root spawned model
 				AvatarBoneSDKData boneSdkData = newlySpawnedAvatar.GetComponent<AvatarBoneSDKData>();
@@ -100,7 +104,7 @@ namespace GladMMO
 			}
 		}
 
-		private GameObject InstantiateNewFromPrefab([NotNull] GameObject prefab, [NotNull] GameObject oldAvatar)
+		private GameObject InstantiateNewFromPrefab(ObjectGuid guid, [NotNull] GameObject prefab, [NotNull] GameObject oldAvatar)
 		{
 			if (prefab == null) throw new ArgumentNullException(nameof(prefab));
 			if (oldAvatar == null) throw new ArgumentNullException(nameof(oldAvatar));
@@ -110,6 +114,10 @@ namespace GladMMO
 			//Replace the current avatar root gameobject with the new one.
 			GameObject newAvatarRoot = GameObject.Instantiate(prefab, oldAvatar.transform.parent);
 			newAvatarRoot.transform.localScale = oldAvatar.transform.localScale;
+
+			//Apply creature scale, loading from DBC and dynamic unit field stuff.
+			newAvatarRoot.transform.localScale *= ModelScaler.ComputeScale(guid);
+
 			newAvatarRoot.transform.localPosition = Vector3.zero;
 			newAvatarRoot.transform.localRotation = Quaternion.identity;
 			return newAvatarRoot;
