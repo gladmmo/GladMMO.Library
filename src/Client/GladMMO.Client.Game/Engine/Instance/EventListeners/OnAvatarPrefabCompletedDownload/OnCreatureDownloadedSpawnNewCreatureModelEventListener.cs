@@ -39,11 +39,23 @@ namespace GladMMO
 			try
 			{
 				//TODO: Handle the case of a creature CHANGING it's model ID.
-
 				//Now we've assigned the handle, we need to actually handle the spawning/loading of the creature
 				//model as a child of the parent.
 				GameObject root = GameObjectMappable.RetrieveEntity(args.EntityGuid);
+
+				//TODO: This is kinda hacky, we should maintain a management component that provides access to these things.
+				//Destroy existing one
+				foreach (Transform transform in root.transform)
+				{
+					if (transform.gameObject.name == "VISUAL_MODEL")
+					{
+						GameObject.Destroy(transform.gameObject);
+						break;
+					}
+				}
+
 				GameObject newlySpawnedAvatar = InstantiateNewFromPrefab(args, root);
+				newlySpawnedAvatar.name = "VISUAL_MODEL";
 			}
 			catch (Exception e)
 			{
