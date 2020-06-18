@@ -16,19 +16,20 @@ namespace GladMMO
 
 		private IFactoryCreatable<GameObject, EntityPrefab> PrefabFactory { get; }
 
-		private IReadonlyEntityGuidMappable<MovementBlockData> MovementDataMappable { get; }
+		//Don't use MAPPABLE, initialization order will mean MAYBE it doesn't exist yet.
+		private IWorldTransformFactory WorldTransformFactory { get; }
 
 		private ILog Logger { get; }
 
 		protected SharedOnEntityCreatingCreateWorldObjectRepresentationEventListener(IEntityCreationStartingEventSubscribable subscriptionService,
 			[NotNull] IFactoryCreatable<GameObject, EntityPrefab> prefabFactory,
-			[NotNull] IReadonlyEntityGuidMappable<MovementBlockData> movementDataMappable,
-			[NotNull] ILog logger)
+			[NotNull] ILog logger,
+			[NotNull] IWorldTransformFactory worldTransformFactory)
 			: base(subscriptionService)
 		{
 			PrefabFactory = prefabFactory ?? throw new ArgumentNullException(nameof(prefabFactory));
-			MovementDataMappable = movementDataMappable ?? throw new ArgumentNullException(nameof(movementDataMappable));
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
+			WorldTransformFactory = worldTransformFactory ?? throw new ArgumentNullException(nameof(worldTransformFactory));
 		}
 
 		protected override void OnEventFired(object source, EntityCreationStartingEventArgs args)
@@ -55,11 +56,11 @@ namespace GladMMO
 			}
 
 			EntityPrefab prefabType = ComputePrefabType(args.EntityGuid);
-			MovementBlockData movementData = MovementDataMappable.RetrieveEntity(args.EntityGuid);
+			WorldTransform worldTransform = WorldTransformFactory.Create(args.EntityGuid);
 
 			//load the entity's prefab from the factory
 			GameObject prefab = PrefabFactory.Create(prefabType);
-			GameObject entityGameObject = GameObject.Instantiate(prefab, movementData.MoveInfo.Position.ToUnityVector(), Quaternion.Euler(0, movementData.MoveInfo.Orientation, 0));
+			GameObject entityGameObject = GameObject.Instantiate(prefab, new Vector3(worldTransform.PositionX, worldTransform.PositionY, worldTransform.PositionZ), Quaternion.Euler(0.0f, worldTransform.YAxisRotation, 0.0f));
 
 			OnEntityWorldRepresentationCreated?.Invoke(this, new EntityWorldRepresentationCreatedEventArgs(args.EntityGuid, entityGameObject));
 		}

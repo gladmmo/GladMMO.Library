@@ -49,11 +49,14 @@ namespace GladMMO
 				MovementDataMappable[guid] = data;
 
 			//TODO: Handle cases where JUST POS and JUST orientation are sent and other unhandled cases.
-			
-			//We're dead, an unmoving corpse.
-			if(data.IsDead)
+			if(data.IsLiving) //IsLiving is required for MoveInfo which is required here for movement generator factory.
 			{
-				MovementGeneratorMappable[guid] = new IdleMovementGenerator(data.MoveInfo.Position.ToUnityVector(), data.MoveInfo.Orientation.ToUnity3DYAxisRotation());
+				//Maybe we have a spline
+				if(data.HasSplineData)
+					SplineInfoMappable[guid] = data.SplineInformation; //we may already have it, we cannot add.
+
+				IMovementGenerator<GameObject> generator = MovementGeneratorFactory.Create(new EntityAssociatedData<MovementInfo>(guid, data.MoveInfo));
+				MovementGeneratorMappable[guid] = generator;
 			}
 			else if (data.IsStationaryObject)
 			{
@@ -63,22 +66,13 @@ namespace GladMMO
 
 				MovementGeneratorMappable[guid] = new IdleMovementGenerator(position, orientation);
 			}
-			else if(data.IsLiving) //IsLiving is required for MoveInfo which is required here for movement generator factory.
-			{
-				//Maybe we have a spline
-				if(data.HasSplineData)
-					SplineInfoMappable[guid] = data.SplineInformation; //we may already have it, we cannot add.
-
-				IMovementGenerator<GameObject> generator = MovementGeneratorFactory.Create(new EntityAssociatedData<MovementInfo>(guid, data.MoveInfo));
-				MovementGeneratorMappable[guid] = generator;
-			}
 			else if (data.HasUpdatePosition && data.IsDead) //HasUpdatePosition and IsStationaryObject is mutually exclusive
 			{
 				//GameObjects can have this type of movement flags set
 				//if they don't move.
-				StationaryMovementInfo stationaryMovementInfo = data.StationaryObjectMovementInformation;
-				Vector3 position = stationaryMovementInfo.Position.ToUnityVector();
-				float orientation = stationaryMovementInfo.Orientation.ToUnity3DYAxisRotation();
+				CorpseInfo deadMoveInfo = data.DeadMovementInformation;
+				Vector3 position = deadMoveInfo.GoLocation.ToUnityVector();
+				float orientation = deadMoveInfo.Orientation.ToUnity3DYAxisRotation();
 
 				MovementGeneratorMappable[guid] = new IdleMovementGenerator(position, orientation);
 			}

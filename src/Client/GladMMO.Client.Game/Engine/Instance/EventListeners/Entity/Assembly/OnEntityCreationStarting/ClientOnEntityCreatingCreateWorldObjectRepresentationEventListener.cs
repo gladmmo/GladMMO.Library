@@ -16,10 +16,10 @@ namespace GladMMO
 
 		public ClientOnEntityCreatingCreateWorldObjectRepresentationEventListener(IEntityCreationStartingEventSubscribable subscriptionService, 
 			IFactoryCreatable<GameObject, EntityPrefab> prefabFactory, 
-			IReadonlyEntityGuidMappable<MovementBlockData> movementDataMappable, 
 			ILocalCharacterDataRepository characterDataRepository,
+			IWorldTransformFactory worldTransformFactory,
 			ILog logger) 
-			: base(subscriptionService, prefabFactory, movementDataMappable, logger)
+			: base(subscriptionService, prefabFactory, logger, worldTransformFactory)
 		{
 			CharacterDataRepository = characterDataRepository;
 		}
