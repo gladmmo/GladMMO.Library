@@ -39,7 +39,6 @@ namespace GladMMO
 				case EntityTypeId.TYPEID_ITEM:
 				case EntityTypeId.TYPEID_CONTAINER:
 					return;
-				case EntityTypeId.TYPEID_GAMEOBJECT:
 				case EntityTypeId.TYPEID_DYNAMICOBJECT:
 				case EntityTypeId.TYPEID_CORPSE:
 					if(Logger.IsWarnEnabled)
