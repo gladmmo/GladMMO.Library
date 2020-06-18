@@ -29,11 +29,43 @@ namespace GladMMO
 		{
 			IEntityDataFieldContainer entityData = EntityDataMappable.RetrieveEntity(args.TargetedEntity);
 
-			EntityDataChangeCallbackService.RegisterCallback<int>(args.TargetedEntity, (int)EUnitFields.UNIT_FIELD_LEVEL, OnTargetEntityLevelChanged);
+			RegisterLevelCallback(args);
 
 			//Only initialize if we have their values
-			if (entityData.DataSetIndicationArray.Get((int)EUnitFields.UNIT_FIELD_LEVEL))
-				OnTargetEntityLevelChanged(args.TargetedEntity, new EntityDataChangedArgs<int>(0, entityData.GetFieldValue<int>(EUnitFields.UNIT_FIELD_LEVEL)));
+			if (CheckLevelSet(args.TargetedEntity, entityData))
+				OnTargetEntityLevelChanged(args.TargetedEntity, new EntityDataChangedArgs<int>(0, GetLevel(args.TargetedEntity, entityData)));
+		}
+
+		private static int GetLevel(ObjectGuid targetGuid, IEntityDataFieldContainer entityData)
+		{
+			if (targetGuid.TypeId == EntityTypeId.TYPEID_GAMEOBJECT)
+				return entityData.GetFieldValue<int>(EGameObjectFields.GAMEOBJECT_LEVEL);
+			else
+				return entityData.GetFieldValue<int>(EUnitFields.UNIT_FIELD_LEVEL);
+		}
+
+		private static bool CheckLevelSet([NotNull] ObjectGuid targetGuid, [NotNull] IEntityDataFieldContainer entityData)
+		{
+			if (targetGuid == null) throw new ArgumentNullException(nameof(targetGuid));
+			if (entityData == null) throw new ArgumentNullException(nameof(entityData));
+
+			if (targetGuid.TypeId == EntityTypeId.TYPEID_GAMEOBJECT)
+				return entityData.DataSetIndicationArray.Get((int)EGameObjectFields.GAMEOBJECT_LEVEL);
+			else
+				return entityData.DataSetIndicationArray.Get((int)EUnitFields.UNIT_FIELD_LEVEL);
+		}
+
+		private void RegisterLevelCallback(LocalPlayerTargetChangedEventArgs args)
+		{
+			//Gamobject level is very different.
+			if (args.TargetedEntity.TypeId == EntityTypeId.TYPEID_GAMEOBJECT)
+			{
+				EntityDataChangeCallbackService.RegisterCallback<int>(args.TargetedEntity, (int)EGameObjectFields.GAMEOBJECT_LEVEL, OnTargetEntityLevelChanged);
+			}
+			else
+			{
+				EntityDataChangeCallbackService.RegisterCallback<int>(args.TargetedEntity, (int)EUnitFields.UNIT_FIELD_LEVEL, OnTargetEntityLevelChanged);
+			}
 		}
 
 		private void OnTargetEntityLevelChanged(ObjectGuid entity, EntityDataChangedArgs<int> args)
