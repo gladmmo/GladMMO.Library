@@ -79,6 +79,7 @@ namespace GladMMO
 			//Game object uses DIFFERENT flags for selectability.
 			if(args.EntityGuid.TypeId == EntityTypeId.TYPEID_GAMEOBJECT)
 			{
+				//TODO: More info is actually needed to determine if a GO is selectable. NOT_SELECTABLE isn't actually enough.
 				return !entity.HasBaseGameObjectFieldFlag(GameObjectFlags.GO_FLAG_NOT_SELECTABLE);
 			}
 			else
