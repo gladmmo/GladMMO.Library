@@ -69,16 +69,6 @@ namespace GladMMO
 				.As<IFactoryCreatable<IMovementGenerator<GameObject>, EntityAssociatedData<MovementInfo>>>()
 				.SingleInstance();
 
-			//NetworkedTrackerChangePacketFactory : IFactoryCreatable<PlayerNetworkTrackerChangeUpdateRequest, NetworkMovementTrackerTypeFlags>
-			builder.RegisterType<NetworkedTrackerChangePacketFactory>()
-				.As<IFactoryCreatable<PlayerNetworkTrackerChangeUpdateRequest, NetworkMovementTrackerTypeFlags>>()
-				.SingleInstance();
-
-			//DefaultClientGameObjectEntityBehaviourFactory : IClientGameObjectEntityBehaviourFactory
-			builder.RegisterType<DefaultClientGameObjectEntityBehaviourFactory>()
-				.As<IClientGameObjectEntityBehaviourFactory>()
-				.SingleInstance();
-
 			//DefaultKnownSpellSet : IKnownSpellSet
 			builder.RegisterType<DefaultKnownSpellSet>()
 				.As<IKnownSpellSet>()

@@ -9,7 +9,7 @@ namespace GladMMO.SDK
 	{
 		public ICreatureDataServiceClient Create(EmptyFactoryContext context)
 		{
-			return Refit.RestService.For<ICreatureDataServiceClient>("http://test-guardians-contentserver.azurewebsites.net/", new RefitSettings() { HttpMessageHandlerFactory = () => new AuthenticatedHttpClientHandler(new ContentSDKAuthenticationTokenRepository()) });
+			return Refit.RestService.For<ICreatureDataServiceClient>("http://test-guardians-contentserver.azurewebsites.net/", new RefitSettings() { HttpMessageHandlerFactory = () => new AuthenticatedHttpClientHandler(null) });
 		}
 	}
 }
