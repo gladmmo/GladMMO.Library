@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Common.Logging;
 using FreecraftCore;
 using UnityEngine;
 
@@ -27,15 +28,19 @@ namespace GladMMO
 
 		private IEntityGuidMappable<SplineInfo> SplineInfoMappable { get; }
 
+		private ILog Logger { get; }
+
 		public DefaultMovementDataUpdater([NotNull] IFactoryCreatable<IMovementGenerator<GameObject>, EntityAssociatedData<MovementInfo>> movementGeneratorFactory,
 			[NotNull] IEntityGuidMappable<IMovementGenerator<GameObject>> movementGeneratorMappable,
 			[NotNull] IEntityGuidMappable<MovementBlockData> movementDataMappable,
-			[NotNull] IEntityGuidMappable<SplineInfo> splineInfoMappable)
+			[NotNull] IEntityGuidMappable<SplineInfo> splineInfoMappable,
+			[NotNull] ILog logger)
 		{
 			MovementGeneratorFactory = movementGeneratorFactory ?? throw new ArgumentNullException(nameof(movementGeneratorFactory));
 			MovementGeneratorMappable = movementGeneratorMappable ?? throw new ArgumentNullException(nameof(movementGeneratorMappable));
 			MovementDataMappable = movementDataMappable ?? throw new ArgumentNullException(nameof(movementDataMappable));
 			SplineInfoMappable = splineInfoMappable ?? throw new ArgumentNullException(nameof(splineInfoMappable));
+			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
 		public void Update(ObjectGuid guid, MovementBlockData data, bool updateComponent)
@@ -43,13 +48,22 @@ namespace GladMMO
 			if (updateComponent)
 				MovementDataMappable[guid] = data;
 
+			//TODO: Handle cases where JUST POS and JUST orientation are sent and other unhandled cases.
+			
 			//We're dead, an unmoving corpse.
 			if(data.IsDead)
 			{
 				MovementGeneratorMappable[guid] = new IdleMovementGenerator(data.MoveInfo.Position.ToUnityVector(), data.MoveInfo.Orientation.ToUnity3DYAxisRotation());
-				return;
 			}
-			else
+			else if (data.IsStationaryObject)
+			{
+				StationaryMovementInfo stationaryMovementInfo = data.StationaryObjectMovementInformation;
+				Vector3 position = stationaryMovementInfo.Position.ToUnityVector();
+				float orientation = stationaryMovementInfo.Orientation.ToUnity3DYAxisRotation();
+
+				MovementGeneratorMappable[guid] = new IdleMovementGenerator(position, orientation);
+			}
+			else if(data.IsLiving) //IsLiving is required for MoveInfo which is required here for movement generator factory.
 			{
 				//Maybe we have a spline
 				if(data.HasSplineData)
@@ -57,6 +71,21 @@ namespace GladMMO
 
 				IMovementGenerator<GameObject> generator = MovementGeneratorFactory.Create(new EntityAssociatedData<MovementInfo>(guid, data.MoveInfo));
 				MovementGeneratorMappable[guid] = generator;
+			}
+			else if (data.HasUpdatePosition && data.IsDead) //HasUpdatePosition and IsStationaryObject is mutually exclusive
+			{
+				//GameObjects can have this type of movement flags set
+				//if they don't move.
+				StationaryMovementInfo stationaryMovementInfo = data.StationaryObjectMovementInformation;
+				Vector3 position = stationaryMovementInfo.Position.ToUnityVector();
+				float orientation = stationaryMovementInfo.Orientation.ToUnity3DYAxisRotation();
+
+				MovementGeneratorMappable[guid] = new IdleMovementGenerator(position, orientation);
+			}
+			else
+			{
+				if(Logger.IsWarnEnabled)
+					Logger.Warn($"Failed to create MoveGenerator For: {guid} MoveFlags: {data.UpdateFlags}.");
 			}
 		}
 	}
