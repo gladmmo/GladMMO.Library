@@ -39,7 +39,7 @@ namespace GladMMO
 
 		public async Task<ResponseModel<NameQueryResponse, NameQueryResponseCode>> RetrieveGameObjectNameAsync(ulong rawGuidValue)
 		{
-			return await (await GetService().ConfigureAwaitFalse()).RetrieveCreatureNameAsync(rawGuidValue).ConfigureAwaitFalse();
+			return await (await GetService().ConfigureAwaitFalse()).RetrieveGameObjectNameAsync(rawGuidValue).ConfigureAwaitFalse();
 		}
 
 		public async Task<ResponseModel<NameQueryResponse, NameQueryResponseCode>> RetrieveGuildNameAsync(int guildId)
