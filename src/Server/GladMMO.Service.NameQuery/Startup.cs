@@ -125,6 +125,7 @@ namespace GladMMO
 				.AddEntityFrameworkMySql();
 
 			services.AddTransient<ITrinityCreatureTemplateRepository, TrinityCoreCreatureTemplateRepository>();
+			services.AddTransient<ITrinityGameObjectTemplateRepository, TrinityCoreGameObjectTemplateRepository>();
 		}
 	}
 }
