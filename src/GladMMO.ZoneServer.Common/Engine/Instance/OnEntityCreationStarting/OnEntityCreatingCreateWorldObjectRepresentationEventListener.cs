@@ -46,6 +46,7 @@ namespace GladMMO
 					return;
 
 				//We implemented handling for these so far.
+				case EntityTypeId.TYPEID_GAMEOBJECT:
 				case EntityTypeId.TYPEID_UNIT:
 				case EntityTypeId.TYPEID_PLAYER:
 					break;
