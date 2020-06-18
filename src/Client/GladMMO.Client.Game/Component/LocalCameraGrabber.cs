@@ -20,6 +20,7 @@ namespace GladMMO
 
 			Camera.main.gameObject.transform.parent = this.transform;
 			Camera.main.gameObject.transform.localPosition = Vector3.zero;
+			Camera.main.gameObject.transform.localRotation = Quaternion.Euler(0,0,0);
 			Camera.main.enabled = true;
 		}
 	}
