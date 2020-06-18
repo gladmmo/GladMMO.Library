@@ -26,6 +26,11 @@ namespace GladMMO
 		public void Test_All_GameInitablizes_Have_GameSceneAttribute(Type t)
 		{
 			//arrange
+			if (t.IsAbstract)
+			{
+				Assert.Pass();
+				return;
+			}
 
 			//act
 			bool hasAttribute = t.HasAttribute<SceneTypeCreateGladMMO>();
