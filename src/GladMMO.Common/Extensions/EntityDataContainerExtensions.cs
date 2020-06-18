@@ -49,6 +49,13 @@ namespace GladMMO
 			return ((UnitFlags) container.GetFieldValue<int>(EUnitFields.UNIT_FIELD_FLAGS) & flag) == flag;
 		}
 
+		public static bool HasBaseGameObjectFieldFlag(this IEntityDataFieldContainer container, GameObjectFlags flag)
+		{
+			if(container == null) throw new ArgumentNullException(nameof(container));
+
+			return ((GameObjectFlags)container.GetFieldValue<int>(EGameObjectFields.GAMEOBJECT_FLAGS) & flag) == flag;
+		}
+
 		/// <summary>
 		/// TODO: Doc
 		/// </summary>

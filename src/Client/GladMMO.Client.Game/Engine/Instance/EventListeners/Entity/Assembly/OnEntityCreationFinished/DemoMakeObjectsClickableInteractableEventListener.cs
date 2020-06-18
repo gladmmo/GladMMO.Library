@@ -52,8 +52,9 @@ namespace GladMMO
 			{
 				if (eventArgs.Type == MouseButtonClickEventArgs.MouseType.Left)
 				{
+					//Assume this is at least a UNIT then.
 					//Check if they are selectable
-					if (!EntityDataFieldMappable.RetrieveEntity(args.EntityGuid).HasBaseObjectFieldFlag(UnitFlags.UNIT_FLAG_NOT_SELECTABLE))
+					if(IsSelectable(args))
 					{
 						SendService.SendMessage(new CMSG_SET_SELECTION_Payload(args.EntityGuid));
 						//Client side prediction of player target
@@ -69,6 +70,22 @@ namespace GladMMO
 					}*/
 				}
 			};
+		}
+
+		private bool IsSelectable(EntityCreationFinishedEventArgs args)
+		{
+			IEntityDataFieldContainer entity = EntityDataFieldMappable.RetrieveEntity(args.EntityGuid);
+
+			//Game object uses DIFFERENT flags for selectability.
+			if(args.EntityGuid.TypeId == EntityTypeId.TYPEID_GAMEOBJECT)
+			{
+				return !entity.HasBaseGameObjectFieldFlag(GameObjectFlags.GO_FLAG_NOT_SELECTABLE);
+			}
+			else
+			{
+				//Assume it's a UNIT then.
+				return !entity.HasBaseObjectFieldFlag(UnitFlags.UNIT_FLAG_NOT_SELECTABLE);
+			}
 		}
 	}
 }
