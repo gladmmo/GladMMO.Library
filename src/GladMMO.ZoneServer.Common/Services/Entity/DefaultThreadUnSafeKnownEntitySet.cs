@@ -15,6 +15,22 @@ namespace GladMMO
 		/// <inheritdoc />
 		public ReaderWriterLockSlim LockObject { get; }
 
+		public int Count
+		{
+			get
+			{
+				LockObject.EnterReadLock();
+				try
+				{
+					return InternalKnownSet.Count;
+				}
+				finally
+				{
+					LockObject.ExitReadLock();
+				}
+			}
+		}
+
 		/// <inheritdoc />
 		public DefaultThreadUnSafeKnownEntitySet()
 		{

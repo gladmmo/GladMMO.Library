@@ -19,6 +19,8 @@ namespace GladMMO
 		/// The synchronization object for the known entity set.
 		/// </summary>
 		ReaderWriterLockSlim LockObject { get; }
+
+		int Count { get; }
 	}
 
 	public interface IKnownEntitySet : IReadonlyKnownEntitySet
