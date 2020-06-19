@@ -31,8 +31,11 @@ namespace GladMMO
 
 		protected override void OnEventFired(object source, EntityCreationStartingEventArgs args)
 		{
-			//We're just using the WoW EUnitFields for now, and using display id for the avatar.
-			EntityDataCallbackRegister.RegisterCallback<int>(args.EntityGuid, (int)EUnitFields.UNIT_FIELD_DISPLAYID, HandleModelChange);
+			//Whyyyy Blizzard, so dumb... We need SEPERATE handling for DisplayID for GameObjects
+			if (args.EntityGuid.TypeId == EntityTypeId.TYPEID_GAMEOBJECT)
+				EntityDataCallbackRegister.RegisterCallback<int>(args.EntityGuid, (int)EGameObjectFields.GAMEOBJECT_DISPLAYID, HandleModelChange);
+			else
+				EntityDataCallbackRegister.RegisterCallback<int>(args.EntityGuid, (int)EUnitFields.UNIT_FIELD_DISPLAYID, HandleModelChange);
 		}
 
 		private void HandleModelChange([NotNull] ObjectGuid entityGuid, EntityDataChangedArgs<int> changedModelId)
