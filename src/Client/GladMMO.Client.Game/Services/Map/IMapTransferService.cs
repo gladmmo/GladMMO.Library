@@ -56,55 +56,53 @@ namespace GladMMO
 			//TODO: Remove old PSO playable game scene enum
 			SceneChangePublisher.PublishEvent(this, new RequestedSceneChangeEventArgs(PlayableGameScene.Episode1Pioneer2, mapId));
 
-			//We cannot do this on the networking thread, it must be on next frame
-			await UnityAsyncHelper.UnityMainThreadContext.PostAsync(async () =>
+			await new UnityYieldAwaitable();
+
+			//Unload all scenes, we need to remove the current instance server scene
+			//and the current map scene.
+			await GladMMOSceneManager.UnloadAllAddressableScenesAsync();
+
+			/*AsyncOperationHandle worldLoadHandle = GladMMOSceneManager.LoadAddressableSceneAsync(new MapFilePath(map.Directory));
+			worldLoadHandle.Completed += op => GladMMOSceneManager.LoadAddressableSceneAdditiveAsync(GladMMOClientConstants.INSTANCE_SERVER_SCENE_NAME);*/
+
+			//Assume the map exists
+			MapEntry<string> map = ClientData.AssertEntry<MapEntry<string>>(mapId);
+
+			TaskCompletionSource<object> taskCompletionSource = new TaskCompletionSource<object>();
+
+			//Now we should load the two maps one on top of eachother.
+			try
 			{
-				//Unload all scenes, we need to remove the current instance server scene
-				//and the current map scene.
-				await GladMMOSceneManager.UnloadAllAddressableScenesAsync();
-
-				/*AsyncOperationHandle worldLoadHandle = GladMMOSceneManager.LoadAddressableSceneAsync(new MapFilePath(map.Directory));
-				worldLoadHandle.Completed += op => GladMMOSceneManager.LoadAddressableSceneAdditiveAsync(GladMMOClientConstants.INSTANCE_SERVER_SCENE_NAME);*/
-
-				//Assume the map exists
-				MapEntry<string> map = ClientData.AssertEntry<MapEntry<string>>(mapId);
-
-				TaskCompletionSource<object> taskCompletionSource = new TaskCompletionSource<object>();
-
-				//Now we should load the two maps one on top of eachother.
-				try
-				{
-					//TODO: Once ASYNC Addressabel loading doesn't RANDOMLY throw fucking NULL REFs fucking UNITY we don't need this nested disaster.
-					GladMMOSceneManager.LoadAddressableSceneAdditiveAsync(new MapFilePath(map.Directory), true)
-						.Completed += handle =>
+				//TODO: Once ASYNC Addressable loading doesn't RANDOMLY throw fucking NULL REFs fucking UNITY we don't need this nested disaster.
+				GladMMOSceneManager.LoadAddressableSceneAdditiveAsync(new MapFilePath(map.Directory), true)
+					.Completed += handle =>
+					{
+						if(handle.Status != AsyncOperationStatus.Succeeded)
 						{
-							if (handle.Status != AsyncOperationStatus.Succeeded)
+							taskCompletionSource.SetException(new InvalidOperationException($"Failed to load: {map.Directory} for Map Transfer."));
+							return;
+						}
+
+						GladMMOSceneManager.LoadAddressableSceneAdditiveAsync(GladMMOClientConstants.INSTANCE_SERVER_SCENE_NAME)
+							.Completed += handle2 =>
 							{
-								taskCompletionSource.SetException(new InvalidOperationException($"Failed to load: {map.Directory} for Map Transfer."));
-								return;
-							}
-
-							GladMMOSceneManager.LoadAddressableSceneAdditiveAsync(GladMMOClientConstants.INSTANCE_SERVER_SCENE_NAME)
-								.Completed += handle2 =>
+								if(handle2.Status == AsyncOperationStatus.Succeeded)
 								{
-									if (handle2.Status == AsyncOperationStatus.Succeeded)
-									{
-										taskCompletionSource.SetResult(null);
-									}
-									else
-										taskCompletionSource.SetException(new InvalidOperationException($"Failed to load: {GladMMOClientConstants.INSTANCE_SERVER_SCENE_NAME} for Map Transfer."));
-								};
-						};
-				}
-				catch(Exception e)
-				{
-					InvalidOperationException exception = new InvalidOperationException($"Failed to load Map: {map.MapId} Directory: {map.Directory}. Reason: {e.Message}", e);
-					taskCompletionSource.SetException(exception);
-					throw exception;
-				}
+									taskCompletionSource.SetResult(null);
+								}
+								else
+									taskCompletionSource.SetException(new InvalidOperationException($"Failed to load: {GladMMOClientConstants.INSTANCE_SERVER_SCENE_NAME} for Map Transfer."));
+							};
+					};
+			}
+			catch(Exception e)
+			{
+				InvalidOperationException exception = new InvalidOperationException($"Failed to load Map: {map.MapId} Directory: {map.Directory}. Reason: {e.Message}", e);
+				taskCompletionSource.SetException(exception);
+				throw exception;
+			}
 
-				await taskCompletionSource.Task;
-			});
+			await taskCompletionSource.Task;
 		}
 	}
 }
