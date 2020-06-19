@@ -8,18 +8,23 @@ namespace GladMMO
 {
 	public sealed class NetworkGameObjectContentResourceManager : DefaultLoadableContentResourceManager
 	{
-		private IDownloadableContentServerServiceClient ContentClient { get; }
+		private IClientDataCollectionContainer ClientData { get; }
 
-		public NetworkGameObjectContentResourceManager([NotNull] IDownloadableContentServerServiceClient contentClient, ILog logger) 
+		public NetworkGameObjectContentResourceManager(ILog logger,
+			[NotNull] IClientDataCollectionContainer clientData) 
 			: base(logger, UserContentType.GameObject)
 		{
-			ContentClient = contentClient ?? throw new ArgumentNullException(nameof(contentClient));
+			ClientData = clientData ?? throw new ArgumentNullException(nameof(clientData));
 		}
 
-		protected override async Task<ContentDownloadURLResponse> RequestDownloadURL(long contentId)
+		protected override Task<ContentDownloadURLResponse> RequestDownloadURL(long contentId)
 		{
-			return await ContentClient.RequestGameObjectModelDownloadUrl(contentId)
-				.ConfigureAwaitFalse();
+			if (!ClientData.HasEntry<GameObjectDisplayInfoEntry<string>>((int)contentId))
+				return Task.FromResult(new ContentDownloadURLResponse(ContentDownloadURLResponseCode.NoContentId));
+
+			GameObjectDisplayInfoEntry<string> entry = ClientData.AssertEntry<GameObjectDisplayInfoEntry<string>>((int) contentId);
+
+			return Task.FromResult(new ContentDownloadURLResponse(entry.ModelPath.Replace(".mdx", ""), 1));
 		}
 	}
 }
