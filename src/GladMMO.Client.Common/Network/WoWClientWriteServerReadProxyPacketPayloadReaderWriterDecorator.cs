@@ -44,12 +44,12 @@ namespace GladMMO
 		/// <summary>
 		/// Async read syncronization object.
 		/// </summary>
-		protected readonly AsyncLock readSynObj = new AsyncLock();
+		protected AsyncLock ReadSynObj { get; } = new AsyncLock();
 
 		/// <summary>
 		/// Async write syncronization object.
 		/// </summary>
-		protected readonly AsyncLock writeSynObj = new AsyncLock();
+		protected AsyncLock WriteSynObj { get; } = new AsyncLock();
 
 		public WoWClientWriteServerReadProxyPacketPayloadReaderWriterDecorator(TClientType decoratedClient, INetworkSerializationService serializer, int payloadBufferSize = 30000)
 		{
@@ -73,7 +73,7 @@ namespace GladMMO
 		/// <inheritdoc />
 		public override async Task ClearReadBuffers()
 		{
-			using(await readSynObj.LockAsync().ConfigureAwait(false))
+			using(await ReadSynObj.LockAsync().ConfigureAwait(false))
 				await DecoratedClient.ClearReadBuffers()
 					.ConfigureAwait(false);
 		}
@@ -131,7 +131,7 @@ namespace GladMMO
 		private async Task CryptAndSend(byte[] payloadData, byte[] clientPacketHeader, int payloadBytesOffset, int payloadBytesCount)
 		{
 			//VERY critical we lock here otherwise we could write a header and then another unrelated body could be written inbetween
-			using(await writeSynObj.LockAsync().ConfigureAwait(false))
+			using(await WriteSynObj.LockAsync().ConfigureAwait(false))
 			{
 				//It's important to always write the header first
 				await DecoratedClient.WriteAsync(clientPacketHeader)
@@ -155,7 +155,7 @@ namespace GladMMO
 			IPacketHeader header = null;
 			TReadPayloadBaseType payload = null;
 
-			using(await readSynObj.LockAsync(token).ConfigureAwait(false))
+			using(await ReadSynObj.LockAsync(token).ConfigureAwait(false))
 			{
 				//Check crypto first. We may need to decrypt this header
 				//This is very complicated though for reading server headers
