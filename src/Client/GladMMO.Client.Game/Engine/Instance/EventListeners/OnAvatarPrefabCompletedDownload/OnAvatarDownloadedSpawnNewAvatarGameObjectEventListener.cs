@@ -22,12 +22,15 @@ namespace GladMMO
 
 		private IModelScaleStrategy ModelScaler { get; }
 
+		private IReadonlyKnownEntitySet KnownEntitySet { get; }
+
 		public OnAvatarDownloadedSpawnNewAvatarGameObjectEventListener(IContentPrefabCompletedDownloadEventSubscribable subscriptionService,
 			[NotNull] ILog logger,
 			[NotNull] IReadonlyEntityGuidMappable<EntityGameObjectDirectory> gameObjectDirectoryMappable,
 			[NotNull] IEntityGuidMappable<IMovementDirectionChangedListener> movementDirectionListener,
 			[NotNull] IEntityNameQueryable nameQueryable,
-			[NotNull] IModelScaleStrategy modelScaler) 
+			[NotNull] IModelScaleStrategy modelScaler,
+			[NotNull] IReadonlyKnownEntitySet knownEntitySet) 
 			: base(subscriptionService)
 		{
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -35,6 +38,7 @@ namespace GladMMO
 			MovementDirectionListenerMappable = movementDirectionListener ?? throw new ArgumentNullException(nameof(movementDirectionListener));
 			NameQueryable = nameQueryable ?? throw new ArgumentNullException(nameof(nameQueryable));
 			ModelScaler = modelScaler ?? throw new ArgumentNullException(nameof(modelScaler));
+			KnownEntitySet = knownEntitySet ?? throw new ArgumentNullException(nameof(knownEntitySet));
 		}
 
 		protected override void OnEventFired(object source, ContentPrefabCompletedDownloadEventArgs args)
@@ -45,6 +49,15 @@ namespace GladMMO
 
 			if(Logger.IsInfoEnabled)
 				Logger.Info($"About to create new Avatar for Entity: {args.EntityGuid}");
+
+			//Possible it was despawned before we finished loading it.
+			if(!KnownEntitySet.isEntityKnown(args.EntityGuid))
+			{
+				if(Logger.IsInfoEnabled)
+					Logger.Info($"No longer known Entity: {args.EntityGuid} finished loading model Id: {args.DownloadedPrefabObject.name}");
+
+				return;
+			}
 
 			try
 			{

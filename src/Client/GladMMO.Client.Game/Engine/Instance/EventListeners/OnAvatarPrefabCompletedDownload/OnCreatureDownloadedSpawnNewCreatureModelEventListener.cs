@@ -17,14 +17,18 @@ namespace GladMMO
 
 		private IModelScaleStrategy ModelScaler { get; }
 
+		private IReadonlyKnownEntitySet KnownEntitySet { get; }
+
 		public OnCreatureDownloadedSpawnNewCreatureModelEventListener(IContentPrefabCompletedDownloadEventSubscribable subscriptionService,
 			[NotNull] ILog logger,
-			[NotNull] IReadonlyEntityGuidMappable<GameObject> gameObjectMappable, [NotNull] IModelScaleStrategy modelScaler)
+			[NotNull] IReadonlyEntityGuidMappable<GameObject> gameObjectMappable, [NotNull] IModelScaleStrategy modelScaler,
+			[NotNull] IReadonlyKnownEntitySet knownEntitySet)
 			: base(subscriptionService)
 		{
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
 			GameObjectMappable = gameObjectMappable ?? throw new ArgumentNullException(nameof(gameObjectMappable));
 			ModelScaler = modelScaler ?? throw new ArgumentNullException(nameof(modelScaler));
+			KnownEntitySet = knownEntitySet ?? throw new ArgumentNullException(nameof(knownEntitySet));
 		}
 
 		protected override void OnEventFired(object source, ContentPrefabCompletedDownloadEventArgs args)
@@ -35,6 +39,15 @@ namespace GladMMO
 
 			if(Logger.IsInfoEnabled)
 				Logger.Info($"About to create new Creature model for Entity: {args.EntityGuid}");
+
+			//Possible it was despawned before we finished loading it.
+			if (!KnownEntitySet.isEntityKnown(args.EntityGuid))
+			{
+				if(Logger.IsInfoEnabled)
+					Logger.Info($"No longer known Entity: {args.EntityGuid} finished loading model Id: {args.DownloadedPrefabObject.name}");
+
+				return;
+			}
 
 			try
 			{
