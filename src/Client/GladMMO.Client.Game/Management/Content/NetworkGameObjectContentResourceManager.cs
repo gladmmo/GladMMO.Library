@@ -11,7 +11,7 @@ namespace GladMMO
 		private IClientDataCollectionContainer ClientData { get; }
 
 		public NetworkGameObjectContentResourceManager(ILog logger,
-			[NotNull] IClientDataCollectionContainer clientData) 
+			[NotNull] IClientDataCollectionContainer clientData)
 			: base(logger, UserContentType.GameObject)
 		{
 			ClientData = clientData ?? throw new ArgumentNullException(nameof(clientData));

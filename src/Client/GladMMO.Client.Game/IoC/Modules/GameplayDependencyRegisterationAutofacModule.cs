@@ -93,6 +93,11 @@ namespace GladMMO
 				.As<IWorldTransformFactory>()
 				.SingleInstance();
 
+			//DefaultMapTransferService : IMapTransferService
+			builder.RegisterType<DefaultMapTransferService>()
+				.As<IMapTransferService>()
+				.SingleInstance();
+
 			//Ok, now we actually register update block types manually
 			//because it's not worth it to do an assembly-wide search for them.
 			/*builder.RegisterType<DefaultObjectUpdateBlockDispatcher>()
