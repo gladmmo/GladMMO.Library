@@ -51,9 +51,31 @@ namespace GladMMO
 			if (guid == null) throw new ArgumentNullException(nameof(guid));
 
 			//TODO: Implement players and gameobjects for scaling.
-			if (guid.TypeId != EntityTypeId.TYPEID_UNIT)
+			if (guid.TypeId != EntityTypeId.TYPEID_GAMEOBJECT)
+				return CalculateUnitScale(guid);
+			else
+				return CalculateGameObjectScale(guid);
+
+		}
+
+		private float CalculateGameObjectScale([NotNull] ObjectGuid guid)
+		{
+			if (guid == null) throw new ArgumentNullException(nameof(guid));
+
+			IEntityDataFieldContainer fieldContainer = EntityFieldDataMappable.RetrieveEntity(guid);
+
+			if(!fieldContainer.DataSetIndicationArray.Get((int)EGameObjectFields.GAMEOBJECT_DISPLAYID))
 				return 1.0f;
 
+			int displayId = fieldContainer.GetFieldValue<int>(EGameObjectFields.GAMEOBJECT_DISPLAYID);
+
+			//GameObjects don't have model scale clientside
+			//var displayInfo = ClientData.AssertEntry<GameObjectDisplayInfoEntry<string>>(displayId);
+			return 1.0f;
+		}
+
+		private float CalculateUnitScale(ObjectGuid guid)
+		{
 			IEntityDataFieldContainer fieldContainer = EntityFieldDataMappable.RetrieveEntity(guid);
 
 			if (!fieldContainer.DataSetIndicationArray.Get((int) EUnitFields.UNIT_FIELD_DISPLAYID))
