@@ -9,7 +9,7 @@ using GladNet;
 namespace GladMMO
 {
 	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
-	public sealed class SMSG_LOGIN_VERIFY_WORLD_PayloadHandler : BaseGameClientGameMessageHandler<SMSG_LOGIN_VERIFY_WORLD_PAYLOAD>
+	public sealed class SMSG_LOGIN_VERIFY_WORLD_PayloadHandler : BaseGameClientGameMessageHandler<SMSG_LOGIN_VERIFY_WORLD_Payload>
 	{
 		//Not readonly, we need to modify it MAYBE.
 		private IZoneDataRepository ZoneDataRepository { get; }
@@ -31,14 +31,14 @@ namespace GladMMO
 
 		//Note: Unfortunately we have some troubles here. TC may send UPDATE packet before we even recieve this
 		//so we must LEAVE the current functionality that causes us to disconnect completely.
-		public override async Task HandleMessage(IPeerMessageContext<GamePacketPayload> context, SMSG_LOGIN_VERIFY_WORLD_PAYLOAD payload)
+		public override async Task HandleMessage(IPeerMessageContext<GamePacketPayload> context, SMSG_LOGIN_VERIFY_WORLD_Payload payload)
 		{
 			//Nothing has to happen if we're in the right map.
 			if (ZoneDataRepository.ZoneId == payload.MapId)
 				return;
 
 			if (Logger.IsWarnEnabled)
-				Logger.Warn($"Loaded wrong Map according to {nameof(SMSG_LOGIN_VERIFY_WORLD_PAYLOAD)}. This is normal if an instance has expired. KnownEntity Check: {KnownEntities.Count}");
+				Logger.Warn($"Loaded wrong Map according to {nameof(SMSG_LOGIN_VERIFY_WORLD_Payload)}. This is normal if an instance has expired. KnownEntity Check: {KnownEntities.Count}");
 
 			//TODO: This is a hack, can we ever improve it?
 			//Disconnect, we're in the WRONG MAP. Current issues with staying connected here because TC will send a packet to start spawning

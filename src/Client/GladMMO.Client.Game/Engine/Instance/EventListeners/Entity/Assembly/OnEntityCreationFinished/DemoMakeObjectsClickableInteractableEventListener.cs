@@ -54,7 +54,7 @@ namespace GladMMO
 				{
 					//Assume this is at least a UNIT then.
 					//Check if they are selectable
-					if(IsSelectable(args))
+					if (IsSelectable(args))
 					{
 						SendService.SendMessage(new CMSG_SET_SELECTION_Payload(args.EntityGuid));
 						//Client side prediction of player target
@@ -63,11 +63,13 @@ namespace GladMMO
 				}
 				else
 				{
-					//Check if the entity is interactable before sending a packet.
-					/*if (EntityDataFieldMappable.RetrieveEntity(args.EntityGuid).HasBaseObjectFieldFlag(UnitFlags.UNIT_FLAG_INTERACTABLE))
-					{
-						SendService.SendMessage(new ClientInteractNetworkedObjectRequestPayload(args.EntityGuid, ClientInteractNetworkedObjectRequestPayload.InteractType.Interaction));
-					}*/
+					//TODO: Support right-clicking on non-gameobjects
+					//We right CLICK woooo
+					if (args.EntityGuid.TypeId != EntityTypeId.TYPEID_GAMEOBJECT)
+						return;
+
+					//TODO: Are there flags we should check??
+					SendService.SendMessage(new CMSG_GAMEOBJ_USE_Payload(args.EntityGuid));
 				}
 			};
 		}
