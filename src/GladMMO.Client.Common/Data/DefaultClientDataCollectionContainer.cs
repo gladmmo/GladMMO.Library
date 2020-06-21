@@ -105,7 +105,7 @@ namespace GladMMO
 			if (!DBCTypes.Contains(typeof(T)))
 				throw new InvalidOperationException($"Tried to load DBC: {typeof(T).Name} but DBC is not specified in Known DBC Array: {nameof(DBCTypes)}");
 
-			string dbcName = typeof(T).GetGenericTypeDefinition().Name.Substring(0, typeof(T).GetGenericTypeDefinition().Name.LastIndexOf("Entry"));
+			string dbcName = ComputeDBCType<T>();
 			string path = $"GDBC/{dbcName}.gdbc";
 
 			try
@@ -127,6 +127,15 @@ namespace GladMMO
 			{
 				throw new InvalidOperationException($"Failed to load Client Data. Path: {path} Reason: {e.Message}", e);
 			}
+		}
+
+		private static string ComputeDBCType<T>() 
+			where T : IDBCEntryIdentifiable
+		{
+			if (typeof(T).IsGenericType)
+				return typeof(T).GetGenericTypeDefinition().Name.Substring(0, typeof(T).GetGenericTypeDefinition().Name.LastIndexOf("Entry"));
+			else
+				return typeof(T).Name.Replace("Entry", "");
 		}
 	}
 }
