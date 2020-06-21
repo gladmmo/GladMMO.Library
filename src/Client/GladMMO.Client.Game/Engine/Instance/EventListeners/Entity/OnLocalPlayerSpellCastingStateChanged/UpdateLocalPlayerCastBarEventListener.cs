@@ -49,6 +49,11 @@ namespace GladMMO
 			this.isSpellCasting = isSpellCasting;
 			Identifier = identifier;
 		}
+
+		public bool IsExpired(int currentTimeStamp)
+		{
+			return EndTimeStamp < currentTimeStamp;
+		}
 	}
 
 	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
@@ -98,6 +103,7 @@ namespace GladMMO
 				Logger.Info($"Player started casting Spell: {args.CastingSpellId}");
 
 			//If the current state and the new state match keys, then it's an update to the current casting state
+			
 			if (CastingState.Identifier == args.SpellCastIdentifier)
 			{
 				//TODO: Different handling for STOPPED vs Canceled/Interrupted.
@@ -108,19 +114,30 @@ namespace GladMMO
 					CastingBar.CastingBarFillable.FillAmount = 0;
 					CastingState = new BarCastingState(false, args.SpellCastIdentifier);
 				}
+				else if (args.isCasting && (CastingState.IsExpired((int) TimeService.CurrentRemoteTime) || !CastingState.isSpellCasting)) //case serverside sends new spell with same identifier (example serverside spells)
+				{
+					//We have to check EXPIRED because for serverside spells this could be a new spell without an increment, meaning we cannot really rely on the
+					//identifier.
+					StartNewCastingState(args);
+				}
 			}
 			else
 			{
 				//otherwise, if keys don't match this is a NEW cast and we should ignore any old or current state.
 				if (args.isCasting)
 				{
-					SpellEntry<string> entry = ClientData.AssertEntry<SpellEntry<string>>(args.CastingSpellId);
-
-					CastingState = new BarCastingState(true, entry, TimeService.CurrentRemoteTime, TimeService.CurrentRemoteTime + args.RemainingCastTime, args.SpellCastIdentifier);
-					CastingBar.CastingBarSpellNameText.Text = entry.SpellName.enUS;
-					CastingBar.SetElementActive(true);
+					StartNewCastingState(args);
 				}
 			}
+		}
+
+		private void StartNewCastingState(SpellCastingStateChangedEventArgs args)
+		{
+			SpellEntry<string> entry = ClientData.AssertEntry<SpellEntry<string>>(args.CastingSpellId);
+
+			CastingState = new BarCastingState(true, entry, TimeService.CurrentRemoteTime, TimeService.CurrentRemoteTime + args.RemainingCastTime, args.SpellCastIdentifier);
+			CastingBar.CastingBarSpellNameText.Text = entry.SpellName.enUS;
+			CastingBar.SetElementActive(true);
 		}
 	}
 }
