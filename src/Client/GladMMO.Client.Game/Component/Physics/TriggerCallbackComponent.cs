@@ -18,21 +18,21 @@ namespace GladMMO
 		/// <summary>
 		/// Event published when a collider on the same layer enter the trigger.
 		/// </summary>
-		public event EventHandler OnTriggerEntered;
+		public event EventHandler<Transform> OnTriggerEntered;
 
 		/// <summary>
 		/// Event published when a collider on the same layer exits the trigger.
 		/// </summary>
-		public event EventHandler OnTriggerExited;
+		public event EventHandler<Transform> OnTriggerExited;
 
 		public void OnTriggerEnter(Collider enteredCollider)
 		{
-			OnTriggerEntered?.Invoke(this, EventArgs.Empty);
+			OnTriggerEntered?.Invoke(this, enteredCollider.GetRootGameObject().transform);
 		}
 
 		public void OnTriggerExit(Collider exitedCollider)
 		{
-			OnTriggerExited?.Invoke(this, EventArgs.Empty);
+			OnTriggerExited?.Invoke(this, exitedCollider.GetRootGameObject().transform);
 		}
 	}
 }
