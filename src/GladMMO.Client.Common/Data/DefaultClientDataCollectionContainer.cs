@@ -30,7 +30,8 @@ namespace GladMMO
 			typeof(SpellEntry<string>),
 			typeof(CreatureDisplayInfoEntry<string>),
 			typeof(CreatureModelDataEntry<string>),
-			typeof(GameObjectDisplayInfoEntry<string>)
+			typeof(GameObjectDisplayInfoEntry<string>),
+			typeof(AreaTriggerEntry)
 		};
 
 		internal static IEnumerable<Type> DBCCollectionTypes
@@ -78,7 +79,8 @@ namespace GladMMO
 				LoadOnBackgroundThreadAsync<SpellIconEntry<string>>(),
 				LoadOnBackgroundThreadAsync<CreatureDisplayInfoEntry<string>>(),
 				LoadOnBackgroundThreadAsync<CreatureModelDataEntry<string>>(),
-				LoadOnBackgroundThreadAsync<GameObjectDisplayInfoEntry<string>>()
+				LoadOnBackgroundThreadAsync<GameObjectDisplayInfoEntry<string>>(),
+				LoadOnBackgroundThreadAsync<AreaTriggerEntry>()
 			};
 
 			return Task.WhenAll(loadingTaskList);
