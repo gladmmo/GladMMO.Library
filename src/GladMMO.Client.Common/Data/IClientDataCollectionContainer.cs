@@ -73,5 +73,13 @@ namespace GladMMO
 				.DataType<TEntryType>()
 				.ContainsKey(key);
 		}
+
+		public static IGDBCEnumerable<TEntryType> Enumerate<TEntryType>([NotNull] this IClientDataCollectionContainer collection) 
+			where TEntryType : IDBCEntryIdentifiable
+		{
+			if (collection == null) throw new ArgumentNullException(nameof(collection));
+
+			return collection.DataType<TEntryType>();
+		}
 	}
 }
