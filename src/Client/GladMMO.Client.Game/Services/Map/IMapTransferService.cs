@@ -32,15 +32,19 @@ namespace GladMMO
 
 		private ILog Logger { get; }
 
+		private IZoneDataRepository ZoneRepository { get; }
+
 		public DefaultMapTransferService([NotNull] ILoadingScreenManagementService loadingScreenService,
 			[NotNull] IInstanceSceneChangeRequestedEventPublisher sceneChangePublisher,
 			[NotNull] IClientDataCollectionContainer clientData,
-			[NotNull] ILog logger)
+			[NotNull] ILog logger,
+			[NotNull] IZoneDataRepository zoneRepository)
 		{
 			LoadingScreenService = loadingScreenService ?? throw new ArgumentNullException(nameof(loadingScreenService));
 			SceneChangePublisher = sceneChangePublisher ?? throw new ArgumentNullException(nameof(sceneChangePublisher));
 			ClientData = clientData ?? throw new ArgumentNullException(nameof(clientData));
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
+			ZoneRepository = zoneRepository ?? throw new ArgumentNullException(nameof(zoneRepository));
 		}
 
 		public async Task TransferToMapAsync(int mapId)
@@ -103,6 +107,9 @@ namespace GladMMO
 			}
 
 			await taskCompletionSource.Task;
+
+			//If successful, the task won't throw and we'll set the map id.
+			ZoneRepository.UpdateZoneId(mapId);
 		}
 	}
 }

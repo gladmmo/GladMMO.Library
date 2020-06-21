@@ -12,14 +12,14 @@ namespace GladMMO
 	public sealed class SMSG_LOGIN_VERIFY_WORLD_PayloadHandler : BaseGameClientGameMessageHandler<SMSG_LOGIN_VERIFY_WORLD_Payload>
 	{
 		//Not readonly, we need to modify it MAYBE.
-		private IZoneDataRepository ZoneDataRepository { get; }
+		private IReadonlyZoneDataRepository ZoneDataRepository { get; }
 
 		private IMapTransferService MapTransferService { get; }
 
 		private IReadonlyKnownEntitySet KnownEntities { get; }
 
 		public SMSG_LOGIN_VERIFY_WORLD_PayloadHandler(ILog logger,
-			[NotNull] IZoneDataRepository zoneDataRepository,
+			[NotNull] IReadonlyZoneDataRepository zoneDataRepository,
 			[NotNull] IMapTransferService mapTransferService,
 			[NotNull] IReadonlyKnownEntitySet knownEntities) 
 			: base(logger)
@@ -49,7 +49,6 @@ namespace GladMMO
 			//and loaded into the wrong map. The MapId in THIS packet is the actual correct one.
 			//And we should load it if our expectations are wrong.
 			await MapTransferService.TransferToMapAsync(payload.MapId);
-			ZoneDataRepository.UpdateZoneId(payload.MapId);
 
 			if(Logger.IsWarnEnabled)
 				Logger.Warn($"KnownEntity Check2: {KnownEntities.Count}");
