@@ -44,7 +44,7 @@ namespace GladMMO
 				GameObject areaTriggerInstance = GameObject.Instantiate(areaTriggerPrefab, at.Position.ToUnityVector(), Quaternion.Euler(0.0f, at.Orientation.ToUnity3DYAxisRotation(), 0.0f));
 				areaTriggerInstance.name = $"AreaTrigger_{at.EntryId}";
 
-				BoxCollider collider = areaTriggerInstance.GetComponent<BoxCollider>();
+				TriggerCallbackComponent trigger = areaTriggerInstance.GetComponent<TriggerCallbackComponent>();
 
 				if (at.isAxisAlignedBox)
 				{
@@ -54,6 +54,8 @@ namespace GladMMO
 				{
 					collider.size = at.UnalignedBoxDimension.ToUnityVector();
 				}
+
+				trigger.OnTriggerEntered += (sender, args) => SendService.SendMessage(new CMSG_AREATRIGGER_Payload(at.EntryId));
 			}
 		}
 	}
