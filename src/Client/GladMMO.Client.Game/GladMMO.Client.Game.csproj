@@ -9,14 +9,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Component\Base\**" />
     <Compile Remove="Entity\**" />
     <Compile Remove="Initializables\**" />
     <Compile Remove="UI\Attributes\**" />
     <Compile Remove="UI\WorldLoad\**" />
+    <EmbeddedResource Remove="Component\Base\**" />
     <EmbeddedResource Remove="Entity\**" />
     <EmbeddedResource Remove="Initializables\**" />
     <EmbeddedResource Remove="UI\Attributes\**" />
     <EmbeddedResource Remove="UI\WorldLoad\**" />
+    <None Remove="Component\Base\**" />
     <None Remove="Entity\**" />
     <None Remove="Initializables\**" />
     <None Remove="UI\Attributes\**" />
@@ -79,7 +82,6 @@
 
   <ItemGroup>
     <Folder Include="Attributes\" />
-    <Folder Include="Component\Base\" />
     <Folder Include="Engine\Instance\Initializables\Content\" />
     <Folder Include="Engine\LoadingScreen\Handlers\" />
     <Folder Include="Engine\Shared\Handlers\" />
