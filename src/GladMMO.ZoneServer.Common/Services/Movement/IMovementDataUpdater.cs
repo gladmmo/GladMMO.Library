@@ -26,6 +26,8 @@ namespace GladMMO
 
 		private IEntityGuidMappable<MovementBlockData> MovementDataMappable { get; }
 
+		private IEntityGuidMappable<EntityMovementSpeed> MovementSpeedMappable { get; }
+
 		private IEntityGuidMappable<SplineInfo> SplineInfoMappable { get; }
 
 		private ILog Logger { get; }
@@ -34,19 +36,34 @@ namespace GladMMO
 			[NotNull] IEntityGuidMappable<IMovementGenerator<GameObject>> movementGeneratorMappable,
 			[NotNull] IEntityGuidMappable<MovementBlockData> movementDataMappable,
 			[NotNull] IEntityGuidMappable<SplineInfo> splineInfoMappable,
-			[NotNull] ILog logger)
+			[NotNull] ILog logger,
+			[NotNull] IEntityGuidMappable<EntityMovementSpeed> movementSpeedMappable)
 		{
 			MovementGeneratorFactory = movementGeneratorFactory ?? throw new ArgumentNullException(nameof(movementGeneratorFactory));
 			MovementGeneratorMappable = movementGeneratorMappable ?? throw new ArgumentNullException(nameof(movementGeneratorMappable));
 			MovementDataMappable = movementDataMappable ?? throw new ArgumentNullException(nameof(movementDataMappable));
 			SplineInfoMappable = splineInfoMappable ?? throw new ArgumentNullException(nameof(splineInfoMappable));
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
+			MovementSpeedMappable = movementSpeedMappable ?? throw new ArgumentNullException(nameof(movementSpeedMappable));
 		}
 
 		public void Update(ObjectGuid guid, MovementBlockData data, bool updateComponent)
 		{
 			if (updateComponent)
+			{
 				MovementDataMappable[guid] = data;
+
+				//Movement speed only exists for living creatures
+				if (data.IsLiving)
+				{
+					//Special handling for mutable component type.
+					if(MovementSpeedMappable.ContainsKey(guid))
+						MovementSpeedMappable[guid].SetMovementSpeeds(data.MovementSpeeds);
+					else
+						MovementSpeedMappable[guid] = new EntityMovementSpeed(data.MovementSpeeds);
+				}
+			}
+				
 
 			//TODO: Handle cases where JUST POS and JUST orientation are sent and other unhandled cases.
 			if(data.IsLiving) //IsLiving is required for MoveInfo which is required here for movement generator factory.
