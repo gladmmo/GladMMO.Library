@@ -19,15 +19,19 @@ namespace GladMMO
 
 		private IReadonlyEntityGuidMappable<AsyncLock> LockMappable { get; }
 
+		private IReadonlyEntityGuidMappable<EntityMovementSpeed> MovementSpeedMappable { get; }
+
 		public SMSG_MONSTER_MOVE_PayloadHandler(ILog logger, 
 			[NotNull] IEntityGuidMappable<IMovementGenerator<GameObject>> movementGeneratorMappable,
 			[NotNull] IReadonlyNetworkTimeService timeService,
-			[NotNull] IReadonlyEntityGuidMappable<AsyncLock> lockMappable) 
+			[NotNull] IReadonlyEntityGuidMappable<AsyncLock> lockMappable,
+			[NotNull] IReadonlyEntityGuidMappable<EntityMovementSpeed> movementSpeedMappable) 
 			: base(logger)
 		{
 			MovementGeneratorMappable = movementGeneratorMappable ?? throw new ArgumentNullException(nameof(movementGeneratorMappable));
 			TimeService = timeService ?? throw new ArgumentNullException(nameof(timeService));
 			LockMappable = lockMappable ?? throw new ArgumentNullException(nameof(lockMappable));
+			MovementSpeedMappable = movementSpeedMappable ?? throw new ArgumentNullException(nameof(movementSpeedMappable));
 		}
 
 		public override async Task HandleMessage(IPeerMessageContext<GamePacketPayload> context, SMSG_MONSTER_MOVE_Payload payload)
@@ -56,7 +60,7 @@ namespace GladMMO
 					case MonsterMoveType.MonsterMoveFacingAngle:
 						//TODO: Handle different spline types
 						if (payload.OptionalSplineInformation.HasLinearPath)
-							MovementGeneratorMappable[creatureGuid] = new LinearPathMovementGenerator(payload.OptionalSplineInformation.OptionalLinearPathInformation, payload.InitialMovePoint.ToUnityVector(), payload.OptionalSplineInformation.SplineDuration);
+							MovementGeneratorMappable[creatureGuid] = new LinearPathMovementGenerator(payload.OptionalSplineInformation.OptionalLinearPathInformation, payload.InitialMovePoint.ToUnityVector(), payload.OptionalSplineInformation.SplineDuration, MovementSpeedMappable.RetrieveEntity(payload.MonsterGuid));
 						break;
 					default:
 						throw new ArgumentOutOfRangeException();

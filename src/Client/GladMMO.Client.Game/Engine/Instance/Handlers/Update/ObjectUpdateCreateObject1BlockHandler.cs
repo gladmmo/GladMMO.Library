@@ -20,16 +20,20 @@ namespace GladMMO
 
 		private IEntityGuidMappable<AsyncLock> LockMappable { get; }
 
+		private IMovementDataUpdater<MovementBlockData> MovementBlockUpdater { get; }
+
 		/// <inheritdoc />
 		public ObjectUpdateCreateObject1BlockHandler(ILog logger,
 			[NotNull] INetworkEntityVisibilityEventPublisher visibilityEventPublisher,
 			[NotNull] IFactoryCreatable<NetworkEntityNowVisibleEventArgs, ObjectCreationData> visibleEventFactory,
-			[NotNull] IEntityGuidMappable<AsyncLock> lockMappable)
+			[NotNull] IEntityGuidMappable<AsyncLock> lockMappable,
+			[NotNull] IMovementDataUpdater<MovementBlockData> movementBlockUpdater)
 			: base(ObjectUpdateType.UPDATETYPE_CREATE_OBJECT, logger)
 		{
 			VisibilityEventPublisher = visibilityEventPublisher ?? throw new ArgumentNullException(nameof(visibilityEventPublisher));
 			VisibleEventFactory = visibleEventFactory ?? throw new ArgumentNullException(nameof(visibleEventFactory));
 			LockMappable = lockMappable ?? throw new ArgumentNullException(nameof(lockMappable));
+			MovementBlockUpdater = movementBlockUpdater ?? throw new ArgumentNullException(nameof(movementBlockUpdater));
 		}
 
 		/// <inheritdoc />
@@ -83,6 +87,7 @@ namespace GladMMO
 			}
 
 			NetworkEntityNowVisibleEventArgs visibilityEvent = VisibleEventFactory.Create(updateBlock.CreationData);
+			MovementBlockUpdater.Update(updateBlock.Guid, updateBlock.CreationData.MovementData, true);
 
 			//Now we broadcast that an entity is now visible.
 			VisibilityEventPublisher.Publish(visibilityEvent);

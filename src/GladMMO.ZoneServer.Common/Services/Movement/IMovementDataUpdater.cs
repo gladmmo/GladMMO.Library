@@ -52,18 +52,19 @@ namespace GladMMO
 			if (updateComponent)
 			{
 				MovementDataMappable[guid] = data;
-
-				//Movement speed only exists for living creatures
-				if (data.IsLiving)
-				{
-					//Special handling for mutable component type.
-					if(MovementSpeedMappable.ContainsKey(guid))
-						MovementSpeedMappable[guid].SetMovementSpeeds(data.MovementSpeeds);
-					else
-						MovementSpeedMappable[guid] = new EntityMovementSpeed(data.MovementSpeeds);
-				}
-			}
 				
+				//Special handling for mutable component type.
+				if (MovementSpeedMappable.ContainsKey(guid))
+				{
+					//Movement speed only exists for living creatures
+					if (data.IsLiving)
+						MovementSpeedMappable[guid].SetMovementSpeeds(data.MovementSpeeds);
+				}
+				else if(data.IsLiving)
+					MovementSpeedMappable[guid] = new EntityMovementSpeed(data.MovementSpeeds);
+				else
+					MovementSpeedMappable[guid] = new EntityMovementSpeed();
+			}
 
 			//TODO: Handle cases where JUST POS and JUST orientation are sent and other unhandled cases.
 			if(data.IsLiving) //IsLiving is required for MoveInfo which is required here for movement generator factory.

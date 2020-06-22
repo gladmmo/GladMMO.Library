@@ -14,13 +14,17 @@ namespace GladMMO
 
 		private IReadonlyEntityGuidMappable<SplineInfo> SplineInfoMappable { get; }
 
+		private IReadonlyEntityGuidMappable<EntityMovementSpeed> MovementSpeedMappable { get; }
+
 		public ClientMovementGeneratorFactory([NotNull] IReadonlyEntityGuidMappable<CharacterController> controllerMappable, 
 			[NotNull] ILocalPlayerDetails localPlayerDetails,
-			[NotNull] IReadonlyEntityGuidMappable<SplineInfo> splineInfoMappable)
+			[NotNull] IReadonlyEntityGuidMappable<SplineInfo> splineInfoMappable,
+			[NotNull] IReadonlyEntityGuidMappable<EntityMovementSpeed> movementSpeedMappable)
 		{
 			ControllerMappable = controllerMappable ?? throw new ArgumentNullException(nameof(controllerMappable));
 			LocalPlayerDetails = localPlayerDetails ?? throw new ArgumentNullException(nameof(localPlayerDetails));
 			SplineInfoMappable = splineInfoMappable ?? throw new ArgumentNullException(nameof(splineInfoMappable));
+			MovementSpeedMappable = movementSpeedMappable ?? throw new ArgumentNullException(nameof(movementSpeedMappable));
 		}
 
 		public IMovementGenerator<GameObject> Create(EntityAssociatedData<MovementInfo> context)
@@ -39,7 +43,7 @@ namespace GladMMO
 						//TODO: Support cyclical
 						//TODO: Fix linear path
 						LinearPathMoveInfo spoofedLinearMoveInfo = new LinearPathMoveInfo(info.WayPoints.Length - 1, info.SplineEndpoint, Array.Empty<Vector3<float>>());
-						return new LinearPathMovementGenerator(spoofedLinearMoveInfo, context.Data.Position.ToUnityVector(), info.SplineFullTime, info.SplineTime);
+						return new LinearPathMovementGenerator(spoofedLinearMoveInfo, context.Data.Position.ToUnityVector(), info.SplineFullTime, info.SplineTime, MovementSpeedMappable.RetrieveEntity(context.EntityGuid));
 					}
 					else
 						return new IdleMovementGenerator(context.Data.Position.ToUnityVector(), context.Data.Orientation.ToUnity3DYAxisRotation());
@@ -53,7 +57,7 @@ namespace GladMMO
 		private IMovementGenerator<GameObject> CreatePlayerMovementGenerator(EntityAssociatedData<MovementInfo> context)
 		{
 			//The reason we use a lazy here is because we can't promise that the character controller exists AT ALL at this point sadly.
-			return new ClientCharacterControllerInputMovementGenerator(context.Data, BuildLazyControllerFactory(context), LocalPlayerDetails.LocalPlayerGuid == context.EntityGuid);
+			return new ClientCharacterControllerInputMovementGenerator(context.Data, BuildLazyControllerFactory(context), MovementSpeedMappable.RetrieveEntity(context.EntityGuid), LocalPlayerDetails.LocalPlayerGuid == context.EntityGuid);
 		}
 
 		private Lazy<CharacterController> BuildLazyControllerFactory(EntityAssociatedData<MovementInfo> context)

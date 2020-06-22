@@ -46,13 +46,15 @@ namespace GladMMO
 
 		private LinearPointPathState State { get; set; }
 
-		public LinearPathMovementGenerator(LinearPathMoveInfo movementData, Vector3 initialPosition, int totalLengthDuration) 
-			: this(movementData, initialPosition, totalLengthDuration, 0)
+		private EntityMovementSpeed MovementSpeedCollection { get; }
+
+		public LinearPathMovementGenerator(LinearPathMoveInfo movementData, Vector3 initialPosition, int totalLengthDuration, EntityMovementSpeed movementSpeedCollection) 
+			: this(movementData, initialPosition, totalLengthDuration, 0, movementSpeedCollection)
 		{
 			
 		}
 
-		public LinearPathMovementGenerator(LinearPathMoveInfo movementData, Vector3 initialPosition, int totalLengthDuration, int timeElapsed)
+		public LinearPathMovementGenerator(LinearPathMoveInfo movementData, Vector3 initialPosition, int totalLengthDuration, int timeElapsed, EntityMovementSpeed movementSpeedCollection)
 			: base(movementData, initialPosition)
 		{
 			if(totalLengthDuration < 0) throw new ArgumentOutOfRangeException(nameof(totalLengthDuration));
@@ -61,6 +63,7 @@ namespace GladMMO
 
 			//Push the Start timestamp backwards, since some splines we may see start in the middle.
 			StartTimeStamp -= timeElapsed;
+			MovementSpeedCollection = movementSpeedCollection;
 
 			//Offset
 			//G3D::Vector3 middle = (real_path[0] + real_path[last_idx]) / 2.f;
@@ -114,10 +117,16 @@ namespace GladMMO
 				if(Vector3.Distance(GeneratedPath[0], entity.transform.position) < 4.0f)
 					GeneratedPath[0] = entity.transform.position;
 
-				State = new LinearPointPathState(GeneratedPath[0], GeneratedPath[1], 8.0f, 0, (int) StartTimeStamp);
+				State = new LinearPointPathState(GeneratedPath[0], GeneratedPath[1], CalculateMovementSpeed(), 0, (int) StartTimeStamp);
 			}
 
 			return entity.transform.position;
+		}
+
+		private float CalculateMovementSpeed()
+		{
+			//TODO: When do creatures walk??
+			return MovementSpeedCollection[UnitMoveType.MOVE_RUN];
 		}
 
 		protected override Vector3 InternalUpdate(GameObject entity, long currentTime)
@@ -160,7 +169,7 @@ namespace GladMMO
 					StopGenerator();
 				else
 				{
-					State = new LinearPointPathState(GeneratedPath[State.CurrentIndex + 1], GeneratedPath[State.CurrentIndex + 2], 8.0f, State.CurrentIndex + 1, (int) currentTime);
+					State = new LinearPointPathState(GeneratedPath[State.CurrentIndex + 1], GeneratedPath[State.CurrentIndex + 2], CalculateMovementSpeed(), State.CurrentIndex + 1, (int) currentTime);
 				}
 			}
 

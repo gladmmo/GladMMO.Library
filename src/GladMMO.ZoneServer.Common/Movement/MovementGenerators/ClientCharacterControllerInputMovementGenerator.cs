@@ -14,8 +14,8 @@ namespace GladMMO
 
 		private bool IsLocalClient { get; }
 
-		public ClientCharacterControllerInputMovementGenerator(MovementInfo movementData, Lazy<CharacterController> controller, bool isLocalClient = false) 
-			: base(movementData, controller)
+		public ClientCharacterControllerInputMovementGenerator(MovementInfo movementData, Lazy<CharacterController> controller, EntityMovementSpeed movementSpeedCollection, bool isLocalClient = false) 
+			: base(movementData, controller, movementSpeedCollection)
 		{
 			IsLocalClient = isLocalClient;
 

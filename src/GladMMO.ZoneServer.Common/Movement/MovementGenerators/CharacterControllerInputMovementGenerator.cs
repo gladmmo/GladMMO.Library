@@ -12,10 +12,6 @@ namespace GladMMO
 	{
 		private Vector3 CachedMovementDirection;
 
-		//See: https://wowwiki.fandom.com/wiki/Speed
-		//TODO: We shouldn't do this here, still true!
-		private float DefaultPlayerSpeed = 7.0f; //Characters are extremely fast by real-world standards. The standard running speed is 7 yards per second
-
 		//TODO: Update gravity
 		//https://www.mmo-champion.com/threads/1955227-If-you-were-ver-curious-about-how-fast-players-fall-in-wow
 		//https://us.forums.blizzard.com/en/wow/t/has-anyone-figured-out-terminal-velocity-in-wow/385478/21
@@ -31,16 +27,22 @@ namespace GladMMO
 
 		protected Lazy<CharacterController> Controller { get; }
 
-		public CharacterControllerInputMovementGenerator(MovementInfo movementData, [NotNull] Lazy<CharacterController> controller) 
+		private EntityMovementSpeed MovementSpeedCollection { get; }
+
+		public CharacterControllerInputMovementGenerator(MovementInfo movementData, [NotNull] Lazy<CharacterController> controller,
+			[NotNull] EntityMovementSpeed movementSpeedCollection) 
 			: base(movementData)
 		{
 			Controller = controller ?? throw new ArgumentNullException(nameof(controller));
+			MovementSpeedCollection = movementSpeedCollection ?? throw new ArgumentNullException(nameof(movementSpeedCollection));
 		}
 
-		public CharacterControllerInputMovementGenerator(MovementInfo movementData, [NotNull] Lazy<CharacterController> controller, Vector3 initialPosition)
+		public CharacterControllerInputMovementGenerator(MovementInfo movementData, [NotNull] Lazy<CharacterController> controller, Vector3 initialPosition,
+			[NotNull] EntityMovementSpeed movementSpeedCollection)
 			: base(movementData, initialPosition)
 		{
 			Controller = controller ?? throw new ArgumentNullException(nameof(controller));
+			MovementSpeedCollection = movementSpeedCollection ?? throw new ArgumentNullException(nameof(movementSpeedCollection));
 		}
 
 		protected override Vector3 Start([NotNull] GameObject entity, long currentTime)
@@ -101,7 +103,7 @@ namespace GladMMO
 				CachedMovementDirection.y = (CHARACTERCONTROLLER_GRAVITY_SPEED * diff);
 
 			//Debug.Log($"Move: {CachedMovementDirection} Diff: {diff}");
-			Controller.Value.Move(entity.transform.worldToLocalMatrix.inverse * CachedMovementDirection * diff * DefaultPlayerSpeed);
+			Controller.Value.Move(entity.transform.worldToLocalMatrix.inverse * CachedMovementDirection * diff * CalculateMovementSpeed());
 
 			//Our new last movement time is now the current time.
 			LastMovementUpdateTime = currentTime;
@@ -122,6 +124,13 @@ namespace GladMMO
 				return 0.0f; //we do this so it moves a tiny bit at least. This is kind of a hack to prevent Moving movement generators from stationary time desync
 
 			return diff;
+		}
+
+		//Characters default movement speed is extremely fast by real-world standards. The standard running speed is 7 yards per second
+		//See: https://wowwiki.fandom.com/wiki/Speed
+		private float CalculateMovementSpeed()
+		{
+			return MovementSpeedCollection[UnitMoveType.MOVE_RUN];
 		}
 	}
 }
