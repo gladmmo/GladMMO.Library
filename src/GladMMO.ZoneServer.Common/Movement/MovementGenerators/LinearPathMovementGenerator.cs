@@ -48,6 +48,14 @@ namespace GladMMO
 
 		private EntityMovementSpeed MovementSpeedCollection { get; }
 
+		/// <summary>
+		/// The computed modifier generated from the distance traveled over time
+		/// compared to the in-time run movement speed.
+		/// </summary>
+		private float MovementSpeedModifier { get; set; }
+
+		private float PathDistance { get; }
+
 		public LinearPathMovementGenerator(LinearPathMoveInfo movementData, Vector3 initialPosition, int totalLengthDuration, EntityMovementSpeed movementSpeedCollection) 
 			: this(movementData, initialPosition, totalLengthDuration, 0, movementSpeedCollection)
 		{
@@ -57,7 +65,7 @@ namespace GladMMO
 		public LinearPathMovementGenerator(LinearPathMoveInfo movementData, Vector3 initialPosition, int totalLengthDuration, int timeElapsed, EntityMovementSpeed movementSpeedCollection)
 			: base(movementData, initialPosition)
 		{
-			if(totalLengthDuration < 0) throw new ArgumentOutOfRangeException(nameof(totalLengthDuration));
+			if (totalLengthDuration < 0) throw new ArgumentOutOfRangeException(nameof(totalLengthDuration));
 
 			TotalLengthDuration = totalLengthDuration;
 
@@ -72,10 +80,10 @@ namespace GladMMO
 			// offset = middle - real_path[i];
 			//We need to do: real_path[i] = middle - offset;
 			//or middle - offset = real_path[i];
+			Vector3 finalPosition = movementData.FinalPosition.ToUnityVector();
 			if(movementData.SplineMiddlePoints.Length > 0)
 			{
-				Vector3 finalPoint = movementData.FinalPosition.ToUnityVector();
-				Vector3 midpoint = (initialPosition + finalPoint) / 2.0f;
+				Vector3 midpoint = (initialPosition + finalPosition) / 2.0f;
 				var midPointsConverted = MovementData
 					.SplineMiddlePoints
 					.Select(p => midpoint - p.ToUnityVector())
@@ -85,15 +93,20 @@ namespace GladMMO
 
 				//I know mid + 1 looks strange, but we do -1 in loop. All good.
 				GeneratedPath[0] = initialPosition;
-				for(int i = 1; i < midPointsConverted.Length + 1; i++) 
+				for(int i = 1; i < midPointsConverted.Length + 1; i++)
 				{
 					GeneratedPath[i] = midPointsConverted[i - 1];
+					PathDistance += (GeneratedPath[i] - GeneratedPath[i - 1]).magnitude;
 				}
-				GeneratedPath[GeneratedPath.Length - 1] = finalPoint;
+				GeneratedPath[GeneratedPath.Length - 1] = finalPosition;
+
+				//One last segement to calc
+				PathDistance += (GeneratedPath[GeneratedPath.Length - 1] - GeneratedPath[GeneratedPath.Length - 2]).magnitude;
 			}
 			else
 			{
-				GeneratedPath = new Vector3[1 + 1] { initialPosition, movementData.FinalPosition.ToUnityVector() };
+				PathDistance = (finalPosition - initialPosition).magnitude;
+				GeneratedPath = new Vector3[1 + 1] { initialPosition, finalPosition };
 			}
 		}
 
@@ -113,6 +126,9 @@ namespace GladMMO
 				//Calculate the ending timestamp as the total duration by SPEED and convert to milliseconds.
 				EndTimeStamp = ((long)(TotalLengthDuration) + StartTimeStamp);
 
+				//meters per millisecond
+				MovementSpeedModifier = PathDistance / TotalLengthDuration * 1000.0f;
+
 				//TODO: Is this a hack, to rewrite initial position??
 				if(Vector3.Distance(GeneratedPath[0], entity.transform.position) < 4.0f)
 					GeneratedPath[0] = entity.transform.position;
@@ -126,7 +142,8 @@ namespace GladMMO
 		private float CalculateMovementSpeed()
 		{
 			//TODO: When do creatures walk??
-			return MovementSpeedCollection[UnitMoveType.MOVE_RUN];
+			return MovementSpeedModifier;
+			//return MovementSpeedCollection[UnitMoveType.MOVE_RUN];
 		}
 
 		protected override Vector3 InternalUpdate(GameObject entity, long currentTime)
