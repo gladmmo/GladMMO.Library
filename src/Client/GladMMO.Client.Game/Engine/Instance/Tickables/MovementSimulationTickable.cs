@@ -13,7 +13,7 @@ namespace GladMMO
 
 		private IReadonlyEntityGuidMappable<GameObject> WorldObjectMap { get; }
 
-		private IEntityGuidMappable<WorldTransform> TransformMap { get; }
+		private IReadonlyEntityGuidMappable<WorldTransform> TransformMap { get; }
 
 		private IReadonlyNetworkTimeService TimeService { get; }
 
@@ -25,7 +25,7 @@ namespace GladMMO
 			IReadonlyEntityGuidMappable<GameObject> worldObjectMap,
 			INetworkTimeService timeService,
 			[NotNull] IReadonlyKnownEntitySet knownEntities,
-			[NotNull] IEntityGuidMappable<WorldTransform> transformMap)
+			[NotNull] IReadonlyEntityGuidMappable<WorldTransform> transformMap)
 		{
 			MovementGenerators = movementGenerators ?? throw new ArgumentNullException(nameof(movementGenerators));
 			WorldObjectMap = worldObjectMap ?? throw new ArgumentNullException(nameof(worldObjectMap));
@@ -46,7 +46,10 @@ namespace GladMMO
 
 				//TODO: Rotation is not correct.
 				Vector3 currentPosition = entry.ComponentValue.CurrentPosition;
-				TransformMap.ReplaceObject(entry.EntityGuid, new WorldTransform(currentPosition.x, currentPosition.y, currentPosition.z, TransformMap.RetrieveEntity(entry.EntityGuid).YAxisRotation));
+				WorldTransform transform = TransformMap.RetrieveEntity(entry.EntityGuid);
+				transform.PositionX = currentPosition.x;
+				transform.PositionY = currentPosition.y;
+				transform.PositionZ = currentPosition.z;
 			}
 		}
 	}
