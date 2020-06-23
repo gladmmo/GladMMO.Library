@@ -50,7 +50,7 @@ namespace GladMMO
 
 						//TODO: Provide corect angle, or make angle optional.
 						ProjectVersionStage.AssertInternalTesting();
-						MovementGeneratorMappable[creatureGuid] = new IdleMovementGenerator(payload.InitialMovePoint.ToUnityVector(), 0.0f);
+						MovementGeneratorMappable[creatureGuid] = new IdleMovementGenerator(payload.InitialMovePoint.ToUnityVector());
 						break;
 
 					//All these types have a spline.

@@ -13,7 +13,7 @@ namespace GladMMO
 	{
 		private Vector3 InitialPosition { get; }
 
-		private float YAxisRotation { get; }
+		private float? YAxisRotation { get; } = null;
 
 		public IdleMovementGenerator(Vector3 initialPosition, float yAxisRotation)
 		{
@@ -21,12 +21,20 @@ namespace GladMMO
 			YAxisRotation = yAxisRotation;
 		}
 
+		public IdleMovementGenerator(Vector3 initialPosition)
+		{
+			InitialPosition = initialPosition;
+		}
+
 		protected override Vector3 Start(GameObject entity, long currentTime)
 		{
 			//Immediately we're idle so let's stop the generator.
 			StopGenerator();
 
-			entity.transform.SetPositionAndRotation(InitialPosition, Quaternion.AngleAxis(YAxisRotation, Vector3.up));
+			if (YAxisRotation.HasValue)
+				entity.transform.SetPositionAndRotation(InitialPosition, Quaternion.AngleAxis(YAxisRotation.Value, Vector3.up));
+			else
+				return entity.transform.position = InitialPosition;
 
 			return entity.transform.position;
 		}
