@@ -52,7 +52,7 @@ namespace GladMMO
 		}
 
 		/// <inheritdoc />
-		public void Update(GameObject entity, long currentTime)
+		public virtual void Update(GameObject entity, long currentTime)
 		{
 			if (isFinished)
 				return;
@@ -78,7 +78,7 @@ namespace GladMMO
 		/// <param name="currentTime"></param>
 		protected abstract Vector3 InternalUpdate(GameObject entity, long currentTime);
 
-		protected void StopGenerator()
+		protected virtual void StopGenerator()
 		{
 			isFinished = true;
 		}
