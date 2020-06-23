@@ -46,12 +46,40 @@ namespace GladMMO
 
 		public bool CanHandle(NetworkIncomingMessage<GamePacketPayload> message)
 		{
+			//TODO: Change to IsMovementPacket.
 			NetworkOperationCode code = message.Payload.GetOperationCode();
 
-			if (code >= NetworkOperationCode.MSG_MOVE_START_FORWARD && code <= NetworkOperationCode.MSG_MOVE_SET_PITCH || code == NetworkOperationCode.MSG_MOVE_HEARTBEAT)
-				return true;
-			else
-				return false;
+			switch (code)
+			{
+				case NetworkOperationCode.CMSG_MOVE_FALL_RESET:
+				case NetworkOperationCode.CMSG_MOVE_SET_FLY:
+				case NetworkOperationCode.MSG_MOVE_FALL_LAND:
+				case NetworkOperationCode.MSG_MOVE_HEARTBEAT:
+				case NetworkOperationCode.MSG_MOVE_JUMP:
+				case NetworkOperationCode.MSG_MOVE_SET_FACING:
+				case NetworkOperationCode.MSG_MOVE_SET_PITCH:
+				case NetworkOperationCode.MSG_MOVE_SET_RUN_MODE:
+				case NetworkOperationCode.MSG_MOVE_SET_WALK_MODE:
+				case NetworkOperationCode.MSG_MOVE_START_ASCEND:
+				case NetworkOperationCode.MSG_MOVE_START_BACKWARD:
+				case NetworkOperationCode.MSG_MOVE_START_DESCEND:
+				case NetworkOperationCode.MSG_MOVE_START_FORWARD:
+				case NetworkOperationCode.MSG_MOVE_START_PITCH_DOWN:
+				case NetworkOperationCode.MSG_MOVE_START_PITCH_UP:
+				case NetworkOperationCode.MSG_MOVE_START_STRAFE_LEFT:
+				case NetworkOperationCode.MSG_MOVE_START_STRAFE_RIGHT:
+				case NetworkOperationCode.MSG_MOVE_START_SWIM:
+				case NetworkOperationCode.MSG_MOVE_START_TURN_LEFT:
+				case NetworkOperationCode.MSG_MOVE_START_TURN_RIGHT:
+				case NetworkOperationCode.MSG_MOVE_STOP_ASCEND:
+				case NetworkOperationCode.MSG_MOVE_STOP:
+				case NetworkOperationCode.MSG_MOVE_STOP_STRAFE:
+				case NetworkOperationCode.MSG_MOVE_STOP_SWIM:
+				case NetworkOperationCode.MSG_MOVE_STOP_TURN:
+					return true;
+				default:
+					return false;
+			}
 		}
 
 		public Task<bool> TryHandleMessage(IPeerMessageContext<GamePacketPayload> context, NetworkIncomingMessage<GamePacketPayload> message)
@@ -64,11 +92,16 @@ namespace GladMMO
 		{
 			if (movementUpdate == null) throw new ArgumentNullException(nameof(movementUpdate));
 
-			MovementInfoMappable.ReplaceObject(movementUpdate.MovementGuid, movementUpdate.MoveInfo);
+			HandleMovementInfo(movementUpdate.MovementGuid, movementUpdate.MoveInfo, forceHandleLocal);
+		}
 
-			if(!KnownEntities.isEntityKnown(movementUpdate.MovementGuid))
+		public void HandleMovementInfo(ObjectGuid guid, MovementInfo moveInfo, bool forceHandleLocal)
+		{
+			MovementInfoMappable.ReplaceObject(guid, moveInfo);
+
+			if (!KnownEntities.isEntityKnown(guid))
 			{
-				if(Logger.IsInfoEnabled)
+				if (Logger.IsInfoEnabled)
 					Logger.Info($"TODO: Received movement update too soon. Must enable deferred movement update queueing for entities that are about to spawn.");
 
 				return;
@@ -76,26 +109,26 @@ namespace GladMMO
 
 			try
 			{
-				if(!forceHandleLocal)
+				if (!forceHandleLocal)
 				{
 					//TODO: Handle remote serverside controlled movement.
 					//Cheap check, and we're on another thread so performance doesn't really matter
-					if(movementUpdate.MovementGuid == PlayerDetails.LocalPlayerGuid)
-							return; //don't handle user created movement data about ourselves. It'll just make movement abit janky locally.
+					if (guid == PlayerDetails.LocalPlayerGuid)
+						return;
 				}
 
-				IMovementGenerator<GameObject> generator = MovementGeneratorFactory.Create(new EntityAssociatedData<MovementInfo>(movementUpdate.MovementGuid, movementUpdate.MoveInfo));
+				IMovementGenerator<GameObject> generator = MovementGeneratorFactory.Create(new EntityAssociatedData<MovementInfo>(guid, moveInfo));
 
 				//We just initialize this casually, the next update tick in Unity3D will start the movement generator, the old generator actually might be running right now
 				//at the time this is set.
-				MovementGeneratorMappable.ReplaceObject(movementUpdate.MovementGuid, generator);
-				MovementInfoMappable.ReplaceObject(movementUpdate.MovementGuid, movementUpdate.MoveInfo);
+				MovementGeneratorMappable.ReplaceObject(guid, generator);
+				MovementInfoMappable.ReplaceObject(guid, moveInfo);
 			}
-			catch(Exception e)
+			catch (Exception e)
 			{
-				string error = $"Failed to handle Movement Data for Entity: {movementUpdate.MovementGuid} Type: {movementUpdate.MoveInfo.GetType().Name} Error: {e.Message}";
+				string error = $"Failed to handle Movement Data for Entity: {guid} Type: {moveInfo.GetType().Name} Error: {e.Message}";
 
-				if(Logger.IsErrorEnabled)
+				if (Logger.IsErrorEnabled)
 					Logger.Error(error);
 
 				throw new InvalidOperationException(error, e);
