@@ -115,6 +115,7 @@ namespace GladMMO
 			if (TotalLengthDuration == 0) //this case can happen there is no diff between last and first point.
 			{
 				StopGenerator();
+				SetFinalRotation(entity);
 
 				return entity.transform.position = GeneratedPath[GeneratedPath.Length - 1]; //this is fine, it's ALWAYS at least 2 in size.
 			}
@@ -139,6 +140,16 @@ namespace GladMMO
 			return entity.transform.position;
 		}
 
+		protected virtual void SetFinalRotation([NotNull] GameObject entity)
+		{
+			if (entity == null) throw new ArgumentNullException(nameof(entity));
+
+			Vector3 direction = GeneratedPath[GeneratedPath.Length - 1] - GeneratedPath[GeneratedPath.Length - 2];
+			direction = new Vector3(direction.x, 0.0f, direction.z);
+
+			entity.transform.rotation = Quaternion.LookRotation(direction, Vector3.up);
+		}
+
 		private float CalculateMovementSpeed()
 		{
 			//TODO: When do creatures walk??
@@ -148,8 +159,14 @@ namespace GladMMO
 
 		protected override Vector3 InternalUpdate(GameObject entity, long currentTime)
 		{
-			if(EndTimeStamp <= currentTime)
+			if (EndTimeStamp <= currentTime)
+			{
+				//It's past time, let's STOP
+				StopGenerator();
+				SetFinalRotation(entity);
+
 				return entity.transform.position = GeneratedPath.Last();
+			}
 
 			int diffSinceLastPoint = (int)currentTime - State.StartTimeStamp;
 
@@ -172,7 +189,7 @@ namespace GladMMO
 			Vector3 direction = (GeneratedPath[State.CurrentIndex + 1] - GeneratedPath[State.CurrentIndex]);
 			direction = new Vector3(direction.x, 0.0f, direction.z);
 
-			entity.transform.rotation = Quaternion.Slerp(entity.transform.rotation, Quaternion.LookRotation(direction, Vector3.up), 100.0f * Time.deltaTime);
+			InterpolateRotation(entity, direction);
 			entity.transform.position = Vector3.Lerp(GeneratedPath[State.CurrentIndex], GeneratedPath[State.CurrentIndex + 1], Mathf.Clamp(segmentCompleteRatio, 0, 1.0f));
 
 #if DEBUG
@@ -183,7 +200,10 @@ namespace GladMMO
 			if (segmentCompleteRatio >= 1.0f)
 			{
 				if (State.CurrentIndex + 2 == GeneratedPath.Length)
+				{
 					StopGenerator();
+					SetFinalRotation(entity);
+				}
 				else
 				{
 					State = new LinearPointPathState(GeneratedPath[State.CurrentIndex + 1], GeneratedPath[State.CurrentIndex + 2], CalculateMovementSpeed(), State.CurrentIndex + 1, (int) currentTime);
@@ -191,6 +211,11 @@ namespace GladMMO
 			}
 
 			return entity.transform.position;
+		}
+
+		protected virtual void InterpolateRotation(GameObject entity, Vector3 direction)
+		{
+			entity.transform.rotation = Quaternion.Slerp(entity.transform.rotation, Quaternion.LookRotation(direction, Vector3.up), 100.0f * Time.deltaTime);
 		}
 	}
 }
