@@ -21,17 +21,21 @@ namespace GladMMO
 
 		private IReadonlyEntityGuidMappable<EntityMovementSpeed> MovementSpeedMappable { get; }
 
+		private IReadonlyEntityGuidMappable<WorldTransform> WorldTransformMappable { get; }
+
 		public SMSG_MONSTER_MOVE_PayloadHandler(ILog logger, 
 			[NotNull] IEntityGuidMappable<IMovementGenerator<GameObject>> movementGeneratorMappable,
 			[NotNull] IReadonlyNetworkTimeService timeService,
 			[NotNull] IReadonlyEntityGuidMappable<AsyncLock> lockMappable,
-			[NotNull] IReadonlyEntityGuidMappable<EntityMovementSpeed> movementSpeedMappable) 
+			[NotNull] IReadonlyEntityGuidMappable<EntityMovementSpeed> movementSpeedMappable,
+			[NotNull] IReadonlyEntityGuidMappable<WorldTransform> worldTransformMappable) 
 			: base(logger)
 		{
 			MovementGeneratorMappable = movementGeneratorMappable ?? throw new ArgumentNullException(nameof(movementGeneratorMappable));
 			TimeService = timeService ?? throw new ArgumentNullException(nameof(timeService));
 			LockMappable = lockMappable ?? throw new ArgumentNullException(nameof(lockMappable));
 			MovementSpeedMappable = movementSpeedMappable ?? throw new ArgumentNullException(nameof(movementSpeedMappable));
+			WorldTransformMappable = worldTransformMappable ?? throw new ArgumentNullException(nameof(worldTransformMappable));
 		}
 
 		public override async Task HandleMessage(IPeerMessageContext<GamePacketPayload> context, SMSG_MONSTER_MOVE_Payload payload)
@@ -55,17 +59,44 @@ namespace GladMMO
 
 					//All these types have a spline.
 					case MonsterMoveType.MonsterMoveNormal:
-					case MonsterMoveType.MonsterMoveFacingSpot:
-					case MonsterMoveType.MonsterMoveFacingTarget:
-					case MonsterMoveType.MonsterMoveFacingAngle:
 						//TODO: Handle different spline types
 						if (payload.OptionalSplineInformation.HasLinearPath)
-							MovementGeneratorMappable[creatureGuid] = new LinearPathMovementGenerator(payload.OptionalSplineInformation.OptionalLinearPathInformation, payload.InitialMovePoint.ToUnityVector(), payload.OptionalSplineInformation.SplineDuration, MovementSpeedMappable.RetrieveEntity(payload.MonsterGuid));
+							MovementGeneratorMappable[creatureGuid] = BuildNormalLinearMovementGenerator(payload);
+						break;
+					case MonsterMoveType.MonsterMoveFacingSpot:
+						break;
+					case MonsterMoveType.MonsterMoveFacingTarget:
+						if (payload.OptionalSplineInformation.HasLinearPath && payload.MoveInfo.HasFinalTarget)
+						{
+							//Possible we don't know they entity they are chasing.
+							//So we check and if not build a normal path generator.
+							if (WorldTransformMappable.ContainsKey(payload.MoveInfo.FinalTarget))
+							{
+								WorldTransform entity = WorldTransformMappable.RetrieveEntity(payload.MoveInfo.FinalTarget);
+								MovementGeneratorMappable[creatureGuid] = new LookAtLinearPathMovementGenerator(payload.OptionalSplineInformation.OptionalLinearPathInformation, payload.InitialMovePoint.ToUnityVector(), payload.OptionalSplineInformation.SplineDuration, 0, MovementSpeedMappable.RetrieveEntity(payload.MonsterGuid), entity);
+							}
+							else
+							{
+								if(Logger.IsWarnEnabled)
+									Logger.Warn($"Creature: {payload.MonsterGuid} tried to Face: {payload.MoveInfo.FinalTarget} but does not exist on client.");
+
+								MovementGeneratorMappable[creatureGuid] = BuildNormalLinearMovementGenerator(payload);
+							}
+						}
+						break;
+					case MonsterMoveType.MonsterMoveFacingAngle:
+						if (payload.OptionalSplineInformation.HasLinearPath && payload.MoveInfo.HasFinalOrientation)
+							MovementGeneratorMappable[creatureGuid] = new FinalAngleLinearPathMovementGenerator(payload.OptionalSplineInformation.OptionalLinearPathInformation, payload.InitialMovePoint.ToUnityVector(), payload.OptionalSplineInformation.SplineDuration, 0, MovementSpeedMappable.RetrieveEntity(payload.MonsterGuid), payload.MoveInfo.FinalOrientation.ToUnity3DYAxisRotation());
 						break;
 					default:
 						throw new ArgumentOutOfRangeException();
 				}
 			}
+		}
+
+		private LinearPathMovementGenerator BuildNormalLinearMovementGenerator(SMSG_MONSTER_MOVE_Payload payload)
+		{
+			return new LinearPathMovementGenerator(payload.OptionalSplineInformation.OptionalLinearPathInformation, payload.InitialMovePoint.ToUnityVector(), payload.OptionalSplineInformation.SplineDuration, MovementSpeedMappable.RetrieveEntity(payload.MonsterGuid));
 		}
 	}
 }
