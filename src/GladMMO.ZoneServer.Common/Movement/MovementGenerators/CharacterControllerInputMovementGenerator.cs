@@ -99,7 +99,8 @@ namespace GladMMO
 
 			//gravity
 			//Don't need to subtract the cached direction Y because it should be 0, or treated as 0.
-			if(!Controller.Value.isGrounded) //this is to prevent stutter, mostly matters for local
+			//Gravity is not applied if the unit is GROUNDED or the unit is flying.
+			if(!Controller.Value.isGrounded && ((MovementData.MoveFlags & MovementFlag.MOVEMENTFLAG_FLYING) == 0)) //this is to prevent stutter, mostly matters for local
 				CachedMovementDirection.y = (CHARACTERCONTROLLER_GRAVITY_SPEED * diff);
 
 			//Debug.Log($"Move: {CachedMovementDirection} Diff: {diff}");
