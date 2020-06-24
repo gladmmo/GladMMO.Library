@@ -84,11 +84,26 @@ namespace GladMMO
 		}
 	}
 
+	public abstract class BaseMovementGenerator : MoveGenerator
+	{
+		protected BaseMovementGenerator(Vector3 initialPosition)
+			: base(initialPosition)
+		{
+			
+		}
+
+		protected BaseMovementGenerator()
+			: base()
+		{
+			
+		}
+	}
+
 	/// <summary>
 	/// Base for movement generators that control client and serverside movement simulation.
 	/// </summary>
 	/// <typeparam name="TDataInputType">The data input type.</typeparam>
-	public abstract class BaseMovementGenerator<TDataInputType> : MoveGenerator
+	public abstract class BaseMovementGenerator<TDataInputType> : BaseMovementGenerator
 		where TDataInputType : class
 	{
 		/// <summary>
