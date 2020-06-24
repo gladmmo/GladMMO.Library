@@ -54,7 +54,7 @@ namespace GladMMO
 		/// </summary>
 		private float MovementSpeedModifier { get; set; }
 
-		private float PathDistance { get; }
+		private float PathDistance { get; set; }
 
 		public LinearPathMovementGenerator(LinearPathMoveInfo movementData, Vector3 initialPosition, int totalLengthDuration, EntityMovementSpeed movementSpeedCollection) 
 			: this(movementData, initialPosition, totalLengthDuration, 0, movementSpeedCollection)
@@ -127,12 +127,15 @@ namespace GladMMO
 				//Calculate the ending timestamp as the total duration by SPEED and convert to milliseconds.
 				EndTimeStamp = ((long)(TotalLengthDuration) + StartTimeStamp);
 
+				//TODO: Is this a hack, to rewrite initial position??
+				if (Vector3.Distance(GeneratedPath[0], entity.transform.position) < 4.0f)
+				{
+					PathDistance += Vector3.Distance(GeneratedPath[0], entity.transform.position);
+					GeneratedPath[0] = entity.transform.position;
+				}
+
 				//meters per millisecond
 				MovementSpeedModifier = PathDistance / TotalLengthDuration * 1000.0f;
-
-				//TODO: Is this a hack, to rewrite initial position??
-				if(Vector3.Distance(GeneratedPath[0], entity.transform.position) < 4.0f)
-					GeneratedPath[0] = entity.transform.position;
 
 				State = new LinearPointPathState(GeneratedPath[0], GeneratedPath[1], CalculateMovementSpeed(), 0, (int) StartTimeStamp);
 			}
