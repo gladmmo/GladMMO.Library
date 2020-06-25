@@ -20,7 +20,7 @@ namespace GladMMO
 
 		public void PublishEvent(object sender, ActionBarMouseOverStateChangeEventArgs eventArgs)
 		{
-			throw new NotImplementedException();
+			OnActionBarMouseOverStateChanged?.Invoke(sender, eventArgs);
 		}
 
 		public Task OnGameInitialized()
