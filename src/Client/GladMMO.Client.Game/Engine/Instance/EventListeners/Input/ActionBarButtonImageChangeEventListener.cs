@@ -57,6 +57,7 @@ namespace GladMMO
 						SpellEntry<string> spellEntry = ClientData.AssertEntry<SpellEntry<string>>(args.ActionId);
 						SpellIconEntry<string> iconEntry = ClientData.AssertEntry<SpellIconEntry<string>>((int) spellEntry.SpellIconID);
 
+						//TODO: Find a way to cancel this if they swap action bar again.
 						UnityAsyncHelper.UnityMainThreadContext.PostAsync(async () =>
 						{
 							Texture2D icon = await ContentLoadService.LoadContentAsync<Texture2D>(iconEntry.TextureFileName);
