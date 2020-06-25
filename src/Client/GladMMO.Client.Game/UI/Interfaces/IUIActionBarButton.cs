@@ -10,5 +10,12 @@ namespace GladMMO
 		IUIButton ActionBarButton { get; }
 
 		IUIImage ActionBarImageIcon { get; }
+
+		/// <summary>
+		/// Event published when the mouse over state changes.
+		/// Event arg will be TRUE if mouse over.
+		/// FALSE if exited.
+		/// </summary>
+		event EventHandler<bool> OnActionBarMouseOverChanged;
 	}
 }

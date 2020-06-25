@@ -23,6 +23,10 @@ namespace GladMMO
 
 		public IUIImage ActionBarImageIcon => _ActionBarImageIcon.Value;
 
+		public bool isActive => _ActionBarIcon.isActiveAndEnabled && _ActionButton.isActiveAndEnabled;
+
+		public event EventHandler<bool> OnActionBarMouseOverChanged;
+
 		public ActionBarButtonAdapter()
 		{
 			_ActionBarButton = new Lazy<IUIButton>(() => new UnityButtonUIButtonAdapterImplementation(_ActionButton));
@@ -35,6 +39,14 @@ namespace GladMMO
 			_ActionButton.gameObject.SetActive(state);
 		}
 
-		public bool isActive => _ActionBarIcon.isActiveAndEnabled && _ActionButton.isActiveAndEnabled;
+		public void OnMouseOver()
+		{
+			OnActionBarMouseOverChanged?.Invoke(this, true);
+		}
+
+		public void OnMouseExit()
+		{
+			OnActionBarMouseOverChanged?.Invoke(this, false);
+		}
 	}
 }
