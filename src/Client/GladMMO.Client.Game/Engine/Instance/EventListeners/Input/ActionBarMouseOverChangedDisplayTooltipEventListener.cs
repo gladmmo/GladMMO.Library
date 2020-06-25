@@ -59,7 +59,7 @@ namespace GladMMO
 			StaticSpellTooltip.SetText(SpellTooltipInfoSlot.Name, entry.SpellName.enUS);
 			StaticSpellTooltip.SetSlotState(SpellTooltipInfoSlot.Name, true);
 
-			StaticSpellTooltip.SetText(SpellTooltipInfoSlot.Info, entry.ToolTip.enUS);
+			StaticSpellTooltip.SetText(SpellTooltipInfoSlot.Info, entry.Description.enUS);
 			StaticSpellTooltip.SetSlotState(SpellTooltipInfoSlot.Info, true);
 
 			if (!string.IsNullOrEmpty(entry.Rank.enUS))
