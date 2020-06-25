@@ -81,6 +81,8 @@ namespace GladMMO
 
 		LoadingScreen = 34,
 
-		LoadingScreenBar = 35
+		LoadingScreenBar = 35,
+
+		StaticSpellTooltip = 36
 	}
 }
