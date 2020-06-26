@@ -1,0 +1,80 @@
+﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=026FE0503D4F0146A4AA4A9A8575179D/@KeyIndexDefined">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=026FE0503D4F0146A4AA4A9A8575179D/Applicability/=File/@EntryIndexedValue">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=026FE0503D4F0146A4AA4A9A8575179D/Categories/=Imported_00206_002F26_002F2020/@EntryIndexedValue">Imported 6/26/2020</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=026FE0503D4F0146A4AA4A9A8575179D/CustomProperties/=Extension/@EntryIndexedValue">cs</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=026FE0503D4F0146A4AA4A9A8575179D/CustomProperties/=FileName/@EntryIndexedValue">$OPCODE$_Payload</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=026FE0503D4F0146A4AA4A9A8575179D/CustomProperties/=ValidateFileName/@EntryIndexedValue">True</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=026FE0503D4F0146A4AA4A9A8575179D/Description/@EntryValue">Default Packet Structure</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=026FE0503D4F0146A4AA4A9A8575179D/Field/=OPCODE/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=026FE0503D4F0146A4AA4A9A8575179D/Field/=OPCODE/Expression/@EntryValue">clipboard()</s:String>
+	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=026FE0503D4F0146A4AA4A9A8575179D/Field/=OPCODE/Order/@EntryValue">0</s:Int64>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=026FE0503D4F0146A4AA4A9A8575179D/Scope/=E8F0594528C33E45BBFEC6CFE851095D/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=026FE0503D4F0146A4AA4A9A8575179D/Scope/=E8F0594528C33E45BBFEC6CFE851095D/Type/@EntryValue">InCSharpProjectFile</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=026FE0503D4F0146A4AA4A9A8575179D/ShortenQualifiedReferences/@EntryValue">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=026FE0503D4F0146A4AA4A9A8575179D/Text/@EntryValue">using System;&#xD;
+using System.Collections.Generic;&#xD;
+using System.Text;&#xD;
+using FreecraftCore.Serializer;&#xD;
+using JetBrains.Annotations;&#xD;
+&#xD;
+namespace FreecraftCore&#xD;
+{&#xD;
+	/// &lt;summary&gt;&#xD;
+	/// Packet payload structure for the &lt;see cref="NetworkOperationCode"/&gt; $OPCODE$.&#xD;
+	/// &lt;/summary&gt;&#xD;
+	[WireDataContract]&#xD;
+	[GamePayloadOperationCode(NetworkOperationCode.$OPCODE$)]&#xD;
+	public sealed class $OPCODE$_Payload : GamePacketPayload&#xD;
+	{&#xD;
+		/// &lt;summary&gt;&#xD;
+		/// Default Serializer Ctor.&#xD;
+		/// &lt;/summary&gt;&#xD;
+		internal $OPCODE$_Payload()&#xD;
+		{&#xD;
+&#xD;
+		}&#xD;
+	}&#xD;
+}</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=2C9E2C00F606BA48A1B1172A1B016D5A/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=2C9E2C00F606BA48A1B1172A1B016D5A/Description/@EntryValue">Default Packet Handler</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=2C9E2C00F606BA48A1B1172A1B016D5A/Text/@EntryValue">using System; &#xD;
+using FreecraftCore;&#xD;
+using System.Collections.Generic;&#xD;
+using System.Text;&#xD;
+using System.Threading.Tasks;&#xD;
+using Common.Logging;&#xD;
+using Glader.Essentials;&#xD;
+using GladMMO;&#xD;
+using GladNet;&#xD;
+&#xD;
+namespace GladMMO&#xD;
+{&#xD;
+	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]&#xD;
+	public sealed class $OPCODE$_PayloadHandler : BaseGameClientGameMessageHandler&lt;$OPCODE$_Payload&gt;&#xD;
+	{&#xD;
+		/// &lt;inheritdoc /&gt;&#xD;
+		public $OPCODE$_PayloadHandler(ILog logger)&#xD;
+			: base(logger)&#xD;
+		{&#xD;
+		}&#xD;
+&#xD;
+		/// &lt;inheritdoc /&gt;&#xD;
+		public override Task HandleMessage(IPeerMessageContext&lt;GamePacketPayload&gt; context, $OPCODE$_Payload payload)&#xD;
+		{&#xD;
+			return Task.CompletedTask;&#xD;
+		}&#xD;
+	}&#xD;
+}</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=2C9E2C00F606BA48A1B1172A1B016D5A/Reformat/@EntryValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=2C9E2C00F606BA48A1B1172A1B016D5A/ShortenQualifiedReferences/@EntryValue">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=2C9E2C00F606BA48A1B1172A1B016D5A/Categories/=Imported_00206_002F26_002F2020/@EntryIndexedValue">Imported 6/26/2020</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=2C9E2C00F606BA48A1B1172A1B016D5A/CustomProperties/=FileName/@EntryIndexedValue">$OPCODE$_PayloadHandler</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=2C9E2C00F606BA48A1B1172A1B016D5A/CustomProperties/=Extension/@EntryIndexedValue">cs</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=2C9E2C00F606BA48A1B1172A1B016D5A/CustomProperties/=ValidateFileName/@EntryIndexedValue">True</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=2C9E2C00F606BA48A1B1172A1B016D5A/Applicability/=File/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=2C9E2C00F606BA48A1B1172A1B016D5A/Scope/=E8F0594528C33E45BBFEC6CFE851095D/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=2C9E2C00F606BA48A1B1172A1B016D5A/Scope/=E8F0594528C33E45BBFEC6CFE851095D/Type/@EntryValue">InCSharpProjectFile</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=2C9E2C00F606BA48A1B1172A1B016D5A/Field/=OPCODE/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=2C9E2C00F606BA48A1B1172A1B016D5A/Field/=OPCODE/Expression/@EntryValue">clipboard()</s:String>
+	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=2C9E2C00F606BA48A1B1172A1B016D5A/Field/=OPCODE/Order/@EntryValue">0</s:Int64></wpf:ResourceDictionary>
