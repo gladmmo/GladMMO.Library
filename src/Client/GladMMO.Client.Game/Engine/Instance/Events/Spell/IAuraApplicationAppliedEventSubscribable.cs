@@ -17,7 +17,7 @@ namespace GladMMO
 	/// <summary>
 	/// Event arguments for the <see cref="IAuraApplicationAppliedEventSubscribable"/> interface.
 	/// </summary>
-	public sealed class AuraApplicationAppliedEventArgs : EventArgs
+	public sealed class AuraApplicationAppliedEventArgs : EventArgs, IAuraApplicationDataEventContainer
 	{
 		/// <summary>
 		/// The aura slot to occupy.
