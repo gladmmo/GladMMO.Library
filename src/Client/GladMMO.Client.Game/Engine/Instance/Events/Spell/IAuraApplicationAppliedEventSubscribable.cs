@@ -19,10 +19,19 @@ namespace GladMMO
 	/// </summary>
 	public sealed class AuraApplicationAppliedEventArgs : EventArgs
 	{
+		/// <summary>
+		/// The aura slot to occupy.
+		/// </summary>
 		public byte Slot { get; }
 
+		/// <summary>
+		/// The ID of the spell associated with the aura application.
+		/// </summary>
 		public int SpellId { get; }
 
+		/// <summary>
+		/// The application data.
+		/// </summary>
 		public AuraApplicationStateUpdate ApplicationData { get; }
 
 		public AuraApplicationAppliedEventArgs(byte slot, int spellId, [NotNull] AuraApplicationStateUpdate applicationData)
