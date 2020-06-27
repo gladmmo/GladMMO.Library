@@ -6,11 +6,18 @@ using Glader.Essentials;
 
 namespace GladMMO
 {
+	/// <summary>
+	/// Contract for an <see cref="IEventPublisher{TEventPublisherInterface,TEventArgsType}"/> implementation for <see cref="ICharacterFriendAddedEventSubscribable"/>
+	/// and <see cref="CharacterFriendAddedEventArgs"/>.
+	/// </summary>
 	public interface ICharacterFriendAddedEventPublisher : IEventPublisher<ICharacterFriendAddedEventSubscribable, CharacterFriendAddedEventArgs>
 	{
 
 	}
 
+	/// <summary>
+	/// Default <see cref="ICharacterFriendAddedEventPublisher"/> implementation.
+	/// </summary>
 	[AdditionalRegisterationAs(typeof(ICharacterFriendAddedEventSubscribable))]
 	[AdditionalRegisterationAs(typeof(ICharacterFriendAddedEventPublisher))]
 	[AdditionalRegisterationAs(typeof(IEventPublisher<ICharacterFriendAddedEventSubscribable, CharacterFriendAddedEventArgs>))]
