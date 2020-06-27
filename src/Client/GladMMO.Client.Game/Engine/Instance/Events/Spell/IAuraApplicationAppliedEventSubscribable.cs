@@ -20,6 +20,11 @@ namespace GladMMO
 	public sealed class AuraApplicationAppliedEventArgs : EventArgs, IAuraApplicationDataEventContainer
 	{
 		/// <summary>
+		/// The Aura target.
+		/// </summary>
+		public ObjectGuid Target { get; }
+
+		/// <summary>
 		/// The aura slot to occupy.
 		/// </summary>
 		public byte Slot { get; }
@@ -34,12 +39,13 @@ namespace GladMMO
 		/// </summary>
 		public AuraApplicationStateUpdate ApplicationData { get; }
 
-		public AuraApplicationAppliedEventArgs(byte slot, int spellId, [NotNull] AuraApplicationStateUpdate applicationData)
+		public AuraApplicationAppliedEventArgs(byte slot, [NotNull] ObjectGuid target, int spellId, [NotNull] AuraApplicationStateUpdate applicationData)
 		{
-			if (spellId <= 0) throw new ArgumentOutOfRangeException(nameof(spellId));
+			if(spellId <= 0) throw new ArgumentOutOfRangeException(nameof(spellId));
 
 			SpellId = spellId;
 			ApplicationData = applicationData ?? throw new ArgumentNullException(nameof(applicationData));
+			Target = target ?? throw new ArgumentNullException(nameof(target));
 			Slot = slot;
 		}
 	}

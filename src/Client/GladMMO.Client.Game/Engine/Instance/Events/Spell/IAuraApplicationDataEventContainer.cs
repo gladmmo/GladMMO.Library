@@ -8,6 +8,11 @@ namespace GladMMO
 	public interface IAuraApplicationDataEventContainer
 	{
 		/// <summary>
+		/// The Aura target.
+		/// </summary>
+		ObjectGuid Target { get; }
+
+		/// <summary>
 		/// The aura slot to occupy.
 		/// </summary>
 		byte Slot { get; }
