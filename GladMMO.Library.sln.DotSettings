@@ -77,4 +77,61 @@ namespace GladMMO&#xD;
 	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=2C9E2C00F606BA48A1B1172A1B016D5A/Scope/=E8F0594528C33E45BBFEC6CFE851095D/Type/@EntryValue">InCSharpProjectFile</s:String>
 	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=2C9E2C00F606BA48A1B1172A1B016D5A/Field/=OPCODE/@KeyIndexDefined">True</s:Boolean>
 	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=2C9E2C00F606BA48A1B1172A1B016D5A/Field/=OPCODE/Expression/@EntryValue">clipboard()</s:String>
-	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=2C9E2C00F606BA48A1B1172A1B016D5A/Field/=OPCODE/Order/@EntryValue">0</s:Int64></wpf:ResourceDictionary>
+	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=2C9E2C00F606BA48A1B1172A1B016D5A/Field/=OPCODE/Order/@EntryValue">0</s:Int64>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=E243B658F1160E41921A01A02FF2FD9A/@KeyIndexDefined">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=E243B658F1160E41921A01A02FF2FD9A/Applicability/=File/@EntryIndexedValue">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=E243B658F1160E41921A01A02FF2FD9A/CustomProperties/=Extension/@EntryIndexedValue">cs</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=E243B658F1160E41921A01A02FF2FD9A/CustomProperties/=FileName/@EntryIndexedValue">EventPublisher</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=E243B658F1160E41921A01A02FF2FD9A/CustomProperties/=ValidateFileName/@EntryIndexedValue">True</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=E243B658F1160E41921A01A02FF2FD9A/Description/@EntryValue">Event Publisher</s:String>
+	
+	
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=E243B658F1160E41921A01A02FF2FD9A/Field/=EVENTNAME/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=E243B658F1160E41921A01A02FF2FD9A/Field/=EVENTNAME/Expression/@EntryValue">clipboard()</s:String>
+	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=E243B658F1160E41921A01A02FF2FD9A/Field/=EVENTNAME/Order/@EntryValue">0</s:Int64>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=E243B658F1160E41921A01A02FF2FD9A/Reformat/@EntryValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=E243B658F1160E41921A01A02FF2FD9A/Scope/=E8F0594528C33E45BBFEC6CFE851095D/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=E243B658F1160E41921A01A02FF2FD9A/Scope/=E8F0594528C33E45BBFEC6CFE851095D/Type/@EntryValue">InCSharpProjectFile</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=E243B658F1160E41921A01A02FF2FD9A/ShortenQualifiedReferences/@EntryValue">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=E243B658F1160E41921A01A02FF2FD9A/Text/@EntryValue">using System; &#xD;
+using FreecraftCore;&#xD;
+using System.Collections.Generic;&#xD;
+using System.Text;&#xD;
+using System.Threading.Tasks;&#xD;
+using Glader.Essentials;&#xD;
+&#xD;
+namespace GladMMO&#xD;
+{&#xD;
+&#xD;
+	/// &lt;summary&gt;&#xD;
+	/// Contract for an &lt;see cref="IEventPublisher{TEventPublisherInterface,TEventArgsType}"/&gt; implementation for &lt;see cref="I$EVENTNAME$EventSubscribable"/&gt;&#xD;
+	/// and &lt;see cref="$EVENTNAME$EventArgs"/&gt;.&#xD;
+	/// &lt;/summary&gt;&#xD;
+	public interface I$EVENTNAME$EventPublisher : IEventPublisher&lt;I$EVENTNAME$EventSubscribable, $EVENTNAME$EventArgs&gt;&#xD;
+	{&#xD;
+&#xD;
+	}&#xD;
+&#xD;
+	/// &lt;summary&gt;&#xD;
+	/// Default &lt;see cref="I$EVENTNAME$EventPublisher"/&gt; implementation.&#xD;
+	/// &lt;/summary&gt;&#xD;
+	[AdditionalRegisterationAs(typeof(I$EVENTNAME$EventSubscribable))]&#xD;
+	[AdditionalRegisterationAs(typeof(I$EVENTNAME$EventPublisher))]&#xD;
+	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]&#xD;
+	public sealed class $EVENTNAME$EventPublisher : I$EVENTNAME$EventPublisher, I$EVENTNAME$EventSubscribable, IGameInitializable&#xD;
+	{&#xD;
+		public event EventHandler&lt;$EVENTNAME$EventArgs&gt; On$EVENTNAME$;&#xD;
+&#xD;
+		public void PublishEvent(object sender, $EVENTNAME$EventArgs eventArgs)&#xD;
+		{&#xD;
+			//Just forward event.&#xD;
+			On$EVENTNAME$?.Invoke(sender, eventArgs);&#xD;
+		}&#xD;
+&#xD;
+		public Task OnGameInitialized()&#xD;
+		{&#xD;
+			return Task.CompletedTask;&#xD;
+		}&#xD;
+	}&#xD;
+}&#xD;
+</s:String></wpf:ResourceDictionary>
