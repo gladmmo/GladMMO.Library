@@ -78,6 +78,44 @@ namespace GladMMO&#xD;
 	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=2C9E2C00F606BA48A1B1172A1B016D5A/Field/=OPCODE/@KeyIndexDefined">True</s:Boolean>
 	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=2C9E2C00F606BA48A1B1172A1B016D5A/Field/=OPCODE/Expression/@EntryValue">clipboard()</s:String>
 	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=2C9E2C00F606BA48A1B1172A1B016D5A/Field/=OPCODE/Order/@EntryValue">0</s:Int64>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=85719BAE48927445B720134571653C43/@KeyIndexDefined">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=85719BAE48927445B720134571653C43/Applicability/=File/@EntryIndexedValue">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=85719BAE48927445B720134571653C43/CustomProperties/=Extension/@EntryIndexedValue">cs</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=85719BAE48927445B720134571653C43/CustomProperties/=FileName/@EntryIndexedValue">I$EVENTNAME$EventSubscribable</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=85719BAE48927445B720134571653C43/CustomProperties/=ValidateFileName/@EntryIndexedValue">False</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=85719BAE48927445B720134571653C43/Description/@EntryValue">Event Subscribable</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=85719BAE48927445B720134571653C43/Field/=EVENTNAME/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=85719BAE48927445B720134571653C43/Field/=EVENTNAME/Expression/@EntryValue">clipboard()</s:String>
+	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=85719BAE48927445B720134571653C43/Field/=EVENTNAME/Order/@EntryValue">0</s:Int64>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=85719BAE48927445B720134571653C43/Reformat/@EntryValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=85719BAE48927445B720134571653C43/Scope/=E8F0594528C33E45BBFEC6CFE851095D/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=85719BAE48927445B720134571653C43/Scope/=E8F0594528C33E45BBFEC6CFE851095D/Type/@EntryValue">InCSharpProjectFile</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=85719BAE48927445B720134571653C43/ShortenQualifiedReferences/@EntryValue">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=85719BAE48927445B720134571653C43/Text/@EntryValue">using System;&#xD;
+using FreecraftCore;&#xD;
+using System.Collections.Generic;&#xD;
+using System.Text;&#xD;
+&#xD;
+namespace GladMMO&#xD;
+{&#xD;
+	/// &lt;summary&gt;&#xD;
+	/// Contract for a type that implements a subscription service for events that publish &lt;see cref="$EVENTNAME$EventArgs"/&gt;&#xD;
+	/// through the &lt;see cref="EventHandler{TEventArgs}"/&gt; &lt;see cref="On$EVENTNAME$"/&gt;&#xD;
+	/// &lt;/summary&gt;&#xD;
+	public interface I$EVENTNAME$EventSubscribable&#xD;
+	{&#xD;
+		event EventHandler&lt;$EVENTNAME$EventArgs&gt; On$EVENTNAME$;&#xD;
+	}&#xD;
+&#xD;
+	/// &lt;summary&gt;&#xD;
+	/// Event arguments for the &lt;see cref="I$EVENTNAME$EventSubscribable"/&gt; interface.&#xD;
+	/// &lt;/summary&gt;&#xD;
+	public sealed class $EVENTNAME$EventArgs : EventArgs&#xD;
+	{&#xD;
+&#xD;
+	}&#xD;
+}&#xD;
+</s:String>
 	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=E243B658F1160E41921A01A02FF2FD9A/@KeyIndexDefined">True</s:Boolean>
 	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=E243B658F1160E41921A01A02FF2FD9A/Applicability/=File/@EntryIndexedValue">True</s:Boolean>
 	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=E243B658F1160E41921A01A02FF2FD9A/CustomProperties/=Extension/@EntryIndexedValue">cs</s:String>
