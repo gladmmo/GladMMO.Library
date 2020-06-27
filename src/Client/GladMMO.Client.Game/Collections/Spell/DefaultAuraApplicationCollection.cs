@@ -34,13 +34,17 @@ namespace GladMMO
 			}
 		}
 
-		public void Apply(AuraUpdateData data)
+		public void Apply([NotNull] AuraUpdateData data)
 		{
+			if (data == null) throw new ArgumentNullException(nameof(data));
+
 			InternalAuraApplicationMap[data.SlotIndex] = data;
 		}
 
-		public void Remove(AuraUpdateData data)
+		public void Remove([NotNull] AuraUpdateData data)
 		{
+			if (data == null) throw new ArgumentNullException(nameof(data));
+
 			InternalAuraApplicationMap[data.SlotIndex] = null;
 		}
 
