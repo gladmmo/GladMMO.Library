@@ -7,11 +7,15 @@ using Glader.Essentials;
 namespace GladMMO
 {
 	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
-	public sealed class AuraDataChangedHandlerTickable : EventQueueBasedTickable<IAuraStateChangedEventSubscribable, AuraStateChangedEventArgs>
+	public sealed class AuraDataChangedHandlerTickable : EventQueueBasedTickable<IAuraStateChangedEventSubscribable, AuraStateChangedEventArgs>, IAuraApplicationAppliedEventSubscribable, IAuraApplicationRemovedEventSubscribable
 	{
 		private IReadonlyKnownEntitySet KnownEntities { get; }
 
 		private IReadonlyEntityGuidMappable<IAuraApplicationCollection> AuraApplicationMappable { get; }
+
+		public event EventHandler<AuraApplicationAppliedEventArgs> OnAuraApplicationApplied;
+
+		public event EventHandler<AuraApplicationRemovedEventArgs> OnAuraApplicationRemoved;
 
 		public AuraDataChangedHandlerTickable(IAuraStateChangedEventSubscribable subscriptionService, 
 			ILog logger,
@@ -39,9 +43,36 @@ namespace GladMMO
 			IAuraApplicationCollection collection = AuraApplicationMappable.RetrieveEntity(args.Target);
 
 			if (args.Data.IsAuraRemoved)
-				collection.Remove(args.Data.SlotIndex);
+			{
+				if (collection.IsSlotActive(args.Data.SlotIndex))
+				{
+					var slotData = collection[args.Data.SlotIndex];
+					collection.Remove(args.Data.SlotIndex);
+
+					//This broadcasts the main thead engine event for aura apply/remove
+					OnAuraApplicationRemoved?.Invoke(this, new AuraApplicationRemovedEventArgs(args.Data.SlotIndex, slotData.AuraSpellId));
+				}
+				else
+				{
+					if (Logger.IsErrorEnabled)
+						Logger.Error($"Attempted to Remove Aura Slot: {args.Data.SlotIndex} but Slot was not active on Entity: {args.Target}");
+				}
+			}
 			else
-				collection.Apply(args.Data);
+			{
+				if (collection.IsSlotActive(args.Data.SlotIndex))
+				{
+					if(Logger.IsErrorEnabled)
+						Logger.Error($"Attempted to Apply Aura Slot: {args.Data.SlotIndex} Spell: {args.Data.AuraSpellId} to Slot but Slot was already active on Entity: {args.Target}");
+				}
+				else
+				{
+					collection.Apply(args.Data);
+
+					//This broadcasts the main thead engine event for aura apply/remove
+					OnAuraApplicationApplied?.Invoke(this, new AuraApplicationAppliedEventArgs(args.Data.SlotIndex, args.Data.AuraSpellId, args.Data.State));
+				}
+			}
 		}
 	}
 }
