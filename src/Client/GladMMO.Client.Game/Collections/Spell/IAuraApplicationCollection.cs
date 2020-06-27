@@ -8,7 +8,7 @@ namespace GladMMO
 	public interface IAuraApplicationCollection : IReadonlyAuraApplicationCollection, IEnumerable<AuraUpdateData>
 	{
 		/// <summary>
-		/// Replaces the data at the specified index with <see cref="data"/>
+		/// Applies the data at the specified index with <see cref="data"/>
 		/// </summary>
 		/// <param name="data">The data.</param>
 		void Apply(AuraUpdateData data);
@@ -18,6 +18,12 @@ namespace GladMMO
 		/// </summary>
 		/// <param name="data">The data.</param>
 		void Remove(AuraUpdateData data);
+
+		/// <summary>
+		/// Updates the data at the specified index within <see cref="data"/>
+		/// </summary>
+		/// <param name="data">The aura application update data.</param>
+		void Update(AuraUpdateData data);
 
 		/// <summary>
 		/// Removes the data at the specified index <see cref="slot"/>.

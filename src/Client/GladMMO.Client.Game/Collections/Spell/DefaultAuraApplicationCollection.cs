@@ -44,6 +44,16 @@ namespace GladMMO
 			InternalAuraApplicationMap[data.SlotIndex] = null;
 		}
 
+		public void Update([NotNull] AuraUpdateData data)
+		{
+			if (data == null) throw new ArgumentNullException(nameof(data));
+
+			if (!IsSlotActive(data.SlotIndex))
+				throw new InvalidOperationException($"Cannot {nameof(Update)} Slot: {data.SlotIndex} because the slot is not already active.");
+
+			InternalAuraApplicationMap[data.SlotIndex] = data;
+		}
+
 		public void Remove(byte slot)
 		{
 			InternalAuraApplicationMap[slot] = null;
