@@ -19,16 +19,19 @@ namespace GladMMO
 	/// </summary>
 	public sealed class AuraApplicationAppliedEventArgs : EventArgs
 	{
+		public byte Slot { get; }
+
 		public int SpellId { get; }
 
 		public AuraApplicationStateUpdate ApplicationData { get; }
 
-		public AuraApplicationAppliedEventArgs(int spellId, [NotNull] AuraApplicationStateUpdate applicationData)
+		public AuraApplicationAppliedEventArgs(byte slot, int spellId, [NotNull] AuraApplicationStateUpdate applicationData)
 		{
 			if (spellId <= 0) throw new ArgumentOutOfRangeException(nameof(spellId));
 
 			SpellId = spellId;
 			ApplicationData = applicationData ?? throw new ArgumentNullException(nameof(applicationData));
+			Slot = slot;
 		}
 	}
 }
