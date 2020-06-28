@@ -83,6 +83,8 @@ namespace GladMMO
 
 		LoadingScreenBar = 35,
 
-		StaticSpellTooltip = 36
+		StaticSpellTooltip = 36,
+
+		AuraBuffCollection = 37
 	}
 }
