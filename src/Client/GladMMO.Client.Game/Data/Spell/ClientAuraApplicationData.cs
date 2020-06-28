@@ -32,7 +32,7 @@ namespace GladMMO
 		{
 			if (data == null) throw new ArgumentNullException(nameof(data));
 
-			if (data.State.HasDuration)
+			if (!data.IsAuraRemoved && data.State.HasDuration)
 				return currentTimeStamp - (data.State.MaximumAuraDuration - data.State.CurrentAuraDuration);
 			else
 				return currentTimeStamp;
