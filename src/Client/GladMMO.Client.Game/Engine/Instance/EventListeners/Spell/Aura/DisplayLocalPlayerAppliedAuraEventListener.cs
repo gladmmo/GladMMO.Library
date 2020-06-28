@@ -84,6 +84,7 @@ namespace GladMMO
 			}
 			else //WOW, days!
 			{
+				//TODO: This is TOTALLY wrong.
 				return $"{remainingDuration / (24 * 60 * 1000)} d";
 			}
 		}
