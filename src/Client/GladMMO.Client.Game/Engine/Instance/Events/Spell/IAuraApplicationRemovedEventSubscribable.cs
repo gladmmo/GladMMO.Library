@@ -20,6 +20,11 @@ namespace GladMMO
 	public sealed class AuraApplicationRemovedEventArgs : EventArgs
 	{
 		/// <summary>
+		/// The aura's target guid.
+		/// </summary>
+		public ObjectGuid Target { get; }
+
+		/// <summary>
 		/// The aura slot to occupy.
 		/// </summary>
 		public byte Slot { get; }
@@ -29,12 +34,13 @@ namespace GladMMO
 		/// </summary>
 		public int SpellId { get; }
 
-		public AuraApplicationRemovedEventArgs(byte slot, int spellId)
+		public AuraApplicationRemovedEventArgs([NotNull] ObjectGuid target, byte slot, int spellId)
 		{
 			if (spellId <= 0) throw new ArgumentOutOfRangeException(nameof(spellId));
 
 			Slot = slot;
 			SpellId = spellId;
+			Target = target ?? throw new ArgumentNullException(nameof(target));
 		}
 	}
 }
