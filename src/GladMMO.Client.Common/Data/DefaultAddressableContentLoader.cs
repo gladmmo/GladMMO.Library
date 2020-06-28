@@ -12,7 +12,13 @@ namespace GladMMO
 		{
 			//TODO: Implement generalized loading.
 			if (typeof(T) == typeof(Texture2D))
-				return await UnityEngine.AddressableAssets.Addressables.LoadAssetAsync<T>("Interface/Icons/Trade_Engineering").Task;
+			{
+				//TODO: Remove this hack for loading an icon.
+				//Interface\Icons\Spell_Nature_FarSight
+				//Assets/Content/Interface/Icons/Ability_BackStab.png
+				return await UnityEngine.AddressableAssets.Addressables.LoadAssetAsync<T>($"Assets/Content/{address.Replace('\\','/')}.png").Task;
+			}
+			
 
 			throw new NotImplementedException($"TODO: Implement: {typeof(T).Name} loading.");
 		}
