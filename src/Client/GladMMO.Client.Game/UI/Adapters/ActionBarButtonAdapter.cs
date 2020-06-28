@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 namespace GladMMO
 {
-	public sealed class ActionBarButtonAdapter : BaseUnityUI<IUIActionBarButton>, IUIActionBarButton
+	public sealed class ActionBarButtonAdapter : BaseUnityUI<IUIActionBarButton>, IUIActionBarButton, IUIMouseBoundsEventListener
 	{
 		[SerializeField]
 		private Image _ActionBarIcon;
