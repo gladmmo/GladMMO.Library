@@ -7,10 +7,10 @@ using TMPro;
 
 namespace GladMMO
 {
-	public sealed class TextMeshProUITextAdapter : MonoBehaviour, IUIText
+	public sealed class TextMeshProUGUIUITextAdapter : MonoBehaviour, IUIText
 	{
 		[SerializeField]
-		private TextMeshPro TextObject;
+		private TextMeshProUGUI TextObject;
 
 		public string Text
 		{
