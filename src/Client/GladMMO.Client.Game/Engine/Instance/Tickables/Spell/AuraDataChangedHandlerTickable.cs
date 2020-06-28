@@ -58,7 +58,7 @@ namespace GladMMO
 					collection.Remove(args.Data.SlotIndex);
 
 					//This broadcasts the main thead engine event for aura apply/remove
-					OnAuraApplicationRemoved?.Invoke(this, new AuraApplicationRemovedEventArgs(args.Data.SlotIndex, slotData.AuraSpellId));
+					OnAuraApplicationRemoved?.Invoke(this, new AuraApplicationRemovedEventArgs(args.Target, args.Data.SlotIndex, slotData.AuraSpellId));
 				}
 				else
 				{
