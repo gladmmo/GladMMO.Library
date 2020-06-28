@@ -8,22 +8,22 @@ namespace GladMMO
 {
 	public sealed class DefaultAuraApplicationCollection : IAuraApplicationCollection
 	{
-		private static AuraUpdateData[] Empty { get; } = new AuraUpdateData[byte.MaxValue];
+		private static ClientAuraApplicationData[] Empty { get; } = new ClientAuraApplicationData[byte.MaxValue];
 
-		private AuraUpdateData[] InternalAuraApplicationMap { get; } = new AuraUpdateData[byte.MaxValue];
+		private ClientAuraApplicationData[] InternalAuraApplicationMap { get; } = new ClientAuraApplicationData[byte.MaxValue];
 
 		static DefaultAuraApplicationCollection()
 		{
 			for(byte i = 0; i < byte.MaxValue; i++)
-				Empty[i] = new AuraUpdateData(i);
+				Empty[i] = new ClientAuraApplicationData(0, new AuraUpdateData(i));
 		}
 
 		public bool IsSlotActive(byte auraSlot)
 		{
-			return InternalAuraApplicationMap[auraSlot] != null && !InternalAuraApplicationMap[auraSlot].IsAuraRemoved;
+			return InternalAuraApplicationMap[auraSlot] != null && !InternalAuraApplicationMap[auraSlot].Data.IsAuraRemoved;
 		}
 
-		public AuraUpdateData this[byte slot]
+		public ClientAuraApplicationData this[byte slot]
 		{
 			get
 			{
@@ -34,28 +34,28 @@ namespace GladMMO
 			}
 		}
 
-		public void Apply([NotNull] AuraUpdateData data)
+		public void Apply([NotNull] ClientAuraApplicationData data)
 		{
 			if (data == null) throw new ArgumentNullException(nameof(data));
 
-			InternalAuraApplicationMap[data.SlotIndex] = data;
+			InternalAuraApplicationMap[data.Data.SlotIndex] = data;
 		}
 
-		public void Remove([NotNull] AuraUpdateData data)
+		public void Remove([NotNull] ClientAuraApplicationData data)
 		{
 			if (data == null) throw new ArgumentNullException(nameof(data));
 
-			InternalAuraApplicationMap[data.SlotIndex] = null;
+			InternalAuraApplicationMap[data.Data.SlotIndex] = null;
 		}
 
-		public void Update([NotNull] AuraUpdateData data)
+		public void Update([NotNull] ClientAuraApplicationData data)
 		{
 			if (data == null) throw new ArgumentNullException(nameof(data));
 
-			if (!IsSlotActive(data.SlotIndex))
-				throw new InvalidOperationException($"Cannot {nameof(Update)} Slot: {data.SlotIndex} because the slot is not already active.");
+			if (!IsSlotActive(data.Data.SlotIndex))
+				throw new InvalidOperationException($"Cannot {nameof(Update)} Slot: {data.Data.SlotIndex} because the slot is not already active.");
 
-			InternalAuraApplicationMap[data.SlotIndex] = data;
+			InternalAuraApplicationMap[data.Data.SlotIndex] = data;
 		}
 
 		public void Remove(byte slot)
@@ -63,11 +63,11 @@ namespace GladMMO
 			InternalAuraApplicationMap[slot] = null;
 		}
 
-		public IEnumerator<AuraUpdateData> GetEnumerator()
+		public IEnumerator<ClientAuraApplicationData> GetEnumerator()
 		{
 			//Only return non-null valid applications.
 			foreach(var entry in InternalAuraApplicationMap)
-				if (entry != null && !entry.IsAuraRemoved)
+				if (entry != null && !entry.Data.IsAuraRemoved)
 					yield return entry;
 		}
 

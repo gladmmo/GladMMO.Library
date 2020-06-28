@@ -25,14 +25,18 @@ namespace GladMMO
 
 		public event EventHandler<AuraApplicationUpdatedEventArgs> OnAuraApplicationUpdated;
 
+		private IReadonlyNetworkTimeService TimeService { get; }
+
 		public AuraDataChangedHandlerTickable(IAuraStateChangedEventSubscribable subscriptionService, 
 			ILog logger,
 			[NotNull] IReadonlyKnownEntitySet knownEntities,
-			[NotNull] IReadonlyEntityGuidMappable<IAuraApplicationCollection> auraApplicationMappable) 
+			[NotNull] IReadonlyEntityGuidMappable<IAuraApplicationCollection> auraApplicationMappable,
+			[NotNull] IReadonlyNetworkTimeService timeService) 
 			: base(subscriptionService, true, logger)
 		{
 			KnownEntities = knownEntities ?? throw new ArgumentNullException(nameof(knownEntities));
 			AuraApplicationMappable = auraApplicationMappable ?? throw new ArgumentNullException(nameof(auraApplicationMappable));
+			TimeService = timeService ?? throw new ArgumentNullException(nameof(timeService));
 		}
 
 		protected override void HandleEvent(AuraStateChangedEventArgs args)
@@ -58,7 +62,7 @@ namespace GladMMO
 					collection.Remove(args.Data.SlotIndex);
 
 					//This broadcasts the main thead engine event for aura apply/remove
-					OnAuraApplicationRemoved?.Invoke(this, new AuraApplicationRemovedEventArgs(args.Target, args.Data.SlotIndex, slotData.AuraSpellId));
+					OnAuraApplicationRemoved?.Invoke(this, new AuraApplicationRemovedEventArgs(args.Target, args.Data.SlotIndex, slotData.Data.AuraSpellId));
 				}
 				else
 				{
@@ -73,13 +77,13 @@ namespace GladMMO
 				//and is NOT an error.
 				if (collection.IsSlotActive(args.Data.SlotIndex))
 				{
-					collection.Update(args.Data);
+					collection.Update(new ClientAuraApplicationData((int)TimeService.CurrentRemoteTime, args.Data));
 
 					OnAuraApplicationUpdated?.Invoke(this, new AuraApplicationUpdatedEventArgs(args.Data.SlotIndex, args.Target, args.Data.AuraSpellId, args.Data.State));
 				}
 				else
 				{
-					collection.Apply(args.Data);
+					collection.Apply(new ClientAuraApplicationData((int)TimeService.CurrentRemoteTime, args.Data));
 
 					//This broadcasts the main thead engine event for aura apply/remove
 					OnAuraApplicationApplied?.Invoke(this, new AuraApplicationAppliedEventArgs(args.Data.SlotIndex, args.Target, args.Data.AuraSpellId, args.Data.State));

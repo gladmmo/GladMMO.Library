@@ -59,7 +59,7 @@ namespace GladMMO
 					throw new InvalidOperationException($"Failed to load Icon with Path: {iconEntry.TextureFileName}");
 
 				//Due to async nature, we must ensure that it's still valid operation
-				if (!applicationCollection.IsSlotActive(args.Slot) || args.SpellId != applicationCollection[args.Slot].AuraSpellId)
+				if (!applicationCollection.IsSlotActive(args.Slot) || args.SpellId != applicationCollection[args.Slot].Data.AuraSpellId)
 					return;
 
 				slot.AuraIconImage.SetSpriteTexture(iconTexture);
