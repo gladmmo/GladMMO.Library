@@ -29,6 +29,8 @@ namespace GladMMO
 
 		public IUIAuraBuffSlot this[AuraBuffType type, byte index] => RetrieveUIAuraSlot(type, index);
 
+		public event EventHandler<AuraBuffClickedEventArgs> OnAuraBuffClicked;
+
 		private IUIAuraBuffSlot RetrieveUIAuraSlot(AuraBuffType type, byte index)
 		{
 			if (!Enum.IsDefined(typeof(AuraBuffType), type)) throw new InvalidEnumArgumentException(nameof(type), (int) type, typeof(AuraBuffType));
@@ -76,7 +78,7 @@ namespace GladMMO
 			if (NegativeBuffSlotPool.Count == 0)
 			{
 				GameObject auraSlot = Instantiate(AuraDebuffPrefab, Vector3.zero, Quaternion.identity, NegativeAuraBarTransform);
-				return InternalAuraMap[index] = auraSlot.GetComponent<AuraBuffSlotUIAdapter>();
+				return InternalAuraMap[index] = GetAuraComponent(auraSlot);
 			}
 			else
 			{
@@ -89,11 +91,41 @@ namespace GladMMO
 			if (PositiveBuffSlotPool.Count == 0)
 			{
 				GameObject auraSlot = Instantiate(AuraBuffPrefab, Vector3.zero, Quaternion.identity, PositiveAuraBarTransform);
-				return InternalAuraMap[index] = auraSlot.GetComponent<AuraBuffSlotUIAdapter>();
+				return InternalAuraMap[index] = GetAuraComponent(auraSlot);
 			}
 			else
 			{
 				return InternalAuraMap[index] = PositiveBuffSlotPool.Dequeue();
+			}
+		}
+
+		private AuraBuffSlotUIAdapter GetAuraComponent(GameObject auraSlot)
+		{
+			AuraBuffSlotUIAdapter adapter = auraSlot.GetComponent<AuraBuffSlotUIAdapter>();
+
+			//Positive buffs can be DEBUFFED!
+			if (adapter.BuffType == AuraBuffType.Positive)
+			{
+				adapter.AuraButton.AddOnClickListener(() => OnAuraButtonClicked(adapter));
+			}
+
+			return adapter;
+		}
+
+		private void OnAuraButtonClicked(IUIAuraBuffSlot slot)
+		{
+			//This is dumb and slow, but it ALMOST never happens
+			//so performance doesn't matter.
+			foreach (var kvp in InternalAuraMap)
+			{
+				//VERY dumb, to do it via reference but the original
+				//aura collection design FORCES this
+				if (kvp.Value == slot)
+				{
+					//TODO: THIS IS A TOTAL HACK!! This is NOT how we should do right-clicking events
+					OnAuraBuffClicked?.Invoke(this, new AuraBuffClickedEventArgs(kvp.Key));
+					break;
+				}
 			}
 		}
 	}

@@ -23,5 +23,17 @@ namespace GladMMO
 	public interface IUIAuraBuffCollection
 	{
 		IUIAuraBuffSlot this[AuraBuffType type, byte index] { get; }
+
+		event EventHandler<AuraBuffClickedEventArgs> OnAuraBuffClicked;
+	}
+
+	public sealed class AuraBuffClickedEventArgs : EventArgs
+	{
+		public byte Slot { get; }
+
+		public AuraBuffClickedEventArgs(byte slot)
+		{
+			Slot = slot;
+		}
 	}
 }
