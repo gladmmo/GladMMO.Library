@@ -15,6 +15,16 @@ namespace GladMMO
 		[SerializeField]
 		private Transform PositiveAuraBarTransform;
 
+		[SerializeField]
+		private GameObject AuraDebuffPrefab;
+
+		[SerializeField]
+		private Transform NegativeAuraBarTransform;
+
+		private Queue<IUIAuraBuffSlot> PositiveBuffSlotPool { get; } = new Queue<IUIAuraBuffSlot>(255);
+
+		private Queue<IUIAuraBuffSlot> NegativeBuffSlotPool { get; } = new Queue<IUIAuraBuffSlot>(255);
+
 		private Dictionary<byte, IUIAuraBuffSlot> InternalAuraMap { get; } = new Dictionary<byte, IUIAuraBuffSlot>(byte.MaxValue);
 
 		public IUIAuraBuffSlot this[AuraBuffType type, byte index] => RetrieveUIAuraSlot(type, index);
@@ -23,13 +33,67 @@ namespace GladMMO
 		{
 			if (!Enum.IsDefined(typeof(AuraBuffType), type)) throw new InvalidEnumArgumentException(nameof(type), (int) type, typeof(AuraBuffType));
 
+			//Return only ACTIVE one.
 			if (InternalAuraMap.ContainsKey(index))
-				return InternalAuraMap[index];
+			{
+				IUIAuraBuffSlot slot = InternalAuraMap[index];
+
+				if(slot.RootElement.isActive)
+					return slot;
+				else
+				{
+					if (type == slot.BuffType)
+						return slot;
+					else
+						switch (slot.BuffType)
+						{
+							case AuraBuffType.Positive:
+								PositiveBuffSlotPool.Enqueue(slot);
+								break;
+							case AuraBuffType.Negative:
+								NegativeBuffSlotPool.Enqueue(slot);
+								break;
+							default:
+								throw new ArgumentOutOfRangeException();
+						}
+
+					InternalAuraMap[index] = null;
+				}
+			}
+
+			if(type == AuraBuffType.Positive)
+			{
+				return GetPositiveBuffSlot(index);
+			}
 			else
 			{
-				GameObject auraSlot = Instantiate(AuraBuffPrefab, Vector3.zero, Quaternion.identity, PositiveAuraBarTransform);
+				return GetNegativeBuffSlot(index);
+			}
+		}
 
+		private IUIAuraBuffSlot GetNegativeBuffSlot(byte index)
+		{
+			if (NegativeBuffSlotPool.Count == 0)
+			{
+				GameObject auraSlot = Instantiate(AuraDebuffPrefab, Vector3.zero, Quaternion.identity, NegativeAuraBarTransform);
 				return InternalAuraMap[index] = auraSlot.GetComponent<AuraBuffSlotUIAdapter>();
+			}
+			else
+			{
+				return InternalAuraMap[index] = NegativeBuffSlotPool.Dequeue();
+			}
+		}
+
+		private IUIAuraBuffSlot GetPositiveBuffSlot(byte index)
+		{
+			if (PositiveBuffSlotPool.Count == 0)
+			{
+				GameObject auraSlot = Instantiate(AuraBuffPrefab, Vector3.zero, Quaternion.identity, PositiveAuraBarTransform);
+				return InternalAuraMap[index] = auraSlot.GetComponent<AuraBuffSlotUIAdapter>();
+			}
+			else
+			{
+				return InternalAuraMap[index] = PositiveBuffSlotPool.Dequeue();
 			}
 		}
 	}

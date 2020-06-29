@@ -44,7 +44,7 @@ namespace GladMMO
 				return;
 
 			//Event call order doesn't matter
-			IUIAuraBuffSlot slot = AuraBuffUICollection[AuraBuffType.Positive, args.Slot];
+			IUIAuraBuffSlot slot = AuraBuffUICollection[args.ApplicationData.Flags.ToBuffType(), args.Slot];
 
 			uint iconId = ClientData.AssertEntry<SpellEntry<string>>(args.SpellId).SpellIconID;
 

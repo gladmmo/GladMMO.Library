@@ -47,7 +47,7 @@ namespace GladMMO
 			if (args.Target != PlayerDetails.LocalPlayerGuid)
 				return;
 
-			IUIAuraBuffSlot buffSlot = AuraBuffUICollection[AuraBuffType.Positive, args.Slot];
+			IUIAuraBuffSlot buffSlot = AuraBuffUICollection[args.ApplicationData.Flags.ToBuffType(), args.Slot];
 
 			if (args.ApplicationData.HasDuration)
 				buffSlot.DurationText.Text = ComputeAuraDurationText(args.ApplicationData);

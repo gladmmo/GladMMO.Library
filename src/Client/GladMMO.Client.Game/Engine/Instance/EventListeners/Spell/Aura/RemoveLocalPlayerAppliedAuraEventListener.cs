@@ -33,6 +33,7 @@ namespace GladMMO
 			if (PlayerDetails.LocalPlayerGuid != args.Target)
 				return;
 
+			//TODO: Need to support disabling NEGATIVE elements.
 			IUIAuraBuffSlot slot = AuraBuffUICollection[AuraBuffType.Positive, args.Slot];
 			slot.RootElement.SetElementActive(false);
 		}

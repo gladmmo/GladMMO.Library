@@ -18,6 +18,11 @@ namespace GladMMO
 		[SerializeField]
 		private UnityImageUIImageAdapter _AuraIconImage;
 
+		[SerializeField]
+		private AuraBuffType _BuffType;
+
+		public AuraBuffType BuffType => _BuffType;
+
 		public IUIText DurationText => _DurationText;
 
 		public IUIText CounterText => _CounterText;

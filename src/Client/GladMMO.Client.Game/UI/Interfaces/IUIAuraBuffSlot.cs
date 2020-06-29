@@ -7,6 +7,8 @@ namespace GladMMO
 {
 	public interface IUIAuraBuffSlot
 	{
+		AuraBuffType BuffType { get; }
+
 		/// <summary>
 		/// The text element responsible for the duration of the buff.
 		/// </summary>

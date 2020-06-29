@@ -5,6 +5,14 @@ using FreecraftCore;
 
 namespace GladMMO
 {
+	public static class AuraBuffTypeExtensions
+	{
+		public static AuraBuffType ToBuffType(this AuraFlags flags)
+		{
+			return flags.HasAnyFlags(AuraFlags.NEGATIVE) ? AuraBuffType.Negative : AuraBuffType.Positive;
+		}
+	}
+
 	//TODO: Shouldwe use a different enum?? Should we put this somewhere else?
 	public enum AuraBuffType
 	{
