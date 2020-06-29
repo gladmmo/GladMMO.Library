@@ -54,7 +54,7 @@ namespace GladMMO
 				if (!application.Data.State.HasDuration)
 					continue;
 
-				IUIAuraBuffSlot buffSlot = LocalPlayerBuffUI[AuraBuffType.Positive, application.Data.SlotIndex];
+				IUIAuraBuffSlot buffSlot = LocalPlayerBuffUI[application.Data.State.Flags.ToBuffType(), application.Data.SlotIndex];
 
 				//This is a hacky optimization that avoid allocations
 				string currentDurationText = buffSlot.DurationText.Text;
