@@ -19,6 +19,9 @@ namespace GladMMO
 		private UnityImageUIImageAdapter _AuraIconImage;
 
 		[SerializeField]
+		private UnityButtonUIButtonAdapter _AuraButton;
+
+		[SerializeField]
 		private AuraBuffType _BuffType;
 
 		public AuraBuffType BuffType => _BuffType;
@@ -30,6 +33,8 @@ namespace GladMMO
 		public IUIImage AuraIconImage =>_AuraIconImage;
 
 		public IUIElement RootElement => this;
+
+		public IUIButton AuraButton => _AuraButton;
 
 		public bool isActive => gameObject.activeSelf;
 

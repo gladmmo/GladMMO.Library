@@ -29,6 +29,11 @@ namespace GladMMO
 		/// </summary>
 		IUIElement RootElement { get; }
 
+		/// <summary>
+		/// The button component of the aura.
+		/// </summary>
+		IUIButton AuraButton { get; }
+
 		event EventHandler<bool> OnAuraBuffMouseHoverChanged;
 	}
 }
