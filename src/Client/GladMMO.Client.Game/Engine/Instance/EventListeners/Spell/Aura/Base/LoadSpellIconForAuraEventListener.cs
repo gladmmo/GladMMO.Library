@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace GladMMO
 {
-	public abstract class LoadSpellIconForAuraEventListener : BaseSingleEventListenerInitializable<IAuraApplicationAppliedEventSubscribable, AuraApplicationAppliedEventArgs>
+	public abstract class LoadSpellIconForAuraEventListener : BaseSingleEventListenerInitializable<IAuraApplicationAppliedEventSubscribable, AuraApplicationAppliedEventArgs>, IAuraDataUpdateApplyable
 	{
 		private IAddressableContentLoader ContentLoadService { get; }
 
@@ -45,12 +45,17 @@ namespace GladMMO
 			if (!IsHandlingTarget(args.Target))
 				return;
 
+			ApplyAuraData(args);
+		}
+
+		public void ApplyAuraData(IAuraApplicationDataEventContainer args)
+		{
 			//Event call order doesn't matter
 			IUIAuraBuffSlot slot = AuraBuffUICollection[args.ApplicationData.Flags.ToBuffType(), args.Slot];
 
 			uint iconId = ClientData.AssertEntry<SpellEntry<string>>(args.SpellId).SpellIconID;
 
-			SpellIconEntry<string> iconEntry = ClientData.AssertEntry<SpellIconEntry<string>>((int)iconId);
+			SpellIconEntry<string> iconEntry = ClientData.AssertEntry<SpellIconEntry<string>>((int) iconId);
 			IAuraApplicationCollection applicationCollection = AuraApplicationMappable.RetrieveEntity(args.Target);
 
 			//TODO: For target buff icons there is a race condition that under some circumstances could cause the icon to override the correct icon

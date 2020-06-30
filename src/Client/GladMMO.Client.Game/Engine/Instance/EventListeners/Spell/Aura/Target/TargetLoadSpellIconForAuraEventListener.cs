@@ -9,6 +9,7 @@ using UnityEngine;
 
 namespace GladMMO
 {
+	[AdditionalRegisterationAs(typeof(IAuraDataUpdateApplyable))]
 	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
 	public sealed class TargetLoadSpellIconForAuraEventListener : LoadSpellIconForAuraEventListener
 	{

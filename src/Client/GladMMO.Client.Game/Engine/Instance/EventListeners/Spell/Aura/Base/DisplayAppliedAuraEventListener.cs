@@ -8,7 +8,7 @@ using Glader.Essentials;
 
 namespace GladMMO
 {
-	public abstract class DisplayAppliedAuraEventListener : BaseSingleEventListenerInitializable<IAuraApplicationAppliedEventSubscribable, AuraApplicationAppliedEventArgs>
+	public abstract class DisplayAppliedAuraEventListener : BaseSingleEventListenerInitializable<IAuraApplicationAppliedEventSubscribable, AuraApplicationAppliedEventArgs>, IAuraDataUpdateApplyable
 	{
 		private IUIAuraBuffCollection AuraBuffUICollection { get; }
 
@@ -45,7 +45,7 @@ namespace GladMMO
 			ApplyAuraData(args);
 		}
 
-		private void ApplyAuraData(IAuraApplicationDataEventContainer args)
+		public void ApplyAuraData(IAuraApplicationDataEventContainer args)
 		{
 			if (!IsHandlingTarget(args.Target))
 				return;
