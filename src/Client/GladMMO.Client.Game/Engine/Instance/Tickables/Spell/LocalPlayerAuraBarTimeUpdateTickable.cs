@@ -24,7 +24,7 @@ namespace GladMMO
 			[NotNull] IReadonlyLocalPlayerDetails playerDetails,
 			[NotNull] ILocalPlayerSpawnedEventSubscribable localPlayerSpawnEventSubscription,
 			[NotNull] IReadonlyEntityGuidMappable<IAuraApplicationCollection> auraApplicationCollection,
-			[KeyFilter(UnityUIRegisterationKey.AuraBuffCollection)] [NotNull] IUIAuraBuffCollection localPlayerBuffUi)
+			[KeyFilter(UnityUIRegisterationKey.LocalPlayerAuraBuffCollection)] [NotNull] IUIAuraBuffCollection localPlayerBuffUi)
 		{
 			if (localPlayerSpawnEventSubscription == null) throw new ArgumentNullException(nameof(localPlayerSpawnEventSubscription));
 			TimeService = timeService ?? throw new ArgumentNullException(nameof(timeService));

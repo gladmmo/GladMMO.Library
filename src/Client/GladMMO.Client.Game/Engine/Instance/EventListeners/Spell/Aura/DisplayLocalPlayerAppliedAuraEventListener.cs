@@ -19,7 +19,7 @@ namespace GladMMO
 
 		public DisplayLocalPlayerAppliedAuraEventListener([NotNull] IAuraApplicationAppliedEventSubscribable subscriptionService,
 			IAuraApplicationUpdatedEventSubscribable secondarySubscriptionService,
-			[KeyFilter(UnityUIRegisterationKey.AuraBuffCollection)] [NotNull] IUIAuraBuffCollection auraBuffUiCollection,
+			[KeyFilter(UnityUIRegisterationKey.LocalPlayerAuraBuffCollection)] [NotNull] IUIAuraBuffCollection auraBuffUiCollection,
 			[NotNull] IReadonlyLocalPlayerDetails playerDetails,
 			[NotNull] ILog logger)
 			: base(subscriptionService)

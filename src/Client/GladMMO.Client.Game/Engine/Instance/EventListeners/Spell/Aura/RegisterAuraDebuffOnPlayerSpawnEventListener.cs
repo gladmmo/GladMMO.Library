@@ -20,7 +20,7 @@ namespace GladMMO
 		private IPeerPayloadSendService<GamePacketPayload> SendService { get; }
 
 		public RegisterAuraDebuffOnPlayerSpawnEventListener(ILocalPlayerSpawnedEventSubscribable subscriptionService,
-			[KeyFilter(UnityUIRegisterationKey.AuraBuffCollection)] [NotNull] IUIAuraBuffCollection auraBuffUiCollection,
+			[KeyFilter(UnityUIRegisterationKey.LocalPlayerAuraBuffCollection)] [NotNull] IUIAuraBuffCollection auraBuffUiCollection,
 			[NotNull] IReadonlyEntityGuidMappable<IAuraApplicationCollection> auraApplicationMappable,
 			[NotNull] IReadonlyLocalPlayerDetails playerDetails,
 			[NotNull] IPeerPayloadSendService<GamePacketPayload> sendService) 

@@ -24,7 +24,7 @@ namespace GladMMO
 
 		public LoadLocalPlayerSpellIconForAuraEventListener([NotNull] IAuraApplicationAppliedEventSubscribable subscriptionService,
 			[NotNull] IAddressableContentLoader contentLoadService,
-			[KeyFilter(UnityUIRegisterationKey.AuraBuffCollection)] [NotNull] IUIAuraBuffCollection auraBuffUiCollection,
+			[KeyFilter(UnityUIRegisterationKey.LocalPlayerAuraBuffCollection)] [NotNull] IUIAuraBuffCollection auraBuffUiCollection,
 			[NotNull] IReadonlyLocalPlayerDetails playerDetails,
 			[NotNull] IClientDataCollectionContainer clientData,
 			[NotNull] IReadonlyEntityGuidMappable<IAuraApplicationCollection> auraApplicationMappable) 

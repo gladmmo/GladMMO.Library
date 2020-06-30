@@ -18,7 +18,7 @@ namespace GladMMO
 		private ILog Logger { get; }
 
 		public RemoveLocalPlayerAppliedAuraEventListener([NotNull] IAuraApplicationRemovedEventSubscribable subscriptionService,
-			[KeyFilter(UnityUIRegisterationKey.AuraBuffCollection)] [NotNull] IUIAuraBuffCollection auraBuffUiCollection,
+			[KeyFilter(UnityUIRegisterationKey.LocalPlayerAuraBuffCollection)] [NotNull] IUIAuraBuffCollection auraBuffUiCollection,
 			[NotNull] IReadonlyLocalPlayerDetails playerDetails,
 			[NotNull] ILog logger)
 			: base(subscriptionService)
