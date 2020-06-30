@@ -14,19 +14,37 @@ namespace GladMMO
 	{
 		private IUIAuraBuffCollection TargetUIAuraBuffCollection { get; }
 
+		private IReadonlyEntityGuidMappable<IAuraApplicationCollection> AuraApplicationMappable { get; }
+
 		public ResetAuraUIForTargetFrameEventListener(ILocalPlayerTargetChangedEventListener subscriptionService, 
 			ILog logger,
 			[KeyFilter(UnityUIRegisterationKey.TargetUnitFrame)] IUIUnitFrame targetUnitFrame,
-			[KeyFilter(UnityUIRegisterationKey.TargetAuraBuffCollection)] [NotNull] IUIAuraBuffCollection targetUiAuraBuffCollection) 
+			[KeyFilter(UnityUIRegisterationKey.TargetAuraBuffCollection)] [NotNull] IUIAuraBuffCollection targetUiAuraBuffCollection,
+			[NotNull] IReadonlyEntityGuidMappable<IAuraApplicationCollection> auraApplicationMappable) 
 			: base(subscriptionService, logger, targetUnitFrame)
 		{
 			TargetUIAuraBuffCollection = targetUiAuraBuffCollection ?? throw new ArgumentNullException(nameof(targetUiAuraBuffCollection));
+			AuraApplicationMappable = auraApplicationMappable ?? throw new ArgumentNullException(nameof(auraApplicationMappable));
 		}
 
 		protected override void OnLocalPlayerTargetChanged(LocalPlayerTargetChangedEventArgs args)
 		{
+			//Disables ALL the elements.
 			foreach (IUIAuraBuffSlot slot in TargetUIAuraBuffCollection.EnumerateActive())
 				slot.RootElement.SetElementActive(false);
+
+			IAuraApplicationCollection applicationCollection = AuraApplicationMappable.RetrieveEntity(args.TargetedEntity);
+
+			//This will enable ALL the slots that should be active from the actual entity
+			//application collection.
+			foreach (var entry in applicationCollection)
+			{
+				if (entry.Data.IsAuraRemoved)
+					continue;
+
+				IUIAuraBuffSlot slot = TargetUIAuraBuffCollection[entry.Data.State.Flags.ToBuffType(), entry.Data.SlotIndex];
+				slot.RootElement.SetElementActive(true);
+			}
 		}
 	}
 }
