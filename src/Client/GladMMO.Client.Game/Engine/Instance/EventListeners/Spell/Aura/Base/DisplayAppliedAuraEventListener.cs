@@ -52,17 +52,22 @@ namespace GladMMO
 
 			IUIAuraBuffSlot buffSlot = AuraBuffUICollection[args.ApplicationData.Flags.ToBuffType(), args.Slot];
 
+			DisplayAuraApplicationText(args, buffSlot);
+
+			buffSlot.RootElement.SetElementActive(true);
+		}
+
+		protected virtual void DisplayAuraApplicationText(IAuraApplicationDataEventContainer args, IUIAuraBuffSlot buffSlot)
+		{
 			if (args.ApplicationData.HasDuration)
 				buffSlot.DurationText.Text = ComputeAuraDurationText(args.ApplicationData);
 			else
-				buffSlot.DurationText.Text = "";
+				buffSlot.DurationText.Text = String.Empty;
 
 			if (args.ApplicationData.CounterAmount > 0)
 				buffSlot.CounterText.Text = args.ApplicationData.CounterAmount.ToString();
 			else
-				buffSlot.CounterText.Text = "";
-
-			buffSlot.RootElement.SetElementActive(true);
+				buffSlot.CounterText.Text = String.Empty;
 		}
 
 		private string ComputeAuraDurationText([NotNull] AuraApplicationStateUpdate data)
