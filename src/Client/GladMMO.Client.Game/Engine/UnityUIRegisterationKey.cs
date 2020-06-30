@@ -85,6 +85,8 @@ namespace GladMMO
 
 		StaticSpellTooltip = 36,
 
-		LocalPlayerAuraBuffCollection = 37
+		LocalPlayerAuraBuffCollection = 37,
+
+		TargetAuraBuffCollection = 38,
 	}
 }
