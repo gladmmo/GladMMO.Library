@@ -15,7 +15,7 @@ namespace GladMMO
 		public RemoveTargetPlayerAppliedAuraEventListener(IAuraApplicationRemovedEventSubscribable subscriptionService, 
 			[KeyFilter(UnityUIRegisterationKey.TargetAuraBuffCollection)] IUIAuraBuffCollection auraBuffUiCollection, 
 			ILog logger,
-			[NotNull] IReadonlyLocalPlayerDetails playerDetails) 
+			IReadonlyLocalPlayerDetails playerDetails) 
 			: base(subscriptionService, auraBuffUiCollection, logger)
 		{
 			PlayerDetails = playerDetails ?? throw new ArgumentNullException(nameof(playerDetails));
