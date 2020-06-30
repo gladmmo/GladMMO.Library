@@ -29,5 +29,19 @@ namespace GladMMO
 
 			return PlayerDetails.EntityData.GetEntityGuidValue(EUnitFields.UNIT_FIELD_TARGET) == target;
 		}
+
+		protected override void DisplayAuraApplicationText([NotNull] IAuraApplicationDataEventContainer args, [NotNull] IUIAuraBuffSlot buffSlot)
+		{
+			if (args == null) throw new ArgumentNullException(nameof(args));
+			if (buffSlot == null) throw new ArgumentNullException(nameof(buffSlot));
+
+			//Targets shouldn't display duration normally.
+			buffSlot.DurationText.Text = String.Empty;
+
+			if (args.ApplicationData.CounterAmount > 0)
+				buffSlot.CounterText.Text = args.ApplicationData.CounterAmount.ToString();
+			else
+				buffSlot.CounterText.Text = String.Empty;
+		}
 	}
 }
