@@ -9,33 +9,22 @@ using Glader.Essentials;
 namespace GladMMO
 {
 	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
-	public sealed class RemoveLocalPlayerAppliedAuraEventListener : BaseSingleEventListenerInitializable<IAuraApplicationRemovedEventSubscribable, AuraApplicationRemovedEventArgs>
+	public sealed class RemoveLocalPlayerAppliedAuraEventListener : RemoveAppliedAuraFromUIEventListener
 	{
-		private IUIAuraBuffCollection AuraBuffUICollection { get; }
-
 		private IReadonlyLocalPlayerDetails PlayerDetails { get; }
 
-		private ILog Logger { get; }
-
-		public RemoveLocalPlayerAppliedAuraEventListener([NotNull] IAuraApplicationRemovedEventSubscribable subscriptionService,
+		public RemoveLocalPlayerAppliedAuraEventListener(IAuraApplicationRemovedEventSubscribable subscriptionService,
 			[KeyFilter(UnityUIRegisterationKey.LocalPlayerAuraBuffCollection)] [NotNull] IUIAuraBuffCollection auraBuffUiCollection,
-			[NotNull] IReadonlyLocalPlayerDetails playerDetails,
-			[NotNull] ILog logger)
-			: base(subscriptionService)
+			IReadonlyLocalPlayerDetails playerDetails, 
+			ILog logger) 
+			: base(subscriptionService, auraBuffUiCollection, logger)
 		{
-			AuraBuffUICollection = auraBuffUiCollection ?? throw new ArgumentNullException(nameof(auraBuffUiCollection));
-			PlayerDetails = playerDetails ?? throw new ArgumentNullException(nameof(playerDetails));
-			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
+			PlayerDetails = playerDetails;
 		}
 
-		protected override void OnEventFired(object source, AuraApplicationRemovedEventArgs args)
+		protected override bool IsHandlingTarget(ObjectGuid target)
 		{
-			if (PlayerDetails.LocalPlayerGuid != args.Target)
-				return;
-
-			//TODO: Need to support disabling NEGATIVE elements.
-			IUIAuraBuffSlot slot = AuraBuffUICollection[AuraBuffType.Positive, args.Slot];
-			slot.RootElement.SetElementActive(false);
+			return PlayerDetails.LocalPlayerGuid == target;
 		}
 	}
 }
