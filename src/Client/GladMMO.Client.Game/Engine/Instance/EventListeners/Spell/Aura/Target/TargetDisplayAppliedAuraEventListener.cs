@@ -8,6 +8,7 @@ using Glader.Essentials;
 
 namespace GladMMO
 {
+	//TODO: It is bad that we register this as this type directly, since it's generalized.
 	[AdditionalRegisterationAs(typeof(IAuraDataUpdateApplyable))]
 	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
 	public sealed class TargetDisplayAppliedAuraEventListener : DisplayAppliedAuraEventListener
