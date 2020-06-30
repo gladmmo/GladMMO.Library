@@ -31,6 +31,13 @@ namespace GladMMO
 
 		public event EventHandler<AuraBuffClickedEventArgs> OnAuraBuffClicked;
 
+		public IEnumerable<IUIAuraBuffSlot> EnumerateActive()
+		{
+			foreach(var slot in InternalAuraMap.Values)
+				if (slot != null && slot.RootElement.isActive)
+					yield return slot;
+		}
+
 		private IUIAuraBuffSlot RetrieveUIAuraSlot(AuraBuffType type, byte index)
 		{
 			if (!Enum.IsDefined(typeof(AuraBuffType), type)) throw new InvalidEnumArgumentException(nameof(type), (int) type, typeof(AuraBuffType));

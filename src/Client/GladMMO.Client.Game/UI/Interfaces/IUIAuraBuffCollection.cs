@@ -25,6 +25,8 @@ namespace GladMMO
 		IUIAuraBuffSlot this[AuraBuffType type, byte index] { get; }
 
 		event EventHandler<AuraBuffClickedEventArgs> OnAuraBuffClicked;
+
+		IEnumerable<IUIAuraBuffSlot> EnumerateActive();
 	}
 
 	public sealed class AuraBuffClickedEventArgs : EventArgs
