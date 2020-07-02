@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Glader.Essentials;
+using UnityEngine;
 
 namespace GladMMO
 {
@@ -27,9 +28,12 @@ namespace GladMMO
 		{
 			//This is only for Gaia Online avatars.
 			//TODO: Renable movement change listener handling.
-			//foreach(var listener in MovementDirectionChangeListenerMappable.EnumerateWithGuid(KnownEntities, EntityTypeId.TYPEID_PLAYER))
-			//	if(MovementDataMappable[listener.EntityGuid] is MovementBlockData posChangeData)
-			//		listener.ComponentValue.SetMovementDirection(posChangeData.Direction);
+			foreach (var listener in MovementDirectionChangeListenerMappable.EnumerateWithGuid(KnownEntities, EntityTypeId.TYPEID_PLAYER))
+			{
+				//TODO: This is hacky, but Gaia only need to know if there is ANY movement.
+				MovementInfo info = MovementDataMappable[listener.EntityGuid];
+				listener.ComponentValue.SetMovementDirection(info.MoveFlags.HasAnyFlags(MovementFlag.MOVEMENTFLAG_MASK_MOVING) ? Vector2.one : Vector2.zero);
+			}
 		}
 	}
 }
