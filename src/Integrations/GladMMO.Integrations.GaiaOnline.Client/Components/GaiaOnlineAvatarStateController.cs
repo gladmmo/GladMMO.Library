@@ -103,12 +103,12 @@ namespace GaiaOnline
 				LegAnimator.gameObject.SetActive(true);
 
 				//positionDelta = Quaternion.AngleAxis(delta, Vector3.up) * positionDelta;
-				var direction = transform.InverseTransformDirection(positionDelta);
+				var direction = transform.InverseTransformDirection(positionDelta).normalized;
 
 				//assume normalization, won't matter
-				if(direction.x > Vector3.kEpsilon) //TODO: Is this the best way to determine facing?
+				if (direction.x > Vector3.kEpsilon * 10.0f) //TODO: Is this the best way to determine facing?
 					gameObject.transform.localScale = new Vector3(Mathf.Abs(gameObject.transform.localScale.x) * -1.0f, gameObject.transform.localScale.y, gameObject.transform.localScale.z);
-				else if(Math.Abs(direction.x) > Vector3.kEpsilon) //ignore 0 to make sure it doesn't change from other inputs
+				else if(Math.Abs(direction.x) > Vector3.kEpsilon * 10.0f) //ignore 0 to make sure it doesn't change from other inputs
 					gameObject.transform.localScale = new Vector3(Mathf.Abs(gameObject.transform.localScale.x), gameObject.transform.localScale.y, gameObject.transform.localScale.z);
 			}
 			else
