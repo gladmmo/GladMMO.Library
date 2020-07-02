@@ -32,7 +32,15 @@ namespace GladMMO
 
 			//Now we've assigned the handle, we need to actually handle the spawning/loading of the avatar.
 			GameObject ikRootGameObject = GameObjectDirectoryMappable.RetrieveEntity(args.EntityGuid).GetGameObject(EntityGameObjectDirectory.Type.IKRoot);
+			GameObject currentAvatarRootGameObject = ikRootGameObject.transform.GetChild(0).gameObject;
 			GameObject newlySpawnedAvatar = args.AvatarWorldRepresentation;
+
+			//The old system expected PLAYER models to be parented to a special root object
+			//So we parent the new one at the same location and destroy the existing one
+			newlySpawnedAvatar.transform.parent = currentAvatarRootGameObject.transform.parent;
+
+			//TODO: Do we really need to destroy immediately?? I cannot remember why I did this, too avoid to Change. Maybe not: https://answers.unity.com/questions/18651/difference-between-destroy-and-destroyimmediate-.html
+			GameObject.DestroyImmediate(currentAvatarRootGameObject, false);
 
 			//Try to get AvatarBoneSDKData from root spawned model
 			AvatarBoneSDKData boneSdkData = newlySpawnedAvatar.GetComponent<AvatarBoneSDKData>();
