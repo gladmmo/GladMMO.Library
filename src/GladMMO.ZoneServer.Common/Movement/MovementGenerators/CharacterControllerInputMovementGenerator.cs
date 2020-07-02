@@ -121,8 +121,8 @@ namespace GladMMO
 			//Special case of rounding error can cause small negative diff from local
 			//Remote clients timestamps aren't adjusted by server so we get what they sent
 			//which if there is a drift or lack of syncronization it may end up negative.
-			if (diff <= 0.0f)
-				return Time.deltaTime; //we do this so it moves a tiny bit at least. This is kind of a hack to prevent Moving movement generators from stationary time desync
+			if (diff < 0.0f)
+				return 0.0f; //we do this so it moves a tiny bit at least. This is kind of a hack to prevent Moving movement generators from stationary time desync
 
 			return diff;
 		}
