@@ -140,8 +140,8 @@ namespace GladMMO
 				TalentGroupsCount = 1,
 				Map = 13, //Test map
 				PositionX = 0,
-				PositionY = 0,
-				PositionZ = -144.698f,
+				PositionY = -8,
+				PositionZ = 0,
 
 				Race = (byte)FreecraftCore.CharacterRace.HUMAN,
 				Class = (byte)FreecraftCore.CharacterClass.Warrior,
