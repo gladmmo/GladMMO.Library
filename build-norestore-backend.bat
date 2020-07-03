@@ -30,6 +30,6 @@ xcopy src\Server\GladMMO.Service.Vivox\bin\Debug_Local\netcoreapp3.1\publish bui
 xcopy src\Server\GladMMO.Service.NameQuery\bin\Debug_Local\netcoreapp3.1\publish build\namequery /s /y
 ::xcopy src\Server\GladMMO.Service.Social\bin\Debug_Local\netcoreapp2.1\publish build\social /s /y
 ::xcopy src\Server\GladMMO.Service.ZoneAuthentication\bin\Debug_Local\netcoreapp2.1\publish build\zoneauth /s /y
-xcopy src\Server\GladMMO.Service.ZoneManager\bin\Debug_Local\netcoreapp.1\publish build\zonemanager /s /y
+xcopy src\Server\GladMMO.Service.ZoneManager\bin\Debug_Local\netcoreapp3.1\publish build\zonemanager /s /y
 
 EXIT 0
