@@ -148,6 +148,13 @@ namespace GladMMO
 			return new ObjectGuid(container.GetFieldValue<ulong>((int) index));
 		}
 
+		public static ObjectGuid GetEntityGuidValue(this IReadonlyEntityDataFieldContainer container, ECorpseFields index)
+		{
+			if(container == null) throw new ArgumentNullException(nameof(container));
+
+			return new ObjectGuid(container.GetFieldValue<ulong>((int)index));
+		}
+
 		public static ObjectGuid GetEntityGuidValue(this IReadonlyEntityDataFieldContainer container, EObjectFields index)
 		{
 			if(container == null) throw new ArgumentNullException(nameof(container));
