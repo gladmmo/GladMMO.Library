@@ -20,7 +20,7 @@ namespace GladMMO
 
 		/// <inheritdoc />
 		public CacheableEntityNameQueryable([NotNull] INameQueryService nameServiceQueryable,
-			[JetBrains.Annotations.NotNull] IReadonlyEntityGuidMappable<IEntityDataFieldContainer> entityDataFieldMappable)
+			[NotNull] IReadonlyEntityGuidMappable<IEntityDataFieldContainer> entityDataFieldMappable)
 		{
 			NameServiceQueryable = nameServiceQueryable ?? throw new ArgumentNullException(nameof(nameServiceQueryable));
 			EntityDataFieldMappable = entityDataFieldMappable ?? throw new ArgumentNullException(nameof(entityDataFieldMappable));
@@ -65,15 +65,14 @@ namespace GladMMO
 
 				//Check corpse too
 				if (entity.TypeId == EntityTypeId.TYPEID_CORPSE)
-				{
 					if (EntityDataFieldMappable.ContainsKey(entity))
 					{
-						ObjectGuid corpseOwner = EntityDataFieldMappable[entity].GetEntityGuidValue(ECorpseFields.CORPSE_FIELD_OWNER);
+						CorpseNameBuilder builder = new CorpseNameBuilder(EntityDataFieldMappable.RetrieveEntity(entity), entity, LocalNameMap);
 
-						if (LocalNameMap.ContainsKey(corpseOwner))
-							return $"Corpse of {LocalNameMap[corpseOwner]}"; //do not call Retrieve, old versions of Unity3D don't support recursive readwrite locking.
+						//If we can't build it yet, then we don't wanna just return default.
+						if (builder.IsBuildable())
+							return LocalNameMap[entity] = builder;
 					}
-				}
 			}
 
 			//If we're here, it wasn't contained
@@ -90,16 +89,16 @@ namespace GladMMO
 			}
 		}
 
-		private static string ComputeNameQueryResult(ObjectGuid guid, ResponseModel<NameQueryResponse, NameQueryResponseCode> result)
+		private string ComputeNameQueryResult(ObjectGuid guid, ResponseModel<NameQueryResponse, NameQueryResponseCode> result)
 		{
 			if (!result.isSuccessful)
 				if (guid.TypeId == EntityTypeId.TYPEID_CORPSE)
-					return GladMMOCommonConstants.DEFAULT_UNKNOWN_CORPSE_NAME_STRING;
+					return new CorpseNameBuilder(guid, LocalNameMap);
 				else
 					return GladMMOCommonConstants.DEFAULT_UNKNOWN_ENTITY_NAME_STRING;
 
 			if (guid.TypeId == EntityTypeId.TYPEID_CORPSE)
-				return $"Corpse of {result.Result.EntityName}";
+				return new CorpseNameBuilder(result.Result.EntityName);
 			else
 				return result.Result.EntityName;
 		}
