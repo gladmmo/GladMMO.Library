@@ -3,7 +3,7 @@ using FreecraftCore;
 
 namespace GladMMO
 {
-	public sealed class DefaultModelScaleStrategy : IModelScaleStrategy
+	public class DefaultModelScaleStrategy : IModelScaleStrategy
 	{
 		private IClientDataCollectionContainer ClientData { get; }
 
@@ -27,7 +27,12 @@ namespace GladMMO
 			if (!fieldContainer.DataSetIndicationArray.Get((int) EObjectFields.OBJECT_FIELD_SCALE_X))
 				return staticModelScale;
 
-			return staticModelScale + fieldContainer.GetFieldValue<float>(EObjectFields.OBJECT_FIELD_SCALE_X);
+			return staticModelScale + CalculateAdditiveUnitFieldScale(guid, fieldContainer);
+		}
+
+		protected virtual float CalculateAdditiveUnitFieldScale(ObjectGuid guid, IEntityDataFieldContainer fieldContainer)
+		{
+			return fieldContainer.GetFieldValue<float>(EObjectFields.OBJECT_FIELD_SCALE_X);
 		}
 
 		//TrinityCore:
