@@ -110,8 +110,12 @@ namespace GladMMO
 						Logger.Debug($"Auth Response for User: {UsernameText.Text} Result: {PlayerAccountJWTModel?.isTokenValid} OptionalError: {PlayerAccountJWTModel?.Error} OptionalErrorDescription: {PlayerAccountJWTModel?.ErrorDescription}");
 
 					PreBetaUsernameStorage.UserName = UsernameText.Text.ToUpper();
+
 					//Even if it's null, we should broadcast the event.
-					OnAuthenticationResultRecieved?.Invoke(this, new AuthenticationResultEventArgs(new PlayerAccountJWTModel(PlayerAccountJWTModel.AccessToken)));
+					if (PlayerAccountJWTModel != null && PlayerAccountJWTModel.isTokenValid)
+						OnAuthenticationResultRecieved?.Invoke(this, new AuthenticationResultEventArgs(new PlayerAccountJWTModel(PlayerAccountJWTModel.AccessToken)));
+					else
+						OnAuthenticationResultRecieved?.Invoke(this, new AuthenticationResultEventArgs());
 				}
 			});
 		}
