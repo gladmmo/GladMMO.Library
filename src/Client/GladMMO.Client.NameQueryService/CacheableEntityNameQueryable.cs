@@ -15,10 +15,15 @@ namespace GladMMO
 
 		private AsyncReaderWriterLock SyncObj { get; } = new AsyncReaderWriterLock();
 
+		//We need this for certain things such as corpses.
+		private IReadonlyEntityGuidMappable<IEntityDataFieldContainer> EntityDataFieldMappable { get; }
+
 		/// <inheritdoc />
-		public CacheableEntityNameQueryable([NotNull] INameQueryService nameServiceQueryable)
+		public CacheableEntityNameQueryable([NotNull] INameQueryService nameServiceQueryable,
+			[JetBrains.Annotations.NotNull] IReadonlyEntityGuidMappable<IEntityDataFieldContainer> entityDataFieldMappable)
 		{
 			NameServiceQueryable = nameServiceQueryable ?? throw new ArgumentNullException(nameof(nameServiceQueryable));
+			EntityDataFieldMappable = entityDataFieldMappable ?? throw new ArgumentNullException(nameof(entityDataFieldMappable));
 		}
 
 		/// <inheritdoc />
@@ -57,6 +62,18 @@ namespace GladMMO
 			{
 				if(LocalNameMap.ContainsKey(entity))
 					return LocalNameMap[entity]; //do not call Retrieve, old versions of Unity3D don't support recursive readwrite locking.
+
+				//Check corpse too
+				if (entity.TypeId == EntityTypeId.TYPEID_CORPSE)
+				{
+					if (EntityDataFieldMappable.ContainsKey(entity))
+					{
+						ObjectGuid corpseOwner = EntityDataFieldMappable[entity].GetEntityGuidValue(ECorpseFields.CORPSE_FIELD_OWNER);
+
+						if (LocalNameMap.ContainsKey(corpseOwner))
+							return $"Corpse of {LocalNameMap[corpseOwner]}"; //do not call Retrieve, old versions of Unity3D don't support recursive readwrite locking.
+					}
+				}
 			}
 
 			//If we're here, it wasn't contained
@@ -70,11 +87,22 @@ namespace GladMMO
 			{
 				//Check if some other thing already initialized it
 
-				if(LocalNameMap.ContainsKey(entity))
+				if (LocalNameMap.ContainsKey(entity))
 					return LocalNameMap[entity]; //do not call Retrieve, old versions of Unity3D don't support recursive readwrite locking.
 
-				return LocalNameMap[entity] = result.isSuccessful ? result.Result.EntityName : "Unknown";
+				return LocalNameMap[entity] = ComputeNameQueryResult(entity, result);
 			}
+		}
+
+		private static string ComputeNameQueryResult(ObjectGuid guid, ResponseModel<NameQueryResponse, NameQueryResponseCode> result)
+		{
+			if (!result.isSuccessful)
+				return "Unknown";
+
+			if (guid.TypeId == EntityTypeId.TYPEID_CORPSE)
+				return $"Corpse of {result.Result.EntityName}";
+			else
+				return result.Result.EntityName;
 		}
 
 		private async Task<ResponseModel<NameQueryResponse, NameQueryResponseCode>> QueryRemoteNameService(ObjectGuid entity)
@@ -87,6 +115,14 @@ namespace GladMMO
 					return await NameServiceQueryable.RetrieveGameObjectNameAsync(entity.RawGuidValue);
 				case EntityTypeId.TYPEID_UNIT:
 					return await NameServiceQueryable.RetrieveCreatureNameAsync(entity.RawGuidValue);
+				case EntityTypeId.TYPEID_CORPSE:
+					if (EntityDataFieldMappable.ContainsKey(entity))
+					{
+						ObjectGuid corpseOwner = EntityDataFieldMappable[entity].GetEntityGuidValue(ECorpseFields.CORPSE_FIELD_OWNER);
+						return await NameServiceQueryable.RetrievePlayerNameAsync(corpseOwner.RawGuidValue);
+					}
+					else
+						throw new InvalidOperationException($"Failed to NameQuery Corpse: {entity}");
 				default:
 					throw new ArgumentOutOfRangeException();
 			}

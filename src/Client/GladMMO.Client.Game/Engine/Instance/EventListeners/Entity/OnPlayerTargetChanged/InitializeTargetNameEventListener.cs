@@ -34,6 +34,8 @@ namespace GladMMO
 				//TODO: We need to handle this case better.
 				if(Logger.IsWarnEnabled)
 					Logger.Warn($"Could not load target entity name.");
+
+				TargetUnitFrame.UnitName.Text = "Unknown";
 			}
 		}
 	}

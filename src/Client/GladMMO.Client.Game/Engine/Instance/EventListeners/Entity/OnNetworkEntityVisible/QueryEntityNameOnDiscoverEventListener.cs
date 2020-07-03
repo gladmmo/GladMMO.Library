@@ -11,7 +11,7 @@ namespace GladMMO
 		private IEntityNameQueryable NameQueryService { get; }
 
 		public QueryEntityNameOnDiscoverEventListener(INetworkEntityVisibleEventSubscribable subscriptionService,
-			[NotNull] IEntityNameQueryable nameQueryService) 
+			[NotNull] IEntityNameQueryable nameQueryService)
 			: base(subscriptionService)
 		{
 			NameQueryService = nameQueryService ?? throw new ArgumentNullException(nameof(nameQueryService));
