@@ -84,8 +84,8 @@ namespace GladMMO
 			if(string.IsNullOrWhiteSpace(name)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(name));
 
 			//Only letters in WoW.
-			if (!name.All(char.IsLetter))
-				return Ok(new CharacterNameValidationResponse(CharacterNameValidationResponseCode.NameLengthIsInvalid));
+			//if (!name.All(char.IsLetter))
+			//	return Ok(new CharacterNameValidationResponse(CharacterNameValidationResponseCode.NameLengthIsInvalid));
 
 			//TODO: Finer grain picking apart. We want to indicate the failure reason.
 			bool nameIsAvailable = await ValidateNameAvailability(name);
