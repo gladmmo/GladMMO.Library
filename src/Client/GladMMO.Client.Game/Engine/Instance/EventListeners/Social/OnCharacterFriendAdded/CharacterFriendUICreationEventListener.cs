@@ -45,7 +45,7 @@ namespace GladMMO
 
 				//TODO: Query for name.
 				characterFriendSlot.Text = characterName;
-				characterFriendSlot.LocationText.Text = "Unknown";
+				characterFriendSlot.LocationText.Text = GladMMOCommonConstants.DEFAULT_UNKNOWN_ENTITY_NAME_STRING;
 			});
 		}
 	}

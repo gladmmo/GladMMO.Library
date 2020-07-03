@@ -79,14 +79,10 @@ namespace GladMMO
 			//If we're here, it wasn't contained
 			var result = await QueryRemoteNameService(entity);
 
-			if(!result.isSuccessful)
-				throw new InvalidOperationException($"Failed to query name for Entity: {entity}. Result: {result.ResultCode}.");
-
 			//Add it
 			using(await SyncObj.WriterLockAsync())
 			{
 				//Check if some other thing already initialized it
-
 				if (LocalNameMap.ContainsKey(entity))
 					return LocalNameMap[entity]; //do not call Retrieve, old versions of Unity3D don't support recursive readwrite locking.
 
@@ -97,7 +93,10 @@ namespace GladMMO
 		private static string ComputeNameQueryResult(ObjectGuid guid, ResponseModel<NameQueryResponse, NameQueryResponseCode> result)
 		{
 			if (!result.isSuccessful)
-				return "Unknown";
+				if (guid.TypeId == EntityTypeId.TYPEID_CORPSE)
+					return GladMMOCommonConstants.DEFAULT_UNKNOWN_CORPSE_NAME_STRING;
+				else
+					return GladMMOCommonConstants.DEFAULT_UNKNOWN_ENTITY_NAME_STRING;
 
 			if (guid.TypeId == EntityTypeId.TYPEID_CORPSE)
 				return $"Corpse of {result.Result.EntityName}";
