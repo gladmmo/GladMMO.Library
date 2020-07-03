@@ -40,20 +40,25 @@ namespace GladMMO
 		/// <inheritdoc />
 		protected override void HandleEvent(TEventArgs args)
 		{
+			//Do it BEFOREHAND because we actually check the lock map
+			//and it's possible we do not know this entity
+			//and therefore will encounter throws if we try to direct access
+			//before checking if known.
+			//This can happen with TrinityCore related to remote player equipped items
+			//not create packets are sent for these, but despawns occur.
+			if(!KnownEntities.isEntityKnown(args.EntityGuid))
+				if(Logger.IsWarnEnabled)
+				{
+					Logger.Warn($"Tried to cleanup unknown Entity: {args.EntityGuid}");
+					return;
+				}
+
 			AsyncLock syncObj = LockMappable.RetrieveEntity(args.EntityGuid);
 
 			using (syncObj.Lock())
 			{
 				try
 				{
-					if(!KnownEntities.isEntityKnown(args.EntityGuid))
-						if(Logger.IsWarnEnabled)
-						{
-							Logger.Warn($"Tried to cleanup unknown Entity: {args.EntityGuid}");
-							return;
-						}
-
-
 					if(Logger.IsInfoEnabled)
 						Logger.Info($"Despawning Entity: {args.EntityGuid}.");
 
