@@ -50,6 +50,10 @@ namespace GladMMO
 					return Resources.Load<GameObject>("Prefabs/Character_Friend_Slot");
 				case EntityPrefab.CharacterGuildSlot:
 					return Resources.Load<GameObject>("Prefabs/Character_Guild_Slot");
+				case EntityPrefab.NetworkCorpse:
+					GameObject primitive = GameObject.CreatePrimitive(PrimitiveType.Cube);
+					primitive.name = "TODO Corpse";
+					return primitive;
 			}
 
 			throw new NotImplementedException($"Failed to load prefab for {nameof(EntityPrefab)}: {context}");

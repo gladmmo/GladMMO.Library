@@ -11,7 +11,9 @@ namespace GladMMO
 	public enum EntityPrefab : int
 	{
 		Unknown = 0,
+
 		LocalPlayer = 1,
+
 		RemotePlayer = 2,
 
 		NetworkNpc = 3,
@@ -22,6 +24,8 @@ namespace GladMMO
 
 		CharacterFriendSlot = 6,
 
-		CharacterGuildSlot = 7
+		CharacterGuildSlot = 7,
+
+		NetworkCorpse = 8
 	}
 }

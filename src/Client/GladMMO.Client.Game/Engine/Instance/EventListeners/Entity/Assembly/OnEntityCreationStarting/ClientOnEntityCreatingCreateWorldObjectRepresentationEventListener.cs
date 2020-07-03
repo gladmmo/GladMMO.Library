@@ -38,6 +38,8 @@ namespace GladMMO
 					return EntityPrefab.NetworkNpc;
 				case EntityTypeId.TYPEID_GAMEOBJECT:
 					return EntityPrefab.NetworkGameObject;
+				case EntityTypeId.TYPEID_CORPSE:
+					return EntityPrefab.NetworkCorpse;
 			}
 
 			//TODO: Handle other cases.

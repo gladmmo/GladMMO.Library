@@ -41,7 +41,6 @@ namespace GladMMO
 				case EntityTypeId.TYPEID_CONTAINER:
 					return;
 				case EntityTypeId.TYPEID_DYNAMICOBJECT:
-				case EntityTypeId.TYPEID_CORPSE:
 					if(Logger.IsWarnEnabled)
 						Logger.Warn($"Tried to create World Representation for: {args.EntityGuid.TypeId} Id: {args.EntityGuid}. Not implemented.");
 					return;
@@ -50,6 +49,7 @@ namespace GladMMO
 				case EntityTypeId.TYPEID_GAMEOBJECT:
 				case EntityTypeId.TYPEID_UNIT:
 				case EntityTypeId.TYPEID_PLAYER:
+				case EntityTypeId.TYPEID_CORPSE:
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();
