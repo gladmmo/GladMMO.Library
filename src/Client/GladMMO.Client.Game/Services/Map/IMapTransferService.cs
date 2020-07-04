@@ -78,8 +78,10 @@ namespace GladMMO
 			try
 			{
 				//TODO: Once ASYNC Addressable loading doesn't RANDOMLY throw fucking NULL REFs fucking UNITY we don't need this nested disaster.
-				GladMMOSceneManager.LoadAddressableSceneAdditiveAsync(new MapFilePath(map.Directory), true)
-					.Completed += handle =>
+				AsyncOperationHandle sceneLoadHandle = GladMMOSceneManager.LoadAddressableSceneAdditiveAsync(new MapFilePath(map.Directory), true);
+				LoadingScreenService.RegisterOperation(sceneLoadHandle);
+
+				sceneLoadHandle.Completed += handle =>
 					{
 						if(handle.Status != AsyncOperationStatus.Succeeded)
 						{
