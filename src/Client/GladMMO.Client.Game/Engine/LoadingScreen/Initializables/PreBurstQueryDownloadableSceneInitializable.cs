@@ -27,15 +27,19 @@ namespace GladMMO
 
 		private IClientDataCollectionContainer ClientData { get; }
 
+		private ILoadingScreenManagementService LoadingScreenService { get; }
+
 		public event EventHandler<WorldDownloadBeginEventArgs> OnWorldDownloadBegins;
 
 		public PreBurstQueryDownloadableSceneInitializable(ICharacterSessionDataChangedEventSubscribable subscriptionService,
 			[NotNull] ILog logger,
-			[NotNull] IClientDataCollectionContainer clientData) 
+			[NotNull] IClientDataCollectionContainer clientData,
+			[NotNull] ILoadingScreenManagementService loadingScreenService) 
 			: base(subscriptionService)
 		{
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
 			ClientData = clientData ?? throw new ArgumentNullException(nameof(clientData));
+			LoadingScreenService = loadingScreenService ?? throw new ArgumentNullException(nameof(loadingScreenService));
 		}
 
 		protected override void OnThreadUnSafeEventFired(object source, CharacterSessionDataChangedEventArgs args)
@@ -46,8 +50,9 @@ namespace GladMMO
 			MapEntry<string> map = ClientData.AssertEntry<MapEntry<string>>(args.ZoneIdentifier);
 
 			AsyncOperationHandle worldLoadHandle = GladMMOSceneManager.LoadAddressableSceneAsync(new MapFilePath(map.Directory));
-			worldLoadHandle.Completed += op => GladMMOSceneManager.LoadAddressableSceneAdditiveAsync(GladMMOClientConstants.INSTANCE_SERVER_SCENE_NAME);
+			LoadingScreenService.RegisterOperation(worldLoadHandle);
 
+			worldLoadHandle.Completed += op => GladMMOSceneManager.LoadAddressableSceneAdditiveAsync(GladMMOClientConstants.INSTANCE_SERVER_SCENE_NAME);
 			OnWorldDownloadBegins?.Invoke(this, new WorldDownloadBeginEventArgs(worldLoadHandle));
 		}
 	}

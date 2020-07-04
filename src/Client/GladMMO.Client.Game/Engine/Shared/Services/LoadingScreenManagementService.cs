@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -33,6 +34,18 @@ namespace GladMMO
 		/// </summary>
 		/// <param name="mapId">The id of the map.</param>
 		void EnableLoadingScreenForMap(int mapId);
+
+		/// <summary>
+		/// Registers an operation for loadingscreen bar.
+		/// </summary>
+		/// <param name="operation">The operations.</param>
+		void RegisterOperation(AsyncOperationHandle operation);
+	}
+
+	public sealed class LoadingScreenOperationContainer
+	{
+		//Needs to be static so it can be shared across instances.
+		public static Stack<AsyncOperationHandle> OperationStack { get; } = new Stack<AsyncOperationHandle>();
 	}
 
 	[AdditionalRegisterationAs(typeof(ILoadingScreenStateChangedEventSubscribable))]
@@ -54,18 +67,22 @@ namespace GladMMO
 
 		public IUIImage LoadingScreenBackgroundImage { get; }
 
+		private IUIFillableImage LoadingScreenFillBar { get; }
+
 		//Prevent loading screen races because they may set maps inbetween loading the texture.
 		private AsyncLock SyncObj { get; } = new AsyncLock();
 
 		public LoadingScreenManagementService([NotNull] IClientDataCollectionContainer clientData, 
 			[NotNull] ILog logger,
 			[KeyFilter(UnityUIRegisterationKey.LoadingScreen)] [NotNull] IUIElement loadingScreenRoot,
-			[KeyFilter(UnityUIRegisterationKey.LoadingScreen)] [NotNull] IUIImage loadingScreenBackgroundImage)
+			[KeyFilter(UnityUIRegisterationKey.LoadingScreen)] [NotNull] IUIImage loadingScreenBackgroundImage,
+			[KeyFilter(UnityUIRegisterationKey.LoadingScreenBar)] IUIFillableImage loadingScreenFillBar)
 		{
 			ClientData = clientData ?? throw new ArgumentNullException(nameof(clientData));
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
 			LoadingScreenRoot = loadingScreenRoot ?? throw new ArgumentNullException(nameof(loadingScreenRoot));
 			LoadingScreenBackgroundImage = loadingScreenBackgroundImage ?? throw new ArgumentNullException(nameof(loadingScreenBackgroundImage));
+			LoadingScreenFillBar = loadingScreenFillBar;
 		}
 
 		public void Disable()
@@ -153,9 +170,28 @@ namespace GladMMO
 			});
 		}
 
+		public void RegisterOperation(AsyncOperationHandle operation)
+		{
+			LoadingScreenOperationContainer.OperationStack.Push(operation);
+		}
+
 		public Task OnGameInitialized()
 		{
 			return Task.CompletedTask;
+		}
+
+		//Nonsesical hack from: https://forum.unity.com/threads/0-7-4-addressables-downloaddependencies-percentcomplete-always-returns-0.667558/
+		//Results aren't real, but feel real-ish.
+		private static float CalculatePercentComplete(AsyncOperationHandle asyncOperation)
+		{
+			var deps = new List<AsyncOperationHandle>();
+			asyncOperation.GetDependencies(deps); // deps is added to! (weird API...)
+			float percentCompleteSum = 0;
+			foreach(var asyncOperationHandle in deps)
+			{
+				percentCompleteSum += asyncOperationHandle.PercentComplete;
+			}
+			return percentCompleteSum / deps.Count;
 		}
 	}
 }
