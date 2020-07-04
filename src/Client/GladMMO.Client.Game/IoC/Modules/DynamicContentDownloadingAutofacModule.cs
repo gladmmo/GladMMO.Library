@@ -15,9 +15,7 @@ namespace GladMMO
 				.SingleInstance();
 
 			//DefaultLoadableContentResourceManager : ILoadableContentResourceManager, IDisposable
-			builder.RegisterType<NetworkAvatarContentResourceManager>()
-				.AsImplementedInterfaces()
-				.SingleInstance();
+			RegisterPlayerAvatarResourceContentManager(builder);
 
 			builder.RegisterType<NetworkCreatureContentResourceManager>()
 				.AsImplementedInterfaces()
@@ -26,6 +24,27 @@ namespace GladMMO
 			builder.RegisterType<NetworkGameObjectContentResourceManager>()
 				.AsImplementedInterfaces()
 				.SingleInstance();
+		}
+
+		private static void RegisterPlayerAvatarResourceContentManager([NotNull] ContainerBuilder builder)
+		{
+			if (builder == null) throw new ArgumentNullException(nameof(builder));
+
+			switch (GladMMOClientConstants.CLIENT_MODE)
+			{
+				case ClientGameMode.Default:
+					builder.RegisterType<NetworkAvatarContentResourceManager>()
+						.AsImplementedInterfaces()
+						.SingleInstance();
+					break;
+				case ClientGameMode.GaiaOnline:
+					builder.RegisterType<GaiaPlayerAvatarContentResourceManager>()
+						.AsImplementedInterfaces()
+						.SingleInstance();
+					break;
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
 		}
 	}
 }

@@ -83,10 +83,7 @@ namespace GladMMO
 				.As<IMovementDataUpdater<MovementBlockData>>()
 				.SingleInstance();
 
-			//DefaultModelScaleStrategy : IModelScaleStrategy
-			builder.RegisterType<DefaultModelScaleStrategy>()
-				.As<IModelScaleStrategy>()
-				.SingleInstance();
+			RegisterModelScalerService(builder);
 
 			//DefaultWorldTransformFactory : IFactoryCreatable<WorldTransform, MovementBlockData>
 			builder.RegisterType<DefaultWorldTransformFactory>()
@@ -113,6 +110,26 @@ namespace GladMMO
 			builder.RegisterInstance(new StubbedObjectUpdateBlockHandler(ObjectUpdateType.UPDATETYPE_MOVEMENT)).As<IObjectUpdateBlockHandler>();
 			builder.RegisterInstance(new StubbedObjectUpdateBlockHandler(ObjectUpdateType.UPDATETYPE_NEAR_OBJECTS)).As<IObjectUpdateBlockHandler>();
 			builder.RegisterInstance(new StubbedObjectUpdateBlockHandler(ObjectUpdateType.UPDATETYPE_OUT_OF_RANGE_OBJECTS)).As<IObjectUpdateBlockHandler>();*/
+		}
+
+		private static void RegisterModelScalerService(ContainerBuilder builder)
+		{
+			//DefaultModelScaleStrategy : IModelScaleStrategy
+			switch(GladMMOClientConstants.CLIENT_MODE)
+			{
+				case ClientGameMode.Default:
+					builder.RegisterType<DefaultModelScaleStrategy>()
+						.As<IModelScaleStrategy>()
+						.SingleInstance();
+					break;
+				case ClientGameMode.GaiaOnline:
+					builder.RegisterType<GaiaOnlineModelScaleStrategy>()
+						.As<IModelScaleStrategy>()
+						.SingleInstance();
+					break;
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
 		}
 
 		/*private static void RegisterUpdateBlockHandler<THandlerType>([NotNull] ContainerBuilder builder)

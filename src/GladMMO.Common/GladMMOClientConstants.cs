@@ -17,5 +17,10 @@ namespace GladMMO
 		public const string TITLE_SCREEN_NAME = "MainTitleScreen";
 
 		public const string SHARED_SCENE_NAME = "SharedScene";
+
+		/// <summary>
+		/// Controls/indicates the mode for the client.
+		/// </summary>
+		public const ClientGameMode CLIENT_MODE = ClientGameMode.GaiaOnline;
 	}
 }
