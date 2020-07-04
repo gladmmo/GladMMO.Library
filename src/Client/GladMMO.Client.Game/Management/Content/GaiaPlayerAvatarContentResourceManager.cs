@@ -6,16 +6,16 @@ using Common.Logging;
 
 namespace GladMMO
 {
-	public class NetworkAvatarContentResourceManager : DefaultLoadableContentResourceManager
+	public class GaiaPlayerAvatarContentResourceManager : NetworkAvatarContentResourceManager
 	{
 		private IClientDataCollectionContainer ClientData { get; }
 
 		private IDownloadableContentServerServiceClient ContentClient { get; }
 
-		public NetworkAvatarContentResourceManager([NotNull] IDownloadableContentServerServiceClient contentClient, 
+		public GaiaPlayerAvatarContentResourceManager([NotNull] IDownloadableContentServerServiceClient contentClient, 
 			ILog logger,
 			[NotNull] IClientDataCollectionContainer clientData) 
-			: base(logger, UserContentType.Avatar)
+			: base(contentClient, logger, clientData)
 		{
 			ContentClient = contentClient ?? throw new ArgumentNullException(nameof(contentClient));
 			ClientData = clientData ?? throw new ArgumentNullException(nameof(clientData));
@@ -33,8 +33,15 @@ namespace GladMMO
 
 			CreatureModelDataEntry<string> modelDataEntry = ClientData.AssertEntry<CreatureModelDataEntry<string>>(displayInfoEntry.ModelId);
 
-			//WoW content has MDX format in its path, so we should remove it if it exists.
-			return new ContentDownloadURLResponse(modelDataEntry.FilePath.Replace(".mdx", ""), 1);
+			//TODO: Update FLAGS, I think this is PLAYABLE race.
+			if (((int) modelDataEntry.Flags & 2048) != 0)
+			{
+				//WoW content has MDX format in its path, so we should remove it if it exists.
+				//return new ContentDownloadURLResponse(modelDataEntry.FilePath.Replace(".mdx", ""), 1);
+				return new ContentDownloadURLResponse(@"Assets/Content/Character/GaiaOnline/GaiaOnlineAvatar_Root.prefab", 1);
+			}
+			else
+				return await base.RequestDownloadURL(contentId);
 		}
 	}
 }
