@@ -10,7 +10,6 @@ namespace GladMMO
 {
 	public sealed class GameServerNetworkClientAutofacModule : Module
 	{
-		//TODO: We need to clean this up on returning to the titlescreen or something. Assuming we aren't auto-disconnected.
 		private static IManagedNetworkClient<GamePacketPayload, GamePacketPayload> GloballyManagedClient { get; set; }
 
 		/// <inheritdoc />
@@ -22,12 +21,11 @@ namespace GladMMO
 
 			builder.Register<IManagedNetworkClient<GamePacketPayload, GamePacketPayload>>(context =>
 				{
-					//The idea here is if the global network client it's null we should use it as the instance.
-					if(GloballyManagedClient == null || !GloballyManagedClient.isConnected)
-						return GloballyManagedClient = new WoWClientWriteServerReadProxyPacketPayloadReaderWriterDecorator<DotNetTcpClientNetworkClient, GamePacketPayload, GamePacketPayload, IGamePacketPayload>(new DotNetTcpClientNetworkClient(), context.Resolve<INetworkSerializationService>())
-							.AsManaged();
-					else
-						return GloballyManagedClient;
+					//TODO: We used to not do this, and persist the client. But now we just DISCONNECT
+					GloballyManagedClient?.DisconnectAsync(0);
+
+					return GloballyManagedClient = new WoWClientWriteServerReadProxyPacketPayloadReaderWriterDecorator<DotNetTcpClientNetworkClient, GamePacketPayload, GamePacketPayload, IGamePacketPayload>(new DotNetTcpClientNetworkClient(), context.Resolve<INetworkSerializationService>())
+						.AsManaged();
 				})
 				.As<IManagedNetworkClient<GamePacketPayload, GamePacketPayload>>()
 				.As<IPeerPayloadSendService<GamePacketPayload>>()
