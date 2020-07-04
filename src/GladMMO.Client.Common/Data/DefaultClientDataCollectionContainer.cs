@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -45,11 +46,11 @@ namespace GladMMO
 
 		private ISerializerService Serializer { get; }
 
-		public Task DataLoadingTask { get; private set; }
+		public Task DataLoadingTask { get; private set; } = default(Task);
 
 		//This is a TOTAL hack. It's upcasting GDBC collections to object so we can store and map them
 		//for pseudo-generic access.
-		private Dictionary<Type, object> GDBCCollectionMap { get; } = new Dictionary<Type, object>();
+		private ConcurrentDictionary<Type, object> GDBCCollectionMap { get; } = new ConcurrentDictionary<Type, object>();
 
 		public DefaultClientDataCollectionContainer([NotNull] ISerializerService serializer)
 		{
@@ -62,7 +63,7 @@ namespace GladMMO
 		public void StartLoadingAsync()
 		{
 			//Only ever load once, even if it didn't fully finish loading.
-			if (GDBCCollectionMap.Count > 1)
+			if (DataLoadingTask != default(Task))
 				return;
 
 			DataLoadingTask = CreateDataLoadingTask();
