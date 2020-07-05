@@ -56,6 +56,9 @@ namespace GladMMO
 
 		private float PathDistance { get; set; }
 
+		//Used for path generation, so client usually should not be able to break it.
+		public override bool IsClientInterruptable => false;
+
 		public LinearPathMovementGenerator(LinearPathMoveInfo movementData, Vector3 initialPosition, int totalLengthDuration, EntityMovementSpeed movementSpeedCollection) 
 			: this(movementData, initialPosition, totalLengthDuration, 0, movementSpeedCollection)
 		{

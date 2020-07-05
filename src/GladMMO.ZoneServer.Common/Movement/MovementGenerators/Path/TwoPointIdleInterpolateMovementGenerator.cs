@@ -18,6 +18,9 @@ namespace GladMMO
 
 		public const int MAX_TIME = 2 * 1000;
 
+		//Used for path generation, so client usually should not be able to break it.
+		public override bool IsClientInterruptable => false;
+
 		public TwoPointIdleInterpolateMovementGenerator(Vector3 targetPosition, EntityMovementSpeed movementSpeeds)
 		{
 			TargetPosition = targetPosition;
