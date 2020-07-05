@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using Glader.Essentials;
 
 namespace GladMMO
@@ -10,6 +11,9 @@ namespace GladMMO
 	public sealed class EntityFieldDataCollectionEntityGuidMappable : IEntityGuidMappable<IChangeTrackableEntityDataCollection>, IReadonlyEntityGuidMappable<IEntityDataFieldContainer>
 	{
 		private ConcurrentDictionary<ObjectGuid, IChangeTrackableEntityDataCollection> InternalMap { get; }
+
+		//TODO: Some versions of Unity3D don't suport Recursion??
+		public ReaderWriterLockSlim SyncObj { get; } = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
 
 		public EntityFieldDataCollectionEntityGuidMappable()
 		{
