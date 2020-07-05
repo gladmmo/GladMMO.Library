@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FreecraftCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace GladMMO
@@ -22,6 +23,14 @@ namespace GladMMO
 			return await Context.CharacterAction
 				.Where(c => c.Guid == (uint) characterId && c.Spec == 0 && c.Button < (int)ActionBarIndex.ActionBarIndex_12) 
 				.ToArrayAsync();
+		}
+
+		public async Task<bool> AddAllAsync(CharacterAction[] actions)
+		{
+			await Context.CharacterAction
+				.AddRangeAsync(actions);
+
+			return await Context.SaveChangesAsync() != 0;
 		}
 	}
 }

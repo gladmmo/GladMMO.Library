@@ -126,6 +126,7 @@ namespace GladMMO
 
 			services.AddTransient<ITrinityCreatureTemplateRepository, TrinityCoreCreatureTemplateRepository>();
 			services.AddTransient<ITrinityGameObjectTemplateRepository, TrinityCoreGameObjectTemplateRepository>();
+			services.AddTransient<ITrinityCharacterActionBarRepository, TrinityCoreCharacterActionBarRepository>();
 		}
 	}
 }

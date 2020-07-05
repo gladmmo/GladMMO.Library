@@ -9,10 +9,16 @@ namespace GladMMO
 {
 	public sealed class TrinityCoreCharacterRepository : BaseGenericBackedDatabaseRepository<wotlk_charactersContext, uint, Characters>, ITrinityCharacterRepository
 	{
-		public TrinityCoreCharacterRepository(wotlk_charactersContext context) 
+		private wotlk_worldContext WorldContext { get; }
+
+		private ITrinityCharacterActionBarRepository ActionBarRepository { get; }
+
+		public TrinityCoreCharacterRepository(wotlk_charactersContext context, [JetBrains.Annotations.NotNull] wotlk_worldContext worldContext,
+			[JetBrains.Annotations.NotNull] ITrinityCharacterActionBarRepository actionBarRepository) 
 			: base(context)
 		{
-
+			WorldContext = worldContext ?? throw new ArgumentNullException(nameof(worldContext));
+			ActionBarRepository = actionBarRepository ?? throw new ArgumentNullException(nameof(actionBarRepository));
 		}
 
 		public async Task<string> RetrieveNameAsync(uint key)
@@ -31,6 +37,35 @@ namespace GladMMO
 				.FirstAsync(c => c.Name == characterName.ToUpperInvariant());
 
 			return character;
+		}
+
+		public override async Task<bool> TryCreateAsync(Characters model)
+		{
+			bool creationResult = await base.TryCreateAsync(model);
+
+			//We also need to add some DEFAULT stuff
+			if (creationResult)
+			{
+				PlayercreateinfoAction[] actions = await WorldContext
+					.PlayercreateinfoAction
+					.Where(a => a.Class == model.Class && a.Race == model.Race)
+					.ToArrayAsync();
+
+				//Now we need to add their action bar, these are the default
+				CharacterAction[] characterActions = actions.Select(a => new CharacterAction()
+					{
+						Action = a.Action,
+						Button = (byte) a.Button,
+						Guid = model.Guid,
+						Spec = 0, //TODO: What should this be??
+						Type = (byte) a.Type
+					})
+					.ToArray();
+
+				await ActionBarRepository.AddAllAsync(characterActions);
+			}
+
+			return creationResult;
 		}
 
 		public async Task<bool> ContainsAsync(string characterName)
