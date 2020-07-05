@@ -28,14 +28,14 @@ namespace FreecraftCore.Swarm
 		}
 
 		/// <inheritdoc />
-		public override async Task HandleMessage(IPeerMessageContext<GamePacketPayload> context, CharacterListResponse payload)
+		public override Task HandleMessage(IPeerMessageContext<GamePacketPayload> context, CharacterListResponse payload)
 		{
 			if(Logger.IsInfoEnabled)
 				Logger.Info($"Handling: {nameof(CharacterListResponse)}");
 
 			//Not accurate to WoW client but the first packet we are going to send
 			//is the packet that will get the server absolute timestamp.
-			await context.PayloadSendService.SendMessageImmediately(new CMSG_QUERY_TIME_Payload())
+			context.PayloadSendService.SendMessage(new CMSG_QUERY_TIME_Payload())
 				.ConfigureAwaitFalseVoid();
 
 			TimeService.RecalculateQueryTime();
@@ -44,6 +44,8 @@ namespace FreecraftCore.Swarm
 			//Idea here is to just login to the first character.
 			context.PayloadSendService.SendMessage(new CharacterLoginRequest(CharacterDataRepository.LocalCharacterGuid))
 				.ConfigureAwaitFalseVoid();
+
+			return Task.CompletedTask;
 		}
 	}
 }
