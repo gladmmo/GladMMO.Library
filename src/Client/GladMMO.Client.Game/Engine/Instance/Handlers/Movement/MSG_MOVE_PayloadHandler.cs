@@ -138,6 +138,29 @@ namespace GladMMO
 		//TODO: Make interface.
 		public void SpoofLocal(GamePacketPayload payloadToSend)
 		{
+			//We unfortunately most lock on local spoofs because network thread
+			//may be setting an actual uninterruptable movement generator
+			//Otherwise we'd have a race condition.
+			MovementGeneratorMappable.SyncObj.EnterReadLock();
+			try
+			{
+				//Cannot spoof a local movement
+				//if a generator is running that disallows client movement input
+				if (MovementGeneratorMappable.ContainsKey(PlayerDetails.LocalPlayerGuid))
+				{
+					IMovementGenerator<GameObject> currentGenerator = MovementGeneratorMappable.RetrieveEntity(PlayerDetails.LocalPlayerGuid);
+
+					//REJECT client movement if we cannot interrupt the current generator
+					//and it's not finished. Finished uninterruptable generators can be overriden.
+					if (!currentGenerator.IsClientInterruptable && !currentGenerator.isFinished)
+						return;
+				}
+			}
+			finally
+			{
+				MovementGeneratorMappable.SyncObj.ExitReadLock();
+			}
+
 			HandleMovementPacket((IPlayerMovementPayload<MovementInfo, MovementFlag, PackedGuid>)payloadToSend, true);
 		}
 	}
