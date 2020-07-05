@@ -144,7 +144,7 @@ namespace GladMMO
 				PositionZ = 0,
 
 				Race = (byte)FreecraftCore.CharacterRace.HUMAN,
-				Class = (byte)FreecraftCore.CharacterClass.Warrior,
+				Class = (byte)FreecraftCore.CharacterClass.Mage,
 
 				TaxiPath = "",
 				Taximask = "",
