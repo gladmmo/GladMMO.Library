@@ -109,6 +109,12 @@ namespace GladMMO
 			//Our new last movement time is now the current time.
 			LastMovementUpdateTime = currentTime;
 
+			//Check that we're not OVER predicting past the point of reasonable predicition.
+			//A heartbeat packet is sent every 500ms but since we might change that we ref
+			//a constant
+			if ((currentTime - MovementData.TimeStamp) > (GladMMOCommonConstants.MOVEMENT_PACKET_HEARTBEAT_TIME_MILLISECONDS * 1.5))
+				StopGenerator();
+
 			return entity.transform.position;
 		}
 
