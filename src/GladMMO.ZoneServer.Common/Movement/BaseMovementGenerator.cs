@@ -39,6 +39,8 @@ namespace GladMMO
 
 		public bool isFinished { get; private set; } = false;
 
+		public virtual bool IsClientInterruptable { get; } = true;
+
 		protected abstract Vector3 Start(GameObject entity, long currentTime);
 
 		protected MoveGenerator()

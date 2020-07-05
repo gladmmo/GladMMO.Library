@@ -30,5 +30,11 @@ namespace GladMMO
 		/// Indicates if the generator is finished.
 		/// </summary>
 		bool isFinished { get; }
+
+		//TODO: We need enum for priority/handling
+		/// <summary>
+		/// Indicates if the local client can interrupt the handling of this movement generator.
+		/// </summary>
+		bool IsClientInterruptable { get; }
 	}
 }
