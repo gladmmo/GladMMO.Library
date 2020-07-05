@@ -9,5 +9,7 @@ namespace GladMMO
 		public const string DEFAULT_UNKNOWN_ENTITY_NAME_STRING = "Unknown";
 
 		public const string DEFAULT_UNKNOWN_CORPSE_NAME_STRING = "Corpse of " + DEFAULT_UNKNOWN_ENTITY_NAME_STRING;
+
+		public const int MOVEMENT_PACKET_HEARTBEAT_TIME_MILLISECONDS = 500; //500ms for movement heartbeats.
 	}
 }

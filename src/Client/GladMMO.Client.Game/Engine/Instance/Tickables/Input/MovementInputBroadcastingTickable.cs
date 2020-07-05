@@ -13,8 +13,6 @@ namespace GladMMO
 	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
 	public sealed class MovementInputBroadcastingTickable : OnLocalPlayerSpawnedEventListener, IGameTickable, IMovementInputChangedEventSubscribable
 	{
-		public const int HEARTBEAT_MILLISECOND_TIME = 500;
-
 		/// <inheritdoc />
 		public event EventHandler<MovementInputChangedEventArgs> OnMovementInputDataChanged;
 
@@ -70,13 +68,13 @@ namespace GladMMO
 			if(isBroadcastingHeartbeat)
 				HeartBeatCounter += Time.deltaTime * 1000f;
 
-			if((int)HeartBeatCounter > HEARTBEAT_MILLISECOND_TIME)
+			if((int)HeartBeatCounter > GladMMOCommonConstants.MOVEMENT_PACKET_HEARTBEAT_TIME_MILLISECONDS)
 				Debug.Log("Sending heartbeat movement.");
 
 			//If the input has changed we should dispatch to anyone interested.
-			if (changed || (int)HeartBeatCounter > HEARTBEAT_MILLISECOND_TIME)
+			if (changed || (int)HeartBeatCounter > GladMMOCommonConstants.MOVEMENT_PACKET_HEARTBEAT_TIME_MILLISECONDS)
 			{
-				MovementInputChangedEventArgs args = new MovementInputChangedEventArgs(vertical, horizontal, !changed && HeartBeatCounter > HEARTBEAT_MILLISECOND_TIME);
+				MovementInputChangedEventArgs args = new MovementInputChangedEventArgs(vertical, horizontal, !changed && HeartBeatCounter > GladMMOCommonConstants.MOVEMENT_PACKET_HEARTBEAT_TIME_MILLISECONDS);
 				OnMovementInputDataChanged?.Invoke(this, args);
 
 				//Always reset heartbeat on send.
