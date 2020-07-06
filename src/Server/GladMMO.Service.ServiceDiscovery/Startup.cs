@@ -31,8 +31,12 @@ namespace GladMMO
 			services.AddGladMMOCORS();
 
 			// Add framework services.
-			services.AddMvc()
-				.RegisterHealthCheckController();
+			services.AddMvc(options =>
+				{
+					options.EnableEndpointRouting = false;
+				})
+				.RegisterHealthCheckController()
+				.AddNewtonsoftJson();
 
 			services.AddLogging();
 

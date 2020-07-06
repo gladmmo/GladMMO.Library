@@ -37,6 +37,7 @@ namespace GladMMO
 			return Discover(new ResolveServiceEndpointRequest(ClientRegionLocale.US, serviceName));
 		}
 
+		//TODO: Why post? Wrote this so long ago, cannot remember.
 		[HttpPost(nameof(Discover))]
 		public async Task<ResolveServiceEndpointResponse> Discover([FromBody] ResolveServiceEndpointRequest requestModel)
 		{
