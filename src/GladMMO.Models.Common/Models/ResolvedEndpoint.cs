@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Text;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
 namespace GladMMO
 {
+	[Owned]
 	[JsonObject]
 	public sealed class ResolvedEndpoint
 	{
