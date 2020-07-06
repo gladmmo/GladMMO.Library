@@ -60,8 +60,8 @@ namespace GladMMO
 						Logger.Info($"Recieved ZoneEndpoint: {endpointResponse.ToString()}");
 
 					//TODO: Handle DNS
-					if(await Client.ConnectAsync(endpointResponse.Endpoint.EndpointAddress,
-						endpointResponse.Endpoint.EndpointPort))
+					if(await Client.ConnectAsync(endpointResponse.Endpoint.Address,
+						endpointResponse.Endpoint.Port))
 					{
 						//TODO: We could broadcast a successful connection, but no listeners/interest right now.
 						if(Logger.IsDebugEnabled)

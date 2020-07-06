@@ -64,9 +64,9 @@ namespace GladMMO
 			//assert
 			Assert.NotNull(serializedModel);
 			Assert.IsNotEmpty(serializedModel);
-			Assert.True(serializedModel.Contains(endpoints.Values.First().EndpointAddress));
+			Assert.True(serializedModel.Contains(endpoints.Values.First().Address));
 			Assert.True(serializedModel.Contains(nameof(model.ServiceEndpoints)));
-			Assert.True(serializedModel.Contains(endpoints.Values.First().EndpointPort.ToString()));
+			Assert.True(serializedModel.Contains(endpoints.Values.First().Port.ToString()));
 			Assert.True(serializedModel.Contains(value.ToString()));
 		}
 
@@ -95,7 +95,7 @@ namespace GladMMO
 			Assert.True(Enum.IsDefined(typeof(ClientRegionLocale), deserializedModel.Region));
 			Assert.NotNull(deserializedModel.ServiceEndpoints.Keys.First());
 			Assert.AreEqual(endpoints.First().Key, deserializedModel.ServiceEndpoints.First().Key);
-			Assert.AreEqual(endpoints.First().Value.EndpointAddress, deserializedModel.ServiceEndpoints.First().Value.EndpointAddress);
+			Assert.AreEqual(endpoints.First().Value.Address, deserializedModel.ServiceEndpoints.First().Value.Address);
 		}
 	}
 }

@@ -96,9 +96,9 @@ namespace GladMMO
 			//assert
 			Assert.NotNull(deserializedModel);
 			Assert.NotNull(deserializedModel.Endpoint);
-			Assert.NotNull(deserializedModel.Endpoint.EndpointAddress);
-			Assert.AreEqual(endpoint, deserializedModel.Endpoint.EndpointAddress);
-			Assert.AreEqual(port, deserializedModel.Endpoint.EndpointPort);
+			Assert.NotNull(deserializedModel.Endpoint.Address);
+			Assert.AreEqual(endpoint, deserializedModel.Endpoint.Address);
+			Assert.AreEqual(port, deserializedModel.Endpoint.Port);
 		}
 
 		[Test]

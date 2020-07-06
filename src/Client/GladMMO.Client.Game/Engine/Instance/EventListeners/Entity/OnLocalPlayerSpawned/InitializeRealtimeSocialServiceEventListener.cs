@@ -58,7 +58,7 @@ namespace GladMMO
 					if(!endpointResponse.isSuccessful)
 						throw new InvalidOperationException($"Failed to query for SocialService. Reason: {endpointResponse.ResultCode}");
 
-					string hubConnectionString = $@"{endpointResponse.Endpoint.EndpointAddress}:{endpointResponse.Endpoint.EndpointPort}/realtime/social";
+					string hubConnectionString = $@"{endpointResponse.Endpoint.Address}:{endpointResponse.Endpoint.Port}/realtime/social";
 
 					if(Logger.IsInfoEnabled)
 						Logger.Info($"Social HubConnection String: {hubConnectionString}");

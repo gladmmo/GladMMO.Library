@@ -161,7 +161,7 @@ namespace GladMMO
 				throw new System.InvalidOperationException($"Failed to query for Service: {serviceType} Result: {endpointResponse.ResultCode}");
 
 			//TODO: Do we need extra slash?
-			return $"{endpointResponse.Endpoint.EndpointAddress}:{endpointResponse.Endpoint.EndpointPort}/";
+			return $"{endpointResponse.Endpoint.Address}:{endpointResponse.Endpoint.Port}/";
 		}
 
 		//AutoFac DI/IoC registeration method.

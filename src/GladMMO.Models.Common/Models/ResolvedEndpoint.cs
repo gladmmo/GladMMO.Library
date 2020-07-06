@@ -11,19 +11,19 @@ namespace GladMMO
 	[JsonObject]
 	public sealed class ResolvedEndpoint
 	{
-		[JsonProperty(Required = Required.Always)]
-		public string EndpointAddress { get; }
+		[JsonProperty(Required = Required.Always, PropertyName = "EndpointAddress")] //JSON prop names here for backwards compat
+		public string Address { get; }
 
-		[JsonProperty(Required = Required.Always)]
-		public int EndpointPort { get; }
+		[JsonProperty(Required = Required.Always, PropertyName = "EndpointPort")] //JSON prop names here for backwards compat
+		public int Port { get; }
 
 		public ResolvedEndpoint(string endpointAddress, int endpointPort)
 		{
 			if(string.IsNullOrWhiteSpace(endpointAddress)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(endpointAddress));
 			if(endpointPort <= 0 || endpointPort >= 65535) throw new ArgumentOutOfRangeException(nameof(endpointPort));
 
-			EndpointAddress = endpointAddress;
-			EndpointPort = endpointPort;
+			Address = endpointAddress;
+			Port = endpointPort;
 		}
 
 		/// <summary>
@@ -36,7 +36,7 @@ namespace GladMMO
 
 		public override string ToString()
 		{
-			return $"Address: {EndpointAddress} Port: {EndpointPort}";
+			return $"Address: {Address} Port: {Port}";
 		}
 	}
 }

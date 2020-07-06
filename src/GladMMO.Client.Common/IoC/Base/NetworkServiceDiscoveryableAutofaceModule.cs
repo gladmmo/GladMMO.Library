@@ -40,7 +40,7 @@ namespace GladMMO
 			//Debug.Log($"Recieved service discovery response: {endpointResponse.Endpoint.EndpointAddress}:{endpointResponse.Endpoint.EndpointPort} for Type: {serviceType}");
 
 			//TODO: Do we need extra slash?
-			return $"{endpointResponse.Endpoint.EndpointAddress}:{endpointResponse.Endpoint.EndpointPort}/";
+			return $"{endpointResponse.Endpoint.Address}:{endpointResponse.Endpoint.Port}/";
 		}
 	}
 }

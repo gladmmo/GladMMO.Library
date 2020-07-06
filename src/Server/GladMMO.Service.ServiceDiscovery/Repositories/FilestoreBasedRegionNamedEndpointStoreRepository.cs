@@ -53,7 +53,7 @@ namespace GladMMO
 
 			NameEndpointResolutionStorageModel regionInfo = await Retrieve(locale);
 
-			return new ResolvedEndpoint(regionInfo.ServiceEndpoints[serviceType].EndpointAddress, regionInfo.ServiceEndpoints[serviceType].EndpointPort);
+			return new ResolvedEndpoint(regionInfo.ServiceEndpoints[serviceType].Address, regionInfo.ServiceEndpoints[serviceType].Port);
 		}
 
 		/// <inheritdoc />

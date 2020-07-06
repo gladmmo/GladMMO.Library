@@ -24,7 +24,7 @@ namespace GladMMO
 				{
 					NameEndpointResolutionStorageModel model = regionEndpointStore.Retrieve(region).Result;
 					foreach (var kvp in model.ServiceEndpoints)
-						Endpoints.Add(new NamedResolvedEndpointEntryModel(model.Region, kvp.Key, kvp.Value.EndpointAddress, kvp.Value.EndpointPort));
+						Endpoints.Add(new NamedResolvedEndpointEntryModel(model.Region, kvp.Key, kvp.Value.Address, kvp.Value.Port));
 				}
 			}
 
