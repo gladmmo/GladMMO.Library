@@ -2920,15 +2920,12 @@ namespace GladMMO
 
             modelBuilder.Entity<GuildMember>(entity =>
             {
-                entity.HasNoKey();
-
                 entity.ToTable("guild_member");
 
                 entity.HasComment("Guild System");
 
-                entity.HasIndex(e => e.Guid)
-                    .HasName("guid_key")
-                    .IsUnique();
+                entity.HasKey(e => e.Guid)
+                    .HasName("guid_key");
 
                 entity.HasIndex(e => e.Guildid)
                     .HasName("guildid_key");
