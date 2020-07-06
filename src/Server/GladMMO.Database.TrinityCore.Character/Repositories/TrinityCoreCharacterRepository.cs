@@ -34,7 +34,7 @@ namespace GladMMO
 		{
 			Characters character = await Context
 				.Characters
-				.FirstAsync(c => c.Name == characterName.ToUpperInvariant());
+				.FirstAsync(c => c.Name == characterName); //TODO: Should this be normalized?
 
 			return character;
 		}
@@ -72,7 +72,7 @@ namespace GladMMO
 		{
 			return await Context
 				.Characters
-				.AnyAsync(c => c.Name == characterName.ToUpperInvariant());
+				.AnyAsync(c => c.Name == characterName); //TODO: Should this be normalized?
 		}
 
 		public async Task<int[]> CharacterIdsForAccountId(int accountId)
