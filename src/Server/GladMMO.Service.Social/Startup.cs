@@ -42,8 +42,10 @@ namespace GladMMO
 					//This prevents ASP Core from trying to validate Vector3's children, which contain Vector3 (because Unity3D thanks)
 					//so it will cause stack overflows. This will avoid it.
 					//options.ModelMetadataDetailsProviders.Add(new SuppressChildValidationMetadataProvider(typeof(Vector3)));
+					options.EnableEndpointRouting = false;
 				})
-				.RegisterHealthCheckController();
+				.RegisterHealthCheckController()
+				.AddNewtonsoftJson();
 
 			X509Certificate2 cert = null;
 			string certPath = "Certs/TestCert.pfx";
@@ -216,7 +218,7 @@ namespace GladMMO
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-		public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+		public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
 		{
 #warning Do not deploy exceptions page into production
 			app.UseDeveloperExceptionPage();
