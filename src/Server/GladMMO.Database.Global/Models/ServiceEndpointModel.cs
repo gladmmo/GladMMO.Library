@@ -12,7 +12,7 @@ namespace GladMMO
 		/// <summary>
 		/// Identifier of the service endpoint entry.
 		/// </summary>
-		public int ServiceId { get; internal set; }
+		public string ServiceName { get; internal set; }
 
 		/// <summary>
 		/// The locale of the service.
@@ -24,13 +24,13 @@ namespace GladMMO
 		/// </summary>
 		public DeploymentMode Mode { get; internal set; }
 
-		public ServiceEndpointKey(int serviceId, ClientRegionLocale locale, DeploymentMode mode)
+		public ServiceEndpointKey([JetBrains.Annotations.NotNull] string serviceName, ClientRegionLocale locale, DeploymentMode mode)
 		{
 			if (!Enum.IsDefined(typeof(ClientRegionLocale), locale)) throw new InvalidEnumArgumentException(nameof(locale), (int) locale, typeof(ClientRegionLocale));
 			if (!Enum.IsDefined(typeof(DeploymentMode), mode)) throw new InvalidEnumArgumentException(nameof(mode), (int) mode, typeof(DeploymentMode));
-			if (serviceId <= 0) throw new ArgumentOutOfRangeException(nameof(serviceId));
+			if (string.IsNullOrWhiteSpace(serviceName)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(serviceName));
 
-			ServiceId = serviceId;
+			ServiceName = serviceName.ToUpper();
 			Locale = locale;
 			Mode = mode;
 		}

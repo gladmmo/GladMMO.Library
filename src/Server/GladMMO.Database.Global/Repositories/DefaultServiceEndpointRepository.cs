@@ -21,7 +21,7 @@ namespace GladMMO
 
 			return await Context
 				.ServiceEndpoints
-				.AnyAsync(se => se.Locale == key.Locale && se.Mode == key.Mode && se.ServiceId == key.ServiceId);
+				.AnyAsync(se => se.Locale == key.Locale && se.Mode == key.Mode && se.Service.ServiceName == key.ServiceName);
 		}
 
 		public async Task<bool> TryCreateAsync([JetBrains.Annotations.NotNull] ServiceEndpointModel model)
@@ -40,7 +40,7 @@ namespace GladMMO
 
 			return await Context
 				.ServiceEndpoints
-				.FirstAsync(se => se.Locale == key.Locale && se.Mode == key.Mode && se.ServiceId == key.ServiceId);
+				.FirstAsync(se => se.Locale == key.Locale && se.Mode == key.Mode && se.Service.ServiceName == key.ServiceName);
 		}
 
 		public async Task<bool> TryDeleteAsync([JetBrains.Annotations.NotNull] ServiceEndpointKey key)
