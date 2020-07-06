@@ -8,7 +8,7 @@ using UnityEngine;
 namespace GladMMO
 {
 	//TODO: Refactor with server-side input generator
-	public class CharacterControllerInputMovementGenerator : BaseMovementGenerator<MovementInfo>
+	public abstract class CharacterControllerInputMovementGenerator : BaseMovementGenerator<MovementInfo>
 	{
 		private Vector3 CachedMovementDirection;
 
