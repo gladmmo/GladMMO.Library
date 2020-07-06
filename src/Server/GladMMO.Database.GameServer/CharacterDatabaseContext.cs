@@ -20,11 +20,6 @@ namespace GladMMO
 
 		public DbSet<ClaimedSessionsModel> ClaimedSession { get; set; }
 
-		/// <summary>
-		/// The character friend requests.
-		/// </summary>
-		public DbSet<CharacterFriendRelationshipModel> CharacterFriendRequests { get; set; }
-
 		//TODO: This is getting ridiculous, we can't have everything in this database.
 		public DbSet<GuildEntryModel> Guilds { get; set; }
 
@@ -40,8 +35,6 @@ namespace GladMMO
 		public DbSet<CharacterGroupInviteEntryModel> GroupInvites { get; set; }
 
 		public DbSet<CharacterDataModel> CharacterData { get; set; }
-
-		public DbSet<CharacterFriendModel> CharacterFriends { get; set; }
 
 		public CharacterDatabaseContext(DbContextOptions<CharacterDatabaseContext> options) 
 			: base(options)
@@ -122,15 +115,6 @@ namespace GladMMO
 			zoneEntity
 				.HasAlternateKey(model => new { model.ZoneServerAddress, model.ZoneServerPort });
 
-			EntityTypeBuilder<CharacterFriendRelationshipModel> requestEntity = modelBuilder.Entity<CharacterFriendRelationshipModel>();
-
-			requestEntity
-				.HasAlternateKey(model => new { model.RequestingCharacterId, model.TargetRequestCharacterId });
-
-			requestEntity
-				.HasIndex(model => model.DirectionalUniqueness)
-				.IsUnique();
-
 			EntityTypeBuilder<GuildEntryModel> guildsEntryEntity = modelBuilder.Entity<GuildEntryModel>();
 
 			guildsEntryEntity
@@ -149,14 +133,6 @@ namespace GladMMO
 			EntityTypeBuilder<CharacterGroupEntryModel> groupsEntries = modelBuilder.Entity<CharacterGroupEntryModel>();
 			groupsEntries
 				.HasAlternateKey(model => model.LeaderCharacterId);
-
-			EntityTypeBuilder<CharacterFriendModel> characterFriendsEntity = modelBuilder.Entity<CharacterFriendModel>();
-
-			characterFriendsEntity
-				.HasKey(model => new {model.CharacterId, model.FriendCharacterId});
-
-			characterFriendsEntity
-				.HasIndex(model => model.CharacterId);
 		}
 	}
 }

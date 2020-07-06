@@ -151,8 +151,10 @@ namespace GladMMO
 #endif
 			});
 
+			services.AddDbContext<wotlk_charactersContext>(builder => { builder.UseMySql("server=127.0.0.1;port=3307;user=root;password=test;database=wotlk_characters"); });
+
 			services.AddTransient<IGuildCharacterMembershipRepository, DatabaseBackedGuildCharacterMembershipRepository>();
-			services.AddTransient<ICharacterFriendRepository, DatabaseBackedCharacterFriendRepository>();
+			services.AddTransient<ITrinityFriendshipRepository, TrinityCoreTrinityFriendshipRepository>();
 		}
 
 		private async Task<string> GetSocialServiceAuthorizationToken([JetBrains.Annotations.NotNull] IAuthenticationService authService)

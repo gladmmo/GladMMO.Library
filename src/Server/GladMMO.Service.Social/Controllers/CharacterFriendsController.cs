@@ -21,7 +21,7 @@ namespace GladMMO
 		[ResponseCache(Duration = 10)] //This should be good for caching
 		[AuthorizeJwt]
 		[HttpGet]
-		public async Task<IActionResult> GetCharacterFriends([FromServices] [JetBrains.Annotations.NotNull] ICharacterFriendRepository friendsRepository,
+		public async Task<IActionResult> GetCharacterFriends([FromServices] [JetBrains.Annotations.NotNull] ITrinityFriendshipRepository friendsRepository,
 			[FromServices] [JetBrains.Annotations.NotNull] ISocialServiceToGameServiceClient socialServiceClient)
 		{
 			if (friendsRepository == null) throw new ArgumentNullException(nameof(friendsRepository));
@@ -42,7 +42,7 @@ namespace GladMMO
 		[AuthorizeJwt]
 		[HttpPost("befriend/{name}")]
 		public async Task<IActionResult> TryAddFriend([FromRoute(Name = "name")] [JetBrains.Annotations.NotNull] string characterFriendName,
-			[FromServices] [JetBrains.Annotations.NotNull] ICharacterFriendRepository friendsRepository,
+			[FromServices] [JetBrains.Annotations.NotNull] ITrinityFriendshipRepository friendsRepository,
 			[FromServices] [JetBrains.Annotations.NotNull] ISocialServiceToGameServiceClient socialServiceClient,
 			[FromServices] INameQueryService nameQueryService)
 		{
@@ -78,7 +78,12 @@ namespace GladMMO
 			if (await friendsRepository.IsFriendshipPresentAsync(response.CharacterId, nameReverseQueryResponse.Result.CurrentObjectGuid))
 				return BuildFailedResponseModel(CharacterFriendAddResponseCode.AlreadyFriends);
 
-			if (await friendsRepository.TryCreateAsync(new CharacterFriendModel(response.CharacterId, nameReverseQueryResponse.Result.CurrentObjectGuid)))
+			if (await friendsRepository.TryCreateAsync(new CharacterSocial()
+			{
+				Friend = (uint) nameReverseQueryResponse.Result.CurrentObjectGuid,
+				Guid = (uint) response.CharacterId,
+				Flags = 0x01 //TODO: Use SocialFlag from Freecraft when pushed.
+			}))
 			{
 				//This is a success, let's tell them about who they added.
 				return BuildSuccessfulResponseModel(new CharacterFriendAddResponseModel(nameReverseQueryResponse.Result));

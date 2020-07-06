@@ -36,6 +36,7 @@
     <ProjectReference Include="..\..\GladMMO.Network.Common\GladMMO.Network.Common.csproj" />
     <ProjectReference Include="..\..\GladMMO.Social.Common\GladMMO.Social.Common.csproj" />
     <ProjectReference Include="..\GladMMO.Database.GameServer\GladMMO.Database.GameServer.csproj" />
+    <ProjectReference Include="..\GladMMO.Database.TrinityCore.Character\GladMMO.Database.TrinityCore.Character.csproj" />
     <ProjectReference Include="..\GladMMO.Server.Common\GladMMO.Server.Common.csproj" />
     <ProjectReference Include="..\GladMMO.Service.Common\GladMMO.Service.Common.csproj" />
   </ItemGroup>
