@@ -10,6 +10,8 @@ namespace GladMMO
 	{
 		public DbSet<ServiceEntryModel> Services { get; set; }
 
+		public DbSet<ServiceEndpointModel> ServiceEndpoints { get; set; }
+
 		public GlobalDatabaseContext(DbContextOptions<GlobalDatabaseContext> options)
 			: base(options)
 		{
@@ -36,6 +38,7 @@ namespace GladMMO
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
 			SetupServiceEntryModel(modelBuilder);
+			SetupServiceEndpointEntryModel(modelBuilder);
 
 			base.OnModelCreating(modelBuilder);
 		}
@@ -47,6 +50,15 @@ namespace GladMMO
 			//Makes the name a unique entry.
 			serviceEntity
 				.HasAlternateKey(s => s.ServiceName);
+		}
+
+		private static void SetupServiceEndpointEntryModel(ModelBuilder modelBuilder)
+		{
+			EntityTypeBuilder<ServiceEndpointModel> serviceEndpointEntity = modelBuilder.Entity<ServiceEndpointModel>();
+
+			//Makes a service endpoint unique for a service type, locale and deployment mode.
+			serviceEndpointEntity
+				.HasKey(s => new { s.ServiceId, s.Locale, s.Mode });
 		}
 	}
 }

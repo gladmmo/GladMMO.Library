@@ -12,10 +12,10 @@ namespace GladMMO
 	public sealed class ResolvedEndpoint
 	{
 		[JsonProperty(Required = Required.Always, PropertyName = "EndpointAddress")] //JSON prop names here for backwards compat
-		public string Address { get; }
+		public string Address { get; internal set; }
 
 		[JsonProperty(Required = Required.Always, PropertyName = "EndpointPort")] //JSON prop names here for backwards compat
-		public int Port { get; }
+		public int Port { get; internal set; }
 
 		public ResolvedEndpoint(string endpointAddress, int endpointPort)
 		{

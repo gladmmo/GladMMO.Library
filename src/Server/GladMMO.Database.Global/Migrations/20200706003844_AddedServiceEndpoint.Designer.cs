@@ -2,14 +2,16 @@
 using GladMMO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GladMMO.Database.Global.Migrations
 {
     [DbContext(typeof(GlobalDatabaseContext))]
-    partial class GlobalDatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20200706003844_AddedServiceEndpoint")]
+    partial class AddedServiceEndpoint
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -67,12 +69,6 @@ namespace GladMMO.Database.Global.Migrations
                                 .HasColumnType("int");
 
                             b1.Property<int>("ServiceEndpointModelMode")
-                                .HasColumnType("int");
-
-                            b1.Property<string>("Address")
-                                .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                            b1.Property<int>("Port")
                                 .HasColumnType("int");
 
                             b1.HasKey("ServiceEndpointModelServiceId", "ServiceEndpointModelLocale", "ServiceEndpointModelMode");
