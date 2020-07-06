@@ -23,11 +23,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Repositories\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\GladMMO.Models.Common\GladMMO.Models.Common.csproj" />
+    <ProjectReference Include="..\GladMMO.Database.Common\GladMMO.Database.Common.csproj" />
   </ItemGroup>
 
 </Project>

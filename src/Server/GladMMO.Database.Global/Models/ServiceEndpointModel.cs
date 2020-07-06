@@ -7,13 +7,41 @@ using System.Text;
 
 namespace GladMMO
 {
+	public sealed class ServiceEndpointKey
+	{
+		/// <summary>
+		/// Identifier of the service endpoint entry.
+		/// </summary>
+		public int ServiceId { get; internal set; }
+
+		/// <summary>
+		/// The locale of the service.
+		/// </summary>
+		public ClientRegionLocale Locale { get; internal set; }
+
+		/// <summary>
+		/// Indicates the deployment/enviroment mode.
+		/// </summary>
+		public DeploymentMode Mode { get; internal set; }
+
+		public ServiceEndpointKey(int serviceId, ClientRegionLocale locale, DeploymentMode mode)
+		{
+			if (!Enum.IsDefined(typeof(ClientRegionLocale), locale)) throw new InvalidEnumArgumentException(nameof(locale), (int) locale, typeof(ClientRegionLocale));
+			if (!Enum.IsDefined(typeof(DeploymentMode), mode)) throw new InvalidEnumArgumentException(nameof(mode), (int) mode, typeof(DeploymentMode));
+			if (serviceId <= 0) throw new ArgumentOutOfRangeException(nameof(serviceId));
+
+			ServiceId = serviceId;
+			Locale = locale;
+			Mode = mode;
+		}
+	}
+
 	[Table("service_endpoints")]
 	public class ServiceEndpointModel
 	{
 		/// <summary>
 		/// Identifier of the service endpoint entry.
 		/// </summary>
-		[Key]
 		public int ServiceId { get; internal set; }
 
 		/// <summary>
