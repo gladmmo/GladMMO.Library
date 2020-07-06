@@ -5,7 +5,7 @@ dotnet publish src/Server/GladMMO.Service.GameServer/GladMMO.Service.GameServer.
 ::dotnet publish src/Server/GladMMO.Service.ContentServer/GladMMO.Service.ContentServer.csproj -c DEBUG_LOCAL
 dotnet publish src/Server/GladMMO.Service.Vivox/GladMMO.Service.Vivox.csproj -c DEBUG_LOCAL
 dotnet publish src/Server/GladMMO.Service.NameQuery/GladMMO.Service.NameQuery.csproj -c DEBUG_LOCAL
-::dotnet publish src/Server/GladMMO.Service.Social/GladMMO.Service.Social.csproj -c DEBUG_LOCAL
+dotnet publish src/Server/GladMMO.Service.Social/GladMMO.Service.Social.csproj -c DEBUG_LOCAL
 ::dotnet publish src/Server/GladMMO.Service.ZoneAuthentication/GladMMO.Service.ZoneAuthentication.csproj -c DEBUG_LOCAL
 dotnet publish src/Server/GladMMO.Service.ZoneManager/GladMMO.Service.ZoneManager.csproj -c DEBUG_LOCAL
 
@@ -28,7 +28,7 @@ xcopy src\Server\GladMMO.Service.GameServer\bin\Debug_Local\netcoreapp3.1\publis
 ::xcopy src\Server\GladMMO.Service.ContentServer\bin\Debug_Local\netcoreapp2.1\publish build\contentserv /s /y
 xcopy src\Server\GladMMO.Service.Vivox\bin\Debug_Local\netcoreapp3.1\publish build\vivox /s /y
 xcopy src\Server\GladMMO.Service.NameQuery\bin\Debug_Local\netcoreapp3.1\publish build\namequery /s /y
-::xcopy src\Server\GladMMO.Service.Social\bin\Debug_Local\netcoreapp2.1\publish build\social /s /y
+xcopy src\Server\GladMMO.Service.Social\bin\Debug_Local\netcoreapp3.1\publish build\social /s /y
 ::xcopy src\Server\GladMMO.Service.ZoneAuthentication\bin\Debug_Local\netcoreapp2.1\publish build\zoneauth /s /y
 xcopy src\Server\GladMMO.Service.ZoneManager\bin\Debug_Local\netcoreapp3.1\publish build\zonemanager /s /y
 
