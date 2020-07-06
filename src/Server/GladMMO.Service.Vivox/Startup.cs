@@ -72,6 +72,7 @@ namespace GladMMO
 
 			services.AddTransient<ITrinityCharacterRepository, TrinityCoreCharacterRepository>();
 			services.AddTransient<ITrinityCharacterActionBarRepository, TrinityCoreCharacterActionBarRepository>();
+			services.AddTransient<ITrinityGuildMembershipRepository, TrinityCoreGuildMembershipRepository>();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

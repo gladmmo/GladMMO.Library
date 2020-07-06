@@ -50,33 +50,31 @@ namespace GladMMO
 		[AuthorizeJwt]
 		[NoResponseCache]
 		[HttpPost("guild/join")]
-		public async Task<IActionResult> JoinGuildChat([FromServices] ICharacterSessionRepository characterSessionRepository,
+		public async Task<IActionResult> JoinGuildChat([FromServices] ITrinityCharacterRepository characterSessionRepository,
 			[FromServices] IFactoryCreatable<VivoxTokenClaims, VivoxTokenClaimsCreationContext> claimsFactory,
 			[FromServices] ITrinityGuildMembershipRepository guildMembershipRepository,
 			[FromServices] IVivoxTokenSignService signService)
 		{
 			int accountId = this.ClaimsReader.GetAccountIdInt(User);
 
-			return BuildFailedResponseModel(VivoxLoginResponseCode.ChannelUnavailable);
-
-			/*//If the user doesn't actually have a claimed session in the game
+			//If the user doesn't actually have a claimed session in the game
 			//then we shouldn't log them into Vivox.
 			if(!await characterSessionRepository.AccountHasActiveSession(accountId))
 				return BuildFailedResponseModel(VivoxLoginResponseCode.NoActiveCharacterSession);
 
 			int characterId = await RetrieveSessionCharacterIdAsync(characterSessionRepository, accountId);
 
-			if(!await guildMembershipRepository.ContainsAsync(characterId))
+			if(!await guildMembershipRepository.ContainsAsync((uint) characterId))
 				return BuildFailedResponseModel(VivoxLoginResponseCode.ChannelUnavailable);
 
-			int guildId = (await guildMembershipRepository.RetrieveAsync(characterId)).GuildId;
+			int guildId = (int) (await guildMembershipRepository.RetrieveAsync((uint) characterId)).Guildid;
 
 			//TODO: Use a factory for channel name generation maybe?
 			VivoxTokenClaims claims = claimsFactory.Create(new VivoxTokenClaimsCreationContext(characterId, VivoxAction.JoinChannel, new VivoxChannelData(false, $"Guild-{guildId}")));
 
 			//We don't send it back in a JSON form even though it's technically a JSON object
 			//because the client just needs it as a raw string anyway to put through the Vivox client API.
-			return BuildSuccessfulResponseModel(new VivoxChannelJoinResponse(signService.CreateSignature(claims), claims.DestinationSIPURI));*/
+			return BuildSuccessfulResponseModel(new VivoxChannelJoinResponse(signService.CreateSignature(claims), claims.DestinationSIPURI));
 		}
 
 		private static async Task<int> RetrieveSessionCharacterIdAsync(ITrinityCharacterRepository characterRepository, int accountId)
