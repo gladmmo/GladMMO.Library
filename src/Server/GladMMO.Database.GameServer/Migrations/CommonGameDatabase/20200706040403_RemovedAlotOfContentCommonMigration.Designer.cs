@@ -2,14 +2,16 @@
 using GladMMO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GladMMO.Database.GameServer.Migrations.CommonGameDatabase
 {
     [DbContext(typeof(CommonGameDatabaseContext))]
-    partial class CommonGameDatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20200706040403_RemovedAlotOfContentCommonMigration")]
+    partial class RemovedAlotOfContentCommonMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

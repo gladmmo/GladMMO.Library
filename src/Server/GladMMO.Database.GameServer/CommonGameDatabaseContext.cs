@@ -7,10 +7,10 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace GladMMO
 {
+	//This is from way way back, but because migrations reference it we can never ever remove it.
+	[Obsolete("This is here only for legacy reasons. Never add anything to it.")]
 	public sealed class CommonGameDatabaseContext : DbContext
 	{
-		public DbSet<PathWaypointModel> PathWaypoints { get; set; }
-
 		public CommonGameDatabaseContext(DbContextOptions<CommonGameDatabaseContext> options) 
 			: base(options)
 		{
@@ -37,11 +37,6 @@ namespace GladMMO
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
 			base.OnModelCreating(modelBuilder);
-
-			EntityTypeBuilder<PathWaypointModel> characterEntity = modelBuilder.Entity<PathWaypointModel>();
-
-			characterEntity
-				.HasKey(p => new {p.PathId, p.PointId});
 		}
 	}
 }
