@@ -35,17 +35,14 @@ namespace GladMMO
 		{
 			UnityAsyncHelper.UnityMainThreadContext.PostAsync(async () =>
 			{
-				string characterName = await NameQueryable.RetrieveAsync(args.FriendGuid);
-
 				GameObject slotObject = GameObject.Instantiate(PrefabFactory.Create(EntityPrefab.CharacterFriendSlot));
 				IUICharacterFriendSlot characterFriendSlot = slotObject.GetComponent<IUICharacterFriendSlot>();
 
 				//We're on the main thread here, we can create the tab.
 				FriendWindowRoot.Parent(slotObject);
 
-				//TODO: Query for name.
-				characterFriendSlot.Text = characterName;
 				characterFriendSlot.LocationText.Text = GladMMOCommonConstants.DEFAULT_UNKNOWN_ENTITY_NAME_STRING;
+				characterFriendSlot.Text = await NameQueryable.RetrieveAsync(args.FriendGuid);
 			});
 		}
 	}
