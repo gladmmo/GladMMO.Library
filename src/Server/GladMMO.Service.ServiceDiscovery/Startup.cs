@@ -35,6 +35,10 @@ namespace GladMMO
 				.RegisterHealthCheckController();
 
 			services.AddLogging();
+
+			//DefaultServiceEndpointRepository : IServiceEndpointRepository
+			services.AddTransient<IServiceEndpointRepository, DefaultServiceEndpointRepository>();
+			services.AddDbContext<GlobalDatabaseContext>(builder => { builder.UseMySql("server=127.0.0.1;port=3306;Database=guardians.global;Uid=root;Pwd=test;"); });
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -18,11 +18,11 @@ namespace GladMMO
 		/// <summary>
 		/// The endpoint repository.
 		/// </summary>
-		private IRegionbasedNameEndpointResolutionRepository EndpointRepository { get; }
+		private IServiceEndpointRepository EndpointRepository { get; }
 
 		public ILogger<ServiceDiscoveryController> LoggingService { get; }
 
-		public ServiceDiscoveryController([FromServices] IRegionbasedNameEndpointResolutionRepository endpointRepository, ILogger<ServiceDiscoveryController> loggingService)
+		public ServiceDiscoveryController([FromServices] IServiceEndpointRepository endpointRepository, ILogger<ServiceDiscoveryController> loggingService)
 		{
 			if (endpointRepository == null) throw new ArgumentNullException(nameof(endpointRepository));
 			if (loggingService == null) throw new ArgumentNullException(nameof(loggingService));
@@ -51,10 +51,13 @@ namespace GladMMO
 				return new ResolveServiceEndpointResponse(ResolveServiceEndpointResponseCode.GeneralRequestError);
 			}
 
+			ServiceEndpointKey endpointKey = new ServiceEndpointKey(requestModel.ServiceType, requestModel.Region, DeploymentMode.Internal);
+
 			//We need to check if we know about the locale
 			//If we don't we should indicate it is unlisted
 			//We also need to check if the keypair region and servicetype exist
-			if (!await EndpointRepository.HasEntryAsync(requestModel.Region, requestModel.ServiceType))
+			//TODO: Deployment mode handling, right now it's set to INTERNAL
+			if (!await EndpointRepository.ContainsAsync(endpointKey))
 			{
 				if(LoggingService.IsEnabled(LogLevel.Debug))
 					LoggingService.LogDebug($"Client requested unlisted service Region: {requestModel.Region} Service: {requestModel.ServiceType}.");
@@ -62,19 +65,19 @@ namespace GladMMO
 				return new ResolveServiceEndpointResponse(ResolveServiceEndpointResponseCode.ServiceUnlisted);
 			}
 
-			ResolvedEndpoint endpoint = await EndpointRepository.RetrieveAsync(requestModel.Region, requestModel.ServiceType);
+			ServiceEndpointModel endpoint = await EndpointRepository.RetrieveAsync(endpointKey);
 
 			if (endpoint == null)
 			{
 				//Log the error. It shouldn't be null if the checks passed
-				if(LoggingService.IsEnabled(LogLevel.Error))
+				if (LoggingService.IsEnabled(LogLevel.Error))
 					LoggingService.LogError($"Resolution request {requestModel.ServiceType} for region {requestModel.Region} failed even through it was a known pair.");
 
 				return new ResolveServiceEndpointResponse(ResolveServiceEndpointResponseCode.GeneralRequestError);
 			}
 
 			//Just return the JSON model response to the client
-			return new ResolveServiceEndpointResponse(endpoint);
+			return new ResolveServiceEndpointResponse(endpoint.Endpoint);
 		}
 	}
 }
