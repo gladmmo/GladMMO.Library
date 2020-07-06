@@ -46,6 +46,9 @@ namespace GladMMO
 			InviteGuildMemberButton.IsInteractable = false;
 			string memberToInvite = GuildInviteInputText.Text;
 
+			if (Logger.IsInfoEnabled)
+				Logger.Info($"Guild Invite: {memberToInvite}");
+
 			//Try adding them
 			UnityAsyncHelper.UnityMainThreadContext.PostAsync(async () =>
 			{
