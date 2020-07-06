@@ -2,11 +2,25 @@
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace GladMMO
 {
 	public sealed class GlobalDatabaseContext : DbContext
 	{
+		public DbSet<ServiceEntryModel> Services { get; set; }
+
+		public GlobalDatabaseContext(DbContextOptions<GlobalDatabaseContext> options)
+			: base(options)
+		{
+
+		}
+
+		public GlobalDatabaseContext()
+		{
+
+		}
+
 		//We do the below for local database creation stuff
 #if DATABASE_MIGRATION
 		/// <inheritdoc />
@@ -17,11 +31,22 @@ namespace GladMMO
 
 			base.OnConfiguring(optionsBuilder);
 		}
+#endif
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
+			SetupServiceEntryModel(modelBuilder);
+
 			base.OnModelCreating(modelBuilder);
 		}
-#endif
+
+		private static void SetupServiceEntryModel(ModelBuilder modelBuilder)
+		{
+			EntityTypeBuilder<ServiceEntryModel> serviceEntity = modelBuilder.Entity<ServiceEntryModel>();
+
+			//Makes the name a unique entry.
+			serviceEntity
+				.HasAlternateKey(s => s.ServiceName);
+		}
 	}
 }
