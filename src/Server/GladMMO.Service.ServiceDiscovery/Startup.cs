@@ -35,32 +35,10 @@ namespace GladMMO
 				.RegisterHealthCheckController();
 
 			services.AddLogging();
-
-#if AZURE_RELEASE || AZURE_DEBUG
-			services.AddSingleton<IRegionbasedNameEndpointResolutionRepository, AzureStaticEndpointRepository>();
-#else
-			//We're using an inmemory store for now that we populate with the file stored data
-			//It needs to be singleton because we're doing it in memory and reloading per request would be bad
-			//services.AddDbContext<NamedEndpointDbContext>(options => options.UseInMemoryDatabase(), ServiceLifetime.Singleton);
-			//services.AddTransient<IRegionbasedNameEndpointResolutionRepository, DatabaseContextBasedRegionBasedNameEndpointResolutionRepository>();
-
-			//We use a config file for now. Can move to Consul or db at another time.
-			services.AddSingleton<IRegionNamedEndpointStoreRepository, FilestoreBasedRegionNamedEndpointStoreRepository>();
-			services.AddSingleton<IRegionbasedNameEndpointResolutionRepository, FilestoreBasedRegionNamedEndpointStoreRepository>();
-
-			//TODO: We don't actually want to use config files for this. But we do for now.
-			//On local builds we want to use a different file
-	#if !DEBUG_LOCAL && !RELEASE_LOCAL
-			services.AddSingleton<IRegionalServiceFilePathBuilder, DeployedRegionalServiceFilePathBuilder>();
-	#else
-			services.AddSingleton<IRegionalServiceFilePathBuilder, LocalRegionalServiceFilePathBuilder>();
-	#endif
-
-#endif
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-		public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+		public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
 		{
 #warning Do not deploy exceptions page into production
 			app.UseDeveloperExceptionPage();
