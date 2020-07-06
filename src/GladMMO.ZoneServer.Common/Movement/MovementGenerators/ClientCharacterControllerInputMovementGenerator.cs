@@ -56,5 +56,12 @@ namespace GladMMO
 			else
 				return Time.deltaTime; //local client should use SUPER accurate Time.deltaTime. Too noticable locally due to camera otherwise.
 		}
+
+		protected override void PredictValidationCheck(long currentTime)
+		{
+			//Don't validate local client predict/continued movement generation.
+			if (!IsLocalClient)
+				base.PredictValidationCheck(currentTime);
+		}
 	}
 }

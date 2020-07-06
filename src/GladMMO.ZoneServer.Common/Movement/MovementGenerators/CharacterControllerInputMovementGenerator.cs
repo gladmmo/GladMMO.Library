@@ -113,6 +113,13 @@ namespace GladMMO
 			//Our new last movement time is now the current time.
 			LastMovementUpdateTime = currentTime;
 
+			PredictValidationCheck(currentTime);
+
+			return entity.transform.position;
+		}
+
+		protected virtual void PredictValidationCheck(long currentTime)
+		{
 			//Check that we're not OVER predicting past the point of reasonable predicition.
 			//A heartbeat packet is sent every 500ms but since we might change that we ref
 			//a constant
@@ -121,8 +128,6 @@ namespace GladMMO
 				Debug.Log($"STOPPING PREDICT. Curr: {currentTime} MoveTime: {StartTimeStamp} Diff: {currentTime - StartTimeStamp}");
 				StopGenerator();
 			}
-
-			return entity.transform.position;
 		}
 
 		//I know virtuals likely cannot be inlined, but leaving this attribute from the past.
