@@ -10,14 +10,11 @@ namespace GladMMO
 	{
 		private IClientDataCollectionContainer ClientData { get; }
 
-		private IDownloadableContentServerServiceClient ContentClient { get; }
-
 		public GaiaPlayerAvatarContentResourceManager([NotNull] IDownloadableContentServerServiceClient contentClient, 
 			ILog logger,
 			[NotNull] IClientDataCollectionContainer clientData) 
 			: base(contentClient, logger, clientData)
 		{
-			ContentClient = contentClient ?? throw new ArgumentNullException(nameof(contentClient));
 			ClientData = clientData ?? throw new ArgumentNullException(nameof(clientData));
 		}
 

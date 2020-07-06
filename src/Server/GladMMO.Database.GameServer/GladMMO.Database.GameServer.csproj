@@ -61,4 +61,8 @@
     </Reference>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\Player\" />
+  </ItemGroup>
+
 </Project>

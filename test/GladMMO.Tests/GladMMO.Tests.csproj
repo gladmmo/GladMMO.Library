@@ -36,6 +36,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="UnitTests\Database\GameServer\AvatarEntryRepo\" />
     <Folder Include="UnitTests\Database\GameServer\NpcEntryRepo\" />
     <Folder Include="UnitTests\Database\GameServer\NpcTemplateRepo\" />
   </ItemGroup>

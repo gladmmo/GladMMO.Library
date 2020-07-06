@@ -11,34 +11,6 @@ namespace GladMMO
 	{
 		public DbSet<WorldEntryModel> Worlds { get; set; }
 
-		public DbSet<AvatarEntryModel> Avatars { get; set; }
-
-		public DbSet<CreatureModelEntryModel> CreatureModels { get; set; }
-
-		public DbSet<CreatureTemplateEntryModel> CreatureTemplates { get; set; }
-
-		public DbSet<CreatureEntryModel> Creatures { get; set; }
-
-		public DbSet<GameObjectModelEntryModel> GameObjectModels { get; set; }
-
-		public DbSet<GameObjectTemplateEntryModel> GameObjectTemplates { get; set; }
-
-		public DbSet<GameObjectEntryModel> GameObjects { get; set; }
-
-		public DbSet<PlayerSpawnPointEntryModel> PlayerSpawnPoints { get; set; }
-
-		public DbSet<GameObjectWorldTeleporterEntryModel> WorldTeleporters { get; set; }
-
-		public DbSet<GameObjectAvatarPedestalEntryModel> AvatarPedestals { get; set; }
-
-		public DbSet<SpellEffectEntryModel> SpellEffects { get; set; }
-
-		public DbSet<SpellEntryModel> SpellEntries { get; set; }
-
-		public DbSet<SpellLevelLearned> LevelLearnedSpells { get; set; }
-
-		public DbSet<ContentIconEntryModel> ContentIcons { get; set; }
-
 		public ContentDatabaseContext(DbContextOptions<ContentDatabaseContext> options) 
 			: base(options)
 		{

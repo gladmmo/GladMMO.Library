@@ -91,7 +91,6 @@ namespace GladMMO
 			services.AddTransient<ICharacterSessionRepository, DatabaseBackedCharacterSessionRepository>();
 			services.AddTransient<IZoneServerRepository, DatabaseBackedZoneServerRepository>();
 			services.AddTransient<IGuildCharacterMembershipRepository, DatabaseBackedGuildCharacterMembershipRepository>();
-			services.AddTransient<ICharacterAppearanceRepository, DatabaseBackedCharacterAppearanceRepository>();
 			services.AddTransient<ICharacterDataRepository, DatabaseBackedCharacterDataRepository>();
 
 			//DatabaseBackedCharacterActionBarRepository
@@ -149,27 +148,6 @@ namespace GladMMO
 #else
 			services.AddSingleton<IServiceDiscoveryService>(provider => RestService.For<IServiceDiscoveryService>("http://72.190.177.214:5000"));
 #endif
-
-			services.AddSingleton<IPlayerSpawnPointDataServiceClient>(provider =>
-			{
-				var serviceDiscClient = provider.GetService<IServiceDiscoveryService>();
-
-				return new AsyncPlayerSpawnPointDataServiceClient(QueryForRemoteServiceEndpoint(serviceDiscClient, "ContentServer"));
-			});
-
-			services.AddSingleton<IGameObjectBehaviourDataServiceClient<WorldTeleporterInstanceModel>>(provider =>
-			{
-				var serviceDiscClient = provider.GetService<IServiceDiscoveryService>();
-
-				return new AsyncGameObjectBehaviourDataServiceClient<WorldTeleporterInstanceModel>(CreateBehaviourDataEndpointFromServiceEndpoint(QueryForRemoteServiceEndpoint(serviceDiscClient, "ContentServer"), "WorldTeleporterData"));
-			});
-
-			services.AddSingleton<IGameObjectBehaviourDataServiceClient<AvatarPedestalInstanceModel>>(provider =>
-			{
-				var serviceDiscClient = provider.GetService<IServiceDiscoveryService>();
-
-				return new AsyncGameObjectBehaviourDataServiceClient<AvatarPedestalInstanceModel>(CreateBehaviourDataEndpointFromServiceEndpoint(QueryForRemoteServiceEndpoint(serviceDiscClient, "ContentServer"), "AvatarPedestalData"));
-			});
 		}
 
 		//TODO: Put this in a base class or something

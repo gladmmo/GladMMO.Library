@@ -39,15 +39,9 @@ namespace GladMMO
 		/// </summary>
 		public DbSet<CharacterGroupInviteEntryModel> GroupInvites { get; set; }
 
-		public DbSet<CharacterAppearanceModel> CharacterAppearances { get; set; }
-
 		public DbSet<CharacterDataModel> CharacterData { get; set; }
 
 		public DbSet<CharacterFriendModel> CharacterFriends { get; set; }
-
-		public DbSet<CharacterActionBarEntry> CharacterActionBars { get; set; }
-
-		public DbSet<CharacterDefaultActionBarEntry> DefaultCharacterActionBars { get; set; }
 
 		public CharacterDatabaseContext(DbContextOptions<CharacterDatabaseContext> options) 
 			: base(options)
@@ -163,25 +157,6 @@ namespace GladMMO
 
 			characterFriendsEntity
 				.HasIndex(model => model.CharacterId);
-
-			EntityTypeBuilder<CharacterActionBarEntry> actionBarEntity = modelBuilder.Entity<CharacterActionBarEntry>();
-
-			actionBarEntity
-				.HasKey(model => new {model.CharacterId, model.BarIndex});
-
-			//Not unique but indexed.
-			actionBarEntity
-				.HasIndex(model => model.CharacterId);
-
-			//CharacterDefaultActionBarEntry
-			EntityTypeBuilder<CharacterDefaultActionBarEntry> defaultActionBarEntity = modelBuilder.Entity<CharacterDefaultActionBarEntry>();
-
-			defaultActionBarEntity
-				.HasKey(model => new { model.ClassType, model.BarIndex });
-
-			//Not unique but indexed.
-			defaultActionBarEntity
-				.HasIndex(model => model.ClassType);
 		}
 	}
 }

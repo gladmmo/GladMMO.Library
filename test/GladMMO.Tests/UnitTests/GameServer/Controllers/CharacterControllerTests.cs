@@ -208,7 +208,6 @@ namespace GladMMO
 			//arrange
 			IServiceProvider serviceProvider = BuildServiceProvider<CharacterController>("Test", 1);
 			Mock<IPlayfabCharacterClient> playfabCharacterClientMock = CreatePlayFabCharacterClientMock();
-			Mock<ICharacterAppearanceRepository> appearanceRepository = new Mock<ICharacterAppearanceRepository>();
 			Mock<ICharacterDataRepository> dataRepository = new Mock<ICharacterDataRepository>();
 			CharacterController controller = serviceProvider.GetService<CharacterController>();
 
@@ -244,7 +243,6 @@ namespace GladMMO
 			IServiceProvider serviceProvider = BuildServiceProvider<CharacterController>("Test", 1);
 			CharacterController controller = serviceProvider.GetService<CharacterController>();
 			Mock<IPlayfabCharacterClient> playfabCharacterClientMock = CreatePlayFabCharacterClientMock();
-			Mock<ICharacterAppearanceRepository> appearanceRepository = new Mock<ICharacterAppearanceRepository>();
 			Mock<ICharacterDataRepository> dataRepository = new Mock<ICharacterDataRepository>();
 
 			//act

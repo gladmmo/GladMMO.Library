@@ -143,13 +143,6 @@ namespace GladMMO
 #else
 			services.AddSingleton<IServiceDiscoveryService>(provider => RestService.For<IServiceDiscoveryService>("http://72.190.177.214:5000"));
 #endif
-
-			services.AddSingleton<IWorldDataServiceClient>(provider =>
-			{
-				var serviceDiscClient = provider.GetService<IServiceDiscoveryService>();
-
-				return new AsyncWorldDataServiceClient(QueryForRemoteServiceEndpoint(serviceDiscClient, "ContentServer"));
-			});
 		}
 
 		//TODO: Put this in a base class or something

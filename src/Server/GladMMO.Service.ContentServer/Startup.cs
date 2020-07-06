@@ -37,9 +37,6 @@ namespace GladMMO
 					//so it will cause stack overflows. This will avoid it.
 					options.ModelMetadataDetailsProviders.Add(new SuppressChildValidationMetadataProvider(typeof(Vector3)));
 					options.ModelMetadataDetailsProviders.Add(new SuppressChildValidationMetadataProvider(typeof(ObjectGuid)));
-					options.ModelMetadataDetailsProviders.Add(new SuppressChildValidationMetadataProvider(typeof(CreatureInstanceModel)));
-					options.ModelMetadataDetailsProviders.Add(new SuppressChildValidationMetadataProvider(typeof(GameObjectInstanceModel)));
-					options.ModelMetadataDetailsProviders.Add(new SuppressChildValidationMetadataProvider(typeof(PlayerSpawnPointInstanceModel)));
 				})
 				.RegisterHealthCheckController();
 
@@ -71,34 +68,6 @@ namespace GladMMO
 			services.AddTransient<IWorldEntryRepository, DatabaseBackedWorldEntryRepository>();
 			services.AddTransient<ICustomContentRepository<WorldEntryModel>>(provider => provider.GetRequiredService<IWorldEntryRepository>());
 
-			//Avatar
-			services.AddTransient<IAvatarEntryRepository, DatabaseBackedAvatarEntryRepository>();
-			services.AddTransient<ICustomContentRepository<AvatarEntryModel>>(provider => provider.GetRequiredService<IAvatarEntryRepository>());
-
-			//Creature
-			services.AddTransient<ICustomContentRepository<CreatureModelEntryModel>, DatabaseBackedCreatureModelEntryRepository>();
-			services.AddTransient<ICreatureTemplateRepository, DatabaseBackedCreatureTemplateEntryRepository>();
-			services.AddTransient<ICreatureEntryRepository, DatabaseBackedCreatureEntryRepository>();
-
-			//GameObjects
-			services.AddTransient<ICustomContentRepository<GameObjectModelEntryModel>, DatabaseBackedGameObjectModelEntryRepository>();
-			services.AddTransient<IGameObjectTemplateRepository, DatabaseBackedGameObjectTemplateEntryRepository>();
-			services.AddTransient<IGameObjectEntryRepository, DatabaseBackedGameObjectEntryRepository>();
-			services.AddTransient<IWorldTeleporterGameObjectEntryRepository, DatabaseBackedWorldTeleporterEntryRepository>();
-			services.AddTransient<IAvatarPedestalGameObjectEntryRepository, DatabaseBackedAvatarPedestalEntryRepository>();
-
-			//Spells
-			services.AddTransient<ISpellEntryRepository, DatabaseBackedSpellEntryModelRepository>();
-			services.AddTransient<ILevelLearnedSpellRepository, DatabaseBackedLevelLearnedSpellRepository>();
-
-			//Player
-			//DatabaseBackedPlayerSpawnPointEntryRepository : IPlayerSpawnPointEntryRepository
-			services.AddTransient<IPlayerSpawnPointEntryRepository, DatabaseBackedPlayerSpawnPointEntryRepository>();
-
-			//Content
-			//DatabaseBackedContentIconEntryRepository : BaseGenericBackedDatabaseRepository<ContentDatabaseContext, int, ContentIconEntryModel>, IContentIconEntryModelRepository
-			services.AddTransient<IContentIconEntryModelRepository, DatabaseBackedContentIconEntryRepository>();
-
 			services.AddTransient<IContentDownloadAuthroizationValidator, UnimplementedContentDownloadAuthorizationValidator>();
 
 			//AZURE_STORAGE_CONNECTIONSTRING
@@ -113,13 +82,6 @@ namespace GladMMO
 
 			//Register all the type converters in the assembly
 			services.AddTypeConverters(GetType().Assembly);
-
-			//DefaultCreatureEntryModelFactory : IFactoryCreatable<CreatureEntryModel, WorldInstanceableEntryModelCreationContext>
-			services.AddTransient<IFactoryCreatable<CreatureEntryModel, WorldInstanceableEntryModelCreationContext>, DefaultCreatureEntryModelFactory>();
-			//DefaultGameObjectEntryModelFactory : IFactoryCreatable<GameObjectEntryModel, WorldInstanceableEntryModelCreationContext>
-			services.AddTransient<IFactoryCreatable<GameObjectEntryModel, WorldInstanceableEntryModelCreationContext>, DefaultGameObjectEntryModelFactory>();
-			//DefaultPlayerSpawnPointEntryModelFactory : IFactoryCreatable<PlayerSpawnPointEntryModel, WorldInstanceableEntryModelCreationContext>
-			services.AddTransient<IFactoryCreatable<PlayerSpawnPointEntryModel, WorldInstanceableEntryModelCreationContext>, DefaultPlayerSpawnPointEntryModelFactory>();
 		}
 
 		private static void RegisterDatabaseServices(IServiceCollection services)
