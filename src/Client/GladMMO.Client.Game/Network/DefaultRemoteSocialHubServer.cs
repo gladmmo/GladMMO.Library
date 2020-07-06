@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Common.Logging;
+using Glader.Essentials;
 using Microsoft.AspNetCore.SignalR.Client;
+using Nito.AsyncEx;
 
 namespace GladMMO
 {
-	public sealed class DefaultRemoteSocialHubServer : IRemoteSocialHubServer, IConnectionHubInitializable
+	public sealed class DefaultRemoteSocialHubServer : IRemoteSocialHubServer, IConnectionHubInitializable, IDisposable
 	{
 		[CanBeNull]
 		public HubConnection Connection { get; set; }
@@ -50,6 +52,18 @@ namespace GladMMO
 					Logger.Error($"Social connection not initialized.");
 
 			return Connection != null;
+		}
+
+		public void Dispose()
+		{
+			UnityAsyncHelper.UnityMainThreadContext.PostAsync(async () =>
+			{
+				if (Logger.IsDebugEnabled)
+					Logger.Debug("Disposing of Social Service connection.");
+
+				await Connection.StopAsync();
+				await Connection.DisposeAsync();
+			});
 		}
 	}
 }
