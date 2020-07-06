@@ -63,7 +63,8 @@ namespace GladMMO
 			services.AddJwtAuthorization(cert);
 			services.AddResponseCaching();
 
-			ISignalRServerBuilder signalRBuilder = services.AddSignalR(options => { }).AddJsonProtocol();
+			ISignalRServerBuilder signalRBuilder = services.AddSignalR(options => { })
+				.AddNewtonsoftJsonProtocol();
 
 			//TODO: Handle failure.
 			//This adds the SignalR rerouting to the specified SignalR backplane.
