@@ -528,8 +528,8 @@ Global
 		{7F224F16-CED0-4F27-92E1-5D9764B89DBF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{730F0707-7974-4EA9-A1DC-0339C9279D5F}.azure_release|Any CPU.ActiveCfg = Release|Any CPU
 		{730F0707-7974-4EA9-A1DC-0339C9279D5F}.azure_release|Any CPU.Build.0 = Release|Any CPU
-		{730F0707-7974-4EA9-A1DC-0339C9279D5F}.Database_Migration|Any CPU.ActiveCfg = Debug|Any CPU
-		{730F0707-7974-4EA9-A1DC-0339C9279D5F}.Database_Migration|Any CPU.Build.0 = Debug|Any CPU
+		{730F0707-7974-4EA9-A1DC-0339C9279D5F}.Database_Migration|Any CPU.ActiveCfg = Database_Migration|Any CPU
+		{730F0707-7974-4EA9-A1DC-0339C9279D5F}.Database_Migration|Any CPU.Build.0 = Database_Migration|Any CPU
 		{730F0707-7974-4EA9-A1DC-0339C9279D5F}.debug_azure|Any CPU.ActiveCfg = Debug|Any CPU
 		{730F0707-7974-4EA9-A1DC-0339C9279D5F}.debug_azure|Any CPU.Build.0 = Debug|Any CPU
 		{730F0707-7974-4EA9-A1DC-0339C9279D5F}.DEBUG_LOCAL|Any CPU.ActiveCfg = Debug|Any CPU

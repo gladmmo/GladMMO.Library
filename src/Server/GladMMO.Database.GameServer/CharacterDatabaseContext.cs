@@ -20,20 +20,6 @@ namespace GladMMO
 
 		public DbSet<ClaimedSessionsModel> ClaimedSession { get; set; }
 
-		//TODO: This is getting ridiculous, we can't have everything in this database.
-		public DbSet<GuildEntryModel> Guilds { get; set; }
-
-		public DbSet<CharacterGuildMemberRelationshipModel> GuildMembers { get; set; }
-
-		public DbSet<CharacterGroupEntryModel> Groups { get; set; }
-
-		public DbSet<CharacterGroupMembershipModel> GroupMembers { get; set; }
-
-		/// <summary>
-		/// Set/Table for invites to <see cref="Groups"/>.
-		/// </summary>
-		public DbSet<CharacterGroupInviteEntryModel> GroupInvites { get; set; }
-
 		public DbSet<CharacterDataModel> CharacterData { get; set; }
 
 		public CharacterDatabaseContext(DbContextOptions<CharacterDatabaseContext> options) 
@@ -115,24 +101,9 @@ namespace GladMMO
 			zoneEntity
 				.HasAlternateKey(model => new { model.ZoneServerAddress, model.ZoneServerPort });
 
-			EntityTypeBuilder<GuildEntryModel> guildsEntryEntity = modelBuilder.Entity<GuildEntryModel>();
-
-			guildsEntryEntity
-				.HasAlternateKey(model => model.GuildMasterCharacterId);
-
-			//This doesn't need to be a key since we likely won't do lookups for it.
-			guildsEntryEntity
-				.HasIndex(model => model.GuildName)
-				.IsUnique();
-
 			//CharacterGuildMemberRelationshipModel
 			//EntityTypeBuilder<CharacterGuildMemberRelationshipModel> guildMemberEntityEntity = modelBuilder.Entity<CharacterGuildMemberRelationshipModel>();
 			//guildMemberEntityEntity.
-
-			//It's important that the leader id is unique and an alternative key
-			EntityTypeBuilder<CharacterGroupEntryModel> groupsEntries = modelBuilder.Entity<CharacterGroupEntryModel>();
-			groupsEntries
-				.HasAlternateKey(model => model.LeaderCharacterId);
 		}
 	}
 }

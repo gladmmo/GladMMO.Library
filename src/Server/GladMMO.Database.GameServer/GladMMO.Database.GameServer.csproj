@@ -58,6 +58,8 @@
 
   <ItemGroup>
     <Folder Include="Models\Player\" />
+    <Folder Include="Models\Social\" />
+    <Folder Include="Repositories\Social\" />
   </ItemGroup>
 
 </Project>

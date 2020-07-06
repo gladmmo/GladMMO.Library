@@ -25,12 +25,12 @@ namespace GladMMO
 		[HttpGet("character/{id}")]
 		[NoResponseCache] //we don't want to cache this, if they are removed from a guild then we want this reflected immediately or they may be taking in a guild chat they aren't apart of due to a race condition
 		public async Task<IActionResult> GetCharacterMembershipGuildStatus([FromRoute(Name = "id")] int characterId,
-			[NotNull] [FromServices] IGuildCharacterMembershipRepository guildCharacterMembershipRepository)
+			[NotNull] [FromServices] ITrinityGuildMembershipRepository guildCharacterMembershipRepository)
 		{
 			if (guildCharacterMembershipRepository == null) throw new ArgumentNullException(nameof(guildCharacterMembershipRepository));
 
 			//If guild membership repo doesn't have the character id as an entry then it means there is no guild associated with them.
-			if (!(await guildCharacterMembershipRepository.ContainsAsync(characterId).ConfigureAwaitFalse()))
+			if (!(await guildCharacterMembershipRepository.ContainsAsync((uint)characterId).ConfigureAwaitFalse()))
 				return BuildFailedResponseModel(CharacterGuildMembershipStatusResponseCode.NoGuild);
 
 			//TODO: There is technically a race condition here. They could have just been kicked from a guild but the cached model may say they are in a guild
@@ -40,7 +40,7 @@ namespace GladMMO
 			//Otherwise, they are in a guild
 			try
 			{
-				return BuildSuccessfulResponseModel(new CharacterGuildMembershipStatusResponse((await guildCharacterMembershipRepository.RetrieveAsync(characterId).ConfigureAwaitFalse()).GuildId));
+				return BuildSuccessfulResponseModel(new CharacterGuildMembershipStatusResponse((int)(await guildCharacterMembershipRepository.RetrieveAsync((uint)characterId).ConfigureAwaitFalse()).Guildid));
 			}
 			catch (Exception e)
 			{
@@ -54,7 +54,7 @@ namespace GladMMO
 		[ProducesJson]
 		[AuthorizeJwt]
 		[HttpGet("list")]
-		public async Task<IActionResult> GetCharacterGuildList([NotNull] [FromServices] IGuildCharacterMembershipRepository guildCharacterMembershipRepository,
+		public async Task<IActionResult> GetCharacterGuildList([NotNull] [FromServices] ITrinityGuildMembershipRepository guildCharacterMembershipRepository,
 			[FromServices] ISocialServiceToGameServiceClient socialToGameClient)
 		{
 			if(guildCharacterMembershipRepository == null) throw new ArgumentNullException(nameof(guildCharacterMembershipRepository));
@@ -65,12 +65,12 @@ namespace GladMMO
 				return BuildFailedResponseModel(CharacterGuildMembershipStatusResponseCode.GeneralServerError);
 
 			//No guild check
-			if (!await guildCharacterMembershipRepository.ContainsAsync(session.CharacterId))
+			if (!await guildCharacterMembershipRepository.ContainsAsync((uint) session.CharacterId))
 				return BuildFailedResponseModel(CharacterGuildMembershipStatusResponseCode.NoGuild);
 
-			var playerGuildMembership = await guildCharacterMembershipRepository.RetrieveAsync(session.CharacterId);
+			var playerGuildMembership = await guildCharacterMembershipRepository.RetrieveAsync((uint) session.CharacterId);
 
-			int[] roster = await guildCharacterMembershipRepository.GetEntireGuildRosterAsync(playerGuildMembership.GuildId);
+			int[] roster = await guildCharacterMembershipRepository.GetEntireGuildRosterAsync((int) playerGuildMembership.Guildid);
 
 			return BuildSuccessfulResponseModel(new CharacterGuildListResponseModel(roster));
 		}

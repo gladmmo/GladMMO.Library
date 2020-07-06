@@ -52,7 +52,7 @@ namespace GladMMO
 		[HttpPost("guild/join")]
 		public async Task<IActionResult> JoinGuildChat([FromServices] ICharacterSessionRepository characterSessionRepository,
 			[FromServices] IFactoryCreatable<VivoxTokenClaims, VivoxTokenClaimsCreationContext> claimsFactory,
-			[FromServices] IGuildCharacterMembershipRepository guildMembershipRepository,
+			[FromServices] ITrinityGuildMembershipRepository guildMembershipRepository,
 			[FromServices] IVivoxTokenSignService signService)
 		{
 			int accountId = this.ClaimsReader.GetAccountIdInt(User);

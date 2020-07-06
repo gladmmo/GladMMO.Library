@@ -14,11 +14,11 @@ namespace GladMMO
 
 		private IEntityGuidMappable<PendingGuildInviteData> PendingInviteData { get; }
 
-		private IRepositoryFactory<IGuildCharacterMembershipRepository> CharacterGuildMembershipRepositoryFactory { get; }
+		private IRepositoryFactory<ITrinityGuildMembershipRepository> CharacterGuildMembershipRepositoryFactory { get; }
 
 		public PendingGuildInviteResultHandler([JetBrains.Annotations.NotNull] ILogger<GuildMemberInviteRequestModelHandler> logger,
 			[JetBrains.Annotations.NotNull] IEntityGuidMappable<PendingGuildInviteData> pendingInviteData,
-			[JetBrains.Annotations.NotNull] IRepositoryFactory<IGuildCharacterMembershipRepository> characterGuildMembershipRepository)
+			[JetBrains.Annotations.NotNull] IRepositoryFactory<ITrinityGuildMembershipRepository> characterGuildMembershipRepository)
 		{
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
 			PendingInviteData = pendingInviteData ?? throw new ArgumentNullException(nameof(pendingInviteData));
@@ -49,7 +49,7 @@ namespace GladMMO
 					//When successful, we must add them to the guild database
 					//and then alert the guild channel (everyone in the guild) that they joined
 					//AND let the client itself know that it joined a guild.
-					guildJoinResult = await characterGuildMembershipRepositoryContainer.Repository.TryCreateAsync(new CharacterGuildMemberRelationshipModel(context.CallerGuid.CurrentObjectGuid, inviteData.GuildId));
+					guildJoinResult = await characterGuildMembershipRepositoryContainer.Repository.TryCreateAsync(CreateNewGuildMembership(context, inviteData));
 				}
 
 				//This should never happen
@@ -82,6 +82,15 @@ namespace GladMMO
 				//Tell the inviter this failed.
 				await inviterClient.ReceiveGuildInviteResponseAsync(new GuildMemberInviteResponseModel(GuildMemberInviteResponseCode.PlayerDeclinedGuildInvite, context.CallerGuid));
 			}
+		}
+
+		private static GuildMember CreateNewGuildMembership(IHubConnectionMessageContext<IRemoteSocialHubClient> context, PendingGuildInviteData inviteData)
+		{
+			return new GuildMember()
+			{
+				Guid = (uint) context.CallerGuid.CurrentObjectGuid,
+				Guildid = (uint) inviteData.GuildId
+			};
 		}
 	}
 }
