@@ -29,6 +29,8 @@ namespace GladMMO
 
 		private EntityMovementSpeed MovementSpeedCollection { get; }
 
+		private long StartTimeStamp { get; set; }
+
 		public CharacterControllerInputMovementGenerator(MovementInfo movementData, [NotNull] Lazy<CharacterController> controller,
 			[NotNull] EntityMovementSpeed movementSpeedCollection) 
 			: base(movementData)
@@ -49,6 +51,8 @@ namespace GladMMO
 		{
 			if (entity == null) throw new ArgumentNullException(nameof(entity));
 			if (Controller == null) throw new ArgumentNullException(nameof(Controller));
+
+			StartTimeStamp = currentTime;
 
 			//Now, we should also create the movement direction\
 			Vector3 directionVector = Vector3.zero;
@@ -112,8 +116,11 @@ namespace GladMMO
 			//Check that we're not OVER predicting past the point of reasonable predicition.
 			//A heartbeat packet is sent every 500ms but since we might change that we ref
 			//a constant
-			if ((currentTime - MovementData.TimeStamp) > (GladMMOCommonConstants.MOVEMENT_PACKET_HEARTBEAT_TIME_MILLISECONDS * 1.5))
+			if ((currentTime - StartTimeStamp) > (GladMMOCommonConstants.MOVEMENT_PACKET_HEARTBEAT_TIME_MILLISECONDS * 1.5))
+			{
+				Debug.Log($"STOPPING PREDICT. Curr: {currentTime} MoveTime: {StartTimeStamp} Diff: {currentTime - StartTimeStamp}");
 				StopGenerator();
+			}
 
 			return entity.transform.position;
 		}
