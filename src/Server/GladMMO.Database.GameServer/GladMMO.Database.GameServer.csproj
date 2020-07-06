@@ -63,7 +63,6 @@
 
   <ItemGroup>
     <Folder Include="Models\Player\" />
-    <Folder Include="Obsolete\" />
   </ItemGroup>
 
 </Project>

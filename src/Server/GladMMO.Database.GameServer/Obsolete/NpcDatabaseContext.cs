@@ -1,28 +1,26 @@
 ﻿using System; using FreecraftCore;
 using System.Collections.Generic;
 using System.Text;
-using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace GladMMO
 {
 	//This is from way way back, but because migrations reference it we can never ever remove it.
 	[Obsolete("This is here only for legacy reasons. Never add anything to it.")]
-	public sealed class CommonGameDatabaseContext : DbContext
+	internal sealed class NpcDatabaseContext : DbContext
 	{
-		public CommonGameDatabaseContext(DbContextOptions<CommonGameDatabaseContext> options) 
+		public NpcDatabaseContext(DbContextOptions<NpcDatabaseContext> options)
 			: base(options)
 		{
+
 		}
 
-		public CommonGameDatabaseContext()
+		public NpcDatabaseContext()
 		{
 
 		}
 
-		//We do the below for local database creation stuff
-#if DATABASE_MIGRATION || Database_Migration
+#if DATABASE_MIGRATION
 		/// <inheritdoc />
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
@@ -32,11 +30,5 @@ namespace GladMMO
 			base.OnConfiguring(optionsBuilder);
 		}
 #endif
-
-		//Due to composite key inmemory testing we need to have this outside of the usual ifdef
-		protected override void OnModelCreating(ModelBuilder modelBuilder)
-		{
-			base.OnModelCreating(modelBuilder);
-		}
 	}
 }
