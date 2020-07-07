@@ -37,8 +37,11 @@ namespace GladMMO
 					//so it will cause stack overflows. This will avoid it.
 					options.ModelMetadataDetailsProviders.Add(new SuppressChildValidationMetadataProvider(typeof(Vector3)));
 					options.ModelMetadataDetailsProviders.Add(new SuppressChildValidationMetadataProvider(typeof(ObjectGuid)));
+
+					options.EnableEndpointRouting = false;
 				})
-				.RegisterHealthCheckController();
+				.RegisterHealthCheckController()
+				.AddNewtonsoftJson();
 
 			RegisterDatabaseServices(services);
 
@@ -106,7 +109,7 @@ namespace GladMMO
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-		public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+		public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
 		{
 #warning Do not deploy exceptions page into production
 			app.UseDeveloperExceptionPage();
