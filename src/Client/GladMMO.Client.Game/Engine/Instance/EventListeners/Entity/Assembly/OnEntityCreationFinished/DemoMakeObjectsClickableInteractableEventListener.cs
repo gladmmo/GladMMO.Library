@@ -63,13 +63,32 @@ namespace GladMMO
 				}
 				else
 				{
-					//TODO: Support right-clicking on non-gameobjects
 					//We right CLICK woooo
-					if (args.EntityGuid.TypeId != EntityTypeId.TYPEID_GAMEOBJECT)
-						return;
-
-					//TODO: Are there flags we should check??
-					SendService.SendMessage(new CMSG_GAMEOBJ_USE_Payload(args.EntityGuid));
+					switch(args.EntityGuid.TypeId)
+					{
+						case EntityTypeId.TYPEID_OBJECT:
+							break;
+						case EntityTypeId.TYPEID_ITEM:
+							break;
+						case EntityTypeId.TYPEID_CONTAINER:
+							break;
+						case EntityTypeId.TYPEID_UNIT:
+							//TODO: Only units with NPCFlags GOSSIP should be able to send a Gossip request. CHECK THESE!!
+							SendService.SendMessage(new CMSG_GOSSIP_HELLO_Payload(args.EntityGuid));
+							break;
+						case EntityTypeId.TYPEID_PLAYER:
+							break;
+						case EntityTypeId.TYPEID_GAMEOBJECT:
+							//TODO: Are there flags we should check??
+							SendService.SendMessage(new CMSG_GAMEOBJ_USE_Payload(args.EntityGuid));
+							break;
+						case EntityTypeId.TYPEID_DYNAMICOBJECT:
+							break;
+						case EntityTypeId.TYPEID_CORPSE:
+							break;
+						default:
+							throw new ArgumentOutOfRangeException();
+					}
 				}
 			};
 		}
