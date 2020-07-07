@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 
 namespace GladMMO
 {
-	[Route("api/gossiptext")]
+	[Route("api/[controller]")]
 	public sealed class GossipTextController : AuthorizationReadyController
 	{
 		public GossipTextController(IClaimsPrincipalReader claimsReader, ILogger<AuthorizationReadyController> logger) 
@@ -16,7 +16,7 @@ namespace GladMMO
 
 		}
 
-		[HttpGet("/creature/{id}")]
+		[HttpGet("creature/{id}")]
 		[ResponseCache(Duration = 300)]
 		public async Task<string> GetCreatureGossipText([FromRoute(Name = "id")] int textId, [FromServices] ITrinityCreatureTextRepository textRepository)
 		{
