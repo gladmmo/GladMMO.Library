@@ -85,6 +85,7 @@
 
   <ItemGroup>
     <Folder Include="Attributes\" />
+    <Folder Include="Engine\Instance\Handlers\Quest\" />
     <Folder Include="Engine\Instance\Initializables\Content\" />
     <Folder Include="Engine\Instance\Initializables\UI\" />
     <Folder Include="Engine\LoadingScreen\Handlers\" />
