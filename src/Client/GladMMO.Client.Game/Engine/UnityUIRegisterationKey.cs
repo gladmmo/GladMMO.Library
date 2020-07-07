@@ -88,5 +88,11 @@ namespace GladMMO
 		LocalPlayerAuraBuffCollection = 37,
 
 		TargetAuraBuffCollection = 38,
+
+		GossipWindowText = 39,
+
+		GossipWindowMenuCollection = 40,
+
+		GossipWindowQuestCollection = 41
 	}
 }
