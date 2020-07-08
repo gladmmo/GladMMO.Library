@@ -16,7 +16,7 @@ namespace GladMMO
 
 		}
 
-		[HttpGet("creature/{id}")]
+		[HttpGet("quest/{id}")]
 		[ResponseCache(Duration = 300)]
 		public async Task<JsonResult> GetQuestGossipText([FromRoute(Name = "id")] int textId, [FromServices] ITrinityQuestTemplateRepository questTemplateRepository)
 		{
