@@ -86,7 +86,6 @@
   <ItemGroup>
     <Folder Include="Attributes\" />
     <Folder Include="Engine\Instance\Initializables\Content\" />
-    <Folder Include="Engine\Instance\Initializables\UI\" />
     <Folder Include="Engine\LoadingScreen\Handlers\" />
     <Folder Include="Engine\Shared\Handlers\" />
     <Folder Include="Engine\Shared\Tickables\" />
