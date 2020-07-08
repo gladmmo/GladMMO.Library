@@ -8,21 +8,28 @@ using Common.Logging;
 using Glader.Essentials;
 using GladMMO;
 using GladNet;
+using Nito.AsyncEx;
 
 namespace GladMMO
 {
+	[AdditionalRegisterationAs(typeof(IGossipMenuCreateEventSubscribable))]
 	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
-	public sealed class SMSG_GOSSIP_MESSAGE_PayloadHandler : BaseGameClientGameMessageHandler<SMSG_GOSSIP_MESSAGE_Payload>
+	public sealed class SMSG_GOSSIP_MESSAGE_PayloadHandler : BaseGameClientGameMessageHandler<SMSG_GOSSIP_MESSAGE_Payload>, IGossipMenuCreateEventSubscribable
 	{
+		private IGossipTextContentServiceClient GossipContentClient { get; }
+
+		public event EventHandler<GossipMenuCreateEventArgs> OnGossipMenuCreate;
+
 		/// <inheritdoc />
-		public SMSG_GOSSIP_MESSAGE_PayloadHandler(ILog logger)
+		public SMSG_GOSSIP_MESSAGE_PayloadHandler(ILog logger,
+			[NotNull] IGossipTextContentServiceClient gossipContentClient)
 			: base(logger)
 		{
-
+			GossipContentClient = gossipContentClient ?? throw new ArgumentNullException(nameof(gossipContentClient));
 		}
 
 		/// <inheritdoc />
-		public override Task HandleMessage(IPeerMessageContext<GamePacketPayload> context, SMSG_GOSSIP_MESSAGE_Payload payload)
+		public override async Task HandleMessage(IPeerMessageContext<GamePacketPayload> context, SMSG_GOSSIP_MESSAGE_Payload payload)
 		{
 			if (Logger.IsDebugEnabled)
 			{
@@ -35,7 +42,21 @@ namespace GladMMO
 					Logger.Debug($"Quest: {quest.QuestId} Text: {quest.QuestTitle}");
 			}
 
-			return Task.CompletedTask;
+			//Just assume they want it on the main thread so queue it up on the sync contenxt
+			UnityAsyncHelper.UnityMainThreadContext.PostAsync(async () => await DispatchEvent(payload));
+		}
+
+		private async Task DispatchEvent(SMSG_GOSSIP_MESSAGE_Payload payload)
+		{
+			string content = String.Empty;
+			if(payload.TitleTextId != 0)
+			{
+				content = await GossipContentClient.GetCreatureGossipTextAsync(payload.TitleTextId);
+				Logger.Debug($"Text: {content}");
+			}
+
+			//TODO: It's hacky to assume ToArrayAvoidCopy won't allocate
+			OnGossipMenuCreate?.Invoke(this, new GossipMenuCreateEventArgs(payload.GossipSource, payload.GossipOptions.ToArrayTryAvoidCopy(), payload.QuestOptions.ToArrayTryAvoidCopy(), content));
 		}
 	}
 }

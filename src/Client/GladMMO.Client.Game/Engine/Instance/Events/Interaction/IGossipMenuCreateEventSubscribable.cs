@@ -21,17 +21,21 @@ namespace GladMMO
 	{
 		public ObjectGuid GossipSource { get; }
 
+		public string Content { get; }
+
 		public IReadOnlyList<GossipMenuItem> GossipMenuEntries { get; }
 
 		public IReadOnlyList<QuestGossipEntry> QuestMenuEntries { get; }
 
 		public GossipMenuCreateEventArgs([NotNull] ObjectGuid gossipSource,
 			[NotNull] IReadOnlyList<GossipMenuItem> gossipMenuEntries,
-			[NotNull] IReadOnlyList<QuestGossipEntry> questMenuEntries)
+			[NotNull] IReadOnlyList<QuestGossipEntry> questMenuEntries,
+			[NotNull] string content)
 		{
 			GossipSource = gossipSource ?? throw new ArgumentNullException(nameof(gossipSource));
 			GossipMenuEntries = gossipMenuEntries ?? throw new ArgumentNullException(nameof(gossipMenuEntries));
 			QuestMenuEntries = questMenuEntries ?? throw new ArgumentNullException(nameof(questMenuEntries));
+			Content = content ?? throw new ArgumentNullException(nameof(content));
 		}
 	}
 }
