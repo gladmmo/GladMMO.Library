@@ -14,5 +14,7 @@ namespace GladMMO
 		IReadOnlyList<IUILabeledButton> GossipMenuButtons { get; }
 
 		IReadOnlyList<IUILabeledButton> GossipQuestButtons { get; }
+
+		void Clear();
 	}
 }

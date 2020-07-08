@@ -28,5 +28,15 @@ namespace GladMMO
 		public IReadOnlyList<IUILabeledButton> GossipMenuButtons => _GossipMenuButtons;
 
 		public IReadOnlyList<IUILabeledButton> GossipQuestButtons => _GossipQuestButtons;
+
+		public void Clear()
+		{
+			GossipText.Text = String.Empty;
+			foreach(var button in GossipMenuButtons)
+				button.SetElementActive(false);
+
+			foreach(var button in GossipQuestButtons)
+				button.SetElementActive(false);
+		}
 	}
 }
