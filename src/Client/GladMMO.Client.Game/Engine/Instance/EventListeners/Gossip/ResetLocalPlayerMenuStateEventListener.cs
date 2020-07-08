@@ -19,7 +19,7 @@ namespace GladMMO
 		protected override void OnEventFired(object source, GossipMenuCreateEventArgs args)
 		{
 			MenuState.Clear();
-			MenuState.Update(args.GossipMenuEntries, args.QuestMenuEntries);
+			MenuState.Update(args.GossipSource, args.GossipMenuEntries, args.QuestMenuEntries);
 		}
 	}
 }
