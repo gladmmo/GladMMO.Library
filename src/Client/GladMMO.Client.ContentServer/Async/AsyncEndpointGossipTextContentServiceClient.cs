@@ -22,6 +22,11 @@ namespace GladMMO
 
 		}
 
+		public async Task<ResponseModel<QuestTextContentModel, GameContentQueryResponseCode>> GetQuestGossipTextAsync(int questId)
+		{
+			return await (await GetService().ConfigureAwaitFalse()).GetQuestGossipTextAsync(questId).ConfigureAwaitFalse();
+		}
+
 		public async Task<string> GetCreatureGossipTextAsync(int textId)
 		{
 			return await (await GetService().ConfigureAwaitFalse()).GetCreatureGossipTextAsync(textId).ConfigureAwaitFalse();

@@ -10,6 +10,9 @@ namespace GladMMO
 	public interface IGossipTextContentServiceClient
 	{
 		[Get("/api/gossiptext/creature/{id}")]
+		Task<ResponseModel<QuestTextContentModel, GameContentQueryResponseCode>> GetQuestGossipTextAsync([AliasAs("id")] int questId);
+
+		[Get("/api/gossiptext/creature/{id}")]
 		Task<string> GetCreatureGossipTextAsync([AliasAs("id")] int textId);
 	}
 }
