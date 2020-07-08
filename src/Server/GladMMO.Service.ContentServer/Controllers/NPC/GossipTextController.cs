@@ -18,6 +18,20 @@ namespace GladMMO
 
 		[HttpGet("creature/{id}")]
 		[ResponseCache(Duration = 300)]
+		public async Task<JsonResult> GetQuestGossipText([FromRoute(Name = "id")] int textId, [FromServices] ITrinityQuestTemplateRepository questTemplateRepository)
+		{
+			if (textId <= 0) throw new ArgumentOutOfRangeException(nameof(textId));
+
+			if (!await questTemplateRepository.ContainsAsync((uint) textId))
+				return BuildFailedResponseModel(GameContentQueryResponseCode.UnknownContentIdentifier);
+
+			QuestTemplate template = await questTemplateRepository.RetrieveAsync((uint) textId);
+
+			return BuildSuccessfulResponseModel(new QuestTextContentModel(template.LogTitle, template.QuestDescription, template.LogDescription));
+		}
+
+		[HttpGet("creature/{id}")]
+		[ResponseCache(Duration = 300)]
 		public async Task<string> GetCreatureGossipText([FromRoute(Name = "id")] int textId, [FromServices] ITrinityCreatureTextRepository textRepository)
 		{
 			if (textId <= 0) throw new ArgumentOutOfRangeException(nameof(textId));

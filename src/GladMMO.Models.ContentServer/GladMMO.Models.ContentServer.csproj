@@ -19,9 +19,4 @@
     </Reference>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Models\" />
-    <Folder Include="ResultCodes\" />
-  </ItemGroup>
-
 </Project>
