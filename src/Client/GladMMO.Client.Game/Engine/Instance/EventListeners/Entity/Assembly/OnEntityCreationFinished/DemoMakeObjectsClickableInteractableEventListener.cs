@@ -73,8 +73,10 @@ namespace GladMMO
 						case EntityTypeId.TYPEID_CONTAINER:
 							break;
 						case EntityTypeId.TYPEID_UNIT:
-							//TODO: Only units with NPCFlags GOSSIP should be able to send a Gossip request. CHECK THESE!!
-							SendService.SendMessage(new CMSG_GOSSIP_HELLO_Payload(args.EntityGuid));
+							if (IsQuestGiver(args.EntityGuid))
+								SendService.SendMessage(new CMSG_QUESTGIVER_HELLO_Payload(args.EntityGuid));
+							else if (IsGossipable(args.EntityGuid))
+								SendService.SendMessage(new CMSG_GOSSIP_HELLO_Payload(args.EntityGuid));
 							break;
 						case EntityTypeId.TYPEID_PLAYER:
 							break;
@@ -108,6 +110,28 @@ namespace GladMMO
 				//Assume it's a UNIT then.
 				return !entity.HasBaseObjectFieldFlag(UnitFlags.UNIT_FLAG_NOT_SELECTABLE);
 			}
+		}
+
+		private bool IsQuestGiver(ObjectGuid entityGuid)
+		{
+			if (entityGuid.isType(EntityTypeId.TYPEID_UNIT))
+			{
+				IEntityDataFieldContainer entity = EntityDataFieldMappable.RetrieveEntity(entityGuid);
+				return entity.HasUnitFieldFlag(NPCFlags.QUESTGIVER);
+			}
+
+			return false;
+		}
+
+		private bool IsGossipable(ObjectGuid entityGuid)
+		{
+			if(entityGuid.isType(EntityTypeId.TYPEID_UNIT))
+			{
+				IEntityDataFieldContainer entity = EntityDataFieldMappable.RetrieveEntity(entityGuid);
+				return entity.HasUnitFieldFlag(NPCFlags.GOSSIP);
+			}
+
+			return false;
 		}
 	}
 }
