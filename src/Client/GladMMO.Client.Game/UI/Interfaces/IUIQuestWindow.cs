@@ -7,6 +7,8 @@ namespace GladMMO
 {
 	public interface IUIQuestWindow
 	{
+		IUIElement RootElement { get; }
+
 		IUIText Title { get; }
 
 		IUIText Description { get; }
