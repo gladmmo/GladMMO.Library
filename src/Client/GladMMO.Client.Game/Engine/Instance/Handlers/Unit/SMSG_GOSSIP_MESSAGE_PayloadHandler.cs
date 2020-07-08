@@ -12,20 +12,21 @@ using Nito.AsyncEx;
 
 namespace GladMMO
 {
-	[AdditionalRegisterationAs(typeof(IGossipMenuCreateEventSubscribable))]
 	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
-	public sealed class SMSG_GOSSIP_MESSAGE_PayloadHandler : BaseGameClientGameMessageHandler<SMSG_GOSSIP_MESSAGE_Payload>, IGossipMenuCreateEventSubscribable
+	public sealed class SMSG_GOSSIP_MESSAGE_PayloadHandler : BaseGameClientGameMessageHandler<SMSG_GOSSIP_MESSAGE_Payload>
 	{
 		private IGossipTextContentServiceClient GossipContentClient { get; }
 
-		public event EventHandler<GossipMenuCreateEventArgs> OnGossipMenuCreate;
+		private IGossipMenuCreateEventPublisher GossipEventPublisher { get; }
 
 		/// <inheritdoc />
 		public SMSG_GOSSIP_MESSAGE_PayloadHandler(ILog logger,
-			[NotNull] IGossipTextContentServiceClient gossipContentClient)
+			[NotNull] IGossipTextContentServiceClient gossipContentClient,
+			[NotNull] IGossipMenuCreateEventPublisher gossipEventPublisher)
 			: base(logger)
 		{
 			GossipContentClient = gossipContentClient ?? throw new ArgumentNullException(nameof(gossipContentClient));
+			GossipEventPublisher = gossipEventPublisher ?? throw new ArgumentNullException(nameof(gossipEventPublisher));
 		}
 
 		/// <inheritdoc />
@@ -56,7 +57,7 @@ namespace GladMMO
 			}
 
 			//TODO: It's hacky to assume ToArrayAvoidCopy won't allocate
-			OnGossipMenuCreate?.Invoke(this, new GossipMenuCreateEventArgs(payload.GossipSource, payload.GossipOptions.ToArrayTryAvoidCopy(), payload.QuestOptions.ToArrayTryAvoidCopy(), content));
+			GossipEventPublisher.PublishEvent(this, new GossipMenuCreateEventArgs(payload.GossipSource, payload.GossipOptions.ToArrayTryAvoidCopy(), payload.QuestOptions.ToArrayTryAvoidCopy(), content));
 		}
 	}
 }
