@@ -95,6 +95,8 @@ namespace GladMMO
 
 		GossipWindowQuestCollection = 41,
 
-		GossipWindow = 42
+		GossipWindow = 42,
+
+		QuestWindow = 43
 	}
 }
