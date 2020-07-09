@@ -21,12 +21,17 @@ namespace GladMMO
 	{
 		public ObjectGuid QuestGiver { get; }
 
+		public int QuestId { get; }
+
 		public QuestTextContentModel Content { get; }
 
-		public QuestWindowCreateEventArgs([NotNull] ObjectGuid questGiver, [NotNull] QuestTextContentModel content)
+		public QuestWindowCreateEventArgs([NotNull] ObjectGuid questGiver, int questId, [NotNull] QuestTextContentModel content)
 		{
+			if (questId <= 0) throw new ArgumentOutOfRangeException(nameof(questId));
+
 			QuestGiver = questGiver ?? throw new ArgumentNullException(nameof(questGiver));
 			Content = content ?? throw new ArgumentNullException(nameof(content));
+			QuestId = questId;
 		}
 	}
 }

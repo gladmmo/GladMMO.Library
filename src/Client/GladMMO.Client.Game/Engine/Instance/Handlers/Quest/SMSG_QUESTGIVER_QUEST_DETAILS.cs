@@ -36,7 +36,7 @@ namespace GladMMO
 
 				//IF we cannot load the content for it, don't broadcast
 				if (response.isSuccessful)
-					OnQuestWindowCreate?.Invoke(this, new QuestWindowCreateEventArgs(payload.QuestGiver, response.Result));
+					OnQuestWindowCreate?.Invoke(this, new QuestWindowCreateEventArgs(payload.QuestGiver, payload.QuestId, response.Result));
 			});
 
 			return Task.CompletedTask;
