@@ -14,5 +14,7 @@ namespace GladMMO
 		IUIText Description { get; }
 
 		IUIText Objective { get; }
+
+		IUIButton AcceptButton { get; }
 	}
 }
