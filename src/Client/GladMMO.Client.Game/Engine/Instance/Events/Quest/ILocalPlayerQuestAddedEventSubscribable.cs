@@ -33,7 +33,7 @@ namespace GladMMO
 		public LocalPlayerQuestAddedEventArgs(int questSlot, int questId)
 		{
 			//TODO: Verify against quest max range.
-			if (questSlot <= 0) throw new ArgumentOutOfRangeException(nameof(questSlot));
+			if (questSlot < 0) throw new ArgumentOutOfRangeException(nameof(questSlot));
 			if (questId <= 0) throw new ArgumentOutOfRangeException(nameof(questId));
 
 			QuestSlot = questSlot;
