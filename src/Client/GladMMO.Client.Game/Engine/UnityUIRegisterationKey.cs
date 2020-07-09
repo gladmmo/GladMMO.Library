@@ -97,6 +97,8 @@ namespace GladMMO
 
 		GossipWindow = 42,
 
-		QuestWindow = 43
+		QuestWindow = 43,
+
+		QuestAcceptButton = 44
 	}
 }
