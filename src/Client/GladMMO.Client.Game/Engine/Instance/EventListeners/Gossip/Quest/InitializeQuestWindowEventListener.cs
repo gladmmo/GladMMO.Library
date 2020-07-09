@@ -23,6 +23,7 @@ namespace GladMMO
 			QuestWindow.Title.Text = args.Content.Title;
 			QuestWindow.Description.Text = args.Content.Details;
 			QuestWindow.Objective.Text = args.Content.Objectives;
+			QuestWindow.AcceptButton.IsInteractable = true;
 
 			QuestWindow.RootElement.SetElementActive(true);
 		}
