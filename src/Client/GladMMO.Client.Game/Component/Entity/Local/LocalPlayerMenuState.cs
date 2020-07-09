@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using FreecraftCore;
 
@@ -40,6 +41,11 @@ namespace GladMMO
 				throw new ArgumentOutOfRangeException(nameof(index), $"Cannot use quest Index: {index} for QuestOptions Count: {QuestOptions.Count}");
 
 			SelectedQuest = QuestOptions[index];
+		}
+
+		public void SelectQuestByQuestId(int questId)
+		{
+			SelectedQuest = QuestOptions.First(q => q.QuestId == questId);
 		}
 	}
 }
