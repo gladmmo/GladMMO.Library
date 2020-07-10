@@ -117,6 +117,9 @@ namespace GladMMO
 
 			services.AddDbContext<wotlk_worldContext>(builder => { builder.UseMySql("server=127.0.0.1;port=3307;user=root;password=test;database=wotlk_world"); })
 				.AddEntityFrameworkMySql();
+
+			services.RegisterCharactersDatabaseRepositoryTypes();
+			services.RegisterWorldDatabaseRepositoryTypes();
 		}
 	}
 }
