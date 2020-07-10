@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Common.Logging;
@@ -54,6 +55,24 @@ namespace GladMMO
 			if (questIdSlotChanged.NewValue != 0)
 			{
 				OnLocalPlayerQuestAdded?.Invoke(this, new LocalPlayerQuestAddedEventArgs(questSlot, questIdSlotChanged.NewValue));
+			}
+		}
+
+		public bool HasStartedQuest(int questId)
+		{
+			return CurrentQuests().Contains(questId);
+		}
+
+		private IEnumerable<int> CurrentQuests()
+		{
+			for (int i = (int) EPlayerFields.PLAYER_QUEST_LOG_1_1; i < (int) EPlayerFields.PLAYER_QUEST_LOG_25_1; i += 5)
+			{
+				if (PlayerDetails.EntityData.DataSetIndicationArray.Get(i))
+				{
+					int id = PlayerDetails.EntityData.GetFieldValue<int>(i);
+					if (id != 0)
+						yield return id;
+				}
 			}
 		}
 	}
