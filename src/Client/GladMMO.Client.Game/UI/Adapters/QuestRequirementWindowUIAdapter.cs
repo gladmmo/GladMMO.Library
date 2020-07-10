@@ -19,9 +19,6 @@ namespace GladMMO
 		private TextMeshProUGUIUITextAdapter _Description;
 
 		[SerializeField]
-		private TextMeshProUGUIUITextAdapter _Objective;
-
-		[SerializeField]
 		private UnityButtonUIButtonAdapter _AcceptButton;
 
 		public IUIElement RootElement => _RootElement;
@@ -29,8 +26,6 @@ namespace GladMMO
 		public IUIText Title => _Title;
 
 		public IUIText Description => _Description;
-
-		public IUIText Objective => _Objective;
 
 		public IUIButton AcceptButton => _AcceptButton;
 	}
