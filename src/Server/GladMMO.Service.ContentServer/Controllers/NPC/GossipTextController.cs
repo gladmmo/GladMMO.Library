@@ -32,7 +32,7 @@ namespace GladMMO
 
 		[HttpGet("creature/{id}")]
 		[ResponseCache(Duration = 300)]
-		public async Task<string> GetCreatureGossipText([FromRoute(Name = "id")] int textId, [FromServices] ITrinityCreatureTextRepository textRepository)
+		public async Task<string> GetCreatureGossipText([FromRoute(Name = "id")] int textId, [FromServices] ITrinityNpcTextRepository textRepository)
 		{
 			if (textId <= 0) throw new ArgumentOutOfRangeException(nameof(textId));
 
