@@ -115,7 +115,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GladMMO
 {
-	public partial sealed class TrinityCore{name}Repository : BaseGenericBackedDatabaseRepository<{dbtype}, {key}, {name}>, ITrinity{name}Repository
+	public sealed partial class TrinityCore{name}Repository : BaseGenericBackedDatabaseRepository<{dbtype}, {key}, {name}>, ITrinity{name}Repository
 	{
 		public TrinityCore{name}Repository([JetBrains.Annotations.NotNull] {dbtype} context) 
 			: base(context)
