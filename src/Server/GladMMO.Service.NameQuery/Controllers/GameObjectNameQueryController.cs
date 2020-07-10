@@ -12,11 +12,11 @@ namespace GladMMO
 	[Route("api/namequery/GameObject")]
 	public class GameObjectNameQueryController : BaseNameQueryController
 	{
-		public ITrinityGameObjectTemplateRepository GameObjectTemplateRepository { get; }
+		public ITrinityGameobjectTemplateRepository GameObjectTemplateRepository { get; }
 
 		/// <inheritdoc />
 		public GameObjectNameQueryController(IClaimsPrincipalReader claimsReader, ILogger<AuthorizationReadyController> logger,
-			[JetBrains.Annotations.NotNull] ITrinityGameObjectTemplateRepository gameObjectTemplateRepository)
+			[JetBrains.Annotations.NotNull] ITrinityGameobjectTemplateRepository gameObjectTemplateRepository)
 			: base(claimsReader, logger)
 		{
 			GameObjectTemplateRepository = gameObjectTemplateRepository ?? throw new ArgumentNullException(nameof(gameObjectTemplateRepository));
