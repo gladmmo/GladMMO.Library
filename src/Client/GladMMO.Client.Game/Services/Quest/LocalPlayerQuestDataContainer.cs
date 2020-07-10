@@ -63,6 +63,19 @@ namespace GladMMO
 			return CurrentQuests().Contains(questId);
 		}
 
+		public bool IsQuestComplete(int questId)
+		{
+			if (!HasStartedQuest(questId))
+				return false;
+
+			EPlayerFields questStartField = ComputeSlotOfQuest(questId);
+
+			//TODO: Use QuestSlotOffsets
+			//TODO: Use quest state enum
+			//COMPLETE = 0x0001,
+			return (PlayerDetails.EntityData.GetFieldValue<int>(questStartField + 1) & 0x0001) != 0;
+		}
+
 		private IEnumerable<int> CurrentQuests()
 		{
 			for (int i = (int) EPlayerFields.PLAYER_QUEST_LOG_1_1; i < (int) EPlayerFields.PLAYER_QUEST_LOG_25_1; i += 5)
@@ -74,6 +87,21 @@ namespace GladMMO
 						yield return id;
 				}
 			}
+		}
+
+		private EPlayerFields ComputeSlotOfQuest(int questId)
+		{
+			for(int i = (int)EPlayerFields.PLAYER_QUEST_LOG_1_1; i < (int)EPlayerFields.PLAYER_QUEST_LOG_25_1; i += 5)
+			{
+				if(PlayerDetails.EntityData.DataSetIndicationArray.Get(i))
+				{
+					int id = PlayerDetails.EntityData.GetFieldValue<int>(i);
+					if (id == questId)
+						return (EPlayerFields) i;
+				}
+			}
+
+			throw new InvalidOperationException($"Unknown Quest: {questId}");
 		}
 	}
 }
