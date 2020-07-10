@@ -14,5 +14,11 @@ namespace GladMMO
 
 		[Get("/api/gossiptext/creature/{id}")]
 		Task<string> GetCreatureGossipTextAsync([AliasAs("id")] int textId);
+
+		[Get("/api/questincomplete/{id}")]
+		Task<ResponseModel<string, GameContentQueryResponseCode>> GetQuestIncompleteGossipTextAsync([AliasAs("id")] int questId);
+
+		[Get("/api/questcomplete/{id}")]
+		Task<ResponseModel<string, GameContentQueryResponseCode>> GetQuestCompleteGossipTextAsync([AliasAs("id")] int questId);
 	}
 }
