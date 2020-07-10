@@ -13,6 +13,8 @@ namespace GladMMO
 		{
 			BuildRepositories<wotlk_worldContext>();
 			BuildRepositories<wotlk_charactersContext>();
+
+			//Now generate the register files.
 		}
 
 		private static void BuildRepositories<TDbContextType>()
@@ -26,12 +28,28 @@ namespace GladMMO
 			nameArray[0] = Char.ToUpper(nameArray[0]);
 			databaseName = new string(nameArray);
 
-			GenerateInterfaces<TDbContextType>(databaseName);
-			GenerateImplementationClasses<TDbContextType>(databaseName);
+			Dictionary<string, string> interfaces = GenerateInterfaces<TDbContextType>(databaseName);
+			Dictionary<string, string> classes = GenerateImplementationClasses<TDbContextType>(databaseName);
+
+			GenerateRegisterFile<TDbContextType>(databaseName, interfaces, classes);
 		}
 
-		private static void GenerateInterfaces<TDbContextType>(string databaseName) where TDbContextType : DbContext
+		private static void GenerateRegisterFile<TDbContextType>(string databaseName, Dictionary<string, string> interfaces, Dictionary<string, string> classes) where TDbContextType : DbContext
 		{
+			string registerFileContent = BuildRegisterFileTemplate(databaseName, interfaces, classes);
+
+			string outputPath = Path.Combine(Directory.GetCurrentDirectory(), databaseName);
+
+			if (!Directory.Exists(outputPath))
+				Directory.CreateDirectory(outputPath);
+
+			File.WriteAllText(Path.Combine(outputPath, $"{databaseName}DatabaseDependencyInjectionExtensions.cs"), registerFileContent);
+		}
+
+		private static Dictionary<string, string> GenerateInterfaces<TDbContextType>(string databaseName) where TDbContextType : DbContext
+		{
+			Dictionary<string, string> output = new Dictionary<string, string>();
+
 			string outputPath = Path.Combine(Directory.GetCurrentDirectory(), databaseName, "RepositoryInterfaces");
 
 			if (!Directory.Exists(outputPath))
@@ -46,13 +64,19 @@ namespace GladMMO
 
 				string repoName = $"ITrinity{model.Name}Repository";
 
+				output.Add(model.Name, repoName);
+
 				//Write the packet file out
 				File.WriteAllText(Path.Combine(outputPath, $"{repoName}.cs"), interfaceFileData);
 			}
+
+			return output;
 		}
 
-		private static void GenerateImplementationClasses<TDbContextType>(string databaseName) where TDbContextType : DbContext
+		private static Dictionary<string, string> GenerateImplementationClasses<TDbContextType>(string databaseName) where TDbContextType : DbContext
 		{
+			Dictionary<string, string> output = new Dictionary<string, string>();
+
 			string outputPath = Path.Combine(Directory.GetCurrentDirectory(), databaseName, "Repositories");
 
 			if (!Directory.Exists(outputPath))
@@ -69,9 +93,13 @@ namespace GladMMO
 
 				string implementationName = $"TrinityCore{model.Name}Repository";
 
+				output.Add(model.Name, implementationName);
+
 				//Write the packet file out
 				File.WriteAllText(Path.Combine(outputPath, $"{implementationName}.cs"), implementationFileData);
 			}
+
+			return output;
 		}
 
 		public static IEnumerable<Type> IterateDbSetModelTypes<TDbContextType>()
@@ -125,6 +153,26 @@ namespace GladMMO
 	}
 }";
 
+		public const string RepositoryRegisterFileTemplate = @"using System;
+using System.Collections.Generic;
+using System.Text;
+using Microsoft.Extensions.DependencyInjection;
+
+namespace GladMMO
+{
+	/// <summary>
+	/// Auto-generated code. Do not change.
+	/// </summary>
+	public static class {dbtype}DatabaseDependencyInjectionExtensions
+	{
+		public static IServiceCollection Register{dbtype}DatabaseRepositoryTypes(this IServiceCollection collection)
+		{
+{register}
+			return collection;
+		}
+	}
+}";
+
 		public static string BuildInterfaceFileTemplate(Type modelType, Type keyType)
 		{
 			return InterfaceFileTemplate
@@ -138,6 +186,20 @@ namespace GladMMO
 				.Replace("{name}", modelType.Name)
 				.Replace("{key}", keyType.Name)
 				.Replace("{dbtype}", dbType.Name);
+		}
+
+		public static string BuildRegisterFileTemplate(string databaseName, IDictionary<string, string> interfaceTypeMap, IDictionary<string, string> implementationTypeMap)
+		{
+			string registerationString = String.Empty;
+
+			foreach (string modelName in interfaceTypeMap.Keys)
+			{
+				registerationString += $"\t\t\tcollection.AddTransient<{interfaceTypeMap[modelName]}, {implementationTypeMap[modelName]}>();\n";
+			}
+
+			return RepositoryRegisterFileTemplate
+				.Replace("{dbtype}", databaseName)
+				.Replace("{register}", registerationString);
 		}
 	}
 }
