@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Server\GladMMO.Database.TrinityCore.Auth\GladMMO.Database.TrinityCore.Auth.csproj" />
+    <ProjectReference Include="..\..\Server\GladMMO.Database.TrinityCore.Character\GladMMO.Database.TrinityCore.Character.csproj" />
+    <ProjectReference Include="..\..\Server\GladMMO.Database.TrinityCore.World\GladMMO.Database.TrinityCore.World.csproj" />
+  </ItemGroup>
+
+</Project>
