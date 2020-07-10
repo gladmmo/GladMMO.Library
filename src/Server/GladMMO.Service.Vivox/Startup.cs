@@ -69,10 +69,6 @@ namespace GladMMO
 
 			services.AddDbContext<wotlk_worldContext>(builder => { builder.UseMySql("server=127.0.0.1;port=3307;user=root;password=test;database=wotlk_world"); })
 				.AddEntityFrameworkMySql();
-
-			services.AddTransient<ITrinityCharacterRepository, TrinityCoreCharacterRepository>();
-			services.AddTransient<ITrinityCharacterActionBarRepository, TrinityCoreCharacterActionBarRepository>();
-			services.AddTransient<ITrinityGuildMembershipRepository, TrinityCoreGuildMembershipRepository>();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

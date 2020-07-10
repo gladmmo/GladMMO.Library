@@ -14,11 +14,11 @@ namespace GladMMO
 	[Route("api/characters")]
 	public class CharacterController : AuthorizationReadyController
 	{
-		private ITrinityCharacterRepository CharacterRepository { get; }
+		private ITrinityCharactersRepository CharacterRepository { get; }
 
 		/// <inheritdoc />
 		public CharacterController(IClaimsPrincipalReader claimsReader, ILogger<AuthorizationReadyController> logger,
-			ITrinityCharacterRepository characterRepository)
+			ITrinityCharactersRepository characterRepository)
 			: base(claimsReader, logger)
 		{
 			CharacterRepository = characterRepository ?? throw new ArgumentNullException(nameof(characterRepository));
@@ -159,7 +159,7 @@ namespace GladMMO
 		[NoResponseCache]
 		[AuthorizeJwt]
 		public async Task<IActionResult> GetCharacterActionBar([FromRoute(Name = "id")] int characterId, 
-			[FromServices] ITrinityCharacterActionBarRepository actionBarRepository,
+			[FromServices] ITrinityCharacterActionRepository actionBarRepository,
 			[FromServices] ITypeConverterProvider<ICharacterActionBarEntry, CharacterActionBarInstanceModel> converter)
 		{
 			ProjectVersionStage.AssertBeta();

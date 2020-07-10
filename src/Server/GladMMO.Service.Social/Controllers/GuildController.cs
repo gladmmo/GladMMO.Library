@@ -25,7 +25,7 @@ namespace GladMMO
 		[HttpGet("character/{id}")]
 		[NoResponseCache] //we don't want to cache this, if they are removed from a guild then we want this reflected immediately or they may be taking in a guild chat they aren't apart of due to a race condition
 		public async Task<IActionResult> GetCharacterMembershipGuildStatus([FromRoute(Name = "id")] int characterId,
-			[NotNull] [FromServices] ITrinityGuildMembershipRepository guildCharacterMembershipRepository)
+			[NotNull] [FromServices] ITrinityGuildMemberRepository guildCharacterMembershipRepository)
 		{
 			if (guildCharacterMembershipRepository == null) throw new ArgumentNullException(nameof(guildCharacterMembershipRepository));
 
@@ -54,7 +54,7 @@ namespace GladMMO
 		[ProducesJson]
 		[AuthorizeJwt]
 		[HttpGet("list")]
-		public async Task<IActionResult> GetCharacterGuildList([NotNull] [FromServices] ITrinityGuildMembershipRepository guildCharacterMembershipRepository,
+		public async Task<IActionResult> GetCharacterGuildList([NotNull] [FromServices] ITrinityGuildMemberRepository guildCharacterMembershipRepository,
 			[FromServices] ISocialServiceToGameServiceClient socialToGameClient)
 		{
 			if(guildCharacterMembershipRepository == null) throw new ArgumentNullException(nameof(guildCharacterMembershipRepository));

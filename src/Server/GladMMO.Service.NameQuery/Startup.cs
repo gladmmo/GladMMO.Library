@@ -118,14 +118,8 @@ namespace GladMMO
 			services.AddDbContext<wotlk_charactersContext>(builder => { builder.UseMySql("server=127.0.0.1;port=3307;user=root;password=test;database=wotlk_characters"); })
 				.AddEntityFrameworkMySql();
 
-			services.AddTransient<ITrinityCharacterRepository, TrinityCoreCharacterRepository>();
-
 			services.AddDbContext<wotlk_worldContext>(builder => { builder.UseMySql("server=127.0.0.1;port=3307;user=root;password=test;database=wotlk_world"); })
 				.AddEntityFrameworkMySql();
-
-			services.AddTransient<ITrinityCreatureTemplateRepository, TrinityCoreCreatureTemplateRepository>();
-			services.AddTransient<ITrinityGameObjectTemplateRepository, TrinityCoreGameObjectTemplateRepository>();
-			services.AddTransient<ITrinityCharacterActionBarRepository, TrinityCoreCharacterActionBarRepository>();
 		}
 	}
 }

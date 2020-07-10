@@ -20,7 +20,7 @@ namespace GladMMO
 		[AuthorizeJwt]
 		[NoResponseCache]
 		[HttpPost("Login")]
-		public async Task<IActionResult> LoginVivox([FromServices] ITrinityCharacterRepository characterRepository,
+		public async Task<IActionResult> LoginVivox([FromServices] ITrinityCharactersRepository characterRepository,
 			[FromServices] IFactoryCreatable<VivoxTokenClaims, VivoxTokenClaimsCreationContext> claimsFactory,
 			[FromServices] IVivoxTokenSignService signService)
 		{
@@ -40,7 +40,7 @@ namespace GladMMO
 			return BuildSuccessfulResponseModel(signService.CreateSignature(claims));
 		}
 
-		private static async Task<int> RetrieveSessionCharacterIdAsync(ITrinityCharacterRepository characterRepository, int accountId)
+		private static async Task<int> RetrieveSessionCharacterIdAsync(ITrinityCharactersRepository characterRepository, int accountId)
 		{
 			//TODO: Technically a race condition here.
 			//Now let's actually get the character id of the session that the account has

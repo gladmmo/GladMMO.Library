@@ -12,11 +12,11 @@ namespace GladMMO
 	[Route("api/namequery/player")]
 	public class PlayerNameQueryController : BaseNameQueryController
 	{
-		private ITrinityCharacterRepository CharacterRepository { get; }
+		private ITrinityCharactersRepository CharacterRepository { get; }
 
 		/// <inheritdoc />
 		public PlayerNameQueryController(IClaimsPrincipalReader claimsReader, ILogger<AuthorizationReadyController> logger,
-			ITrinityCharacterRepository characterRepository) 
+			ITrinityCharactersRepository characterRepository) 
 			: base(claimsReader, logger)
 		{
 			CharacterRepository = characterRepository ?? throw new ArgumentNullException(nameof(characterRepository));

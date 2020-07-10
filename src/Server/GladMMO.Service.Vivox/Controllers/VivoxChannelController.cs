@@ -20,7 +20,7 @@ namespace GladMMO
 		[AuthorizeJwt]
 		[NoResponseCache]
 		[HttpPost("proximity/join")]
-		public async Task<IActionResult> JoinZoneProximityChat([FromServices] ITrinityCharacterRepository characterRepository,
+		public async Task<IActionResult> JoinZoneProximityChat([FromServices] ITrinityCharactersRepository characterRepository,
 			[FromServices] IFactoryCreatable<VivoxTokenClaims, VivoxTokenClaimsCreationContext> claimsFactory,
 			[FromServices] IVivoxTokenSignService signService)
 		{
@@ -50,9 +50,9 @@ namespace GladMMO
 		[AuthorizeJwt]
 		[NoResponseCache]
 		[HttpPost("guild/join")]
-		public async Task<IActionResult> JoinGuildChat([FromServices] ITrinityCharacterRepository characterSessionRepository,
+		public async Task<IActionResult> JoinGuildChat([FromServices] ITrinityCharactersRepository characterSessionRepository,
 			[FromServices] IFactoryCreatable<VivoxTokenClaims, VivoxTokenClaimsCreationContext> claimsFactory,
-			[FromServices] ITrinityGuildMembershipRepository guildMembershipRepository,
+			[FromServices] ITrinityGuildMemberRepository guildMembershipRepository,
 			[FromServices] IVivoxTokenSignService signService)
 		{
 			int accountId = this.ClaimsReader.GetAccountIdInt(User);
@@ -77,7 +77,7 @@ namespace GladMMO
 			return BuildSuccessfulResponseModel(new VivoxChannelJoinResponse(signService.CreateSignature(claims), claims.DestinationSIPURI));
 		}
 
-		private static async Task<int> RetrieveSessionCharacterIdAsync(ITrinityCharacterRepository characterRepository, int accountId)
+		private static async Task<int> RetrieveSessionCharacterIdAsync(ITrinityCharactersRepository characterRepository, int accountId)
 		{
 			//TODO: Technically a race condition here.
 			//Now let's actually get the character id of the session that the account has

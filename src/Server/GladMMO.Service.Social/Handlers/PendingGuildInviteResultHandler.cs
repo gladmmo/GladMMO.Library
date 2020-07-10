@@ -14,11 +14,11 @@ namespace GladMMO
 
 		private IEntityGuidMappable<PendingGuildInviteData> PendingInviteData { get; }
 
-		private IRepositoryFactory<ITrinityGuildMembershipRepository> CharacterGuildMembershipRepositoryFactory { get; }
+		private IRepositoryFactory<ITrinityGuildMemberRepository> CharacterGuildMembershipRepositoryFactory { get; }
 
 		public PendingGuildInviteResultHandler([JetBrains.Annotations.NotNull] ILogger<GuildMemberInviteRequestModelHandler> logger,
 			[JetBrains.Annotations.NotNull] IEntityGuidMappable<PendingGuildInviteData> pendingInviteData,
-			[JetBrains.Annotations.NotNull] IRepositoryFactory<ITrinityGuildMembershipRepository> characterGuildMembershipRepository)
+			[JetBrains.Annotations.NotNull] IRepositoryFactory<ITrinityGuildMemberRepository> characterGuildMembershipRepository)
 		{
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
 			PendingInviteData = pendingInviteData ?? throw new ArgumentNullException(nameof(pendingInviteData));

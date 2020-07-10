@@ -21,7 +21,7 @@ namespace GladMMO
 		[ResponseCache(Duration = 10)] //This should be good for caching
 		[AuthorizeJwt]
 		[HttpGet]
-		public async Task<IActionResult> GetCharacterFriends([FromServices] [JetBrains.Annotations.NotNull] ITrinityFriendshipRepository friendsRepository,
+		public async Task<IActionResult> GetCharacterFriends([FromServices] [JetBrains.Annotations.NotNull] ITrinityCharacterSocialRepository friendsRepository,
 			[FromServices] [JetBrains.Annotations.NotNull] ISocialServiceToGameServiceClient socialServiceClient)
 		{
 			if (friendsRepository == null) throw new ArgumentNullException(nameof(friendsRepository));
@@ -42,7 +42,7 @@ namespace GladMMO
 		[AuthorizeJwt]
 		[HttpPost("befriend/{name}")]
 		public async Task<IActionResult> TryAddFriend([FromRoute(Name = "name")] [JetBrains.Annotations.NotNull] string characterFriendName,
-			[FromServices] [JetBrains.Annotations.NotNull] ITrinityFriendshipRepository friendsRepository,
+			[FromServices] [JetBrains.Annotations.NotNull] ITrinityCharacterSocialRepository friendsRepository,
 			[FromServices] [JetBrains.Annotations.NotNull] ISocialServiceToGameServiceClient socialServiceClient,
 			[FromServices] INameQueryService nameQueryService)
 		{

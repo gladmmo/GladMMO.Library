@@ -13,11 +13,11 @@ namespace GladMMO
 	[Route("api/[controller]")]
 	public sealed class CharacterSessionController : AuthorizationReadyController
 	{
-		private ITrinityCharacterRepository CharacterRepository { get; }
+		private ITrinityCharactersRepository CharacterRepository { get; }
 
 		/// <inheritdoc />
 		public CharacterSessionController(IClaimsPrincipalReader claimsReader, ILogger<AuthorizationReadyController> logger, 
-			[FromServices] ITrinityCharacterRepository characterRepository) 
+			[FromServices] ITrinityCharactersRepository characterRepository) 
 			: base(claimsReader, logger)
 		{
 			CharacterRepository = characterRepository ?? throw new ArgumentNullException(nameof(characterRepository));
