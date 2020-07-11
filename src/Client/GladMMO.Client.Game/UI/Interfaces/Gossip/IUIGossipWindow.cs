@@ -5,7 +5,7 @@ using Glader.Essentials;
 
 namespace GladMMO
 {
-	public interface IUIGossipWindow
+	public interface IUIGossipWindow : IUIWindow
 	{
 		IUIElement RootElement { get; }
 

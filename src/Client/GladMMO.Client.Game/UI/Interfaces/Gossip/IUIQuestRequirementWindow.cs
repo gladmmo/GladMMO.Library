@@ -5,7 +5,12 @@ using Glader.Essentials;
 
 namespace GladMMO
 {
-	public interface IUIQuestCompleteWindow
+	/// <summary>
+	/// Basically the incomplete/required item
+	/// window for WoW. Basically iterates to the user
+	/// what the requirements for the quest is.
+	/// </summary>
+	public interface IUIQuestRequirementWindow : IUIWindow
 	{
 		IUIElement RootElement { get; }
 

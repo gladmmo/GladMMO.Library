@@ -5,15 +5,13 @@ using Glader.Essentials;
 
 namespace GladMMO
 {
-	public interface IUIQuestWindow
+	public interface IUIQuestCompleteWindow : IUIWindow
 	{
 		IUIElement RootElement { get; }
 
 		IUIText Title { get; }
 
 		IUIText Description { get; }
-
-		IUIText Objective { get; }
 
 		IUIButton AcceptButton { get; }
 	}
