@@ -7,8 +7,6 @@ namespace GladMMO
 {
 	public interface IUIGossipWindow : IUIWindow
 	{
-		IUIElement RootElement { get; }
-
 		IUIText GossipText { get; }
 
 		IReadOnlyList<IUILabeledButton> GossipMenuButtons { get; }
