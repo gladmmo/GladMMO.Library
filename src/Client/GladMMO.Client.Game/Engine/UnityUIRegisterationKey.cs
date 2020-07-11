@@ -101,6 +101,8 @@ namespace GladMMO
 
 		QuestAcceptButton = 44,
 
-		QuestCompleteWindow = 45
+		QuestCompleteWindow = 45,
+
+		QuestRequirementsWindow = 46
 	}
 }
