@@ -98,6 +98,11 @@ namespace GladMMO
 				.AsSelf()
 				.SingleInstance();
 
+			//DefaultGossipWindowCollection : IGossipWindowCollection
+			builder.RegisterType<DefaultGossipWindowCollection>()
+				.As<IGossipWindowCollection>()
+				.SingleInstance();
+
 			//Ok, now we actually register update block types manually
 			//because it's not worth it to do an assembly-wide search for them.
 			/*builder.RegisterType<DefaultObjectUpdateBlockDispatcher>()
