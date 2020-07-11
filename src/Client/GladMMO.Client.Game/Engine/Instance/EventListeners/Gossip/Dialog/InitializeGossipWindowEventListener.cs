@@ -12,15 +12,21 @@ namespace GladMMO
 	{
 		private IUIGossipWindow GossipWindow { get; }
 
+		private IGossipWindowCollection GossipWindows { get; }
+
 		public InitializeGossipWindowEventListener(IGossipMenuCreateEventSubscribable subscriptionService,
-			[KeyFilter(UnityUIRegisterationKey.GossipWindow)] [NotNull] IUIGossipWindow gossipWindow) 
+			[KeyFilter(UnityUIRegisterationKey.GossipWindow)] [NotNull] IUIGossipWindow gossipWindow,
+			[NotNull] IGossipWindowCollection gossipWindows) 
 			: base(subscriptionService)
 		{
 			GossipWindow = gossipWindow ?? throw new ArgumentNullException(nameof(gossipWindow));
+			GossipWindows = gossipWindows ?? throw new ArgumentNullException(nameof(gossipWindows));
 		}
 
 		protected override void OnEventFired(object source, GossipMenuCreateEventArgs args)
 		{
+			GossipWindows.CloseAll();
+
 			//Clear the entire state of the gossip window first.
 			//So we don't have left over options.
 			GossipWindow.Clear();
