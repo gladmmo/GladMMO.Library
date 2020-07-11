@@ -10,8 +10,10 @@ using GladNet;
 
 namespace GladMMO
 {
+	[AdditionalRegisterationAs(typeof(IQuestCompleteWindowCreateEventSubscribable))]
+	[AdditionalRegisterationAs(typeof(IQuestRequirementsWindowCreateEventSubscribable))]
 	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
-	public sealed class InitializeGossipWindowCallbacksInitializable : IGameStartable
+	public sealed class InitializeGossipWindowCallbacksInitializable : IGameStartable, IQuestRequirementsWindowCreateEventSubscribable, IQuestCompleteWindowCreateEventSubscribable
 	{
 		private IUIGossipWindow GossipWindow { get; }
 
@@ -21,16 +23,28 @@ namespace GladMMO
 
 		private ILog Logger { get; }
 
+		private LocalPlayerQuestDataContainer QuestDataContainer { get; }
+
+		public event EventHandler<QuestRequirementWindowCreateEventArgs> OnQuestRequirementWindowCreate;
+
+		public event EventHandler<QuestCompleteWindowCreateEventArgs> OnQuestCompleteWindowCreate;
+
+		private IGossipTextContentServiceClient GossipTextDataClient { get; }
+
 		public InitializeGossipWindowCallbacksInitializable(
 			[KeyFilter(UnityUIRegisterationKey.GossipWindow)] [NotNull] IUIGossipWindow gossipWindow,
 			[NotNull] IPeerPayloadSendService<GamePacketPayload> sendService,
 			[NotNull] LocalPlayerMenuState menuState,
-			[NotNull] ILog logger)
+			[NotNull] ILog logger,
+			[NotNull] LocalPlayerQuestDataContainer questDataContainer,
+			[NotNull] IGossipTextContentServiceClient gossipTextDataClient)
 		{
 			GossipWindow = gossipWindow ?? throw new ArgumentNullException(nameof(gossipWindow));
 			SendService = sendService ?? throw new ArgumentNullException(nameof(sendService));
 			MenuState = menuState ?? throw new ArgumentNullException(nameof(menuState));
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
+			QuestDataContainer = questDataContainer ?? throw new ArgumentNullException(nameof(questDataContainer));
+			GossipTextDataClient = gossipTextDataClient ?? throw new ArgumentNullException(nameof(gossipTextDataClient));
 		}
 
 		public Task OnGameStart()
@@ -62,9 +76,9 @@ namespace GladMMO
 
 					try
 					{
-						int questId = MenuState.QuestOptions[index].QuestId;
+						QuestGossipEntry questOption = MenuState.QuestOptions[index];
 
-						await SendService.SendMessage(new CMSG_QUESTGIVER_QUERY_QUEST_Payload(MenuState.CurrentGossipEntity, questId));
+						await SendGossipClickAsync(questOption);
 					}
 					catch (Exception e)
 					{
@@ -75,6 +89,39 @@ namespace GladMMO
 			}
 
 			return Task.CompletedTask;
+		}
+
+		private async Task SendGossipClickAsync(QuestGossipEntry questOption)
+		{
+			int questId = questOption.QuestId;
+
+			//Depending on the quest state, we need to send DIFFERENT packets.
+			//If the quest is available/notstarted we need to send CMSG_QUESTGIVER_QUERY_QUEST_Payload
+			if (QuestDataContainer.HasStartedQuest(questId))
+			{
+				//TODO: Send complete quest packet. Strangley it's more like Try Complete.
+				if (QuestDataContainer.IsQuestComplete(questId))
+				{
+					//We don't send TC a packet, because we don't really need to.
+					//We just say HEY the quest is done and show the complete screen.
+					var completeTextModel = await GossipTextDataClient.GetQuestCompleteGossipTextAsync(questId);
+
+					if (completeTextModel.isSuccessful)
+						OnQuestCompleteWindowCreate?.Invoke(this, new QuestCompleteWindowCreateEventArgs(MenuState.CurrentGossipEntity, questId, completeTextModel.Result));
+				}
+				else
+				{
+					//Not complete, and we know it, no need to send "Try Complete" packet
+					//it will redirect us to the screen for requirements, incomplete or required items page.
+					//So we should just do that.
+					var incompleteQuestTextModel = await GossipTextDataClient.GetQuestIncompleteGossipTextAsync(questId);
+
+					if (incompleteQuestTextModel.isSuccessful)
+						OnQuestRequirementWindowCreate?.Invoke(this, new QuestRequirementWindowCreateEventArgs(MenuState.CurrentGossipEntity, questId, incompleteQuestTextModel.Result));
+				}
+			}
+			else
+				await SendService.SendMessage(new CMSG_QUESTGIVER_QUERY_QUEST_Payload(MenuState.CurrentGossipEntity, questId));
 		}
 	}
 }
