@@ -15,12 +15,15 @@ namespace GladMMO
 
 		private ILog Logger { get; }
 
-		public SetPlayerMenuQuestStateEventListener(IQuestWindowCreateEventSubscribable questWindowSubscriptionService,
-			IQuestRequirementsWindowCreateEventSubscribable requirementsWindowSubscriptionService,
-			IQuestCompleteWindowCreateEventSubscribable completeWindowSubscriptionService,
+		public SetPlayerMenuQuestStateEventListener([NotNull] IQuestWindowCreateEventSubscribable questWindowSubscriptionService,
+			[NotNull] IQuestRequirementsWindowCreateEventSubscribable requirementsWindowSubscriptionService,
+			[NotNull] IQuestCompleteWindowCreateEventSubscribable completeWindowSubscriptionService,
 			[NotNull] LocalPlayerMenuState menuState,
 			[NotNull] ILog logger)
 		{
+			if (questWindowSubscriptionService == null) throw new ArgumentNullException(nameof(questWindowSubscriptionService));
+			if (requirementsWindowSubscriptionService == null) throw new ArgumentNullException(nameof(requirementsWindowSubscriptionService));
+			if (completeWindowSubscriptionService == null) throw new ArgumentNullException(nameof(completeWindowSubscriptionService));
 			MenuState = menuState ?? throw new ArgumentNullException(nameof(menuState));
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
