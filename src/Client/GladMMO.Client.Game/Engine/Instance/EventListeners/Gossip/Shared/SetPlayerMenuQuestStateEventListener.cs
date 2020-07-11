@@ -17,6 +17,7 @@ namespace GladMMO
 
 		public SetPlayerMenuQuestStateEventListener(IQuestWindowCreateEventSubscribable questWindowSubscriptionService,
 			IQuestRequirementsWindowCreateEventSubscribable requirementsWindowSubscriptionService,
+			IQuestCompleteWindowCreateEventSubscribable completeWindowSubscriptionService,
 			[NotNull] LocalPlayerMenuState menuState,
 			[NotNull] ILog logger)
 		{
@@ -25,6 +26,7 @@ namespace GladMMO
 
 			requirementsWindowSubscriptionService.OnQuestRequirementWindowCreate += (sender, args) => SetQuestId(args.QuestGiver, args.QuestId);
 			questWindowSubscriptionService.OnQuestWindowCreate += (sender, args) => SetQuestId(args.QuestGiver, args.QuestId);
+			completeWindowSubscriptionService.OnQuestCompleteWindowCreate += (sender, args) => SetQuestId(args.QuestGiver, args.QuestId);
 		}
 
 		private void SetQuestId(ObjectGuid questGiver, int questId)
