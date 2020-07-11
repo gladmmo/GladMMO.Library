@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Autofac;
+using Autofac.Features.AttributeFilters;
 using UnityEngine;
 
 namespace GladMMO
@@ -101,6 +102,7 @@ namespace GladMMO
 			//DefaultGossipWindowCollection : IGossipWindowCollection
 			builder.RegisterType<DefaultGossipWindowCollection>()
 				.As<IGossipWindowCollection>()
+				.WithAttributeFiltering()
 				.SingleInstance();
 
 			//Ok, now we actually register update block types manually
