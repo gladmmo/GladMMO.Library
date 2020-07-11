@@ -10,6 +10,7 @@ using GladNet;
 
 namespace GladMMO
 {
+	//TODO: Refactor into click registeration and click handler service.
 	[AdditionalRegisterationAs(typeof(IQuestCompleteWindowCreateEventSubscribable))]
 	[AdditionalRegisterationAs(typeof(IQuestRequirementsWindowCreateEventSubscribable))]
 	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
@@ -25,7 +26,7 @@ namespace GladMMO
 
 		private LocalPlayerQuestDataContainer QuestDataContainer { get; }
 
-		public event EventHandler<QuestRequirementWindowCreateEventArgs> OnQuestRequirementWindowCreate;
+		public event EventHandler<QuestRequirementsWindowCreateEventArgs> OnQuestRequirementWindowCreate;
 
 		public event EventHandler<QuestCompleteWindowCreateEventArgs> OnQuestCompleteWindowCreate;
 
@@ -117,7 +118,7 @@ namespace GladMMO
 					var incompleteQuestTextModel = await GossipTextDataClient.GetQuestIncompleteGossipTextAsync(questId);
 
 					if (incompleteQuestTextModel.isSuccessful)
-						OnQuestRequirementWindowCreate?.Invoke(this, new QuestRequirementWindowCreateEventArgs(MenuState.CurrentGossipEntity, questId, incompleteQuestTextModel.Result));
+						OnQuestRequirementWindowCreate?.Invoke(this, new QuestRequirementsWindowCreateEventArgs(MenuState.CurrentGossipEntity, questId, incompleteQuestTextModel.Result));
 				}
 			}
 			else
