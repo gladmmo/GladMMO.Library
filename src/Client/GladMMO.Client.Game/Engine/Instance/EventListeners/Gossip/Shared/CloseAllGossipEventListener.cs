@@ -14,19 +14,29 @@ namespace GladMMO
 
 		private IUIQuestWindow QuestWindow { get; }
 
+		private IUIQuestRequirementWindow QuestRequirementsWindow { get; }
+
+		private IUIQuestCompleteWindow QuestCompleteWindow { get; }
+
 		public CloseAllGossipEventListener([NotNull] IGossipCompleteEventSubscribable subscriptionService,
 			[KeyFilter(UnityUIRegisterationKey.GossipWindow)] [NotNull] IUIGossipWindow gossipWindow,
-			[KeyFilter(UnityUIRegisterationKey.QuestWindow)] [NotNull] IUIQuestWindow questWindow) 
+			[KeyFilter(UnityUIRegisterationKey.QuestWindow)] [NotNull] IUIQuestWindow questWindow,
+			[KeyFilter(UnityUIRegisterationKey.QuestRequirementsWindow)] [NotNull] IUIQuestRequirementWindow questRequirementsWindow,
+			[KeyFilter(UnityUIRegisterationKey.QuestCompleteWindow)] [NotNull] IUIQuestCompleteWindow questCompleteWindow) 
 			: base(subscriptionService)
 		{
 			GossipWindow = gossipWindow ?? throw new ArgumentNullException(nameof(gossipWindow));
 			QuestWindow = questWindow ?? throw new ArgumentNullException(nameof(questWindow));
+			QuestRequirementsWindow = questRequirementsWindow ?? throw new ArgumentNullException(nameof(questRequirementsWindow));
+			QuestCompleteWindow = questCompleteWindow ?? throw new ArgumentNullException(nameof(questCompleteWindow));
 		}
 
 		protected override void OnEventFired(object source, GossipCompleteEventArgs args)
 		{
 			GossipWindow.RootElement.SetElementActive(false);
 			QuestWindow.RootElement.SetElementActive(false);
+			QuestRequirementsWindow.RootElement.SetElementActive(false);
+			QuestCompleteWindow.RootElement.SetElementActive(false);
 		}
 	}
 }
