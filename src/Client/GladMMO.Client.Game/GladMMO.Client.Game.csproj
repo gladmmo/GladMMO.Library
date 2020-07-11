@@ -85,6 +85,7 @@
 
   <ItemGroup>
     <Folder Include="Attributes\" />
+    <Folder Include="Engine\Instance\EventListeners\Gossip\QuestComplete\" />
     <Folder Include="Engine\Instance\EventListeners\Quest\Local\" />
     <Folder Include="Engine\Instance\Initializables\Content\" />
     <Folder Include="Engine\LoadingScreen\Handlers\" />
