@@ -9,6 +9,8 @@ using Glader.Essentials;
 
 namespace GladMMO
 {
+	//TODO: Create quest data container interface
+	[AdditionalRegisterationAs(typeof(LocalPlayerQuestDataContainer))]
 	[AdditionalRegisterationAs(typeof(ILocalPlayerQuestAddedEventSubscribable))]
 	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]
 	public sealed class LocalPlayerQuestDataContainer : IGameStartable, ILocalPlayerQuestAddedEventSubscribable
@@ -73,7 +75,8 @@ namespace GladMMO
 			//TODO: Use QuestSlotOffsets
 			//TODO: Use quest state enum
 			//COMPLETE = 0x0001,
-			return (PlayerDetails.EntityData.GetFieldValue<int>(questStartField + 1) & 0x0001) != 0;
+			int questStateFlag = PlayerDetails.EntityData.GetFieldValue<int>(questStartField + 1);
+			return (questStateFlag & 0x0001) != 0;
 		}
 
 		private IEnumerable<int> CurrentQuests()
