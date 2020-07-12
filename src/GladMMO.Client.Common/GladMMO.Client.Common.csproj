@@ -10,8 +10,8 @@
     <PackageReference Include="Autofac" Version="4.8.1" />
     <PackageReference Include="Common.Logging" Version="3.4.1" />
     <PackageReference Include="FluentValidation" Version="7.6.103" />
-    <PackageReference Include="FreecraftCore.API.GDBC" Version="5.0.124" />
-    <PackageReference Include="FreecraftCore.Packet.Game" Version="5.0.124" />
+    <PackageReference Include="FreecraftCore.API.GDBC" Version="5.0.125" />
+    <PackageReference Include="FreecraftCore.Packet.Game" Version="5.0.125" />
     <PackageReference Include="FreecraftCore.Serializer" Version="3.0.39" />
     <PackageReference Include="Glader.Essentials.Common" Version="1.0.37" />
     <PackageReference Include="GladNet3.Client.DotNetTcpClient" Version="3.0.48" />
