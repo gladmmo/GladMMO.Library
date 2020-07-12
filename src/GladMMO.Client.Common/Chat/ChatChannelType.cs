@@ -15,5 +15,7 @@ namespace GladMMO
 		Proximity = 3,
 
 		RealtimeServerCommand = 4,
+
+		GamePlay = 5,
 	}
 }
