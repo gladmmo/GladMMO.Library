@@ -34,17 +34,31 @@ namespace GladMMO
 
 			ChatChannelType messageType = incomingChatMessageEventData.ChannelType;
 
-			string renderableMessage = $"<color=#{ComputeColorFromChatType(messageType)}>{ComputeChannelText(messageType)}: {incomingChatMessageEventData.Message}</color>";
+			string renderableMessage = ComputeRenderableMessage(incomingChatMessageEventData, messageType);
 
 			TextChatEventArgs args = new TextChatEventArgs(renderableMessage, messageType);
 			args.isFormattedText = true;
 			return args;
 		}
 
+		private string ComputeRenderableMessage<TMessageType>(TMessageType incomingChatMessageEventData, ChatChannelType messageType) where TMessageType : ITextMessageContainable, IChatChannelRoutable
+		{
+			string channelText = ComputeChannelText(messageType);
+
+			//Some message won't have a channel pre-pended text.
+			if (channelText == String.Empty)
+			{
+				return $"<color=#{ComputeColorFromChatType(messageType)}>{incomingChatMessageEventData.Message}</color>";
+			}
+			else
+				return $"<color=#{ComputeColorFromChatType(messageType)}>{channelText}: {incomingChatMessageEventData.Message}</color>";
+		}
+
 		private string ComputeColorFromChatType(ChatChannelType messageType)
 		{
 			switch(messageType)
 			{
+				case ChatChannelType.GamePlay:
 				case ChatChannelType.System:
 					return "eff233ff";
 				case ChatChannelType.Zone:
@@ -70,6 +84,8 @@ namespace GladMMO
 					return "[1. Zone]";
 				case ChatChannelType.Guild:
 					return "[Guild]";
+				case ChatChannelType.GamePlay:
+					return String.Empty;
 			}
 
 			throw new NotImplementedException($"Cannot handle Chat Type: {messageType}:{(int)messageType}");
