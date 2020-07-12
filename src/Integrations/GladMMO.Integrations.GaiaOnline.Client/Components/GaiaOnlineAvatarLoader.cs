@@ -65,7 +65,7 @@ namespace GladMMO.GaiaOnline
 				//For some reason we need to do this otherwise the actual
 				//avatars are faded for some reason. I explored other options
 				//but this seems the most viable option.
-				r.material.shader = StandardShaderReference.Value;
+				/*r.material.shader = StandardShaderReference.Value;
 
 				r.material.SetFloat("_Mode", 2);
 				r.material.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
@@ -74,7 +74,7 @@ namespace GladMMO.GaiaOnline
 				r.material.DisableKeyword("_ALPHATEST_ON");
 				r.material.EnableKeyword("_ALPHABLEND_ON");
 				r.material.DisableKeyword("_ALPHAPREMULTIPLY_ON");
-				r.material.renderQueue = 3000;
+				r.material.renderQueue = 3000;*/
 
 				r.material.mainTexture = texture;
 			}
