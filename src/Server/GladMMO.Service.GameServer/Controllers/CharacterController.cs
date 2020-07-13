@@ -143,8 +143,8 @@ namespace GladMMO
 				PositionY = -8,
 				PositionZ = 0,
 
-				Race = (byte)FreecraftCore.CharacterRace.HUMAN,
-				Class = (byte)FreecraftCore.CharacterClass.Mage,
+				Race = (byte)FreecraftCore.CharacterRace.ORC,
+				Class = (byte)FreecraftCore.CharacterClass.Warlock,
 
 				TaxiPath = "",
 				Taximask = "",

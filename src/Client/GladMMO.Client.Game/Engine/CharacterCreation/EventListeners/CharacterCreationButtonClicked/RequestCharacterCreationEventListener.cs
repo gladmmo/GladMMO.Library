@@ -83,7 +83,7 @@ namespace GladMMO
 			else
 			{
 				//If it's valid, we can create it.
-				CharacterCreationResponse creationResponse = await CharacterService.CreateCharacter(new CharacterCreationRequest(CharacterRace.HUMAN, CharacterClass.Warrior, name));
+				CharacterCreationResponse creationResponse = await CharacterService.CreateCharacter(new CharacterCreationRequest(CharacterRace.ORC, CharacterClass.Warlock, name));
 
 				if (!creationResponse.isSuccessful)
 					if (Logger.IsInfoEnabled)
