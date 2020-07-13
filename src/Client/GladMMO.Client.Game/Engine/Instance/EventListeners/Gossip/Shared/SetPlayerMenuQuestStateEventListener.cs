@@ -40,12 +40,12 @@ namespace GladMMO
 			if (MenuState.CurrentGossipEntity != questGiver)
 			{
 				//TODO: Construct quest entry here.
-				QuestGossipEntry questEntry = null; //new QuestGossipEntry();
+				QuestGossipEntry questEntry = new QuestGossipEntry(questId, 3, 1, QuestFlags.NONE, false, "TODO: Auto-share title");
 				MenuState.Clear();
 				MenuState.Update(questGiver, Array.Empty<GossipMenuItem>(), new[] {questEntry});
 
-				if (Logger.IsErrorEnabled)
-					Logger.Error($"Encountered Quest Offer from non-current Gossip (probably shared). TODO: Implement case.");
+				if (Logger.IsWarnEnabled)
+					Logger.Warn($"Encountered Quest Offer from non-current Gossip (probably shared). TODO: Properly Implement case!");
 			}
 
 			//Set the current offered quest state.
