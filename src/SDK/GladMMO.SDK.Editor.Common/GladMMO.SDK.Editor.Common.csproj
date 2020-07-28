@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Fasterflect.Netstandard" Version="1.0.9" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\GladMMO.Common.SDK\GladMMO.Common.SDK.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="UnityEditor">
+      <HintPath>..\..\..\lib\Unity\UnityEditor.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>..\..\..\lib\Unity\UnityEngine.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

@@ -167,7 +167,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GladMMO.Database.Global", "
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{E13AB75D-C491-4A5A-9492-84AA1F566BCC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladMMO.TrinityCore.DatabaseRepositoryGenerator", "src\Tools\GladMMO.TrinityCore.DatabaseRepositoryGenerator\GladMMO.TrinityCore.DatabaseRepositoryGenerator.csproj", "{3B44D4E5-D10E-4B87-91BB-6CEC6AAC075C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GladMMO.TrinityCore.DatabaseRepositoryGenerator", "src\Tools\GladMMO.TrinityCore.DatabaseRepositoryGenerator\GladMMO.TrinityCore.DatabaseRepositoryGenerator.csproj", "{3B44D4E5-D10E-4B87-91BB-6CEC6AAC075C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladMMO.SDK.Editor.Common", "src\SDK\GladMMO.SDK.Editor.Common\GladMMO.SDK.Editor.Common.csproj", "{C15889FB-A52B-4B55-A12F-5DF83BBA16C5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1104,6 +1106,20 @@ Global
 		{3B44D4E5-D10E-4B87-91BB-6CEC6AAC075C}.Debug-Local|Any CPU.Build.0 = Debug|Any CPU
 		{3B44D4E5-D10E-4B87-91BB-6CEC6AAC075C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3B44D4E5-D10E-4B87-91BB-6CEC6AAC075C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C15889FB-A52B-4B55-A12F-5DF83BBA16C5}.azure_release|Any CPU.ActiveCfg = Debug|Any CPU
+		{C15889FB-A52B-4B55-A12F-5DF83BBA16C5}.azure_release|Any CPU.Build.0 = Debug|Any CPU
+		{C15889FB-A52B-4B55-A12F-5DF83BBA16C5}.Database_Migration|Any CPU.ActiveCfg = Debug|Any CPU
+		{C15889FB-A52B-4B55-A12F-5DF83BBA16C5}.Database_Migration|Any CPU.Build.0 = Debug|Any CPU
+		{C15889FB-A52B-4B55-A12F-5DF83BBA16C5}.debug_azure|Any CPU.ActiveCfg = Debug|Any CPU
+		{C15889FB-A52B-4B55-A12F-5DF83BBA16C5}.debug_azure|Any CPU.Build.0 = Debug|Any CPU
+		{C15889FB-A52B-4B55-A12F-5DF83BBA16C5}.DEBUG_LOCAL|Any CPU.ActiveCfg = Debug|Any CPU
+		{C15889FB-A52B-4B55-A12F-5DF83BBA16C5}.DEBUG_LOCAL|Any CPU.Build.0 = Debug|Any CPU
+		{C15889FB-A52B-4B55-A12F-5DF83BBA16C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C15889FB-A52B-4B55-A12F-5DF83BBA16C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C15889FB-A52B-4B55-A12F-5DF83BBA16C5}.Debug-Local|Any CPU.ActiveCfg = Debug|Any CPU
+		{C15889FB-A52B-4B55-A12F-5DF83BBA16C5}.Debug-Local|Any CPU.Build.0 = Debug|Any CPU
+		{C15889FB-A52B-4B55-A12F-5DF83BBA16C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C15889FB-A52B-4B55-A12F-5DF83BBA16C5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1190,6 +1206,7 @@ Global
 		{6ADE8066-93FE-4EEA-B2B3-7C6580F4B507} = {41F8B3EE-28B8-4A68-B3C9-3F0C283EEF4D}
 		{E13AB75D-C491-4A5A-9492-84AA1F566BCC} = {82223BC2-FD46-45B7-8714-A1BBB6FACC0E}
 		{3B44D4E5-D10E-4B87-91BB-6CEC6AAC075C} = {E13AB75D-C491-4A5A-9492-84AA1F566BCC}
+		{C15889FB-A52B-4B55-A12F-5DF83BBA16C5} = {E8263F78-88DE-4FB8-92A9-2A50AE21B518}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {886DD3D7-35E3-42F0-8CE9-74FB5AD7BBD0}
