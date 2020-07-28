@@ -140,11 +140,12 @@ namespace GladMMO
 				TalentGroupsCount = 1,
 				Map = 13, //Test map
 				PositionX = 0,
-				PositionY = -8,
+				PositionY = 0.5f,
 				PositionZ = 0,
 
-				Race = (byte)FreecraftCore.CharacterRace.ORC,
+				Race = (byte)FreecraftCore.CharacterRace.HUMAN,
 				Class = (byte)FreecraftCore.CharacterClass.Warlock,
+				Gender = 1, //TODO: Enum.
 
 				TaxiPath = "",
 				Taximask = "",
