@@ -169,7 +169,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{E13AB75D
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GladMMO.TrinityCore.DatabaseRepositoryGenerator", "src\Tools\GladMMO.TrinityCore.DatabaseRepositoryGenerator\GladMMO.TrinityCore.DatabaseRepositoryGenerator.csproj", "{3B44D4E5-D10E-4B87-91BB-6CEC6AAC075C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladMMO.SDK.Editor.Common", "src\SDK\GladMMO.SDK.Editor.Common\GladMMO.SDK.Editor.Common.csproj", "{C15889FB-A52B-4B55-A12F-5DF83BBA16C5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GladMMO.SDK.Editor.Common", "src\SDK\GladMMO.SDK.Editor.Common\GladMMO.SDK.Editor.Common.csproj", "{C15889FB-A52B-4B55-A12F-5DF83BBA16C5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Discord", "Discord", "{51443F35-04FC-451D-8BCD-551937E7139D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladMMO.Server.Discord.Ingestion", "src\Server\Discord\GladMMO.Server.Discord.Ingestion\GladMMO.Server.Discord.Ingestion.csproj", "{F92D71C5-2572-4DFE-8DCE-CB02EF436BBD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1120,6 +1124,20 @@ Global
 		{C15889FB-A52B-4B55-A12F-5DF83BBA16C5}.Debug-Local|Any CPU.Build.0 = Debug|Any CPU
 		{C15889FB-A52B-4B55-A12F-5DF83BBA16C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C15889FB-A52B-4B55-A12F-5DF83BBA16C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F92D71C5-2572-4DFE-8DCE-CB02EF436BBD}.azure_release|Any CPU.ActiveCfg = Debug|Any CPU
+		{F92D71C5-2572-4DFE-8DCE-CB02EF436BBD}.azure_release|Any CPU.Build.0 = Debug|Any CPU
+		{F92D71C5-2572-4DFE-8DCE-CB02EF436BBD}.Database_Migration|Any CPU.ActiveCfg = Debug|Any CPU
+		{F92D71C5-2572-4DFE-8DCE-CB02EF436BBD}.Database_Migration|Any CPU.Build.0 = Debug|Any CPU
+		{F92D71C5-2572-4DFE-8DCE-CB02EF436BBD}.debug_azure|Any CPU.ActiveCfg = Debug|Any CPU
+		{F92D71C5-2572-4DFE-8DCE-CB02EF436BBD}.debug_azure|Any CPU.Build.0 = Debug|Any CPU
+		{F92D71C5-2572-4DFE-8DCE-CB02EF436BBD}.DEBUG_LOCAL|Any CPU.ActiveCfg = Debug|Any CPU
+		{F92D71C5-2572-4DFE-8DCE-CB02EF436BBD}.DEBUG_LOCAL|Any CPU.Build.0 = Debug|Any CPU
+		{F92D71C5-2572-4DFE-8DCE-CB02EF436BBD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F92D71C5-2572-4DFE-8DCE-CB02EF436BBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F92D71C5-2572-4DFE-8DCE-CB02EF436BBD}.Debug-Local|Any CPU.ActiveCfg = Debug|Any CPU
+		{F92D71C5-2572-4DFE-8DCE-CB02EF436BBD}.Debug-Local|Any CPU.Build.0 = Debug|Any CPU
+		{F92D71C5-2572-4DFE-8DCE-CB02EF436BBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F92D71C5-2572-4DFE-8DCE-CB02EF436BBD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1207,6 +1225,8 @@ Global
 		{E13AB75D-C491-4A5A-9492-84AA1F566BCC} = {82223BC2-FD46-45B7-8714-A1BBB6FACC0E}
 		{3B44D4E5-D10E-4B87-91BB-6CEC6AAC075C} = {E13AB75D-C491-4A5A-9492-84AA1F566BCC}
 		{C15889FB-A52B-4B55-A12F-5DF83BBA16C5} = {E8263F78-88DE-4FB8-92A9-2A50AE21B518}
+		{51443F35-04FC-451D-8BCD-551937E7139D} = {98B85CCA-E727-485B-AD3C-68AC2A2B0364}
+		{F92D71C5-2572-4DFE-8DCE-CB02EF436BBD} = {51443F35-04FC-451D-8BCD-551937E7139D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {886DD3D7-35E3-42F0-8CE9-74FB5AD7BBD0}
