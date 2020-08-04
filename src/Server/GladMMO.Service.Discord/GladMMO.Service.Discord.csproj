@@ -22,4 +22,13 @@
     <ProjectReference Include="..\GladMMO.Service.Common\GladMMO.Service.Common.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Certs\TestCert.pfx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Certs\TLSCert.pfx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
