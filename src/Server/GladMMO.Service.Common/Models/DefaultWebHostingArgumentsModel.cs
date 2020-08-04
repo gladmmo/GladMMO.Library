@@ -1,5 +1,6 @@
 ﻿using System; using FreecraftCore;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using CommandLine;
 
@@ -14,13 +15,13 @@ namespace GladMMO
 		/// Command line option --url={url}.
 		/// Specifies the URL {url} to host the web service on.
 		/// </summary>
-		[Option('u', "url")]
-		public string Url { get; private set; } //For CommandLineParser 2.1.1-beta we must have private setters
+		[Option('u', "url", Separator = ' ')]
+		public IEnumerable<string> Url { get; private set; } //For CommandLineParser 2.1.1-beta we must have private setters
 
 		/// <summary>
 		/// Indicates if a custom URL is defined.
 		/// </summary>
-		public bool isCustomUrlDefined => !String.IsNullOrEmpty(Url);
+		public bool isCustomUrlDefined => Url.Any();
 
 		/// <summary>
 		/// Command line options --usehttps={CertName}.
