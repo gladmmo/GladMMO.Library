@@ -37,3 +37,7 @@ cd ..
 cd zonemanager
 start "zonemanager" dotnet GladMMO.Service.ZoneManager.dll --url=http://192.168.0.12:5012
 cd ..
+
+cd discord
+start "discordserv" dotnet GladMMO.Service.Discord.dll --url=http://192.168.0.12:5013 https://192.168.0.12:15013 --usehttps=Certs/ScapeVRMMOOrg.pfx
+cd ..
