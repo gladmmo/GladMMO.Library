@@ -65,6 +65,9 @@ namespace GladMMO
 
 			app.UseResponseCaching();
 			app.UseAuthentication();
+
+			app.UseMiddleware<EventGridValidationMiddleware>();
+
 			app.UseMvcWithDefaultRoute();
 		}
 	}
