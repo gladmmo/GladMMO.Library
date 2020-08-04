@@ -58,15 +58,13 @@ namespace GladMMO
 			Parser.Default.ParseArguments<DefaultWebHostingArgumentsModel>(args)
 				.WithParsed(model =>
 				{
-					List<string> endpoints = new List<string>();
-
 					//If https is enabled then a certifcate should be available for loading.
 					builder.UseKestrel(options =>
 					{
 						//Get the port
 						if (model.isCustomUrlDefined)
 						{
-							
+							List<string> endpoints = new List<string>();
 							foreach (var entry in model.Url)
 							{
 								int port = 5000;
@@ -95,7 +93,7 @@ namespace GladMMO
 								endpoints.Add(modelUrl);
 							}
 						}
-						else if(shouldUseDefaultUrlIfNoneProvided)
+						else if (shouldUseDefaultUrlIfNoneProvided)
 						{
 							string prefix = model.isHttpsEnabled ? @"https://" : @"http://";
 							builder.UseUrls($@"{prefix}localhost:5000");
@@ -103,7 +101,7 @@ namespace GladMMO
 
 						//Check if we have an http setting set
 						string potentialHttpValue = builder.GetSetting("http_endpoint");
-						if(!String.IsNullOrWhiteSpace(potentialHttpValue))
+						if (!String.IsNullOrWhiteSpace(potentialHttpValue))
 							options.Listen(new IPEndPoint(IPAddress.Parse(builder.GetSetting("http_endpoint")), Int32.Parse(builder.GetSetting("http_port"))));
 
 						//.UseSetting("https_port", "443")
@@ -113,7 +111,7 @@ namespace GladMMO
 							{
 								options.Listen(new IPEndPoint(IPAddress.Parse(builder.GetSetting("https_endpoint")), Int32.Parse(builder.GetSetting("https_port"))), listenOptions =>
 								{
-									if(model.isHttpsEnabled)
+									if (model.isHttpsEnabled)
 									{
 										var httpsConnectionAdapterOptions = new HttpsConnectionAdapterOptions()
 										{
@@ -124,7 +122,8 @@ namespace GladMMO
 											//Ssl3 is mostly safe and supported by Mono which means it will work in Unity3D now.
 											SslProtocols = System.Security.Authentication.SslProtocols.Tls
 											               | System.Security.Authentication.SslProtocols.Tls11
-											               | System.Security.Authentication.SslProtocols.Tls12,
+											               | System.Security.Authentication.SslProtocols.Tls12
+											               | System.Security.Authentication.SslProtocols.Tls13,
 
 											ServerCertificate = X509Certificate2Loader.Create(model.HttpsCertificateName).Load()
 										};
@@ -138,8 +137,7 @@ namespace GladMMO
 								throw new System.InvalidOperationException($"Failed to register HTTPS Endpoint: {builder.GetSetting("https_endpoint")}:{builder.GetSetting("https_port")} Reason: {e.Message}", e);
 							}
 						}
-					})
-						.UseUrls(endpoints.ToArray());
+					});
 				});
 
 			return builder;
