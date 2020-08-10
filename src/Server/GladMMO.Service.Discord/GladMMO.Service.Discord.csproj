@@ -19,6 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\GladMMO.Models.Server.Discord\GladMMO.Models.Server.Discord.csproj" />
     <ProjectReference Include="..\GladMMO.Service.Common\GladMMO.Service.Common.csproj" />
   </ItemGroup>
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GladMMO.Discord;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.EventGrid.Models;
 using Microsoft.Extensions.Logging;
@@ -23,6 +24,13 @@ namespace GladMMO
 		{
 			//TODO: Validate URL
 			return Json(new SubscriptionValidationResponse(eventModels.First().Data.ValidationCode));
+		}
+
+		[HttpPost("Test")]
+		public async Task<IActionResult> TestCommandAsync([FromBody] TestCommand model)
+		{
+			Logger.LogInformation($"Discord Test Command: {model.Message}");
+			return Ok();
 		}
 	}
 }
