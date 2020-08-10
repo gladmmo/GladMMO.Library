@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Configurations>Debug;Release;debug_azure;azure_release</Configurations>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Refit" Version="4.7.51" />
+  </ItemGroup>
+
+</Project>
