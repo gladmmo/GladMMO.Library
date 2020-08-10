@@ -4,4 +4,8 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\GladMMO.Models.Common\GladMMO.Models.Common.csproj" />
+  </ItemGroup>
+
 </Project>

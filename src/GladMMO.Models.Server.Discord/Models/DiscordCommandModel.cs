@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Newtonsoft.Json;
 
-namespace GladMMO
+namespace GladMMO.Discord
 {
 	[JsonObject]
 	public abstract class DiscordCommandModel
