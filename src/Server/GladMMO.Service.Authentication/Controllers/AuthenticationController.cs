@@ -7,6 +7,8 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using FreecraftCore;
+using FreecraftCore.Crypto;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -58,16 +60,27 @@ namespace GladMMO
 
 				Account account = await TrinityCoreAuthenticationDbContext.Account.FirstAsync(a => a.Username == request.Username.ToUpper());
 
-				// Validate the username/password parameters and ensure the account is not locked out.
-				if(account.ShaPassHash != CreateHash(request.Username.ToUpper(), request.Password.ToUpper()))
+				//TC doesn't store a hash anymore, so we must compute verifier.
+				using(WoWSRP6PublicComponentHashServiceProvider hashProvider = new WoWSRP6PublicComponentHashServiceProvider())
 				{
-					return Forbid(
-						authenticationSchemes: OpenIddictServerAspNetCoreDefaults.AuthenticationScheme,
-						properties: new AuthenticationProperties(new Dictionary<string, string>
-						{
-							[OpenIddictServerAspNetCoreConstants.Properties.Error] = Errors.InvalidGrant,
-							[OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = "The username/password couple is invalid."
-						}));
+					//Compute password hash salted with provided salt
+					//x doesn't hash salt and hashed password. It actually hashes salt and hashed authstring which is {0}:{1} username:password.
+					byte[] hash = hashProvider
+						.Hash(account.Salt, hashProvider.Hash(Encoding.ASCII.GetBytes($"{request.Username.ToUpper()}:{request.Password.ToUpper()}".ToUpper())));
+
+					BigInteger gmod = WoWSRP6ServerCryptoServiceProvider.G.ModPow(hash.ToBigInteger(), WoWSRP6ServerCryptoServiceProvider.N);
+					byte[] verifier = gmod.ToCleanByteArray();
+
+					if (!verifier.SequenceEqual(account.Verifier))
+					{
+						return Forbid(
+							authenticationSchemes: OpenIddictServerAspNetCoreDefaults.AuthenticationScheme,
+							properties: new AuthenticationProperties(new Dictionary<string, string>
+							{
+								[OpenIddictServerAspNetCoreConstants.Properties.Error] = Errors.InvalidGrant,
+								[OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = "The username/password couple is invalid."
+							}));
+					}
 				}
 
 				ClaimsIdentity identity = await GenerateClaimsAsync(account);
