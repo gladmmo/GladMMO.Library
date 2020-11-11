@@ -85,7 +85,7 @@ namespace GladMMO
 			ProjectVersionStage.AssertBeta();
 
 			//TrinityCore: for now we just return local TC instance
-			return Ok(new ResolveServiceEndpointResponse(new ResolvedEndpoint("127.0.0.1", 8085)));
+			return Ok(new ResolveServiceEndpointResponse(new ResolvedEndpoint("72.190.177.214", 8085)));
 
 			//We reuse the service discovery response model
 			/*if(!await ZoneRepository.ContainsAsync(zoneId))
