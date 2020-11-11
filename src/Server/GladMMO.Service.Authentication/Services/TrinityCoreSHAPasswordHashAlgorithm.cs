@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace GladMMO
 {
+	[Obsolete("This hash Algorithm is no longer used by modern TrinityCore so we should not use it. SHA was never secure anyway.")]
 	public sealed class TrinityCoreSHAPasswordHashAlgorithm : IPasswordHashingAlgorithm
 	{
 		//See: https://stackoverflow.com/questions/311165/how-do-you-convert-a-byte-array-to-a-hexadecimal-string-and-vice-versa/24343727#24343727
