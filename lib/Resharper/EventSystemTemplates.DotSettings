@@ -1,0 +1,94 @@
+﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=E243B658F1160E41921A01A02FF2FD9A/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=E243B658F1160E41921A01A02FF2FD9A/Description/@EntryValue">Event Publisher</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=E243B658F1160E41921A01A02FF2FD9A/Text/@EntryValue">using System; &#xD;
+using FreecraftCore;&#xD;
+using System.Collections.Generic;&#xD;
+using System.Text;&#xD;
+using System.Threading.Tasks;&#xD;
+using Glader.Essentials;&#xD;
+&#xD;
+namespace GladMMO&#xD;
+{&#xD;
+&#xD;
+	/// &lt;summary&gt;&#xD;
+	/// Contract for an &lt;see cref="IEventPublisher{TEventPublisherInterface,TEventArgsType}"/&gt; implementation for &lt;see cref="I$EVENTNAME$EventSubscribable"/&gt;&#xD;
+	/// and &lt;see cref="$EVENTNAME$EventArgs"/&gt;.&#xD;
+	/// &lt;/summary&gt;&#xD;
+	public interface I$EVENTNAME$EventPublisher : IEventPublisher&lt;I$EVENTNAME$EventSubscribable, $EVENTNAME$EventArgs&gt;&#xD;
+	{&#xD;
+&#xD;
+	}&#xD;
+&#xD;
+	/// &lt;summary&gt;&#xD;
+	/// Default &lt;see cref="I$EVENTNAME$EventPublisher"/&gt; implementation.&#xD;
+	/// &lt;/summary&gt;&#xD;
+	[AdditionalRegisterationAs(typeof(I$EVENTNAME$EventSubscribable))]&#xD;
+	[AdditionalRegisterationAs(typeof(I$EVENTNAME$EventPublisher))]&#xD;
+	[SceneTypeCreateGladMMO(GameSceneType.InstanceServerScene)]&#xD;
+	public sealed class $EVENTNAME$EventPublisher : I$EVENTNAME$EventPublisher, I$EVENTNAME$EventSubscribable, IGameInitializable&#xD;
+	{&#xD;
+		public event EventHandler&lt;$EVENTNAME$EventArgs&gt; On$EVENTNAME$;&#xD;
+&#xD;
+		public void PublishEvent(object sender, $EVENTNAME$EventArgs eventArgs)&#xD;
+		{&#xD;
+			//Just forward event.&#xD;
+			On$EVENTNAME$?.Invoke(sender, eventArgs);&#xD;
+		}&#xD;
+&#xD;
+		public Task OnGameInitialized()&#xD;
+		{&#xD;
+			return Task.CompletedTask;&#xD;
+		}&#xD;
+	}&#xD;
+}&#xD;
+</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=E243B658F1160E41921A01A02FF2FD9A/Reformat/@EntryValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=E243B658F1160E41921A01A02FF2FD9A/ShortenQualifiedReferences/@EntryValue">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=E243B658F1160E41921A01A02FF2FD9A/CustomProperties/=Extension/@EntryIndexedValue">cs</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=E243B658F1160E41921A01A02FF2FD9A/CustomProperties/=FileName/@EntryIndexedValue">EventPublisher</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=E243B658F1160E41921A01A02FF2FD9A/CustomProperties/=ValidateFileName/@EntryIndexedValue">True</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=E243B658F1160E41921A01A02FF2FD9A/Applicability/=File/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=E243B658F1160E41921A01A02FF2FD9A/Scope/=E8F0594528C33E45BBFEC6CFE851095D/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=E243B658F1160E41921A01A02FF2FD9A/Scope/=E8F0594528C33E45BBFEC6CFE851095D/Type/@EntryValue">InCSharpProjectFile</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=E243B658F1160E41921A01A02FF2FD9A/Field/=EVENTNAME/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=E243B658F1160E41921A01A02FF2FD9A/Field/=EVENTNAME/Expression/@EntryValue">clipboard()</s:String>
+	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=E243B658F1160E41921A01A02FF2FD9A/Field/=EVENTNAME/Order/@EntryValue">0</s:Int64>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=85719BAE48927445B720134571653C43/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=85719BAE48927445B720134571653C43/Description/@EntryValue">Event Subscribable</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=85719BAE48927445B720134571653C43/Text/@EntryValue">using System;&#xD;
+using FreecraftCore;&#xD;
+using System.Collections.Generic;&#xD;
+using System.Text;&#xD;
+&#xD;
+namespace GladMMO&#xD;
+{&#xD;
+	/// &lt;summary&gt;&#xD;
+	/// Contract for a type that implements a subscription service for events that publish &lt;see cref="$EVENTNAME$EventArgs"/&gt;&#xD;
+	/// through the &lt;see cref="EventHandler{TEventArgs}"/&gt; &lt;see cref="On$EVENTNAME$"/&gt;&#xD;
+	/// &lt;/summary&gt;&#xD;
+	public interface I$EVENTNAME$EventSubscribable&#xD;
+	{&#xD;
+		event EventHandler&lt;$EVENTNAME$EventArgs&gt; On$EVENTNAME$;&#xD;
+	}&#xD;
+&#xD;
+	/// &lt;summary&gt;&#xD;
+	/// Event arguments for the &lt;see cref="I$EVENTNAME$EventSubscribable"/&gt; interface.&#xD;
+	/// &lt;/summary&gt;&#xD;
+	public sealed class $EVENTNAME$EventArgs : EventArgs&#xD;
+	{&#xD;
+&#xD;
+	}&#xD;
+}&#xD;
+</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=85719BAE48927445B720134571653C43/Reformat/@EntryValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=85719BAE48927445B720134571653C43/ShortenQualifiedReferences/@EntryValue">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=85719BAE48927445B720134571653C43/CustomProperties/=Extension/@EntryIndexedValue">cs</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=85719BAE48927445B720134571653C43/CustomProperties/=FileName/@EntryIndexedValue">I$EVENTNAME$EventSubscribable</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=85719BAE48927445B720134571653C43/CustomProperties/=ValidateFileName/@EntryIndexedValue">False</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=85719BAE48927445B720134571653C43/Applicability/=File/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=85719BAE48927445B720134571653C43/Scope/=E8F0594528C33E45BBFEC6CFE851095D/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=85719BAE48927445B720134571653C43/Scope/=E8F0594528C33E45BBFEC6CFE851095D/Type/@EntryValue">InCSharpProjectFile</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=85719BAE48927445B720134571653C43/Field/=EVENTNAME/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=85719BAE48927445B720134571653C43/Field/=EVENTNAME/Expression/@EntryValue">clipboard()</s:String>
+	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=85719BAE48927445B720134571653C43/Field/=EVENTNAME/Order/@EntryValue">0</s:Int64></wpf:ResourceDictionary>
