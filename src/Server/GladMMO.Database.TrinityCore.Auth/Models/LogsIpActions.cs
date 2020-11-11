@@ -8,6 +8,7 @@ namespace GladMMO
         public uint Id { get; set; }
         public uint AccountId { get; set; }
         public uint CharacterGuid { get; set; }
+        public uint RealmId { get; set; }
         public byte Type { get; set; }
         public string Ip { get; set; }
         public string Systemnote { get; set; }

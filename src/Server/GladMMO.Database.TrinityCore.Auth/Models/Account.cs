@@ -12,10 +12,10 @@ namespace GladMMO
 
         public uint Id { get; set; }
         public string Username { get; set; }
-        public string ShaPassHash { get; set; }
-        public string Sessionkey { get; set; }
-        public string V { get; set; }
-        public string S { get; set; }
+        public byte[] Salt { get; set; }
+        public byte[] Verifier { get; set; }
+        public byte[] SessionKeyAuth { get; set; }
+        public byte[] SessionKeyBnet { get; set; }
         public byte[] TotpSecret { get; set; }
         public string Email { get; set; }
         public string RegMail { get; set; }

@@ -160,29 +160,20 @@ namespace GladMMO
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
-                entity.Property(e => e.S)
+                entity.Property(e => e.Salt)
                     .IsRequired()
-                    .HasColumnName("s")
-                    .HasColumnType("varchar(64)")
-                    .HasDefaultValueSql("''")
-                    .HasCharSet("utf8")
-                    .HasCollation("utf8_general_ci");
+                    .HasColumnName("salt")
+                    .HasMaxLength(32)
+                    .IsFixedLength();
 
-                entity.Property(e => e.Sessionkey)
-                    .IsRequired()
-                    .HasColumnName("sessionkey")
-                    .HasColumnType("varchar(80)")
-                    .HasDefaultValueSql("''")
-                    .HasCharSet("utf8")
-                    .HasCollation("utf8_general_ci");
+                entity.Property(e => e.SessionKeyAuth)
+                    .HasColumnName("session_key_auth")
+                    .HasMaxLength(40)
+                    .IsFixedLength();
 
-                entity.Property(e => e.ShaPassHash)
-                    .IsRequired()
-                    .HasColumnName("sha_pass_hash")
-                    .HasColumnType("varchar(40)")
-                    .HasDefaultValueSql("''")
-                    .HasCharSet("utf8")
-                    .HasCollation("utf8_general_ci");
+                entity.Property(e => e.SessionKeyBnet)
+                    .HasColumnName("session_key_bnet")
+                    .HasMaxLength(64);
 
                 entity.Property(e => e.TotpSecret)
                     .HasColumnName("totp_secret")
@@ -196,24 +187,22 @@ namespace GladMMO
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
-                entity.Property(e => e.V)
+                entity.Property(e => e.Verifier)
                     .IsRequired()
-                    .HasColumnName("v")
-                    .HasColumnType("varchar(64)")
-                    .HasDefaultValueSql("''")
-                    .HasCharSet("utf8")
-                    .HasCollation("utf8_general_ci");
+                    .HasColumnName("verifier")
+                    .HasMaxLength(32)
+                    .IsFixedLength();
             });
 
             modelBuilder.Entity<AccountAccess>(entity =>
             {
-                entity.HasKey(e => new { e.Id, e.RealmId })
+                entity.HasKey(e => new { e.AccountId, e.RealmId })
                     .HasName("PRIMARY");
 
                 entity.ToTable("account_access");
 
-                entity.Property(e => e.Id)
-                    .HasColumnName("id")
+                entity.Property(e => e.AccountId)
+                    .HasColumnName("AccountID")
                     .HasColumnType("int(10) unsigned");
 
                 entity.Property(e => e.RealmId)
@@ -221,9 +210,12 @@ namespace GladMMO
                     .HasColumnType("int(11)")
                     .HasDefaultValueSql("'-1'");
 
-                entity.Property(e => e.Gmlevel)
-                    .HasColumnName("gmlevel")
-                    .HasColumnType("tinyint(3) unsigned");
+                entity.Property(e => e.Comment)
+                    .HasColumnType("varchar(255)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.SecurityLevel).HasColumnType("tinyint(3) unsigned");
             });
 
             modelBuilder.Entity<AccountBanned>(entity =>
@@ -503,6 +495,11 @@ namespace GladMMO
                     .HasDefaultValueSql("'127.0.0.1'")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.RealmId)
+                    .HasColumnName("realm_id")
+                    .HasColumnType("int(10) unsigned")
+                    .HasComment("Realm ID");
 
                 entity.Property(e => e.Systemnote)
                     .HasColumnName("systemnote")

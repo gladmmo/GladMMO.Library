@@ -15,12 +15,12 @@ namespace GladMMO
 		{
 			CancellationTokenSource cancelTokenSource = new CancellationTokenSource();
 
-			using (var container = BuildServiceContainer())
+			await using (var container = BuildServiceContainer())
 			{
 				//Let's go FOREVER baby
 				while (true)
 				{
-					using(var scope = container.BeginLifetimeScope())
+					await using(var scope = container.BeginLifetimeScope())
 					{
 						var client = scope.Resolve<DiscordSocketClient>();
 
@@ -29,7 +29,7 @@ namespace GladMMO
 
 						// Tokens should be considered secret data and never hard-coded.
 						// We can read from the environment variable to avoid hardcoding.
-						await client.LoginAsync(TokenType.Bot, "");
+						await client.LoginAsync(TokenType.Bot, "NzM5NzU0NTczNzgyMzE5MTM2.XyfEIg.h6kXJp7dSO1aav3_HiapmfgWQTg");
 						await client.StartAsync();
 
 						// Here we initialize the logic required to register our commands.
@@ -62,10 +62,6 @@ namespace GladMMO
 
 			builder.RegisterType<CommandHandlingService>()
 				.InstancePerLifetimeScope();
-
-			/*.AddSingleton<CommandHandlingService>()
-			.AddSingleton<PictureService>()
-			.BuildServiceProvider();*/
 
 			return builder.Build();
 		}
