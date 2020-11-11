@@ -8,7 +8,7 @@ namespace GladMMO
         public ushort Type { get; set; }
         public uint SpawnId { get; set; }
         public uint PoolSpawnId { get; set; }
-        public double Chance { get; set; }
+        public float Chance { get; set; }
         public string Description { get; set; }
     }
 }

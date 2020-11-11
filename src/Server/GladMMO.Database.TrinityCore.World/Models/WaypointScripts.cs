@@ -16,5 +16,6 @@ namespace GladMMO
         public float Z { get; set; }
         public float O { get; set; }
         public int Guid { get; set; }
+        public string Comment { get; set; }
     }
 }

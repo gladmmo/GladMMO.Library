@@ -6,6 +6,6 @@ namespace GladMMO
     public partial class GameEventBattlegroundHoliday
     {
         public byte EventEntry { get; set; }
-        public uint Bgflag { get; set; }
+        public uint BattlegroundId { get; set; }
     }
 }

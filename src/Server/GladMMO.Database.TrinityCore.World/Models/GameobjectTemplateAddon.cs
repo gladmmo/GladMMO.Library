@@ -10,5 +10,9 @@ namespace GladMMO
         public uint Flags { get; set; }
         public uint Mingold { get; set; }
         public uint Maxgold { get; set; }
+        public int Artkit0 { get; set; }
+        public int Artkit1 { get; set; }
+        public int Artkit2 { get; set; }
+        public int Artkit3 { get; set; }
     }
 }

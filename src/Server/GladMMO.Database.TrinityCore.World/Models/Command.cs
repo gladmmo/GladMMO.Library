@@ -6,7 +6,6 @@ namespace GladMMO
     public partial class Command
     {
         public string Name { get; set; }
-        public ushort Permission { get; set; }
         public string Help { get; set; }
     }
 }

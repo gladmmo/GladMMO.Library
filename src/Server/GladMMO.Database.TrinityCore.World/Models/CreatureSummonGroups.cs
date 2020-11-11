@@ -15,5 +15,6 @@ namespace GladMMO
         public float Orientation { get; set; }
         public byte SummonType { get; set; }
         public uint SummonTime { get; set; }
+        public string Comment { get; set; }
     }
 }

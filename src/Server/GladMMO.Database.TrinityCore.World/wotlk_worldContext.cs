@@ -24,6 +24,7 @@ namespace GladMMO
         public virtual DbSet<AreatriggerScripts> AreatriggerScripts { get; set; }
         public virtual DbSet<AreatriggerTavern> AreatriggerTavern { get; set; }
         public virtual DbSet<AreatriggerTeleport> AreatriggerTeleport { get; set; }
+        public virtual DbSet<BattlefieldTemplate> BattlefieldTemplate { get; set; }
         public virtual DbSet<BattlegroundTemplate> BattlegroundTemplate { get; set; }
         public virtual DbSet<BattlemasterEntry> BattlemasterEntry { get; set; }
         public virtual DbSet<BroadcastText> BroadcastText { get; set; }
@@ -194,6 +195,9 @@ namespace GladMMO
         public virtual DbSet<VehicleSeatAddon> VehicleSeatAddon { get; set; }
         public virtual DbSet<VehicleTemplateAccessory> VehicleTemplateAccessory { get; set; }
         public virtual DbSet<Version> Version { get; set; }
+        public virtual DbSet<VwConditionsWithLabels> VwConditionsWithLabels { get; set; }
+        public virtual DbSet<VwDisablesWithLabels> VwDisablesWithLabels { get; set; }
+        public virtual DbSet<VwSmartScriptsWithLabels> VwSmartScriptsWithLabels { get; set; }
         public virtual DbSet<WardenChecks> WardenChecks { get; set; }
         public virtual DbSet<WaypointData> WaypointData { get; set; }
         public virtual DbSet<WaypointScripts> WaypointScripts { get; set; }
@@ -201,11 +205,7 @@ namespace GladMMO
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            if (!optionsBuilder.IsConfigured)
-            {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseMySql("server=127.0.0.1;port=3307;database=wotlk_world;user=root;password=test", x => x.ServerVersion("5.7.29-mysql"));
-            }
+            base.OnConfiguring(optionsBuilder);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -511,6 +511,28 @@ namespace GladMMO
                     .HasDefaultValueSql("'0'");
             });
 
+            modelBuilder.Entity<BattlefieldTemplate>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToTable("battlefield_template");
+
+                entity.Property(e => e.Comment)
+                    .HasColumnName("comment")
+                    .HasColumnType("text")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.ScriptName)
+                    .IsRequired()
+                    .HasColumnType("varchar(64)")
+                    .HasDefaultValueSql("''")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.TypeId).HasColumnType("tinyint(3) unsigned");
+            });
+
             modelBuilder.Entity<BattlegroundTemplate>(entity =>
             {
                 entity.ToTable("battleground_template");
@@ -694,10 +716,6 @@ namespace GladMMO
                     .HasColumnType("longtext")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
-
-                entity.Property(e => e.Permission)
-                    .HasColumnName("permission")
-                    .HasColumnType("smallint(5) unsigned");
             });
 
             modelBuilder.Entity<Conditions>(entity =>
@@ -1267,6 +1285,13 @@ namespace GladMMO
 
                 entity.ToTable("creature_summon_groups");
 
+                entity.Property(e => e.Comment)
+                    .IsRequired()
+                    .HasColumnType("varchar(255)")
+                    .HasDefaultValueSql("''")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
                 entity.Property(e => e.Entry)
                     .HasColumnName("entry")
                     .HasColumnType("mediumint(8) unsigned")
@@ -1754,7 +1779,7 @@ namespace GladMMO
 
             modelBuilder.Entity<CreatureTextLocale>(entity =>
             {
-                entity.HasKey(e => new { e.CreatureId, e.GroupId, e.Id })
+                entity.HasKey(e => new { e.CreatureId, e.GroupId, e.Id, e.Locale })
                     .HasName("PRIMARY");
 
                 entity.ToTable("creature_text_locale");
@@ -1773,7 +1798,6 @@ namespace GladMMO
                     .HasColumnType("tinyint(3) unsigned");
 
                 entity.Property(e => e.Locale)
-                    .IsRequired()
                     .HasColumnType("varchar(4)")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
@@ -1881,6 +1905,13 @@ namespace GladMMO
                     .HasColumnName("command")
                     .HasColumnType("mediumint(8) unsigned")
                     .HasDefaultValueSql("'0'");
+
+                entity.Property(e => e.Comment)
+                    .IsRequired()
+                    .HasColumnType("varchar(255)")
+                    .HasDefaultValueSql("''")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
 
                 entity.Property(e => e.Dataint)
                     .HasColumnName("dataint")
@@ -2067,13 +2098,12 @@ namespace GladMMO
                 entity.ToTable("game_event_battleground_holiday");
 
                 entity.Property(e => e.EventEntry)
-                    .HasColumnName("eventEntry")
                     .HasColumnType("tinyint(3) unsigned")
-                    .HasComment("Entry of the game event");
+                    .HasComment("game_event EventEntry identifier");
 
-                entity.Property(e => e.Bgflag)
-                    .HasColumnName("bgflag")
-                    .HasColumnType("int(10) unsigned");
+                entity.Property(e => e.BattlegroundId)
+                    .HasColumnName("BattlegroundID")
+                    .HasColumnType("int(3) unsigned");
             });
 
             modelBuilder.Entity<GameEventCondition>(entity =>
@@ -2857,6 +2887,22 @@ namespace GladMMO
                     .HasColumnName("entry")
                     .HasColumnType("mediumint(8) unsigned")
                     .HasDefaultValueSql("'0'");
+
+                entity.Property(e => e.Artkit0)
+                    .HasColumnName("artkit0")
+                    .HasColumnType("int(11)");
+
+                entity.Property(e => e.Artkit1)
+                    .HasColumnName("artkit1")
+                    .HasColumnType("int(11)");
+
+                entity.Property(e => e.Artkit2)
+                    .HasColumnName("artkit2")
+                    .HasColumnType("int(11)");
+
+                entity.Property(e => e.Artkit3)
+                    .HasColumnName("artkit3")
+                    .HasColumnType("int(11)");
 
                 entity.Property(e => e.Faction)
                     .HasColumnName("faction")
@@ -5287,9 +5333,7 @@ namespace GladMMO
                     .HasColumnName("spawnId")
                     .HasColumnType("int(10) unsigned");
 
-                entity.Property(e => e.Chance)
-                    .HasColumnName("chance")
-                    .HasColumnType("double unsigned");
+                entity.Property(e => e.Chance).HasColumnName("chance");
 
                 entity.Property(e => e.Description)
                     .HasColumnName("description")
@@ -5426,7 +5470,7 @@ namespace GladMMO
 
             modelBuilder.Entity<QuestGreetingLocale>(entity =>
             {
-                entity.HasKey(e => new { e.Id, e.Type })
+                entity.HasKey(e => new { e.Id, e.Type, e.Locale })
                     .HasName("PRIMARY");
 
                 entity.ToTable("quest_greeting_locale");
@@ -5438,15 +5482,14 @@ namespace GladMMO
 
                 entity.Property(e => e.Type).HasColumnType("tinyint(3) unsigned");
 
-                entity.Property(e => e.Greeting)
-                    .HasColumnType("text")
+                entity.Property(e => e.Locale)
+                    .HasColumnName("locale")
+                    .HasColumnType("varchar(4)")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
-                entity.Property(e => e.Locale)
-                    .IsRequired()
-                    .HasColumnName("locale")
-                    .HasColumnType("varchar(4)")
+                entity.Property(e => e.Greeting)
+                    .HasColumnType("text")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
@@ -7338,6 +7381,13 @@ namespace GladMMO
                     .HasColumnType("mediumint(8) unsigned")
                     .HasDefaultValueSql("'0'");
 
+                entity.Property(e => e.Comment)
+                    .IsRequired()
+                    .HasColumnType("varchar(255)")
+                    .HasDefaultValueSql("''")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
                 entity.Property(e => e.Dataint)
                     .HasColumnName("dataint")
                     .HasColumnType("int(11)");
@@ -7856,6 +7906,260 @@ namespace GladMMO
                     .HasCollation("utf8_general_ci");
             });
 
+            modelBuilder.Entity<VwConditionsWithLabels>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("vw_conditions_with_labels");
+
+                entity.Property(e => e.Comment)
+                    .HasColumnType("varchar(255)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.ConditionTarget).HasColumnType("tinyint(3) unsigned");
+
+                entity.Property(e => e.ConditionTypeOrReference)
+                    .IsRequired()
+                    .HasColumnType("varchar(34)")
+                    .HasDefaultValueSql("''")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.ConditionValue1)
+                    .HasColumnType("mediumint(8) unsigned")
+                    .HasDefaultValueSql("'0'");
+
+                entity.Property(e => e.ConditionValue2)
+                    .HasColumnType("mediumint(8) unsigned")
+                    .HasDefaultValueSql("'0'");
+
+                entity.Property(e => e.ConditionValue3)
+                    .HasColumnType("mediumint(8) unsigned")
+                    .HasDefaultValueSql("'0'");
+
+                entity.Property(e => e.ElseGroup)
+                    .HasColumnType("mediumint(8) unsigned")
+                    .HasDefaultValueSql("'0'");
+
+                entity.Property(e => e.ErrorTextId)
+                    .HasColumnType("mediumint(8) unsigned")
+                    .HasDefaultValueSql("'0'");
+
+                entity.Property(e => e.ErrorType)
+                    .HasColumnType("mediumint(8) unsigned")
+                    .HasDefaultValueSql("'0'");
+
+                entity.Property(e => e.NegativeCondition).HasColumnType("tinyint(3) unsigned");
+
+                entity.Property(e => e.ScriptName)
+                    .IsRequired()
+                    .HasColumnType("char(64)")
+                    .HasDefaultValueSql("''")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.SourceEntry)
+                    .HasColumnType("mediumint(8)")
+                    .HasDefaultValueSql("'0'");
+
+                entity.Property(e => e.SourceGroup)
+                    .HasColumnType("mediumint(8) unsigned")
+                    .HasDefaultValueSql("'0'");
+
+                entity.Property(e => e.SourceId).HasColumnType("int(11)");
+
+                entity.Property(e => e.SourceTypeOrReferenceId)
+                    .IsRequired()
+                    .HasColumnType("varchar(49)")
+                    .HasDefaultValueSql("''")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+            });
+
+            modelBuilder.Entity<VwDisablesWithLabels>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("vw_disables_with_labels");
+
+                entity.Property(e => e.Comment)
+                    .IsRequired()
+                    .HasColumnName("comment")
+                    .HasColumnType("varchar(255)")
+                    .HasDefaultValueSql("''")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.Entry)
+                    .HasColumnName("entry")
+                    .HasColumnType("int(10) unsigned");
+
+                entity.Property(e => e.Flags)
+                    .HasColumnName("flags")
+                    .HasColumnType("smallint(5)");
+
+                entity.Property(e => e.Params0)
+                    .IsRequired()
+                    .HasColumnName("params_0")
+                    .HasColumnType("varchar(255)")
+                    .HasDefaultValueSql("''")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.Params1)
+                    .IsRequired()
+                    .HasColumnName("params_1")
+                    .HasColumnType("varchar(255)")
+                    .HasDefaultValueSql("''")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.SourceType)
+                    .IsRequired()
+                    .HasColumnName("sourceType")
+                    .HasColumnType("varchar(33)")
+                    .HasDefaultValueSql("''")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+            });
+
+            modelBuilder.Entity<VwSmartScriptsWithLabels>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("vw_smart_scripts_with_labels");
+
+                entity.Property(e => e.ActionParam1)
+                    .HasColumnName("action_param1")
+                    .HasColumnType("int(10) unsigned");
+
+                entity.Property(e => e.ActionParam2)
+                    .HasColumnName("action_param2")
+                    .HasColumnType("int(10) unsigned");
+
+                entity.Property(e => e.ActionParam3)
+                    .HasColumnName("action_param3")
+                    .HasColumnType("int(10) unsigned");
+
+                entity.Property(e => e.ActionParam4)
+                    .HasColumnName("action_param4")
+                    .HasColumnType("int(10) unsigned");
+
+                entity.Property(e => e.ActionParam5)
+                    .HasColumnName("action_param5")
+                    .HasColumnType("int(10) unsigned");
+
+                entity.Property(e => e.ActionParam6)
+                    .HasColumnName("action_param6")
+                    .HasColumnType("int(10) unsigned");
+
+                entity.Property(e => e.ActionType)
+                    .IsRequired()
+                    .HasColumnName("action_type")
+                    .HasColumnType("varchar(47)")
+                    .HasDefaultValueSql("''")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.Comment)
+                    .IsRequired()
+                    .HasColumnName("comment")
+                    .HasColumnType("text")
+                    .HasComment("Event Comment")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.Entryorguid)
+                    .HasColumnName("entryorguid")
+                    .HasColumnType("int(11)");
+
+                entity.Property(e => e.EventChance)
+                    .HasColumnName("event_chance")
+                    .HasColumnType("tinyint(3) unsigned")
+                    .HasDefaultValueSql("'100'");
+
+                entity.Property(e => e.EventFlags)
+                    .HasColumnName("event_flags")
+                    .HasColumnType("smallint(5) unsigned");
+
+                entity.Property(e => e.EventParam1)
+                    .HasColumnName("event_param1")
+                    .HasColumnType("int(10) unsigned");
+
+                entity.Property(e => e.EventParam2)
+                    .HasColumnName("event_param2")
+                    .HasColumnType("int(10) unsigned");
+
+                entity.Property(e => e.EventParam3)
+                    .HasColumnName("event_param3")
+                    .HasColumnType("int(10) unsigned");
+
+                entity.Property(e => e.EventParam4)
+                    .HasColumnName("event_param4")
+                    .HasColumnType("int(10) unsigned");
+
+                entity.Property(e => e.EventParam5)
+                    .HasColumnName("event_param5")
+                    .HasColumnType("int(10) unsigned");
+
+                entity.Property(e => e.EventPhaseMask)
+                    .HasColumnName("event_phase_mask")
+                    .HasColumnType("smallint(5) unsigned");
+
+                entity.Property(e => e.EventType)
+                    .IsRequired()
+                    .HasColumnName("event_type")
+                    .HasColumnType("varchar(35)")
+                    .HasDefaultValueSql("''")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("id")
+                    .HasColumnType("smallint(5) unsigned");
+
+                entity.Property(e => e.Link)
+                    .HasColumnName("link")
+                    .HasColumnType("smallint(5) unsigned");
+
+                entity.Property(e => e.SourceType)
+                    .HasColumnName("source_type")
+                    .HasColumnType("tinyint(3) unsigned");
+
+                entity.Property(e => e.TargetO).HasColumnName("target_o");
+
+                entity.Property(e => e.TargetParam1)
+                    .HasColumnName("target_param1")
+                    .HasColumnType("int(10) unsigned");
+
+                entity.Property(e => e.TargetParam2)
+                    .HasColumnName("target_param2")
+                    .HasColumnType("int(10) unsigned");
+
+                entity.Property(e => e.TargetParam3)
+                    .HasColumnName("target_param3")
+                    .HasColumnType("int(10) unsigned");
+
+                entity.Property(e => e.TargetParam4)
+                    .HasColumnName("target_param4")
+                    .HasColumnType("int(10) unsigned");
+
+                entity.Property(e => e.TargetType)
+                    .IsRequired()
+                    .HasColumnName("target_type")
+                    .HasColumnType("varchar(41)")
+                    .HasDefaultValueSql("''")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.TargetX).HasColumnName("target_x");
+
+                entity.Property(e => e.TargetY).HasColumnName("target_y");
+
+                entity.Property(e => e.TargetZ).HasColumnName("target_z");
+            });
+
             modelBuilder.Entity<WardenChecks>(entity =>
             {
                 entity.ToTable("warden_checks");
@@ -7876,9 +8180,8 @@ namespace GladMMO
 
                 entity.Property(e => e.Data)
                     .HasColumnName("data")
-                    .HasColumnType("varchar(48)")
-                    .HasCharSet("utf8")
-                    .HasCollation("utf8_general_ci");
+                    .HasMaxLength(24)
+                    .IsFixedLength();
 
                 entity.Property(e => e.Length)
                     .HasColumnName("length")
@@ -7886,13 +8189,11 @@ namespace GladMMO
 
                 entity.Property(e => e.Result)
                     .HasColumnName("result")
-                    .HasColumnType("varchar(24)")
-                    .HasCharSet("utf8")
-                    .HasCollation("utf8_general_ci");
+                    .HasMaxLength(24);
 
                 entity.Property(e => e.Str)
                     .HasColumnName("str")
-                    .HasColumnType("varchar(20)")
+                    .HasColumnType("varchar(170)")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
@@ -7963,6 +8264,13 @@ namespace GladMMO
                     .HasColumnName("command")
                     .HasColumnType("int(11) unsigned");
 
+                entity.Property(e => e.Comment)
+                    .IsRequired()
+                    .HasColumnType("varchar(255)")
+                    .HasDefaultValueSql("''")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
                 entity.Property(e => e.Dataint)
                     .HasColumnName("dataint")
                     .HasColumnType("int(11) unsigned");
@@ -8010,6 +8318,12 @@ namespace GladMMO
                     .HasColumnName("pointid")
                     .HasColumnType("mediumint(8) unsigned")
                     .HasDefaultValueSql("'0'");
+
+                entity.Property(e => e.Delay)
+                    .HasColumnName("delay")
+                    .HasColumnType("int(10) unsigned");
+
+                entity.Property(e => e.Orientation).HasColumnName("orientation");
 
                 entity.Property(e => e.PointComment)
                     .HasColumnName("point_comment")

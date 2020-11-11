@@ -20,6 +20,7 @@
     <Compile Include="Models\AreatriggerScripts.cs" />
     <Compile Include="Models\AreatriggerTavern.cs" />
     <Compile Include="Models\AreatriggerTeleport.cs" />
+    <Compile Include="Models\BattlefieldTemplate.cs" />
     <Compile Include="Models\BattlegroundTemplate.cs" />
     <Compile Include="Models\BattlemasterEntry.cs" />
     <Compile Include="Models\BroadcastText.cs" />
@@ -190,6 +191,9 @@
     <Compile Include="Models\VehicleSeatAddon.cs" />
     <Compile Include="Models\VehicleTemplateAccessory.cs" />
     <Compile Include="Models\Version.cs" />
+    <Compile Include="Models\VwConditionsWithLabels.cs" />
+    <Compile Include="Models\VwDisablesWithLabels.cs" />
+    <Compile Include="Models\VwSmartScriptsWithLabels.cs" />
     <Compile Include="Models\WardenChecks.cs" />
     <Compile Include="Models\WaypointData.cs" />
     <Compile Include="Models\Waypoints.cs" />
