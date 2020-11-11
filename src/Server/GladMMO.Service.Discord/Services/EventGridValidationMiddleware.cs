@@ -14,6 +14,9 @@ using Newtonsoft.Json.Linq;
 
 namespace GladMMO
 {
+	/// <summary>
+	/// ASP Core Middleware for validating Event Grid webhook registerations.
+	/// </summary>
 	public class EventGridValidationMiddleware
 	{
 		private RequestDelegate Next { get; }
@@ -51,6 +54,12 @@ namespace GladMMO
 				//Check for validation event
 				if (events[0].EventType == EventTypes.EventGridSubscriptionValidationEvent)
 					context.Request.Path = $"{context.Request.Path}/{GladMMOServiceDiscordConstants.EVENT_GRID_VALIDATE_ACTION}";
+				else
+				{
+					//We're a DISCORD BOT COMMAND!
+					//TODO: We're assuming we only have 1 and we're not batch events. By default batch events are turned off on Event Grid.
+					string innerCommandEventString = (string) events[0].Data;
+				}
 			}
 
 			//Reset stream before forwarding anything, otherwise it'll look wrong!!
