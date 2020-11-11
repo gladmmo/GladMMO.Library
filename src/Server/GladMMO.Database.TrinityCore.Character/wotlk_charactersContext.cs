@@ -108,8 +108,8 @@ namespace GladMMO
         public virtual DbSet<Worldstates> Worldstates { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-           base.OnConfiguring(optionsBuilder);
+        { 
+            base.OnConfiguring(optionsBuilder);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -369,6 +369,8 @@ namespace GladMMO
                 entity.Property(e => e.Deposit)
                     .HasColumnName("deposit")
                     .HasColumnType("int(10) unsigned");
+
+                entity.Property(e => e.Flags).HasColumnType("tinyint(3) unsigned");
 
                 entity.Property(e => e.Houseid)
                     .HasColumnName("houseid")
@@ -888,8 +890,7 @@ namespace GladMMO
 
                 entity.Property(e => e.MountSpell)
                     .HasColumnName("mountSpell")
-                    .HasColumnType("mediumint(8) unsigned")
-                    .HasDefaultValueSql("'0'");
+                    .HasColumnType("int(10) unsigned");
 
                 entity.Property(e => e.TaxiEnd)
                     .HasColumnName("taxiEnd")

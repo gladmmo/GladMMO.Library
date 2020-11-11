@@ -15,5 +15,6 @@ namespace GladMMO
         public uint Lastbid { get; set; }
         public uint Startbid { get; set; }
         public uint Deposit { get; set; }
+        public byte Flags { get; set; }
     }
 }
