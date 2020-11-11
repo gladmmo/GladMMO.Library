@@ -9,4 +9,8 @@
     <PackageReference Include="Refit" Version="4.7.51" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\GladMMO.Common\GladMMO.Common.csproj" />
+  </ItemGroup>
+
 </Project>
