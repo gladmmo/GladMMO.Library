@@ -21,7 +21,7 @@ namespace GladMMO
 		public static IWebHost BuildWebHost(string[] args) =>
 			WebHost.CreateDefaultBuilder(args)
 				//Even if not on Azure we need the default endpoints.
-				.UseKestrelGuardiansConfigWithStandardEndpoints(args)
+				.UseKestrelGuardiansConfig(args)
 				.UseIISIntegration()
 				//Only way: https://stackoverflow.com/a/51450471
 				.ConfigureServices(collection =>
