@@ -21,6 +21,6 @@ namespace GladMMO
 		/// <summary>
 		/// Controls/indicates the mode for the client.
 		/// </summary>
-		public const ClientGameMode CLIENT_MODE = ClientGameMode.GaiaOnline;
+		public const ClientGameMode CLIENT_MODE = ClientGameMode.Default;
 	}
 }
