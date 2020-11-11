@@ -1,5 +1,5 @@
 cd build\auth
-start "auth" dotnet GladMMO.Service.Authentication.dll --usehttps Certs/TLSCert.pfx
+start "auth" dotnet GladMMO.Service.Authentication.dll --url=https://192.168.0.12:4999 --usehttps=Certs/TLSCert.pfx
 cd ..
 
 cd servdisc
@@ -11,7 +11,7 @@ start "servsel" dotnet GladMMO.Service.ServerSelection.dll --url=http://192.168.
 cd ..
 
 cd gameserv
-start "gameserv" dotnet GladMMO.Service.GameServer.dll --url=http://192.168.0.12:5004
+start "gameserv" dotnet GladMMO.Service.GameServer.dll --url=http://192.168.0.12:5004 https://192.168.0.12:15004 --usehttps=Certs/ScapeVRMMOOrg.pfx
 cd ..
 
 cd contentserv
