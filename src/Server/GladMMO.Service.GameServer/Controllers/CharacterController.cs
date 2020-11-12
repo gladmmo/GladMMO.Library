@@ -139,9 +139,9 @@ namespace GladMMO
 				Health = 500000000,
 				TalentGroupsCount = 1,
 				Map = 13, //Test map
-				PositionX = 0,
-				PositionY = 0.5f,
-				PositionZ = 0,
+				PositionX = 4.29911f,
+				PositionY = 9.19941f,
+				PositionZ = -144.699f,
 
 				Race = (byte)FreecraftCore.CharacterRace.HUMAN,
 				Class = (byte)FreecraftCore.CharacterClass.Warlock,
